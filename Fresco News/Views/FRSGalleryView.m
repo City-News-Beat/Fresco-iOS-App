@@ -23,10 +23,15 @@
 #import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSUserManager.h"
+#import "FRSGalleryFooterView.h"
+#import "FRSGalleryDetailView.h"
 
 #define TEXTVIEW_TOP_PAD 12
+#define LABEL_HEIGHT 20
+#define LABEL_PADDING 8
+#define CAPTION_PADDING 24
 
-@interface FRSGalleryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
+@interface FRSGalleryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
@@ -36,6 +41,7 @@
 @property (strong, nonatomic) NSMutableArray *playerLayers;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
+@property (strong, nonatomic) FRSGalleryFooterView *galleryFooterView;
 @end
 
 @implementation FRSGalleryView
@@ -393,6 +399,12 @@
     [self configureCaptionLabel]; // this will stay similar
 
     [self configureActionsBar]; // this will stay similar
+    
+//    NSString *rating = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.gallery.rating]];
+    
+    if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
+        [self configureBaseMetaData];
+    }
 
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
 }
@@ -961,6 +973,10 @@
 - (void)adjustHeight {
     NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
 
+    if (self.galleryFooterView) {
+        height += self.galleryFooterView.frame.size.height + CAPTION_PADDING;
+    }
+    
     if ([self.delegate shouldHaveActionBar]) {
         height -= TEXTVIEW_TOP_PAD;
     }
@@ -1381,8 +1397,26 @@
             [player pause];
         }
     }
-
-    //    self.muteImageView.alpha = 1;
 }
+
+#pragma mark - Base Meta Data Configuration
+
+- (void)configureBaseMetaData {
+    
+    // Configure the view
+    self.galleryFooterView = [[FRSGalleryFooterView alloc] initWithFrame:CGRectMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height + CAPTION_PADDING, self.frame.size.width, self.galleryFooterView.calculatedHeight) gallery:self.gallery delegate:self];
+    self.galleryFooterView.delegate = self;
+    
+    // Set the height of the galleryFooterView after all the labels have been configured and add it to the subview
+    [self.galleryFooterView setSizeWithSize:CGSizeMake(self.galleryFooterView.frame.size.width, self.galleryFooterView.calculatedHeight)];
+    
+    [self addSubview:self.galleryFooterView];
+}
+
+- (void)userAvatarTapped {
+    FRSProfileViewController *profile = [[FRSProfileViewController alloc] initWithUser:self.gallery.creator];
+    [self.delegate.navigationController pushViewController:profile animated:YES];
+}
+
 
 @end

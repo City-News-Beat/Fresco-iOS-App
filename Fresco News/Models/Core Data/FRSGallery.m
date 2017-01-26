@@ -41,6 +41,7 @@
 @dynamic externalID;
 @dynamic externalSource;
 @dynamic externalURL;
+@dynamic rating;
 
 - (NSArray *)sorted {
     NSArray *sorted;
@@ -57,17 +58,61 @@
     self.visibility = dict[@"visiblity"];
     self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
 
-    if (dict[@"action_at"] && ![dict[@"action_at"] isEqual:[NSNull null]]) {
-        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"action_at"]];
+    if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
+        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
+    }
+    
+    if (dict[@"captured_at"] && ![dict[@"captured_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"captured_at"]];
+    } else if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+    }
+    
+    if (dict[@"rating"] && ![dict[@"rating"] isEqual:[NSNull null]]) {
+        self.rating = dict[@"rating"];
+    }
+    
+    if (dict[@"byline"] && ![dict[@"byline"] isEqual:[NSNull null]]) {
+        self.byline = dict[@"byline"];
+    }
+    
+    if (dict[@"caption"] && ![dict[@"caption"] isEqual:[NSNull null]]) {
+        self.caption = dict[@"caption"];
     }
 
-    self.caption = dict[@"caption"];
-    if ([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]) {
-        self.byline = dict[@"owner"][@"full_name"];
-        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
-        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
-        self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
+    if (!self.creator) {
+        if (dict[@"owner"] != [NSNull null]) {
+            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
+            
+            @try {
+                self.creator = newUser;
+                self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
+                self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
+                self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
+                self.creator.profileImage = (dict[@"owner"][@"avatar"] != nil && ![dict[@"owner"][@"avatar"] isEqual:[NSNull null]]) ? dict[@"owner"][@"avatar"] : @"";
+                self.creator.bio = (dict[@"owner"][@"bio"] != nil && ![dict[@"owner"][@"bio"] isEqual:[NSNull null]]) ? dict[@"owner"][@"bio"] : @"";
+                
+                NSLog(@"OWNER: %@", self.creator.username);
+            } @catch (NSException *exception) {
+            }
+            
+        } else if (dict[@"curator"] != [NSNull null]) {
+            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
+            
+            @try {
+                self.creator = newUser;
+                self.creator.uid = (dict[@"curator"][@"id"] != nil && ![dict[@"curator"][@"id"] isEqual:[NSNull null]]) ? dict[@"curator"][@"id"] : @"";
+                self.creator.username = (dict[@"curator"][@"username"] != nil && ![dict[@"curator"][@"username"] isEqual:[NSNull null]]) ? dict[@"curator"][@"username"] : @"";
+                self.creator.firstName = (dict[@"curator"][@"full_name"] != nil && ![dict[@"curator"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"curator"][@"full_name"] : @"";
+                self.creator.profileImage = (dict[@"curator"][@"avatar"] != nil && ![dict[@"curator"][@"avatar"] isEqual:[NSNull null]]) ? dict[@"curator"][@"avatar"] : @"";
+                self.creator.bio = (dict[@"curator"][@"bio"] != nil && ![dict[@"curator"][@"bio"] isEqual:[NSNull null]]) ? dict[@"curator"][@"bio"] : @"";
+                
+                NSLog(@"CURATOR: %@", self.creator.username);
+            } @catch (NSException *exception) {
+            }
+        }
     }
+
 
     NSArray *sources = (NSArray *)dict[@"sources"];
     if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
@@ -85,16 +130,6 @@
                                              }];
     }
 
-    if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
-        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
-
-        @try {
-            self.creator = newUser;
-            self.creator.uid = dict[@"owner"][@"id"];
-        } @catch (NSException *exception) {
-        } @finally {
-        }
-    }
 
     //    if ([dict valueForKey:@"curator"] != [NSNull null]) {
     //        self.creator = [FRSUser MR_createEntity];
@@ -175,7 +210,7 @@
         self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
         self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
         self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
-        //blocked
+        NSLog(@"CONFIG OWNER: %@", self.creator.username);
     }
 }
 

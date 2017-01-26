@@ -15,4 +15,5 @@
 @dynamic creator;
 @dynamic liked;
 @dynamic likes;
+@dynamic rating;
 @end

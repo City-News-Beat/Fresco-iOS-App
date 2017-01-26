@@ -106,6 +106,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)configureGalleryView {
     [self.galleryView configureWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 500) gallery:self.gallery delegate:self];
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
+    self.galleryView.delegate.navigationController = self.navigationController;
 
     [self.galleryView play];
     [self focusOnPost];
