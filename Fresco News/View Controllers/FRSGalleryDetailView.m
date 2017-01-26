@@ -123,8 +123,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     articlesLabel.hidden = [self.gallery.articles allObjects].count == 0;
 }
 
-- (void)configureComments {
-
+- (void)configureComments{
     // Move the comment tableview up if there are no articles
     CGFloat zeplinTVLabelTopPadding = 24;
     if ([self.gallery.articles allObjects].count > 0) {
@@ -137,6 +136,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     commentsTableView.delegate = self;
     commentsTableView.dataSource = self;
+    commentsTableView.estimatedRowHeight = 20;
+    commentsTableView.rowHeight = UITableViewAutomaticDimension;
 
     commentsTableView.hidden = self.comments.count == 0;
     commentsTVTopLine.hidden = self.comments.count == 0;
@@ -332,38 +333,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)adjustCommentsTableHeight {
-    float height = 0;
-    NSInteger index = 0;
-
-    //Add in all the comment's heights
-    for (FRSComment *comment in _comments) {
-        CGRect labelRect = [comment.comment
-            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 78, INT_MAX) //78 is left and right padding
-                         options:NSStringDrawingUsesLineFragmentOrigin
-                      attributes:@{
-                          NSFontAttributeName : [UIFont systemFontOfSize:15]
-                      }
-                         context:nil];
-        float commentSize = labelRect.size.height;
-
-        if (commentSize < 56) {
-            height += 56;
-        } else {
-            height += commentSize;
-        }
-        index++;
+    /*CGFloat height = 0;
+    for(int i = 0; i < [commentsTableView numberOfRowsInSection:0]; i ++){
+        height+=[self tableView:commentsTableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
     }
-    height += 45;
-
-    commentsTableView.frame = CGRectMake(0, commentsTableView.frame.origin.y, self.frame.size.width, height);
-    if (!showsMoreButton) {
-        CGFloat showMoreHeight = 45;
-        height -= showMoreHeight;
-    }
-
     commentsHeightConstraint.constant = height;
-
-    [commentsTableView reloadData];
+    [self setNeedsUpdateConstraints];
+    [self layoutIfNeeded];*/
 }
 
 #pragma mark - Comment Methods
@@ -481,7 +457,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                       showsMoreButton = TRUE;
                                                   }
 
-                                                  [self adjustCommentsTableHeight];
+                                                  [commentsTableView reloadData];
+                                                    //Scroll the the bottom comment
+                                                    [commentsTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([commentsTableView numberOfRowsInSection:0]-1) inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                                                 }];
 }
 
@@ -599,6 +577,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 #pragma mark - UITableViewDataSource
 
+-(void)reloadData{
+    
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -621,46 +603,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    if (tableView == self.articlesTableView) {
-        return CELL_HEIGHT;
-    }
-
-    if (tableView == commentsTableView) {
-        if (indexPath.row == 0 && showsMoreButton) {
-            CGFloat showsMoreButtonHeight = 45;
-            return showsMoreButtonHeight;
-        }
-
-        if (indexPath.row < self.comments.count + showsMoreButton) {
-            FRSCommentCell *cell = (FRSCommentCell *)[self tableView:commentsTableView cellForRowAtIndexPath:indexPath];
-
-            CGFloat height = 0;
-
-            CGRect labelRect = [cell.commentTextView.text
-                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 78, INT_MAX) //78 is the padding on the left and right sides
-                             options:NSStringDrawingUsesLineFragmentOrigin
-                          attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15]
-                          }
-                             context:nil];
-
-            float commentSize = labelRect.size.height;
-
-            commentSize += 36; //36 is default padding
-
-            if (commentSize < 56) {
-                height += 56;
-            } else {
-                height = commentSize + 20;
-            }
-
-            return height;
-        }
-    }
-
-    return 56;
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.articlesTableView) {
@@ -727,6 +669,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (tableView == self.articlesTableView) {
         [((FRSArticlesTableViewCell *)cell)configureCell];
     }
+    //Adjusts the comment tableview height constraint
+    commentsHeightConstraint.constant = cell.frame.origin.y + cell.frame.size.height + 5;
+    NSLog(@"Height: %f", commentsHeightConstraint.constant);
+    [self setNeedsUpdateConstraints];
+    [self layoutIfNeeded];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
