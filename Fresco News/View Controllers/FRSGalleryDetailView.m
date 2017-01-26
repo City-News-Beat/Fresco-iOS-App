@@ -96,11 +96,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)configureCommentsSpinner { //Not sure if this does anything
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(82, 13, 20, 20)];
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2, galleryHeightConstraint.constant + 50, 20, 20)];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
-    [commentsLabel addSubview:self.loadingView];
+    [self addSubview:self.loadingView];
 }
 
 - (void)configureGalleryView {
@@ -142,6 +142,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     commentsTableView.hidden = self.comments.count == 0;
     commentsTVTopLine.hidden = self.comments.count == 0;
     commentsLabel.hidden = self.comments.count == 0;
+    
+    if(commentsTableView.hidden == false){
+        [self.loadingView stopLoading];
+    }
 
     [self adjustCommentsTableHeight];
     [self.actionBar actionButtonTitleNeedsUpdate];
@@ -364,7 +368,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                        [self.actionBar actionButtonTitleNeedsUpdate];
                                        
                                        self.totalCommentCount++;
-                                       commentsTableView.hidden = NO;
 
                                        self.commentTextField.text = @"";
 
@@ -451,15 +454,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                       [_comments addObject:commentObject];
                                                   }
 
-                                                  if (response.count < 10) {
-                                                      showsMoreButton = FALSE;
-                                                  } else {
-                                                      showsMoreButton = TRUE;
-                                                  }
+                                                    if((self.comments.count == 0) || (commentsTableView.hidden == true && self.comments.count > 0)){
+                                                        [self configureComments];
+                                                    }
 
-                                                  [commentsTableView reloadData];
-                                                    //Scroll the the bottom comment
-                                                    [commentsTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([commentsTableView numberOfRowsInSection:0]-1) inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                                                    if (response.count < 10) {
+                                                        showsMoreButton = FALSE;
+                                                    } else {
+                                                        showsMoreButton = TRUE;
+                                                    }
+                                                    
+                                                    CGPoint offset = self.scrollView.contentOffset;
+                                                    [commentsTableView reloadData];
+                                                    [commentsTableView layoutIfNeeded]; // Force layout so things are updated before resetting the contentOffset.
+                                                    [self.scrollView setContentOffset:offset];
+                                                    
                                                 }];
 }
 
@@ -599,10 +608,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return self.comments.count;
         }
     }
-
     return 0;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView == self.articlesTableView) {
+        return CELL_HEIGHT;
+    }
+    return 56;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.articlesTableView) {
