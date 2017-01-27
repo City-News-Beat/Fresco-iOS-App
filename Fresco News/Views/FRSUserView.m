@@ -73,9 +73,8 @@
         [self addSubview:usernameLabel];
         
         
-        NSString *bio = user.bio;
         UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH - LABEL_LEFT_PADDING - BIO_RIGHT_PADDING, CGFLOAT_MAX)];
-        bioLabel.text = (bio && ![bio isEqual:[NSNull null]] && ![bio isEqualToString:@""]) ? bio : @" ";
+        bioLabel.text = user.bio;
         bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         bioLabel.textColor = [UIColor frescoMediumTextColor];
         bioLabel.numberOfLines = 0;
@@ -97,9 +96,18 @@
             profileIcon.alpha = 0;
         }
         
-        bioLabel.text = user.bio ? user.bio : @" "; // Adding a space if there's no bio to avoid overlap with the gallery status bar when sizing
+
+        // Size bio label before setting calculated height
+        if (user.bio && ![user.bio isEqual:[NSNull null]] && [[user.bio class] isSubclassOfClass:[NSString class]] && [user.bio length] > 0) {
+            bioLabel.text = user.bio;
+        } else {
+            // Set text to an empty space to avoid overlapping UI when calling sizeToFit
+            bioLabel.text = @" ";
+        }
+        
         [bioLabel sizeToFit];
         
+        // Set calculatedHeight after all UI elements have been configured
         self.calculatedHeight = NAME_TOP_PADDING + BIO_TOP_PADDING + bioLabel.frame.size.height;
     }
     

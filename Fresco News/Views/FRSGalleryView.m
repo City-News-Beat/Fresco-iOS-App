@@ -23,7 +23,6 @@
 #import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSUserManager.h"
-#import "FRSGalleryFooterView.h"
 #import "FRSGalleryDetailView.h"
 
 #define TEXTVIEW_TOP_PAD 12
@@ -41,7 +40,6 @@
 @property (strong, nonatomic) NSMutableArray *playerLayers;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
-@property (strong, nonatomic) FRSGalleryFooterView *galleryFooterView;
 @end
 
 @implementation FRSGalleryView
@@ -156,19 +154,8 @@
 }
 
 - (void)checkOwner {
-    /*NSString *ownerID = self.gallery.creator.uid;
-    NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
     
-    if (userID && ownerID && [ownerID isEqualToString:userID]) {
-        // owner == self
-        [self.actionBar setCurrentUser:TRUE];
-    }
-    else {
-        [self.actionBar setCurrentUser:FALSE];
-    }*/
-
     dispatch_async(dispatch_get_main_queue(), ^{
-
       if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
           [self.actionBar setCurrentUser:YES];
       } else {
@@ -181,7 +168,6 @@
     FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
 
     if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
-        //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
         NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
@@ -199,8 +185,6 @@
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
     BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
 
-    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
-
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     [self.actionBar handleHeartState:isLiked];
@@ -212,7 +196,6 @@
     self.repostImageView = Nil;
 
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
@@ -245,8 +228,6 @@
 
 - (void)handleActionButtonTapped {
 
-    // idk why dan made this method life is a mystery
-
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
@@ -258,9 +239,6 @@
 }
 
 - (void)handleLike:(FRSContentActionsBar *)actionBar {
-    /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
-        return;
-    }*/
 
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
@@ -301,10 +279,6 @@
 }
 
 - (void)handleRepost:(FRSContentActionsBar *)actionBar {
-
-    /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
-        return;
-    }*/
 
     NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
@@ -400,8 +374,6 @@
 
     [self configureActionsBar]; // this will stay similar
     
-//    NSString *rating = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.gallery.rating]];
-    
     if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
         [self configureBaseMetaData];
     }
@@ -469,14 +441,6 @@
 
         imageView.userInteractionEnabled = YES;
     }
-
-    //    dispatch_async(dispatch_get_main_queue(), ^{
-    //        if (self.imageViews.count > 1) {
-    //            UIImageView *nextImage = self.imageViews[1];
-    //            FRSPost *nextPost = self.orderedPosts[1];
-    //            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
-    //        }
-    //    });
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
@@ -802,8 +766,6 @@
           NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
           [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
-          //NSLog(@"wwAvatar: %@",post.creator.profileImage);
-
           UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
           [photoTap setNumberOfTapsRequired:1];
           [self.profileIV setUserInteractionEnabled:YES];
@@ -856,7 +818,6 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
 
-    //[self.locationLabel sizeToFit];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     [self.timeLabel sizeToFit];
@@ -879,7 +840,6 @@
 
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-        //[self.nameLabel setUserInteractionEnabled:NO];
     }
 
     UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
@@ -924,13 +884,11 @@
     label.text = text;
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
-    //[label addFixedShadow];
     label.layer.shouldRasterize = TRUE;
     label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     label.adjustsFontSizeToFitWidth = YES;
     label.numberOfLines = 1;
 
-    // [label sizeToFit];
     CGRect labelFrame = label.frame;
     labelFrame.size.height = 20;
     labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
@@ -1030,7 +988,7 @@
 #pragma mark ScrollView Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    //We add half a screen's width so that the image loading occurs half way through the scroll.
+    // We add half a screen's width so that the image loading occurs half way through the scroll.
     [self pause];
 
     if (!self.players) {
@@ -1142,12 +1100,8 @@
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
-        //self.profileIV.alpha = 1;
-        //NSLog(@"mmAvatar: %@",post.creator.profileImage);
-
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-        // self.profileIV.alpha = 0;
     }
 
     if (adjustedPost.videoUrl == nil) {
@@ -1268,15 +1222,6 @@
 
               if ([currentPost.creator uid] != nil) {
                   [self.delegate.navigationController pushViewController:userViewController animated:YES];
-
-                  //                    userViewController.hidesBottomBarWhenPushed = NO;
-
-                  //                    [userViewController setHiddenTabBar:NO];
-
-                  //                    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                  //                    [[appDelegate.tabBarController tabBar] setHidden:NO];
-
-                  //                    [self.delegate.navigationController.tabBarController.tabBar setHidden:NO];
               }
             });
         }

@@ -82,6 +82,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker screen:@"Gallery Detail"];
 
     dateEntered = [NSDate date];
+    
+    // Access followingButton and update icon when view appears
+    [galleryDetailView.galleryView.galleryFooterView.userView.followingButton updateIconForFollowing:[self.gallery.creator.following boolValue]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
