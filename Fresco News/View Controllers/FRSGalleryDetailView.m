@@ -51,6 +51,7 @@
     IBOutlet UITableView *commentsTableView;
     IBOutlet UILabel *commentsLabel;
     IBOutlet NSLayoutConstraint *commentsLabelTopConstraint;
+    IBOutlet NSLayoutConstraint *commentsTVBotConstraint;
     IBOutlet NSLayoutConstraint *commentsHeightConstraint;
 
     // Articles
@@ -93,14 +94,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self addGestureRecognizer:tap];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:Nil];
 }
 
 - (void)configureCommentsSpinner { //Not sure if this does anything
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2, galleryHeightConstraint.constant + 50, 20, 20)];
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(85, -1, 15, 15)];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
-    [self addSubview:self.loadingView];
+    [commentsLabel addSubview:self.loadingView];
 }
 
 - (void)configureGalleryView {
@@ -123,7 +125,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     articlesLabel.hidden = [self.gallery.articles allObjects].count == 0;
 }
 
-- (void)configureComments{
+- (void)configureComments {
     // Move the comment tableview up if there are no articles
     CGFloat zeplinTVLabelTopPadding = 24;
     if ([self.gallery.articles allObjects].count > 0) {
@@ -141,13 +143,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     commentsTableView.hidden = self.comments.count == 0;
     commentsTVTopLine.hidden = self.comments.count == 0;
-    commentsLabel.hidden = self.comments.count == 0;
-    
-    if(commentsTableView.hidden == false){
-        [self.loadingView stopLoading];
+
+    if (self.loadingView.superview != nil) {
+        commentsLabel.hidden = self.comments.count == 0;
     }
 
-    [self adjustCommentsTableHeight];
     [self.actionBar actionButtonTitleNeedsUpdate];
     [commentsTableView reloadData];
 }
@@ -237,7 +237,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (galleryPurchases.count == 1) {
             NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
 
-//            NSLog(@"%@", purchase[@"outlet"]);
+            //            NSLog(@"%@", purchase[@"outlet"]);
 
             NSString *title = [purchase valueForKeyPath:@"outlet.title"];
 
@@ -271,7 +271,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             }
 
             if (boughtByOneOutlet) {
-                if ([outletNames[0] isEqualToString:@"Fresco News"]){
+                if ([outletNames[0] isEqualToString:@"Fresco News"]) {
                     verificationViewLeftContraint.constant = 56; // Zeplin distance from left
                     verificationEyeImageView.hidden = false;
                 }
@@ -307,22 +307,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     self.actionBar.hidden = false;
-    addCommentBotConstraint.constant = 0;
 
     [self.galleryView playerTap:tap];
-    if (self.commentTextField.isEditing) {
-        [self.commentTextField resignFirstResponder];
-        [UIView animateWithDuration:0.2
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           [self setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-                         }
-                         completion:nil];
-    }
-
-    [self updateConstraintsIfNeeded];
-    [self layoutIfNeeded];
+    
+    [self.commentTextField resignFirstResponder];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -331,50 +319,84 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 
     addCommentBotConstraint.constant = keyboardSize.height;
+    commentsTVBotConstraint.constant = keyboardSize.height + 44;
+    
+    CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+    [self.scrollView setContentOffset:bottomOffset animated:YES];
 
     [self updateConstraintsIfNeeded];
     [self layoutIfNeeded];
 }
 
-- (void)adjustCommentsTableHeight {
-    /*CGFloat height = 0;
-    for(int i = 0; i < [commentsTableView numberOfRowsInSection:0]; i ++){
-        height+=[self tableView:commentsTableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-    }
-    commentsHeightConstraint.constant = height;
-    [self setNeedsUpdateConstraints];
-    [self layoutIfNeeded];*/
+- (void)keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+
+    self.actionBar.hidden = false;
+    
+    addCommentBotConstraint.constant = 0;
+    commentsTVBotConstraint.constant = 44;
+
+    [self.commentTextField resignFirstResponder];
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
+
+
+    CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+    [self.scrollView setContentOffset:bottomOffset animated:YES];
+
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
 }
 
 #pragma mark - Comment Methods
 
 - (void)sendComment {
-    if (!self.commentTextField.text || self.commentTextField.text.length == 0) {
-        return;
+    if (self.loadingView.hidden) {
+        if (!self.commentTextField.text || self.commentTextField.text.length == 0) {
+            return;
+        }
+
+        self.commentTextField.enablesReturnKeyAutomatically = false;
+
+        self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(addCommentView.frame.size.width - 30, 10, 20, 20)];
+        self.loadingView.tintColor = [UIColor frescoOrangeColor];
+        [self.loadingView setPullProgress:90];
+        [self.loadingView startAnimating];
+        [self.loadingView setHidden:false];
+        [addCommentView addSubview:self.loadingView];
+
+        [[FRSAPIClient sharedClient] addComment:self.commentTextField.text
+                                      toGallery:self.gallery.uid
+                                     completion:^(id responseObject, NSError *error) {
+                                       // NSLog(@"%@ %@", responseObject, error);
+                                       self.commentTextField.enablesReturnKeyAutomatically = true;
+                                       [self.loadingView stopLoading];
+                                       [self.loadingView removeFromSuperview];
+                                       [self.loadingView setHidden:true];
+                                       if (error) {
+                                           NSString *message = [NSString stringWithFormat:@"\"%@\"", self.commentTextField.text];
+                                           errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                           [errorAlertView show];
+                                       } else {
+                                           CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+                                           [self.scrollView setContentOffset:bottomOffset animated:YES];
+
+                                           int comments = [[self.gallery valueForKey:@"comments"] intValue];
+                                           comments++;
+                                           [self.gallery setValue:[NSNumber numberWithInt:comments] forKey:@"comments"];
+                                           [self.actionBar actionButtonTitleNeedsUpdate];
+
+                                           self.totalCommentCount++;
+
+                                           self.commentTextField.text = @"";
+
+                                           [self reloadComments];
+                                           [self dismissKeyboard:Nil];
+                                       }
+                                     }];
     }
-
-    [[FRSAPIClient sharedClient] addComment:self.commentTextField.text
-                                  toGallery:self.gallery.uid
-                                 completion:^(id responseObject, NSError *error) {
-                                   // NSLog(@"%@ %@", responseObject, error);
-                                   if (error) {
-                                       NSString *message = [NSString stringWithFormat:@"\"%@\"", self.commentTextField.text];
-                                       errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                       [errorAlertView show];
-                                   } else {
-                                       int comments = [[self.gallery valueForKey:@"comments"] intValue];
-                                       comments++;
-                                       [self.gallery setValue:[NSNumber numberWithInt:comments] forKey:@"comments"];
-                                       [self.actionBar actionButtonTitleNeedsUpdate];
-                                       
-                                       self.totalCommentCount++;
-
-                                       self.commentTextField.text = @"";
-
-                                       [self reloadComments];
-                                       [self dismissKeyboard:Nil];
-                                   }
-                                 }];
 }
 
 - (void)loadMoreComments {
@@ -405,19 +427,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                           if (([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
                                               showsMoreButton = FALSE;
                                           }
-
-                                          [self adjustCommentsTableHeight];
                                         }];
 }
 
 - (void)fetchCommentsWithID:(NSString *)galleryID {
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID
                                                 completion:^(id responseObject, NSError *error) {
+                                                  [self.loadingView stopLoading];
+                                                  [self.loadingView setHidden:true];
                                                   [self.loadingView removeFromSuperview];
-                                                  self.loadingView.alpha = 0;
 
                                                   if (error || !responseObject) {
                                                       //[self commentError:error];
+                                                      [self configureComments];
                                                       return;
                                                   }
 
@@ -433,8 +455,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                   } else {
                                                       showsMoreButton = TRUE;
                                                   }
-
-                                                  [self configureComments];
+                                                    [self configureComments];
                                                 }];
 }
 
@@ -454,21 +475,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                       [_comments addObject:commentObject];
                                                   }
 
-                                                    if((self.comments.count == 0) || (commentsTableView.hidden == true && self.comments.count > 0)){
-                                                        [self configureComments];
-                                                    }
+                                                  if ((self.comments.count == 0) || (commentsTableView.hidden == true && self.comments.count > 0)) {
+                                                      [self configureComments];
+                                                  }
 
-                                                    if (response.count < 10) {
-                                                        showsMoreButton = FALSE;
-                                                    } else {
-                                                        showsMoreButton = TRUE;
-                                                    }
-                                                    
-                                                    CGPoint offset = self.scrollView.contentOffset;
-                                                    [commentsTableView reloadData];
-                                                    [commentsTableView layoutIfNeeded]; // Force layout so things are updated before resetting the contentOffset.
-                                                    [self.scrollView setContentOffset:offset];
-                                                    
+                                                  if (response.count < 10) {
+                                                      showsMoreButton = FALSE;
+                                                  } else {
+                                                      showsMoreButton = TRUE;
+                                                  }
+
+                                                  CGPoint offset = self.scrollView.contentOffset;
+                                                  [commentsTableView reloadData];
+                                                  [commentsTableView layoutIfNeeded]; // Force layout so things are updated before resetting the contentOffset.
+                                                  [self.scrollView setContentOffset:offset];
+
                                                 }];
 }
 
@@ -586,8 +607,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 #pragma mark - UITableViewDataSource
 
--(void)reloadData{
-    
+- (void)reloadData {
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -611,7 +631,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return 0;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.articlesTableView) {
         return CELL_HEIGHT;
     }
