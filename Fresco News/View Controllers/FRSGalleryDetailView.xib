@@ -20,10 +20,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zpr-wT-uyb">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                     <subviews>
                         <view multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="245" verticalHuggingPriority="245" translatesAutoresizingMaskIntoConstraints="NO" id="NbN-nY-a20" userLabel="ContentView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="682"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="638"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Sv-gY-L1p" customClass="FRSGalleryView">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
@@ -133,7 +133,7 @@
                                 <constraint firstItem="w5E-hK-yjE" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" id="abv-fW-AJo"/>
                                 <constraint firstAttribute="trailing" secondItem="rLO-dS-YLU" secondAttribute="trailing" id="b8x-qz-otk"/>
                                 <constraint firstItem="gkQ-Kx-cFr" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" constant="16" id="c8r-nW-kaR"/>
-                                <constraint firstAttribute="bottom" secondItem="rLO-dS-YLU" secondAttribute="bottom" constant="44" id="g8d-Hn-cDn"/>
+                                <constraint firstAttribute="bottom" secondItem="rLO-dS-YLU" secondAttribute="bottom" id="g8d-Hn-cDn"/>
                                 <constraint firstItem="Zrb-4n-89F" firstAttribute="top" secondItem="1Sv-gY-L1p" secondAttribute="bottom" id="guB-vx-av9"/>
                                 <constraint firstItem="rLO-dS-YLU" firstAttribute="top" secondItem="0yb-JT-eRR" secondAttribute="bottom" constant="8" id="j2b-un-Mfk"/>
                                 <constraint firstItem="w5E-hK-yjE" firstAttribute="top" secondItem="Ehb-El-AVW" secondAttribute="bottom" id="jtj-qc-jWH"/>
@@ -202,8 +202,8 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="zpr-wT-uyb" secondAttribute="bottom" id="2fe-u8-qaV"/>
                 <constraint firstAttribute="trailing" secondItem="zpr-wT-uyb" secondAttribute="trailing" id="Anc-zV-xhk"/>
+                <constraint firstItem="kR5-eC-RzP" firstAttribute="top" secondItem="zpr-wT-uyb" secondAttribute="bottom" id="Av7-dO-wIG"/>
                 <constraint firstItem="NbN-nY-a20" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" priority="250" id="ebm-Vm-K9D"/>
                 <constraint firstItem="kR5-eC-RzP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="grg-0v-Tdx"/>
                 <constraint firstAttribute="trailing" secondItem="kR5-eC-RzP" secondAttribute="trailing" id="iys-QB-Yve"/>
@@ -223,7 +223,6 @@
                 <outlet property="commentsHeightConstraint" destination="QYQ-i6-rwz" id="s7r-Sc-62K"/>
                 <outlet property="commentsLabel" destination="0yb-JT-eRR" id="rRx-93-3t1"/>
                 <outlet property="commentsLabelTopConstraint" destination="Q97-PT-NWc" id="kWW-8R-KRF"/>
-                <outlet property="commentsTVBotConstraint" destination="g8d-Hn-cDn" id="Wqo-Ti-Iep"/>
                 <outlet property="commentsTVTopLine" destination="MEo-kD-hxy" id="sWm-4A-SHA"/>
                 <outlet property="commentsTableView" destination="rLO-dS-YLU" id="kbK-DF-hSu"/>
                 <outlet property="galleryHeightConstraint" destination="yka-Fq-ZAn" id="VJm-FE-408"/>
