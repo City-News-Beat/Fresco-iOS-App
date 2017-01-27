@@ -38,6 +38,7 @@
         hasPlayed = FALSE;
 
         [self.galleryView loadGallery:self.gallery];
+        [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
