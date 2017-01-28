@@ -17,7 +17,7 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
 @property (nonatomic) BOOL touchEnabled;
 
@@ -51,6 +51,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (self) {
         self.gallery = gallery; //Remove after tested
         galleryDetailView.gallery = gallery;
+        galleryDetailView.delegate = self;
+        galleryDetailView.navigationController = self.navigationController;
 
         if (gallery.uid) {
             self.galleryID = gallery.uid;
@@ -80,6 +82,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker screen:@"Gallery Detail"];
 
     dateEntered = [NSDate date];
+    
+    // Access followingButton and update icon when view appears
+    [galleryDetailView.galleryView.galleryFooterView.userView.followingButton updateIconForFollowing:[self.gallery.creator.following boolValue]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -113,6 +118,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)configureNIBDetailView {
     galleryDetailView = [[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryDetailView" owner:self options:nil] objectAtIndex:0];
+    galleryDetailView.delegate = self;
+    galleryDetailView.navigationController = self.navigationController;
     [self.view addSubview:galleryDetailView];
     
     galleryDetailView.frame = self.view.frame;

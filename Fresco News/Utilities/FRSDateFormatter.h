@@ -14,6 +14,7 @@
 + (NSString *)dateStringGalleryFormatFromDate:(NSDate *)date;
 + (NSString *)timestampStringFromDate:(NSDate *)date;
 + (NSString *)relativeTimeFromDate:(NSDate *)compareDate;
-+ (NSString *)dateDifference:(NSDate *)date;
++ (NSString *)dateDifference:(NSDate *)date withAbbreviatedMonth:(BOOL)abbreviated;
++ (NSString *)formattedTimestampFromDate:(NSDate *)date;
 
 @end

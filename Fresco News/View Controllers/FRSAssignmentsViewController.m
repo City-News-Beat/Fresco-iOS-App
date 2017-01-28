@@ -877,7 +877,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     [formatter setDateFormat:@"h:mm a"];
     
-    postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate], [formatter stringFromDate:correctDate]];
+    postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate withAbbreviatedMonth:NO], [formatter stringFromDate:correctDate]];
     
     self.postedLabel.text = postedString;
 }

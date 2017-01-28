@@ -10,9 +10,15 @@
 #import "FRSGalleryView.h"
 #import "FRSGalleryExpandedViewController.h"
 
+@protocol FRSGalleryDetailViewDelegate <NSObject>
+@end
+
 @interface FRSGalleryDetailView : UIView <FRSGalleryViewDelegate>
 
+@property (weak, nonatomic) NSObject<FRSGalleryDetailViewDelegate> *delegate;
+
 @property (strong, nonatomic) FRSGallery *gallery;
+@property (strong, nonatomic) UINavigationController *navigationController;
 @property NSString *defaultPostID;
 @property int totalCommentCount;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;

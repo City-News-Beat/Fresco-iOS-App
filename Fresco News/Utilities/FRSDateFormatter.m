@@ -84,7 +84,7 @@
     return result;
 }
 
-+ (NSString *)dateDifference:(NSDate *)date {
++ (NSString *)dateDifference:(NSDate *)date withAbbreviatedMonth:(BOOL)abbreviated {
     const NSTimeInterval secondsPerDay = 60 * 60 * 24;
     NSTimeInterval diff = [date timeIntervalSinceNow] * -1.0;
 
@@ -100,10 +100,17 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone:[NSTimeZone localTimeZone]];
         [formatter setDateFormat:@"MMMM d"];
-
+        
+        if (abbreviated) {
+            [formatter setDateFormat:@"MMM d"];
+        }
+        
         // Display year only if <1yr
         if (diff >= 365) {
             [formatter setDateFormat:@"MMMM d, yyy"];
+            if (abbreviated) {
+                [formatter setDateFormat:@"MMM d, yyy"];
+            }
         }
         return [formatter stringFromDate:correctDate];
     }
@@ -169,6 +176,20 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterLongStyle;
     return [formatter stringFromDate:date];
+}
+
+
++ (NSString *)formattedTimestampFromDate:(NSDate *)date {
+    NSTimeInterval sinceStart = [date timeIntervalSinceNow];
+    sinceStart *= -1;
+    
+    NSDate *correctDate = date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"h:mm a"];
+    [formatter setAMSymbol:@"a.m."];
+    [formatter setPMSymbol:@"p.m."];
+    return [[formatter stringFromDate:correctDate] lowercaseString];
 }
 
 @end
