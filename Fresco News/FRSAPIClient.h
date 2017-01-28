@@ -35,7 +35,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @interface FRSAPIClient : NSObject <FRSAlertViewDelegate>
 
 @property (nonatomic, retain) AFHTTPSessionManager *requestManager;
-@property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
 @property (strong, nonatomic) FRSAlertView *suspendedAlert;
@@ -67,6 +66,8 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 // generic auth-ed call
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 
@@ -151,7 +152,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)handleError:(NSError *)error ;
-- (AFHTTPSessionManager *)managerWithFrescoConfigurations;
-- (void)reevaluateAuthorization;
+- (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType;
+
 @end

@@ -7,7 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FRSBaseManager.h"
 
-@interface FRSSessionManager : NSObject
+@interface FRSSessionManager : FRSBaseManager
+
++ (instancetype)sharedInstance;
+
+- (void)generateClientCredentials;
+- (void)refreshToken:(BOOL)isUserToken completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)saveCientToken:(NSString *)clientToken;
+- (void)saveRefreshCientToken:(NSString *)refreshClientToken;
+- (NSString *)clientToken;
+- (void)saveUserToken:(NSString *)token;
+- (void)deleteTokens;
+- (NSString *)authenticationToken;
 
 @end

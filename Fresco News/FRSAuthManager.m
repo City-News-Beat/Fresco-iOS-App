@@ -8,6 +8,7 @@
 
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSSessionManager.h"
 #import "EndpointManager.h"
 #import "NSString+Fresco.h"
 
@@ -36,22 +37,9 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     return FALSE;
 }
 
-- (NSString *)authenticationToken {
-    NSArray *allAccounts = [SAMKeychain accountsForService:serviceName];
-
-    if ([allAccounts count] == 0) {
-        return Nil;
-    }
-
-    NSDictionary *credentialsDictionary = [allAccounts firstObject];
-    NSString *accountName = credentialsDictionary[kSAMKeychainAccountKey];
-
-    return [SAMKeychain passwordForService:serviceName account:accountName];
-}
-
 - (void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"]) {
-        [self saveToken:[responseObject objectForKey:@"token"] forUser:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
+        [[FRSSessionManager sharedInstance] saveUserToken:[responseObject objectForKey:@"token"]];
     }
 
     FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
@@ -60,7 +48,6 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
         authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
     }
 
-    [[FRSAPIClient sharedClient] reevaluateAuthorization];
     [[FRSUserManager sharedInstance] updateLocalUser];
 
     NSDictionary *currentInstallation = [self currentInstallation];
@@ -92,7 +79,6 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
                            completion:^(id responseObject, NSError *error) {
 
                              if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-                                 // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
                                  [self handleUserLogin:responseObject];
                              }
 
@@ -113,20 +99,7 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 }
 
 - (void)logout {
-    NSArray *allAccounts = [SAMKeychain allAccounts];
-
-    for (NSDictionary *account in allAccounts) {
-        NSString *accountName = account[kSAMKeychainAccountKey];
-        [SAMKeychain deletePasswordForService:serviceName account:accountName];
-    }
-}
-
-- (NSString *)tokenForUser:(NSString *)userName {
-    return [SAMKeychain passwordForService:serviceName account:userName];
-}
-
-- (void)saveToken:(NSString *)token forUser:(NSString *)userName {
-    [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
+    [[FRSSessionManager sharedInstance] deleteTokens];
 }
 
 // all info needed for "installation" field of registration/signin
@@ -338,5 +311,8 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 
     return socialDigestion;
 }
+
+
+
 
 @end

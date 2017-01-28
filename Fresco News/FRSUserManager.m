@@ -17,7 +17,6 @@ static NSString *const setAvatarEndpoint = @"user/avatar";
 static NSString *const updateUserEndpoint = @"user/update";
 static NSString *const authenticatedUserEndpoint = @"user/me";
 
-
 @implementation FRSUserManager
 
 + (instancetype)sharedInstance {
@@ -41,6 +40,8 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
 
     return self;
 }
+
+#pragma API calls
 
 - (void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion {
 
@@ -155,13 +156,10 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
 }
 
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
-
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.fresco" code:404 userInfo:Nil]); // no authenticated user, 404
         return;
     }
-
-    [[FRSAPIClient sharedClient] reevaluateAuthorization]; // specific check on bearer
 
     // authenticated request to user/me (essentially user/ozetadev w/ more fields)
     [[FRSAPIClient sharedClient] get:authenticatedUserEndpoint
@@ -234,24 +232,9 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
 }
 
 - (void)postAvatarWithParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPSessionManager *manager = [[FRSAPIClient sharedClient] managerWithFrescoConfigurations];
-
-    [manager POST:setAvatarEndpoint
-        parameters:parameters
-        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-          NSString *paramNameForImage = @"avatar";
-          [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-        }
-        progress:^(NSProgress *_Nonnull uploadProgress) {
-
-        }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [[FRSAPIClient sharedClient] handleError:error];
-        }];
+    [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:parameters withData:parameters[@"avatar"] withName:@"avatar" withFileName:@"photo.jpg" completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 @end
