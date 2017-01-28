@@ -23,8 +23,14 @@
 - (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion; // leaves burdon of constructing dict obj to sender (will have method for that)
-- (NSString *)authenticationToken;
 - (void)logout;
 - (NSDictionary *)currentInstallation;
+- (void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion;
+- (void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion;
+- (void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion;
+- (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
 
 @end

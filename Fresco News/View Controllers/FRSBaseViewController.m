@@ -155,7 +155,6 @@
 #pragma mark - Logout
 
 - (void)logoutWithPop:(BOOL)pop {
-
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-enabled"];
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -166,7 +165,6 @@
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
     }
 
-    [[FRSAuthManager sharedInstance] logout];
     [FRSTracker reset];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -179,8 +177,6 @@
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
     [delegate stopNotificationTimer];
-
-    //[SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
 
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];

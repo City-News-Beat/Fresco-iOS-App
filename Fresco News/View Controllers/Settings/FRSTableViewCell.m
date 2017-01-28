@@ -18,6 +18,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSLocationManager.h"
 #import "FRSUserManager.h"
+#import "FRSAuthManager.h"
 
 @interface FRSTableViewCell () <FRSAlertViewDelegate>
 
@@ -177,7 +178,7 @@
         self.alert.delegate = self;
         [self.alert show];
 
-        [[FRSAPIClient sharedClient] unlinkTwitter:^(id responseObject, NSError *error) {
+        [[FRSAuthManager sharedInstance] unlinkTwitter:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Twitter Error: %@", error);
         }];
 
@@ -193,8 +194,7 @@
           self.userInteractionEnabled = YES;
 
           if (session) {
-
-              [[FRSAPIClient sharedClient] linkTwitter:session.authToken
+              [[FRSAuthManager sharedInstance] linkTwitter:session.authToken
                                                 secret:session.authTokenSecret
                                             completion:^(id responseObject, NSError *error) {
                                               if (responseObject && !error) {
@@ -251,7 +251,7 @@
 
         self.facebookSwitch.on = NO;
         self.facebookSwitch.enabled = NO;
-        [[FRSAPIClient sharedClient] unlinkFacebook:^(id responseObject, NSError *error) {
+        [[FRSAuthManager sharedInstance] unlinkFacebook:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Facebook Error: %@", error);
           self.facebookSwitch.enabled = YES;
           if (error) {
@@ -283,7 +283,7 @@
 
                                   if (result && !error) {
 
-                                      [[FRSAPIClient sharedClient] linkFacebook:[FBSDKAccessToken currentAccessToken].tokenString
+                                      [[FRSAuthManager sharedInstance] linkFacebook:[FBSDKAccessToken currentAccessToken].tokenString
                                                                      completion:^(id responseObject, NSError *error) {
                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                                                                        [self.facebookSwitch setOn:YES animated:YES];

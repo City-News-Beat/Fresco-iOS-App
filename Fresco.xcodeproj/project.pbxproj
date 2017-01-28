@@ -143,12 +143,13 @@
 		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
 		CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */; };
 		CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */; };
-		CEC20DEC1E1C795400532D75 /* FRSUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEB1E1C795400532D75 /* FRSUserManager.m */; };
-		CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */; };
 		CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */; };
+		CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3621B21E3922FB00C4330E /* FRSSessionManager.m */; };
 		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
 		CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */; };
 		CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */; };
+		CEC20DEC1E1C795400532D75 /* FRSUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEB1E1C795400532D75 /* FRSUserManager.m */; };
+		CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */; };
 		CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
@@ -563,15 +564,17 @@
 		CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseManager.m; sourceTree = "<group>"; };
 		CE1E6EF81E1C82F900236AC7 /* NSString+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Fresco.h"; path = "Categories/NSString+Fresco.h"; sourceTree = "<group>"; };
 		CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Fresco.m"; path = "Categories/NSString+Fresco.m"; sourceTree = "<group>"; };
-		CEC20DEA1E1C795400532D75 /* FRSUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserManager.h; sourceTree = "<group>"; };
-		CEC20DEB1E1C795400532D75 /* FRSUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserManager.m; sourceTree = "<group>"; };
-		CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAuthManager.h; sourceTree = "<group>"; };
-		CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAuthManager.m; sourceTree = "<group>"; };
 		CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSEmailViewController.xib; path = "Fresco News/View Controllers/Settings/FRSEmailViewController.xib"; sourceTree = "<group>"; };
+		CE3621B11E3922FB00C4330E /* FRSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSessionManager.h; sourceTree = "<group>"; };
+		CE3621B21E3922FB00C4330E /* FRSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSessionManager.m; sourceTree = "<group>"; };
 		CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsViewController.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.xib"; sourceTree = "<group>"; };
 		CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPaymentViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPaymentViewController.xib"; sourceTree = "<group>"; };
 		CEC20DE71E1C6BC000532D75 /* FRSIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSIdentityViewController.h; path = "Fresco News/View Controllers/FRSIdentityViewController.h"; sourceTree = SOURCE_ROOT; };
 		CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSIdentityViewController.m; path = "Fresco News/View Controllers/FRSIdentityViewController.m"; sourceTree = SOURCE_ROOT; };
+		CEC20DEA1E1C795400532D75 /* FRSUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserManager.h; sourceTree = "<group>"; };
+		CEC20DEB1E1C795400532D75 /* FRSUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserManager.m; sourceTree = "<group>"; };
+		CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAuthManager.h; sourceTree = "<group>"; };
+		CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAuthManager.m; sourceTree = "<group>"; };
 		CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSIdentityViewController.xib; path = "Fresco News/View Controllers/Onboard/FRSIdentityViewController.xib"; sourceTree = SOURCE_ROOT; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
@@ -1175,6 +1178,8 @@
 				CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */,
 				CE1E6EF51E1C828600236AC7 /* FRSBaseManager.h */,
 				CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */,
+				CE3621B11E3922FB00C4330E /* FRSSessionManager.h */,
+				CE3621B21E3922FB00C4330E /* FRSSessionManager.m */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -2849,6 +2854,7 @@
 				D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
+				CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
 				D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,

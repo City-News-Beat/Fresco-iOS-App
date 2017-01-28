@@ -35,7 +35,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @interface FRSAPIClient : NSObject <FRSAlertViewDelegate>
 
 @property (nonatomic, retain) AFHTTPSessionManager *requestManager;
-@property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
 @property (strong, nonatomic) FRSAlertView *suspendedAlert;
@@ -67,17 +66,16 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 // generic auth-ed call
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 
 //registration
 
 - (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
+
 - (NSNumber *)fileSizeForURL:(NSURL *)url;
-// social
-- (void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -133,7 +131,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
 
 // file
-- (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
@@ -152,13 +149,9 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion;
-
 - (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)reevaluateAuthorization;
+- (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType;
+
 @end

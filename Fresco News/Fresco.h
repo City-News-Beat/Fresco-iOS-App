@@ -56,10 +56,6 @@ static NSString *const dualLocationEndpoint = @"user/locationcall"; // send loca
 static NSString *const acceptAssignmentEndpoint = @"assignment/%@/accept";
 static NSString *const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
 
-// sign in / sign up (authorization) methods
-static NSString *const loginEndpoint = @"auth/signin";
-static NSString *const signUpEndpoint = @"auth/register";
-static NSString *const socialLoginEndpoint = @"auth/signin/social";
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
 
@@ -67,13 +63,7 @@ static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
 static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
 static NSString *const getCommentEndpoint = @"gallery/%@/comment/%@";
 
-// user endpoints
-static NSString *const userEndpoint = @"user/";
-static NSString *const setAvatarEndpoint = @"user/avatar";
-static NSString *const updateUserEndpoint = @"user/update";
-static NSString *const authenticatedUserEndpoint = @"user/me";
-static NSString *const addSocialEndpoint = @"user/social/connect/";
-static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
+
 
 static NSString *const disableAccountEndpoint = @"user/disable/";
 

@@ -19,6 +19,7 @@
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSSessionManager.h"
 #import "NSDate+ISO.h"
 
 @implementation FRSAPIClient
@@ -32,93 +33,6 @@
     });
 
     return client;
-}
-
-- (void)handleError:(NSError *)error {
-    switch (error.code / 100) {
-    case 5:
-        // server error
-        break;
-    case 4:
-        // client error
-        switch (error.code) {
-        case 401:
-
-            break;
-        case 403:
-
-            break;
-        case 404:
-
-            break;
-
-        case 405:
-
-            break;
-
-        case 412:
-            // installation token error or social taken error
-            break;
-        default:
-            break;
-        }
-        break;
-
-    case 3:
-        // redirection
-        break;
-
-    //test
-    case 2:
-        // prolly not an error
-        break;
-
-    default:
-        break;
-    }
-}
-
-- (void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (token && secret) {
-        [self post:addSocialEndpoint
-            withParameters:@{ @"platform" : @"twitter",
-                              @"token" : token,
-                              @"secret" : secret }
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-    } else {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:@{ @"message" : @"Incorrect Twitter credentials" }]);
-    }
-}
-
-- (void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (token) {
-        [self post:addSocialEndpoint
-            withParameters:@{ @"platform" : @"facebook",
-                              @"token" : token }
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-    } else {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:@{ @"message" : @"Incorrect Twitter credentials" }]);
-    }
-}
-
-- (void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:deleteSocialEndpoint
-        withParameters:@{ @"platform" : @"facebook" }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:deleteSocialEndpoint
-        withParameters:@{ @"platform" : @"twitter" }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
 }
 
 - (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
@@ -159,31 +73,6 @@
 
 - (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:disableAccountEndpoint withParameters:digestion completion:completion];
-}
-
-// all the info needed for "social_links" field of registration/signin
-- (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken {
-    // side note, twitter_handle is outside social links, needs to be handled outside this method
-    NSMutableDictionary *socialDigestion = [[NSMutableDictionary alloc] init];
-
-    if (twitterSession) {
-        // add twitter to digestion
-        if (twitterSession.authToken && twitterSession.authTokenSecret) {
-            NSDictionary *twitterDigestion = @{ @"token" : twitterSession.authToken,
-                                                @"secret" : twitterSession.authTokenSecret };
-            [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
-        }
-    }
-
-    if (facebookToken) {
-        // add facebook to digestion
-        if (facebookToken.tokenString) {
-            NSDictionary *facebookDigestion = @{ @"token" : facebookToken.tokenString };
-            [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
-        }
-    }
-
-    return socialDigestion;
 }
 
 - (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -408,8 +297,7 @@
             }];
 }
 
-- (AFHTTPSessionManager *)managerWithFrescoConfigurations {
-
+- (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType {
     if (!self.requestManager) {
         AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
         self.requestManager = manager;
@@ -417,7 +305,7 @@
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     }
 
-    [self reevaluateAuthorization];
+    [self reevaluateAuthorization:endpoint withRequestType:requestType];
 
     return self.requestManager;
 }
@@ -433,25 +321,6 @@
             }];
 }
 
-- (void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *twitterDictionary = [[NSMutableDictionary alloc] init];
-    [twitterDictionary setObject:@"Twitter" forKey:@"platform"];
-
-    if (twitterSession.authToken && twitterSession.authTokenSecret) {
-        [twitterDictionary setObject:twitterSession.authToken forKey:@"token"];
-        [twitterDictionary setObject:twitterSession.authTokenSecret forKey:@"secret"];
-    } else {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
-        return;
-    }
-
-    [self post:addSocialEndpoint
-        withParameters:twitterDictionary
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
 - (void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
 
@@ -459,107 +328,134 @@
         withParameters:Nil
             completion:^(id responseObject, NSError *error) {
               completion(responseObject, error);
-            }];
-}
-- (void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *tokenString = facebookToken.tokenString;
 
-    if (!tokenString) {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
-        return;
-    }
-
-    NSDictionary *facebookDictionary = @{ @"platform" : @"Facebook",
-                                          @"token" : tokenString };
-
-    [self post:addSocialEndpoint
-        withParameters:facebookDictionary
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
             }];
 }
 
 /*
  Keychain-Based interaction & authentication
  */
-
-- (void)reevaluateAuthorization {
-    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        // set client token
+- (void)reevaluateAuthorization:(NSString *)endpoint withRequestType:(NSString *)requestType {
+    if ([self shouldSendBasic:endpoint withRequestType:requestType]) {
+        [self.requestManager.requestSerializer setValue:[self basicAuthorization] forHTTPHeaderField:@"Authorization"];
+    } else if ([self shouldSendClientToken:endpoint]) {
         [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
-    } else { // set bearer token if we haven't already
-        // set bearer client token
-        NSString *currentBearerToken = [[FRSAuthManager sharedInstance] authenticationToken];
-        if (currentBearerToken) {
-            currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
-
-            [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
-            [self startLocator];
-        } else { // something went wrong here (maybe pass to error handler)
-            [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
-        }
+    } else if ([self shouldSendUserToken:endpoint]) {
+        [self.requestManager.requestSerializer setValue:[self userAuthorization] forHTTPHeaderField:@"Authorization"];
+    } else {
+        [[FRSSessionManager sharedInstance] generateClientCredentials];
+        [self.requestManager.requestSerializer setValue:[self basicAuthorization] forHTTPHeaderField:@"Authorization"];
     }
-    _managerAuthenticated = TRUE;
+}
+
+- (BOOL)shouldSendClientToken:(NSString *)endpoint {
+    NSString *clientToken = [[FRSSessionManager sharedInstance] clientToken];
+    return (![[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/signin"] && ![endpoint containsString:@"auth/token"] && clientToken);
+}
+
+- (BOOL)shouldSendUserToken:(NSString *)endpoint {
+    return ([[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/signin"] && ![endpoint containsString:@"auth/token"]);
+}
+
+- (BOOL)shouldSendBasic:(NSString *)endpoint withRequestType:(NSString *)requestType {
+    return ![requestType isEqualToString:@"DELETE"] && ([endpoint containsString:@"auth/signin"] || [endpoint containsString:@"auth/token"]);
+}
+
+- (NSString *)basicAuthorization {
+    return [NSString stringWithFormat:@"Basic %@", [EndpointManager sharedInstance].currentEndpoint.frescoClientId];
+}
+
+- (NSString *)userAuthorization {
+    return [NSString stringWithFormat:@"Bearer %@", [[FRSSessionManager sharedInstance] authenticationToken]];
 }
 
 - (NSString *)clientAuthorization {
-    return [NSString stringWithFormat:@"Basic %@", [EndpointManager sharedInstance].currentEndpoint.frescoClientId];
+    return [NSString stringWithFormat:@"Bearer %@", [[FRSSessionManager sharedInstance] clientToken]];
 }
 
 /*
  Generic HTTP methods for use within class
  */
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
-    
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"GET"];
+
     [manager GET:endPoint
-      parameters:parameters
+        parameters:parameters
         progress:^(NSProgress *_Nonnull downloadProgress) {
         }
-         success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-             completion(responseObject, Nil);
-         }
-         failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-             completion(Nil, error);
-             [self handleError:error];
-         }];
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+          if (response && response.statusCode == 401) {
+              [[FRSSessionManager sharedInstance] refreshToken:[[FRSAuthManager sharedInstance] isAuthenticated]
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      if (!error) {
+                                                          [self get:endPoint withParameters:parameters completion:completion];
+                                                      }
+                                                    }];
+          } else {
+              completion(Nil, error);
+          }
+        }];
 }
 
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
-    
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"POST"];
+
     [manager POST:endPoint
-       parameters:parameters
-         progress:^(NSProgress *_Nonnull downloadProgress) {
-         }
-          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-              completion(responseObject, Nil);
-          }
-          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+        parameters:parameters
+        progress:^(NSProgress *_Nonnull downloadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+          if (response && response.statusCode == 401) {
+              [[FRSSessionManager sharedInstance] refreshToken:[[FRSAuthManager sharedInstance] isAuthenticated]
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      if (!error) {
+                                                          [self post:endPoint withParameters:parameters completion:completion];
+                                                      }
+                                                    }];
+          } else {
               completion(Nil, error);
-              [self handleError:error];
-          }];
+          }
+        }];
 }
 
-- (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
-    
-    [manager POST:endPoint
-       parameters:parameters
-constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-    NSString *paramNameForImage = @"avatar";
-    [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+- (void) delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"DELETE"];
+
+    [manager DELETE:endPoint
+        parameters:parameters
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+        }];
 }
-         progress:^(NSProgress *_Nonnull uploadProgress) {
-             
-         }
-          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-              completion(responseObject, Nil);
-          }
-          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-              completion(Nil, error);
-              [self handleError:error];
-          }];
+
+- (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"POST"];
+
+    [manager POST:endPoint
+        parameters:parameters
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+          [formData appendPartWithFileData:data name:name fileName:fileName mimeType:@"image/jpeg"];
+        }
+        progress:^(NSProgress *_Nonnull uploadProgress) {
+
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(nil, error);
+        }];
 }
 
 - (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -568,32 +464,31 @@ constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
     [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
     manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
-    
+
     [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
-    
+
     [manager POST:endPoint
-       parameters:nil
-constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-    [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-    [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
-}
-         progress:^(NSProgress *_Nonnull uploadProgress) {
-         }
-          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-              completion(responseObject, Nil);
-          }
-          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-              completion(Nil, error);
-              [self handleError:error];
-          }];
+        parameters:nil
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+          [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
+        }
+        progress:^(NSProgress *_Nonnull uploadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+        }];
 }
 
 - (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:updateTaxInfoEndpoint
-withParameters:@{ @"stripe_document_token" : fileID }
-    completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+        withParameters:@{ @"stripe_document_token" : fileID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
 }
 
 /*
@@ -676,7 +571,6 @@ withParameters:@{ @"stripe_document_token" : fileID }
 }
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-
     NSString *endpoint = [NSString stringWithFormat:@"gallery/%@", gallery];
 
     [self get:endpoint
@@ -687,7 +581,6 @@ withParameters:@{ @"stripe_document_token" : fileID }
 }
 
 - (void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion {
-
     NSString *endpoint = [NSString stringWithFormat:@"assignment/%@", assignment];
 
     [self get:endpoint
@@ -844,6 +737,7 @@ withParameters:@{ @"stripe_document_token" : fileID }
               [[self managedObjectContext] save:Nil];
             }];
 }
+
 - (void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
@@ -917,6 +811,7 @@ withParameters:@{ @"stripe_document_token" : fileID }
               completion(responseObject, error);
             }];
 }
+
 - (void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.news" code:101 userInfo:Nil]);
@@ -983,6 +878,7 @@ withParameters:@{ @"stripe_document_token" : fileID }
 - (void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     [self fetchCommentsForGalleryID:gallery.uid completion:completion];
 }
+
 - (void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:commentsEndpoint, galleryID];
     [self get:endpoint

@@ -24,5 +24,6 @@
 - (void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)postAvatarWithParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 
 @end

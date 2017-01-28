@@ -12,6 +12,11 @@
 #import "FRSAPIClient.h"
 #import "FRSAuthManager.h"
 
+static NSString *const userEndpoint = @"user/";
+static NSString *const setAvatarEndpoint = @"user/avatar";
+static NSString *const updateUserEndpoint = @"user/update";
+static NSString *const authenticatedUserEndpoint = @"user/me";
+
 @implementation FRSUserManager
 
 + (instancetype)sharedInstance {
@@ -35,6 +40,8 @@
 
     return self;
 }
+
+#pragma API calls
 
 - (void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion {
 
@@ -149,13 +156,10 @@
 }
 
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
-
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.fresco" code:404 userInfo:Nil]); // no authenticated user, 404
         return;
     }
-
-    [[FRSAPIClient sharedClient] reevaluateAuthorization]; // specific check on bearer
 
     // authenticated request to user/me (essentially user/ozetadev w/ more fields)
     [[FRSAPIClient sharedClient] get:authenticatedUserEndpoint
@@ -219,11 +223,18 @@
 
 - (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-    
-    [[FRSAPIClient sharedClient] get:checkEndpoint withParameters:Nil
-   completion:^(id responseObject, NSError *error) {
-       completion(responseObject, error);
-   }];
+
+    [[FRSAPIClient sharedClient] get:checkEndpoint
+                      withParameters:Nil
+                          completion:^(id responseObject, NSError *error) {
+                            completion(responseObject, error);
+                          }];
+}
+
+- (void)postAvatarWithParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:parameters withData:parameters[@"avatar"] withName:@"avatar" withFileName:@"photo.jpg" completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 @end
