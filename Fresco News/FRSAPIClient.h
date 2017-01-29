@@ -41,14 +41,10 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 + (instancetype)sharedClient;
 - (NSManagedObjectContext *)managedObjectContext;
-- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void (^)(NSArray *stories, NSError *error))completion;
+
 - (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+
+
 - (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -78,7 +74,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion;
 
@@ -86,16 +81,15 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (NSDate *)dateFromString:(NSString *)string;
 
 - (void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
 
 - (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
 
 - (void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
 
 
 - (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -105,9 +99,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 
 
-
-
-- (void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 
@@ -129,7 +120,7 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
 - (NSString *)md5:(PHAsset *)asset;
 - (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
-- (void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+
 
 // terms
 - (void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;

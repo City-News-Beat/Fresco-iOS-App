@@ -26,7 +26,7 @@
     NSTimeInterval lastOffsetCapture;
     BOOL isScrollingFast;
 }
-@property (retain, nonatomic, readonly) NSArray *galleries;
+@property (retain, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 - (void)reloadFollowing;

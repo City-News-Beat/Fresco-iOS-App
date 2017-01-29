@@ -75,68 +75,14 @@
     [self post:disableAccountEndpoint withParameters:digestion completion:completion];
 }
 
-- (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
 
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
-/*
- Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
- */
 
-- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
-
-    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
-    [geoData setObject:@"Point" forKey:@"type"];
-    [geoData setObject:location forKey:@"coordinates"];
-
-    NSDictionary *params = @{
-
-        @"geo" : geoData,
-        @"radius" : @(radius),
-    };
-
-    [self get:assignmentsEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 - (void)showErrorWithMessage:(NSString *)message onCancel:(FRSAPIBooleanCompletionBlock)onCancel onRetry:(FRSAPIBooleanCompletionBlock)onRetry {
 }
 
-- (void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
-    [geoData setObject:@"MultiPoint" forKey:@"type"];
 
-    NSMutableDictionary *coordinates = [[NSMutableDictionary alloc] init];
-
-    int counter = 0;
-    for (CLLocation *loc in location) {
-        NSArray *coordinateLocation = @[ @(loc.coordinate.longitude), @(loc.coordinate.latitude) ];
-        [coordinates setObject:coordinateLocation forKey:[NSNumber numberWithInt:counter]];
-        counter++;
-    }
-
-    [geoData setObject:coordinates forKey:@"coordinates"];
-
-    NSDictionary *params = @{
-        @"geo" : geoData,
-        @"radius" : @(radius)
-    };
-
-    [self get:assignmentsEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 #pragma mark - Gallery Fetch
 
@@ -217,30 +163,7 @@
     [FRSLocator sharedLocator];
 }
 
-- (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion {
-    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
-    if (!authenticatedUser) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.fresco" code:404 userInfo:@{ @"error" : @"no user u dingus" }]);
-    }
-
-    NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
-
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:likeFeed, user.uid];
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 - (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     [FRSTracker track:galleryUnliked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
@@ -269,7 +192,6 @@
 }
 
 - (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-
     NSDictionary *params = [gallery jsonObject];
 
     [self post:createGalleryEndpoint
@@ -278,8 +200,6 @@
               completion(responseObject, error);
             }];
 }
-
-
 
 /*
  Keychain-Based interaction & authentication
@@ -508,62 +428,7 @@
             }];
 }
 
-- (void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:@"assignment/%@", assignment];
 
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-                  completion(responseObject, error);
-              } else {
-                  completion(nil, error);
-              }
-            }];
-}
-
-- (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([FRSAuthManager sharedInstance]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    NSString *endpoint = [NSString stringWithFormat:acceptAssignmentEndpoint, assignmentID];
-
-    [self post:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([FRSAuthManager sharedInstance]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    NSString *endpoint = [NSString stringWithFormat:unacceptAssignmentEndpoint, assignmentID];
-
-    [self post:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    [self get:acceptedAssignmentEndpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 - (NSDate *)dateFromString:(NSString *)string {
     if (!self.dateFormatter) {

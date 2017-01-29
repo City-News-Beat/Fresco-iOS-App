@@ -7,28 +7,21 @@
 //
 
 #import "FRSStoryView.h"
-
 #import "FRSStoryView.h"
 #import "FRSPost.h"
 #import "FRSStory.h"
-
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
 #import "FRSDateFormatter.h"
-
 #import "FRSScrollViewImageView.h"
-
 #import "FRSContentActionsBar.h"
-
 #import <Haneke/Haneke.h>
-
 #import "FRSProfileViewController.h"
-
 #import "FRSDualUserListViewController.h"
+#import "FRSStoryManager.h"
 
 #define TEXTVIEW_TOP_PADDING 12
-
 #define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height / 2)
 
 @interface FRSStoryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
@@ -288,43 +281,43 @@
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
     if ([[self.story valueForKey:@"liked"] boolValue]) {
-        [[FRSAPIClient sharedClient] unlikeStory:self.story
-                                      completion:^(id responseObject, NSError *error) {
-                                        if (error) {
-                                            [actionBar handleHeartState:TRUE];
-                                            [actionBar handleHeartAmount:likes];
-                                        }
-                                      }];
+        [[FRSStoryManager sharedInstance] unlikeStory:self.story
+                                           completion:^(id responseObject, NSError *error) {
+                                             if (error) {
+                                                 [actionBar handleHeartState:TRUE];
+                                                 [actionBar handleHeartAmount:likes];
+                                             }
+                                           }];
     } else {
-        [[FRSAPIClient sharedClient] likeStory:self.story
-                                    completion:^(id responseObject, NSError *error) {
-                                      if (error) {
-                                          [actionBar handleHeartState:FALSE];
-                                          [actionBar handleHeartAmount:likes];
-                                      }
-                                    }];
+        [[FRSStoryManager sharedInstance] likeStory:self.story
+                                         completion:^(id responseObject, NSError *error) {
+                                           if (error) {
+                                               [actionBar handleHeartState:FALSE];
+                                               [actionBar handleHeartAmount:likes];
+                                           }
+                                         }];
     }
 }
 
--(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
     vc.didTapRepostLabel = YES;
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleRepost:(FRSContentActionsBar *)actionBar {
-    [[FRSAPIClient sharedClient] repostStory:self.story completion:^(id responseObject, NSError *error) {
-        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
-    }];
+- (void)handleRepost:(FRSContentActionsBar *)actionBar {
+    [[FRSStoryManager sharedInstance] repostStory:self.story
+                                       completion:^(id responseObject, NSError *error) {
+                                         NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
+                                       }];
 }
 
 - (void)configureRepostWithName:(NSString *)name {
-
     if (self.repostLabel == nil) {
         self.repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
         self.repostImageView.frame = CGRectMake(16, 12, 24, 24);
@@ -344,7 +337,6 @@
 }
 
 - (void)segueToSourceUser {
-
     FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.story.sourceUser];
     if ([self.story.sourceUser uid] != nil) {
 
@@ -353,7 +345,6 @@
 }
 
 - (void)addShadowToLabel:(UILabel *)label {
-
     if ([label.text isEqualToString:@""] || !label) {
         return;
     }
@@ -384,7 +375,6 @@
 }
 
 - (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
-
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }

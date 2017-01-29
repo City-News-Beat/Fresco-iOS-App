@@ -45,16 +45,11 @@ static NSString *const notificationEndpoint = @"user/notifications";
 // content endpoints
 
 static NSString *const highlightsEndpoint = @"gallery/highlights";
-static NSString *const assignmentsEndpoint = @"assignment/find";
-
 
 static NSString *const settingsUpdateEndpoint = @"user/settings/update";
 
 // location endpoints
 static NSString *const locationEndpoint = @"user/locate"; // send location
-static NSString *const dualLocationEndpoint = @"user/locationcall"; // send location & get nearby assignments
-static NSString *const acceptAssignmentEndpoint = @"assignment/%@/accept";
-static NSString *const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
 
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
@@ -62,8 +57,6 @@ static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
 // comments
 static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
 static NSString *const getCommentEndpoint = @"gallery/%@/comment/%@";
-
-
 
 static NSString *const disableAccountEndpoint = @"user/disable/";
 
@@ -76,7 +69,6 @@ static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
 static NSString *const unrepostGalleryEndpoint = @"gallery/%@/unrepost";
 
-
 static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
 static NSString * const purchasesEndpoint = @"gallery/%@/purchases";
 static NSString *const commentEndpoint = @"gallery/%@/comment/";
@@ -85,11 +77,6 @@ static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
 static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
 static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
-
-// feeds
-static NSString *const likeFeed = @"feeds/%@/likes";
-static NSString *const followingFeed = @"feeds/%@/following";
-static NSString *const userFeed = @"feeds/%@/user";
 
 // quick actions -- app delegate
 static NSString *const assignmentsAction = @"FRSAssignmentsAction";
@@ -108,9 +95,6 @@ static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
 static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
 static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/files";
 static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
-
-// moderation
-
 
 // user defaults
 static NSString *const previouslySelectedTabKey = @"previouslySelectedTab";

@@ -21,6 +21,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSUploadManager.h"
 #import "FRSAuthManager.h"
+#import "FRSAssignmentManager.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -951,131 +952,131 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     self.isFetching = YES;
 
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii
-                                                 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
-                                             withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:radii
+                                                           ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
+                                                       withCompletion:^(id responseObject, NSError *error) {
 
-                                               NSArray *assignments = (NSArray *)responseObject[@"nearby"];
-                                               NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+                                                         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+                                                         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
 
-                                               FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                               // self.assignmentsArray = [[NSMutableArray alloc] init];
-                                               //  self.assignmentsArray  = [assignments mutableCopy];
-                                               self.globalAssignments = [globalAssignments copy];
-                                               self.assignments = [assignments copy];
+                                                         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                         // self.assignmentsArray = [[NSMutableArray alloc] init];
+                                                         //  self.assignmentsArray  = [assignments mutableCopy];
+                                                         self.globalAssignments = [globalAssignments copy];
+                                                         self.assignments = [assignments copy];
 
-                                               self.isFetching = NO;
+                                                         self.isFetching = NO;
 
-                                               if (!notFirstFetch) {
-                                                   notFirstFetch = TRUE;
-                                                   [self cacheAssignments];
-                                               }
+                                                         if (!notFirstFetch) {
+                                                             notFirstFetch = TRUE;
+                                                             [self cacheAssignments];
+                                                         }
 
-                                               [delegate.managedObjectContext save:Nil];
-                                               [delegate saveContext];
-                                               NSMutableArray *nearBy = responseObject[@"nearby"];
-                                               NSArray *global = responseObject[@"global"];
-                                               self.assignmentsArray = [[NSMutableArray alloc] init];
-                                               for (NSDictionary *assignment in nearBy) {
-                                                   NSArray *coords = assignment[@"location"][@"coordinates"];
-                                                   CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
-                                                   float radius = [assignment[@"radius"] floatValue];
+                                                         [delegate.managedObjectContext save:Nil];
+                                                         [delegate saveContext];
+                                                         NSMutableArray *nearBy = responseObject[@"nearby"];
+                                                         NSArray *global = responseObject[@"global"];
+                                                         self.assignmentsArray = [[NSMutableArray alloc] init];
+                                                         for (NSDictionary *assignment in nearBy) {
+                                                             NSArray *coords = assignment[@"location"][@"coordinates"];
+                                                             CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
+                                                             float radius = [assignment[@"radius"] floatValue];
 
-                                                   BOOL shouldAdd = FALSE;
+                                                             BOOL shouldAdd = FALSE;
 
-                                                   for (PHAsset *asset in self.content) {
-                                                       CLLocation *location = asset.location;
-                                                       CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
-                                                       float miles = distanceFromAssignment / 1609.34;
-                                                       if (miles < radius) {
-                                                           shouldAdd = TRUE;
-                                                       }
-                                                       //1609.34
-                                                   }
+                                                             for (PHAsset *asset in self.content) {
+                                                                 CLLocation *location = asset.location;
+                                                                 CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
+                                                                 float miles = distanceFromAssignment / 1609.34;
+                                                                 if (miles < radius) {
+                                                                     shouldAdd = TRUE;
+                                                                 }
+                                                                 //1609.34
+                                                             }
 
-                                                   if (shouldAdd) {
-                                                       [self.assignmentsArray addObject:assignment];
-                                                   }
+                                                             if (shouldAdd) {
+                                                                 [self.assignmentsArray addObject:assignment];
+                                                             }
 
-                                                   // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
-                                               }
+                                                             // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+                                                         }
 
-                                               //  self.assignmentsArray = nearBy;
-                                               self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
+                                                         //  self.assignmentsArray = nearBy;
+                                                         self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
 
-                                               self.globalAssignments = global;
-                                               self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
+                                                         self.globalAssignments = global;
+                                                         self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
 
-                                               [self.spinner stopLoading];
-                                               [self.spinner removeFromSuperview];
+                                                         [self.spinner stopLoading];
+                                                         [self.spinner removeFromSuperview];
 
-                                               /*
+                                                         /*
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
         NSLog(@"Global Assignments: %@", global);
         NSLog(@"Error: %@", error);
         */
-                                               //Get the closest assignment to the user
-                                               CLLocationDistance closestDistance = 9999999999999999999.0;
-                                               int closestIndex = 0;
-                                               for (int i = 0; i < self.assignmentsArray.count; i++) {
-                                                   NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
-                                                   NSArray *coords = assignmentDic[@"location"][@"coordinates"];
-                                                   //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
-                                                   CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
-                                                   CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
-                                                   //NSLog(@"Distance: %f",distanceFromAssignment);
-                                                   if (closestDistance > distanceFromAssignment) {
-                                                       closestDistance = distanceFromAssignment;
-                                                       //NSLog(@"Closest Distance: %f",closestDistance);
-                                                       closestIndex = i;
-                                                   }
-                                               }
+                                                         //Get the closest assignment to the user
+                                                         CLLocationDistance closestDistance = 9999999999999999999.0;
+                                                         int closestIndex = 0;
+                                                         for (int i = 0; i < self.assignmentsArray.count; i++) {
+                                                             NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
+                                                             NSArray *coords = assignmentDic[@"location"][@"coordinates"];
+                                                             //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
+                                                             CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
+                                                             CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+                                                             //NSLog(@"Distance: %f",distanceFromAssignment);
+                                                             if (closestDistance > distanceFromAssignment) {
+                                                                 closestDistance = distanceFromAssignment;
+                                                                 //NSLog(@"Closest Distance: %f",closestDistance);
+                                                                 closestIndex = i;
+                                                             }
+                                                         }
 
-                                               [self configureAssignmentsTableView];
+                                                         [self configureAssignmentsTableView];
 
-                                               self.closestAssignmentIndex = closestIndex;
+                                                         self.closestAssignmentIndex = closestIndex;
 
-                                               //If there is a preselectedGlobalAssignment then change the index
-                                               if (self.preselectedGlobalAssignment) {
+                                                         //If there is a preselectedGlobalAssignment then change the index
+                                                         if (self.preselectedGlobalAssignment) {
 
-                                                   for (int i = 0; i < self.globalAssignments.count; i++) {
-                                                       if ([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]) {
-                                                           self.closestAssignmentIndex = i;
-                                                       }
-                                                   }
-                                               }
+                                                             for (int i = 0; i < self.globalAssignments.count; i++) {
+                                                                 if ([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]) {
+                                                                     self.closestAssignmentIndex = i;
+                                                                 }
+                                                             }
+                                                         }
 
-                                               if (self.preselectedAssignment) {
+                                                         if (self.preselectedAssignment) {
 
-                                                   for (int i = 0; i < self.assignments.count; i++) {
-                                                       if ([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]) {
-                                                           self.closestAssignmentIndex = i;
-                                                           NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
-                                                           [self selectAssignmentWithTitle:assignmentTitle];
-                                                       }
-                                                   }
-                                               }
+                                                             for (int i = 0; i < self.assignments.count; i++) {
+                                                                 if ([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]) {
+                                                                     self.closestAssignmentIndex = i;
+                                                                     NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
+                                                                     [self selectAssignmentWithTitle:assignmentTitle];
+                                                                 }
+                                                             }
+                                                         }
 
-                                               [self configureGlobalAssignmentsDrawer];
-                                               if (self.preselectedGlobalAssignment) {
-                                                   [self toggleGlobalAssignmentsDrawer];
-                                               }
-                                               [self configureTextView];
-                                               [self adjustScrollViewContentSize];
+                                                         [self configureGlobalAssignmentsDrawer];
+                                                         if (self.preselectedGlobalAssignment) {
+                                                             [self toggleGlobalAssignmentsDrawer];
+                                                         }
+                                                         [self configureTextView];
+                                                         [self adjustScrollViewContentSize];
 
-                                               [self.assignmentsTableView reloadData];
-                                               [self.globalAssignmentsTableView reloadData];
-                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                 [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-                                                 if (self.preselectedGlobalAssignment) {
-                                                     [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-                                                 }
-                                                 if (self.preselectedAssignment) {
-                                                     [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-                                                 }
-                                               });
-                                             }];
+                                                         [self.assignmentsTableView reloadData];
+                                                         [self.globalAssignmentsTableView reloadData];
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                           [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                           if (self.preselectedGlobalAssignment) {
+                                                               [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                           }
+                                                           if (self.preselectedAssignment) {
+                                                               [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                           }
+                                                         });
+                                                       }];
 }
 
 - (void)selectAssignmentWithTitle:(NSString *)title {

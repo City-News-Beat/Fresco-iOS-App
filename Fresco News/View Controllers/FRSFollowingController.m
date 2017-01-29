@@ -14,6 +14,7 @@
 #import "FRSAwkwardView.h"
 #import "UIColor+Fresco.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSFeedManager.h"
 
 @implementation FRSFollowingController
 @synthesize tableView = _tableView, feed = _feed;
@@ -39,7 +40,7 @@
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
 
     FRSGallery *gallery = self.feed[notification.row];
-    
+
     [FRSTracker track:galleryOpenedFromHighlights
            parameters:@{ @"gallery_id" : (gallery.uid != nil) ? gallery.uid : @"",
                          @"opened_from" : @"following" }];
@@ -62,23 +63,11 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-
-      if (galleries.count == 0) {
-          FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 175 / 2, self.tableView.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
-          [self.tableView addSubview:awkwardView];
-          self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-      }
-
-      [loadingView removeFromSuperview];
-
-      self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
-      [self.tableView reloadData];
-    }];
+    [self reloadData];
 }
 
 - (void)reloadData {
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+    [[FRSFeedManager sharedInstance] fetchFollowing:^(NSArray *galleries, NSError *error) {
 
       if (galleries.count == 0) {
           FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 175 / 2, self.tableView.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];

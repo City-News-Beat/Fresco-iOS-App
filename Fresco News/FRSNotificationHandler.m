@@ -1,3 +1,4 @@
+ 
 //
 //  FRSNotificationHandler.m
 //  Fresco
@@ -16,6 +17,7 @@
 #import "FRSIdentityViewController.h"
 #import "Fresco.h"
 #import "FRSStoryManager.h"
+#import "FRSAssignmentManager.h"
 
 static BOOL isDeeplinking;
 
@@ -407,63 +409,63 @@ static BOOL isSegueingToAssignment;
 
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 
-    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID
-                                           completion:^(id responseObject, NSError *error) {
+    [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID
+                                                     completion:^(id responseObject, NSError *error) {
 
-                                             //Tell the view controller we're done with this segue
-                                             isSegueingToAssignment = NO;
+                                                       //Tell the view controller we're done with this segue
+                                                       isSegueingToAssignment = NO;
 
-                                             if (error) {
-                                                 FRSAlertView *alertView = [[FRSAlertView alloc]
-                                                        initWithTitle:@"Unable to Load Assignment!"
-                                                              message:@"We're unable to load this assignment right now!"
-                                                          actionTitle:@"OK"
-                                                          cancelTitle:@""
-                                                     cancelTitleColor:[UIColor frescoBackgroundColorDark]
-                                                             delegate:nil];
-                                                 [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-                                                 [alertView show];
+                                                       if (error) {
+                                                           FRSAlertView *alertView = [[FRSAlertView alloc]
+                                                                  initWithTitle:@"Unable to Load Assignment!"
+                                                                        message:@"We're unable to load this assignment right now!"
+                                                                    actionTitle:@"OK"
+                                                                    cancelTitle:@""
+                                                               cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                                                       delegate:nil];
+                                                           [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+                                                           [alertView show];
 
-                                                 return;
-                                             }
+                                                           return;
+                                                       }
 
-                                             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
+                                                       FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
 
-                                             UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+                                                       UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
 
-                                             [assignment configureWithDictionary:responseObject];
+                                                       [assignment configureWithDictionary:responseObject];
 
-                                             NSTimeInterval dateDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
-                                             if (dateDiff < 0.0) { // if expired
-                                                 FRSAlertView *alertView = [[FRSAlertView alloc]
-                                                        initWithTitle:@"Assignment Expired"
-                                                              message:@"This assignment has already expired"
-                                                          actionTitle:@"OK"
-                                                          cancelTitle:@""
-                                                     cancelTitleColor:[UIColor frescoBackgroundColorDark]
-                                                             delegate:nil];
-                                                 [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-                                                 [alertView show];
-                                             } else {
-                                                 if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                                                     UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
-                                                     tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                                                     tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                                                       NSTimeInterval dateDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
+                                                       if (dateDiff < 0.0) { // if expired
+                                                           FRSAlertView *alertView = [[FRSAlertView alloc]
+                                                                  initWithTitle:@"Assignment Expired"
+                                                                        message:@"This assignment has already expired"
+                                                                    actionTitle:@"OK"
+                                                                    cancelTitle:@""
+                                                               cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                                                       delegate:nil];
+                                                           [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+                                                           [alertView show];
+                                                       } else {
+                                                           if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                                                               UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
+                                                               tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                                                               tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
 
-                                                     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                                                               FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
 
-                                                     assignmentsVC.assignmentCardIsOpen = YES;
-                                                     assignmentsVC.hasDefault = YES;
-                                                     assignmentsVC.defaultID = assignmentID;
+                                                               assignmentsVC.assignmentCardIsOpen = YES;
+                                                               assignmentsVC.hasDefault = YES;
+                                                               assignmentsVC.defaultID = assignmentID;
 
-                                                     [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-                                                     assignmentsVC.selectedAssignment = assignment;
+                                                               [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                                                               assignmentsVC.selectedAssignment = assignment;
 
-                                                     navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
-                                                     [tab setSelectedIndex:3];
-                                                 }
-                                             }
-                                           }];
+                                                               navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
+                                                               [tab setSelectedIndex:3];
+                                                           }
+                                                       }
+                                                     }];
 }
 
 + (void)segueToPayment {
@@ -530,3 +532,4 @@ static BOOL isSegueingToAssignment;
 }
 
 @end
+
