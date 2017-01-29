@@ -25,7 +25,7 @@
     SDAVAssetExportSession *exporter;
 }
 
-+ (id)sharedUploader;
++ (id)sharedInstance;
 - (void)checkCachedUploads;
 - (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
 

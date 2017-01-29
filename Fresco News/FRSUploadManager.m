@@ -22,16 +22,31 @@
 
 static NSDate *lastDate;
 
-+ (id)sharedUploader {
-    static FRSUploadManager *sharedUploader = nil;
++ (id)sharedInstance {
+    static FRSUploadManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-      sharedUploader = [[self alloc] init];
-      [[NSNotificationCenter defaultCenter] addObserver:sharedUploader selector:@selector(notifyExit:) name:UIApplicationWillResignActiveNotification object:nil];
+      sharedInstance = [[self alloc] init];
+      [[NSNotificationCenter defaultCenter] addObserver:sharedInstance selector:@selector(notifyExit:) name:UIApplicationWillResignActiveNotification object:nil];
 
     });
 
-    return sharedUploader;
+    return sharedInstance;
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.currentGalleryID = @"";
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)exportSession:(SDAVAssetExportSession *)exportSession renderFrame:(CVPixelBufferRef)pixelBuffer withPresentationTime:(CMTime)presentationTime toBuffer:(CVPixelBufferRef)renderBuffer {
@@ -51,23 +66,7 @@ static NSDate *lastDate;
                                                                   @"percentage" : @(totalTranscodingProgress) }];
 }
 
-- (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        self.currentGalleryID = @"";
-        [self commonInit];
-    }
-
-    return self;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)notifyExit:(NSNotification *)notification {
-
     if (completed == toComplete || toComplete == 0) {
         return;
     }
@@ -313,7 +312,6 @@ static NSDate *lastDate;
                                                     encoder.postID = postID;
 
                                                     NSLog(@"STARTING EXPORT");
-
                                                     [encoder exportAsynchronouslyWithCompletionHandler:^{
                                                       NSLog(@"ENDING EXPORT %@", encoder.error);
                                                       unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
@@ -477,11 +475,6 @@ static NSDate *lastDate;
 }
 
 - (void)taskDidComplete:(AWSTask *)task {
-    //    NSString *eTag = task.aws_properties[@"ETag"];
-    //
-    //    if (eTag == nil) {
-    //        [self uploadDidErrorWithError:Nil];
-    //    }
 }
 
 @end

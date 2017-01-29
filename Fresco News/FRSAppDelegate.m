@@ -127,7 +127,7 @@
 
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[FRSUploadManager sharedUploader] checkCachedUploads];
+    [[FRSUploadManager sharedInstance] checkCachedUploads];
 
     [FRSTracker startTracking];
     [self startTracking];

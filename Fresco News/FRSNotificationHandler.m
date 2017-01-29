@@ -1,4 +1,4 @@
- 
+
 //
 //  FRSNotificationHandler.m
 //  Fresco
@@ -18,6 +18,7 @@
 #import "Fresco.h"
 #import "FRSStoryManager.h"
 #import "FRSAssignmentManager.h"
+#import "FRSGalleryManager.h"
 
 static BOOL isDeeplinking;
 
@@ -233,22 +234,22 @@ static BOOL isSegueingToAssignment;
 
     for (int i = 0; i < [galleryIDs count]; i++) {
 
-        [[FRSAPIClient sharedClient] getGalleryWithUID:[galleryIDs objectAtIndex:i]
-                                            completion:^(id responseObject, NSError *error) {
-                                              if (!error && responseObject) {
-                                                  [galleryArray addObject:responseObject];
+        [[FRSGalleryManager sharedInstance] getGalleryWithUID:[galleryIDs objectAtIndex:i]
+                                                   completion:^(id responseObject, NSError *error) {
+                                                     if (!error && responseObject) {
+                                                         [galleryArray addObject:responseObject];
 
-                                                  // Checks if loop is complete by comparing added galleries with gallery IDs
-                                                  if ([galleryArray count] == [galleryIDs count]) {
+                                                         // Checks if loop is complete by comparing added galleries with gallery IDs
+                                                         if ([galleryArray count] == [galleryIDs count]) {
 
-                                                      // If all galleries from the galleryIDs array have been adedd, push and configure
-                                                      [detailVC configureWithGalleries:galleryArray];
-                                                      [navController pushViewController:detailVC animated:TRUE];
-                                                  }
-                                              } else {
-                                                  NSLog(@"Unable to create gallery from id: %@", [galleryIDs objectAtIndex:i]);
-                                              }
-                                            }];
+                                                             // If all galleries from the galleryIDs array have been adedd, push and configure
+                                                             [detailVC configureWithGalleries:galleryArray];
+                                                             [navController pushViewController:detailVC animated:TRUE];
+                                                         }
+                                                     } else {
+                                                         NSLog(@"Unable to create gallery from id: %@", [galleryIDs objectAtIndex:i]);
+                                                     }
+                                                   }];
     }
 }
 
@@ -275,27 +276,27 @@ static BOOL isSegueingToAssignment;
         [navController setNavigationBarHidden:FALSE];
     }
 
-    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID
-                                        completion:^(id responseObject, NSError *error) {
-                                          if (error || !responseObject) {
-                                              [self error:error];
-                                              return;
-                                          }
+    [[FRSGalleryManager sharedInstance] getGalleryWithUID:galleryID
+                                               completion:^(id responseObject, NSError *error) {
+                                                 if (error || !responseObject) {
+                                                     [self error:error];
+                                                     return;
+                                                 }
 
-                                          if (isPushingGallery) {
-                                              return;
-                                          }
+                                                 if (isPushingGallery) {
+                                                     return;
+                                                 }
 
-                                          isPushingGallery = TRUE;
+                                                 isPushingGallery = TRUE;
 
-                                          FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
+                                                 FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
 
-                                          [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
+                                                 [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
 
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                            [detailVC loadGallery:galleryToSave];
-                                          });
-                                        }];
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                   [detailVC loadGallery:galleryToSave];
+                                                 });
+                                               }];
 }
 
 + (void)error:(NSError *)error {
@@ -532,4 +533,3 @@ static BOOL isSegueingToAssignment;
 }
 
 @end
-

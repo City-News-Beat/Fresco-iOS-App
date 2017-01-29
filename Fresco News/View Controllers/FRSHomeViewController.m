@@ -27,6 +27,7 @@
 #import "FRSUserManager.h"
 #import "FRSNotificationHandler.h"
 #import "FRSModerationManager.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -296,7 +297,7 @@
 - (void)reloadData {
     [self.followingTable reloadFollowing];
    
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
                                                 [self.appDelegate.managedObjectContext performBlock:^{
@@ -524,7 +525,7 @@
     [self fetchLocalData];
 
     // network call
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
                                                 if ([galleries count] == 0) {
@@ -731,7 +732,7 @@
 
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
 
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:offsetID
                                               completion:^(NSArray *galleries, NSError *error) {
 

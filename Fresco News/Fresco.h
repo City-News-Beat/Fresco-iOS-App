@@ -44,39 +44,20 @@ static NSString *const notificationEndpoint = @"user/notifications";
 
 // content endpoints
 
-static NSString *const highlightsEndpoint = @"gallery/highlights";
+
 
 static NSString *const settingsUpdateEndpoint = @"user/settings/update";
-
-// location endpoints
-static NSString *const locationEndpoint = @"user/locate"; // send location
 
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
 
-// comments
-static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
-static NSString *const getCommentEndpoint = @"gallery/%@/comment/%@";
+
 
 static NSString *const disableAccountEndpoint = @"user/disable/";
 
-// gallery creation
-static NSString *const createGalleryEndpoint = @"gallery/submit";
-static NSString *const completePostEndpoint = @"post/complete";
 
 // formatted endpoints
-static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
-static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
-static NSString *const unrepostGalleryEndpoint = @"gallery/%@/unrepost";
 
-static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
-static NSString * const purchasesEndpoint = @"gallery/%@/purchases";
-static NSString *const commentEndpoint = @"gallery/%@/comment/";
-static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
-
-static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
-static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
-static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
 
 // quick actions -- app delegate
 static NSString *const assignmentsAction = @"FRSAssignmentsAction";

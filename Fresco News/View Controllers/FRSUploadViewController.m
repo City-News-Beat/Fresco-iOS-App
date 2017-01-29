@@ -22,6 +22,7 @@
 #import "FRSUploadManager.h"
 #import "FRSAuthManager.h"
 #import "FRSAssignmentManager.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -1205,18 +1206,17 @@ static NSString *const cellIdentifier = @"assignment-cell";
             gallery[@"outlet_id"] = selectedOutlet;
         }
 
-        [[FRSAPIClient sharedClient] post:createGalleryEndpoint
-                           withParameters:gallery
-                               completion:^(id responseObject, NSError *error) {
-                                 if (!error) {
-                                     [self moveToUpload:responseObject];
-                                 } else {
-                                     [self creationError:error];
-                                     [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                     self.sendButton.userInteractionEnabled = YES;
-                                     return;
-                                 }
-                               }];
+        [[FRSGalleryManager sharedInstance] createGallery:gallery
+                                               completion:^(id responseObject, NSError *error) {
+                                                 if (!error) {
+                                                     [self moveToUpload:responseObject];
+                                                 } else {
+                                                     [self creationError:error];
+                                                     [self stopSpinner:self.loadingView onButton:self.sendButton];
+                                                     self.sendButton.userInteractionEnabled = YES;
+                                                     return;
+                                                 }
+                                               }];
     }
 }
 
@@ -1256,11 +1256,11 @@ static NSString *const cellIdentifier = @"assignment-cell";
     NSArray *posts = postData[@"posts_new"];
 
     int i = 0;
-    [[FRSUploadManager sharedUploader] setUploadsToComplete:(int)self.content.count];
+    [[FRSUploadManager sharedInstance] setUploadsToComplete:(int)self.content.count];
     for (PHAsset *asset in self.content) {
         NSDictionary *post = posts[i];
         NSString *key = post[@"key"];
-        [[FRSUploadManager sharedUploader] addAsset:asset withToken:key withPostID:post[@"post_id"]];
+        [[FRSUploadManager sharedInstance] addAsset:asset withToken:key withPostID:post[@"post_id"]];
         i++;
     }
 

@@ -142,6 +142,7 @@
 		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
 		CAF0928A1E25921500F7F711 /* FRSGalleryStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */; };
 		CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */; };
+		CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0A6FC91E3E82AC00E67766 /* FRSGalleryManager.m */; };
 		CE0AABA11E3CEA2800DD6A8A /* FRSStoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABA01E3CEA2800DD6A8A /* FRSStoryManager.m */; };
 		CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABA31E3DEB4A00DD6A8A /* FRSModerationManager.m */; };
 		CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABA71E3DF15B00DD6A8A /* FRSFollowManager.m */; };
@@ -570,6 +571,8 @@
 		CAF092881E25921500F7F711 /* FRSGalleryStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryStatusView.h; sourceTree = "<group>"; };
 		CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryStatusView.m; sourceTree = "<group>"; };
 		CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryStatusView.xib; sourceTree = "<group>"; };
+		CE0A6FC81E3E82AC00E67766 /* FRSGalleryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryManager.h; sourceTree = "<group>"; };
+		CE0A6FC91E3E82AC00E67766 /* FRSGalleryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryManager.m; sourceTree = "<group>"; };
 		CE0AAB9F1E3CEA2800DD6A8A /* FRSStoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryManager.h; sourceTree = "<group>"; };
 		CE0AABA01E3CEA2800DD6A8A /* FRSStoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryManager.m; sourceTree = "<group>"; };
 		CE0AABA21E3DEB4A00DD6A8A /* FRSModerationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSModerationManager.h; sourceTree = "<group>"; };
@@ -1227,6 +1230,8 @@
 				CE0AABAA1E3DF55700DD6A8A /* FRSFeedManager.m */,
 				CE0AABAC1E3E00BF00DD6A8A /* FRSAssignmentManager.h */,
 				CE0AABAD1E3E00BF00DD6A8A /* FRSAssignmentManager.m */,
+				CE0A6FC81E3E82AC00E67766 /* FRSGalleryManager.h */,
+				CE0A6FC91E3E82AC00E67766 /* FRSGalleryManager.m */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -2805,6 +2810,7 @@
 				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
+				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,

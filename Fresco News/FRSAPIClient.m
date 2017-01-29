@@ -84,67 +84,6 @@
 
 
 
-#pragma mark - Gallery Fetch
-
-/*
- Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
- */
-
-- (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion {
-
-    NSDictionary *params = @{
-
-        @"limit" : [NSNumber numberWithInteger:limit],
-        @"last" : (offset != Nil) ? offset : @"",
-    };
-
-    if (!offset) {
-        params = @{
-            @"limit" : [NSNumber numberWithInteger:limit],
-        };
-    }
-
-    [self get:highlightsEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
-
-    [self get:endpoint
-        withParameters:@{ @"limit" : limit,
-                          @"last" : lastID }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
-
-    [self get:endpoint
-        withParameters:@{ @"limit" : limit,
-                          @"last" : lastID }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
-    NSDictionary *params = @{ @"comment_id" : commentID };
-
-    [self post:endpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
 - (void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
 
     if (!token) {
@@ -165,17 +104,7 @@
 
 
 
-- (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    [FRSTracker track:galleryUnliked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
-    NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-              [gallery setValue:@(TRUE) forKey:@"liked"];
-            }];
-}
 
 
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType {
@@ -191,15 +120,7 @@
     return self.requestManager;
 }
 
-- (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSDictionary *params = [gallery jsonObject];
 
-    [self post:createGalleryEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 /*
  Keychain-Based interaction & authentication
@@ -418,15 +339,6 @@
             }];
 }
 
-- (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:@"gallery/%@", gallery];
-
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 
 
@@ -444,23 +356,7 @@
 /* 
     Social interaction
 */
-- (void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([FRSAuthManager sharedInstance]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
 
-    [FRSTracker track:galleryLiked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
-    NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-              [gallery setValue:@(TRUE) forKey:@"liked"];
-              [[self managedObjectContext] save:Nil];
-            }];
-}
 
 - (void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     [self get:nearbyUsersEndpoint
@@ -491,101 +387,7 @@
 }
 
 
-- (void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 
-    if ([FRSAuthManager sharedInstance]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    if ([[gallery valueForKey:@"reposted"] boolValue]) {
-        [self unrepostGallery:gallery completion:completion];
-        return;
-    }
-
-    [FRSTracker track:galleryReposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
-    NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
-
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-
-              [gallery setValue:@(TRUE) forKey:@"reposted"];
-              [[self managedObjectContext] save:Nil];
-            }];
-}
-
-- (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
-
-    [FRSTracker track:galleryUnreposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-
-              [gallery setValue:@(FALSE) forKey:@"reposted"];
-
-              [[self managedObjectContext] save:Nil];
-            }];
-}
-
-- (void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self fetchCommentsForGalleryID:gallery.uid completion:completion];
-}
-
-- (void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:commentsEndpoint, galleryID];
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:purchasesEndpoint, galleryID];
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:paginateComments, gallery.uid, last];
-
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    //    if ([self checkAuthAndPresentOnboard]) {
-    //        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-    //        return;
-    //    }
-
-    [self addComment:comment toGalleryID:gallery completion:completion];
-}
-
-- (void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    if ([FRSAuthManager sharedInstance]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
-    NSDictionary *parameters = @{ @"comment" : comment };
-
-    [self post:endpoint withParameters:parameters completion:completion];
-}
 
 /* serialization */
 
@@ -759,14 +561,6 @@
     return digest;
 }
 
-- (void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    [self post:completePostEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 - (void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion {
     [self get:getPaymentsEndpoint

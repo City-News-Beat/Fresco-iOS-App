@@ -17,6 +17,7 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSModerationManager.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
@@ -349,24 +350,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery
-                                        completion:^(id responseObject, NSError *error) {
-                                          NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                          if (error) {
-                                              [actionBar handleHeartState:TRUE];
-                                              [actionBar handleHeartAmount:likes];
-                                          }
-                                        }];
+        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
+                                               completion:^(id responseObject, NSError *error) {
+                                                 NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
+                                                 if (error) {
+                                                     [actionBar handleHeartState:TRUE];
+                                                     [actionBar handleHeartAmount:likes];
+                                                 }
+                                               }];
 
     } else {
-        [[FRSAPIClient sharedClient] likeGallery:self.gallery
-                                      completion:^(id responseObject, NSError *error) {
-                                        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                        if (error) {
-                                            [actionBar handleHeartState:FALSE];
-                                            [actionBar handleHeartAmount:likes];
-                                        }
-                                      }];
+        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
+                                             completion:^(id responseObject, NSError *error) {
+                                               NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+                                               if (error) {
+                                                   [actionBar handleHeartState:FALSE];
+                                                   [actionBar handleHeartAmount:likes];
+                                               }
+                                             }];
     }
 }
 
@@ -374,15 +375,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
     NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
 
-    [[FRSAPIClient sharedClient] repostGallery:self.gallery
-                                    completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"REPOSTED %@", error);
+    [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
+                                           completion:^(id responseObject, NSError *error) {
+                                             NSLog(@"REPOSTED %@", error);
 
-                                      if (error) {
-                                          [actionBar handleRepostState:!state];
-                                          [actionBar handleRepostAmount:repostCount];
-                                      }
-                                    }];
+                                             if (error) {
+                                                 [actionBar handleRepostState:!state];
+                                                 [actionBar handleRepostAmount:repostCount];
+                                             }
+                                           }];
 }
 
 #pragma mark - UIScrollView Delegate
