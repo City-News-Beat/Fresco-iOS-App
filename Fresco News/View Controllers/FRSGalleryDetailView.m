@@ -18,6 +18,7 @@
 #import "FRSGalleryStatusTableViewCell.h"
 #import "Haneke.h"
 #import "FRSUserManager.h"
+#import "FRSAuthManager.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
@@ -555,7 +556,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
     // comment text field comes up
-    if (![[FRSAPIClient sharedClient] checkAuthAndPresentOnboard]) {
+    if (![[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
         [self.commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
         self.commentTextField.delegate = self;
         [self.commentTextField becomeFirstResponder];

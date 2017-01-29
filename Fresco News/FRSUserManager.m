@@ -9,12 +9,12 @@
 //
 
 #import "FRSUserManager.h"
-#import "FRSAPIClient.h"
 #import "FRSAuthManager.h"
 
 static NSString *const userEndpoint = @"user/";
 static NSString *const setAvatarEndpoint = @"user/avatar";
 static NSString *const updateUserEndpoint = @"user/update";
+static NSString *const updateUserIdentityEndpoint = @"user/identity/update";
 static NSString *const authenticatedUserEndpoint = @"user/me";
 
 @implementation FRSUserManager
@@ -41,7 +41,7 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
     return self;
 }
 
-#pragma API calls
+#pragma mark - API calls
 
 - (void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion {
 
@@ -128,33 +128,6 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
                            }];
 }
 
-- (FRSUser *)authenticatedUser {
-    // predicate searching for users in store w/ loggedIn as TRUE/1
-    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
-    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
-    signedInRequest.predicate = signedInPredicate;
-
-    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
-    NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext]; // temp (replace with internal or above method
-
-    // no need to sort response, because theoretically there is 1
-    NSError *userFetchError;
-    NSArray *authenticatedUsers = [context executeFetchRequest:signedInRequest error:&userFetchError];
-
-    // no authenticated user, or we had trouble accessing data store
-    if (userFetchError || [authenticatedUsers count] < 1) {
-        return Nil;
-    }
-
-    // if we have multiple "authenticated" users in data store, we probs messed up big time
-    if ([authenticatedUsers count] > 1) {
-    }
-
-    _authenticatedUser = [authenticatedUsers firstObject];
-
-    return _authenticatedUser;
-}
-
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.fresco" code:404 userInfo:Nil]); // no authenticated user, 404
@@ -170,7 +143,7 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
 }
 
 - (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    [[FRSAPIClient sharedClient] post:@"user/identity/update"
+    [[FRSAPIClient sharedClient] post:updateUserIdentityEndpoint
                        withParameters:digestion
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
@@ -187,19 +160,6 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
                            }];
-}
-
-- (void)handleLocationUpdate:(NSNotification *)userInfo {
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-      [self updateUserLocation:userInfo.userInfo
-                    completion:^(NSDictionary *response, NSError *error) {
-                      if (!error) {
-                      } else {
-                          NSLog(@"Location Error: %@ %@", response, error);
-                      }
-                    }];
-    });
 }
 
 - (void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -232,9 +192,56 @@ static NSString *const authenticatedUserEndpoint = @"user/me";
 }
 
 - (void)postAvatarWithParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:parameters withData:parameters[@"avatar"] withName:@"avatar" withFileName:@"photo.jpg" completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+    [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint
+                             withParameters:parameters
+                                   withData:parameters[@"avatar"]
+                                   withName:@"avatar"
+                               withFileName:@"photo.jpg"
+                                 completion:^(id responseObject, NSError *error) {
+                                   completion(responseObject, error);
+                                 }];
+}
+
+#pragma mark - Helper Methods
+
+- (FRSUser *)authenticatedUser {
+    // predicate searching for users in store w/ loggedIn as TRUE/1
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
+    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
+    signedInRequest.predicate = signedInPredicate;
+
+    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
+    NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext]; // temp (replace with internal or above method
+
+    // no need to sort response, because theoretically there is 1
+    NSError *userFetchError;
+    NSArray *authenticatedUsers = [context executeFetchRequest:signedInRequest error:&userFetchError];
+
+    // no authenticated user, or we had trouble accessing data store
+    if (userFetchError || [authenticatedUsers count] < 1) {
+        return Nil;
+    }
+
+    // if we have multiple "authenticated" users in data store, we probs messed up big time
+    if ([authenticatedUsers count] > 1) {
+    }
+
+    _authenticatedUser = [authenticatedUsers firstObject];
+
+    return _authenticatedUser;
+}
+
+- (void)handleLocationUpdate:(NSNotification *)userInfo {
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+      [self updateUserLocation:userInfo.userInfo
+                    completion:^(NSDictionary *response, NSError *error) {
+                      if (!error) {
+                      } else {
+                          NSLog(@"Location Error: %@ %@", response, error);
+                      }
+                    }];
+    });
 }
 
 @end

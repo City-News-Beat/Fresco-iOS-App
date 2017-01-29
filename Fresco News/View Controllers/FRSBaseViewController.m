@@ -24,7 +24,6 @@
 
 @property BOOL isSegueingToGallery;
 @property BOOL isSegueingToStory;
-@property (strong, nonatomic) FRSAlertView *suspendedAlert;
 
 @end
 
@@ -208,54 +207,6 @@
     [tab updateUserIcon];
     [FRSTracker track:logoutEvent];
     [self popViewController];
-}
-
-#pragma mark - Smooch
-- (void)presentSmooch {
-    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
-
-    if (currentUser.firstName) {
-        [SKTUser currentUser].firstName = currentUser.firstName;
-    }
-
-    if (currentUser.email) {
-        [SKTUser currentUser].email = currentUser.email;
-    }
-
-    if (currentUser.uid) {
-        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
-    }
-
-    [Smooch show];
-}
-
-#pragma mark - Moderation
-- (void)checkSuspended {
-
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
-
-    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
-        self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        [self.suspendedAlert show];
-    }
-}
-
-- (void)didPressButtonAtIndex:(NSInteger)index {
-
-    if (self.suspendedAlert) {
-        switch (index) {
-        case 0:
-            [self presentSmooch];
-            break;
-
-        case 1:
-
-            break;
-        default:
-            break;
-        }
-    }
 }
 
 @end

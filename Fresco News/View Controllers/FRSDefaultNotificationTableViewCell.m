@@ -12,6 +12,7 @@
 #import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
 #import "FRSUserManager.h"
+#import "FRSStoryManager.h"
 
 @interface FRSDefaultNotificationTableViewCell ()
 
@@ -196,20 +197,20 @@
     [self configureDefaultCell];
     self.annotationView.alpha = 0;
 
-    [[FRSAPIClient sharedClient] getStoryWithUID:storyID
-                                      completion:^(id responseObject, NSError *error) {
+    [[FRSStoryManager sharedInstance] getStoryWithUID:storyID
+                                           completion:^(id responseObject, NSError *error) {
 
-                                        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
-                                        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-                                        self.bodyLabel.numberOfLines = 0;
-                                        self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
-                                        self.titleLabel.numberOfLines = 2;
+                                             self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
+                                             self.bodyLabel.text = [responseObject objectForKey:@"caption"];
+                                             self.bodyLabel.numberOfLines = 0;
+                                             self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                                             self.titleLabel.numberOfLines = 2;
 
-                                        if ([responseObject objectForKey:@"thumbnails"] != [NSNull null]) {
-                                            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
-                                            [self.image hnk_setImageFromURL:avatarURL];
-                                        }
-                                      }];
+                                             if ([responseObject objectForKey:@"thumbnails"] != [NSNull null]) {
+                                                 NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
+                                                 [self.image hnk_setImageFromURL:avatarURL];
+                                             }
+                                           }];
 }
 
 #pragma mark - Helpers

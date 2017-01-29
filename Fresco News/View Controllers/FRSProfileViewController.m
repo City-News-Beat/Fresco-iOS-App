@@ -25,6 +25,8 @@
 #import "UITextView+Resize.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSFollowManager.h"
+#import "FRSModerationManager.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
@@ -770,7 +772,6 @@
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
 
-    
     if (self.representedUser.isLoggedIn && [self.navigationController.childViewControllers objectAtIndex:0] == self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotificationsAnimated)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
@@ -1419,7 +1420,7 @@
             galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
             [[galCell galleryView] adjustHeight];
-            
+
         } else if (self.currentFeed.count == 0) {
 
         } else {
@@ -1573,36 +1574,36 @@
     self.didFollow = YES;
     [self shouldRefresh:YES];
 
-    [[FRSAPIClient sharedClient] followUser:self.representedUser
-                                 completion:^(id responseObject, NSError *error) {
-                                   if (error) {
-                                       return;
-                                   }
+    [[FRSFollowManager sharedInstance] followUser:self.representedUser
+                                       completion:^(id responseObject, NSError *error) {
+                                         if (error) {
+                                             return;
+                                         }
 
-                                   if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-                                       [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+                                         if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                                             [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
 
-                                   } else {
-                                       [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-                                       [self unfollowUser];
-                                   }
-                                 }];
+                                         } else {
+                                             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+                                             [self unfollowUser];
+                                         }
+                                       }];
 }
 
 - (void)unfollowUser {
-    [[FRSAPIClient sharedClient] unfollowUser:self.representedUser
-                                   completion:^(id responseObject, NSError *error) {
-                                     if (error) {
-                                         return;
-                                     }
+    [[FRSFollowManager sharedInstance] unfollowUser:self.representedUser
+                                         completion:^(id responseObject, NSError *error) {
+                                           if (error) {
+                                               return;
+                                           }
 
-                                     if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-                                         [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-                                     } else {
-                                         [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-                                     }
+                                           if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                                               [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+                                           } else {
+                                               [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+                                           }
 
-                                   }];
+                                         }];
 }
 
 - (void)shouldRefresh:(BOOL)refresh {
@@ -1761,7 +1762,7 @@
 }
 
 - (void)blockUser:(FRSUser *)user {
-    [[FRSAPIClient sharedClient] blockUser:user.uid
+    [[FRSModerationManager sharedInstance] blockUser:user.uid
                             withCompletion:^(id responseObject, NSError *error) {
 
                               if (responseObject) {
@@ -1807,7 +1808,7 @@
 
     [self configureSpinner];
 
-    [[FRSAPIClient sharedClient] unblockUser:user.uid
+    [[FRSModerationManager sharedInstance] unblockUser:user.uid
                               withCompletion:^(id responseObject, NSError *error) {
                                 if (responseObject) {
 
@@ -1844,7 +1845,7 @@
 
 - (void)reportUser:(NSString *)userID {
 
-    [[FRSAPIClient sharedClient] reportUser:userID
+    [[FRSModerationManager sharedInstance] reportUser:userID
         params:@{ @"reason" : self.reportUserReasonString,
                   @"message" : self.reportUserAlertView.textView.text }
         completion:^(id responseObject, NSError *error) {

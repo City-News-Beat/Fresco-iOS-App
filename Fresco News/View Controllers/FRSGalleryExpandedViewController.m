@@ -16,6 +16,7 @@
 #import "FRSGalleryDetailView.h"
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
+#import "FRSModerationManager.h"
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
@@ -82,7 +83,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker screen:@"Gallery Detail"];
 
     dateEntered = [NSDate date];
-    
+
     // Access followingButton and update icon when view appears
     [galleryDetailView.galleryView.galleryFooterView.userView.followingButton updateIconForFollowing:[self.gallery.creator.following boolValue]];
 }
@@ -121,12 +122,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView.delegate = self;
     galleryDetailView.navigationController = self.navigationController;
     [self.view addSubview:galleryDetailView];
-    
+
     galleryDetailView.frame = self.view.frame;
     galleryDetailView.parentVC = self;
-    
+
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
-    
+
     //NSLog(@"Gallery Object: \n%@", self.gallery.jsonObject);
 }
 
@@ -263,19 +264,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                     style:UIAlertActionStyleDefault
                                                   handler:^(UIAlertAction *action) {
 
-                                                    [[FRSAPIClient sharedClient] blockUser:comment.userDictionary[@"id"]
-                                                                            withCompletion:^(id responseObject, NSError *error) {
+                                                    [[FRSModerationManager sharedInstance] blockUser:comment.userDictionary[@"id"]
+                                                                                      withCompletion:^(id responseObject, NSError *error) {
 
-                                                                              if (responseObject) {
-                                                                                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                                                                  self.didDisplayBlock = YES;
-                                                                                  [alert show];
-                                                                                  self.isBlockingFromComment = YES;
+                                                                                        if (responseObject) {
+                                                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                            self.didDisplayBlock = YES;
+                                                                                            [alert show];
+                                                                                            self.isBlockingFromComment = YES;
 
-                                                                              } else {
-                                                                                  [self presentGenericError];
-                                                                              }
-                                                                            }];
+                                                                                        } else {
+                                                                                            [self presentGenericError];
+                                                                                        }
+                                                                                      }];
 
                                                     [view dismissViewControllerAnimated:YES completion:nil];
                                                   }];
@@ -284,15 +285,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction *action) {
 
-                                                      [[FRSAPIClient sharedClient] unblockUser:comment.userDictionary[@"id"]
-                                                                                withCompletion:^(id responseObject, NSError *error) {
+                                                      [[FRSModerationManager sharedInstance] unblockUser:comment.userDictionary[@"id"]
+                                                                                          withCompletion:^(id responseObject, NSError *error) {
 
-                                                                                  if (responseObject) {
+                                                                                            if (responseObject) {
 
-                                                                                  } else {
-                                                                                      [self presentGenericError];
-                                                                                  }
-                                                                                }];
+                                                                                            } else {
+                                                                                                [self presentGenericError];
+                                                                                            }
+                                                                                          }];
 
                                                       [view dismissViewControllerAnimated:YES completion:nil];
                                                     }];
@@ -449,7 +450,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - FRSAlertViewDelegate
 
 - (void)reportGalleryAlertAction {
-    [[FRSAPIClient sharedClient] reportGallery:self.gallery
+    [[FRSModerationManager sharedInstance] reportGallery:self.gallery
         params:@{ @"reason" : self.reportReasonString,
                   @"message" : self.galleryReportAlertView.textView.text }
         completion:^(id responseObject, NSError *error) {
@@ -563,39 +564,38 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)blockUser:(FRSUser *)user {
 
-    [[FRSAPIClient sharedClient] blockUser:user.uid
-                            withCompletion:^(id responseObject, NSError *error) {
+    [[FRSModerationManager sharedInstance] blockUser:user.uid
+                                      withCompletion:^(id responseObject, NSError *error) {
 
-                              if (responseObject) {
-                                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                  self.didDisplayBlock = YES;
-                                  [alert show];
-                                  self.didBlockUser = YES;
-                                  self.isBlockingFromComment = NO;
+                                        if (responseObject) {
+                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                            self.didDisplayBlock = YES;
+                                            [alert show];
+                                            self.didBlockUser = YES;
+                                            self.isBlockingFromComment = NO;
 
-                              } else {
-                                  [self presentGenericError];
-                              }
-                            }];
+                                        } else {
+                                            [self presentGenericError];
+                                        }
+                                      }];
 }
 
 - (void)unblockUser:(NSString *)userID {
-    [[FRSAPIClient sharedClient] unblockUser:userID
-                              withCompletion:^(id responseObject, NSError *error) {
+    [[FRSModerationManager sharedInstance] unblockUser:userID
+                                        withCompletion:^(id responseObject, NSError *error) {
 
-                                if (responseObject) {
-                                    self.didBlockUser = NO;
-                                }
+                                          if (responseObject) {
+                                              self.didBlockUser = NO;
+                                          }
 
-                                if (error) {
-                                    [self presentGenericError];
-                                }
-                              }];
+                                          if (error) {
+                                              [self presentGenericError];
+                                          }
+                                        }];
 }
 
 - (void)reportUser:(NSString *)userID {
-
-    [[FRSAPIClient sharedClient] reportUser:userID
+    [[FRSModerationManager sharedInstance] reportUser:userID
         params:@{ @"reason" : self.reportReasonString,
                   @"message" : self.reportUserAlertView.textView.text }
         completion:^(id responseObject, NSError *error) {

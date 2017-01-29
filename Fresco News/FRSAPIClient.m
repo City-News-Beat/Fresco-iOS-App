@@ -199,40 +199,6 @@
             }];
 }
 
-- (void)fetchGalleriesInStory:(NSString *)storyID completion:(void (^)(NSArray *galleries, NSError *error))completion {
-
-    NSString *endpoint = [NSString stringWithFormat:storyGalleriesEndpoint, storyID];
-
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)getRecentGalleriesFromLastGalleryID:(NSString *)galleryID completion:(void (^)(NSArray *galleries, NSError *error))completion {
-}
-
-- (void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void (^)(NSArray *stories, NSError *error))completion {
-
-    NSDictionary *params = @{
-        @"limit" : [NSNumber numberWithInteger:limit],
-        @"last" : (offsetID != Nil) ? offsetID : @""
-    };
-
-    if (!offsetID) {
-        params = @{
-            @"limit" : [NSNumber numberWithInteger:limit],
-        };
-    }
-
-    [self get:storiesEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
 - (void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
 
     if (!token) {
@@ -287,15 +253,7 @@
               [gallery setValue:@(TRUE) forKey:@"liked"];
             }];
 }
-- (void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:storyUnlikeEndpoint, story.uid];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-              [story setValue:@(FALSE) forKey:@"liked"];
-            }];
-}
+
 
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType {
     if (!self.requestManager) {
@@ -321,16 +279,7 @@
             }];
 }
 
-- (void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
 
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-
-            }];
-}
 
 /*
  Keychain-Based interaction & authentication
@@ -549,27 +498,6 @@
             }];
 }
 
-- (void)getStoryWithUID:(NSString *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    NSString *endpoint = [NSString stringWithFormat:@"story/%@", story];
-
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-                  completion(responseObject, error);
-              }
-
-              // shouldn't happen
-              completion(responseObject, error);
-            }];
-}
-
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:@"gallery/%@", gallery];
 
@@ -600,7 +528,7 @@
 }
 
 - (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
+    if ([FRSAuthManager sharedInstance]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
@@ -615,7 +543,7 @@
 }
 
 - (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
+    if ([FRSAuthManager sharedInstance]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
@@ -652,7 +580,7 @@
     Social interaction
 */
 - (void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
+    if ([FRSAuthManager sharedInstance]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
@@ -696,25 +624,11 @@
               completion(responseObject, error);
             }];
 }
-- (void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
 
-    NSString *endpoint = [NSString stringWithFormat:likeStoryEndpoint, story.uid];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-              [story setValue:@(TRUE) forKey:@"liked"];
-              [[self managedObjectContext] save:Nil];
-            }];
-}
 
 - (void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 
-    if ([self checkAuthAndPresentOnboard]) {
+    if ([FRSAuthManager sharedInstance]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
@@ -738,28 +652,6 @@
             }];
 }
 
-- (void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    if ([[story valueForKey:@"reposted"] boolValue]) {
-        [self unrepostStory:story completion:completion];
-        return;
-    }
-
-    NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-
-              [story setValue:@(TRUE) forKey:@"reposted"];
-              [[self managedObjectContext] save:Nil];
-            }];
-}
-
 - (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
 
@@ -773,105 +665,6 @@
               [gallery setValue:@(FALSE) forKey:@"reposted"];
 
               [[self managedObjectContext] save:Nil];
-            }];
-}
-
-- (void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:unrepostStoryEndpoint, story.uid];
-
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-
-              [story setValue:@(FALSE) forKey:@"reposted"];
-
-              [[self managedObjectContext] save:Nil];
-            }];
-}
-
-- (void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    if ([user valueForKey:@"following"] && [[user valueForKey:@"following"] boolValue] == TRUE) {
-        [self unfollowUser:user
-                completion:^(id responseObject, NSError *error) {
-                  completion(responseObject, error);
-                }];
-        return;
-    }
-
-    [self followUserID:user.uid
-            completion:^(id responseObject, NSError *error) {
-              [user setValue:@(TRUE) forKey:@"following"];
-              [[self managedObjectContext] save:Nil];
-              completion(responseObject, error);
-            }];
-}
-
-- (void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.news" code:101 userInfo:Nil]);
-        return;
-    }
-
-    [self unfollowUserID:user.uid
-              completion:^(id responseObject, NSError *error) {
-                [user setValue:@(FALSE) forKey:@"following"];
-                [[self managedObjectContext] save:Nil];
-                completion(responseObject, error);
-              }];
-}
-
-- (void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
-
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
-
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
-
-    [self get:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:followUserEndpoint, userID];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-- (void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:unfollowUserEndpoint, userID];
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
             }];
 }
 
@@ -918,7 +711,7 @@
 
 - (void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
 
-    if ([self checkAuthAndPresentOnboard]) {
+    if ([FRSAuthManager sharedInstance]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
@@ -1000,78 +793,10 @@
     return [appDelegate managedObjectContext];
 }
 
-- (BOOL)checkAuthAndPresentOnboard {
 
-    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-
-        id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
-        FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
-
-        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-            [navController pushViewController:onboardVC animated:FALSE];
-        } else {
-            UITabBarController *tab = (UITabBarController *)navController;
-            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-            UINavigationController *onboardNav = [[UINavigationController alloc] init];
-            [onboardNav pushViewController:onboardVC animated:NO];
-            [tab presentViewController:onboardNav animated:YES completion:Nil];
-        }
-
-        return TRUE;
-    }
-
-    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
-        [self checkSuspended];
-        return TRUE;
-    }
-
-    return FALSE;
-}
 
 /// not ideal
-#pragma mark - Smooch
-- (void)presentSmooch {
-    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
-    if (currentUser.firstName) {
-        [SKTUser currentUser].firstName = currentUser.firstName;
-    }
-    if (currentUser.email) {
-        [SKTUser currentUser].email = currentUser.email;
-    }
-    if (currentUser.uid) {
-        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
-    }
-    [Smooch show];
-}
 
-- (void)checkSuspended {
-
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
-
-    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
-        self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        [self.suspendedAlert show];
-    }
-}
-- (void)didPressButtonAtIndex:(NSInteger)index {
-
-    if (self.suspendedAlert) {
-        switch (index) {
-        case 0:
-            [self presentSmooch];
-            break;
-
-        case 1:
-
-            break;
-        default:
-            break;
-        }
-    }
-}
 /// not ideal
 
 - (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -1214,41 +939,6 @@
 }
 - (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:acceptTermsEndpoint withParameters:Nil completion:completion];
-}
-
-- (void)blockUser:(NSString *)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:blockUserEndpoint, userID];
-
-    [self post:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)unblockUser:(NSString *)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:unblockUserEndpoint, userID];
-
-    [self post:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-- (void)reportUser:(NSString *)userID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *format = @"user/%@/report";
-    NSString *endpoint = [NSString stringWithFormat:format, userID];
-    [self post:endpoint withParameters:params completion:completion];
-}
-
-- (void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *format = @"gallery/%@/report";
-    NSString *endpoint = [NSString stringWithFormat:format, gallery.uid];
-    [self post:endpoint withParameters:params completion:completion];
-}
-
-- (void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
-    [self get:@"user/blocked" withParameters:Nil completion:completion];
 }
 
 - (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion {

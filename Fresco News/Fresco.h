@@ -43,10 +43,10 @@ static NSString *const nearbyUsersEndpoint = @"user/suggestions";
 static NSString *const notificationEndpoint = @"user/notifications";
 
 // content endpoints
-static NSString *const storiesEndpoint = @"story/recent";
+
 static NSString *const highlightsEndpoint = @"gallery/highlights";
 static NSString *const assignmentsEndpoint = @"assignment/find";
-static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
+
 
 static NSString *const settingsUpdateEndpoint = @"user/settings/update";
 
@@ -74,19 +74,14 @@ static NSString *const completePostEndpoint = @"post/complete";
 // formatted endpoints
 static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
-static NSString *const likeStoryEndpoint = @"story/%@/like";
-static NSString *const repostStoryEndpoint = @"story/%@/repost";
 static NSString *const unrepostGalleryEndpoint = @"gallery/%@/unrepost";
-static NSString *const unrepostStoryEndpoint = @"story/%@/unrepost";
-static NSString *const followUserEndpoint = @"user/%@/follow";
-static NSString *const unfollowUserEndpoint = @"user/%@/unfollow";
-static NSString *const followersEndpoint = @"user/%@/followers";
-static NSString *const followingEndpoint = @"user/%@/following";
+
+
 static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
 static NSString * const purchasesEndpoint = @"gallery/%@/purchases";
 static NSString *const commentEndpoint = @"gallery/%@/comment/";
 static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
-static NSString *const storyUnlikeEndpoint = @"story/%@/unlike";
+
 static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
 static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
 static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
@@ -115,9 +110,7 @@ static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/file
 static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
 
 // moderation
-static NSString *const blockUserEndpoint = @"user/%@/block";
-static NSString *const unblockUserEndpoint = @"user/%@/unblock";
-static NSString *const reportUserEndpoint = @"user/%@/report";
+
 
 // user defaults
 static NSString *const previouslySelectedTabKey = @"previouslySelectedTab";

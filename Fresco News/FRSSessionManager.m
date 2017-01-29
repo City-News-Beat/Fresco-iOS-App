@@ -7,7 +7,6 @@
 //
 
 #import "FRSSessionManager.h"
-#import "FRSAPIClient.h"
 #import "EndpointManager.h"
 
 static NSString *const kClientToken = @"kClientToken";

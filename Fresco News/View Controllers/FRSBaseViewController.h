@@ -17,7 +17,7 @@
 #import "FRSNavigationController.h"
 #import "FRSAlertView.h"
 
-@interface FRSBaseViewController : UIViewController <FRSAlertViewDelegate>
+@interface FRSBaseViewController : UIViewController
 
 @property (nonatomic) BOOL hiddenTabBar;
 @property (nonatomic) BOOL actionBarVisible;
@@ -45,11 +45,5 @@
 - (void)presentGenericError;
 - (void)presentNoConnectionError;
 - (void)checkStatusAndPresentPermissionsAlert:(id)delegate;
-
-/* MODERATION */
-- (void)checkSuspended;
-
-/* SMOOCH */
-- (void)presentSmooch;
 
 @end

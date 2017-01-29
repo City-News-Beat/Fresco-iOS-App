@@ -26,6 +26,7 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationHandler.h"
+#import "FRSModerationManager.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -86,7 +87,7 @@
 
     [self displayPreviousTab];
 
-    [self checkSuspended];
+    [[FRSModerationManager sharedInstance] checkSuspended];
 
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
