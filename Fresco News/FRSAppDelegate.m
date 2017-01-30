@@ -40,6 +40,7 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationManager.h"
+#import <UXCam/UXCam.h>
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -132,7 +133,13 @@
     [FRSTracker startTracking];
     [self startTracking];
 
+    [self configureUXCam];
+    
     return YES;
+}
+
+-(void)configureUXCam {
+    [UXCam startWithKey:UXCamKey];
 }
 
 - (void)configureStartDate {
