@@ -1,4 +1,5 @@
-//
+
+    //
 //  FRSAppDelegate.m
 //  Fresco
 //
@@ -39,6 +40,7 @@
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSNotificationManager.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -50,7 +52,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-    
+
     NSString *yourAppToken = @"bxk48kwhbx8g";
     NSString *environment = ADJEnvironmentSandbox;
     ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
@@ -61,7 +63,7 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
-    
+
     EndpointManager *manager = [EndpointManager sharedInstance];
     [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
 
@@ -94,10 +96,9 @@
 
         self.window.rootViewController = mainNav;
         [self createItemsWithIcons];
-        [self reloadUser];
+        [[FRSUserManager sharedInstance] reloadUser];
         [self startNotificationTimer];
     } else {
-
         [self startAuthentication];
 
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
@@ -142,7 +143,6 @@
 }
 
 - (void)clearUploadCache {
-
     BOOL isDir;
     NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -216,206 +216,6 @@
                            }];
 }
 
-- (void)refreshSettings {
-    [[FRSAPIClient sharedClient] fetchSettings:^(id responseObject, NSError *error) {
-      if ([[responseObject class] isSubclassOfClass:[NSArray class]]) {
-          for (NSDictionary *setting in responseObject) {
-              if ([setting[@"type"] isEqualToString:@"notify-user-dispatch-new-assignment"]) {
-                  if (setting[@"options"] && ![setting[@"option"] isEqual:[NSNull null]]) {
-                      if ([setting[@"options"][@"send_push"] boolValue]) {
-                          [[NSUserDefaults standardUserDefaults] setValue:@(TRUE) forKey:settingsUserNotificationToggle];
-                      } else {
-                          [[NSUserDefaults standardUserDefaults] setValue:@(FALSE) forKey:settingsUserNotificationToggle];
-                      }
-                      [[NSUserDefaults standardUserDefaults] synchronize];
-                  }
-              }
-          }
-      }
-    }];
-}
-
-- (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
-
-    [[FRSUserManager sharedInstance] refreshCurrentUser:^(id responseObject, NSError *error) {
-      // check against existing user
-      if (error || responseObject[@"error"]) {
-          // throw up sign in
-
-          return;
-      }
-
-      [self.managedObjectContext performBlock:^{
-        [self saveUserFields:responseObject];
-      }];
-
-      if ([[FRSAuthManager sharedInstance] isAuthenticated] && !self.didPresentPermissionsRequest) {
-          if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
-              [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-          }
-      }
-
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (completion) {
-            completion(Nil, Nil);
-        }
-      });
-
-    }];
-
-    [self refreshSettings];
-}
-
-- (void)saveUserFields:(NSDictionary *)responseObject {
-    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
-
-    if (!authenticatedUser) {
-        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
-    }
-
-    // update user
-
-    if (responseObject[@"id"] && ![responseObject[@"id"] isEqual:[NSNull null]]) {
-        authenticatedUser.uid = responseObject[@"id"];
-    }
-    //        authenticatedUser.email = responseObject[@"email"];
-
-    if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
-        authenticatedUser.firstName = responseObject[@"full_name"];
-    }
-    if (responseObject[@"username"] && ![responseObject[@"username"] isEqual:[NSNull null]]) {
-        authenticatedUser.username = responseObject[@"username"];
-    }
-    if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
-        authenticatedUser.bio = responseObject[@"bio"];
-    }
-    if (![responseObject[@"email"] isEqual:[NSNull null]]) {
-        authenticatedUser.email = responseObject[@"email"];
-    }
-    authenticatedUser.isLoggedIn = @(TRUE);
-    if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
-        authenticatedUser.profileImage = responseObject[@"avatar"];
-    }
-
-    if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
-        [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
-    }
-
-    if (responseObject[@"followed_count"] != Nil && ![responseObject[@"followed_count"] isEqual:[NSNull null]]) {
-        [authenticatedUser setValue:responseObject[@"followed_count"] forKey:@"followedCount"];
-    }
-
-    if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
-        [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
-    }
-
-    if (responseObject[@"terms"] && ![responseObject[@"terms"] isEqual:[NSNull null]] && [responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
-        UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
-        UINavigationController *nav = [tabBar.viewControllers firstObject];
-        FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
-        [homeViewController presentTOS];
-    }
-
-    if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {
-        authenticatedUser.blocked = [responseObject[@"blocked"] boolValue];
-    }
-
-    if (responseObject[@"blocking"] && ![responseObject[@"blocking"] isEqual:[NSNull null]]) {
-        authenticatedUser.blocking = [responseObject[@"blocking"] boolValue];
-    }
-
-    if (responseObject[@"suspended_until"] && ![responseObject[@"suspended_until"] isEqual:[NSNull null]]) {
-        authenticatedUser.suspended = YES;
-    } else {
-        authenticatedUser.suspended = NO;
-    }
-
-    if (responseObject[@"disabled"] && ![responseObject[@"disabled"] isEqual:[NSNull null]]) {
-        authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
-    }
-
-    if (responseObject[@"identity"] && ![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
-
-        if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
-        }
-        if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
-        }
-
-        NSDictionary *identity = responseObject[@"identity"];
-
-        NSString *birthDay = identity[@"dob_day"];
-        NSString *birthMonth = identity[@"dob_month"];
-        NSString *birthYear = identity[@"dob_year"];
-        NSString *addressLineOne = identity[@"address_line1"];
-        NSString *addressLineTwo = identity[@"address_line2"];
-        NSString *addressZip = identity[@"address_zip"];
-        NSString *addressCity = identity[@"address_city"];
-        NSString *addressState = identity[@"address_state"];
-
-        NSString *radius = [responseObject valueForKey:@"radius"];
-        if ([self isValue:radius]) {
-            [[NSUserDefaults standardUserDefaults] setValue:radius forKey:settingsUserNotificationRadius];
-            authenticatedUser.notificationRadius = @([radius floatValue]);
-        }
-
-        BOOL hasSavedFields = FALSE;
-
-        if ([self isValue:birthDay]) {
-            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
-            hasSavedFields = TRUE;
-        }
-        if ([self isValue:birthMonth]) {
-            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
-            hasSavedFields = TRUE;
-        }
-        if ([self isValue:birthYear]) {
-            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
-            hasSavedFields = TRUE;
-        }
-        if ([self isValue:addressLineOne]) {
-            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
-            hasSavedFields = TRUE;
-        }
-        if ([self isValue:addressLineTwo]) {
-            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
-            hasSavedFields = TRUE;
-        }
-
-        if ([self isValue:addressZip]) {
-            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
-            hasSavedFields = TRUE;
-        }
-        if ([self isValue:addressCity]) {
-            [authenticatedUser setValue:addressCity forKey:@"address_city"];
-            hasSavedFields = TRUE;
-        }
-        if ([self isValue:addressState]) {
-            [authenticatedUser setValue:addressState forKey:@"address_state"];
-            hasSavedFields = TRUE;
-        }
-
-        NSArray *fieldsNeeded = identity[@"fields_needed"];
-
-        if (fieldsNeeded) {
-            [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
-            [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @try {
-                [self saveContext];
-            } @catch (NSException *exception) {
-                NSLog(@"Error saving context.");
-            }
-        });
-    }
-}
-
-- (void)reloadUser {
-    [self reloadUser:Nil];
-}
 
 - (BOOL)isValue:(id)value {
     if (value != Nil && ![value isEqual:[NSNull null]]) {
@@ -489,7 +289,7 @@
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response
              withCompletionHandler:(void (^)())completionHandler {
-    
+
     NSLog(@"Handle push from background or closed");
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
     NSLog(@"%@", response.notification.request.content.userInfo);
@@ -523,8 +323,8 @@
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
-    
-    @synchronized (self) {
+
+    @synchronized(self) {
         return _persistentStoreCoordinator;
     }
 }
@@ -539,15 +339,15 @@
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-    
+
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (!coordinator) {
         return nil;
     }
     _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    
-    @synchronized (self) {
+
+    @synchronized(self) {
         return _managedObjectContext;
     }
 }
@@ -584,12 +384,6 @@
     self.window.rootViewController = mainNav;
 }
 
-- (BOOL)isAuthenticated {
-
-    // check against keychian
-
-    return FALSE;
-}
 // when the app isn't open
 - (void)handleColdQuickAction:(UIApplicationShortcutItem *)shortcutItem {
 
@@ -776,7 +570,7 @@
         return;
     }
 
-    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+    [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
       if (error) {
           //soft fail
           return;
@@ -861,7 +655,6 @@
 }
 
 - (void)updateTabBarToUser {
-
     FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
     [frsTabBar updateUserIcon];
     frsTabBar.dot.alpha = 0;
@@ -909,6 +702,7 @@
 
 - (void)popViewController {
 }
+
 - (void)segueHome {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
     tab.selectedIndex = 0;

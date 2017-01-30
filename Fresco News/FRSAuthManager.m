@@ -88,18 +88,6 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
                            }];
 }
 
-- (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *mutableDigestion = [digestion mutableCopy];
-
-    if (self.passwordUsed) {
-        [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
-    } else if (self.socialUsed && !self.passwordUsed) {
-        [mutableDigestion addEntriesFromDictionary:self.socialUsed];
-    }
-
-    [[FRSUserManager sharedInstance] updateUserWithDigestion:mutableDigestion completion:completion];
-}
-
 - (void)logout {
     [[FRSSessionManager sharedInstance] deleteTokens];
 }

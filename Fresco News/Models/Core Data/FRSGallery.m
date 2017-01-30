@@ -61,21 +61,21 @@
     if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
         self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
     }
-    
+
     if (dict[@"captured_at"] && ![dict[@"captured_at"] isEqual:[NSNull null]]) {
         self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"captured_at"]];
     } else if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
         self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
     }
-    
+
     if (dict[@"rating"] && ![dict[@"rating"] isEqual:[NSNull null]]) {
         self.rating = dict[@"rating"];
     }
-    
+
     if (dict[@"byline"] && ![dict[@"byline"] isEqual:[NSNull null]]) {
         self.byline = dict[@"byline"];
     }
-    
+
     if (dict[@"caption"] && ![dict[@"caption"] isEqual:[NSNull null]]) {
         self.caption = dict[@"caption"];
     }
@@ -91,11 +91,10 @@
 
         [[FRSUserManager sharedInstance] getUserWithUID:userID
                                              completion:^(id responseObject, NSError *error) {
-                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
                                                self.sourceUser = user;
                                              }];
     }
-
 
     if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
         self.externalAccountID = [dict objectForKey:@"external_account_id"];
@@ -147,7 +146,6 @@
 
     [self setValue:@([dict[@"reposts"] intValue]) forKey:@"reposts"];
     [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
-    
 }
 
 + (instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
@@ -164,9 +162,9 @@
 }
 
 - (void)configureCreatorWithDictionary:(NSDictionary *)dict {
-    
+
     NSString *dictKey = @"";
-    
+
     // Default to the the gallerys owner, fall back on the curator if the owner is not found
     if (dict[@"owner"] != [NSNull null]) {
         dictKey = @"owner";
@@ -176,7 +174,7 @@
         NSLog(@"Unable to find owner or curator on gallery");
         return;
     }
-    
+
     // Create and save new user on gallery only if creator has changed
     if (!self.creator) {
         self.creator = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];

@@ -91,7 +91,7 @@ static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
                              completion(responseObject, error);
 
                              [story setValue:@(TRUE) forKey:@"reposted"];
-                             [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+                             [[[FRSAuthManager sharedInstance] managedObjectContext] save:Nil];
                            }];
 }
 
@@ -105,7 +105,7 @@ static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
 
                              [story setValue:@(FALSE) forKey:@"reposted"];
 
-                             [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+                             [[[FRSAuthManager sharedInstance] managedObjectContext] save:Nil];
                            }];
 }
 

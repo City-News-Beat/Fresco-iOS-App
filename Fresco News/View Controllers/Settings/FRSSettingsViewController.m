@@ -105,9 +105,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
 
-    [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser:^(id responseObject, NSError *error) {
+    [[FRSUserManager sharedInstance] reloadUser:^(id responseObject, NSError *error) {
       [self.tableView reloadData];
-
     }];
 }
 

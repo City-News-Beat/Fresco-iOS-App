@@ -25,6 +25,7 @@
 #import "FRSNotificationHandler.h"
 #import "FRSUserManager.h"
 #import "FRSFollowManager.h"
+#import "FRSNotificationManager.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
 
@@ -71,7 +72,7 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 - (void)getNotifications {
-    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+    [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
       self.feed = [responseObject objectForKey:@"feed"];
 
       NSLog(@"GET NOTIFICATIONS: %@", responseObject);
@@ -182,31 +183,31 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
         loadingMoreNotifications = TRUE;
         NSString *lastNotifID = [[self.feed lastObject] objectForKey:@"id"];
 
-        [[FRSAPIClient sharedClient] getNotificationsWithLast:lastNotifID
-                                                   completion:^(id responseObject, NSError *error) {
-                                                     if (!error) {
-                                                         NSMutableArray *feed = [self.feed mutableCopy];
-                                                         NSArray *notifications = responseObject[@"feed"];
+        [[FRSNotificationManager sharedInstance] getNotificationsWithLast:lastNotifID
+                                                               completion:^(id responseObject, NSError *error) {
+                                                                 if (!error) {
+                                                                     NSMutableArray *feed = [self.feed mutableCopy];
+                                                                     NSArray *notifications = responseObject[@"feed"];
 
-                                                         if (!notifications || notifications.count == 0) {
-                                                             reachedBottom = TRUE;
-                                                         }
+                                                                     if (!notifications || notifications.count == 0) {
+                                                                         reachedBottom = TRUE;
+                                                                     }
 
-                                                         [feed addObjectsFromArray:notifications];
-                                                         self.feed = feed;
+                                                                     [feed addObjectsFromArray:notifications];
+                                                                     self.feed = feed;
 
-                                                         NSMutableArray *toRead = [[NSMutableArray alloc] init];
+                                                                     NSMutableArray *toRead = [[NSMutableArray alloc] init];
 
-                                                         for (NSDictionary *notif in notifications) {
-                                                             [toRead addObject:notif[@"id"]];
-                                                         }
+                                                                     for (NSDictionary *notif in notifications) {
+                                                                         [toRead addObject:notif[@"id"]];
+                                                                     }
 
-                                                         [self readAllNotifications];
-                                                     }
+                                                                     [self readAllNotifications];
+                                                                 }
 
-                                                     [self.tableView reloadData];
-                                                     loadingMoreNotifications = FALSE;
-                                                   }];
+                                                                 [self.tableView reloadData];
+                                                                 loadingMoreNotifications = FALSE;
+                                                               }];
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

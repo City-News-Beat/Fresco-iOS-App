@@ -7,25 +7,24 @@
 //
 
 #import "FRSGalleryManager.h"
-#import "FRSAPIClient.h"
 #import "FRSAuthManager.h"
 
 static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
 static NSString *const unrepostGalleryEndpoint = @"gallery/%@/unrepost";
-
 static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
 static NSString *const purchasesEndpoint = @"gallery/%@/purchases";
 static NSString *const commentEndpoint = @"gallery/%@/comment/";
 static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
-
-static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
+static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete";
 static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
 static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
 static NSString *const highlightsEndpoint = @"gallery/highlights";
 static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
 static NSString *const getCommentEndpoint = @"gallery/%@/comment/%@";
 static NSString *const createGalleryEndpoint = @"gallery/submit";
+static NSString *const getPostEndpoint = @"post/%@";
+static NSString *const getOutletEndpoint = @"outlet/%@";
 
 @implementation FRSGalleryManager
 
@@ -44,7 +43,7 @@ static NSString *const createGalleryEndpoint = @"gallery/submit";
     [[FRSAPIClient sharedClient] post:createGalleryEndpoint
                        withParameters:galleryDict
                            completion:^(id responseObject, NSError *error) {
-                               completion(responseObject, error);
+                             completion(responseObject, error);
                            }];
 }
 
@@ -183,17 +182,17 @@ static NSString *const createGalleryEndpoint = @"gallery/submit";
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
                           completion:^(id responseObject, NSError *error) {
-                              completion(responseObject, error);
+                            completion(responseObject, error);
                           }];
 }
 
 - (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:paginateComments, gallery.uid, last];
-    
+
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
                           completion:^(id responseObject, NSError *error) {
-                              completion(responseObject, error);
+                            completion(responseObject, error);
                           }];
 }
 
@@ -202,22 +201,21 @@ static NSString *const createGalleryEndpoint = @"gallery/submit";
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
-    
+
     NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
     NSDictionary *parameters = @{ @"comment" : comment };
-    
+
     [[FRSAPIClient sharedClient] post:endpoint withParameters:parameters completion:completion];
 }
 
 - (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    
     NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
     NSDictionary *params = @{ @"comment_id" : commentID };
-    
+
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:params
                            completion:^(id responseObject, NSError *error) {
-                               completion(responseObject, error);
+                             completion(responseObject, error);
                            }];
 }
 
@@ -228,6 +226,46 @@ static NSString *const createGalleryEndpoint = @"gallery/submit";
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
                           completion:^(id responseObject, NSError *error) {
+                            completion(responseObject, error);
+                          }];
+}
+
+- (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:getPostEndpoint, post];
+    [[FRSAPIClient sharedClient] get:endpoint
+                      withParameters:nil
+                          completion:^(id responseObject, NSError *error) {
+
+                            if (error) {
+                                completion(responseObject, error);
+                                return;
+                            }
+
+                            if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+                                completion(responseObject, error);
+                            }
+
+                            // shouldn't happen
+                            completion(responseObject, error);
+                          }];
+}
+
+- (void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:getOutletEndpoint, outlet];
+    [[FRSAPIClient sharedClient] get:endpoint
+                      withParameters:nil
+                          completion:^(id responseObject, NSError *error) {
+
+                            if (error) {
+                                completion(responseObject, error);
+                                return;
+                            }
+
+                            if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+                                completion(responseObject, error);
+                            }
+
+                            // shouldn't happen
                             completion(responseObject, error);
                           }];
 }

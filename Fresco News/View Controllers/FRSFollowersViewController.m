@@ -219,7 +219,7 @@
                                                   }
 
                                                   for (NSDictionary *user in users) {
-                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
                                                       [self.followingArray addObject:newUser];
                                                   }
 
@@ -252,7 +252,7 @@
                                                   }
 
                                                   for (NSDictionary *user in users) {
-                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
                                                       [self.followerArray addObject:newUser];
                                                   }
 
@@ -269,7 +269,6 @@
 
     [[FRSFollowManager sharedInstance] getFollowingForUser:_representedUser
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   self.didLoadOnce = YES;
                                                   [self.followingSpinner removeFromSuperview];
 
@@ -277,7 +276,7 @@
                                                   NSArray *users = (NSArray *)responseObject;
 
                                                   for (NSDictionary *user in users) {
-                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
                                                       [following addObject:newUser];
                                                   }
 
@@ -303,14 +302,13 @@
 - (void)reloadFollowers {
     [[FRSFollowManager sharedInstance] getFollowersForUser:_representedUser
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   [self.followerSpinner removeFromSuperview];
 
                                                   NSMutableArray *followers = [[NSMutableArray alloc] init];
                                                   NSArray *users = (NSArray *)responseObject;
 
                                                   for (NSDictionary *user in users) {
-                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
                                                       [followers addObject:newUser];
                                                   }
 

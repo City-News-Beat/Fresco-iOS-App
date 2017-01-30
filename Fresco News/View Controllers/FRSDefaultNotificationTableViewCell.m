@@ -13,6 +13,7 @@
 #import <Haneke/Haneke.h>
 #import "FRSUserManager.h"
 #import "FRSStoryManager.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSDefaultNotificationTableViewCell ()
 
@@ -109,20 +110,20 @@
 
     self.titleLabel.text = @"Your photo was purchased!";
 
-    [[FRSAPIClient sharedClient] getOutletWithID:outletID
-                                      completion:^(id responseObject, NSError *error){
+    [[FRSGalleryManager sharedInstance] getOutletWithID:outletID
+                                             completion:^(id responseObject, NSError *error){
 
-                                      }];
+                                             }];
 
-    [[FRSAPIClient sharedClient] getPostWithID:postID
-                                    completion:^(id responseObject, NSError *error) {
+    [[FRSGalleryManager sharedInstance] getPostWithID:postID
+                                           completion:^(id responseObject, NSError *error) {
 
-                                      if ([responseObject objectForKey:@"image"] != [NSNull null]) {
+                                             if ([responseObject objectForKey:@"image"] != [NSNull null]) {
 
-                                          NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
-                                          [self.image hnk_setImageFromURL:avatarURL];
-                                      }
-                                    }];
+                                                 NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+                                                 [self.image hnk_setImageFromURL:avatarURL];
+                                             }
+                                           }];
 
     //if user has payment method
     self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletID, price, paymentMethod];
@@ -137,20 +138,18 @@
     self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.titleLabel.numberOfLines = 0;
 
-    [[FRSAPIClient sharedClient] getOutletWithID:outletID
-                                      completion:^(id responseObject, NSError *error){
+    [[FRSGalleryManager sharedInstance] getOutletWithID:outletID
+                                             completion:^(id responseObject, NSError *error){
+                                             }];
 
-                                      }];
+    [[FRSGalleryManager sharedInstance] getPostWithID:postID
+                                           completion:^(id responseObject, NSError *error) {
+                                             if ([responseObject objectForKey:@"image"] != [NSNull null]) {
 
-    [[FRSAPIClient sharedClient] getPostWithID:postID
-                                    completion:^(id responseObject, NSError *error) {
-
-                                      if ([responseObject objectForKey:@"image"] != [NSNull null]) {
-
-                                          NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
-                                          [self.image hnk_setImageFromURL:avatarURL];
-                                      }
-                                    }];
+                                                 NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+                                                 [self.image hnk_setImageFromURL:avatarURL];
+                                             }
+                                           }];
 
     //if user has payment method
     self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your video! We've sent %@ to your %@.", outletID, price, paymentMethod];
@@ -171,7 +170,6 @@
 
     [[FRSUserManager sharedInstance] getUserWithUID:userID
                                          completion:^(id responseObject, NSError *error) {
-
                                            self.titleLabel.text = [responseObject objectForKey:@"full_name"];
 
                                            if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {

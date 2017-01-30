@@ -20,6 +20,7 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSFollowManager.h"
+#import "FRSNotificationManager.h"
 
 @interface FRSTableViewCell () <FRSAlertViewDelegate>
 
@@ -902,10 +903,9 @@
 }
 
 - (void)follow:(NSDictionary *)userDict user:(FRSUser *)user following:(BOOL)following {
-
     FRSUser *currentUser;
     if (userDict) {
-        currentUser = [FRSUser nonSavedUserWithProperties:userDict context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        currentUser = [FRSUser nonSavedUserWithProperties:userDict context:[[FRSFollowManager sharedInstance] managedObjectContext]];
     } else {
         currentUser = user;
     }
@@ -918,7 +918,6 @@
 }
 
 - (void)follow:(FRSUser *)user {
-
     [[FRSFollowManager sharedInstance] followUser:user
                                        completion:^(id responseObject, NSError *error) {
                                          if (error) {
@@ -1002,30 +1001,30 @@
             radius = [user.notificationRadius floatValue];
         }
 
-        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES
-                                                      completion:^(id responseObject, NSError *error) {
-                                                        if (responseObject && !error) {
-                                                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
-                                                            [[NSUserDefaults standardUserDefaults] synchronize];
+        [[FRSNotificationManager sharedInstance] setPushNotificationWithBool:YES
+                                                                  completion:^(id responseObject, NSError *error) {
+                                                                    if (responseObject && !error) {
+                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+                                                                        [[NSUserDefaults standardUserDefaults] synchronize];
 
-                                                        } else {
-                                                            [sender setOn:FALSE];
-                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                                                            [alert show];
-                                                        }
-                                                      }];
+                                                                    } else {
+                                                                        [sender setOn:FALSE];
+                                                                        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                                        [alert show];
+                                                                    }
+                                                                  }];
     } else {
-        [[FRSAPIClient sharedClient] setPushNotificationWithBool:NO
-                                                      completion:^(id responseObject, NSError *error) {
-                                                        if (responseObject && !error) {
-                                                            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
-                                                            [[NSUserDefaults standardUserDefaults] synchronize];
-                                                        } else {
-                                                            [sender setOn:TRUE];
-                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                                                            [alert show];
-                                                        }
-                                                      }];
+        [[FRSNotificationManager sharedInstance] setPushNotificationWithBool:NO
+                                                                  completion:^(id responseObject, NSError *error) {
+                                                                    if (responseObject && !error) {
+                                                                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+                                                                        [[NSUserDefaults standardUserDefaults] synchronize];
+                                                                    } else {
+                                                                        [sender setOn:TRUE];
+                                                                        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                                        [alert show];
+                                                                    }
+                                                                  }];
     }
 }
 

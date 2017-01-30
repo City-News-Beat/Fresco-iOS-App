@@ -28,6 +28,7 @@
 #import "FRSFollowManager.h"
 #import "FRSModerationManager.h"
 #import "FRSFeedManager.h"
+#import "FRSNotificationManager.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
@@ -135,7 +136,7 @@
                                                    return;
                                                }
 
-                                               _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                               _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
                                                [self configureWithUser:_representedUser];
 
                                              }];
@@ -308,7 +309,7 @@
 
     FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
 
-    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+    [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
 
       if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
           [tabBarController updateUserIcon];
@@ -316,26 +317,6 @@
           [tabBarController updateBellIcon:NO];
       }
     }];
-
-    //
-    //    if(!self.editedProfile){
-    //        if (!_representedUser) {
-    //            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    //            self.authenticatedProfile = TRUE;
-    //            [self configureWithUser:_representedUser];
-    //        }else{
-    //            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
-    //                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-    //                [self configureWithUser:_representedUser];
-    //
-    //                NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
-    //                self.bioLabel.frame = CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16);
-    //                [self.bioLabel sizeToFit];
-    //            }];
-    //        }
-    //    }else{
-    //        self.editedProfile = false;
-    //    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -369,19 +350,10 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    //This logic should be happen once the notif view is dismissed.
-    //We should see the tab bar in the notification view with the notification icon.
-    //    UITabBarItem *item4 = [self.tabBarController.tabBar.items objectAtIndex:4];
-    //    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    //    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    //    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    //    frsTabBar.dot.alpha = 0;
 }
 
 - (instancetype)initWithUser:(FRSUser *)user {
-
     if (self) {
-
         _representedUser = user; // obviously save for future
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
 
@@ -1628,8 +1600,7 @@
 }
 
 - (void)segueToSetup {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
 
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     setupProfileVC.nameStr = self.nameLabel.text;

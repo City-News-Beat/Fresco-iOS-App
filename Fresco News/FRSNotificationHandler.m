@@ -390,14 +390,6 @@ static BOOL isSegueingToAssignment;
 + (void)popViewController {
 }
 
-+ (void)segueToGallery:(NSString *)gallery post:(NSString *)post {
-
-    [[FRSAPIClient sharedClient] getPostWithID:post
-                                    completion:^(id responseObject, NSError *error){
-
-                                    }];
-}
-
 + (void)segueToAssignment:(NSString *)assignmentID {
 
     if (isSegueingToAssignment) {

@@ -204,7 +204,7 @@
     [self.tabBarController.tabBar setHidden:FALSE];
 
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
-    [self.appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
     [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;

@@ -41,7 +41,6 @@
  */
 
 - (FRSAVAuthStatus)authStatus {
-
     switch ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo]) {
     case AVAuthorizationStatusAuthorized:
         if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-camera"]) {
@@ -78,7 +77,6 @@
 }
 
 - (void)startCaptureSessionForCaptureMode:(FRSCaptureMode)captureMode withCompletion:(void (^)())completion {
-
     self.session = [[AVCaptureSession alloc] init];
 
     dispatch_async(self.sessionQueue, ^{

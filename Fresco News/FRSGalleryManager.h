@@ -32,5 +32,7 @@
 - (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion;
 
 @end

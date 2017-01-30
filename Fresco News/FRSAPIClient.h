@@ -27,80 +27,21 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) UIWindow *window;
 @end
 
-@protocol FRSFileUploaderObjectContext <NSObject>
-- (NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
-- (void)registerForPushNotifications;
-@end
-
 @interface FRSAPIClient : NSObject <FRSAlertViewDelegate>
 
 @property (nonatomic, retain) AFHTTPSessionManager *requestManager;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
-
-
 + (instancetype)sharedClient;
-- (NSManagedObjectContext *)managedObjectContext;
-
-
-
-// notifications
-- (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)setPushNotificationWithBool:(BOOL)sendPush completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void) delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion;
 
-
-
-//registration
-
-- (NSNumber *)fileSizeForURL:(NSURL *)url;
-
-
-
-- (void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// check user
 - (NSDate *)dateFromString:(NSString *)string;
 
-
 - (NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
-
-- (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// search
-- (void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion;
-- (void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// file
-- (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
-- (NSString *)md5:(PHAsset *)asset;
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
-
-
-// terms
-- (void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType;
 

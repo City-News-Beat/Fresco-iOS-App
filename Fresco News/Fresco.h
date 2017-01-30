@@ -32,32 +32,10 @@ static NSString *const serviceName = @"frescoNewsService3";
 static NSString *const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // user settings (notifications)
-static NSString *const settingsEndpoint = @"user/settings";
-static NSString *const updateSettingsEndpoint = @"user/settings/update";
-
-// search endpoint
-static NSString *const searchEndpoint = @"search";
-static NSString *const nearbyUsersEndpoint = @"user/suggestions";
 
 // notification endpoint
-static NSString *const notificationEndpoint = @"user/notifications";
-
-// content endpoints
-
-
-
-static NSString *const settingsUpdateEndpoint = @"user/settings/update";
-
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
-
-
-
-static NSString *const disableAccountEndpoint = @"user/disable/";
-
-
-// formatted endpoints
-
 
 // quick actions -- app delegate
 static NSString *const assignmentsAction = @"FRSAssignmentsAction";
@@ -69,14 +47,6 @@ static NSString *const postObjectType = @"post";
 static NSString *const galleryObjectType = @"gallery";
 static NSString *const storyObjectType = @"story";
 
-// payments
-static NSString *const createPayment = @"user/payment/create";
-static NSString *const getPaymentsEndpoint = @"user/payment";
-static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
-static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
-static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/files";
-static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
-
 // user defaults
 static NSString *const previouslySelectedTabKey = @"previouslySelectedTab";
 static NSString *const settingsUserNotificationRadius = @"notification-radius";
@@ -84,14 +54,12 @@ static NSString *const settingsPaymentLastFour = @"payment-last-four";
 static NSString *const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString *const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString *const startDate = @"startDate";
-static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
 
 // nsnotification
 static NSString *const enableAssignmentAccept = @"enableAssignmentAccept";
 static NSString *const disableAssignmentAccept = @"disableAssignmentAccept";
 
 // mixpanel
-
 static NSString *const activityDuration = @"activity_duration";
 
 // user - data
@@ -132,8 +100,6 @@ static NSString *const settingsCellIdentifier = @"SettingsCell";
 static NSString *const galleryCellIdentifier = @"gallery-cell";
 
 // TOS
-static NSString *const getTermsEndpoint = @"terms";
-static NSString *const acceptTermsEndpoint = @"terms/accept";
 
 #define USER_NAME @"username"
 #define PASS_WORD @"password"

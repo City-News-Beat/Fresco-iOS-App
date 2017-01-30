@@ -426,8 +426,7 @@
 }
 
 - (void)popToOrigin {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
 
     NSArray *viewControllers = [self.navigationController viewControllers];
 
@@ -439,8 +438,6 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
         [self dismissViewControllerAnimated:YES completion:Nil];
     }
-
-    //[self postLoginNotification];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }

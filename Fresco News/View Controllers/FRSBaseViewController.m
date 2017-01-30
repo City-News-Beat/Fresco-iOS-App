@@ -158,10 +158,11 @@
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[delegate managedObjectContext] save:nil];
 
     if ([[FRSUserManager sharedInstance] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
-        [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
+        [[[FRSUserManager sharedInstance] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
     }
 
     [FRSTracker reset];
@@ -173,7 +174,6 @@
 
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
 
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
     [delegate stopNotificationTimer];
 

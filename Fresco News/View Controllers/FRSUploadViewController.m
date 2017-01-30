@@ -1172,23 +1172,23 @@ static NSString *const cellIdentifier = @"assignment-cell";
 - (void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
     if (posts.count > 0) {
         PHAsset *firstAsset = posts[0];
-        [[FRSAPIClient sharedClient] digestForAsset:firstAsset
-                                           callback:^(id responseObject, NSError *error) {
-                                             NSNumber *fileSize = responseObject[@"fileSize"];
-                                             contentSize += [fileSize longLongValue];
+        [[FRSUploadManager sharedInstance] digestForAsset:firstAsset
+                                                 callback:^(id responseObject, NSError *error) {
+                                                   NSNumber *fileSize = responseObject[@"fileSize"];
+                                                   contentSize += [fileSize longLongValue];
 
-                                             [posts removeObject:firstAsset];
-                                             [current addObject:responseObject];
+                                                   [posts removeObject:firstAsset];
+                                                   [current addObject:responseObject];
 
-                                             if (error) {
-                                                 [self creationError:error];
-                                                 [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                                 self.sendButton.userInteractionEnabled = YES;
-                                                 return;
-                                             }
+                                                   if (error) {
+                                                       [self creationError:error];
+                                                       [self stopSpinner:self.loadingView onButton:self.sendButton];
+                                                       self.sendButton.userInteractionEnabled = YES;
+                                                       return;
+                                                   }
 
-                                             [self getPostData:posts current:current];
-                                           }];
+                                                   [self getPostData:posts current:current];
+                                                 }];
     } else {
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];

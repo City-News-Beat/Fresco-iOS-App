@@ -11,6 +11,7 @@
 static NSString *const assignmentsEndpoint = @"assignment/find";
 static NSString *const acceptAssignmentEndpoint = @"assignment/%@/accept";
 static NSString *const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
+static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
 
 @implementation FRSAssignmentManager
 

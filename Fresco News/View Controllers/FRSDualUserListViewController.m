@@ -307,7 +307,7 @@ int const FETCH_LIMIT = 20;
                                                         NSArray *users = (NSArray *)responseObject;
 
                                                         for (NSDictionary *user in users) {
-                                                            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
                                                             [likers addObject:newUser];
                                                         }
 
@@ -362,7 +362,7 @@ int const FETCH_LIMIT = 20;
                                                           NSArray *users = (NSArray *)responseObject;
 
                                                           for (NSDictionary *user in users) {
-                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
                                                               [reposters addObject:newUser];
                                                           }
 
@@ -410,7 +410,7 @@ int const FETCH_LIMIT = 20;
                                                           NSArray *users = (NSArray *)responseObject;
 
                                                           for (NSDictionary *user in users) {
-                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
                                                               [self.likedUsersArray addObject:newUser];
                                                           }
 
@@ -449,7 +449,7 @@ int const FETCH_LIMIT = 20;
                                                           NSArray *users = (NSArray *)responseObject;
 
                                                           for (NSDictionary *user in users) {
-                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
                                                               [self.repostedUsersArray addObject:newUser];
                                                           }
 

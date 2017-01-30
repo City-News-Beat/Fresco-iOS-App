@@ -1,3 +1,5 @@
+ 
+    
 
 //
 //  FRSAPIClient.m
@@ -35,78 +37,6 @@
     return client;
 }
 
-- (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
-
-    [self get:notificationEndpoint
-        withParameters:@{}
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)setPushNotificationWithBool:(BOOL)sendPush completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSDictionary *dict = @{ @"send_push" : [NSNumber numberWithBool:sendPush] };
-
-    [self post:settingsUpdateEndpoint
-        withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)getNotificationsWithLast:(nonnull NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    if (!last) {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:Nil]);
-    }
-
-    [self get:notificationEndpoint
-        withParameters:@{ @"last" : last }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:settingsUpdateEndpoint withParameters:digestion completion:completion];
-}
-
-- (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:disableAccountEndpoint withParameters:digestion completion:completion];
-}
-
-
-
-
-
-- (void)showErrorWithMessage:(NSString *)message onCancel:(FRSAPIBooleanCompletionBlock)onCancel onRetry:(FRSAPIBooleanCompletionBlock)onRetry {
-}
-
-
-
-- (void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    if (!token) {
-        completion(Nil, Nil);
-    }
-
-    [self post:createPayment
-        withParameters:@{ @"token" : token,
-                          @"active" : @(TRUE) }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-- (void)startLocator {
-    [FRSLocator sharedLocator];
-}
-
-
-
-
-
-
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType {
     if (!self.requestManager) {
         AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
@@ -119,8 +49,6 @@
 
     return self.requestManager;
 }
-
-
 
 /*
  Keychain-Based interaction & authentication
@@ -216,7 +144,7 @@
         }];
 }
 
-- (void) delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"DELETE"];
 
     [manager DELETE:endPoint
@@ -248,100 +176,6 @@
         }];
 }
 
-- (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
-    manager.requestSerializer = [[FRSRequestSerializer alloc] init];
-    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
-    manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
-    NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
-    [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
-
-    [manager POST:endPoint
-        parameters:nil
-        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-          [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
-        }
-        progress:^(NSProgress *_Nonnull uploadProgress) {
-        }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-        }];
-}
-
-- (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:updateTaxInfoEndpoint
-        withParameters:@{ @"stripe_document_token" : fileID }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
-/*
- One-off tools for use within class
- */
-
-- (NSNumber *)fileSizeForURL:(NSURL *)url {
-    NSNumber *fileSizeValue = nil;
-    NSError *fileSizeError = nil;
-    [url getResourceValue:&fileSizeValue
-                   forKey:NSURLFileSizeKey
-                    error:&fileSizeError];
-
-    return fileSizeValue;
-}
-
-- (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    NSString *endpoint = [NSString stringWithFormat:@"post/%@", post];
-
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-                  completion(responseObject, error);
-              }
-
-              // shouldn't happen
-              completion(responseObject, error);
-            }];
-}
-
-- (void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    NSString *endpoint = [NSString stringWithFormat:@"outlet/%@", outlet];
-
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-                  completion(responseObject, error);
-              }
-
-              // shouldn't happen
-              completion(responseObject, error);
-            }];
-}
-
-
-
-
 - (NSDate *)dateFromString:(NSString *)string {
     if (!self.dateFormatter) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
@@ -353,47 +187,12 @@
     return [self.dateFormatter dateFromString:string];
 }
 
-/* 
-    Social interaction
-*/
-
-
-- (void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    [self get:nearbyUsersEndpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (!query) {
-        // error out
-
-        return;
-    }
-
-    NSDictionary *params = @{ @"q" : query,
-                              @"stories" : @(TRUE),
-                              @"galleries" : @(TRUE),
-                              @"users" : @(TRUE),
-                              @"limit" : @999 };
-
-    [self get:searchEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-
-
-
 /* serialization */
 
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
-        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSManagedObjectContext *managedObjectContext = (cache) ? [appDelegate managedObjectContext] : Nil;
         NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
         NSArray *keys = [response allKeys];
 
@@ -415,7 +214,7 @@
         return responseObjects;
     } else if ([[response class] isSubclassOfClass:[NSArray class]]) {
         NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
-        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSManagedObjectContext *managedObjectContext = (cache) ? [appDelegate managedObjectContext] : Nil;
 
         for (NSDictionary *responseObject in response) {
             id originalResponse = [self objectFromDictionary:responseObject context:managedObjectContext];
@@ -435,176 +234,24 @@
 }
 
 - (id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
-
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSString *objectType = dictionary[@"object"];
 
     if ([objectType isEqualToString:galleryObjectType]) {
-        NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
+        NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
 
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
-        gallery.currentContext = [self managedObjectContext];
+        gallery.currentContext = [appDelegate managedObjectContext];
         [gallery configureWithDictionary:dictionary];
         return gallery;
     } else if ([objectType isEqualToString:storyObjectType]) {
-        NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];
+        NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
         FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:storyEntity insertIntoManagedObjectContext:nil];
         [story configureWithDictionary:dictionary];
         return story;
     }
 
     return dictionary; // not serializable
-}
-
-- (NSManagedObjectContext *)managedObjectContext {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate managedObjectContext];
-}
-
-
-
-/// not ideal
-
-/// not ideal
-
-- (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    __block NSString *address;
-
-    [geocoder reverseGeocodeLocation:location
-                   completionHandler:^(NSArray *placemarks, NSError *error) {
-                     if (placemarks && placemarks.count > 0) {
-                         CLPlacemark *placemark = [placemarks objectAtIndex:0];
-
-                         NSString *thoroughFare = @"";
-                         if ([placemark thoroughfare] && [[placemark thoroughfare] length] > 0) {
-                             thoroughFare = [[placemark thoroughfare] stringByAppendingString:@", "];
-
-                             if ([placemark subThoroughfare]) {
-                                 thoroughFare = [[[placemark subThoroughfare] stringByAppendingString:@" "] stringByAppendingString:thoroughFare];
-                             }
-                         }
-
-                         address = [NSString stringWithFormat:@"%@%@, %@", thoroughFare, [placemark locality], [placemark administrativeArea]];
-                         completion(address, Nil);
-                     } else {
-                         completion(@"No address found.", Nil);
-                         [FRSTracker track:addressError parameters:@{ @"coordinates" : @[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] }];
-                     }
-
-                   }];
-}
-
-// FILE DEALINGS
-- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback {
-    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-    options.version = PHVideoRequestOptionsVersionOriginal;
-
-    [[PHImageManager defaultManager] requestAVAssetForVideo:video
-                                                    options:options
-                                              resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                if ([asset isKindOfClass:[AVURLAsset class]]) {
-                                                    AVURLAsset *urlAsset = (AVURLAsset *)asset;
-
-                                                    NSNumber *size;
-                                                    NSError *fetchError;
-
-                                                    [urlAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:&fetchError];
-                                                    callback([size integerValue], fetchError);
-                                                }
-                                              }];
-}
-
-- (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSAPISizeCompletionBlock)callback {
-    [[PHImageManager defaultManager] requestImageDataForAsset:image
-                                                      options:nil
-                                                resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                                                  float imageSize = imageData.length;
-                                                  callback([@(imageSize) integerValue], Nil);
-                                                }];
-}
-
-- (NSString *)md5:(PHAsset *)asset {
-    return @"";
-}
-
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
-    NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
-
-    [self fetchAddressFromLocation:asset.location
-                        completion:^(id responseObject, NSError *error) {
-
-                          digest[@"address"] = responseObject;
-                          digest[@"lat"] = @(asset.location.coordinate.latitude);
-                          digest[@"lng"] = @(asset.location.coordinate.longitude);
-
-                          digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
-
-                          if (asset.mediaType == PHAssetMediaTypeImage) {
-                              digest[@"contentType"] = @"image/jpeg";
-                              [self fetchFileSizeForImage:asset
-                                                 callback:^(NSInteger size, NSError *err) {
-                                                   digest[@"fileSize"] = @(size);
-                                                   digest[@"chunkSize"] = @(size);
-                                                   callback(digest, err);
-                                                 }];
-                          } else {
-                              [self fetchFileSizeForVideo:asset
-                                                 callback:^(NSInteger size, NSError *err) {
-                                                   digest[@"fileSize"] = @(size);
-                                                   digest[@"chunkSize"] = @(chunkSize * megabyteDefinition);
-                                                   digest[@"contentType"] = @"video/mp4";
-                                                   callback(digest, err);
-                                                 }];
-                          }
-                        }];
-
-    return digest;
-}
-
-
-- (void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion {
-    [self get:getPaymentsEndpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:deletePaymentEndpoint, paymentID];
-
-    [self post:endpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:makePaymentActiveEndpoint, paymentID];
-
-    NSDictionary *params = @{ @"active" : @(1) };
-
-    [self post:endpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-
-              completion(responseObject, error);
-            }];
-}
-
-- (void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    [self get:getTermsEndpoint withParameters:Nil completion:completion];
-}
-- (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:acceptTermsEndpoint withParameters:Nil completion:completion];
-}
-
-- (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion {
-    [self get:settingsEndpoint withParameters:Nil completion:completion];
-}
-- (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:updateSettingsEndpoint withParameters:params completion:completion];
 }
 
 @end
