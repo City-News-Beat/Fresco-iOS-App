@@ -10,7 +10,6 @@
 #import "UIColor+Fresco.h"
 #import "Fresco.h"
 #import "FRSTableViewCell.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
 #import "FRSPaymentManager.h"

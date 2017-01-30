@@ -545,24 +545,8 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 - (void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell dictionary:(NSDictionary *)dictionary {
-
     textCell.label.numberOfLines = 0;
     textCell.textLabel.text = [dictionary objectForKey:@"body"];
-}
-
-- (void)markAllAsRead:(NSArray *)notificationIDS {
-    NSDictionary *params = @{ @"notification_ids" : notificationIDS };
-
-    [[FRSAPIClient sharedClient] post:@"user/notifications/see"
-                       withParameters:params
-                           completion:^(id responseObject, NSError *error) {
-                             BOOL success = FALSE;
-
-                             if (!error && responseObject) {
-                                 success = TRUE;
-                             }
-
-                           }];
 }
 
 - (void)readAllNotifications {
@@ -572,7 +556,8 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
         [toMarkAsRead addObject:notif[@"id"]];
     }
 
-    [self markAllAsRead:toMarkAsRead];
+    NSDictionary *params = @{ @"notification_ids" : toMarkAsRead };
+    [[FRSNotificationManager sharedInstance] markAsRead:params];
 }
 
 #pragma mark - Assignments

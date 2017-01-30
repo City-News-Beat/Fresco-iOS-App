@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
-#import "FRSAPIClient.h"
 
 @interface FRSSetupProfileViewController : FRSBaseViewController
 

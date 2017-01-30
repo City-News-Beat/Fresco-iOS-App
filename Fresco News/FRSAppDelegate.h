@@ -25,7 +25,6 @@
 #import <Crashlytics/Crashlytics.h>
 #import <Smooch/Smooch.h>
 #import <UserNotifications/UserNotifications.h>
-#import "FRSAPIClient.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Adjust.h"
 
@@ -46,7 +45,6 @@
 - (void)updateTabBarToUser;
 - (void)clearKeychain;
 - (void)restartUpload;
-- (void)saveUserFields:(NSDictionary *)responseObject;
 - (void)startNotificationTimer;
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;

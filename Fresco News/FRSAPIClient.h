@@ -13,7 +13,6 @@
 #import "FRSJSONResponseSerializer.h"
 #import "AFNetworking.h"
 #import "SAMKeychain.h"
-#import <Photos/Photos.h>
 #import <Mixpanel/Mixpanel.h>
 #import "FRSAlertView.h"
 #import "UIColor+Fresco.h"

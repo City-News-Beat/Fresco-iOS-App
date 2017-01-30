@@ -7,7 +7,6 @@
 //
 
 #import "FRSSocial.h"
-#import "FRSAPIClient.h"
 #import "FRSAuthManager.h"
 
 @implementation FRSSocial
@@ -19,7 +18,6 @@
       if (session) {
           [[FRSAuthManager sharedInstance] signInWithTwitter:session
                                                   completion:^(id responseObject, NSError *error) {
-
                                                     if (responseObject) {
 
                                                         /*if ([[responseObject objectForKey:@"valid_password"] boolValue]) {

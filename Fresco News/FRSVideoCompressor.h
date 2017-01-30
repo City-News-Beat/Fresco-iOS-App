@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
+
 typedef void (^FRSCompressionCompletionBlock)(NSURL *filePath, NSError *error);
 
 @interface FRSVideoCompressor : NSObject

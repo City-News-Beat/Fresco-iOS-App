@@ -24,7 +24,6 @@
 #import "FRSIdentityViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <Smooch/Smooch.h>
-#import "FRSAPIClient.h"
 #import "FRSSocial.h"
 #import "SAMKeychain.h"
 #import "NSDate+ISO.h"

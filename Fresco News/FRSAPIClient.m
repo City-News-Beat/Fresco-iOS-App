@@ -176,10 +176,6 @@
         }];
 }
 
-
-
-/* serialization */
-
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {

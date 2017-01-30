@@ -5,10 +5,7 @@
 //  Created by Philip Bernstein on 3/5/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
-
-#import "FRSAPIClient.h" // Network
 #import "FRSGallery+CoreDataProperties.h"
-#import "FRSAPIClient.h" // imports all extension classes needed (location, persistence, social, upload)
 #import "FRSStripe.h"
 #import "AFNetworking.h"
 #import "FRSTracker.h"

@@ -7,11 +7,9 @@
 //
 
 #import "FRSContentActionsBar.h"
-
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
-#import "FRSAPIClient.h"
 
 @interface FRSContentActionsBar ()
 

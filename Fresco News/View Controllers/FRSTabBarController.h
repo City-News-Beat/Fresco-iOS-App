@@ -7,15 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSAlertView.h"
 
 @interface FRSTabBarController : UITabBarController <FRSAlertViewDelegate>
 
 @property (nonatomic) NSInteger lastActiveIndex;
 
 - (void)returnToGalleryPost;
-
-//- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode;
-
 - (void)presentAssignments;
 - (void)setIrisItemColor:(UIColor *)color;
 - (void)handleNotification:(NSDictionary *)notification;

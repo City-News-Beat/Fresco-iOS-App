@@ -10,6 +10,7 @@
 
 static NSString *const notificationEndpoint = @"user/notifications";
 static NSString *const updateSettingsEndpoint = @"user/settings/update";
+static NSString *const seeNotificationsEndpoint = @"user/notifications/see";
 
 @implementation FRSNotificationManager
 
@@ -50,6 +51,13 @@ static NSString *const updateSettingsEndpoint = @"user/settings/update";
         completion:^(id responseObject, NSError *error) {
           completion(responseObject, error);
         }];
+}
+
+- (void)markAsRead:(NSDictionary *)params {
+    [[FRSAPIClient sharedClient] post:seeNotificationsEndpoint
+                       withParameters:params
+                           completion:^(id responseObject, NSError *error) {
+                           }];
 }
 
 @end

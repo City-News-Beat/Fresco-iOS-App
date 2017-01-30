@@ -30,5 +30,6 @@
 - (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)reloadUser;
 - (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
+- (void)saveUserFields:(NSDictionary *)responseObject;
 
 @end

@@ -10,7 +10,6 @@
 #import "FRSOnboardingViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSUploadViewController.h"
-#import "FRSAPIClient.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
 #import "FRSAlertView.h"
@@ -223,9 +222,7 @@
                                    [self stopSpinner:self.loadingView onButton:self.loginButton];
 
                                    if (error.code == 0) {
-
-                                       FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                       [delegate saveUserFields:responseObject[@"user"]];
+                                       [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
                                        [self setMigrateState:responseObject];
 
                                        [self popToOrigin];
@@ -390,14 +387,12 @@
           [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
           [[NSUserDefaults standardUserDefaults] synchronize];
 
-          FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-          [delegate saveUserFields:responseObject[@"user"]];
+          [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
           [self setMigrateState:responseObject];
 
           self.didAuthenticateSocial = YES;
 
           [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-
           [self popToOrigin];
 
           return;
@@ -480,16 +475,9 @@
 
           NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
 
-          /*  */
-          // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
-          /*  */
-
-          FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-          [delegate saveUserFields:responseObject[@"user"]];
+          [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
           [self setMigrateState:responseObject];
-
-          NSLog(@"Social Digest: %@", socialDigest);
-
+          
           [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
                                                         completion:^(id responseObject, NSError *error) {
                                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
