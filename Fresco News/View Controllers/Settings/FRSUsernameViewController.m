@@ -234,8 +234,7 @@
 
     [[FRSUserManager sharedInstance] updateUserWithDigestion:digestion
                                                   completion:^(id responseObject, NSError *error) {
-                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                    [delegate reloadUser];
+                                                    [[FRSUserManager sharedInstance] reloadUser];
 
                                                     if (!error) {
                                                         [self popViewController];
@@ -265,7 +264,7 @@
 
     FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.username = self.username;
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
 }
 
 - (void)checkUsername {
@@ -354,25 +353,25 @@
         if ((![self.cell.textField.text isEqualToString:@""])) {
 
             [[FRSUserManager sharedInstance] checkUsername:self.username
-                                            completion:^(id responseObject, NSError *error) {
+                                                completion:^(id responseObject, NSError *error) {
 
-                                              if (!error && responseObject) {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  self.usernameTaken = NO;
-                                                  [self stopUsernameTimer];
-                                                  [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                                                  self.cell.rightAlignedButton.userInteractionEnabled = NO;
-                                              } else if (error.code == -1009) {
-                                                  if (!self.alert) {
-                                                      self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                      [self.alert show];
+                                                  if (!error && responseObject) {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                      self.usernameTaken = NO;
+                                                      [self stopUsernameTimer];
+                                                      [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                                                      self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                                                  } else if (error.code == -1009) {
+                                                      if (!self.alert) {
+                                                          self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                          [self.alert show];
+                                                      }
+                                                  } else {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      self.usernameTaken = YES;
+                                                      [self stopUsernameTimer];
                                                   }
-                                              } else {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  self.usernameTaken = YES;
-                                                  [self stopUsernameTimer];
-                                              }
-                                            }];
+                                                }];
         }
     }
 }

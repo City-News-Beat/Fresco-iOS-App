@@ -14,6 +14,7 @@
 #import "DGElasticPullToRefresh.h"
 #import "Haneke.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSStoryManager.h"
 
 @interface FRSStoryDetailViewController () <UINavigationBarDelegate>
 
@@ -320,27 +321,27 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     self.stories = [[NSMutableArray alloc] init];
 
-    [[FRSAPIClient sharedClient] fetchGalleriesInStory:self.story.uid
-                                            completion:^(NSArray *galleries, NSError *error) {
+    [[FRSStoryManager sharedInstance] fetchGalleriesInStory:self.story.uid
+                                                 completion:^(NSArray *galleries, NSError *error) {
 
-                                              FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-                                              NSArray *galleriesArray = galleries;
+                                                   FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+                                                   NSArray *galleriesArray = galleries;
 
-                                              for (NSDictionary *gallery in galleriesArray) {
-                                                  FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
-                                                  [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
-                                                  [self.stories addObject:galleryObject];
+                                                   for (NSDictionary *gallery in galleriesArray) {
+                                                       FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
+                                                       [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
+                                                       [self.stories addObject:galleryObject];
 
-                                                  //self.galleriesTable.scrollEnabled = YES;
-                                              }
+                                                       //self.galleriesTable.scrollEnabled = YES;
+                                                   }
 
-                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                [self.galleriesTable reloadData];
-                                                [self.loadingView stopLoading];
-                                                [self.loadingView removeFromSuperview];
-                                                self.loadingView.alpha = 0;
-                                              });
-                                            }];
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                     [self.galleriesTable reloadData];
+                                                     [self.loadingView stopLoading];
+                                                     [self.loadingView removeFromSuperview];
+                                                     self.loadingView.alpha = 0;
+                                                   });
+                                                 }];
 }
 
 - (void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {

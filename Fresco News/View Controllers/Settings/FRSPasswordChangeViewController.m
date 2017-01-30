@@ -228,8 +228,7 @@
 
     [[FRSUserManager sharedInstance] updateUserWithDigestion:digestion
                                                   completion:^(id responseObject, NSError *error) {
-                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                    [delegate reloadUser];
+                                                    [[FRSUserManager sharedInstance] reloadUser];
 
                                                     if (!error) {
                                                         [self popViewController];
@@ -264,7 +263,7 @@
 
     FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.password = self.updatedPassword;
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:nil];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {

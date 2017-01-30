@@ -27,131 +27,18 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) UIWindow *window;
 @end
 
-@protocol FRSFileUploaderObjectContext <NSObject>
-- (NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
-- (void)registerForPushNotifications;
-@end
-
 @interface FRSAPIClient : NSObject <FRSAlertViewDelegate>
 
 @property (nonatomic, retain) AFHTTPSessionManager *requestManager;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
-@property (strong, nonatomic) FRSAlertView *suspendedAlert;
-
 + (instancetype)sharedClient;
-- (NSManagedObjectContext *)managedObjectContext;
-- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void (^)(NSArray *stories, NSError *error))completion;
-- (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchGalleriesInStory:(NSString *)storyID completion:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// notifications
-- (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)setPushNotificationWithBool:(BOOL)sendPush completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-// generic auth-ed call
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void) delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-
-//registration
-
-- (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (NSNumber *)fileSizeForURL:(NSURL *)url;
-
-- (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// check user
-- (NSDate *)dateFromString:(NSString *)string;
-
-- (void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
-
-- (void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (BOOL)checkAuthAndPresentOnboard;
-- (void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// search
-- (void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion;
-- (void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
-
-// file
-- (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
-- (NSString *)md5:(PHAsset *)asset;
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
-- (void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
-// terms
-- (void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
-// moderation
-- (void)blockUser:(NSString *)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unblockUser:(NSString *)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)reportUser:(NSString *)userID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
-
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType;
 
 @end

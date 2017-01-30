@@ -10,6 +10,7 @@
 #import "UIColor+Fresco.h"
 #import <Smooch/Smooch.h>
 #import "FRSUserManager.h"
+#import "FRSModerationManager.h"
 
 @interface MissingSomethingCollectionReusableView ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -33,21 +34,7 @@
 }
 
 - (IBAction)pressedChatWithUs:(id)sender {
-    [self presentSmooch];
-}
-
-- (void)presentSmooch {
-    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
-    if (currentUser.firstName) {
-        [SKTUser currentUser].firstName = currentUser.firstName;
-    }
-    if (currentUser.email) {
-        [SKTUser currentUser].email = currentUser.email;
-    }
-    if (currentUser.uid) {
-        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
-    }
-    [Smooch show];
+    [[FRSModerationManager sharedInstance] presentSmooch];
 }
 
 - (void)setup {

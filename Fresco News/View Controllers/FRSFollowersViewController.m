@@ -13,6 +13,7 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSProfileViewController.h"
 #import "FRSAwkwardView.h"
+#import "FRSFollowManager.h"
 
 #define CELL_HEIGHT 56
 
@@ -202,29 +203,29 @@
     FRSUser *user = [self.followingArray lastObject];
     isReloadingFollowing = TRUE;
 
-    [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser
-                                                last:user
-                                          completion:^(id responseObject, NSError *error) {
+    [[FRSFollowManager sharedInstance] getFollowingForUser:_representedUser
+                                                      last:user
+                                                completion:^(id responseObject, NSError *error) {
 
-                                            if (error || !responseObject) {
-                                                NSLog(@"Load More Following Error: %@", error);
-                                                return;
-                                            }
+                                                  if (error || !responseObject) {
+                                                      NSLog(@"Load More Following Error: %@", error);
+                                                      return;
+                                                  }
 
-                                            NSArray *users = (NSArray *)responseObject;
+                                                  NSArray *users = (NSArray *)responseObject;
 
-                                            if (users.count == 0) {
-                                                isAtBottomFollowing = TRUE;
-                                            }
+                                                  if (users.count == 0) {
+                                                      isAtBottomFollowing = TRUE;
+                                                  }
 
-                                            for (NSDictionary *user in users) {
-                                                FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                [self.followingArray addObject:newUser];
-                                            }
+                                                  for (NSDictionary *user in users) {
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
+                                                      [self.followingArray addObject:newUser];
+                                                  }
 
-                                            isReloadingFollowing = FALSE;
-                                            [self.followingTable reloadData];
-                                          }];
+                                                  isReloadingFollowing = FALSE;
+                                                  [self.followingTable reloadData];
+                                                }];
 }
 
 - (void)loadMoreFollowers {
@@ -236,28 +237,28 @@
     FRSUser *user = [self.followerArray lastObject];
     isReloadingFollowers = TRUE;
 
-    [[FRSAPIClient sharedClient] getFollowersForUser:_representedUser
-                                                last:user
-                                          completion:^(id responseObject, NSError *error) {
-                                            if (error || !responseObject) {
-                                                NSLog(@"Load More Followers Error: %@", error);
-                                                return;
-                                            }
+    [[FRSFollowManager sharedInstance] getFollowersForUser:_representedUser
+                                                      last:user
+                                                completion:^(id responseObject, NSError *error) {
+                                                  if (error || !responseObject) {
+                                                      NSLog(@"Load More Followers Error: %@", error);
+                                                      return;
+                                                  }
 
-                                            NSArray *users = (NSArray *)responseObject;
+                                                  NSArray *users = (NSArray *)responseObject;
 
-                                            if (users.count == 0) {
-                                                isAtBottomFollowers = TRUE;
-                                            }
+                                                  if (users.count == 0) {
+                                                      isAtBottomFollowers = TRUE;
+                                                  }
 
-                                            for (NSDictionary *user in users) {
-                                                FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                [self.followerArray addObject:newUser];
-                                            }
+                                                  for (NSDictionary *user in users) {
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
+                                                      [self.followerArray addObject:newUser];
+                                                  }
 
-                                            isReloadingFollowers = FALSE;
-                                            [self.tableView reloadData];
-                                          }];
+                                                  isReloadingFollowers = FALSE;
+                                                  [self.tableView reloadData];
+                                                }];
 }
 
 - (void)reloadFollowing {
@@ -266,69 +267,67 @@
         [self configureSpinner];
     }
 
-    [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser
-                                          completion:^(id responseObject, NSError *error) {
+    [[FRSFollowManager sharedInstance] getFollowingForUser:_representedUser
+                                                completion:^(id responseObject, NSError *error) {
+                                                  self.didLoadOnce = YES;
+                                                  [self.followingSpinner removeFromSuperview];
 
-                                            self.didLoadOnce = YES;
-                                            [self.followingSpinner removeFromSuperview];
+                                                  NSMutableArray *following = [[NSMutableArray alloc] init];
+                                                  NSArray *users = (NSArray *)responseObject;
 
-                                            NSMutableArray *following = [[NSMutableArray alloc] init];
-                                            NSArray *users = (NSArray *)responseObject;
+                                                  for (NSDictionary *user in users) {
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
+                                                      [following addObject:newUser];
+                                                  }
 
-                                            for (NSDictionary *user in users) {
-                                                FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                [following addObject:newUser];
-                                            }
+                                                  self.followingArray = following;
 
-                                            self.followingArray = following;
+                                                  if (self.followingArray.count == 0) {
+                                                      [self displayAwkwardView:true followingTable:true];
+                                                  } else if (_hasLoadedOnce) {
+                                                      [self displayAwkwardView:false followingTable:true];
+                                                  }
 
-                                            if (self.followingArray.count == 0) {
-                                                [self displayAwkwardView:true followingTable:true];
-                                            } else if (_hasLoadedOnce) {
-                                                [self displayAwkwardView:false followingTable:true];
-                                            }
+                                                  [self.tableView reloadData];
+                                                  [self.tableView dg_stopLoading];
+                                                  [self.followingTable reloadData];
+                                                  [self.followingTable dg_stopLoading];
+                                                  //[self.followingSpinner stopLoading];
+                                                  //self.followingSpinner.hidden = true;
 
-                                            [self.tableView reloadData];
-                                            [self.tableView dg_stopLoading];
-                                            [self.followingTable reloadData];
-                                            [self.followingTable dg_stopLoading];
-                                            //[self.followingSpinner stopLoading];
-                                            //self.followingSpinner.hidden = true;
-
-                                            self.hasLoadedOnce = TRUE;
-                                          }];
+                                                  self.hasLoadedOnce = TRUE;
+                                                }];
 }
 
 - (void)reloadFollowers {
-    [[FRSAPIClient sharedClient] getFollowersForUser:_representedUser
-                                          completion:^(id responseObject, NSError *error) {
+    [[FRSFollowManager sharedInstance] getFollowersForUser:_representedUser
+                                                completion:^(id responseObject, NSError *error) {
+                                                  [self.followerSpinner removeFromSuperview];
 
-                                            [self.followerSpinner removeFromSuperview];
+                                                  NSMutableArray *followers = [[NSMutableArray alloc] init];
+                                                  NSArray *users = (NSArray *)responseObject;
 
-                                            NSMutableArray *followers = [[NSMutableArray alloc] init];
-                                            NSArray *users = (NSArray *)responseObject;
+                                                  for (NSDictionary *user in users) {
+                                                      FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
+                                                      [followers addObject:newUser];
+                                                  }
 
-                                            for (NSDictionary *user in users) {
-                                                FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                [followers addObject:newUser];
-                                            }
+                                                  self.followerArray = followers;
 
-                                            self.followerArray = followers;
+                                                  //Awkward View
+                                                  if (self.followerArray.count == 0) {
+                                                      [self displayAwkwardView:true followingTable:false];
+                                                  } else if (_hasLoadedOnce) {
+                                                      [self displayAwkwardView:false followingTable:false];
+                                                  }
 
-                                            //Awkward View
-                                            if (self.followerArray.count == 0) {
-                                                [self displayAwkwardView:true followingTable:false];
-                                            } else if (_hasLoadedOnce) {
-                                                [self displayAwkwardView:false followingTable:false];
-                                            }
-
-                                            [self.followingTable reloadData];
-                                            [self.followingTable dg_stopLoading];
-                                            [self.tableView reloadData];
-                                            [self.tableView dg_stopLoading];
-                                            //[self.followerSpinner stopLoading];
-                                            //self.followerSpinner.hidden = true;
-                                          }];
+                                                  [self.followingTable reloadData];
+                                                  [self.followingTable dg_stopLoading];
+                                                  [self.tableView reloadData];
+                                                  [self.tableView dg_stopLoading];
+                                                  //[self.followerSpinner stopLoading];
+                                                  //self.followerSpinner.hidden = true;
+                                                }];
 }
 
 - (void)displayAwkwardView:(BOOL)show followingTable:(BOOL)following {
@@ -469,7 +468,6 @@
     if (self.tableView == tableView) {
 
     } else {
-
     }
     return 1;
 }

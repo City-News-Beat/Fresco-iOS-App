@@ -26,6 +26,9 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationHandler.h"
+#import "FRSModerationManager.h"
+#import "FRSGalleryManager.h"
+#import "NSString+Fresco.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -86,7 +89,7 @@
 
     [self displayPreviousTab];
 
-    [self checkSuspended];
+    [[FRSModerationManager sharedInstance] checkSuspended];
 
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
@@ -96,7 +99,7 @@
         if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
                 NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
-                NSDate *startDate = [[FRSAPIClient sharedClient] dateFromString:startDateString];
+                NSDate *startDate = [NSString dateFromString:startDateString];
                 NSDate *today = [NSDate date];
 
                 NSInteger days = [FRSHomeViewController daysBetweenDate:startDate andDate:today];
@@ -202,7 +205,7 @@
     [self.tabBarController.tabBar setHidden:FALSE];
 
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
-    [self.appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
     [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
@@ -295,7 +298,7 @@
 - (void)reloadData {
     [self.followingTable reloadFollowing];
    
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
                                                 [self.appDelegate.managedObjectContext performBlock:^{
@@ -523,7 +526,7 @@
     [self fetchLocalData];
 
     // network call
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
                                                 if ([galleries count] == 0) {
@@ -730,7 +733,7 @@
 
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
 
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:offsetID
                                               completion:^(NSArray *galleries, NSError *error) {
 

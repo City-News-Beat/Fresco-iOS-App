@@ -50,14 +50,12 @@
     [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"email" : self.email,
                                                                 @"verify_password" : self.password }
         completion:^(id responseObject, NSError *error) {
-
-          FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-          [delegate reloadUser];
+          [[FRSUserManager sharedInstance] reloadUser];
 
           if (!error && responseObject) {
               FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
               userToUpdate.email = self.email;
-              [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+              [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
 
               [self popViewController];
               return;

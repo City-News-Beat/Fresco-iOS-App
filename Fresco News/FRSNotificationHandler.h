@@ -24,7 +24,6 @@
 + (void)segueToAssignment:(NSString *)assignment;
 
 + (void)segueToGallery:(NSString *)gallery;
-+ (void)segueToGallery:(NSString *)gallery post:(NSString *)post;
 + (void)segueToStory:(NSString *)story;
 + (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
 + (void)segueToPayment;

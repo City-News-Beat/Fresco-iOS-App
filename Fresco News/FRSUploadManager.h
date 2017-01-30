@@ -25,9 +25,10 @@
     SDAVAssetExportSession *exporter;
 }
 
-+ (id)sharedUploader;
++ (id)sharedInstance;
 - (void)checkCachedUploads;
 - (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
+- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 
 @property (nonatomic, retain) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;

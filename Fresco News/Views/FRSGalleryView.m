@@ -24,6 +24,7 @@
 #import "FRSDualUserListViewController.h"
 #import "FRSUserManager.h"
 #import "FRSGalleryDetailView.h"
+#import "FRSGalleryManager.h"
 
 #define TEXTVIEW_TOP_PAD 12
 #define LABEL_HEIGHT 20
@@ -154,7 +155,7 @@
 }
 
 - (void)checkOwner {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
       if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
           [self.actionBar setCurrentUser:YES];
@@ -243,38 +244,38 @@
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery
-                                        completion:^(id responseObject, NSError *error) {
-                                          if (error) {
-                                              [actionBar handleHeartState:TRUE];
-                                              [actionBar handleHeartAmount:likes];
-                                              if (error.code != 101) {
-                                                  self.gallery.likes = @([self.gallery.likes intValue] - 1);
+        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
+                                               completion:^(id responseObject, NSError *error) {
+                                                 if (error) {
+                                                     [actionBar handleHeartState:TRUE];
+                                                     [actionBar handleHeartAmount:likes];
+                                                     if (error.code != 101) {
+                                                         self.gallery.likes = @([self.gallery.likes intValue] - 1);
 
-                                                  @try {
-                                                      self.gallery.numberOfLikes--;
-                                                  }
-                                                  @catch (NSException *e) {
-                                                  }
-                                              }
-                                          }
-                                        }];
+                                                         @try {
+                                                             self.gallery.numberOfLikes--;
+                                                         }
+                                                         @catch (NSException *e) {
+                                                         }
+                                                     }
+                                                 }
+                                               }];
 
     } else {
-        [[FRSAPIClient sharedClient] likeGallery:self.gallery
-                                      completion:^(id responseObject, NSError *error) {
-                                        if (error) {
-                                            [actionBar handleHeartState:FALSE];
-                                            [actionBar handleHeartAmount:likes];
-                                            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                            NSInteger responseCode = response.statusCode;
+        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
+                                             completion:^(id responseObject, NSError *error) {
+                                               if (error) {
+                                                   [actionBar handleHeartState:FALSE];
+                                                   [actionBar handleHeartAmount:likes];
+                                                   NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                   NSInteger responseCode = response.statusCode;
 
-                                            // 400 status code means the user has already liked the gallery, should soft fail.
-                                            if (error.code != 101 && responseCode != 400) {
-                                                self.gallery.numberOfLikes++;
-                                            }
-                                        }
-                                      }];
+                                                   // 400 status code means the user has already liked the gallery, should soft fail.
+                                                   if (error.code != 101 && responseCode != 400) {
+                                                       self.gallery.numberOfLikes++;
+                                                   }
+                                               }
+                                             }];
     }
 }
 
@@ -282,31 +283,31 @@
 
     NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
-        [[FRSAPIClient sharedClient] unrepostGallery:self.gallery
-                                          completion:^(id responseObject, NSError *error) {
-                                            if (error) {
-                                                [actionBar handleRepostState:TRUE];
-                                                [actionBar handleRepostAmount:reposts];
-                                                if (error.code != 101) {
-                                                    self.gallery.numberOfReposts--;
-                                                }
-                                            }
-                                          }];
+        [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery
+                                                 completion:^(id responseObject, NSError *error) {
+                                                   if (error) {
+                                                       [actionBar handleRepostState:TRUE];
+                                                       [actionBar handleRepostAmount:reposts];
+                                                       if (error.code != 101) {
+                                                           self.gallery.numberOfReposts--;
+                                                       }
+                                                   }
+                                                 }];
     } else {
-        [[FRSAPIClient sharedClient] repostGallery:self.gallery
-                                        completion:^(id responseObject, NSError *error) {
-                                          if (error) {
-                                              [actionBar handleRepostState:FALSE];
-                                              [actionBar handleRepostAmount:reposts];
-                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                              NSInteger responseCode = response.statusCode;
+        [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
+                                               completion:^(id responseObject, NSError *error) {
+                                                 if (error) {
+                                                     [actionBar handleRepostState:FALSE];
+                                                     [actionBar handleRepostAmount:reposts];
+                                                     NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                     NSInteger responseCode = response.statusCode;
 
-                                              // 400 status code means the user has already reposted the gallery, should soft fail.
-                                              if (error.code != 101 && responseCode != 400) {
-                                                  self.gallery.numberOfReposts++;
-                                              }
-                                          }
-                                        }];
+                                                     // 400 status code means the user has already reposted the gallery, should soft fail.
+                                                     if (error.code != 101 && responseCode != 400) {
+                                                         self.gallery.numberOfReposts++;
+                                                     }
+                                                 }
+                                               }];
     }
 }
 
@@ -373,7 +374,7 @@
     [self configureCaptionLabel]; // this will stay similar
 
     [self configureActionsBar]; // this will stay similar
-    
+
     if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
         [self configureBaseMetaData];
     }
@@ -934,7 +935,7 @@
     if (self.galleryFooterView) {
         height += self.galleryFooterView.frame.size.height + CAPTION_PADDING;
     }
-    
+
     if ([self.delegate shouldHaveActionBar]) {
         height -= TEXTVIEW_TOP_PAD;
     }
@@ -1347,14 +1348,14 @@
 #pragma mark - Base Meta Data Configuration
 
 - (void)configureBaseMetaData {
-    
+
     // Configure the view
     self.galleryFooterView = [[FRSGalleryFooterView alloc] initWithFrame:CGRectMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height + CAPTION_PADDING, self.frame.size.width, self.galleryFooterView.calculatedHeight) gallery:self.gallery delegate:self];
     self.galleryFooterView.delegate = self;
-    
+
     // Set the height of the galleryFooterView after all the labels have been configured and add it to the subview
     [self.galleryFooterView setSizeWithSize:CGSizeMake(self.galleryFooterView.frame.size.width, self.galleryFooterView.calculatedHeight)];
-    
+
     [self addSubview:self.galleryFooterView];
 }
 
@@ -1362,6 +1363,5 @@
     FRSProfileViewController *profile = [[FRSProfileViewController alloc] initWithUser:self.gallery.creator];
     [self.delegate.navigationController pushViewController:profile animated:YES];
 }
-
 
 @end

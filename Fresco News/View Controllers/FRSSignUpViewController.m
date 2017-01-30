@@ -184,7 +184,7 @@
 
     FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.notificationRadius = @(self.miles);
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
 }
 
 - (void)updateUserLocationOnMap {
@@ -939,43 +939,43 @@
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
 
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
-                                            completion:^(id responseObject, NSError *error) {
+                                                completion:^(id responseObject, NSError *error) {
 
-                                              //Return if no internet
-                                              if (error.code == -1009) {
+                                                  //Return if no internet
+                                                  if (error.code == -1009) {
 
-                                                  return;
-                                              }
+                                                      return;
+                                                  }
 
-                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                              NSInteger responseCode = response.statusCode;
-                                              NSLog(@"Check Username Error: %ld", (long)responseCode);
+                                                  NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                  NSInteger responseCode = response.statusCode;
+                                                  NSLog(@"Check Username Error: %ld", (long)responseCode);
 
-                                              if (responseCode == 404) { //
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  self.usernameTaken = NO;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                                  return;
-                                              } else {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  self.usernameTaken = YES;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                              }
+                                                  if (responseCode == 404) { //
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                      self.usernameTaken = NO;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                      return;
+                                                  } else {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      self.usernameTaken = YES;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                  }
 
-                                              //                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
-                                              //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                              //                    self.usernameTaken = NO;
-                                              //                    [self stopUsernameTimer];
-                                              //                    [self checkCreateAccountButtonState];
-                                              //                } else {
-                                              //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                              //                    self.usernameTaken = YES;
-                                              //                    [self stopUsernameTimer];
-                                              //                    [self checkCreateAccountButtonState];
-                                              //                }
-                                            }];
+                                                  //                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                                                  //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                  //                    self.usernameTaken = NO;
+                                                  //                    [self stopUsernameTimer];
+                                                  //                    [self checkCreateAccountButtonState];
+                                                  //                } else {
+                                                  //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                  //                    self.usernameTaken = YES;
+                                                  //                    [self stopUsernameTimer];
+                                                  //                    [self checkCreateAccountButtonState];
+                                                  //                }
+                                                }];
         }
     }
 }
@@ -1309,18 +1309,18 @@
 
 - (void)checkEmail {
     [[FRSUserManager sharedInstance] checkEmail:self.emailTF.text
-                                 completion:^(id responseObject, NSError *error) {
-                                   if (!error) {
-                                       self.emailTaken = YES;
-                                       [self shouldShowEmailDialogue:YES];
-                                       [self presentInvalidEmail];
-                                   } else {
-                                       self.emailTaken = NO;
-                                       [self shouldShowEmailDialogue:NO];
-                                   }
+                                     completion:^(id responseObject, NSError *error) {
+                                       if (!error) {
+                                           self.emailTaken = YES;
+                                           [self shouldShowEmailDialogue:YES];
+                                           [self presentInvalidEmail];
+                                       } else {
+                                           self.emailTaken = NO;
+                                           [self shouldShowEmailDialogue:NO];
+                                       }
 
-                                   [self checkCreateAccountButtonState];
-                                 }];
+                                       [self checkCreateAccountButtonState];
+                                     }];
 }
 
 - (BOOL)checkFields {
@@ -1823,8 +1823,7 @@
 }
 
 - (void)segueToSetup {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
 
     [self.navigationController pushViewController:self.setupProfileVC animated:YES];
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];

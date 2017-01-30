@@ -11,6 +11,8 @@
 #import "FRSSessionManager.h"
 #import "EndpointManager.h"
 #import "NSString+Fresco.h"
+#import "FRSModerationManager.h"
+#import "FRSOnboardingViewController.h"
 
 // sign in / sign up (authorization) methods
 static NSString *const loginEndpoint = @"auth/signin";
@@ -84,18 +86,6 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 
                              completion(responseObject, error);
                            }];
-}
-
-- (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *mutableDigestion = [digestion mutableCopy];
-
-    if (self.passwordUsed) {
-        [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
-    } else if (self.socialUsed && !self.passwordUsed) {
-        [mutableDigestion addEntriesFromDictionary:self.socialUsed];
-    }
-
-    [[FRSUserManager sharedInstance] updateUserWithDigestion:mutableDigestion completion:completion];
 }
 
 - (void)logout {
@@ -312,7 +302,33 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     return socialDigestion;
 }
 
-
-
+- (BOOL)checkAuthAndPresentOnboard {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
+        
+        id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
+        FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+        UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+        
+        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+            [navController pushViewController:onboardVC animated:FALSE];
+        } else {
+            UITabBarController *tab = (UITabBarController *)navController;
+            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+            UINavigationController *onboardNav = [[UINavigationController alloc] init];
+            [onboardNav pushViewController:onboardVC animated:NO];
+            [tab presentViewController:onboardNav animated:YES completion:Nil];
+        }
+        
+        return YES;
+    }
+    
+    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
+        [[FRSModerationManager sharedInstance] checkSuspended];
+        return NO;
+    }
+    
+    return FALSE;
+}
 
 @end

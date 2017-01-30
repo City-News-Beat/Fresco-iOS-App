@@ -12,6 +12,7 @@
 #import "FRSAddPaymentCell.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
+#import "FRSPaymentManager.h"
 
 @interface FRSPaymentViewController ()
 @end
@@ -78,10 +79,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
 - (void)deletePayment:(NSIndexPath *)path {
     NSDictionary *pay = self.payments[path.row];
 
-    [[FRSAPIClient sharedClient] deletePayment:pay[@"id"]
-                                    completion:^(id responseObject, NSError *error) {
-                                      [self reloadPayments];
-                                    }];
+    [[FRSPaymentManager sharedInstance] deletePayment:pay[@"id"]
+                                           completion:^(id responseObject, NSError *error) {
+                                             [self reloadPayments];
+                                           }];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -103,12 +104,12 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
         [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
 
-        [[FRSAPIClient sharedClient] makePaymentActive:paymentID
-                                            completion:^(id responseObject, NSError *error) {
-                                              if (!error) {
-                                                  [self resetOtherPayments:paymentID];
-                                              }
-                                            }];
+        [[FRSPaymentManager sharedInstance] makePaymentActive:paymentID
+                                                   completion:^(id responseObject, NSError *error) {
+                                                     if (!error) {
+                                                         [self resetOtherPayments:paymentID];
+                                                     }
+                                                   }];
     }
 }
 
@@ -131,7 +132,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
 }
 
 - (void)reloadPayments {
-    [[FRSAPIClient sharedClient] fetchPayments:^(id responseObject, NSError *error) {
+    [[FRSPaymentManager sharedInstance] fetchPayments:^(id responseObject, NSError *error) {
       if (error || !responseObject) {
           return;
       }
@@ -155,13 +156,13 @@ static NSString *addPaymentCell = @"addPaymentCell";
         return;
     }
 
-    [[FRSAPIClient sharedClient] deletePayment:payment[@"id"]
-                                    completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"%@", responseObject);
-                                      if (!error) {
-                                          [self reloadPayments];
-                                      }
-                                    }];
+    [[FRSPaymentManager sharedInstance] deletePayment:payment[@"id"]
+                                           completion:^(id responseObject, NSError *error) {
+                                             NSLog(@"%@", responseObject);
+                                             if (!error) {
+                                                 [self reloadPayments];
+                                             }
+                                           }];
 }
 
 @end

@@ -142,6 +142,15 @@
 		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
 		CAF0928A1E25921500F7F711 /* FRSGalleryStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */; };
 		CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */; };
+		CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0A6FC91E3E82AC00E67766 /* FRSGalleryManager.m */; };
+		CE0A6FCD1E3E998A00E67766 /* FRSSearchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0A6FCC1E3E998A00E67766 /* FRSSearchManager.m */; };
+		CE0A6FD01E3E9E5800E67766 /* FRSNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0A6FCF1E3E9E5800E67766 /* FRSNotificationManager.m */; };
+		CE0A6FD31E3EA95800E67766 /* FRSPaymentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0A6FD21E3EA95800E67766 /* FRSPaymentManager.m */; };
+		CE0AABA11E3CEA2800DD6A8A /* FRSStoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABA01E3CEA2800DD6A8A /* FRSStoryManager.m */; };
+		CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABA31E3DEB4A00DD6A8A /* FRSModerationManager.m */; };
+		CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABA71E3DF15B00DD6A8A /* FRSFollowManager.m */; };
+		CE0AABAB1E3DF55700DD6A8A /* FRSFeedManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABAA1E3DF55700DD6A8A /* FRSFeedManager.m */; };
+		CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AABAD1E3E00BF00DD6A8A /* FRSAssignmentManager.m */; };
 		CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0CAE611E1579CA00CDE511 /* Endpoint.m */; };
 		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
 		CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */; };
@@ -565,6 +574,24 @@
 		CAF092881E25921500F7F711 /* FRSGalleryStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryStatusView.h; sourceTree = "<group>"; };
 		CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryStatusView.m; sourceTree = "<group>"; };
 		CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryStatusView.xib; sourceTree = "<group>"; };
+		CE0A6FC81E3E82AC00E67766 /* FRSGalleryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryManager.h; sourceTree = "<group>"; };
+		CE0A6FC91E3E82AC00E67766 /* FRSGalleryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryManager.m; sourceTree = "<group>"; };
+		CE0A6FCB1E3E998A00E67766 /* FRSSearchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchManager.h; sourceTree = "<group>"; };
+		CE0A6FCC1E3E998A00E67766 /* FRSSearchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchManager.m; sourceTree = "<group>"; };
+		CE0A6FCE1E3E9E5800E67766 /* FRSNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationManager.h; sourceTree = "<group>"; };
+		CE0A6FCF1E3E9E5800E67766 /* FRSNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationManager.m; sourceTree = "<group>"; };
+		CE0A6FD11E3EA95800E67766 /* FRSPaymentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPaymentManager.h; sourceTree = "<group>"; };
+		CE0A6FD21E3EA95800E67766 /* FRSPaymentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPaymentManager.m; sourceTree = "<group>"; };
+		CE0AAB9F1E3CEA2800DD6A8A /* FRSStoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryManager.h; sourceTree = "<group>"; };
+		CE0AABA01E3CEA2800DD6A8A /* FRSStoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryManager.m; sourceTree = "<group>"; };
+		CE0AABA21E3DEB4A00DD6A8A /* FRSModerationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSModerationManager.h; sourceTree = "<group>"; };
+		CE0AABA31E3DEB4A00DD6A8A /* FRSModerationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSModerationManager.m; sourceTree = "<group>"; };
+		CE0AABA61E3DF15B00DD6A8A /* FRSFollowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowManager.h; sourceTree = "<group>"; };
+		CE0AABA71E3DF15B00DD6A8A /* FRSFollowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowManager.m; sourceTree = "<group>"; };
+		CE0AABA91E3DF55700DD6A8A /* FRSFeedManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFeedManager.h; sourceTree = "<group>"; };
+		CE0AABAA1E3DF55700DD6A8A /* FRSFeedManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFeedManager.m; sourceTree = "<group>"; };
+		CE0AABAC1E3E00BF00DD6A8A /* FRSAssignmentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentManager.h; sourceTree = "<group>"; };
+		CE0AABAD1E3E00BF00DD6A8A /* FRSAssignmentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentManager.m; sourceTree = "<group>"; };
 		CE0CAE601E1579CA00CDE511 /* Endpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endpoint.h; sourceTree = "<group>"; };
 		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
 		CE12A5F71E14747A0032E72F /* EndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndpointManager.h; sourceTree = "<group>"; };
@@ -1086,7 +1113,7 @@
 				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				6596ECA01C5032000011C18B /* Subclasses */,
 				1EDA45041AA4D0B10082E08D /* Categories */,
-				1EDA44DF1AA4CD0D0082E08D /* Singletons */,
+				1EDA44DF1AA4CD0D0082E08D /* Managers */,
 				1EDA44F31AA4D0730082E08D /* Models */,
 				1EDA44DD1AA4CCF20082E08D /* Views */,
 				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
@@ -1189,21 +1216,43 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
-		1EDA44DF1AA4CD0D0082E08D /* Singletons */ = {
+		1EDA44DF1AA4CD0D0082E08D /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				D487F1BF1CBD726E005742F3 /* AVSession */,
-				D487F1C01CBD7274005742F3 /* Location Manager */,
+				CE1E6EF51E1C828600236AC7 /* FRSBaseManager.h */,
+				CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */,
+				CE12A5F71E14747A0032E72F /* EndpointManager.h */,
+				CE12A5F81E14747A0032E72F /* EndpointManager.m */,
+				075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */,
+				075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */,
+				65EBEDB71C44197100BE671F /* FRSLocationManager.h */,
+				65EBEDB81C44197100BE671F /* FRSLocationManager.m */,
 				CEC20DEA1E1C795400532D75 /* FRSUserManager.h */,
 				CEC20DEB1E1C795400532D75 /* FRSUserManager.m */,
 				CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */,
 				CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */,
-				CE1E6EF51E1C828600236AC7 /* FRSBaseManager.h */,
-				CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */,
 				CE3621B11E3922FB00C4330E /* FRSSessionManager.h */,
 				CE3621B21E3922FB00C4330E /* FRSSessionManager.m */,
+				CE0AAB9F1E3CEA2800DD6A8A /* FRSStoryManager.h */,
+				CE0AABA01E3CEA2800DD6A8A /* FRSStoryManager.m */,
+				CE0AABA21E3DEB4A00DD6A8A /* FRSModerationManager.h */,
+				CE0AABA31E3DEB4A00DD6A8A /* FRSModerationManager.m */,
+				CE0AABA61E3DF15B00DD6A8A /* FRSFollowManager.h */,
+				CE0AABA71E3DF15B00DD6A8A /* FRSFollowManager.m */,
+				CE0AABA91E3DF55700DD6A8A /* FRSFeedManager.h */,
+				CE0AABAA1E3DF55700DD6A8A /* FRSFeedManager.m */,
+				CE0AABAC1E3E00BF00DD6A8A /* FRSAssignmentManager.h */,
+				CE0AABAD1E3E00BF00DD6A8A /* FRSAssignmentManager.m */,
+				CE0A6FC81E3E82AC00E67766 /* FRSGalleryManager.h */,
+				CE0A6FC91E3E82AC00E67766 /* FRSGalleryManager.m */,
+				CE0A6FCB1E3E998A00E67766 /* FRSSearchManager.h */,
+				CE0A6FCC1E3E998A00E67766 /* FRSSearchManager.m */,
+				CE0A6FCE1E3E9E5800E67766 /* FRSNotificationManager.h */,
+				CE0A6FCF1E3E9E5800E67766 /* FRSNotificationManager.m */,
+				CE0A6FD11E3EA95800E67766 /* FRSPaymentManager.h */,
+				CE0A6FD21E3EA95800E67766 /* FRSPaymentManager.m */,
 			);
-			name = Singletons;
+			name = Managers;
 			sourceTree = "<group>";
 		};
 		1EDA44F31AA4D0730082E08D /* Models */ = {
@@ -2080,24 +2129,6 @@
 			name = "Media Scroll";
 			sourceTree = "<group>";
 		};
-		D487F1BF1CBD726E005742F3 /* AVSession */ = {
-			isa = PBXGroup;
-			children = (
-				075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */,
-				075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */,
-			);
-			name = AVSession;
-			sourceTree = "<group>";
-		};
-		D487F1C01CBD7274005742F3 /* Location Manager */ = {
-			isa = PBXGroup;
-			children = (
-				65EBEDB71C44197100BE671F /* FRSLocationManager.h */,
-				65EBEDB81C44197100BE671F /* FRSLocationManager.m */,
-			);
-			name = "Location Manager";
-			sourceTree = "<group>";
-		};
 		D487F1CB1CC14231005742F3 /* Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -2355,8 +2386,6 @@
 				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
-				CE12A5F71E14747A0032E72F /* EndpointManager.h */,
-				CE12A5F81E14747A0032E72F /* EndpointManager.m */,
 				CE0CAE601E1579CA00CDE511 /* Endpoint.h */,
 				CE0CAE611E1579CA00CDE511 /* Endpoint.m */,
 			);
@@ -2766,9 +2795,11 @@
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
+				CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */,
 				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
 				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,
 				D453CC841CCA80850091A004 /* NSManagedObject+MagicalRequests.m in Sources */,
+				CE0A6FD01E3E9E5800E67766 /* FRSNotificationManager.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
 				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
 				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
@@ -2779,7 +2810,9 @@
 				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
+				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
+				CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
 				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
 				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
@@ -2793,7 +2826,10 @@
 				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,
 				D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */,
 				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
+				CE0A6FCD1E3E998A00E67766 /* FRSSearchManager.m in Sources */,
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
+				CE0A6FD31E3EA95800E67766 /* FRSPaymentManager.m in Sources */,
+				CE0AABAB1E3DF55700DD6A8A /* FRSFeedManager.m in Sources */,
 				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
 				D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */,
 				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
@@ -2824,6 +2860,7 @@
 				077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */,
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
 				0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */,
+				CE0AABA11E3CEA2800DD6A8A /* FRSStoryManager.m in Sources */,
 				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
@@ -2885,6 +2922,7 @@
 				D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */,
+				CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,

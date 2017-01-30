@@ -163,7 +163,7 @@
               [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
               FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
               userToUpdate.notificationRadius = @(self.miles);
-              [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+              [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
           }
         }];
 }

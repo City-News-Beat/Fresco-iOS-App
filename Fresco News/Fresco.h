@@ -31,70 +31,8 @@ static NSString *const kStatusBarTappedNotification = @"statusBarTappedNotificat
 static NSString *const serviceName = @"frescoNewsService3";
 static NSString *const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
-// user settings (notifications)
-static NSString *const settingsEndpoint = @"user/settings";
-static NSString *const updateSettingsEndpoint = @"user/settings/update";
-
-// search endpoint
-static NSString *const searchEndpoint = @"search";
-static NSString *const nearbyUsersEndpoint = @"user/suggestions";
-
-// notification endpoint
-static NSString *const notificationEndpoint = @"user/notifications";
-
-// content endpoints
-static NSString *const storiesEndpoint = @"story/recent";
-static NSString *const highlightsEndpoint = @"gallery/highlights";
-static NSString *const assignmentsEndpoint = @"assignment/find";
-static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
-
-static NSString *const settingsUpdateEndpoint = @"user/settings/update";
-
-// location endpoints
-static NSString *const locationEndpoint = @"user/locate"; // send location
-static NSString *const dualLocationEndpoint = @"user/locationcall"; // send location & get nearby assignments
-static NSString *const acceptAssignmentEndpoint = @"assignment/%@/accept";
-static NSString *const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
-
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
-
-// comments
-static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
-static NSString *const getCommentEndpoint = @"gallery/%@/comment/%@";
-
-
-
-static NSString *const disableAccountEndpoint = @"user/disable/";
-
-// gallery creation
-static NSString *const createGalleryEndpoint = @"gallery/submit";
-static NSString *const completePostEndpoint = @"post/complete";
-
-// formatted endpoints
-static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
-static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
-static NSString *const likeStoryEndpoint = @"story/%@/like";
-static NSString *const repostStoryEndpoint = @"story/%@/repost";
-static NSString *const unrepostGalleryEndpoint = @"gallery/%@/unrepost";
-static NSString *const unrepostStoryEndpoint = @"story/%@/unrepost";
-static NSString *const followUserEndpoint = @"user/%@/follow";
-static NSString *const unfollowUserEndpoint = @"user/%@/unfollow";
-static NSString *const followersEndpoint = @"user/%@/followers";
-static NSString *const followingEndpoint = @"user/%@/following";
-static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
-static NSString * const purchasesEndpoint = @"gallery/%@/purchases";
-static NSString *const commentEndpoint = @"gallery/%@/comment/";
-static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
-static NSString *const storyUnlikeEndpoint = @"story/%@/unlike";
-static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
-static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
-static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
-
-// feeds
-static NSString *const likeFeed = @"feeds/%@/likes";
-static NSString *const followingFeed = @"feeds/%@/following";
-static NSString *const userFeed = @"feeds/%@/user";
 
 // quick actions -- app delegate
 static NSString *const assignmentsAction = @"FRSAssignmentsAction";
@@ -106,19 +44,6 @@ static NSString *const postObjectType = @"post";
 static NSString *const galleryObjectType = @"gallery";
 static NSString *const storyObjectType = @"story";
 
-// payments
-static NSString *const createPayment = @"user/payment/create";
-static NSString *const getPaymentsEndpoint = @"user/payment";
-static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
-static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
-static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/files";
-static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
-
-// moderation
-static NSString *const blockUserEndpoint = @"user/%@/block";
-static NSString *const unblockUserEndpoint = @"user/%@/unblock";
-static NSString *const reportUserEndpoint = @"user/%@/report";
-
 // user defaults
 static NSString *const previouslySelectedTabKey = @"previouslySelectedTab";
 static NSString *const settingsUserNotificationRadius = @"notification-radius";
@@ -126,14 +51,12 @@ static NSString *const settingsPaymentLastFour = @"payment-last-four";
 static NSString *const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString *const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString *const startDate = @"startDate";
-static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
 
 // nsnotification
 static NSString *const enableAssignmentAccept = @"enableAssignmentAccept";
 static NSString *const disableAssignmentAccept = @"disableAssignmentAccept";
 
 // mixpanel
-
 static NSString *const activityDuration = @"activity_duration";
 
 // user - data
@@ -174,8 +97,6 @@ static NSString *const settingsCellIdentifier = @"SettingsCell";
 static NSString *const galleryCellIdentifier = @"gallery-cell";
 
 // TOS
-static NSString *const getTermsEndpoint = @"terms";
-static NSString *const acceptTermsEndpoint = @"terms/accept";
 
 #define USER_NAME @"username"
 #define PASS_WORD @"password"

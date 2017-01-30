@@ -29,6 +29,7 @@
 #import "SAMKeychain.h"
 #import "NSDate+ISO.h"
 #import "FRSUserManager.h"
+#import "FRSModerationManager.h"
 
 typedef NS_ENUM(NSInteger, SettingsSection) {
     Me,
@@ -104,9 +105,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
 
-    [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser:^(id responseObject, NSError *error) {
+    [[FRSUserManager sharedInstance] reloadUser:^(id responseObject, NSError *error) {
       [self.tableView reloadData];
-
     }];
 }
 
@@ -430,7 +430,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
             break;
         }
         case Support:
-            [self presentSmooch];
+            [[FRSModerationManager sharedInstance] presentSmooch];
             break;
         case DisableAccount: {
             FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];

@@ -32,14 +32,14 @@
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate> {
     NSTimer *notificationTimer;
 }
+
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
 @property BOOL didPresentPermissionsRequest;
-- (void)reloadUser;
-- (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
+
 - (void)saveContext;
 - (UITabBarController *)tabBar;
 - (BOOL)isFirstRun;
@@ -50,4 +50,5 @@
 - (void)startNotificationTimer;
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
+
 @end

@@ -921,8 +921,7 @@
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
 
-        [[FRSAPIClient sharedClient] getTermsWithCompletion:^(id responseObject, NSError *error) {
-
+        [[FRSUserManager sharedInstance] getTermsWithCompletion:^(id responseObject, NSError *error) {
           if (error || !responseObject) {
               return;
           }
@@ -936,15 +935,9 @@
           [self animateIn];
         }];
 
-        //        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:TOS];
-        //        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        //        [paragraphStyle setLineSpacing:2];
-        //        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [TOS length])];
-
         self.TOSTextView = [[UITextView alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 320)];
         self.TOSTextView.textColor = [UIColor frescoMediumTextColor];
         self.TOSTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        //        self.TOSTextView.attributedText = attributedString;
         self.TOSTextView.textAlignment = NSTextAlignmentLeft;
         self.TOSTextView.backgroundColor = [UIColor clearColor];
         self.TOSTextView.editable = NO;
@@ -1024,8 +1017,7 @@
 }
 
 - (void)acceptTapped {
-    [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
-
+    [[FRSUserManager sharedInstance] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
       if (!error) {
           [self dismiss];
       } else {
@@ -1439,50 +1431,50 @@
     [spinner startAnimating];
     [self addSubview:spinner];
 
-    [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                      [appDelegate saveUserFields:responseObject];
+    [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
+                                                        completion:^(id responseObject, NSError *error) {
+                                                          FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                          [appDelegate saveUserFields:responseObject];
 
-                                                      if (responseObject && !error) {
-                                                          [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
-                                                          [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
-                                                          [[NSUserDefaults standardUserDefaults] synchronize];
-                                                      }
+                                                          if (responseObject && !error) {
+                                                              [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
+                                                              [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
+                                                              [[NSUserDefaults standardUserDefaults] synchronize];
+                                                          }
 
-                                                      spinner.alpha = 0;
-                                                      [spinner stopLoading];
-                                                      [spinner removeFromSuperview];
-                                                      self.cancelButton.alpha = 1;
-
-                                                      if (error) {
-                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                            [spinner stopLoading];
-                                                            [spinner removeFromSuperview];
-                                                            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-                                                          });
+                                                          spinner.alpha = 0;
+                                                          [spinner stopLoading];
+                                                          [spinner removeFromSuperview];
+                                                          self.cancelButton.alpha = 1;
 
                                                           if (error) {
-                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                                                              [alert show];
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                [spinner stopLoading];
+                                                                [spinner removeFromSuperview];
+                                                                [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                                                              });
 
-                                                              return;
-                                                          }
+                                                              if (error) {
+                                                                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                                  [alert show];
 
-                                                          if (responseObject) {
-
-                                                              if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
-                                                                  [[FRSUserManager sharedInstance] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
+                                                                  return;
                                                               }
 
-                                                              if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
-                                                                  [[FRSUserManager sharedInstance] authenticatedUser].email = self.emailTextField.text;
+                                                              if (responseObject) {
+
+                                                                  if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
+                                                                      [[FRSUserManager sharedInstance] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
+                                                                  }
+
+                                                                  if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
+                                                                      [[FRSUserManager sharedInstance] authenticatedUser].email = self.emailTextField.text;
+                                                                  }
                                                               }
                                                           }
-                                                      }
 
-                                                      [self dismiss];
-                                                    }];
+                                                          [self dismiss];
+                                                        }];
 }
 
 - (void)checkEmail {
@@ -1493,18 +1485,18 @@
     }
 
     [[FRSUserManager sharedInstance] checkEmail:self.emailTextField.text
-                                 completion:^(id responseObject, NSError *error) {
+                                     completion:^(id responseObject, NSError *error) {
 
-                                   if (!error) {
-                                       self.emailTaken = YES;
-                                       [self shouldShowEmailError:YES];
-                                   } else {
-                                       self.emailTaken = NO;
-                                       [self shouldShowEmailError:NO];
-                                   }
+                                       if (!error) {
+                                           self.emailTaken = YES;
+                                           [self shouldShowEmailError:YES];
+                                       } else {
+                                           self.emailTaken = NO;
+                                           [self shouldShowEmailError:NO];
+                                       }
 
-                                   [self checkCreateAccountButtonState];
-                                 }];
+                                       [self checkCreateAccountButtonState];
+                                     }];
 }
 
 - (void)shouldShowEmailError:(BOOL)error {
@@ -1548,30 +1540,30 @@
         if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
 
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTextField.text substringFromIndex:1]
-                                            completion:^(id responseObject, NSError *error) {
+                                                completion:^(id responseObject, NSError *error) {
 
-                                              //Return if no internet
-                                              if (error.code == -1009) {
+                                                  //Return if no internet
+                                                  if (error.code == -1009) {
 
-                                                  return;
-                                              }
+                                                      return;
+                                                  }
 
-                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                              NSInteger responseCode = response.statusCode;
+                                                  NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                  NSInteger responseCode = response.statusCode;
 
-                                              if (responseCode == 404) { //
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  self.usernameTaken = NO;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                                  return;
-                                              } else {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  self.usernameTaken = YES;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                              }
-                                            }];
+                                                  if (responseCode == 404) { //
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                      self.usernameTaken = NO;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                      return;
+                                                  } else {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      self.usernameTaken = YES;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                  }
+                                                }];
         }
     }
 }

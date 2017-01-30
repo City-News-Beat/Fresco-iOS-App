@@ -7,15 +7,14 @@
 //
 
 #import "FRSUserTableViewCell.h"
-
 #import "FRSUser.h"
-
 #import "UILabel+Custom.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-
 #import <Haneke/Haneke.h>
+#import "FRSFollowManager.h"
+
 @interface FRSUserTableViewCell ()
 
 @property (strong, nonatomic) UIImageView *profileIV;
@@ -75,13 +74,13 @@
 - (void)toggleFollowButton {
     [self.followButton setSelected:!self.followButton.selected];
     if (self.followButton.selected) {
-        [[FRSAPIClient sharedClient] followUser:self.user
-                                     completion:^(id responseObject, NSError *error) {
-                                     }];
+        [[FRSFollowManager sharedInstance] followUser:self.user
+                                           completion:^(id responseObject, NSError *error){
+                                           }];
     } else {
-        [[FRSAPIClient sharedClient] unfollowUser:self.user
-                                       completion:^(id responseObject, NSError *error) {
-                                       }];
+        [[FRSFollowManager sharedInstance] unfollowUser:self.user
+                                             completion:^(id responseObject, NSError *error){
+                                             }];
     }
 }
 

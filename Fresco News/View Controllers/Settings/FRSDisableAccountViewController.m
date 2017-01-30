@@ -200,9 +200,9 @@
         self.emailIsConfirmed = YES;
     }
 
-    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{ @"password" : self.password,
-                                                                @"email" : self.email,
-                                                                @"username" : self.username }
+    [[FRSUserManager sharedInstance] disableAccountWithDigestion:@{ @"password" : self.password,
+                                                                    @"email" : self.email,
+                                                                    @"username" : self.username }
         completion:^(id responseObject, NSError *error) {
 
           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
@@ -232,9 +232,8 @@
 }
 
 - (void)logout {
-
-    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSUserManager sharedInstance].authenticatedUser];
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] deleteObject:[FRSUserManager sharedInstance].authenticatedUser];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:nil];
     [SAMKeychain deletePasswordForService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
 
     [NSUserDefaults resetStandardUserDefaults];
@@ -303,7 +302,6 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-
     if (textField.tag == 1) {
         self.username = textField.text;
 

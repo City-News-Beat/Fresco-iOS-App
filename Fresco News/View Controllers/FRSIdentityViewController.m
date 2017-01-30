@@ -13,6 +13,7 @@
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
+#import "FRSPaymentManager.h"
 
 @interface FRSIdentityViewController ()
 
@@ -421,18 +422,17 @@
 
                                      NSData *imageData = UIImageJPEGRepresentation(editedImage, 1.0);
                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                       [[FRSAPIClient sharedClient] uploadStateID:setStateIDEndpoint
-                                                                   withParameters:imageData
-                                                                       completion:^(id responseObject, NSError *error) {
-                                                                         if (!error) {
-                                                                             if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
-                                                                                 NSString *fileID = [responseObject valueForKey:@"id"];
-                                                                                 [[FRSAPIClient sharedClient] updateTaxInfoWithFileID:fileID
-                                                                                                                           completion:^(id responseObject, NSError *error){
-                                                                                                                           }];
-                                                                             }
-                                                                         }
-                                                                       }];
+                                       [[FRSPaymentManager sharedInstance] uploadStateIDWithParameters:imageData
+                                                                                            completion:^(id responseObject, NSError *error) {
+                                                                                              if (!error) {
+                                                                                                  if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
+                                                                                                      NSString *fileID = [responseObject valueForKey:@"id"];
+                                                                                                      [[FRSPaymentManager sharedInstance] updateTaxInfoWithFileID:fileID
+                                                                                                                                                       completion:^(id responseObject, NSError *error){
+                                                                                                                                                       }];
+                                                                                                  }
+                                                                                              }
+                                                                                            }];
                                      });
                                  }
                                }];

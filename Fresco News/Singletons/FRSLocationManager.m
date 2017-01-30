@@ -13,9 +13,7 @@
 @interface FRSLocationManager () <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) NSNotificationCenter *notificationCenter;
-
 @property (strong, nonatomic) NSTimer *timer;
-
 @property (strong, nonatomic) NSArray *updatedLocations;
 
 @end

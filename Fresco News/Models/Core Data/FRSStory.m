@@ -13,6 +13,7 @@
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
 #import "FRSUserManager.h"
+#import "NSString+Fresco.h"
 
 @import UIKit;
 
@@ -32,10 +33,10 @@
 - (void)configureWithDictionary:(NSDictionary *)dict {
 
     self.caption = dict[@"caption"];
-    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    self.createdDate = [NSString dateFromString:dict[@"time_created"]];
 
     if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
-        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
+        self.editedDate = [NSString dateFromString:dict[@"updated_at"]];
     }
 
     self.title = dict[@"title"];
@@ -62,19 +63,6 @@
     NSNumber *likes = [dict valueForKey:@"likes"];
     [self setValue:likes forKey:@"likes"];
 
-    //    NSString *curatorID = [dict valueForKey:@"curator_id"];
-
-    //    if (curatorID != nil && ![curatorID isEqual:[NSNull null]]) {
-    //        [[FRSAPIClient sharedClient] getUserWithUID:curatorID completion:^(id responseObject, NSError *error) {
-    //            NSLog(@"RESPONSE OBJ: %@", responseObject);
-    //            NSLog(@"CURATOR_ID: %@", curatorID);
-    //
-    //            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-    //            self.creator = user;
-    //
-    //        }];
-    //    }
-
     if (![dict[@"curator"] isEqual:[NSNull null]]) {
         self.curatorDict = dict[@"curator"];
     }
@@ -95,7 +83,7 @@
 
             [[FRSUserManager sharedInstance] getUserWithUID:userID
                                                  completion:^(id responseObject, NSError *error) {
-                                                   FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                   FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
                                                    self.sourceUser = user;
                                                  }];
         }

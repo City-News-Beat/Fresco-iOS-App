@@ -10,6 +10,7 @@
 #import "FRSGalleryStatusTableViewCell.h"
 #import "FRSGalleryDetailView.h"
 #import "Haneke.h"
+#import "FRSModerationManager.h"
 
 @interface FRSGalleryStatusView () <UITableViewDelegate, UITableViewDataSource>
 @end
@@ -230,7 +231,7 @@ typedef int GalleryStatusRating;
 
 - (IBAction)pressedGetHelp:(id)sender {
     [self animateOut];
-    [self.parentVC presentSmooch];
+    [[FRSModerationManager sharedInstance] presentSmooch];
     [self.parentView dismissKeyboard:nil];
 }
 

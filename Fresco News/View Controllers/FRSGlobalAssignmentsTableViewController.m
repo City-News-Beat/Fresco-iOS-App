@@ -10,6 +10,7 @@
 #import "GlobalAssignmentsTableViewCell.h"
 #import "FRSCameraViewController.h"
 #import "FRSAssignmentsViewController.h"
+#import "FRSAssignmentManager.h"
 
 @interface FRSGlobalAssignmentsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -25,14 +26,14 @@
     [self configureTableView];
 
     if (!self.assignments) {
-        [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:0
-                                                     ofLocation:@[ @0, @0 ]
-                                                 withCompletion:^(id responseObject, NSError *error) {
-                                                   if (!error && responseObject[@"global"]) {
-                                                       self.assignments = (NSArray *)responseObject[@"global"];
-                                                       [self.tableView reloadData];
-                                                   }
-                                                 }];
+        [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:0
+                                                               ofLocation:@[ @0, @0 ]
+                                                           withCompletion:^(id responseObject, NSError *error) {
+                                                             if (!error && responseObject[@"global"]) {
+                                                                 self.assignments = (NSArray *)responseObject[@"global"];
+                                                                 [self.tableView reloadData];
+                                                             }
+                                                           }];
     } else {
     }
 }
@@ -44,7 +45,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     [self expandNavBar:nil];
 }
 
