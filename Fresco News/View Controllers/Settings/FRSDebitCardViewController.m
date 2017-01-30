@@ -12,7 +12,6 @@
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
 #import "FRSStripe.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"

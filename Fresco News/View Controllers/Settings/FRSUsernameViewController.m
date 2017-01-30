@@ -7,7 +7,6 @@
 //
 
 #import "FRSUsernameViewController.h"
-#import "FRSAPIClient.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAppDelegate.h"

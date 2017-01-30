@@ -10,7 +10,6 @@
 #import "FRSPasswordChangeViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserManager.h"

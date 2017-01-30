@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 #import "Fresco.h"
-#import "FRSAPIClient.h"
 #import "FRSPaymentCell.h"
 
 @interface FRSPaymentViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, FRSPaymentCellDelegate> {

@@ -7,17 +7,14 @@
 //
 
 #import "FRSRadiusViewController.h"
-
 #import "FRSTableViewCell.h"
 #import "FRSLocator.h"
-
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
 #import "FRSAssignmentAnnotation.h"
 #import "FRSMapCircle.h"
 #import "FRSUser.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "Haneke.h"
 #import "FRSUserManager.h"

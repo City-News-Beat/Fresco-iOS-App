@@ -7,7 +7,6 @@
 //
 
 #import "GlobalAssignmentsTableViewCell.h"
-#import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "NSString+Fresco.h"

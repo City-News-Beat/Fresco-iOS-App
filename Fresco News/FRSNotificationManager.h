@@ -16,5 +16,6 @@
 - (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)setPushNotificationWithBool:(BOOL)sendPush completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)markAsRead:(NSDictionary *)params;
 
 @end

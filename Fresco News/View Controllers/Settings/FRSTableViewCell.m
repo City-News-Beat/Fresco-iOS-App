@@ -13,7 +13,6 @@
 #import "FRSAlertView.h"
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
 #import "FRSAppDelegate.h"
 #import "FRSLocationManager.h"

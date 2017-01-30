@@ -9,7 +9,6 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"

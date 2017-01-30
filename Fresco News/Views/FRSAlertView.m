@@ -1434,7 +1434,7 @@
     [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
                                                         completion:^(id responseObject, NSError *error) {
                                                           FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                          [appDelegate saveUserFields:responseObject];
+                                                          [[FRSUserManager sharedInstance] saveUserFields:responseObject];
 
                                                           if (responseObject && !error) {
                                                               [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
@@ -1478,7 +1478,6 @@
 }
 
 - (void)checkEmail {
-
     //Prepopulated from login
     if (!self.emailTextField.userInteractionEnabled) {
         return;

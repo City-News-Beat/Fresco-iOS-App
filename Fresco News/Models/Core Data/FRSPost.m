@@ -11,7 +11,6 @@
 #import "FRSUser.h"
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
-#import "FRSAPIClient.h"
 #import "NSString+Fresco.h"
 
 @implementation FRSPost

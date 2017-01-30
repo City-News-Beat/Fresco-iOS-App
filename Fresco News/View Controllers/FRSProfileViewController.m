@@ -11,10 +11,8 @@
 #import "FRSUser.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
-#import "FRSAPIClient.h"
 #import "FRSStoryCell.h"
 #import "FRSSetupProfileViewController.h"
-#import "FRSAPIClient.h"
 #import "FRSAwkwardView.h"
 #import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>

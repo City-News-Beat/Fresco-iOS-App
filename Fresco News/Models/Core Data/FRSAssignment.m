@@ -10,7 +10,6 @@
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
-#import "FRSAPIClient.h"
 #import "NSString+Fresco.h"
 
 @implementation FRSAssignment

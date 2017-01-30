@@ -8,9 +8,9 @@
 
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSCameraViewController.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSGlobalAssignmentsTableViewController.h"
+#import "FRSAssignmentManager.h"
 
 @interface FRSAssignmentNotificationTableViewCell ()
 
@@ -42,20 +42,16 @@
 }
 
 - (IBAction)secondaryAction:(id)sender {
-
-    [[FRSAPIClient sharedClient] get:[NSString stringWithFormat:@"assignment/%@", self.assignmentID]
-                      withParameters:Nil
-                          completion:^(id responseObject, NSError *error) {
-                            if (!error) {
-                                NSArray *coordinates = responseObject[@"location"][@"coordinates"];
-                                [self.delegate navigateToAssignmentWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates firstObject] floatValue]];
-                            } else {
-                            }
-                          }];
+    [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:self.assignmentID
+                                                     completion:^(id responseObject, NSError *error) {
+                                                       if (!error) {
+                                                           NSArray *coordinates = responseObject[@"location"][@"coordinates"];
+                                                           [self.delegate navigateToAssignmentWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates firstObject] floatValue]];
+                                                       }
+                                                     }];
 }
 
 - (NSInteger)heightForCell {
-
     if (_generatedHeight) {
         return _generatedHeight;
     }

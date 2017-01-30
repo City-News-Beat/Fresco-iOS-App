@@ -9,7 +9,6 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSProfileViewController.h"
-#import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
 #import "FRSUserManager.h"
 #import "FRSStoryManager.h"

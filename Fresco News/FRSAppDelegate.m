@@ -20,7 +20,6 @@
 #import "MagicalRecord.h"
 #import <CoreLocation/CoreLocation.h>
 #import "FRSLoginViewController.h"
-#import "FRSAPIClient.h"
 #import "VideoTrimmerViewController.h"
 #import "Fresco.h"
 #import "SAMKeychain.h"
@@ -203,18 +202,7 @@
     }
 }
 
-- (void)markAsRead:(NSString *)notificationID {
-    NSDictionary *params = @{ @"notification_ids" : @[ notificationID ] };
-    [[FRSAPIClient sharedClient] post:@"user/notifications/see"
-                       withParameters:params
-                           completion:^(id responseObject, NSError *error) {
-                             BOOL success = FALSE;
 
-                             if (!error && responseObject) {
-                                 success = TRUE;
-                             }
-                           }];
-}
 
 
 - (BOOL)isValue:(id)value {
