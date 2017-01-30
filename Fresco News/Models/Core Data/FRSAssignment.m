@@ -11,6 +11,7 @@
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
 #import "FRSAPIClient.h"
+#import "NSString+Fresco.h"
 
 @implementation FRSAssignment
 
@@ -54,8 +55,8 @@
         self.radius = dictionary[@"radius"];
     }
 
-    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"starts_at"]];
-    self.expirationDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"ends_at"]];
+    self.createdDate = [NSString dateFromString:dictionary[@"starts_at"]];
+    self.expirationDate = [NSString dateFromString:dictionary[@"ends_at"]];
     self.caption = dictionary[@"caption"];
 
     if (dictionary[@"is_acceptable"]) {

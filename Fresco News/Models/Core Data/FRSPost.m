@@ -12,6 +12,7 @@
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
 #import "FRSAPIClient.h"
+#import "NSString+Fresco.h"
 
 @implementation FRSPost
 @synthesize currentContext, location, contentType;
@@ -35,7 +36,7 @@
     self.visibility = dict[@"visiblity"];
 
     if ([[dict[@"created_date"] class] isSubclassOfClass:[NSString class]]) {
-        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_date"]];
+        self.createdDate = [NSString dateFromString:dict[@"created_date"]];
     }
 
     self.imageUrl = dict[@"image"];
@@ -72,7 +73,7 @@
     self.visibility = dict[@"visiblity"];
 
     if ([[dict[@"created_date"] class] isSubclassOfClass:[NSString class]]) {
-        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_date"]];
+        self.createdDate = [NSString dateFromString:dict[@"created_date"]];
     }
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
@@ -108,7 +109,7 @@
     }
 
     if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
-        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+        self.createdDate = [NSString dateFromString:dict[@"created_at"]];
     }
 }
 
@@ -117,7 +118,7 @@
     self.visibility = dict[@"visiblity"];
 
     if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
-        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+        self.createdDate = [NSString dateFromString:dict[@"created_at"]];
     }
 
     if (dict[@"image"] && ![dict[@"image"] isEqual:[NSNull null]]) {

@@ -10,6 +10,7 @@
 #import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
 #import "FRSGlobalAssignmentsTableViewController.h"
+#import "NSString+Fresco.h"
 
 @implementation GlobalAssignmentsTableViewCell {
     __strong IBOutlet NSLayoutConstraint *outletWidthConstraint;
@@ -129,7 +130,7 @@
 }
 
 - (void)configureExpirationDateWithString:(NSString *)dateInString {
-    NSDate *expirationDate = [[FRSAPIClient sharedClient] dateFromString:dateInString];
+    NSDate *expirationDate = [NSString dateFromString:dateInString];
     NSInteger timeUntilExpiration = [expirationDate timeIntervalSinceDate:[NSDate date]];
 
     NSInteger days = timeUntilExpiration / 60 / 60 / 24;

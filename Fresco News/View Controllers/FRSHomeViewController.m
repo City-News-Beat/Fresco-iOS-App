@@ -28,6 +28,7 @@
 #import "FRSNotificationHandler.h"
 #import "FRSModerationManager.h"
 #import "FRSGalleryManager.h"
+#import "NSString+Fresco.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -98,7 +99,7 @@
         if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
                 NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
-                NSDate *startDate = [[FRSAPIClient sharedClient] dateFromString:startDateString];
+                NSDate *startDate = [NSString dateFromString:startDateString];
                 NSDate *today = [NSDate date];
 
                 NSInteger days = [FRSHomeViewController daysBetweenDate:startDate andDate:today];

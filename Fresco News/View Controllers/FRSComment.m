@@ -9,6 +9,7 @@
 #import "FRSComment.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
+#import "NSString+Fresco.h"
 
 @implementation FRSComment
 
@@ -41,11 +42,11 @@
     _uid = dictionary[@"id"];
 
     if (![dictionary[@"created_at"] isEqual:[NSNull null]]) {
-        _createdAt = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"created_at"]];
+        _createdAt = [NSString dateFromString:dictionary[@"created_at"]];
     }
 
     if (![dictionary[@"updated_at"] isEqual:[NSNull null]]) {
-        _updatedAt = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"updated_at"]];
+        _updatedAt = [NSString dateFromString:dictionary[@"updated_at"]];
     }
 
     [self createAttributedText];

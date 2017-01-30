@@ -14,6 +14,7 @@
 #import "FRSCoreData.h"
 #import "FRSDateFormatter.h"
 #import "FRSUserManager.h"
+#import "NSString+Fresco.h"
 
 @import UIKit;
 
@@ -56,16 +57,16 @@
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    self.createdDate = [NSString dateFromString:dict[@"time_created"]];
 
     if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
-        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
+        self.editedDate = [NSString dateFromString:dict[@"updated_at"]];
     }
 
     if (dict[@"captured_at"] && ![dict[@"captured_at"] isEqual:[NSNull null]]) {
-        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"captured_at"]];
+        self.createdDate = [NSString dateFromString:dict[@"captured_at"]];
     } else if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
-        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+        self.createdDate = [NSString dateFromString:dict[@"created_at"]];
     }
 
     if (dict[@"rating"] && ![dict[@"rating"] isEqual:[NSNull null]]) {

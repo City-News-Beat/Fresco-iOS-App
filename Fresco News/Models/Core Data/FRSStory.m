@@ -13,6 +13,7 @@
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
 #import "FRSUserManager.h"
+#import "NSString+Fresco.h"
 
 @import UIKit;
 
@@ -32,10 +33,10 @@
 - (void)configureWithDictionary:(NSDictionary *)dict {
 
     self.caption = dict[@"caption"];
-    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    self.createdDate = [NSString dateFromString:dict[@"time_created"]];
 
     if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
-        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
+        self.editedDate = [NSString dateFromString:dict[@"updated_at"]];
     }
 
     self.title = dict[@"title"];

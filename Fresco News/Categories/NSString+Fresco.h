@@ -12,5 +12,6 @@
 
 + (NSString *)randomString;
 + (NSString *)random64CharacterString;
++ (NSDate *)dateFromString:(NSString *)string;
 
 @end

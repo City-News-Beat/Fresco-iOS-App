@@ -176,16 +176,7 @@
         }];
 }
 
-- (NSDate *)dateFromString:(NSString *)string {
-    if (!self.dateFormatter) {
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-        self.dateFormatter.timeZone = timeZone;
-        self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    }
 
-    return [self.dateFormatter dateFromString:string];
-}
 
 /* serialization */
 

@@ -31,9 +31,6 @@ static NSString *const kStatusBarTappedNotification = @"statusBarTappedNotificat
 static NSString *const serviceName = @"frescoNewsService3";
 static NSString *const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
-// user settings (notifications)
-
-// notification endpoint
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
 
