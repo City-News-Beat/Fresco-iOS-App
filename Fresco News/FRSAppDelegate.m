@@ -139,10 +139,10 @@
 }
 
 -(void)configureUXCam {
-//#if DEBUG
-//#else
+#if DEBUG
+#else
     [UXCam startWithKey:UXCamKey];
-//#endif
+#endif
 }
 
 - (void)configureStartDate {
