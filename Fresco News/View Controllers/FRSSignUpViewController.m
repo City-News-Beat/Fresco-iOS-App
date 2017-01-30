@@ -19,6 +19,7 @@
 #import "FRSNavigationController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @import MapKit;
 
@@ -1882,6 +1883,12 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordTF];
 }
 
 

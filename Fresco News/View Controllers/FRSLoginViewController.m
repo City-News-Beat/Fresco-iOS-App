@@ -16,6 +16,7 @@
 #import "FRSLocationManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
@@ -114,6 +115,8 @@
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    
+    [self hideSensitiveViews];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -1274,6 +1277,12 @@
                        self.socialLabel.alpha = 0;
                      }
                      completion:nil];
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordField];
 }
 
 @end

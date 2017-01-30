@@ -12,6 +12,7 @@
 #import "FRSAlertView.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSDisableAccountViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -151,6 +152,7 @@
         cell.textField.tag = 3;
         [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
         cell.textField.delegate = self;
+        [self hideSensitiveViews:cell.textField];
 
         [self addErrorViewAtYPos:196 withTextField:cell.textField];
 
@@ -439,6 +441,12 @@
     } else {
         return YES;
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews:(UIView *)view {
+    [UXCam occludeSensitiveView:view];
 }
 
 @end

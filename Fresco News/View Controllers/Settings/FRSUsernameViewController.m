@@ -12,6 +12,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSUsernameViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSAlertViewDelegate>
 
@@ -36,6 +37,8 @@
 
     [self configureTableView];
     [self configureBackButtonAnimated:NO];
+    
+    [self hideSensitiveViews];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -461,6 +464,12 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordTextField];
 }
 
 @end

@@ -18,6 +18,7 @@
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
 #import "FRSPaymentManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSDebitCardViewController ()
 
@@ -55,6 +56,8 @@
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
     [self configureDismissKeyboardGestureRecognizer];
+    
+    [self hideSensitiveViews];
 }
 
 - (void)configureView {
@@ -568,6 +571,14 @@
 - (void)dismissKeyboard {
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:cardNumberTextField];
+    [UXCam occludeSensitiveView:self.routingNumberField];
+    [UXCam occludeSensitiveView:self.accountNumberField];
 }
 
 @end
