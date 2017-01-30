@@ -133,15 +133,20 @@
     [FRSTracker startTracking];
     [self startTracking];
 
-    [self configureUXCam];
+//    [self configureUXCam];
     
     return YES;
 }
 
 -(void)configureUXCam {
+    // Avoid tracking when debugging
 #if DEBUG
 #else
     [UXCam startWithKey:UXCamKey];
+    
+    if ([FRSUserManager authenticatedUser]) {
+        [UXCam tagUsersName:[[FRSUserManager authenticatedUser] uid]];
+    }
 #endif
 }
 

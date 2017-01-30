@@ -10,20 +10,16 @@
 
 @implementation NSURL (Fresco)
 
-- (id)initWithString:(NSString *)URLString width:(float)width {
-    return [self initWithString:[self URLResizedFromURLString:URLString width:width]];
-}
-
-- (NSString *)URLResizedFromURLString:(NSString *)url width:(float)width {
++ (NSURL *)URLResizedFromURLString:(NSString *)url width:(NSInteger)width {
     NSString *adjustedURL = url;
-
+    
     if ([adjustedURL containsString:@"cdn.fresconews"]) {
         NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)width];
         adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
         adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
     }
-
-    return adjustedURL;
+    
+    return [NSURL URLWithString:adjustedURL];
 }
 
 @end
