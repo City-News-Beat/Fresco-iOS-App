@@ -40,7 +40,6 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationManager.h"
-#import <UXCam/UXCam.h>
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -134,36 +133,6 @@
     [self startTracking];
 
     return YES;
-}
-
-
-
-/**
- Starts tracking users screen using UXCam (3rd party)
- */
--(void)configureUXCam {
-#if DEBUG // Avoid tracking when debugging
-#else
-    [UXCam startWithKey:UXCamKey];
-    [self tagUXCamUser];
-#endif
-}
-
-
-/**
- Stops tracking users screen
- */
--(void)stopUXCam {
-    [UXCam stopApplicationAndUploadData];
-}
-
-
--(void)tagUXCamUser {
-    if ([FRSUserManager sharedInstance].authenticatedUser.uid) {
-        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser uid]];
-    } else if ([FRSUserManager sharedInstance].authenticatedUser.username) { // Fall back on username if UID is not found
-        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser username]];
-    }
 }
 
 - (void)configureStartDate {
@@ -548,7 +517,7 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [self stopUXCam];
+    [FRSTracker stopUXCam];
     [[FRSLocationManager sharedManager] pauseLocationMonitoring];
 }
 
@@ -560,8 +529,7 @@
         }
     }
     
-    [self configureUXCam];
-
+    [FRSTracker startUXCam];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{ @"type" : @"reset" }];
 }
 

@@ -36,10 +36,4 @@
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
 
-/**
- Associates an identifiable string with the UXCam session. 
- Tags session with UID and falls back on username. (Default username tag is the device name).
- */
-- (void)tagUXCamUser;
-
 @end

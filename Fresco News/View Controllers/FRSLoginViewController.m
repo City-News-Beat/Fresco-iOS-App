@@ -259,8 +259,7 @@
                                        }
 
                                        // Update the tag on the UXCam session on login
-                                       FRSAppDelegate *appDelegate = (FRSAppDelegate*)[[UIApplication sharedApplication] delegate];
-                                       [appDelegate tagUXCamUser];
+                                       [FRSTracker tagUXCamUser];
                                        return;
                                    }
 

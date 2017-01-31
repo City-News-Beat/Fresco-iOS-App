@@ -8,6 +8,7 @@
 
 #import "FRSTracker.h"
 #import "EndpointManager.h"
+#import "FRSUserManager.h"
 
 @implementation FRSTracker
 + (void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
@@ -42,6 +43,35 @@
 
 + (void)reset {
     [[SEGAnalytics sharedAnalytics] reset];
+}
+
+
+/**
+ Starts tracking users screen using UXCam (3rd party)
+ */
++ (void)startUXCam {
+#if DEBUG // Avoid tracking when debugging
+#else
+    [UXCam startWithKey:UXCamKey];
+    [self tagUXCamUser];
+#endif
+}
+
+
+/**
+ Stops tracking users screen
+ */
++ (void)stopUXCam {
+    [UXCam stopApplicationAndUploadData];
+}
+
+
++ (void)tagUXCamUser {
+    if ([FRSUserManager sharedInstance].authenticatedUser.uid) {
+        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser uid]];
+    } else if ([FRSUserManager sharedInstance].authenticatedUser.username) { // Fall back on username if UID is not found
+        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser username]];
+    }
 }
 
 @end
