@@ -129,8 +129,8 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedInstance] checkCachedUploads];
 
-    [FRSTracker startTracking];
-    [self startTracking];
+    [FRSTracker startSegmentAnalytics];
+    [FRSTracker trackUser];
 
     return YES;
 }
@@ -178,31 +178,6 @@
     // or
     // return NO;
 }
-
-- (void)startTracking {
-    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
-        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
-        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
-        NSString *userID = Nil;
-
-        if (user.uid && ![user.uid isEqual:[NSNull null]]) {
-            userID = user.uid;
-        }
-
-        if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
-            identityDictionary[@"name"] = user.firstName;
-        }
-
-        if (user.email && ![user.email isEqual:[NSNull null]]) {
-            identityDictionary[@"email"] = user.email;
-        }
-
-        [[SEGAnalytics sharedAnalytics] identify:userID
-                                          traits:identityDictionary];
-    }
-}
-
-
 
 
 - (BOOL)isValue:(id)value {

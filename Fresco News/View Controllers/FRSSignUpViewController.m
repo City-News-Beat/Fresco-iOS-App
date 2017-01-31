@@ -1302,8 +1302,8 @@
                                                           _isAlreadyRegistered = TRUE;
                                                           [self segueToSetup];
                                                           
-                                                          // Update the tag on the UXCam session on signup
-                                                          [FRSTracker tagUXCamUser];
+                                                          // Update the Segment and UXCam trackers on signup
+                                                          [FRSTracker trackUser];
                                                       }
                                                       _pastRegistration = registrationDigest;
 

@@ -19,22 +19,23 @@
 + (void)track:(NSString *)eventName;
 + (void)screen:(NSString *)screen;
 + (void)screen:(NSString *)screen parameters:(NSDictionary *)parameters;
-+ (void)startTracking;
++ (void)startSegmentAnalytics;
 + (void)reset;
 
-/**
- Associates an identifiable string with the UXCam session.
- Tags session with UID and falls back on username. (Default username tag is the device name).
- */
-+ (void)tagUXCamUser;
+
 
 /**
- Stops tracking users screen
+ Combines both the Segment user tracking event with the UXCam tracking event into one method call.
+ */
++ (void)trackUser;
+
+/**
+ Stops tracking users screen.
  */
 + (void)stopUXCam;
 
 /**
- Starts tracking users screen using UXCam (3rd party)
+ Starts tracking users screen using UXCam.
  */
 + (void)startUXCam;
 

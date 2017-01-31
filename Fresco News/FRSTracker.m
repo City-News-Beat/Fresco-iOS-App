@@ -11,18 +11,47 @@
 #import "FRSUserManager.h"
 
 @implementation FRSTracker
+
++ (void)trackUser {
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+        NSString *userID = nil;
+        
+        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
+        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+        
+        if (user.uid && ![user.uid isEqual:[NSNull null]]) {
+            userID = user.uid;
+        }
+        
+        if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
+            identityDictionary[@"name"] = user.firstName;
+        }
+        
+        if (user.email && ![user.email isEqual:[NSNull null]]) {
+            identityDictionary[@"email"] = user.email;
+        }
+        
+        [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
+        [self tagUXCamUser:userID];
+    }
+}
+
+
+
+#pragma mark - Segment
+
 + (void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
-    [FRSTracker startTracking];
+    [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] track:eventName
                                properties:parameters];
 }
 + (void)track:(NSString *)eventName {
 
-    [FRSTracker startTracking];
+    [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] track:eventName];
 }
 
-+ (void)startTracking {
++ (void)startSegmentAnalytics {
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:[EndpointManager sharedInstance].currentEndpoint.segmentKey];
     configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
     configuration.recordScreenViews = NO; // Enable this to record screen views automatically!
@@ -31,12 +60,12 @@
 }
 
 + (void)screen:(NSString *)screen {
-    [FRSTracker startTracking];
+    [FRSTracker startSegmentAnalytics];
     [FRSTracker screen:screen parameters:@{}];
 }
 
 + (void)screen:(NSString *)screen parameters:(NSDictionary *)parameters {
-    [FRSTracker startTracking];
+    [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] screen:screen
                                 properties:parameters];
 }
@@ -47,6 +76,8 @@
 
 
 
+#pragma mark - UXCam
+
 + (void)startUXCam {
 #if DEBUG // Avoid tracking when debugging
 #else
@@ -55,17 +86,20 @@
 #endif
 }
 
-
 + (void)stopUXCam {
     [UXCam stopApplicationAndUploadData];
 }
 
+/**
+ Associates an identifiable string with the UXCam session.
+ Tags session with UID and falls back on username. (Default username tag is the device name).
+ 
+ @param userID An The user id that should be tracked.
+ */
 
-+ (void)tagUXCamUser {
-    if ([FRSUserManager sharedInstance].authenticatedUser.uid) {
-        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser uid]];
-    } else if ([FRSUserManager sharedInstance].authenticatedUser.username) { // Fall back on username if UID is not found
-        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser username]];
++ (void)tagUXCamUser:(NSString *)userID {
+    if (userID) {
+        [UXCam tagUsersName:userID];
     }
 }
 

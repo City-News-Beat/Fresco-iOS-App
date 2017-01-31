@@ -258,8 +258,8 @@
                                            [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
                                        }
 
-                                       // Update the tag on the UXCam session on login
-                                       [FRSTracker tagUXCamUser];
+                                       // Update the tag on the UXCam and Segment sessions on login
+                                       [FRSTracker trackUser];
                                        return;
                                    }
 

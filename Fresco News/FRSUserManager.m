@@ -84,27 +84,9 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
                                 return;
                             }
 
-                            // set up FRSUser object with this info, set authenticated to true
-                            NSString *userID = responseObject[@"id"];
-                            NSString *email = responseObject[@"email"];
-                            NSString *name = responseObject[@"full_name"];
-                            NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
-
-                            if (userID && ![userID isEqual:[NSNull null]]) {
-                                userID = userID;
-                            }
-
-                            if (name && ![name isEqual:[NSNull null]]) {
-                                identityDictionary[@"name"] = name;
-                            }
-
-                            if (email && ![email isEqual:[NSNull null]]) {
-                                identityDictionary[@"email"] = email;
-                            }
-
-                            [[SEGAnalytics sharedAnalytics] identify:userID
-                                                              traits:identityDictionary];
                             [FRSTracker track:loginEvent];
+                            [FRSTracker trackUser]; // This also updates the Segment and UXCam trackers on Login
+
                           }];
 }
 
