@@ -6,19 +6,6 @@
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
-//_          _           _           _             _             _
-///\ \       /\ \        /\ \        / /\         /\ \           /\ \
-///  \ \     /  \ \      /  \ \      / /  \       /  \ \         /  \ \
-/// /\ \ \   / /\ \ \    / /\ \ \    / / /\ \__   / /\ \ \       / /\ \ \
-/// / /\ \_\ / / /\ \_\  / / /\ \_\  / / /\ \___\ / / /\ \ \     / / /\ \ \
-/// /_/_ \/_// / /_/ / / / /_/_ \/_/  \ \ \ \/___// / /  \ \_\   / / /  \ \_\
-/// /____/\  / / /__\/ / / /____/\      \ \ \     / / /    \/_/  / / /   / / /
-/// /\____\/ / / /_____/ / /\____\/  _    \ \ \   / / /          / / /   / / /
-/// / /      / / /\ \ \  / / /______ /_/\__/ / /  / / /________  / / /___/ / /
-/// / /      / / /  \ \ \/ / /_______\\ \/___/ /  / / /_________\/ / /____\/ /
-//\/_/       \/_/    \_\/\/__________/ \_____\/   \/____________/\/_________/
-//
-
 #import <UIKit/UIKit.h>
 #import <Fabric/Fabric.h>
 #import <TwitterKit/TwitterKit.h>
@@ -48,5 +35,11 @@
 - (void)startNotificationTimer;
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
+
+/**
+ Associates an identifiable string with the UXCam session. 
+ Tags session with UID and falls back on username. (Default username tag is the device name).
+ */
+- (void)tagUXCamUser;
 
 @end

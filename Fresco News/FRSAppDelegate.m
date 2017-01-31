@@ -133,21 +133,37 @@
     [FRSTracker startTracking];
     [self startTracking];
 
-//    [self configureUXCam];
-    
     return YES;
 }
 
+
+
+/**
+ Starts tracking users screen using UXCam (3rd party)
+ */
 -(void)configureUXCam {
-    // Avoid tracking when debugging
-#if DEBUG
+#if DEBUG // Avoid tracking when debugging
 #else
     [UXCam startWithKey:UXCamKey];
-    
-    if ([FRSUserManager authenticatedUser]) {
-        [UXCam tagUsersName:[[FRSUserManager authenticatedUser] uid]];
-    }
+    [self tagUXCamUser];
 #endif
+}
+
+
+/**
+ Stops tracking users screen
+ */
+-(void)stopUXCam {
+    [UXCam stopApplicationAndUploadData];
+}
+
+
+-(void)tagUXCamUser {
+    if ([FRSUserManager sharedInstance].authenticatedUser.uid) {
+        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser uid]];
+    } else if ([FRSUserManager sharedInstance].authenticatedUser.username) { // Fall back on username if UID is not found
+        [UXCam tagUsersName:[[FRSUserManager sharedInstance].authenticatedUser username]];
+    }
 }
 
 - (void)configureStartDate {
@@ -532,6 +548,7 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    [self stopUXCam];
     [[FRSLocationManager sharedManager] pauseLocationMonitoring];
 }
 
@@ -542,6 +559,8 @@
             [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
         }
     }
+    
+    [self configureUXCam];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{ @"type" : @"reset" }];
 }

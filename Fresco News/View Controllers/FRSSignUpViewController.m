@@ -1301,6 +1301,10 @@
 
                                                           _isAlreadyRegistered = TRUE;
                                                           [self segueToSetup];
+                                                          
+                                                          // Update the tag on the UXCam session on signup
+                                                          FRSAppDelegate *appDelegate = (FRSAppDelegate*)[[UIApplication sharedApplication] delegate];
+                                                          [appDelegate tagUXCamUser];
                                                       }
                                                       _pastRegistration = registrationDigest;
 
