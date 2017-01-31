@@ -764,7 +764,9 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
             [[FRSUserManager sharedInstance] getUserWithUID:[notification objectForKey:@"user_id"]
                                                  completion:^(id responseObject, NSError *error) {
                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                   FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+                                                   FRSUser *currentUser = [FRSUser
+                                                                           nonSavedUserWithProperties:responseObject
+                                                                           context:[delegate.coreDataController managedObjectContext]];
                                                    if ([[responseObject valueForKey:@"following"] boolValue]) {
                                                        [self unfollowUser:currentUser];
                                                    } else {

@@ -27,15 +27,14 @@
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotifications/UserNotifications.h>
 #import "Adjust.h"
+#import "FRSCoreDataController.h"
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate> {
     NSTimer *notificationTimer;
 }
 
 @property (strong, nonatomic) UIWindow *window;
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (strong, nonatomic) FRSCoreDataController *coreDataController;
 @property (nonatomic, retain) id tabBarController;
 @property BOOL didPresentPermissionsRequest;
 
@@ -49,4 +48,12 @@
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
 
+
+
+/**
+ Returns the managed object context from FRSCoreDataController
+
+ @return NSManagedObjectContext from FRSCoreDataController
+ */
+- (NSManagedObjectContext *)managedObjectContext;
 @end
