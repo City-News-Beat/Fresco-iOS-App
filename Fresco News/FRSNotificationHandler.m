@@ -31,7 +31,7 @@ static BOOL isSegueingToAssignment;
     NSString *instruction = push[@"type"];
     
     // smooch
-    if ([instruction isEqualToString:smoochNotification]) {
+    if ([instruction isEqualToString:smoochNotification] || [instruction isEqualToString:@"Fresco Support Request"]) { // Second check is temporary and should be removed when support is added on the web platform for this feature
         [Smooch track:smoochNotificationEventName];
         return;
     }
