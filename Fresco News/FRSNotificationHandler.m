@@ -29,6 +29,12 @@ static BOOL isSegueingToAssignment;
 
 + (void)handleNotification:(NSDictionary *)push {
     NSString *instruction = push[@"type"];
+    
+    // smooch
+    if ([instruction isEqualToString:smoochNotification]) {
+        [Smooch track:smoochNotificationEventName];
+        return;
+    }
 
     // payment
     if ([instruction isEqualToString:newAssignmentNotification]) {
@@ -43,6 +49,7 @@ static BOOL isSegueingToAssignment;
 
         return;
     }
+    
     if ([instruction isEqualToString:purchasedContentNotification]) {
         if ([[push valueForKey:@"has_payment"] boolValue]) {
             NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];

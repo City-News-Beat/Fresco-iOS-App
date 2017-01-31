@@ -404,23 +404,11 @@
 }
 
 - (void)registerForPushNotifications {
-    //    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
-    //                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
-    //
-    //    UIUserNotificationSettings *mySettings =
-    //    [UIUserNotificationSettings settingsForTypes:types categories:nil];
-    //
-    //    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-    //    [[UIApplication sharedApplication] registerForRemoteNotifications];
-
+    
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0") == FALSE) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
 
-        //if( option != nil )
-        //{
-        //    NSLog( @"registerForPushWithOptions:" );
-        //}
     } else {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
         center.delegate = self;
@@ -497,14 +485,6 @@
 
 - (void)handleLocationUpdate {
 }
-
-//- (void)handleLocalPush:(NSDictionary *)push {
-//    [self handleRemotePush:push];
-//}
-//
-//- (void)handleRemotePush:(NSDictionary *)push {
-//    [FRSNotificationHandler handleNotification:push];
-//}
 
 - (void)restartUpload {
 }
