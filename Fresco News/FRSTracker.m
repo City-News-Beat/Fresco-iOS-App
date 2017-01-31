@@ -46,9 +46,7 @@
 }
 
 
-/**
- Starts tracking users screen using UXCam (3rd party)
- */
+
 + (void)startUXCam {
 #if DEBUG // Avoid tracking when debugging
 #else
@@ -58,9 +56,6 @@
 }
 
 
-/**
- Stops tracking users screen
- */
 + (void)stopUXCam {
     [UXCam stopApplicationAndUploadData];
 }
