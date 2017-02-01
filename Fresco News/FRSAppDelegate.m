@@ -60,6 +60,7 @@
     [Adjust appDidLaunch:adjustConfig];
 
     [self startFabric]; // crashlytics first yall
+    [self configureSmooch];
     [self configureStartDate];
     [self clearUploadCache];
 
@@ -255,6 +256,9 @@
 
     [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
     [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
+}
+
+- (void)configureSmooch {
     [Smooch initWithSettings:[SKTSettings settingsWithAppToken:[EndpointManager sharedInstance].currentEndpoint.smoochToken]];
 }
 
