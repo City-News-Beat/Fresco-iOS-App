@@ -83,7 +83,7 @@ static NSDate *lastDate;
     signedInRequest.predicate = signedInPredicate;
 
     // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
-    NSManagedObjectContext *context = [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext]; // temp (replace with internal or above method
+    NSManagedObjectContext *context = [[(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] coreDataController] managedObjectContext]; // temp (replace with internal or above method
 
     // no need to sort response, because theoretically there is 1
     NSError *fetchError;
@@ -197,7 +197,7 @@ static NSDate *lastDate;
     numberOfVideos = 0;
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = delegate.managedObjectContext;
+    self.context = delegate.coreDataController.managedObjectContext;
 
     [self subscribeToEvents];
 }

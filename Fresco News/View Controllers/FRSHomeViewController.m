@@ -301,7 +301,7 @@
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
-                                                [self.appDelegate.managedObjectContext performBlock:^{
+                                                [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
                                                   NSInteger index = 0;
 
                                                   NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
@@ -313,8 +313,8 @@
                  Gallery does not exist -- create it in persistence layer & volotile memory
                  */
                                                       if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-                                                          FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
-                                                          [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                                                          FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
+                                                          [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                                                           [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                                                           [newGalleries addObject:galleryToSave];
                                                           index++;
@@ -326,7 +326,7 @@
                  */
 
                                                       FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                                                       [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                                                       [newGalleries addObject:galleryToSave];
                                                       index++;
@@ -563,24 +563,24 @@
 }
 
 - (void)cacheLocalData:(NSArray *)localData {
-    if (self.appDelegate.managedObjectContext) {
-        [self.appDelegate.managedObjectContext performBlock:^{
+    if (self.appDelegate.coreDataController.managedObjectContext) {
+        [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
             self.dataSource = [[NSMutableArray alloc] init];
             self.highlights = [[NSMutableArray alloc] init];
             
             NSInteger localIndex = 0;
             for (NSDictionary *gallery in localData) {
-                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
                 
-                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                 [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
                 [self.dataSource addObject:galleryToSave];
                 [self.highlights addObject:galleryToSave];
                 localIndex++;
             }
             
-            if ([self.appDelegate.managedObjectContext hasChanges]) {
-                [self.appDelegate.managedObjectContext save:Nil];
+            if ([self.appDelegate.coreDataController.managedObjectContext hasChanges]) {
+                [self.appDelegate.coreDataController.managedObjectContext save:Nil];
             }
             
             [self.appDelegate saveContext];
@@ -588,7 +588,7 @@
             [self.tableView reloadData];
             
             for (FRSGallery *gallery in self.cachedData) {
-                [self.appDelegate.managedObjectContext deleteObject:gallery];
+                [self.appDelegate.coreDataController.managedObjectContext deleteObject:gallery];
             }
             
             [self.appDelegate saveContext];
@@ -608,7 +608,7 @@
 }
 
 - (void)flushCache:(NSArray *)received {
-    NSManagedObjectContext *moc = [self.appDelegate managedObjectContext];
+    NSManagedObjectContext *moc = [self.appDelegate.coreDataController managedObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
     request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
 
@@ -743,12 +743,14 @@
                                                     return;
                                                 }
 
-                                                [[self.appDelegate managedObjectContext] performBlock:^{
+                                                [[[self.appDelegate coreDataController] managedObjectContext] performBlock:^{
                                                   NSInteger index = self.highlights.count;
                                                   for (NSDictionary *gallery in galleries) {
-                                                      FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                                                      FRSGallery *galleryToSave = [NSEntityDescription
+                                                                                   insertNewObjectForEntityForName:@"FRSGallery"
+                                                                                   inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
 
-                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                                                       [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                                                       [self.dataSource addObject:galleryToSave];
                                                       [self.highlights addObject:galleryToSave];
