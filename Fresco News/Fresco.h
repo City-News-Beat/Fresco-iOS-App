@@ -177,6 +177,11 @@ static NSString *const taxInfoDeclinedNotification = @"user-payment-tax-info-dec
 static NSString *const newAssignmentNotification = @"user-dispatch-new-assignment";
 static NSString *const galleryApprovedNotification = @"user-dispatch-content-verified";
 
+// Smooch Whisper
+static NSString *const smoochSupportNotification = @"user-support-request";
+static NSString *const smoochSupportTempNotification = @"Fresco Support Request"; // This will be removed when support is added on the web platform
+static NSString *const smoochNotificationEventName = @"smooch-invite";
+
 // Event Tracking [FRSTracker]
 static NSString *const gallerySession = @"Gallery session";
 static NSString *const galleryLiked = @"Gallery liked";

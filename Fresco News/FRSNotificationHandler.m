@@ -28,10 +28,21 @@ static BOOL isSegueingToAssignment;
 @implementation FRSNotificationHandler
 
 + (void)handleNotification:(NSDictionary *)push {
-    NSString *instruction = push[@"type"];
+    NSString *type = push[@"type"];
+    NSString *title = push[@"title"];
+
+    
+    // smooch
+    
+    // smoochSupportTempNotification checks are temporary and should be removed when support is added on the web platform for this feature
+    if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame) || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame)) {
+        [Smooch track:smoochNotificationEventName];
+        [Smooch show];
+        return;
+    }
 
     // payment
-    if ([instruction isEqualToString:newAssignmentNotification]) {
+    if ([type isEqualToString:newAssignmentNotification]) {
         NSString *assignment = [[push objectForKey:@"meta"] objectForKey:@"assignment_id"];
 
         if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
@@ -43,7 +54,8 @@ static BOOL isSegueingToAssignment;
 
         return;
     }
-    if ([instruction isEqualToString:purchasedContentNotification]) {
+    
+    if ([type isEqualToString:purchasedContentNotification]) {
         if ([[push valueForKey:@"has_payment"] boolValue]) {
             NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
@@ -58,32 +70,32 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:paymentExpiringNotification]) {
+    if ([type isEqualToString:paymentExpiringNotification]) {
         [FRSNotificationHandler segueToPayment];
     }
 
-    if ([instruction isEqualToString:paymentSentNotification]) {
+    if ([type isEqualToString:paymentSentNotification]) {
         [FRSNotificationHandler segueToPayment];
     }
 
-    if ([instruction isEqualToString:taxInfoRequiredNotification]) {
+    if ([type isEqualToString:taxInfoRequiredNotification]) {
         [FRSNotificationHandler segueToIdentification];
     }
 
-    if ([instruction isEqualToString:taxInfoDeclinedNotification]) {
+    if ([type isEqualToString:taxInfoDeclinedNotification]) {
         [FRSNotificationHandler segueToIdentification];
     }
 
-    if ([instruction isEqualToString:taxInfoProcessedNotification]) {
+    if ([type isEqualToString:taxInfoProcessedNotification]) {
         [FRSNotificationHandler segueToIdentification];
     }
 
-    if ([instruction isEqualToString:paymentDeclinedNotification]) {
+    if ([type isEqualToString:paymentDeclinedNotification]) {
         [FRSNotificationHandler segueToPayment];
     }
 
     // social
-    if ([instruction isEqualToString:followedNotification]) {
+    if ([type isEqualToString:followedNotification]) {
         NSString *user = [[[push objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
 
         if (user && [[user class] isSubclassOfClass:[NSString class]]) {
@@ -94,7 +106,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:@"user-news-gallery"]) {
+    if ([type isEqualToString:@"user-news-gallery"]) {
         NSString *galleryID = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (galleryID && [[galleryID class] isSubclassOfClass:[NSString class]]) {
@@ -105,7 +117,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:@"user-news-story"]) {
+    if ([type isEqualToString:@"user-news-story"]) {
         NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
 
         if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
@@ -116,7 +128,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:@"user-social-gallery-liked"]) {
+    if ([type isEqualToString:@"user-social-gallery-liked"]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
@@ -127,7 +139,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:repostedNotification]) {
+    if ([type isEqualToString:repostedNotification]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
@@ -138,7 +150,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:galleryApprovedNotification]) {
+    if ([type isEqualToString:galleryApprovedNotification]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
@@ -149,7 +161,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:commentedNotification]) {
+    if ([type isEqualToString:commentedNotification]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
@@ -160,7 +172,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:photoOfDayNotification]) {
+    if ([type isEqualToString:photoOfDayNotification]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
@@ -171,7 +183,7 @@ static BOOL isSegueingToAssignment;
         }
     }
 
-    if ([instruction isEqualToString:todayInNewsNotification]) {
+    if ([type isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs;
 
         if ([[push objectForKey:@"meta"] objectForKey:@"gallery_ids"]) {
@@ -182,11 +194,11 @@ static BOOL isSegueingToAssignment;
         [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
     }
 
-    if ([instruction isEqualToString:restartUploadNotification]) {
+    if ([type isEqualToString:restartUploadNotification]) {
         [FRSNotificationHandler restartUpload];
     }
 
-    if ([instruction isEqualToString:@"user-social-mentioned-comment"]) {
+    if ([type isEqualToString:@"user-social-mentioned-comment"]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {

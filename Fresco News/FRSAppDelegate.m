@@ -60,6 +60,7 @@
     [Adjust appDidLaunch:adjustConfig];
 
     [self startFabric]; // crashlytics first yall
+    [self configureSmooch];
     [self configureStartDate];
     [self clearUploadCache];
 
@@ -112,13 +113,13 @@
         [self handleLocationUpdate];
     }
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        [self handleLocalPush:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
+        [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         // If we don't check for <iOS 10, multiple calls to handleRemotePush will be made.
         // Once here, and once in userNotificationCenter:didReceiveNotificationResponse.
         if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
-            [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+            [FRSNotificationHandler handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
         }
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
@@ -255,6 +256,9 @@
 
     [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
     [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
+}
+
+- (void)configureSmooch {
     [Smooch initWithSettings:[SKTSettings settingsWithAppToken:[EndpointManager sharedInstance].currentEndpoint.smoochToken]];
 }
 
@@ -281,7 +285,7 @@
     NSLog(@"Handle push from background or closed");
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
     NSLog(@"%@", response.notification.request.content.userInfo);
-    [self handleRemotePush:response.notification.request.content.userInfo];
+    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo];
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
@@ -404,23 +408,11 @@
 }
 
 - (void)registerForPushNotifications {
-    //    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
-    //                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
-    //
-    //    UIUserNotificationSettings *mySettings =
-    //    [UIUserNotificationSettings settingsForTypes:types categories:nil];
-    //
-    //    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-    //    [[UIApplication sharedApplication] registerForRemoteNotifications];
-
+    
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0") == FALSE) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
 
-        //if( option != nil )
-        //{
-        //    NSLog( @"registerForPushWithOptions:" );
-        //}
     } else {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
         center.delegate = self;
@@ -443,13 +435,13 @@
     // custom code to handle notification content
 
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
-        [self handleRemotePush:userInfo];
+        [FRSNotificationHandler handleNotification:userInfo];
     }
 
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        [self handleRemotePush:userInfo];
+        [FRSNotificationHandler handleNotification:userInfo];
         completionHandler(UIBackgroundFetchResultNewData);
     } else {
         completionHandler(UIBackgroundFetchResultNewData);
@@ -461,7 +453,7 @@
         didReceiveRemoteNotification:userInfo
               fetchCompletionHandler:^(UIBackgroundFetchResult result) {
                 // nothing
-                [self handleRemotePush:userInfo];
+                  [FRSNotificationHandler handleNotification:userInfo];
               }];
 }
 
@@ -498,19 +490,11 @@
 - (void)handleLocationUpdate {
 }
 
-- (void)handleLocalPush:(NSDictionary *)push {
-    [self handleRemotePush:push];
-}
-
-- (void)handleRemotePush:(NSDictionary *)push {
-    [FRSNotificationHandler handleNotification:push];
-}
-
 - (void)restartUpload {
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(nonnull UILocalNotification *)notification {
-    [self handleRemotePush:notification.userInfo];
+    [FRSNotificationHandler handleNotification:notification.userInfo];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
