@@ -13,6 +13,7 @@
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
 #import "FRSPaymentManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSIdentityViewController ()
 
@@ -52,6 +53,7 @@
     //    [self configureTableView];
     [self configureBackButtonAnimated:NO];
     [self configureDismissKeyboardGestureRecognizer];
+    [self hideSensitiveViews];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -453,5 +455,13 @@
 
     [self presentViewController:cameraUI animated:YES completion:nil];
 }
+
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.ssnView];
+}
+
 
 @end

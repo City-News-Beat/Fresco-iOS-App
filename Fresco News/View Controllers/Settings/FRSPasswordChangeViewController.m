@@ -13,6 +13,7 @@
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSPasswordChangeViewController ()
 
@@ -295,6 +296,13 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
     self.alert = nil;
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordVerifyTextField];
+    [UXCam occludeSensitiveView:self.passwordTwoTextField];
 }
 
 @end

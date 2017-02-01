@@ -12,6 +12,7 @@
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
+#import "NSURL+Fresco.h"
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
 #import <Haneke/Haneke.h>
@@ -1110,19 +1111,12 @@
 }
 
 - (void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
-    NSString *adjustedURL = url;
-
-    /*
-     Adjust sizing from URL string
-     */
-
-    if ([adjustedURL containsString:@"cdn.fresconews"]) {
-        NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
-        adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
-        adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
-    }
-
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
+    [imageView
+        hnk_setImageFromURL:[NSURL
+                             URLResizedFromURLString:url
+                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                             ]
+     ];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object

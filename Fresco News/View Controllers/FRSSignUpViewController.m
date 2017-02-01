@@ -19,6 +19,7 @@
 #import "FRSNavigationController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @import MapKit;
 
@@ -1300,6 +1301,9 @@
 
                                                           _isAlreadyRegistered = TRUE;
                                                           [self segueToSetup];
+                                                          
+                                                          // Update the Segment and UXCam trackers on signup
+                                                          [FRSTracker trackUser];
                                                       }
                                                       _pastRegistration = registrationDigest;
 
@@ -1882,6 +1886,12 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordTF];
 }
 
 

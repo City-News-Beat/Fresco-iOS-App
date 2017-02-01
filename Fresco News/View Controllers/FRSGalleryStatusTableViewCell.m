@@ -25,7 +25,7 @@
     purchaseDict = [[NSDictionary alloc] initWithDictionary:purchasePostDict];
     postImageView.layer.cornerRadius = 3;
 
-    NSURL *resizedURL = [[NSURL alloc] initWithString:purchaseDict[@"image"] width:postImageView.frame.size.width];
+    NSURL *resizedURL = [NSURL URLResizedFromURLString:purchaseDict[@"image"] width:postImageView.frame.size.width];
     [postImageView hnk_setImageFromURL:resizedURL
         placeholder:nil
         success:^(UIImage *image) {

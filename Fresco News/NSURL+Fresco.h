@@ -10,6 +10,13 @@
 
 @interface NSURL (Fresco)
 
-- (id) initWithString:(NSString *)URLString width:(float)width;
+/**
+ Takes a string and a width, and returns a URL for an image that is sized accordingly
+
+ @param url URL of the asset
+ @param width width of the image an integer
+ @return returns an NSURL correctly formatted
+ */
++ (NSURL *)URLResizedFromURLString:(NSString *)url width:(NSInteger)width;
 
 @end

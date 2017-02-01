@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSEmailViewController ()
 
@@ -34,6 +35,7 @@
     self.title = @"EMAIL ADDRESS";
 
     [self configureBackButtonAnimated:NO];
+    [self hideSensitiveViews];
 }
 
 #pragma mark - Actions
@@ -193,5 +195,12 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
 }
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordTextField];
+}
+
 
 @end
