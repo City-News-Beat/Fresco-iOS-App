@@ -98,8 +98,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:Nil];
 }
 
-- (void)configureCommentsSpinner { //Not sure if this does anything
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(85, -1, 15, 15)];
+- (void)configureCommentsSpinner {
+    commentsLabel.hidden = NO;
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(80, -4, 20, 20)];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
