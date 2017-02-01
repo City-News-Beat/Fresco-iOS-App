@@ -439,6 +439,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                  if (([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
                                                      showsMoreButton = FALSE;
                                                  }
+//                                                 [commentsTableView reloadData];
                                                }];
 }
 
@@ -505,10 +506,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                          [_parentVC scrollViewDidScrollToTop:_scrollView];
 
                                                        }];
-}
-
-- (void)showAllComments {
-    [self loadMoreComments];
 }
 
 #pragma mark - IBActions
@@ -681,7 +678,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             showCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             showCommentsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 0);
 
-            [showCommentsButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
+            [showCommentsButton addTarget:self action:@selector(loadMoreComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:showCommentsButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = [UIColor clearColor];
