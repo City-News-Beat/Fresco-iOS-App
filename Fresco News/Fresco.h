@@ -178,7 +178,8 @@ static NSString *const newAssignmentNotification = @"user-dispatch-new-assignmen
 static NSString *const galleryApprovedNotification = @"user-dispatch-content-verified";
 
 // Smooch Whisper
-static NSString *const smoochNotification = @"user-support-request";
+static NSString *const smoochSupportNotification = @"user-support-request";
+static NSString *const smoochSupportTempNotification = @"Fresco Support Request"; // This will be removed when support is added on the web platform
 static NSString *const smoochNotificationEventName = @"smooch-invite";
 
 // Event Tracking [FRSTracker]
