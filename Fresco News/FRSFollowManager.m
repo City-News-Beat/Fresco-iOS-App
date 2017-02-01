@@ -27,7 +27,7 @@ static NSString *const followingEndpoint = @"user/%@/following";
 }
 
 - (void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([FRSAuthManager sharedInstance]) {
+    if ([[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
@@ -49,7 +49,7 @@ static NSString *const followingEndpoint = @"user/%@/following";
 }
 
 - (void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    if ([FRSAuthManager sharedInstance]) {
+    if ([[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.news" code:101 userInfo:Nil]);
         return;
     }
