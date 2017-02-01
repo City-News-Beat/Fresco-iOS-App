@@ -84,8 +84,8 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
                                 return;
                             }
 
-                            [FRSTracker track:loginEvent];
                             [FRSTracker trackUser]; // This also updates the Segment and UXCam trackers on Login
+                            [FRSTracker track:loginEvent];
 
                           }];
 }
