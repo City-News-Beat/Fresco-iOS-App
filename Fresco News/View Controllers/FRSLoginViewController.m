@@ -284,8 +284,8 @@
         options:UIViewAnimationOptionCurveEaseInOut
         animations:^{
 
-          self.passwordHighlightLine.backgroundColor = [UIColor frescoRedHeartColor];
-          self.usernameHighlightLine.backgroundColor = [UIColor frescoRedHeartColor];
+          self.passwordHighlightLine.backgroundColor = [UIColor frescoRedColor];
+          self.usernameHighlightLine.backgroundColor = [UIColor frescoRedColor];
 
         }
         completion:^(BOOL finished) {

@@ -26,7 +26,7 @@
 
 + (UIColor *)frescoGreenColor;
 
-+ (UIColor *)frescoRedHeartColor;
++ (UIColor *)frescoRedColor;
 
 + (UIColor *)frescoBlueColor;
 

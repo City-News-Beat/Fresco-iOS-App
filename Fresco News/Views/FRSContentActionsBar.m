@@ -118,7 +118,7 @@
     [self.likeLabel addGestureRecognizer:tap];
 
     if (self.likeButton.imageView.image == [UIImage imageNamed:@"like-heart-filled"]) {
-        self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+        self.likeLabel.textColor = [UIColor frescoRedColor];
     }
     
     [self.likeLabel sizeToFit];
@@ -188,7 +188,7 @@
 
     if ([[self.likeButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"liked-heart"]]) {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
-        self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+        self.likeLabel.textColor = [UIColor frescoRedColor];
         likes++;
 
     } else {
@@ -211,7 +211,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
       if (state) {
           [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
-          self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+          self.likeLabel.textColor = [UIColor frescoRedColor];
 
       } else {
           [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
