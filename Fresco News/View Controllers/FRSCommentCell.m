@@ -44,7 +44,6 @@
     self.commentTextView.attributedText = comment.attributedString;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    //    [self.commentTextView frs_resize];
     [self.commentTextView sizeToFit];
     self.commentTextView.delegate = delegate;
 
@@ -74,11 +73,6 @@
     } else if (!userHasUsername && !userHasUsername) {
         self.timestampLabel.transform = CGAffineTransformMakeTranslation(-8, 0);
     }
-
-    //    Calling size to fit here scales the textview down so the user can tap on the comment cell
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    //        [self.commentTextView sizeToFit];
-    //    });
 
     if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
         self.commentTextView.userInteractionEnabled = YES;
