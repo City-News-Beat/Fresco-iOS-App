@@ -457,6 +457,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - FRSCommentCellDelegate
 
 - (void)didPressProfilePictureWithUserId:(NSString *)userId {
+    [self dismissKeyboard:nil];
     FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUserID:userId];
     [self.navigationController pushViewController:controller animated:TRUE];
 }
@@ -584,6 +585,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    [self dismissKeyboard:nil];
 
     if (tableView == self.articlesTableView) {
         if ([self.gallery.articles allObjects].count > indexPath.row) {

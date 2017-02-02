@@ -1231,43 +1231,6 @@
     }
 }
 
-- (void)presentParallax {
-
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.container.alpha = 1;
-                       self.parallaxImage.alpha = 1;
-                     }
-                     completion:nil];
-
-    [UIView beginAnimations:@"statusBar" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    [UIView commitAnimations];
-}
-
-- (void)dismissParallax {
-    self.parallaxImage.alpha = 0;
-
-    [UIView animateWithDuration:0.3
-        delay:0.0
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.container.alpha = 0;
-        }
-        completion:^(BOOL finished) {
-          [self.parallaxImage removeFromSuperview];
-          self.userInteractionEnabled = YES;
-        }];
-
-    [UIView beginAnimations:@"statusBar" context:nil];
-    [UIView setAnimationDuration:0];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [UIView commitAnimations];
-}
-
 - (void)play {
 
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
@@ -1364,6 +1327,7 @@
 - (void)userAvatarTapped {
     FRSProfileViewController *profile = [[FRSProfileViewController alloc] initWithUser:self.gallery.creator];
     [self.delegate.navigationController pushViewController:profile animated:YES];
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
 @end

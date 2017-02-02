@@ -394,14 +394,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (scrollView == galleryDetailView.scrollView) {
         [super scrollViewDidScroll:scrollView];
         [galleryDetailView.actionBar actionButtonTitleNeedsUpdate];
-    }
-
-    if (scrollView == galleryDetailView.scrollView) {
+        
         float size = galleryDetailView.scrollView.contentSize.height;
         float offset = galleryDetailView.scrollView.contentOffset.y;
-
+        
         float percentage = offset / size;
-
+        
         if (percentageScrolled < percentage) {
             percentageScrolled = percentage;
         }
