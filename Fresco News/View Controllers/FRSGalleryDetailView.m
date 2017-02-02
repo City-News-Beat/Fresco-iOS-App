@@ -93,7 +93,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
                 action:@selector(dismissKeyboard:)];
-    tap.cancelsTouchesInView = NO;
     [self.window addGestureRecognizer:tap];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
@@ -166,7 +165,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)configureVerificationTabBarTitle {
     if (galleryPurchases.count > 0) {
-        verificationContainerView.backgroundColor = [UIColor colorWithRed:(76 / 255.0) green:(215 / 255.0) blue:(100 / 255.0) alpha:1.0];
+        verificationContainerView.backgroundColor = [UIColor frescoGreenColor];
         if (galleryPurchases.count == 1) {
             NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
             
@@ -281,7 +280,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     commentsTableView.delegate = self;
     commentsTableView.dataSource = self;
-    commentsTableView.estimatedRowHeight = 20;
+    commentsTableView.estimatedRowHeight = 100;
     commentsTableView.rowHeight = UITableViewAutomaticDimension;
     
     commentsTableView.hidden = self.comments.count == 0;
@@ -362,30 +361,30 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSString *lastID = comment.uid;
     
     [self configureCommentsSpinner];
-
+    
     [[FRSGalleryManager sharedInstance] fetchMoreComments:self.gallery
                                                      last:lastID
                                                completion:^(id responseObject, NSError *error) {
-                                                 if (!responseObject || error) {
-                                                     return;
-                                                 }
-
-                                                 int count = 0;
-
-                                                 for (NSDictionary *comment in responseObject) {
-                                                     FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
-                                                     [_comments insertObject:commentObject atIndex:0];
-                                                     count++;
-                                                 }
-
-                                                 if (count < 10 || ([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
-                                                     showsMoreButton = FALSE;
-                                                 } else {
-                                                     showsMoreButton = TRUE;
-                                                 }
+                                                   if (!responseObject || error) {
+                                                       return;
+                                                   }
                                                    
-                                                 [self stopCommentsSpinner];
-                                                 [commentsTableView reloadData];
+                                                   int count = 0;
+                                                   
+                                                   for (NSDictionary *comment in responseObject) {
+                                                       FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+                                                       [_comments insertObject:commentObject atIndex:0];
+                                                       count++;
+                                                   }
+                                                   
+                                                   if (count < 10 || ([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
+                                                       showsMoreButton = FALSE;
+                                                   } else {
+                                                       showsMoreButton = TRUE;
+                                                   }
+                                                   
+                                                   [self stopCommentsSpinner];
+                                                   [commentsTableView reloadData];
                                                }];
 }
 
@@ -508,7 +507,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (tableView == commentsTableView && indexPath.row == 0 && showsMoreButton) {
         return 35;
     }
-    return 56;
+    return UITableViewAutomaticDimension; // We want to retain the automaticly sized cells heights if the above satements are not met.
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
