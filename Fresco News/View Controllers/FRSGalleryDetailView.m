@@ -93,8 +93,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
                 action:@selector(dismissKeyboard:)];
-    [self.window addGestureRecognizer:tap];
-
+    [self addGestureRecognizer:tap];
+    [self.galleryView addGestureRecognizer:tap];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:Nil];
 }
@@ -728,17 +729,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     self.actionBar.hidden = false;
-    
     [self.galleryView playerTap:tap];
-    
     [self.commentTextField resignFirstResponder];
     addCommentBotConstraint.constant = 0;
-    [self updateConstraintsIfNeeded];
-    [self layoutIfNeeded];
-    if ([commentsTableView numberOfRowsInSection:0] > 5) {
-        [_parentVC scrollViewDidScroll:_scrollView];
-        [_parentVC scrollViewDidScrollToTop:_scrollView];
-    }
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {

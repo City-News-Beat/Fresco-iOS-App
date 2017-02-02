@@ -75,6 +75,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [self.view updateConstraints];
     [self.view layoutSubviews];
+    
+    self.view.backgroundColor = [UIColor redColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -635,22 +637,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
           }
         }];
 }
-/*
--(void)loadGallery:(FRSGallery *)gallery {//Might be useless
-    self.gallery = gallery;//Remove when tested
-    galleryDetailView.gallery = gallery;
-    
-    if (gallery.uid) {
-        self.galleryID = gallery.uid;
-    }
-    self.hiddenTabBar = YES;
-    self.actionBarVisible = YES;
-    self.touchEnabled = NO;
-    //[self.galleryView loadGallery:gallery];//Remove when tested
-    [galleryDetailView.galleryView loadGallery:gallery];
-    [galleryDetailView fetchCommentsWithID:gallery.uid];
-}
-*/
+
 - (void)trackSession {
     NSTimeInterval timeInSession = -1 * [dateEntered timeIntervalSinceNow];
     NSString *galleryID = self.gallery.uid;
