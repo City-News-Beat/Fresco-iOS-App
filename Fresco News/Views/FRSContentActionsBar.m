@@ -104,6 +104,12 @@
     [self.repostButton addTarget:self action:@selector(handleButtonDrag:) forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
 
+    
+//    self.repostButton.backgroundColor = [UIColor blueColor];
+//    self.repostButton.alpha = 0.5;
+//    self.repostLabel.backgroundColor = [UIColor greenColor];
+//    self.repostLabel.alpha = 0.5;
+
 }
 
 - (void)configureLikeSection {
@@ -333,8 +339,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.likeLabel.text = [NSString stringWithFormat:@" %lu", (long)amount];
         [self.likeLabel sizeToFit];
-        int rightPadding = 120;
-        self.likeLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - rightPadding, 0, self.likeLabel.frame.size.width +8, self.frame.size.height);
+        self.likeLabel.frame = CGRectMake(self.repostButton.frame.origin.x - self.likeLabel.frame.size.width -8, 0, self.likeLabel.frame.size.width +8, self.frame.size.height);
         self.likeButton.frame = CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height);
         self.likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
     });
