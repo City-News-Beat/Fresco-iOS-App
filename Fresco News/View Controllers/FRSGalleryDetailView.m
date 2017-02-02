@@ -107,6 +107,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [commentsLabel addSubview:self.loadingView];
 }
 
+- (void)stopCommentsSpinner {
+    [self.loadingView stopLoading];
+    self.loadingView.alpha = 0;
+    [self.loadingView removeFromSuperview];
+}
+
 - (void)configureGalleryView {
     [self.galleryView configureWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 500) gallery:self.gallery delegate:self];
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
@@ -380,11 +386,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                              toGallery:self.gallery.uid
                                             completion:^(id responseObject, NSError *error) {
                                               self.commentTextField.enablesReturnKeyAutomatically = true;
-                                              [self.loadingView stopLoading];
-                                              [self.loadingView removeFromSuperview];
-                                              self.loadingView.alpha = 0;
+                                              [self stopCommentsSpinner];
                                               if (error) {
-                                                  NSString *message = [NSString stringWithFormat:@"\"%@\"", self.commentTextField.text];
                                                   errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                                                   [errorAlertView show];
                                               } else {
@@ -414,6 +417,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)loadMoreComments {
     FRSComment *comment = self.comments[0];
     NSString *lastID = comment.uid;
+    
+    [self configureCommentsSpinner];
 
     [[FRSGalleryManager sharedInstance] fetchMoreComments:self.gallery
                                                      last:lastID
@@ -430,25 +435,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                      count++;
                                                  }
 
-                                                 if (count < 10) {
+                                                 if (count < 10 || ([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
                                                      showsMoreButton = FALSE;
                                                  } else {
                                                      showsMoreButton = TRUE;
                                                  }
-
-                                                 if (([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
-                                                     showsMoreButton = FALSE;
-                                                 }
-//                                                 [commentsTableView reloadData];
+                                                   
+                                                 [self stopCommentsSpinner];
+                                                 [commentsTableView reloadData];
                                                }];
 }
 
 - (void)fetchCommentsWithID:(NSString *)galleryID {
     [[FRSGalleryManager sharedInstance] fetchCommentsForGalleryID:galleryID
                                                        completion:^(id responseObject, NSError *error) {
-                                                         [self.loadingView stopLoading];
-                                                         self.loadingView.alpha = 0;
-                                                         [self.loadingView removeFromSuperview];
+                                                         [self stopCommentsSpinner];
 
                                                          if (error || !responseObject) {
                                                              //[self commentError:error];

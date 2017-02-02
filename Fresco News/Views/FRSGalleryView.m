@@ -375,7 +375,10 @@
     [self configureActionsBar]; // this will stay similar
 
     if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
-        [self configureBaseMetaData];
+        if (![self.gallery.creator.uid isEqualToString:@""] && [self.gallery.creator.uid length] > 0) {
+            [self configureBaseMetaData];
+
+        }
     }
 
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
