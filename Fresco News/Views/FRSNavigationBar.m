@@ -174,7 +174,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
       if (!_failureView) {
           _failureView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.frame.size.width, self.frame.size.height + 20)];
-          _failureView.backgroundColor = [UIColor frescoRedHeartColor];
+          _failureView.backgroundColor = [UIColor frescoRedColor];
 
           UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(_failureView.frame.size.width / 2 - 115 / 2, 35, 115, 19)];
           label.text = @"UPLOAD FAILED";

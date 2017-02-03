@@ -175,7 +175,7 @@
 
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
 
-        self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
 
@@ -246,7 +246,7 @@
     self.didToggleFacebook = YES;
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
 
-        self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
 
@@ -429,7 +429,7 @@
 
     self.logOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width / 2 - 27, self.bounds.size.height / 2 - 6, 54, 17)];
     self.logOutLabel.text = @"LOG OUT";
-    self.logOutLabel.textColor = [UIColor frescoRedHeartColor];
+    self.logOutLabel.textColor = [UIColor frescoRedColor];
     self.logOutLabel.font = [UIFont notaBoldWithSize:15];
     [self addSubview:self.logOutLabel];
 }

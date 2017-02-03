@@ -65,7 +65,6 @@
     [super viewWillAppear:animated];
 
     [self addStatusBarNotification];
-    [self showNavBarForScrollView:self.scrollView animated:NO];
 
     if (self.shouldUpdateOnReturn) {
         [self reloadData];
@@ -599,7 +598,6 @@
             self.followingTabButton.alpha = 1;
             self.followersTabButton.alpha = 0.7;
 
-            [self showNavBarForScrollView:self.scrollView animated:NO];
             self.navigationItem.titleView.alpha = 1;
             [self.followingTable dg_stopLoading];
 

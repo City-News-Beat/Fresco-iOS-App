@@ -816,7 +816,7 @@
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
         [self.cancelButton addTarget:self action:@selector(returnToPreviousViewController) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitleColor:[UIColor frescoRedColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"DELETE" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
@@ -858,7 +858,7 @@
 
     if (self) {
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
-        self.backgroundColor = [UIColor frescoRedHeartColor];
+        self.backgroundColor = [UIColor frescoRedColor];
 
         NSString *title = @"";
 
@@ -965,7 +965,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(14, self.TOSTextView.frame.origin.y + self.TOSTextView.frame.size.height, 54, 44);
-        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:[UIColor frescoRedColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -1111,7 +1111,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, 337, 54, 44);
-        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:[UIColor frescoRedColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -1158,7 +1158,7 @@
         self.usernameTakenLabel = [[UILabel alloc] initWithFrame:CGRectMake(-44 - 6, 5, 44, 17)];
         self.usernameTakenLabel.text = @"TAKEN";
         self.usernameTakenLabel.alpha = 0;
-        self.usernameTakenLabel.textColor = [UIColor frescoRedHeartColor];
+        self.usernameTakenLabel.textColor = [UIColor frescoRedColor];
         self.usernameTakenLabel.font = [UIFont notaBoldWithSize:15];
         [self.usernameCheckIV addSubview:self.usernameTakenLabel];
 

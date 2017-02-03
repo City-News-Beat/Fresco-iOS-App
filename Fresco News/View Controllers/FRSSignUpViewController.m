@@ -1764,13 +1764,13 @@
         UILabel *invalidLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 192, 20)];
         invalidLabel.text = @"Email is taken.";
         invalidLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        invalidLabel.textColor = [UIColor frescoRedHeartColor];
+        invalidLabel.textColor = [UIColor frescoRedColor];
         [self.errorContainer addSubview:invalidLabel];
 
         UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [loginButton addTarget:self action:@selector(segueToLogin) forControlEvents:UIControlEventTouchUpInside];
         loginButton.frame = CGRectMake(90, 0, 100, 20);
-        loginButton.tintColor = [UIColor frescoRedHeartColor];
+        loginButton.tintColor = [UIColor frescoRedColor];
         [loginButton setTitle:@"Tap to log in" forState:UIControlStateNormal];
         [loginButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
         [self.errorContainer addSubview:loginButton];

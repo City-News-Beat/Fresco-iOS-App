@@ -46,17 +46,8 @@
                          @"opened_from" : @"following" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
-    /*
-    
-    [self showNavBarForScrollView:self.tableView animated:NO];
-    
-    self.navigationItem.title = @"";
-    
-    [self.navigationController pushViewController:vc animated:YES];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    [self hideTabBarAnimated:YES];*/
+    [vc configureBackButtonAnimated:YES];
+
 }
 
 - (void)commonInit {
