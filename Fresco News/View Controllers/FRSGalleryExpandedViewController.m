@@ -388,24 +388,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                            }];
 }
 
-#pragma mark - UIScrollView Delegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == galleryDetailView.scrollView) {
-        [super scrollViewDidScroll:scrollView];
-        [galleryDetailView.actionBar actionButtonTitleNeedsUpdate];
-        
-        float size = galleryDetailView.scrollView.contentSize.height;
-        float offset = galleryDetailView.scrollView.contentOffset.y;
-        
-        float percentage = offset / size;
-        
-        if (percentageScrolled < percentage) {
-            percentageScrolled = percentage;
-        }
-    }
-}
-
 #pragma mark - 3D Touch
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

@@ -258,7 +258,7 @@ static BOOL isSegueingToAssignment;
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     FRSGalleryExpandedViewController *detailVC = [[FRSGalleryExpandedViewController alloc] init];
-    detailVC.shouldHaveBackButton = YES;
+    [detailVC configureBackButtonAnimated:YES];
     detailVC.openedFrom = @"push";
 
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;

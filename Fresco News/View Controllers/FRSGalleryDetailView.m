@@ -95,7 +95,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 action:@selector(dismissKeyboard:)];
     [self addGestureRecognizer:tap];
     [self.galleryView addGestureRecognizer:tap];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:Nil];
 }
@@ -337,9 +337,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                   if ([commentsTableView numberOfRowsInSection:0] > 5) {
                                                       CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
                                                       [self.scrollView setContentOffset:bottomOffset animated:YES];
-
-                                                      [_parentVC scrollViewDidScroll:_scrollView];
-                                                      [_parentVC scrollViewDidScrollToTop:_scrollView];
                                                   }
                                                   int comments = [[self.gallery valueForKey:@"comments"] intValue];
                                                   comments++;
@@ -446,9 +443,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                          [commentsTableView reloadData];
                                                          [commentsTableView layoutIfNeeded]; // Force layout so things are updated before resetting the contentOffset.
                                                          [self.scrollView setContentOffset:offset];
-                                                         [_parentVC scrollViewDidScroll:_scrollView];
-                                                         [_parentVC scrollViewDidScrollToTop:_scrollView];
-
                                                        }];
 }
 
@@ -586,8 +580,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    [self dismissKeyboard:nil];
-
     if (tableView == self.articlesTableView) {
         if ([self.gallery.articles allObjects].count > indexPath.row) {
             FRSArticle *article = [self.gallery.articles allObjects][indexPath.row];
@@ -731,11 +723,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Keyboard Handling
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
-    self.actionBar.hidden = false;
     [self.galleryView playerTap:tap];
     [self.commentTextField resignFirstResponder];
-    addCommentBotConstraint.constant = 0;
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        addCommentBotConstraint.constant = 0;
+    } completion:nil];
 }
+
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     NSDictionary *info = [notification userInfo];
@@ -749,27 +744,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
         [self.scrollView setContentOffset:bottomOffset animated:YES];
-        [_parentVC scrollViewDidScroll:_scrollView];
-        [_parentVC scrollViewDidScrollToTop:_scrollView];
     }
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    NSDictionary *info = [notification userInfo];
     
     self.actionBar.hidden = false;
-    [self.commentTextField resignFirstResponder];
-    
-    addCommentBotConstraint.constant = 0;
-    [self updateConstraintsIfNeeded];
-    [self layoutIfNeeded];
-    
+
     if ([commentsTableView numberOfRowsInSection:0] > 5) {
         CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
         [self.scrollView setContentOffset:bottomOffset animated:YES];
-        
-        [_parentVC scrollViewDidScroll:_scrollView];
-        [_parentVC scrollViewDidScrollToTop:_scrollView];
     }
 }
 
