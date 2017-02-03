@@ -554,9 +554,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             cell.delegate = self;
             if (indexPath.row < self.comments.count + showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row - showsMoreButton];
-                cell.cellDelegate = self;
+                cell.cellDelegate = self.parentVC;
                 [cell configureCell:comment delegate:self];
-                //                [cell.commentTextView sizeToFit];
                 cell.backgroundColor = [UIColor clearColor];
                 cell.contentView.backgroundColor = [UIColor clearColor];
                 return cell;
@@ -565,6 +564,23 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 
     return Nil;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    
+    if ([URL.absoluteString containsString:@"name"]) {
+        NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
+        NSLog(@"USER: %@", user);
+        FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
+        [self.navigationController pushViewController:viewController animated:YES];
+    } else if ([URL.absoluteString containsString:@"tag"]) {
+        NSString *search = [URL.absoluteString stringByReplacingOccurrencesOfString:@"tag://" withString:@""];
+        FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
+        [controller search:search];
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+    
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
