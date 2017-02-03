@@ -554,7 +554,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             cell.delegate = self;
             if (indexPath.row < self.comments.count + showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row - showsMoreButton];
-                cell.cellDelegate = self.parentVC;
                 [cell configureCell:comment delegate:self];
                 cell.backgroundColor = [UIColor clearColor];
                 cell.contentView.backgroundColor = [UIColor clearColor];
@@ -570,7 +569,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
-        NSLog(@"USER: %@", user);
         FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
         [self.navigationController pushViewController:viewController animated:YES];
     } else if ([URL.absoluteString containsString:@"tag"]) {
