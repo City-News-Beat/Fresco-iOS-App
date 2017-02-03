@@ -93,13 +93,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
                 action:@selector(dismissKeyboard:)];
-    [self addGestureRecognizer:tap];
     [self.galleryView addGestureRecognizer:tap];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
+    
+    self.scrollView.showsVerticalScrollIndicator = NO;
 }
-
 
 
 
@@ -725,10 +725,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     [self.galleryView playerTap:tap];
     [self.commentTextField resignFirstResponder];
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        addCommentBotConstraint.constant = 0;
-    } completion:nil];
 }
 
 
@@ -750,7 +746,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)keyboardWillHide:(NSNotification *)notification {
     
     self.actionBar.hidden = false;
-
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        addCommentBotConstraint.constant = 0;
+    } completion:nil];
+    
     if ([commentsTableView numberOfRowsInSection:0] > 5) {
         CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
         [self.scrollView setContentOffset:bottomOffset animated:YES];

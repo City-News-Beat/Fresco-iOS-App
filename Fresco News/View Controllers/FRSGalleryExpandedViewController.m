@@ -76,7 +76,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.view updateConstraints];
     [self.view layoutSubviews];
     
-    self.view.backgroundColor = [UIColor redColor];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard:)];
+    [self.view addGestureRecognizer:tap];
+
+}
+
+- (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
+    [galleryDetailView.commentTextField resignFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
