@@ -17,6 +17,7 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
+#import "NSString+Validation.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
@@ -68,35 +69,9 @@
     self.didAnimate = NO;
     self.didTransform = NO;
 
-    self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
-    self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
-
-    self.passwordField.tintColor = [UIColor frescoShadowColor];
-    self.userField.tintColor = [UIColor frescoShadowColor];
-
-    self.userField.delegate = self;
-    self.passwordField.delegate = self;
-
-    UIView *emailLine = [[UIView alloc] initWithFrame:CGRectMake(self.userField.frame.origin.x, self.userField.frame.origin.y, self.userField.frame.size.width, 1)];
-    emailLine.backgroundColor = [UIColor frescoOrangeColor];
-    [self.userField addSubview:emailLine];
-
-    self.userField.tintColor = [UIColor frescoOrangeColor];
-    self.passwordField.tintColor = [UIColor frescoOrangeColor];
-
-    [self.userField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self.passwordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-
-    self.loginButton.enabled = NO;
-
-    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-
     self.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{ NSForegroundColorAttributeName : [UIColor frescoLightTextColor] }];
 
     self.userField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email or @username" attributes:@{ NSForegroundColorAttributeName : [UIColor frescoLightTextColor] }];
-
-    self.userField.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.passwordField.autocorrectionType = UITextAutocorrectionTypeNo;
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
@@ -115,7 +90,7 @@
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    
+
     [self hideSensitiveViews];
 }
 
@@ -167,7 +142,6 @@
 }
 
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-
     [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
@@ -175,7 +149,6 @@
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
-
     [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [spinner stopLoading];
     [spinner removeFromSuperview];
@@ -208,14 +181,13 @@
     [self startSpinner:self.loadingView onButton:self.loginButton];
 
     //checks if username is a username, if not it's an email.
-    if (![self isValidUsername:username]) {
+    if (![username isValidUsername]) {
         username = _userField.text;
     }
 
     [[FRSAuthManager sharedInstance] signIn:username
                                    password:password
                                  completion:^(id responseObject, NSError *error) {
-
                                    if (error) {
                                        [FRSTracker track:loginError
                                               parameters:@{ @"method" : @"email",
@@ -238,7 +210,7 @@
                                        [self stopSpinner:self.loadingView onButton:self.loginButton];
                                        [[FRSAuthManager sharedInstance] setPasswordUsed:self.passwordField.text];
 
-                                       if ([self validEmail:username]) {
+                                       if ([username isValidEmail]) {
                                            [[FRSAuthManager sharedInstance] setEmailUsed:self.userField.text];
                                        }
 
@@ -282,16 +254,14 @@
                                    }
                                  }];
 }
-- (void)presentInvalidInfo {
 
+- (void)presentInvalidInfo {
     [UIView animateWithDuration:0.15
         delay:0.0
         options:UIViewAnimationOptionCurveEaseInOut
         animations:^{
-
           self.passwordHighlightLine.backgroundColor = [UIColor frescoRedColor];
           self.usernameHighlightLine.backgroundColor = [UIColor frescoRedColor];
-
         }
         completion:^(BOOL finished) {
           [UIView animateWithDuration:0.15
@@ -319,15 +289,7 @@
     [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4:0:0:1.0]];
     [[self.view layer] addAnimation:translate forKey:@"translate"];
 
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.view.alpha = 0;
-                     }
-                     completion:^(BOOL finished){
-
-                     }];
+    [self animateAlphaView:self.view withDuration:0.3 withDelay:0 andAlpha:0];
 
     CATransition *transition = [CATransition animation];
     transition.duration = 0.3;
@@ -335,8 +297,8 @@
     transition.type = kCATransitionFade;
     transition.subtype = kCATransitionFromTop;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    //    [[self navigationController] popViewControllerAnimated:NO];
     [self popToOrigin];
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
@@ -363,8 +325,8 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
-- (IBAction)twitter:(id)sender {
 
+- (IBAction)twitter:(id)sender {
     self.twitterButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     spinner.tintColor = [UIColor frescoOrangeColor];
@@ -482,7 +444,7 @@
 
           [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
           [self setMigrateState:responseObject];
-          
+
           [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
                                                         completion:^(id responseObject, NSError *error) {
                                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
@@ -547,7 +509,6 @@
 }
 
 - (IBAction)passwordHelp:(id)sender {
-
     [self highlightTextField:nil enabled:NO];
 
     [self.passwordField resignFirstResponder];
@@ -565,7 +526,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.userField) {
-        if ((![self isValidUsername:self.userField.text] && ![self validEmail:self.userField.text]) || [self.userField.text isEqualToString:@""]) {
+        if ((![self.userField.text isValidUsername] && ![self.userField.text isValidEmail]) || [self.userField.text isEqualToString:@""]) {
             [self animateTextFieldError:textField];
             return NO;
         }
@@ -588,109 +549,48 @@
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-
+- (IBAction)textFieldDidBeginEditing:(UITextField *)textField {
     [self highlightTextField:textField enabled:YES];
-
-    if (self.passwordField.editing) {
-        [UIView animateWithDuration:0.15
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.passwordHelpButton.alpha = 1;
-                         }
-                         completion:nil];
-    }
+    [self animateAlphaView:self.passwordHelpButton withDuration:0.15 withDelay:0 andAlpha:1];
 
     if (!self.didTransform) {
-
         [self animateFramesForKeyboard:NO];
     }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-
-    [UIView animateWithDuration:0.15
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.passwordHelpButton.alpha = 0;
-                     }
-                     completion:nil];
+- (IBAction)textFieldDidEndEditing:(UITextField *)textField {
+    [self animateAlphaView:self.passwordHelpButton withDuration:0.15 withDelay:0 andAlpha:0];
 
     if (!self.didTransform) {
-
         [self animateFramesForKeyboard:YES];
     }
 }
 
-- (void)textFieldDidChange:(UITextField *)textField {
+- (IBAction)textFieldDidChange:(UITextField *)textField {
     if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 1)) {
-        if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
-
+        if ([self.userField.text isValidEmail] || [self.userField.text isValidUsername]) {
             self.loginButton.enabled = YES;
-
-            [UIView transitionWithView:self.loginButton
-                              duration:0.2
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                              [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-                            }
-                            completion:nil];
-
+            [self animateTextColor:self.loginButton withDuration:0.2 andColor:[UIColor frescoBlueColor]];
         } else {
-            [UIView transitionWithView:self.loginButton
-                              duration:0.2
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                              [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                            }
-                            completion:nil];
+            [self animateTextColor:self.loginButton withDuration:0.2 andColor:[UIColor frescoLightTextColor]];
         }
-
-    } else if (self.passwordField.text && self.passwordField.text.length < 1) { //SHOULD BE 8, BROUGHT DOWN TO 4 TO TEST MAURICES PASSWORD
+    } else if (self.passwordField.text && self.passwordField.text.length < 4) { //SHOULD BE 8, BROUGHT DOWN TO 4 TO TEST MAURICES PASSWORD
         self.loginButton.enabled = NO;
-
-        [UIView transitionWithView:self.loginButton
-                          duration:0.2
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                          [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                        }
-                        completion:nil];
+        [self animateTextColor:self.loginButton withDuration:0.2 andColor:[UIColor frescoLightTextColor]];
     }
 
     if ([self.userField.text isEqualToString:@""]) {
-        [UIView transitionWithView:self.loginButton
-                          duration:0.2
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                          [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                        }
-                        completion:nil];
+        [self animateTextColor:self.loginButton withDuration:0.2 andColor:[UIColor frescoLightTextColor]];
     }
 
     if (self.passwordField.editing && ![self.passwordField.text isEqualToString:@""]) { //check whitespace?
-        [UIView animateWithDuration:0.15
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.passwordHelpButton.alpha = 1;
-                         }
-                         completion:nil];
+        [self animateAlphaView:self.passwordHelpButton withDuration:0.15 withDelay:0 andAlpha:1];
     } else {
-        [UIView animateWithDuration:0.15
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.passwordHelpButton.alpha = 0;
-                         }
-                         completion:nil];
+        [self animateAlphaView:self.passwordHelpButton withDuration:0.15 withDelay:0 andAlpha:0];
     }
 }
 
 - (void)highlightTextField:(UITextField *)textField enabled:(BOOL)enabled {
-
     if (!enabled) {
         [UIView animateWithDuration:.15
                               delay:0.0
@@ -703,18 +603,11 @@
                          }
                          completion:nil];
 
-        [UIView animateWithDuration:0.15
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.passwordHelpButton.alpha = 0;
-                         }
-                         completion:nil];
+        [self animateAlphaView:self.passwordHelpButton withDuration:0.15 withDelay:0 andAlpha:0];
         return;
     }
 
     if (textField.editing == self.userField.editing) {
-
         [UIView animateWithDuration:0.15
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -734,7 +627,6 @@
                          completion:nil];
 
     } else if (textField.editing == self.passwordField.editing) {
-
         [UIView animateWithDuration:0.15
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -768,7 +660,6 @@
 }
 
 - (void)animateFramesForKeyboard:(BOOL)hidden {
-
     if (hidden) {
         [UIView animateWithDuration:0.4
             delay:0.0
@@ -805,36 +696,47 @@
     }
 }
 
-#pragma mark - Validators
-
-- (BOOL)validEmail:(NSString *)emailString {
-
-    if ([emailString length] == 0) {
-        return NO;
-    }
-
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-
-    if (regExMatches == 0) {
-        return NO;
-    } else {
-        return YES;
-    }
-}
-
-- (BOOL)isValidUsername:(NSString *)username {
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
-}
-
 #pragma mark - Animation
 
-- (void)animateTextFieldError:(UITextField *)textField {
+- (void)animateAlphaView:(UIView *)view withDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)delay andAlpha:(CGFloat)alpha {
+    [self animateAlphaView:view withDuration:duration withDelay:delay andAlpha:alpha completion:nil];
+}
 
+- (void)animateAlphaView:(UIView *)view withDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)delay andAlpha:(CGFloat)alpha completion:(void (^__nullable)(BOOL finished))completion {
+    [UIView animateWithDuration:duration
+                          delay:delay
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                       view.alpha = alpha;
+                     }
+                     completion:completion];
+}
+
+- (void)animateTextColor:(UIButton *)button withDuration:(NSTimeInterval)duration andColor:(UIColor *)color {
+    [UIView transitionWithView:button
+                      duration:duration
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                      [button setTitleColor:color forState:UIControlStateNormal];
+                    }
+                    completion:nil];
+}
+
+- (void)animateTransformView:(UIView *)view withDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)delay andTransform:(CGAffineTransform)transform {
+    [self animateTransformView:view withDuration:duration withDelay:delay andTransform:transform completion:nil];
+}
+
+- (void)animateTransformView:(UIView *)view withDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)delay andTransform:(CGAffineTransform)transform completion:(void (^__nullable)(BOOL finished))completion {
+    [UIView animateWithDuration:duration
+                          delay:delay
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                       view.transform = transform;
+                     }
+                     completion:completion];
+}
+
+- (void)animateTextFieldError:(UITextField *)textField {
     CGFloat duration = 0.1;
 
     /* SHAKE */
@@ -843,45 +745,35 @@
         delay:0.0
         options:UIViewAnimationOptionCurveEaseInOut
         animations:^{
-
           textField.transform = CGAffineTransformMakeTranslation(-7.5, 0);
-
         }
         completion:^(BOOL finished) {
           [UIView animateWithDuration:duration
               delay:0.0
               options:UIViewAnimationOptionCurveEaseInOut
               animations:^{
-
                 textField.transform = CGAffineTransformMakeTranslation(5, 0);
-
               }
               completion:^(BOOL finished) {
                 [UIView animateWithDuration:duration
                     delay:0.0
                     options:UIViewAnimationOptionCurveEaseInOut
                     animations:^{
-
                       textField.transform = CGAffineTransformMakeTranslation(-2.5, 0);
-
                     }
                     completion:^(BOOL finished) {
                       [UIView animateWithDuration:duration
                           delay:0.0
                           options:UIViewAnimationOptionCurveEaseInOut
                           animations:^{
-
                             textField.transform = CGAffineTransformMakeTranslation(2.5, 0);
-
                           }
                           completion:^(BOOL finished) {
                             [UIView animateWithDuration:duration
                                                   delay:0.0
                                                 options:UIViewAnimationOptionCurveEaseInOut
                                              animations:^{
-
                                                textField.transform = CGAffineTransformMakeTranslation(0, 0);
-
                                              }
                                              completion:nil];
                           }];
@@ -891,7 +783,6 @@
 }
 
 - (void)prepareForAnimation {
-
     self.backButton.alpha = 0;
     self.backButton.transform = CGAffineTransformMakeTranslation(20, 0);
     self.backButton.enabled = NO;
@@ -924,7 +815,6 @@
 }
 
 - (void)animateIn {
-
     self.didAnimate = YES;
 
     [self prepareForAnimation];
@@ -948,13 +838,7 @@
           self.userField.alpha = 1;
         }
         completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.3 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.userField.transform = CGAffineTransformMakeTranslation(0, 0);
-                           }
-                           completion:nil];
+          [self animateTransformView:self.userField withDuration:0.15 withDelay:0 andTransform:CGAffineTransformMakeTranslation(0, 0)];
         }];
 
     /* Transform and fade usernameHighlightLine */
@@ -966,13 +850,7 @@
           self.usernameHighlightLine.alpha = 1;
         }
         completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.3 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(0, 0);
-                           }
-                           completion:nil];
+          [self animateTransformView:self.usernameHighlightLine withDuration:0.15 withDelay:0 andTransform:CGAffineTransformMakeTranslation(0, 0)];
         }];
 
     /* Transform and fade passwordField */
@@ -984,13 +862,7 @@
           self.passwordField.alpha = 1;
         }
         completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.3 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.passwordField.transform = CGAffineTransformMakeTranslation(0, 0);
-                           }
-                           completion:nil];
+          [self animateTransformView:self.passwordField withDuration:0.15 withDelay:0 andTransform:CGAffineTransformMakeTranslation(0, 0)];
         }];
 
     /* Transform and fade passwordHighlightLine */
@@ -1002,13 +874,7 @@
           self.passwordHighlightLine.alpha = 1;
         }
         completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.3 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(0, 0);
-                           }
-                           completion:nil];
+          [self animateTransformView:self.passwordHighlightLine withDuration:0.15 withDelay:0 andTransform:CGAffineTransformMakeTranslation(0, 0)];
         }];
 
     /* Transform and fade loginButton */
@@ -1030,127 +896,62 @@
         }];
 
     /* Transform and fade social line */
+    [self animateTransformView:self.socialLabel withDuration:0.35 withDelay:0.15 andTransform:CGAffineTransformMakeTranslation(0, 0)];
+    [self animateAlphaView:self.socialLabel withDuration:0.25 withDelay:0.15 andAlpha:1];
 
-    [UIView animateWithDuration:0.7 / 2
-                          delay:0.3 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.socialLabel.transform = CGAffineTransformMakeTranslation(0, 0);
-                     }
-                     completion:nil];
+    [self animateTransformView:self.twitterButton withDuration:0.5 withDelay:0.175 andTransform:CGAffineTransformMakeTranslation(0, 0)];
+    [self animateAlphaView:self.twitterButton withDuration:0.15 withDelay:0.175 andAlpha:1];
 
-    [UIView animateWithDuration:0.5 / 2
-                          delay:0.3 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.socialLabel.alpha = 1;
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:1.0 / 2
-                          delay:0.35 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.twitterButton.transform = CGAffineTransformMakeTranslation(0, 0);
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:0.3 / 2
-                          delay:0.35 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.twitterButton.alpha = 1;
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:1.0 / 2
-                          delay:0.4 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.facebookButton.transform = CGAffineTransformMakeTranslation(0, 0);
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:0.3 / 2
-        delay:0.4 / 2
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.facebookButton.alpha = 1;
-        }
-        completion:^(BOOL finished) {
-          self.backButton.enabled = YES;
-        }];
+    [self animateTransformView:self.facebookButton withDuration:0.5 withDelay:0.2 andTransform:CGAffineTransformMakeTranslation(0, 0)];
+    [self animateAlphaView:self.facebookButton
+              withDuration:0.15
+                 withDelay:0.2
+                  andAlpha:1
+                completion:^(BOOL finished) {
+                  self.backButton.enabled = YES;
+                }];
 }
 
 - (void)animateOut {
-
     /* Transform backButton xPos */
-    [UIView animateWithDuration:0.2 / 2
-        delay:0.0
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.backButton.transform = CGAffineTransformMakeTranslation(5, 0);
-        }
-        completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.5 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.backButton.transform = CGAffineTransformMakeTranslation(-20, 0);
-                             self.backButton.alpha = 0;
-                           }
-                           completion:nil];
-        }];
+    [self animateTransformView:self.backButton
+                  withDuration:0.1
+                     withDelay:0
+                  andTransform:CGAffineTransformMakeTranslation(5, 0)
+                    completion:^(BOOL finished) {
+                      [UIView animateWithDuration:0.5 / 2
+                                            delay:0.0
+                                          options:UIViewAnimationOptionCurveEaseInOut
+                                       animations:^{
+                                         self.backButton.transform = CGAffineTransformMakeTranslation(-20, 0);
+                                         self.backButton.alpha = 0;
+                                       }
+                                       completion:nil];
+                    }];
 
     /* Transform userField */
-    [UIView animateWithDuration:0.3 / 2
-        delay:0.0
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.userField.transform = CGAffineTransformMakeTranslation(-5, 0);
-        }
-        completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.7 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.userField.transform = CGAffineTransformMakeTranslation(100, 0);
-                           }
-                           completion:nil];
-        }];
+    [self animateTransformView:self.userField
+                  withDuration:0.16
+                     withDelay:0
+                  andTransform:CGAffineTransformMakeTranslation(-5, 0)
+                    completion:^(BOOL finished) {
+                      [self animateTransformView:self.userField withDuration:0.35 withDelay:0 andTransform:CGAffineTransformMakeTranslation(100, 0)];
+                    }];
 
-    [UIView animateWithDuration:0.4 / 2
-                          delay:0.4 / 2
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                       self.userField.alpha = 0;
-                     }
-                     completion:nil];
+    [self animateAlphaView:self.userField withDuration:0.2 withDelay:0 andAlpha:0];
+
+    [self animateAlphaView:self.userField withDuration:0.2 withDelay:0.2 andAlpha:0];
 
     /* Transform usernameHighlightLine */
-    [UIView animateWithDuration:0.3 / 2
-        delay:0.05 / 2
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(-5, 0);
-        }
-        completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.7 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(100, 0);
-                           }
-                           completion:nil];
-        }];
+    [self animateTransformView:self.usernameHighlightLine
+                  withDuration:0.15
+                     withDelay:0.025
+                  andTransform:CGAffineTransformMakeTranslation(-5, 0)
+                    completion:^(BOOL finished) {
+                      [self animateTransformView:self.usernameHighlightLine withDuration:0.35 withDelay:0 andTransform:CGAffineTransformMakeTranslation(100, 0)];
+                    }];
 
-    [UIView animateWithDuration:0.4 / 2
-                          delay:0.45 / 2
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                       self.usernameHighlightLine.alpha = 0;
-                     }
-                     completion:nil];
+    [self animateAlphaView:self.usernameHighlightLine withDuration:0.2 withDelay:0.225 andAlpha:0];
 
     /* Transform passwordField and helpButton */
     [UIView animateWithDuration:0.3 / 2
@@ -1182,108 +983,41 @@
                      completion:nil];
 
     /* Transform passwordHighlightLine */
-    [UIView animateWithDuration:0.3 / 2
-        delay:0.15 / 2
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(-5, 0);
-        }
-        completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.7 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(100, 0);
-                           }
-                           completion:nil];
-        }];
+    [self animateTransformView:self.passwordHighlightLine
+                  withDuration:0.15
+                     withDelay:0.025
+                  andTransform:CGAffineTransformMakeTranslation(-5, 0)
+                    completion:^(BOOL finished) {
+                      [self animateTransformView:self.passwordHighlightLine withDuration:0.35 withDelay:0 andTransform:CGAffineTransformMakeTranslation(100, 0)];
+                    }];
 
-    [UIView animateWithDuration:0.4 / 2
-                          delay:0.55 / 2
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                       self.passwordHighlightLine.alpha = 0;
-                     }
-                     completion:nil];
+    [self animateAlphaView:self.passwordHighlightLine withDuration:0.2 withDelay:0.225 andAlpha:0];
 
     /* Transform loginButton */
-    [UIView animateWithDuration:0.3 / 2
-        delay:0.2 / 2
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.loginButton.transform = CGAffineTransformMakeTranslation(-5, 0);
-        }
-        completion:^(BOOL finished) {
-          [UIView animateWithDuration:0.7 / 2
-                                delay:0.0
-                              options:UIViewAnimationOptionCurveEaseInOut
-                           animations:^{
-                             self.loginButton.transform = CGAffineTransformMakeTranslation(100, 0);
-                           }
-                           completion:nil];
-        }];
+    [self animateTransformView:self.loginButton
+                  withDuration:0.15
+                     withDelay:0.01
+                  andTransform:CGAffineTransformMakeTranslation(-5, 0)
+                    completion:^(BOOL finished) {
+                      [self animateTransformView:self.loginButton withDuration:0.35 withDelay:0 andTransform:CGAffineTransformMakeTranslation(100, 0)];
+                    }];
 
-    [UIView animateWithDuration:0.4 / 2
-                          delay:0.6 / 2
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                       self.loginButton.alpha = 0;
-                     }
-                     completion:nil];
+    [self animateAlphaView:self.loginButton withDuration:0.2 withDelay:0.3 andAlpha:0];
 
     /* Transform and fade social line */
-    [UIView animateWithDuration:1.0 / 2
-                          delay:0.5 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.facebookButton.transform = CGAffineTransformMakeTranslation(100, 0);
-                     }
-                     completion:nil];
+    [self animateTransformView:self.facebookButton withDuration:0.5 withDelay:0.25 andTransform:CGAffineTransformMakeTranslation(100, 0)];
+    [self animateAlphaView:self.facebookButton withDuration:0.15 withDelay:0.25 andAlpha:0];
 
-    [UIView animateWithDuration:0.3 / 2
-                          delay:0.5 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.facebookButton.alpha = 0;
-                     }
-                     completion:nil];
+    [self animateTransformView:self.twitterButton withDuration:0.5 withDelay:0.275 andTransform:CGAffineTransformMakeTranslation(80, 0)];
+    [self animateAlphaView:self.twitterButton withDuration:0.15 withDelay:0.275 andAlpha:0];
 
-    [UIView animateWithDuration:1.0 / 2
-                          delay:0.55 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.twitterButton.transform = CGAffineTransformMakeTranslation(80, 0);
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:0.3 / 2
-                          delay:0.55 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.twitterButton.alpha = 0;
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:0.7 / 2
-                          delay:0.6 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.socialLabel.transform = CGAffineTransformMakeTranslation(60, 0);
-                     }
-                     completion:nil];
-
-    [UIView animateWithDuration:0.5 / 2
-                          delay:0.6 / 2
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.socialLabel.alpha = 0;
-                     }
-                     completion:nil];
+    [self animateTransformView:self.socialLabel withDuration:0.35 withDelay:0.3 andTransform:CGAffineTransformMakeTranslation(60, 0)];
+    [self animateAlphaView:self.socialLabel withDuration:0.25 withDelay:0.3 andAlpha:0];
 }
 
 #pragma mark - UXCam
 
--(void)hideSensitiveViews {
+- (void)hideSensitiveViews {
     [UXCam occludeSensitiveView:self.passwordField];
 }
 

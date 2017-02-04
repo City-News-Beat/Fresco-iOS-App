@@ -11,11 +11,9 @@
 @interface NSString (Validation)
 
 - (BOOL)isValidEmail;
-
 - (BOOL)isValidPassword;
-
+- (BOOL)isValidUsername;
 + (NSString *)formatCreditCard:(NSString *)input;
-
 + (NSString *)formatCreditCardExpiry:(NSString *)input;
 
 @end

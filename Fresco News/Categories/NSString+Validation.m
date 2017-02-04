@@ -11,17 +11,26 @@
 @implementation NSString (Validation)
 
 - (BOOL)isValidEmail {
-
-    NSString *emailRegex = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
-
-    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-
-    return [emailTest evaluateWithObject:self];
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:self options:0 range:NSMakeRange(0, [self length])];
+    
+    if (regExMatches == 0) {
+        return NO;
+    }
+    return YES;
 }
 
 - (BOOL)isValidPassword {
 
     return ([self length] > 5) ? YES : NO;
+}
+
+- (BOOL)isValidUsername {
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    return ([self rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
 }
 
 + (NSString *)formatCreditCard:(NSString *)input {

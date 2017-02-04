@@ -134,7 +134,10 @@
           if (response && response.statusCode == 401) {
               [[FRSSessionManager sharedInstance] refreshToken:[[FRSAuthManager sharedInstance] isAuthenticated]
                                                     completion:^(id responseObject, NSError *error) {
-                                                      if (!error) {
+                                                      if (error) {
+                                                          completion(nil, error);
+                                                      }
+                                                      else {
                                                           [self post:endPoint withParameters:parameters completion:completion];
                                                       }
                                                     }];
