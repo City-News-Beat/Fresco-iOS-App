@@ -303,7 +303,6 @@
     }
 
     [self addStatusBarNotification];
-    [self showNavBarForScrollView:self.tableView animated:NO];
 
     FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
 
@@ -374,7 +373,6 @@
         [[FRSUserManager sharedInstance] getUserWithUID:userName
                                              completion:^(id responseObject, NSError *error) {
                                                [self addStatusBarNotification];
-                                               [self showNavBarForScrollView:self.tableView animated:NO];
                                                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
                                                FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
@@ -1144,10 +1142,8 @@
     }
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
     vc.openedFrom = @"profile";
-
-    [super showNavBarForScrollView:self.tableView animated:NO];
 
     self.navigationItem.title = @"";
 

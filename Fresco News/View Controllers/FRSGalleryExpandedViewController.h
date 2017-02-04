@@ -12,7 +12,7 @@
 
 @class FRSGallery;
 
-@interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
+@interface FRSGalleryExpandedViewController : FRSBaseViewController <UITextViewDelegate>
 {
     NSDate *dateEntered;
     float percentageScrolled;

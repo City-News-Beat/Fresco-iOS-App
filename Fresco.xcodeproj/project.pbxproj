@@ -113,8 +113,6 @@
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
 		6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */; };
 		659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */; };
-		65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525EE1C4988B9004A622B /* FRSCommentsView.m */; };
-		65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */; };
 		65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */; };
@@ -518,10 +516,6 @@
 		6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBorderedImageView.m; path = Subclasses/FRSBorderedImageView.m; sourceTree = "<group>"; };
 		659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryExpandedViewController.h; sourceTree = "<group>"; };
 		659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryExpandedViewController.m; sourceTree = "<group>"; };
-		65A525ED1C4988B9004A622B /* FRSCommentsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentsView.h; sourceTree = "<group>"; };
-		65A525EE1C4988B9004A622B /* FRSCommentsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCommentsView.m; sourceTree = "<group>"; };
-		65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentTableViewCell.h; sourceTree = "<group>"; };
-		65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCommentTableViewCell.m; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
 		65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Helpers.m"; path = "Categories/UIView+Helpers.m"; sourceTree = "<group>"; };
 		65D1E4E71C4EB7B6003362D3 /* FRSMapCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMapCircle.h; sourceTree = "<group>"; };
@@ -1951,8 +1945,6 @@
 		D43C7FFB1C90748B00A7A7A7 /* Comment Table */ = {
 			isa = PBXGroup;
 			children = (
-				65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */,
-				65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */,
 			);
 			name = "Comment Table";
 			sourceTree = "<group>";
@@ -1960,8 +1952,6 @@
 		D43C7FFC1C90749F00A7A7A7 /* Comments View */ = {
 			isa = PBXGroup;
 			children = (
-				65A525ED1C4988B9004A622B /* FRSCommentsView.h */,
-				65A525EE1C4988B9004A622B /* FRSCommentsView.m */,
 			);
 			name = "Comments View";
 			sourceTree = "<group>";
@@ -2843,7 +2833,6 @@
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
 				D453CC881CCA80850091A004 /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
-				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
@@ -2875,7 +2864,6 @@
 				CA1637441E27F05500779A92 /* FRSGalleryStatusTableViewCell.m in Sources */,
 				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,
 				D453CC7F1CCA80850091A004 /* MagicalRecordInternal.m in Sources */,
-				65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */,
 				072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */,
 				D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,

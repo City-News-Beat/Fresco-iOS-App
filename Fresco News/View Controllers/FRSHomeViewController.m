@@ -197,7 +197,6 @@
     [super viewWillAppear:animated];
 
     [self addStatusBarNotification];
-    [self showNavBarForScrollView:self.scrollView animated:NO];
 
     [FRSTracker screen:@"Home"];
 
@@ -844,10 +843,8 @@
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.gallery = gallery;
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
     vc.openedFrom = @"following";
-
-    [super showNavBarForScrollView:self.tableView animated:NO];
 
     self.navigationItem.title = @"";
 
@@ -865,11 +862,9 @@
                          @"opened_from" : @"highlights" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
     vc.gallery = gallery;
     vc.openedFrom = @"highlights";
-
-    [super showNavBarForScrollView:self.tableView animated:NO];
 
     self.navigationItem.title = @"";
 
@@ -936,8 +931,6 @@
             self.followingTabButton.alpha = 1;
             self.highlightTabButton.alpha = 0.7;
 
-            //[self showNavBarForScrollView:self.scrollView animated:NO];
-            //self.navigationItem.titleView.alpha = 1;
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
 

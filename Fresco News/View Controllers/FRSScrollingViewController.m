@@ -135,54 +135,9 @@
 
     [self determineScrollDirection:scrollView];
 
-    [self adjustFramesForDifference:difference forScrollView:scrollView];
-
     self.prevContentOffY = currentContentOffY;
 }
-/*
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    id<UIViewControllerTransitionCoordinator> tc = navigationController.topViewController.transitionCoordinator;
-    [tc notifyWhenInteractionEndsUsingBlock:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        NSLog(@"Is cancelled: %i", [context isCancelled]);
-    }];
-}
-
--(void)popViewController{
-    NSLog(@"Popped");
-    //[self.navigationController dismiss]
-}
--(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item{
-    NSLog(@"POPPed");
-}
-
--(void)setModalInPopover:(BOOL)modalInPopover{
-    NSLog(@"POOOPED");
-}
-
-
--(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item{
-    NSLog(@"It is popped");
-}
-
--(void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext{
-    NSLog(@"Transitioning");
-}
-
--(void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC{
-    NSLog(@"SEGUEING");
-}*/
-
-/*
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-                                  animationControllerForOperation:(UINavigationControllerOperation)operation
-                                               fromViewController:(UIViewController*)fromVC
-                                                 toViewController:(UIViewController*)toVC
-{
-    NSLog(@"ANIMATING");
-    return nil;
-}*/
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
     NSMutableArray *barButtonItems = [NSMutableArray array];
@@ -264,125 +219,12 @@
     //[self.navigationItem.titleView setFrame:CGRectMake(self.navigationItem.titleView.frame.origin.x, value+(self.navBarHeight/2)-4, self.navigationItem.titleView.frame.size.width,self.navigationItem.titleView.frame.size.height)];
 }
 
-- (void)adjustFramesForDifference:(NSInteger)difference forScrollView:(UIScrollView *)scrollView {
-    if (!difference)
-        return;
-
-    if (self.scrollDirection == UIScrollViewScrollDirectionUp) { // The user is scrolling up and therefore the navigation bar should come back down.
-        [self showNavBarForScrollView:scrollView animated:YES];
-    } else if (self.scrollDirection == UIScrollViewScrollDirectionDown) { //The user is scrolling down and therefore the navigation bar should hide.
-        [self hideNavBarForScrollView:scrollView animated:YES];
-    }
-}
-
-- (void)showNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated {
-    /*
-    CGRect toFrame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44);
-    
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-
-    if (self.search != Nil) {
-        [self.navigationItem setRightBarButtonItem:self.search animated:YES];
-        self.search = Nil;
-    }
-
-    if (animated){
-        
-        if (self.animatingShow) {
-            return;
-        }
-        if (!self.scrollDirectionChanged) {
-            return;
-        }
-        
-        self.animatingShow = YES;
-        self.animatingHide = NO;
-        
-        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.navigationController.navigationBar.frame = toFrame;
-            scrollView.frame = scrollViewFrame;
-            self.navigationItem.titleView.alpha = 1.0;
-            
-            
-            Need to check if back button already exists to avoid weird scrolling bug
-            if (self.shouldHaveBackButton){
-                [super configureBackButtonAnimated:YES];
-            }
-            
-            if (self.shouldHaveBackButton && !self.scrollDirectionChanged){
-                self.scrollDirectionChanged = FALSE;
-                [super configureBackButtonAnimated:YES];
-            }
-            
-        } completion:^(BOOL finished) {
-            if (finished)
-                self.animatingShow = NO;
-        }];
-    }
-    else {
-        scrollView.frame = scrollViewFrame;
-        self.navigationController.navigationBar.frame = toFrame;
-        if (self.shouldHaveBackButton && self.backButtonHidden){
-            [super configureBackButtonAnimated:NO];
-        }
-    }
-    
-    self.navigationItem.leftBarButtonItem.enabled = YES;
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];*/
-}
-
-- (void)hideNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated {
-    /*
-    self.backButtonHidden = YES;
-    
-    CGRect toFrame = CGRectMake(0, -22, [UIScreen mainScreen].bounds.size.width, 44);
-    
-    if (animated){
-        
-        if (self.animatingShow) {
-            return;
-        }
-        if (!self.scrollDirectionChanged) {
-            return;
-        }
-        
-        self.animatingHide = YES;
-        self.animatingShow = NO;
-        
-        self.search = self.navigationItem.rightBarButtonItem;
-        [self.navigationItem setRightBarButtonItem:nil animated:YES];
-        
-        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.navigationController.navigationBar.frame = toFrame;
-            //scrollView.frame = scrollViewFrame;
-            self.navigationItem.titleView.alpha = 0.0;
-            if (self.shouldHaveBackButton){
-                [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:YES];
-            }
-        } completion:^(BOOL finished) {
-            if (finished) {
-                self.animatingHide = NO;
-            }
-        }];
-    }
-    else {
-        //scrollView.frame = scrollViewFrame;
-        self.navigationController.navigationBar.frame = toFrame;
-        [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:NO];
-    }
-    
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.hidesBackButton = YES;
-     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];*/
-}
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
     [self determineScrollDirection:scrollView];
-    //NSLog(@"Decelerating");
 }
 - (void)scrollViewWillEndDecelerating:(UIScrollView *)scrollView {
     [self scrollViewDidScroll:scrollView];
-    //NSLog(@"Decelerating");
 }
 
 - (void)determineScrollDirection:(UIScrollView *)scrollView {
@@ -395,7 +237,6 @@
             self.scrollDirectionChanged = YES;
             self.prevDirectOffSetY = difference;
             self.prevNavBarY = self.navigationController.navigationBar.bounds.origin.y;
-            //NSLog(@"Changed Direction!");
         } else {
             self.scrollDirectionChanged = NO;
         }
@@ -407,7 +248,6 @@
             self.scrollDirectionChanged = YES;
             self.prevDirectOffSetY = difference;
             self.prevNavBarY = self.navigationController.navigationBar.bounds.origin.y;
-            //NSLog(@"Changed Direction!");
         } else {
             self.scrollDirectionChanged = NO;
         }

@@ -75,6 +75,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [self.view updateConstraints];
     [self.view layoutSubviews];
+    
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard:)];
+    [self.view addGestureRecognizer:tap];
+
+}
+
+- (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
+    [galleryDetailView.commentTextField resignFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -386,26 +397,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                            }];
 }
 
-#pragma mark - UIScrollView Delegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == galleryDetailView.scrollView) {
-        [super scrollViewDidScroll:scrollView];
-        [galleryDetailView.actionBar actionButtonTitleNeedsUpdate];
-    }
-
-    if (scrollView == galleryDetailView.scrollView) {
-        float size = galleryDetailView.scrollView.contentSize.height;
-        float offset = galleryDetailView.scrollView.contentOffset.y;
-
-        float percentage = offset / size;
-
-        if (percentageScrolled < percentage) {
-            percentageScrolled = percentage;
-        }
-    }
-}
-
 #pragma mark - 3D Touch
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -635,22 +626,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
           }
         }];
 }
-/*
--(void)loadGallery:(FRSGallery *)gallery {//Might be useless
-    self.gallery = gallery;//Remove when tested
-    galleryDetailView.gallery = gallery;
-    
-    if (gallery.uid) {
-        self.galleryID = gallery.uid;
-    }
-    self.hiddenTabBar = YES;
-    self.actionBarVisible = YES;
-    self.touchEnabled = NO;
-    //[self.galleryView loadGallery:gallery];//Remove when tested
-    [galleryDetailView.galleryView loadGallery:gallery];
-    [galleryDetailView fetchCommentsWithID:gallery.uid];
-}
-*/
+
 - (void)trackSession {
     NSTimeInterval timeInSession = -1 * [dateEntered timeIntervalSinceNow];
     NSString *galleryID = self.gallery.uid;

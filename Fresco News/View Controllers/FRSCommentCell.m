@@ -44,7 +44,6 @@
     self.commentTextView.attributedText = comment.attributedString;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    //    [self.commentTextView frs_resize];
     [self.commentTextView sizeToFit];
     self.commentTextView.delegate = delegate;
 
@@ -75,11 +74,6 @@
         self.timestampLabel.transform = CGAffineTransformMakeTranslation(-8, 0);
     }
 
-    //    Calling size to fit here scales the textview down so the user can tap on the comment cell
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    //        [self.commentTextView sizeToFit];
-    //    });
-
     if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
         self.commentTextView.userInteractionEnabled = YES;
     } else {
@@ -87,13 +81,13 @@
     }
 
     if (comment.isDeletable && !comment.isReportable) {
-        self.rightButtons = @[ [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]] ];
+        self.rightButtons = @[ [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedColor]] ];
     } else if (comment.isReportable && !comment.isDeletable) {
         if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
             self.rightButtons = @[ [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]] ];
         }
     } else if (comment.isDeletable && comment.isReportable) {
-        self.rightButtons = @[ [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]] ];
+        self.rightButtons = @[ [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedColor]] ];
     }
 
     self.rightSwipeSettings.transition = MGSwipeTransitionDrag;

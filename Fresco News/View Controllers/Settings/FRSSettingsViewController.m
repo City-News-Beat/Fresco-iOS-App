@@ -445,12 +445,12 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 }
 
 - (void)configureKenny {
-    UILabel *kenny = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 12, self.tableView.frame.size.height * 1.6, 24, 24)];
+    UILabel *kenny = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 + 5, self.tableView.frame.size.height * 1.6 + 8, 24, 24)];
     kenny.text = @"🎷";
     [self.tableView addSubview:kenny];
     [self rotate:kenny];
 
-    UILabel *music = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 20, self.tableView.frame.size.height * 1.6 - 5, 24, 24)];
+    UILabel *music = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 20, self.tableView.frame.size.height * 1.6 - 5, 24, 24)];
     music.text = @"🎶";
     music.transform = CGAffineTransformMakeScale(0.5, 0.5);
     [self.tableView addSubview:music];

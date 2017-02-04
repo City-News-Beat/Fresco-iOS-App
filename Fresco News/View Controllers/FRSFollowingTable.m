@@ -127,7 +127,7 @@
 
 - (void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
 
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
 

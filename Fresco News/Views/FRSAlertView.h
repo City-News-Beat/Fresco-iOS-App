@@ -10,6 +10,8 @@
 
 @protocol FRSAlertViewDelegate <NSObject>
 
+@required
+@optional
 - (void)didPressButtonAtIndex:(NSInteger)index;
 - (void)logoutAlertAction;
 - (void)reportGalleryAlertAction;

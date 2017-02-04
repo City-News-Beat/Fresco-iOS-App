@@ -102,7 +102,7 @@
 
 - (void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.feed objectAtIndex:indexPath.row]];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
 
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
 
@@ -207,7 +207,7 @@
     // push gallery detail view
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[filteredArray firstObject]];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
 
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
 
