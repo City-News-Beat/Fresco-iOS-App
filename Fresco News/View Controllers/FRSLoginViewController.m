@@ -142,7 +142,6 @@
 }
 
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-
     [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
@@ -150,7 +149,6 @@
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
-
     [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [spinner stopLoading];
     [spinner removeFromSuperview];
@@ -256,6 +254,7 @@
                                    }
                                  }];
 }
+
 - (void)presentInvalidInfo {
     [UIView animateWithDuration:0.15
         delay:0.0
@@ -298,8 +297,8 @@
     transition.type = kCATransitionFade;
     transition.subtype = kCATransitionFromTop;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    //    [[self navigationController] popViewControllerAnimated:NO];
     [self popToOrigin];
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
@@ -326,8 +325,8 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
-- (IBAction)twitter:(id)sender {
 
+- (IBAction)twitter:(id)sender {
     self.twitterButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     spinner.tintColor = [UIColor frescoOrangeColor];
@@ -592,7 +591,6 @@
 }
 
 - (void)highlightTextField:(UITextField *)textField enabled:(BOOL)enabled {
-
     if (!enabled) {
         [UIView animateWithDuration:.15
                               delay:0.0
@@ -1001,7 +999,7 @@
                      withDelay:0.01
                   andTransform:CGAffineTransformMakeTranslation(-5, 0)
                     completion:^(BOOL finished) {
-                        [self animateTransformView:self.loginButton withDuration:0.35 withDelay:0 andTransform:CGAffineTransformMakeTranslation(100, 0)];
+                      [self animateTransformView:self.loginButton withDuration:0.35 withDelay:0 andTransform:CGAffineTransformMakeTranslation(100, 0)];
                     }];
 
     [self animateAlphaView:self.loginButton withDuration:0.2 withDelay:0.3 andAlpha:0];
