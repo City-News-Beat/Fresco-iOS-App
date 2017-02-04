@@ -538,6 +538,7 @@
 }
 
 - (void)didPressButtonAtIndex:(NSInteger)index {
+     [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {

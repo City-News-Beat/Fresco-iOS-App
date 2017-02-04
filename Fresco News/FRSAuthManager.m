@@ -148,7 +148,6 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     [[FRSAPIClient sharedClient] post:loginEndpoint
                        withParameters:params
                            completion:^(id responseObject, NSError *error) {
-
                              completion(responseObject, error);
                              if (!error) {
                                  [self handleUserLogin:responseObject];

@@ -11,7 +11,6 @@
 #import <Analytics/SEGAnalytics.h>
 #import <UXCam/UXCam.h>
 
-
 @interface FRSTracker : NSObject {
 }
 
@@ -21,8 +20,6 @@
 + (void)screen:(NSString *)screen parameters:(NSDictionary *)parameters;
 + (void)startSegmentAnalytics;
 + (void)reset;
-
-
 
 /**
  Combines both the Segment user tracking event with the UXCam tracking event into one method call.
