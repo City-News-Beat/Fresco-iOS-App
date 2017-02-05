@@ -28,24 +28,24 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-    if (self.accountNumberTextField.text.length > 0 && self.routingNumberTextField.text.length == 9) {
-        [self.saveButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.saveButton.userInteractionEnabled = YES;
+    if (self.accountNumberTextField.text.length > 7 && self.routingNumberTextField.text.length >= 8) {
         self.saveButton.enabled = YES;
+    } else {
+        self.saveButton.enabled = NO;
     }
-    
+
     if (textField == self.accountNumberTextField) {
-        if (range.location > 16) {
+        if (range.location > 20) {
             return NO;
         }
     }
-    
+
     if (textField == self.routingNumberTextField) {
-        if (range.location > 8) {
+        if (range.location > 10) {
             return NO;
         }
     }
-    
+
     return YES;
 }
 

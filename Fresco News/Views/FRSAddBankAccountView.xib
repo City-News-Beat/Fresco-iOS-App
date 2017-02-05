@@ -90,7 +90,7 @@
                         <constraint firstAttribute="height" constant="90" id="s2n-IY-3eo"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W5B-Fu-EQV">
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W5B-Fu-EQV">
                     <rect key="frame" x="215" y="95" width="160" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Bo5-PR-VbF"/>
@@ -98,6 +98,9 @@
                     </constraints>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                     <state key="normal" title="SAVE BANK ACCOUNT">
+                        <color key="titleColor" red="0.0" green="0.2784313725" blue="0.74901960779999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <state key="disabled">
                         <color key="titleColor" white="0.0" alpha="0.26000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
                     <connections>
