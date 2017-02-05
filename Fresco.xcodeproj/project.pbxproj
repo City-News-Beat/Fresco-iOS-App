@@ -161,6 +161,10 @@
 		CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */; };
 		CEC20DEC1E1C795400532D75 /* FRSUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEB1E1C795400532D75 /* FRSUserManager.m */; };
 		CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */; };
+		CECB2C9A1E46B4750035FDCE /* FRSAddDebitCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */; };
+		CECB2C9C1E46B48F0035FDCE /* FRSAddDebitCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */; };
+		CECB2C9E1E46CE360035FDCE /* FRSAddBankAccountView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */; };
+		CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */; };
 		CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
@@ -608,6 +612,12 @@
 		CEC20DEB1E1C795400532D75 /* FRSUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserManager.m; sourceTree = "<group>"; };
 		CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAuthManager.h; sourceTree = "<group>"; };
 		CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAuthManager.m; sourceTree = "<group>"; };
+		CECB2C981E46B4750035FDCE /* FRSAddDebitCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAddDebitCardView.h; path = "Fresco News/Views/FRSAddDebitCardView.h"; sourceTree = "<group>"; };
+		CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAddDebitCardView.m; path = "Fresco News/Views/FRSAddDebitCardView.m"; sourceTree = "<group>"; };
+		CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAddDebitCardView.xib; path = "Fresco News/Views/FRSAddDebitCardView.xib"; sourceTree = "<group>"; };
+		CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAddBankAccountView.xib; path = "Fresco News/Views/FRSAddBankAccountView.xib"; sourceTree = "<group>"; };
+		CECB2C9F1E46CE4C0035FDCE /* FRSAddBankAccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAddBankAccountView.h; path = "Fresco News/Views/FRSAddBankAccountView.h"; sourceTree = "<group>"; };
+		CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAddBankAccountView.m; path = "Fresco News/Views/FRSAddBankAccountView.m"; sourceTree = "<group>"; };
 		CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSIdentityViewController.xib; path = "Fresco News/View Controllers/Onboard/FRSIdentityViewController.xib"; sourceTree = SOURCE_ROOT; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
@@ -1763,6 +1773,12 @@
 			children = (
 				07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */,
 				07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */,
+				CECB2C981E46B4750035FDCE /* FRSAddDebitCardView.h */,
+				CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */,
+				CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */,
+				CECB2C9F1E46CE4C0035FDCE /* FRSAddBankAccountView.h */,
+				CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */,
+				CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */,
 			);
 			name = "Add Payment";
 			sourceTree = "<group>";
@@ -2645,6 +2661,7 @@
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
+				CECB2C9E1E46CE360035FDCE /* FRSAddBankAccountView.xib in Resources */,
 				CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */,
 				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
@@ -2663,6 +2680,7 @@
 				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
 				076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */,
 				D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */,
+				CECB2C9C1E46B48F0035FDCE /* FRSAddDebitCardView.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2858,6 +2876,7 @@
 				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
+				CECB2C9A1E46B4750035FDCE /* FRSAddDebitCardView.m in Sources */,
 				D43C7FDD1C8E474C00A7A7A7 /* FRSCheckBox.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
@@ -2870,6 +2889,7 @@
 				CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
+				CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */,
 				CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */,
 				CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,

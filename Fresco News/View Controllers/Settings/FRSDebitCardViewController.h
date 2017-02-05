@@ -8,16 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
-#import "CardIO.h"
 
-@interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate, CardIOViewDelegate, UIScrollViewDelegate> {
-    UIView *cardViewport;
-    UITextField *cardNumberTextField;
-    UITextField *expirationDateTextField;
-    UITextField *securityCodeTextField;
-}
+@interface FRSDebitCardViewController : FRSBaseViewController <UIScrollViewDelegate>
+
+@property BOOL shouldDisplayBankViewOnLoad;
 
 - (void)configureBankFromNavigationController;
-@property BOOL shouldDisplayBankViewOnLoad;
 
 @end
