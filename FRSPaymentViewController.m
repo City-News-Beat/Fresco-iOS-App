@@ -42,7 +42,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -68,30 +68,35 @@ static NSString *addPaymentCell = @"addPaymentCell";
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     } else if (indexPath.section == 1) {
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        cell.alpha = 0;
+        cell.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor clearColor];
+        return cell;
+    } else if (indexPath.section == 2) {
         FRSAddPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:addPaymentCell];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     }
 
-    return Nil;
+    return nil;
 }
 
-- (void)deletePayment:(NSIndexPath *)path {
-    NSDictionary *pay = self.payments[path.row];
-
-    [[FRSPaymentManager sharedInstance] deletePayment:pay[@"id"]
-                                           completion:^(id responseObject, NSError *error) {
-                                             [self reloadPayments];
-                                           }];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1) {
+        return 12;
+    } else {
+        return UITableViewAutomaticDimension;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (isSelectingPayment) {
+        return;
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if (indexPath.section == 1) {
-        FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
-        [self.navigationController pushViewController:debit animated:YES];
-    } else {
+    if (indexPath.section == 0) {
         if (indexPath.row == selectedIndex) {
             return;
         }
@@ -103,14 +108,32 @@ static NSString *addPaymentCell = @"addPaymentCell";
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
 
         [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
-
+        isSelectingPayment = YES;
+        FRSPaymentCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         [[FRSPaymentManager sharedInstance] makePaymentActive:paymentID
                                                    completion:^(id responseObject, NSError *error) {
+                                                     isSelectingPayment = NO;
+                                                     [cell stopSpinner];
                                                      if (!error) {
                                                          [self resetOtherPayments:paymentID];
                                                      }
                                                    }];
+
+        [cell startSpinner];
+
+    } else if (indexPath.section == 2) {
+        FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
+        [self.navigationController pushViewController:debit animated:YES];
     }
+}
+
+- (void)deletePayment:(NSIndexPath *)path {
+    NSDictionary *pay = self.payments[path.row];
+
+    [[FRSPaymentManager sharedInstance] deletePayment:pay[@"id"]
+                                           completion:^(id responseObject, NSError *error) {
+                                             [self reloadPayments];
+                                           }];
 }
 
 - (void)resetOtherPayments:(NSString *)activePayment {
@@ -123,6 +146,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
         NSDictionary *payment = self.payments[i];
         if ([payment[@"id"] isEqualToString:activePayment]) {
             [cell setActive:YES];
+            selectedIndex = i;
         } else {
             [cell setActive:NO];
         }
@@ -132,6 +156,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
 }
 
 - (void)reloadPayments {
+    selectedIndex = -1;
     [[FRSPaymentManager sharedInstance] fetchPayments:^(id responseObject, NSError *error) {
       if (error || !responseObject) {
           return;

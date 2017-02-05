@@ -56,7 +56,7 @@
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
     [self configureDismissKeyboardGestureRecognizer];
-    
+
     [self hideSensitiveViews];
 }
 
@@ -311,7 +311,7 @@
                                                    }
                                                    [[FRSPaymentManager sharedInstance] createPaymentWithToken:token.tokenId
                                                                                                    completion:^(id responseObject, NSError *error) {
-                                                                                                       if (error) {
+                                                                                                     if (error) {
                                                                                                          // failed
                                                                                                          self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                                                                                                          [self.alertView show];
@@ -505,18 +505,26 @@
 
     [FRSStripe createTokenWithCard:params
                         completion:^(STPToken *stripeToken, NSError *error) {
-
                           if (error || !stripeToken) {
                               self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                               [self.alertView show];
                               [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
                               return;
                           }
-
                           [[FRSPaymentManager sharedInstance] createPaymentWithToken:stripeToken.tokenId
                                                                           completion:^(id responseObject, NSError *error) {
                                                                             if (error) {
-                                                                                self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                                                if (response && response.statusCode == 500) {
+                                                                                    NSString *errorString = [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSASCIIStringEncoding];
+                                                                                    NSData *data = [errorString dataUsingEncoding:NSUTF8StringEncoding];
+                                                                                    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                                                                                    NSDictionary *errorDict = json[@"error"];
+                                                                                    NSString *errorMessage = errorDict[@"msg"];
+                                                                                    self.alertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                } else {
+                                                                                    self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                }
                                                                                 [self.alertView show];
                                                                             } else if (responseObject) {
                                                                                 NSString *brand = [responseObject objectForKey:@"brand"];
@@ -538,7 +546,7 @@
 }
 
 - (void)didPressButtonAtIndex:(NSInteger)index {
-     [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
+    [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
@@ -576,7 +584,7 @@
 
 #pragma mark - UXCam
 
--(void)hideSensitiveViews {
+- (void)hideSensitiveViews {
     [UXCam occludeSensitiveView:cardNumberTextField];
     [UXCam occludeSensitiveView:self.routingNumberField];
     [UXCam occludeSensitiveView:self.accountNumberField];

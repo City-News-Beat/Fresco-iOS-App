@@ -15,15 +15,20 @@
 @interface FRSPaymentCell : UITableViewCell {
 }
 
-@property (nonatomic, retain) IBOutlet UILabel *paymentTitleLabel;
-@property (nonatomic, retain) IBOutlet UIImageView *selectionCircle;
-@property (nonatomic, retain) IBOutlet UIButton *deletionButton;
 @property (nonatomic, copy) void (^deletionBlock)(NSDictionary *payment);
+
+@property (nonatomic, weak) IBOutlet UILabel *paymentTitleLabel;
+@property (nonatomic, weak) IBOutlet UIImageView *selectionCircle;
+@property (nonatomic, weak) IBOutlet UIButton *deletionButton;
+
 @property (nonatomic, retain) NSDictionary *payment;
 @property (nonatomic, weak) id<FRSPaymentCellDelegate> delegate;
+
 @property BOOL isActive;
 
 - (IBAction)deletePayment:(id)sender;
 - (void)setActive:(BOOL)active;
+- (void)startSpinner;
+- (void)stopSpinner;
 
 @end
