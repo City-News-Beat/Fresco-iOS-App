@@ -66,9 +66,11 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-    if ((self.cardNumberTextField.text.length >= 15) && (self.securityCodeTextField.text.length >= 3)) {
-        [self.saveButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.saveButton.userInteractionEnabled = YES;
+    if ((self.cardNumberTextField.text.length >= 15) && (self.securityCodeTextField.text.length >= 3) && (self.expirationDateTextField.text.length >= 5)) {
+        self.saveButton.enabled = YES;
+    }
+    else {
+        self.saveButton.enabled = NO;
     }
 
     if (textField == self.cardNumberTextField) {
