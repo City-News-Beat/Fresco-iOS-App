@@ -10,6 +10,6 @@
 #import "FRSBaseViewController.h"
 #import "FRSAlertView.h"
 
-@interface FRSPasswordChangeViewController : FRSBaseViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, FRSAlertViewDelegate>
+@interface FRSPasswordChangeViewController : FRSBaseViewController <UITextFieldDelegate, FRSAlertViewDelegate>
 
 @end

@@ -165,6 +165,7 @@
 		CECB2C9C1E46B48F0035FDCE /* FRSAddDebitCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */; };
 		CECB2C9E1E46CE360035FDCE /* FRSAddBankAccountView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */; };
 		CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */; };
+		CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2CA61E47A7190035FDCE /* FRSPasswordChangeViewController.xib */; };
 		CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
@@ -618,6 +619,7 @@
 		CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAddBankAccountView.xib; path = "Fresco News/Views/FRSAddBankAccountView.xib"; sourceTree = "<group>"; };
 		CECB2C9F1E46CE4C0035FDCE /* FRSAddBankAccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAddBankAccountView.h; path = "Fresco News/Views/FRSAddBankAccountView.h"; sourceTree = "<group>"; };
 		CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAddBankAccountView.m; path = "Fresco News/Views/FRSAddBankAccountView.m"; sourceTree = "<group>"; };
+		CECB2CA61E47A7190035FDCE /* FRSPasswordChangeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPasswordChangeViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPasswordChangeViewController.xib"; sourceTree = "<group>"; };
 		CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSIdentityViewController.xib; path = "Fresco News/View Controllers/Onboard/FRSIdentityViewController.xib"; sourceTree = SOURCE_ROOT; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
@@ -1807,6 +1809,7 @@
 			children = (
 				07A30BEF1C50488800C536EB /* FRSPasswordChangeViewController.h */,
 				07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */,
+				CECB2CA61E47A7190035FDCE /* FRSPasswordChangeViewController.xib */,
 			);
 			name = Password;
 			sourceTree = "<group>";
@@ -2675,6 +2678,7 @@
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
 				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
+				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
 				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,

@@ -19,9 +19,11 @@
 @property (strong, nonatomic) UIImageView *errorImageView;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
-@property (strong, nonatomic) IBOutlet UITextField *emailTextField;
-@property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
-@property (strong, nonatomic) IBOutlet UIButton *saveButton;
+
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+
 @property BOOL emailIsValid;
 @property BOOL passwordIsValid;
 
