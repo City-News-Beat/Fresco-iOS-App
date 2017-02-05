@@ -13,6 +13,7 @@
 
 @interface FRSPaymentViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, FRSPaymentCellDelegate> {
     NSInteger selectedIndex;
+    BOOL isSelectingPayment;
 }
 
 @property (nonatomic, retain) NSArray *payments;

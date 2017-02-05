@@ -7,18 +7,39 @@
 //
 
 #import "FRSPaymentCell.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "UIColor+Fresco.h"
+
+@interface FRSPaymentCell ()
+
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
+@end
 
 @implementation FRSPaymentCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+}
 
-    // Configure the view for the selected state
+- (void)startSpinner {
+    self.loadingView.frame = CGRectMake(0, 0, self.selectionCircle.frame.size.width, self.selectionCircle.frame.size.height);
+    [self.loadingView startAnimating];
+    [self.selectionCircle addSubview:self.loadingView];
+}
+
+- (void)stopSpinner {
+    [self.loadingView stopLoading];
+    [self.loadingView removeFromSuperview];
 }
 
 - (IBAction)deletePayment:(id)sender {
@@ -32,10 +53,9 @@
 
     if (active) {
         self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-filled"];
-        self.deletionButton.hidden = TRUE;
     } else {
         self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-outline"];
-        self.deletionButton.hidden = FALSE;
     }
+    self.deletionButton.hidden = active;
 }
 @end
