@@ -114,7 +114,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
                                                    completion:^(id responseObject, NSError *error) {
                                                      isSelectingPayment = NO;
                                                      [cell stopSpinner];
-                                                     if (!error) {
+                                                     if (error) {
+                                                         [self presentGenericError];
+                                                     }
+                                                     else {
                                                          [self resetOtherPayments:paymentID];
                                                      }
                                                    }];
