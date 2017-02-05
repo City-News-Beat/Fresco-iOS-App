@@ -133,13 +133,13 @@
 
 - (void)bankTapped {
     [self.addDebitCardView dismissKeyboard];
-
     [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
     self.bankButton.alpha = 1.0;
     self.debitButton.alpha = 0.7;
 }
 
 - (void)debitTapped {
+    [self.addBankAccountView dismissKeyboard];
     [_contentScroller setContentOffset:CGPointMake(0, 0) animated:YES];
     self.debitButton.alpha = 1.0;
     self.bankButton.alpha = 0.7;
@@ -299,3 +299,4 @@
 }
 
 @end
+
