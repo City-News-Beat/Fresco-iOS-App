@@ -90,7 +90,7 @@
                         <constraint firstAttribute="height" constant="90" id="s2n-IY-3eo"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W5B-Fu-EQV">
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W5B-Fu-EQV">
                     <rect key="frame" x="215" y="95" width="160" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Bo5-PR-VbF"/>
