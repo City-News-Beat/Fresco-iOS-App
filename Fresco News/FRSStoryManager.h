@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FRSStory.h"
 #import "FRSBaseManager.h"
 
 @interface FRSStoryManager : FRSBaseManager

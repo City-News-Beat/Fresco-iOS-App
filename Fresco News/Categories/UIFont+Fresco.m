@@ -10,6 +10,10 @@
 
 @implementation UIFont (Fresco)
 
++ (UIFont *)helveticaNeueMediumWithSize:(NSInteger)size {
+    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:size];
+}
+
 + (UIFont *)notaBoldWithSize:(NSInteger)size {
     return [UIFont fontWithName:@"Nota-Bold" size:size];
 }

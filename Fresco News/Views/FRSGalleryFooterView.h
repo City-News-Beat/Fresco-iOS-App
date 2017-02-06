@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSUserView.h"
+#import "FRSGallery.h"
 
 @protocol FRSGalleryFooterViewDelegate <NSObject>
 - (void)userAvatarTapped;

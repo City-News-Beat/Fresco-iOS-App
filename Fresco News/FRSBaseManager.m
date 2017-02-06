@@ -7,7 +7,6 @@
 //
 
 #import "FRSBaseManager.h"
-#import "FRSAppDelegate.h"
 
 @implementation FRSBaseManager
 

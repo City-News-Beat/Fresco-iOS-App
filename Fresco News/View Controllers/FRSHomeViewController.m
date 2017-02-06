@@ -7,8 +7,6 @@
 //
 
 #import "FRSHomeViewController.h"
-#import "Fresco.h"
-
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSSearchViewController.h"
 #import "FRSLoginViewController.h"
@@ -19,7 +17,6 @@
 #import "FRSAlertView.h"
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
-#import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 #import "FRSLocationManager.h"

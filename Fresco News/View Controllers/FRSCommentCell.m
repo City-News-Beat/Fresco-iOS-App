@@ -11,6 +11,7 @@
 #import "Haneke.h"
 #import "UITextView+Resize.h"
 #import "FRSAuthManager.h"
+#import "FRSDateFormatter.h"
 
 @implementation FRSCommentCell
 

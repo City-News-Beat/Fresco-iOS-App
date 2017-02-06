@@ -12,7 +12,6 @@
 #import "FRSAuthManager.h"
 #import "FRSHomeViewController.h"
 #import "FRSLocationManager.h"
-#import "FRSAppDelegate.h"
 
 static NSString *const userEndpoint = @"user/";
 static NSString *const setAvatarEndpoint = @"user/avatar";

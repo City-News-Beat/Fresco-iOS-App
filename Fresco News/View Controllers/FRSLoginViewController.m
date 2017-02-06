@@ -11,7 +11,6 @@
 #import "FRSTabBarController.h"
 #import "FRSUploadViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import "FRSAppDelegate.h"
 #import "FRSAlertView.h"
 #import "FRSLocationManager.h"
 #import "FRSAuthManager.h"

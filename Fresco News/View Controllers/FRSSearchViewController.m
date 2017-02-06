@@ -20,7 +20,7 @@
 #import "FRSAlertView.h"
 #import "FRSSearchManager.h"
 
-@interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate>
+@interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;

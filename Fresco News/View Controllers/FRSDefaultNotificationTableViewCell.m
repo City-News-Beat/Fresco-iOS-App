@@ -13,6 +13,7 @@
 #import "FRSUserManager.h"
 #import "FRSStoryManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSNotificationHandler.h"
 
 @interface FRSDefaultNotificationTableViewCell ()
 

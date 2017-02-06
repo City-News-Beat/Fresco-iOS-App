@@ -10,14 +10,16 @@
 #import <AWSCore/AWSCore.h>
 #import <AWSS3/AWSS3.h>
 #import "FRSUpload+CoreDataProperties.h"
-#import "Fresco.h"
-#import "FRSAppDelegate.h"
-#import "FRSTracker.h"
 #import "SDAVAssetExportSession.h"
 #import "EndpointManager.h"
 #import "NSDate+ISO.h"
+#import "NSManagedObject+MagicalRecord.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
+#define AWS_REGION AWSRegionUSEast1
+
+static int const megabyteDefinition = 1048576;
+static int const chunkSize = 5;
 
 @implementation FRSUploadManager
 

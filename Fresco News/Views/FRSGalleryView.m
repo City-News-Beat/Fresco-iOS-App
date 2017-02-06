@@ -20,7 +20,6 @@
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
 #import "FRSAlertView.h"
-#import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSUserManager.h"
 #import "FRSGalleryDetailView.h"

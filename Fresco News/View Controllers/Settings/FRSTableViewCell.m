@@ -14,7 +14,6 @@
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <Haneke/Haneke.h>
-#import "FRSAppDelegate.h"
 #import "FRSLocationManager.h"
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"

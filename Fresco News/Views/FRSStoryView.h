@@ -16,7 +16,9 @@
 - (BOOL)shouldHaveActionBar;
 - (BOOL)shouldHaveTextLimit;
 
+@optional
 - (void)clickedImageAtIndex:(NSInteger)imageIndex;
+
 @property (weak, nonatomic) UINavigationController *navigationController;
 
 @end

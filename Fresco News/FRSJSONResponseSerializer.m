@@ -11,7 +11,6 @@
 #import "FRSJSONResponseSerializer.h"
 #import "FRSGallery.h"
 #import "FRSStory.h"
-#import "FRSAppDelegate.h"
 
 @implementation FRSJSONResponseSerializer
 

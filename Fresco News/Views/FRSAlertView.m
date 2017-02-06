@@ -13,7 +13,6 @@
 #import "UIView+Helpers.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <MapKit/MapKit.h>
-#import "FRSAppDelegate.h"
 #import <Contacts/Contacts.h>
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"

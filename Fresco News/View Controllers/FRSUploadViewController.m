@@ -17,7 +17,6 @@
 #import "FRSPlayer.h"
 #import <Photos/Photos.h>
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import "FRSAppDelegate.h"
 #import "FRSUploadManager.h"
 #import "FRSAuthManager.h"
 #import "FRSAssignmentManager.h"

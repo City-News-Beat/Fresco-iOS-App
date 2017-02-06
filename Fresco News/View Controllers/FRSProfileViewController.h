@@ -8,10 +8,9 @@
 
 #import "FRSScrollingViewController.h"
 #import "FRSUser.h"
-#import "FRSFeedTable.h"
 #import "FRSBorderedImageView.h"
 
-@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate, UITableViewDataSource> {
+@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, UITableViewDataSource> {
     UILabel *titleLabel;
     UIView *topView;
     BOOL isLoadingUser;

@@ -10,7 +10,6 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSPaymentCell.h"
 #import "FRSAddPaymentCell.h"
-#import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
 #import "FRSPaymentManager.h"
 

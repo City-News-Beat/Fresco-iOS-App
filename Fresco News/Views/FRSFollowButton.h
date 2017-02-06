@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSUser.h"
 
 @protocol FRSFollowButtonDelegate <NSObject>
 @end

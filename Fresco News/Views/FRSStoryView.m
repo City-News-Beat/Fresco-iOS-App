@@ -10,6 +10,7 @@
 #import "FRSStoryView.h"
 #import "FRSPost.h"
 #import "FRSStory.h"
+#import "FRSGallery.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"

@@ -8,7 +8,7 @@
 
 #import "FRSModerationManager.h"
 #import "FRSUserManager.h"
-#import "FRSAppDelegate.h"
+#import "FRSGallery.h"
 
 static NSString *const blockedUsersEndpoint = @"user/blocked";
 static NSString *const blockUserEndpoint = @"user/%@/block";

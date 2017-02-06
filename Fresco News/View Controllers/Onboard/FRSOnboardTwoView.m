@@ -67,14 +67,14 @@
     [self addSubview:container];
 
     UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(144 - 109, 0, 218, 19)]; //144 = containerWidth/2, 109 = headerWidth/2
-    [header setText:MAIN_HEADER_2];
+    [header setText:@"Send in your photos and videos"];
     [header setTextColor:[UIColor frescoDarkTextColor]];
     [header setFont:[UIFont notaBoldWithSize:17]];
     header.textAlignment = NSTextAlignmentCenter;
     [container addSubview:header];
 
     UILabel *subHeader = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, 288, 40)]; //144 = containerWidth/2, 109 = headerWidth/2
-    [subHeader setText:SUB_HEADER_2];
+    [subHeader setText:@"Your work can be seen by Fresco users and reporters around the world."];
     [subHeader setTextColor:[UIColor frescoMediumTextColor]];
     [subHeader setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]];
     subHeader.textAlignment = NSTextAlignmentCenter;

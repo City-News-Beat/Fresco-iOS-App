@@ -9,7 +9,6 @@
 
 #import "FRSNotificationHandler.h"
 #import "FRSStoryDetailViewController.h"
-#import "FRSAppDelegate.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSProfileViewController.h"
 #import "FRSAssignmentsViewController.h"
@@ -31,9 +30,8 @@ static BOOL isSegueingToAssignment;
     NSString *type = push[@"type"];
     NSString *title = push[@"title"];
 
-    
     // smooch
-    
+
     // smoochSupportTempNotification checks are temporary and should be removed when support is added on the web platform for this feature
     if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame) || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame)) {
         [Smooch track:smoochNotificationEventName];
@@ -54,7 +52,7 @@ static BOOL isSegueingToAssignment;
 
         return;
     }
-    
+
     if ([type isEqualToString:purchasedContentNotification]) {
         if ([[push valueForKey:@"has_payment"] boolValue]) {
             NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];

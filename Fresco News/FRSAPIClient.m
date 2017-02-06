@@ -1,6 +1,3 @@
- 
-    
-
 //
 //  FRSAPIClient.m
 //  Fresco
@@ -10,19 +7,16 @@
 //
 
 #import "FRSAPIClient.h"
-#import "Fresco.h"
 #import "FRSPost.h"
 #import "FRSRequestSerializer.h"
-#import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
-#import "FRSTracker.h"
 #import "FRSTabBarController.h"
-#import "FRSAppDelegate.h"
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSSessionManager.h"
 #import "NSDate+ISO.h"
+#import "FRSGallery.h"
 
 @implementation FRSAPIClient
 

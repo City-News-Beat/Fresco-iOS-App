@@ -11,7 +11,6 @@
 #import "UIFont+Fresco.h"
 #import "FRSTableViewCell.h"
 #import "FRSAlertView.h"
-#import "FRSAppDelegate.h"
 #import "FRSUsernameViewController.h"
 #import "FRSPromoCodeViewController.h"
 #import "FRSEmailViewController.h"

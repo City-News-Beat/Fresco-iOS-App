@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FRSAPIClient.h"
 
 @interface FRSBaseManager : NSObject
 

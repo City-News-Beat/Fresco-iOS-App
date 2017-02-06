@@ -10,7 +10,6 @@
 #import "FRSGalleryCell.h"
 #import "MagicalRecord.h"
 #import "FRSStory+CoreDataProperties.h"
-#import "FRSAppDelegate.h"
 #import "DGElasticPullToRefresh.h"
 #import "Haneke.h"
 #import "FRSGalleryExpandedViewController.h"

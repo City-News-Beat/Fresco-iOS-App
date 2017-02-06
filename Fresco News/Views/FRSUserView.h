@@ -8,15 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSFollowButton.h"
+#import "FRSUser.h"
 
 @protocol FRSUserViewDelegate <NSObject>
+
 - (void)userAvatarTapped;
+
 @end
 
 @interface FRSUserView : UIView <FRSFollowButtonDelegate>
-- (instancetype)initWithUser:(FRSUser *)user;
+
 @property (weak, nonatomic) NSObject<FRSUserViewDelegate> *delegate;
 @property (strong, nonatomic) FRSFollowButton *followingButton;
 @property CGFloat calculatedHeight;
 @property (strong, nonatomic) FRSUser *user;
+
+- (instancetype)initWithUser:(FRSUser *)user;
+
 @end

@@ -16,7 +16,6 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSTabBarController.h"
-#import "FRSAppDelegate.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 

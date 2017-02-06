@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSUser.h"
+#import <CoreData/CoreData.h>
 
 @protocol FRSTableViewCellDelegate <NSObject>
 

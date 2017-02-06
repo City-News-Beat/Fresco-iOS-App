@@ -16,7 +16,6 @@
 #import "FRSCameraViewController.h"
 #import "UIColor+Fresco.h"
 #import "FRSNavigationBar.h"
-#import "FRSAppDelegate.h"
 #import "FRSUserNotificationViewController.h"
 #import "FRSLocationManager.h"
 #import "FRSBaseViewController.h"
@@ -36,6 +35,7 @@
 
 - (void)presentAssignments {
 }
+
 - (void)returnToGalleryPost {
 }
 

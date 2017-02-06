@@ -16,24 +16,16 @@
 @import AVFoundation;
 @import CoreMotion;
 
-//Managers
 #import "FRSLocationManager.h"
 #import "FRSAVSessionManager.h"
-
-//Categories
-//#import "UIColor+Additions.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIImage+Helpers.h"
-
-//Models
 #import "FRSAssignment.h"
 #import "CLLocation+EXIFGPS.h"
-
 #import "FRSTabBarController.h"
-
-//Root View Controller
 #import "FRSBaseViewController.h"
+#import "FRSTrimTool.h"
 
 #define ICON_WIDTH 24
 #define PREVIEW_WIDTH 56
@@ -41,7 +33,7 @@
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4 / 3
 
-#import "FRSTrimTool.h"
+static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 @interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
 
@@ -337,7 +329,7 @@
 
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
-    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
+    self.assignmentLabel.font = [UIFont helveticaNeueMediumWithSize:15];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
@@ -1814,7 +1806,6 @@
     // Configure animation
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     drawAnimation.duration = maxVideoLength; // for testing purposes
-    //    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
     drawAnimation.repeatCount = 1.0; // Animate only once..
 
     // Animate from no part of the stroke being drawn to the entire stroke being drawn

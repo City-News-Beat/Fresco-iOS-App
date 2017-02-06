@@ -16,7 +16,6 @@
 #import "FRSAssignmentAnnotation.h"
 #import "UITextView+Resize.h"
 #import "Fresco.h"
-#import "FRSAppDelegate.h"
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "Haneke.h"
 #import "FRSAlertView.h"
@@ -1417,8 +1416,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         return;
 
     self.locationManager.lastAcquiredLocation = [locations lastObject];
-
-    //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
 
     if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground) {
         [self.locationManager stopUpdatingLocation];
