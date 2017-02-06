@@ -7,7 +7,6 @@
 //
 
 #import "FRSRequestSerializer.h"
-#import "Fresco.h"
 #import "EndpointManager.h"
 
 @implementation FRSRequestSerializer

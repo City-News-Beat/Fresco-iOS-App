@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "UILabel+Custom.h"
-#import "Fresco.h"
 #import "FRSContentActionsBar.h"
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>

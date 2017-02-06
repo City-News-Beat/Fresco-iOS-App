@@ -15,7 +15,6 @@
 #import "FRSMapCircle.h"
 #import "FRSAssignmentAnnotation.h"
 #import "UITextView+Resize.h"
-#import "Fresco.h"
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "Haneke.h"
 #import "FRSAlertView.h"

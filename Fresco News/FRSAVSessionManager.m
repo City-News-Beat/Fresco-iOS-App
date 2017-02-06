@@ -7,7 +7,6 @@
 //
 
 #import "FRSAVSessionManager.h"
-#import "Fresco.h"
 
 @interface FRSAVSessionManager ()
 

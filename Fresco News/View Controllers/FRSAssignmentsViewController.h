@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import "MagicalRecord.h"
 #import "FRSAssignment.h"
-#import "Fresco.h"
 
 @import MapKit;
 
@@ -22,14 +21,8 @@
     BOOL notFirstFetch;
 }
 
-- (void)setInitialMapRegion;
-- (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
-- (void)configureMap;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
-
-- (void)globalAssignmentsSegue;
-
 @property (nonatomic) BOOL hasDefault;
 @property (strong, nonatomic) UIButton *closeButton;
 @property (nonatomic, retain) NSString *defaultID;
@@ -37,5 +30,10 @@
 @property BOOL mapShouldFollowUser;
 @property BOOL assignmentCardIsOpen;
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
+
+- (void)globalAssignmentsSegue;
+- (void)setInitialMapRegion;
+- (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
+- (void)configureMap;
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "FRSScrollingViewController.h"
-#import "Fresco.h"
 #import "FRSGalleryView.h"
 #import "FRSFollowingController.h"
 #import "FRSAlertView.h"

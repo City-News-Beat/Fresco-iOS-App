@@ -11,7 +11,6 @@
 #import "FRSArticle.h"
 #import "PeekPopArticleViewController.h"
 #import "Haneke.h"
-#import "Fresco.h"
 #import "FRSAlertView.h"
 #import "FRSGalleryDetailView.h"
 #import "FRSUserManager.h"

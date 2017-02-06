@@ -13,6 +13,7 @@
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
+#import "NSString+Validation.h"
 
 @interface FRSDisableAccountViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -280,23 +281,17 @@
 #pragma mark - UITextField Deleagte
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-
     if (textField.tag == 1) {
-
         if (self.usernameErrorImageView.alpha == 1) {
             textField.text = @"";
             self.usernameErrorImageView.alpha = 0;
         }
-
     } else if (textField.tag == 2) {
-
         if (self.emailErrorImageView.alpha == 1) {
             textField.text = @"";
             self.emailErrorImageView.alpha = 0;
         }
-
     } else if (textField.tag == 3) {
-
         textField.text = @"";
         self.passwordErrorImageView.alpha = 0;
     }
@@ -307,7 +302,7 @@
         self.username = textField.text;
 
         if (![self.username isEqualToString:@""]) {
-            if ([self isValidUsername:self.username] && ![self stringContainsEmoji:self.username]) {
+            if ([self.username isValidUsername] && ![self.username stringContainsEmoji]) {
                 self.usernameIsValid = YES;
             } else {
                 self.usernameIsValid = NO;
@@ -315,12 +310,11 @@
         } else {
             self.usernameIsValid = NO;
         }
-
     } else if (textField.tag == 2) {
         self.email = textField.text;
 
         if (![self.email isEqualToString:@""]) {
-            if ([self isValidEmail:self.email]) {
+            if ([self.email isValidEmail]) {
                 self.emailIsValid = YES;
             } else {
                 self.emailIsValid = NO;
@@ -333,11 +327,7 @@
         self.password = textField.text;
 
         if (![self.password isEqualToString:@""]) {
-            if ([self isValidPassword:self.password]) {
-                self.passwordIsValid = YES;
-            } else {
-                self.passwordIsValid = NO;
-            }
+                self.passwordIsValid = [self.password isValidPassword];
         } else {
             self.passwordIsValid = NO;
         }
@@ -352,95 +342,6 @@
     }
 
     return YES;
-}
-
-#pragma mark - Validators
-
-- (BOOL)stringContainsEmoji:(NSString *)string {
-    __block BOOL returnValue = NO;
-    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
-                               options:NSStringEnumerationByComposedCharacterSequences
-                            usingBlock:
-                                ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-
-                                  const unichar hs = [substring characterAtIndex:0];
-                                  // surrogate pair
-                                  if (0xd800 <= hs && hs <= 0xdbff) {
-                                      if (substring.length > 1) {
-                                          const unichar ls = [substring characterAtIndex:1];
-                                          const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                                          if (0x1d000 <= uc && uc <= 0x1f77f) {
-                                              returnValue = YES;
-                                          }
-                                      }
-                                  } else if (substring.length > 1) {
-                                      const unichar ls = [substring characterAtIndex:1];
-                                      if (ls == 0x20e3) {
-                                          returnValue = YES;
-                                      }
-
-                                  } else {
-                                      // non surrogate
-                                      if (0x2100 <= hs && hs <= 0x27ff) {
-                                          returnValue = YES;
-                                      } else if (0x2B05 <= hs && hs <= 0x2b07) {
-                                          returnValue = YES;
-                                      } else if (0x2934 <= hs && hs <= 0x2935) {
-                                          returnValue = YES;
-                                      } else if (0x3297 <= hs && hs <= 0x3299) {
-                                          returnValue = YES;
-                                      } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-                                          returnValue = YES;
-                                      }
-                                  }
-                                }];
-
-    return returnValue;
-}
-
-- (BOOL)isValidPassword:(NSString *)password {
-
-    if (password.length < 8) {
-        return NO;
-    }
-
-    return YES;
-}
-
-- (BOOL)isValidUsername:(NSString *)username {
-
-    if ([self stringContainsEmoji:username]) {
-        return NO;
-    }
-
-    if ([username isEqualToString:@"@"]) {
-        return NO;
-    }
-
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isValidEmail:(NSString *)emailString {
-
-    if ([emailString length] == 0) {
-        return NO;
-    }
-
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-
-    if (regExMatches == 0) {
-        return NO;
-    } else {
-        return YES;
-    }
 }
 
 #pragma mark - UXCam

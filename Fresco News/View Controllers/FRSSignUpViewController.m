@@ -18,6 +18,7 @@
 #import "FRSNavigationController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "NSString+Validation.h"
 #import <UXCam/UXCam.h>
 
 @import MapKit;
@@ -712,11 +713,9 @@
 }
 
 - (void)animateTextFieldError:(UITextField *)textField {
-
     CGFloat duration = 0.1;
 
     /* SHAKE */
-
     [UIView animateWithDuration:duration
         delay:0.0
         options:UIViewAnimationOptionCurveEaseInOut
@@ -794,9 +793,9 @@
 }
 
 #pragma mark - TextField Delegate
-- (void)textFieldDidChange {
 
-    if ((self.emailTF.isEditing) && ([self isValidEmail:self.emailTF.text])) {
+- (void)textFieldDidChange {
+    if ((self.emailTF.isEditing) && ([self.emailTF.text isValidEmail])) {
         [self checkEmail];
     }
 
@@ -813,10 +812,9 @@
 
 - (void)checkCreateAccountButtonState {
     UIControlState controlState;
-
     if (([self.usernameTF.text length] > 0) && ([self.emailTF.text length] > 0) && ([self.passwordTF.text length] > 0)) {
 
-        if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken) && (self.TOSAccepted)) {
+        if ([[self.usernameTF.text substringFromIndex:1] isValidUsername] && [self.emailTF.text isValidEmail] && [self.passwordTF.text isValidPassword] && (!self.emailTaken) && (!self.usernameTaken) && (self.TOSAccepted)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
@@ -834,9 +832,8 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-
     if (textField == self.usernameTF) {
-        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]) {
+        if (![[self.usernameTF.text substringFromIndex:1] isValidUsername] || [textField.text isEqualToString:@"@"]) {
             [self animateTextFieldError:self.usernameTF];
             [textField becomeFirstResponder];
             self.usernameCheckIV.alpha = 0;
@@ -844,14 +841,13 @@
         }
         [self.emailTF becomeFirstResponder];
     } else if (textField == self.emailTF) {
-        if (![self isValidEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
+        if (![textField.text isValidEmail] || [self.emailTF.text isEqualToString:@""]) {
             [self animateTextFieldError:textField];
             [textField becomeFirstResponder];
             return FALSE;
         }
 
         [self.passwordTF becomeFirstResponder];
-
     } else if (textField == self.passwordTF) {
         [self.passwordTF resignFirstResponder];
     }
@@ -860,9 +856,7 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-
     if (textField == self.usernameTF) {
-
         [self startUsernameTimer];
 
         [self highlightTextField:self.usernameTF enabled:YES];
@@ -889,7 +883,7 @@
 
         [self highlightTextField:self.usernameTF enabled:NO];
 
-        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]]) {
+        if (![[self.usernameTF.text substringFromIndex:1] isValidUsername]) {
             [self animateTextFieldError:self.usernameTF];
             [textField becomeFirstResponder];
             return;
@@ -900,16 +894,6 @@
             return;
         }
     }
-
-    //    UIControlState controlState;
-    //
-    //    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-    //        controlState = UIControlStateHighlighted;
-    //    } else {
-    //        controlState = UIControlStateNormal;
-    //    }
-    //
-    //    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
 - (void)startUsernameTimer {
@@ -927,23 +911,18 @@
 }
 
 - (void)usernameTimerFired {
-
     // Check for emoji and error
-    if ([self stringContainsEmoji:[self.usernameTF.text substringFromIndex:1]]) {
+    if ([[self.usernameTF.text substringFromIndex:1] stringContainsEmoji]) {
         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
         return;
     }
 
-    if (self.usernameTF.isEditing && (![self stringContainsEmoji:[self.usernameTF.text substringFromIndex:1]])) {
-
+    if (self.usernameTF.isEditing && (![[self.usernameTF.text substringFromIndex:1] stringContainsEmoji])) {
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
-
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   //Return if no internet
                                                   if (error.code == -1009) {
-
                                                       return;
                                                   }
 
@@ -963,25 +942,12 @@
                                                       [self stopUsernameTimer];
                                                       [self checkCreateAccountButtonState];
                                                   }
-
-                                                  //                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
-                                                  //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  //                    self.usernameTaken = NO;
-                                                  //                    [self stopUsernameTimer];
-                                                  //                    [self checkCreateAccountButtonState];
-                                                  //                } else {
-                                                  //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  //                    self.usernameTaken = YES;
-                                                  //                    [self stopUsernameTimer];
-                                                  //                    [self checkCreateAccountButtonState];
-                                                  //                }
                                                 }];
         }
     }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-
     if (textField == self.emailTF) {
         if (self.emailError) {
             [self shouldShowEmailDialogue:NO];
@@ -989,9 +955,8 @@
     }
 
     if (textField == self.usernameTF) {
-
         if ([string containsString:@" "]) {
-            return FALSE;
+            return NO;
         }
 
         if (textField.text.length == 1 && [string isEqualToString:@""]) { //When detect backspace when have one character.
@@ -1247,8 +1212,6 @@
                                                           facebookSignup = true;
                                                       }
 
-                                                      NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
-
                                                       if (error) {
                                                           [registrationDigest setObject:error.localizedDescription forKey:@"error"];
                                                           [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
@@ -1300,7 +1263,7 @@
 
                                                           _isAlreadyRegistered = TRUE;
                                                           [self segueToSetup];
-                                                          
+
                                                           // Update the Segment and UXCam trackers on signup
                                                           [FRSTracker trackUser];
                                                       }
@@ -1327,7 +1290,7 @@
 }
 
 - (BOOL)checkFields {
-    if (self.usernameTF.text.length <= 1 || ![self isValidUsername:[self.usernameTF.text substringFromIndex:1]]) {
+    if (self.usernameTF.text.length <= 1 || ![[self.usernameTF.text substringFromIndex:1] isValidUsername]) {
         return FALSE;
     }
 
@@ -1335,7 +1298,7 @@
         return FALSE;
     }
 
-    if (self.emailTF.text.length == 0 || ![self isValidEmail:self.emailTF.text]) {
+    if (self.emailTF.text.length == 0 || ![self.emailTF.text isValidEmail]) {
         return FALSE;
     }
 
@@ -1347,7 +1310,6 @@
 }
 
 - (void)twitterTapped {
-
     //Create Spinner
     self.twitterButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -1662,96 +1624,6 @@
     }
 }
 
-#pragma mark - Text Field Validation
-
-- (BOOL)isValidEmail:(NSString *)emailString {
-
-    if ([emailString length] == 0) {
-        return NO;
-    }
-
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-
-    if (regExMatches == 0) {
-        return NO;
-    } else {
-        return YES;
-    }
-}
-
-- (BOOL)isValidUsername:(NSString *)username {
-
-    if ([self stringContainsEmoji:username]) {
-        return NO;
-    }
-
-    if ([username isEqualToString:@"@"]) {
-        return NO;
-    }
-
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isValidPassword:(NSString *)password {
-
-    if (password.length < 8) {
-        return NO;
-    }
-
-    return YES;
-}
-
-- (BOOL)stringContainsEmoji:(NSString *)string {
-    __block BOOL returnValue = NO;
-    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
-                               options:NSStringEnumerationByComposedCharacterSequences
-                            usingBlock:
-                                ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-
-                                  const unichar hs = [substring characterAtIndex:0];
-                                  // surrogate pair
-                                  if (0xd800 <= hs && hs <= 0xdbff) {
-                                      if (substring.length > 1) {
-                                          const unichar ls = [substring characterAtIndex:1];
-                                          const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                                          if (0x1d000 <= uc && uc <= 0x1f77f) {
-                                              returnValue = YES;
-                                          }
-                                      }
-                                  } else if (substring.length > 1) {
-                                      const unichar ls = [substring characterAtIndex:1];
-                                      if (ls == 0x20e3) {
-                                          returnValue = YES;
-                                      }
-
-                                  } else {
-                                      // non surrogate
-                                      if (0x2100 <= hs && hs <= 0x27ff) {
-                                          returnValue = YES;
-                                      } else if (0x2B05 <= hs && hs <= 0x2b07) {
-                                          returnValue = YES;
-                                      } else if (0x2934 <= hs && hs <= 0x2935) {
-                                          returnValue = YES;
-                                      } else if (0x3297 <= hs && hs <= 0x3299) {
-                                          returnValue = YES;
-                                      } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-                                          returnValue = YES;
-                                      }
-                                  }
-                                }];
-
-    return returnValue;
-}
-
 #pragma mark - Error Handling
 
 - (void)presentInvalidEmail {
@@ -1889,7 +1761,7 @@
 
 #pragma mark - UXCam
 
--(void)hideSensitiveViews {
+- (void)hideSensitiveViews {
     [UXCam occludeSensitiveView:self.passwordTF];
 }
 

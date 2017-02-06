@@ -13,6 +13,7 @@
 - (BOOL)isValidEmail;
 - (BOOL)isValidPassword;
 - (BOOL)isValidUsername;
+- (BOOL)stringContainsEmoji;
 + (NSString *)formatCreditCard:(NSString *)input;
 + (NSString *)formatCreditCardExpiry:(NSString *)input;
 

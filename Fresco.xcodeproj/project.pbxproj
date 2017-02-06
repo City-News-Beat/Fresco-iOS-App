@@ -81,7 +81,6 @@
 		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
 		1EDA44D31AA4CCC70082E08D /* FrescoNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
-		42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */; };
@@ -192,7 +191,6 @@
 		D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */; };
 		D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */; };
 		D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42A138E1D89A451008909E6 /* Mixpanel.framework */; };
-		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D433E5621DF1D574007440EC /* FRSNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D433E5601DF1D574007440EC /* FRSNotificationHandler.m */; };
 		D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */; };
 		D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */; };
@@ -451,8 +449,6 @@
 		24BD02930A66131EB6AED7E3 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		42D997FC1AEAF5B300636F33 /* UIImage+PHAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+PHAsset.h"; path = "Categories/UIImage+PHAsset.h"; sourceTree = "<group>"; };
-		42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+PHAsset.m"; path = "Categories/UIImage+PHAsset.m"; sourceTree = "<group>"; };
 		42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLLocation+EXIFGPS.h"; path = "Categories/CLLocation+EXIFGPS.h"; sourceTree = "<group>"; };
 		42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+EXIFGPS.m"; path = "Categories/CLLocation+EXIFGPS.m"; sourceTree = "<group>"; };
 		42D998051AEC46D900636F33 /* NSDate+ISO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+ISO.h"; path = "Categories/NSDate+ISO.h"; sourceTree = "<group>"; };
@@ -654,8 +650,6 @@
 		D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchUserCell.m; sourceTree = "<group>"; };
 		D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSearchUserCell.xib; sourceTree = "<group>"; };
 		D42A138E1D89A451008909E6 /* Mixpanel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mixpanel.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/Mixpanel.framework"; sourceTree = "<group>"; };
-		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../UIImage+Pixels.h"; sourceTree = "<group>"; };
-		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D433E5601DF1D574007440EC /* FRSNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationHandler.m; sourceTree = "<group>"; };
 		D433E5611DF1D574007440EC /* FRSNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationHandler.h; sourceTree = "<group>"; };
 		D433E5651DF1D6A5007440EC /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -1254,8 +1248,6 @@
 		1EDA45041AA4D0B10082E08D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */,
-				D42C90801CC6191400B25C99 /* UIImage+Pixels.m */,
 				65F237C81C24D464002182DE /* UIFont+Fresco.h */,
 				65F237C91C24D464002182DE /* UIFont+Fresco.m */,
 				65F237B51C24AACF002182DE /* UIColor+Fresco.h */,
@@ -2444,8 +2436,6 @@
 				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
 				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
 				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
-				42D997FC1AEAF5B300636F33 /* UIImage+PHAsset.h */,
-				42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
@@ -2742,7 +2732,6 @@
 				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
 				0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */,
-				D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */,
 				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
@@ -2846,7 +2835,6 @@
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
-				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,

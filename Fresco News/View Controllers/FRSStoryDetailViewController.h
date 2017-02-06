@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Fresco.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSGalleryView.h"
@@ -15,9 +14,6 @@
 #import "FRSStoryDetailViewController.h"
 
 @interface FRSStoryDetailViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
-
-{
-}
 
 @property (nonatomic, retain) IBOutlet UITableView *galleriesTable;
 @property (nonatomic, retain) NSMutableArray *stories;

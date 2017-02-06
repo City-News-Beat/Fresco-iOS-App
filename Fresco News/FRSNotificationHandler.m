@@ -14,7 +14,6 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSIdentityViewController.h"
-#import "Fresco.h"
 #import "FRSStoryManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
