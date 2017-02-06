@@ -8,8 +8,6 @@
 
 #import "FRSIdentityViewController.h"
 #import "UIColor+Fresco.h"
-#import "Fresco.h"
-#import "FRSTableViewCell.h"
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
 #import "FRSPaymentManager.h"

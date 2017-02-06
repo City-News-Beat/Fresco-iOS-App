@@ -9,7 +9,6 @@
 #import "FRSLoginViewController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSTabBarController.h"
-#import "FRSUploadViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAlertView.h"
 #import "FRSLocationManager.h"

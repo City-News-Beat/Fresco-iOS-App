@@ -10,6 +10,7 @@
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSUserManager.h"
+#import "NSString+Validation.h"
 #import <UXCam/UXCam.h>
 
 @interface FRSEmailViewController ()
@@ -123,7 +124,7 @@
     if (textField.isSecureTextEntry) {
         //User is editing password textField
         self.password = textField.text;
-        if ([self isValidPassword:self.password]) {
+        if ([self.password isValidPassword]) {
             self.passwordIsValid = YES;
         } else {
             self.passwordIsValid = NO;
@@ -132,7 +133,7 @@
     } else {
         //User is editing email textField
         self.email = textField.text;
-        if ([self isValidEmail:self.email]) {
+        if ([self.email isValidEmail]) {
             self.emailIsValid = YES;
         } else {
             self.emailIsValid = NO;
@@ -159,33 +160,6 @@
         [self saveEmail:nil];
     }
 
-    return YES;
-}
-
-#pragma mark - Validators
-
-- (BOOL)isValidEmail:(NSString *)emailString {
-
-    if ([emailString length] == 0) {
-        return NO;
-    }
-
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-
-    if (regExMatches == 0) {
-        return NO;
-    } else {
-        return YES;
-    }
-}
-
-- (BOOL)isValidPassword:(NSString *)password {
-
-    if (password.length < 1) {
-        return NO;
-    }
     return YES;
 }
 

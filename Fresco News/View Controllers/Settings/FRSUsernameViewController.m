@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
+#import "NSString+Validation.h"
 #import <UXCam/UXCam.h>
 
 @interface FRSUsernameViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSAlertViewDelegate>
@@ -36,7 +37,7 @@
 
     [self configureTableView];
     [self configureBackButtonAnimated:NO];
-    
+
     [self hideSensitiveViews];
 }
 
@@ -146,8 +147,7 @@
 #pragma mark - UITextField Delegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-
-    if ([self isValidPassword:self.password] && self.usernameTaken) {
+    if ([self.password isValidPassword] && self.usernameTaken) {
         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.cell.rightAlignedButton.userInteractionEnabled = YES;
     }
@@ -165,7 +165,7 @@
     }
 
     self.username = textField.text;
-    if ([self isValidUsername:self.username]) {
+    if ([self.username isValidUsername]) {
         [self checkUsername];
     } else {
         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
@@ -269,14 +269,13 @@
 }
 
 - (void)checkUsername {
-
-    if (![self isValidUsername:self.username]) {
+    if (![self.username isValidUsername]) {
         return;
     }
 
     NSRange whiteSpaceRange = [self.username rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
 
-    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self stringContainsEmoji:self.username]) {
+    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self.username stringContainsEmoji]) {
         self.usernameCheckIV.alpha = 0;
         return;
     }
@@ -285,7 +284,6 @@
 }
 
 - (void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
-
     if ([self.username isEqualToString:@""] || self.username == nil) {
         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.cell.rightAlignedButton.userInteractionEnabled = NO;
@@ -331,31 +329,27 @@
 }
 
 - (void)usernameTimerFired {
-
-    if (![self isValidUsername:self.username]) {
+    if (![self.username isValidUsername]) {
         return;
     }
 
     NSRange whiteSpaceRange = [self.username rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
 
-    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self stringContainsEmoji:self.username]) {
+    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self.username stringContainsEmoji]) {
         self.usernameCheckIV.alpha = 0;
         return;
     }
 
     // Check for emoji and error
-    if ([self stringContainsEmoji:[self.cell.textField.text substringFromIndex:1]]) {
+    if ([[self.cell.textField.text substringFromIndex:1] stringContainsEmoji]) {
         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
         return;
     }
 
-    if (![self stringContainsEmoji:self.cell.textField.text]) {
-
+    if (![self.cell.textField.text stringContainsEmoji]) {
         if ((![self.cell.textField.text isEqualToString:@""])) {
-
             [[FRSUserManager sharedInstance] checkUsername:self.username
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   if (!error && responseObject) {
                                                       [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                                                       self.usernameTaken = NO;
@@ -380,80 +374,9 @@
 #pragma mark - Validators
 
 - (void)checkPassword {
-    if ([self isValidPassword:self.password]) {
-
+    if ([self.password isValidPassword]) {
         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.cell.rightAlignedButton.userInteractionEnabled = YES;
-    }
-}
-
-- (BOOL)stringContainsEmoji:(NSString *)string {
-    __block BOOL returnValue = NO;
-    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
-                               options:NSStringEnumerationByComposedCharacterSequences
-                            usingBlock:
-                                ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-
-                                  const unichar hs = [substring characterAtIndex:0];
-                                  // surrogate pair
-                                  if (0xd800 <= hs && hs <= 0xdbff) {
-                                      if (substring.length > 1) {
-                                          const unichar ls = [substring characterAtIndex:1];
-                                          const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                                          if (0x1d000 <= uc && uc <= 0x1f77f) {
-                                              returnValue = YES;
-                                          }
-                                      }
-                                  } else if (substring.length > 1) {
-                                      const unichar ls = [substring characterAtIndex:1];
-                                      if (ls == 0x20e3) {
-                                          returnValue = YES;
-                                      }
-
-                                  } else {
-                                      // non surrogate
-                                      if (0x2100 <= hs && hs <= 0x27ff) {
-                                          returnValue = YES;
-                                      } else if (0x2B05 <= hs && hs <= 0x2b07) {
-                                          returnValue = YES;
-                                      } else if (0x2934 <= hs && hs <= 0x2935) {
-                                          returnValue = YES;
-                                      } else if (0x3297 <= hs && hs <= 0x3299) {
-                                          returnValue = YES;
-                                      } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-                                          returnValue = YES;
-                                      }
-                                  }
-                                }];
-
-    return returnValue;
-}
-
-- (BOOL)isValidPassword:(NSString *)password {
-
-    if (password.length < 7) {
-        return NO;
-    }
-
-    return YES;
-}
-
-- (BOOL)isValidUsername:(NSString *)username {
-
-    if ([self stringContainsEmoji:username]) {
-        return NO;
-    }
-
-    if ([username isEqualToString:@"@"]) {
-        return NO;
-    }
-
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
-        return YES;
-    } else {
-        return NO;
     }
 }
 
@@ -467,7 +390,7 @@
 
 #pragma mark - UXCam
 
--(void)hideSensitiveViews {
+- (void)hideSensitiveViews {
     [UXCam occludeSensitiveView:self.passwordTextField];
 }
 

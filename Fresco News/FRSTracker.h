@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Fresco.h"
 #import <Analytics/SEGAnalytics.h>
 #import <UXCam/UXCam.h>
 

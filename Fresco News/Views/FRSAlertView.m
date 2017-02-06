@@ -7,7 +7,6 @@
 //
 
 #import "FRSAlertView.h"
-
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
@@ -16,6 +15,7 @@
 #import <Contacts/Contacts.h>
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "NSString+Validation.h"
 
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
@@ -1328,7 +1328,7 @@
         }
     }
 
-    if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
+    if ((textField == self.emailTextField) && ([self.emailTextField.text isValidEmail])) {
         [self checkEmail];
     }
 
@@ -1344,7 +1344,7 @@
 }
 
 - (void)textFieldDidChange:(UITextField *)textField {
-    if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
+    if ((textField == self.emailTextField) && ([self.emailTextField.text isValidEmail])) {
         [self checkEmail];
     }
 
@@ -1527,24 +1527,19 @@
     }
 
     // Check for emoji and error
-    if ([self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]]) {
+    if ([[self.usernameTextField.text substringFromIndex:1] stringContainsEmoji]) {
         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
         return;
     }
 
-    if (self.usernameTextField.isEditing && (![self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]])) {
-
+    if (self.usernameTextField.isEditing && (![[self.usernameTextField.text substringFromIndex:1] stringContainsEmoji])) {
         if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
-
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTextField.text substringFromIndex:1]
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   //Return if no internet
                                                   if (error.code == -1009) {
-
                                                       return;
                                                   }
-
                                                   NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                   NSInteger responseCode = response.statusCode;
 
@@ -1592,59 +1587,12 @@
     }
 }
 
-- (BOOL)stringContainsEmoji:(NSString *)string {
-
-    if ([string isEqualToString:@""]) {
-        return NO;
-    }
-
-    __block BOOL returnValue = NO;
-    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
-                               options:NSStringEnumerationByComposedCharacterSequences
-                            usingBlock:
-                                ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-
-                                  const unichar hs = [substring characterAtIndex:0];
-                                  // surrogate pair
-                                  if (0xd800 <= hs && hs <= 0xdbff) {
-                                      if (substring.length > 1) {
-                                          const unichar ls = [substring characterAtIndex:1];
-                                          const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                                          if (0x1d000 <= uc && uc <= 0x1f77f) {
-                                              returnValue = YES;
-                                          }
-                                      }
-                                  } else if (substring.length > 1) {
-                                      const unichar ls = [substring characterAtIndex:1];
-                                      if (ls == 0x20e3) {
-                                          returnValue = YES;
-                                      }
-
-                                  } else {
-                                      // non surrogate
-                                      if (0x2100 <= hs && hs <= 0x27ff) {
-                                          returnValue = YES;
-                                      } else if (0x2B05 <= hs && hs <= 0x2b07) {
-                                          returnValue = YES;
-                                      } else if (0x2934 <= hs && hs <= 0x2935) {
-                                          returnValue = YES;
-                                      } else if (0x3297 <= hs && hs <= 0x3299) {
-                                          returnValue = YES;
-                                      } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-                                          returnValue = YES;
-                                      }
-                                  }
-                                }];
-
-    return returnValue;
-}
-
 - (void)checkCreateAccountButtonState {
     UIControlState controlState;
 
     //Only updating username
     if (!self.passwordTextField && !self.emailTextField && self.usernameTextField) {
-        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
+        if ([[self.usernameTextField.text substringFromIndex:1] isValidUsername] && (!self.usernameTaken)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
@@ -1654,7 +1602,7 @@
 
     //Only updaing email
     if (!self.passwordTextField && self.emailTextField && !self.usernameTextField) {
-        if ([self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
+        if ([self.emailTextField.text isValidEmail] && (!self.emailTaken)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
@@ -1674,7 +1622,7 @@
 
     //Updating password and username
     if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
-        if ([self.passwordTextField.text length] >= 6 && [self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
+        if ([self.passwordTextField.text length] >= 6 && [[self.usernameTextField.text substringFromIndex:1] isValidUsername] && (!self.usernameTaken)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
@@ -1684,7 +1632,7 @@
 
     //Updating password and email
     if (self.passwordTextField && self.emailTextField && !self.usernameTextField) {
-        if ([self.passwordTextField.text length] >= 6 && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
+        if ([self.passwordTextField.text length] >= 6 && [self.emailTextField.text isValidEmail] && (!self.emailTaken)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
@@ -1694,7 +1642,7 @@
 
     //Updating username and email
     if (!self.passwordTextField && self.emailTextField && self.usernameTextField) {
-        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
+        if ([[self.usernameTextField.text substringFromIndex:1] isValidUsername] && (!self.usernameTaken) && [self.emailTextField.text isValidEmail] && (!self.emailTaken)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
@@ -1704,35 +1652,12 @@
 
     //Updaing username, email, and password
     if (self.passwordTextField && self.emailTextField && self.usernameTextField) {
-        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && [self.passwordTextField.text length] >= 6) {
+        if ([[self.usernameTextField.text substringFromIndex:1] isValidUsername] && (!self.usernameTaken) && [self.emailTextField.text isValidEmail] && (!self.emailTaken) && [self.passwordTextField.text length] >= 6) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
-    }
-}
-
-- (BOOL)isValidUsername:(NSString *)username {
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
-}
-
-- (BOOL)isValidEmail:(NSString *)emailString {
-
-    if ([emailString length] == 0) {
-        return NO;
-    }
-
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-
-    if (regExMatches == 0) {
-        return NO;
-    } else {
-        return YES;
     }
 }
 
