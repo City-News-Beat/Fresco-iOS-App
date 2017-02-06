@@ -18,8 +18,6 @@
 
 @property (nonatomic, retain) id<FRSExternalNavigationDelegate> delegate;
 
-- (void)configureAssignmentCellWithID:(NSString *)assignmentID;
-- (void)configureCameraCellWithAssignmentID:(NSString *)assignmentID;
 - (NSInteger)heightForCell;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

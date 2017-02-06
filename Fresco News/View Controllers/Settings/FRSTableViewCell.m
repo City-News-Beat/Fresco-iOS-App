@@ -989,8 +989,6 @@
     [self checkNotificationStatus];
     [self checkLocationStatus];
 
-    __block BOOL state;
-
     if ([sender isOn]) {
         FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
         float radius = 10;

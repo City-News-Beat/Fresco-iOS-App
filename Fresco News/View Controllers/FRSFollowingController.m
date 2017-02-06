@@ -152,6 +152,7 @@
         [storyCell configureCell];
     }
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     float height = 100;
 

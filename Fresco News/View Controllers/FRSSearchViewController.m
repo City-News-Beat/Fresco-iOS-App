@@ -11,7 +11,6 @@
 #import "FRSGallery.h"
 #import "FRSGalleryCell.h"
 #import "FRSGalleryExpandedViewController.h"
-#import "FRSScrollingViewController.h"
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"

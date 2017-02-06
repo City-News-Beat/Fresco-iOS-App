@@ -36,5 +36,6 @@
 @dynamic blocking;
 @dynamic disabled;
 @dynamic suspended;
+@dynamic disabledReason;
 
 @end

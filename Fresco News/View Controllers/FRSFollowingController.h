@@ -15,6 +15,7 @@
 - (void)storyClicked:(FRSStory *)story;
 - (void)galleryClicked:(FRSGallery *)gallery;
 @end
+
 @interface FRSFollowingController : NSObject <UITableViewDelegate, UITableViewDataSource> {
     DGElasticPullToRefreshLoadingViewCircle *loadingView;
 }

@@ -19,9 +19,6 @@
 @synthesize isSelectedAssignment = _isSelectedAssignment;
 @synthesize isSelectedOutlet = _isSelectedOutlet;
 @synthesize isAnOutlet = _isAnOutlet;
-- (void)awakeFromNib {
-    //    [super awakeFromNib];
-}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
@@ -36,9 +33,9 @@
 
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
 
-        self.isSelectedAssignment = FALSE;
-        self.isSelectedOutlet = FALSE;
-        self.isAnOutlet = false;
+        self.isSelectedAssignment = NO;
+        self.isSelectedOutlet = NO;
+        self.isAnOutlet = NO;
 
         [self addSubview:self.selectionImageView];
 
@@ -55,7 +52,6 @@
 }
 
 - (void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath {
-
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
@@ -71,10 +67,6 @@
     } else {
         self.titleLabel.text = @"No assignment";
     }
-
-    //    if (indexPath.row == 0) {
-    //        self.isSelectedAssignment = YES;
-    //    }
 }
 
 - (BOOL)isSelectedAssignment {
@@ -151,14 +143,11 @@
     self.titleLabel.frame = CGRectMake(32, 12, self.frame.size.width - 32 - 24 - 16, 20);
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
 
-    self.isSelectedAssignment = FALSE;
+    self.isSelectedAssignment = NO;
 
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
 
-    //    if (self.outlets.count > 1) {
     self.titleLabel.text = [outlet objectForKey:@"title"];
-    //self.representedOutletID = [outlet objectForKey:@"id"];
-    //    }
 }
 
 @end

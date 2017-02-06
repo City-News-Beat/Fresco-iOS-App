@@ -1432,7 +1432,6 @@
 
     [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
                                                         completion:^(id responseObject, NSError *error) {
-                                                          FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                           [[FRSUserManager sharedInstance] saveUserFields:responseObject];
 
                                                           if (responseObject && !error) {

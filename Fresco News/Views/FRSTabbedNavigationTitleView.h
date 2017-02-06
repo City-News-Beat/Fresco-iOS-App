@@ -12,19 +12,19 @@
 
 @interface FRSTabbedNavigationTitleView : UIView
 
-@property (weak, nonatomic) NSObject <FRSTabbedNavigationTitleViewDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSTabbedNavigationTitleViewDelegate> *delegate;
 
--(instancetype)initWithTabTitles:(NSArray *)tabTitles delegate:(id <FRSTabbedNavigationTitleViewDelegate>)delegate hasBackButton:(BOOL)hasBackButton;
+- (instancetype)initWithTabTitles:(NSArray *)tabTitles delegate:(id<FRSTabbedNavigationTitleViewDelegate>)delegate hasBackButton:(BOOL)hasBackButton;
 
 @end
 
 @protocol FRSTabbedNavigationTitleViewDelegate <NSObject>
 
--(void)tabbedNavigationTitleViewDidTapButtonAtIndex:(NSInteger)index;
--(void)tabbedNavigationTitleViewDidTapLeftBarItem;
--(void)tabbedNavigationTitleViewDidTapRightBarItem;
+- (void)tabbedNavigationTitleViewDidTapButtonAtIndex:(NSInteger)index;
+- (void)tabbedNavigationTitleViewDidTapLeftBarItem;
+- (void)tabbedNavigationTitleViewDidTapRightBarItem;
 
--(UIImage *)imageForLeftBarItem;
--(UIImage *)imageForRightBarItem;
+- (UIImage *)imageForLeftBarItem;
+- (UIImage *)imageForRightBarItem;
 
 @end

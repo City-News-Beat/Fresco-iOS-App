@@ -302,10 +302,6 @@ static BOOL isSegueingToAssignment;
                                                  FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
 
                                                  [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-
-                                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                                   [detailVC loadGallery:galleryToSave];
-                                                 });
                                                }];
 }
 

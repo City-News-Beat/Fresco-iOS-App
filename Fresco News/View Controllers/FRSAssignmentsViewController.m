@@ -26,7 +26,7 @@
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate> {
+@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, FRSAlertViewDelegate> {
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
@@ -1175,16 +1175,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     label.textColor = [UIColor frescoLightTextColor];
     [self.scrollView addSubview:label];
 
-    //    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
-    //    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    //    self.closeButton.tintColor = [UIColor whiteColor];
-    //    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
-    //    self.closeButton.frame = CGRectMake(0, 0, 24, 24);
-    //    self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
-    //    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
-    //    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
-    //    self.navigationItem.leftBarButtonItem = backButton;
-    //    self.closeButton.alpha = 0;
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
 
@@ -1705,11 +1695,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.didAcceptAssignment = NO;
     self.acceptedAssignment = nil;
     self.acceptedAssignmentDictionary = nil;
-    self.assignmentIDs = nil;
     self.assignmentIDs = [[NSMutableArray alloc] init];
     self.defaultID = nil;
     self.assignmentDidExpire = NO;
-    self.acceptedAssignmentDictionary = nil;
 
     [self.greenView removeFromSuperview];
     [self.timer invalidate];

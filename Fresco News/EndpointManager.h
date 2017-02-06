@@ -21,6 +21,5 @@ typedef NS_ENUM(NSUInteger, EndpointName) {
 + (EndpointManager *)sharedInstance;
 
 - (void)saveEndpoint:(EndpointName)endpoint;
-- (Endpoint *)getSavedEndpoint;
 
 @end

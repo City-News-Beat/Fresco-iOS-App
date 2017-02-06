@@ -106,6 +106,7 @@
 
 
 #pragma mark - Actions
+
 -(void)tapped:(UITapGestureRecognizer *)sender {
     
     if (self.player.rate == 0) {
@@ -129,7 +130,6 @@
     float videoDuration = CMTimeGetSeconds(self.player.currentItem.duration);
     
     float startTime = trimmer.left * videoDuration;
-    float endTime = trimmer.right * videoDuration;
     
     [self.player pause];
     

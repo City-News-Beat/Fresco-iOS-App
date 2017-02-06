@@ -48,13 +48,4 @@
     [self.currentEndpoint setEndpoint:endpoint];
 }
 
-- (Endpoint *)getSavedEndpoint {
-    NSString *endpointString = [[NSUserDefaults standardUserDefaults] stringForKey:@"endpoint"];
-    NSDictionary *dict = [self typeDisplayNames];
-    for (NSString *key in dict) {
-        id value = [dict objectForKey:key];
-    }
-    return Dev;
-}
-
 @end

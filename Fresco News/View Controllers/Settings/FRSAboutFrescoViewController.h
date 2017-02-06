@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-@interface FRSAboutFrescoViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate>
+@interface FRSAboutFrescoViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

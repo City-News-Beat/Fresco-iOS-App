@@ -169,7 +169,6 @@
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
-		D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */; };
 		D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */; };
 		D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40B1DA2D2F300133788 /* SAMKeychain.m */; };
 		D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */; };
@@ -231,7 +230,6 @@
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
-		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
 		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
 		D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722A1D10C502000677BF /* FRSFollowingController.m */; };
 		D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */; };
@@ -620,10 +618,8 @@
 		D400FA551D6DF57E008842E1 /* FRSCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentCell.h; sourceTree = "<group>"; };
 		D400FA561D6DF57E008842E1 /* FRSCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCommentCell.m; sourceTree = "<group>"; };
 		D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCommentCell.xib; sourceTree = "<group>"; };
-		D400FA661D6E13FA008842E1 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
-		D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
-		D400FA691D6E1A9E008842E1 /* FRSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTextView.h; sourceTree = "<group>"; };
-		D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextView.m; sourceTree = "<group>"; };
+		D400FA691D6E1A9E008842E1 /* FRSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTextView.h; path = ../TTTAttributedLabel/FRSTextView.h; sourceTree = "<group>"; };
+		D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTextView.m; path = ../TTTAttributedLabel/FRSTextView.m; sourceTree = "<group>"; };
 		D406C40A1DA2D2F300133788 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		D406C40B1DA2D2F300133788 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		D406C40C1DA2D2F300133788 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -739,8 +735,6 @@
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
 		D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSubmissionViewController.m; sourceTree = "<group>"; };
 		D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSubmissionViewController.xib; sourceTree = "<group>"; };
-		D48C72221D09D8D2000677BF /* FRSSplitTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSplitTableView.h; sourceTree = "<group>"; };
-		D48C72231D09D8D2000677BF /* FRSSplitTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSplitTableView.m; sourceTree = "<group>"; };
 		D48C72251D0B3D5C000677BF /* FRSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDevice.h; sourceTree = "<group>"; };
 		D48C72261D0B3D5C000677BF /* FRSDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDevice.m; sourceTree = "<group>"; };
 		D48C72291D10C502000677BF /* FRSFollowingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingController.h; sourceTree = "<group>"; };
@@ -944,7 +938,6 @@
 		074393EF1C3AC56E0007CFF0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				D400FA651D6E13FA008842E1 /* TTTAttributedLabel */,
 				D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */,
 				D43C7FF01C8F518300A7A7A7 /* Loading Resources */,
 				D43C7FF21C8F519300A7A7A7 /* Date Formatter */,
@@ -1156,7 +1149,6 @@
 			children = (
 				D43AA8B71DCA29A50002DF00 /* Stabilization */,
 				D41B2EF71D53E5810007C61F /* Search */,
-				D48C72211D09D8BC000677BF /* Split Table View */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
 				07EAFF281CEA226D00E224E2 /* Launch Screen */,
 				D487F1B81CBD6BE5005742F3 /* Media Scroll */,
@@ -1168,14 +1160,14 @@
 				D43C7FF81C90747300A7A7A7 /* Story View */,
 				D43C7FF91C90747B00A7A7A7 /* Map Annotations */,
 				D43C7FFA1C90748600A7A7A7 /* Map Circle */,
-				D43C7FFB1C90748B00A7A7A7 /* Comment Table */,
-				D43C7FFC1C90749F00A7A7A7 /* Comments View */,
 				D43C7FFD1C9074A400A7A7A7 /* Articles Table */,
 				D43C7FFE1C9074B000A7A7A7 /* Gallery View */,
 				D43C7FFF1C9074B500A7A7A7 /* Gallery Cell */,
 				D43C80001C9074BB00A7A7A7 /* Content Action Bar */,
 				D43C80011C9074C100A7A7A7 /* Alert View */,
 				D43C80021C9074C700A7A7A7 /* Scroll View Image */,
+				D400FA691D6E1A9E008842E1 /* FRSTextView.h */,
+				D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */,
 				0713D12C1CE5121900F79F49 /* FRSAwkwardView.h */,
 				0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */,
 			);
@@ -1592,17 +1584,6 @@
 			name = Cell;
 			sourceTree = "<group>";
 		};
-		D400FA651D6E13FA008842E1 /* TTTAttributedLabel */ = {
-			isa = PBXGroup;
-			children = (
-				D400FA661D6E13FA008842E1 /* TTTAttributedLabel.h */,
-				D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */,
-				D400FA691D6E1A9E008842E1 /* FRSTextView.h */,
-				D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */,
-			);
-			path = TTTAttributedLabel;
-			sourceTree = "<group>";
-		};
 		D40BD3D21CDE1EB100E39701 /* Rechability */ = {
 			isa = PBXGroup;
 			children = (
@@ -1936,20 +1917,6 @@
 			name = "Map Circle";
 			sourceTree = "<group>";
 		};
-		D43C7FFB1C90748B00A7A7A7 /* Comment Table */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Comment Table";
-			sourceTree = "<group>";
-		};
-		D43C7FFC1C90749F00A7A7A7 /* Comments View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Comments View";
-			sourceTree = "<group>";
-		};
 		D43C7FFD1C9074A400A7A7A7 /* Articles Table */ = {
 			isa = PBXGroup;
 			children = (
@@ -2125,15 +2092,6 @@
 				07A2C14A1DEE2EE000B8445F /* FRSPlayer.m */,
 			);
 			name = Player;
-			sourceTree = "<group>";
-		};
-		D48C72211D09D8BC000677BF /* Split Table View */ = {
-			isa = PBXGroup;
-			children = (
-				D48C72221D09D8D2000677BF /* FRSSplitTableView.h */,
-				D48C72231D09D8D2000677BF /* FRSSplitTableView.m */,
-			);
-			name = "Split Table View";
 			sourceTree = "<group>";
 		};
 		D48C72281D10C4EB000677BF /* Following Controller */ = {
@@ -2764,7 +2722,6 @@
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */,
 				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
-				D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */,
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */,
@@ -2887,7 +2844,6 @@
 				D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
-				D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,

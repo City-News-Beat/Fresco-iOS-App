@@ -10,7 +10,7 @@
 #import "FRSArticle.h"
 #import <SafariServices/SafariServices.h>
 
-@interface PeekPopArticleViewController () <UIViewControllerPreviewingDelegate>
+@interface PeekPopArticleViewController ()
 
 @end
 
@@ -24,9 +24,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
 }
 
 - (NSArray<id<UIPreviewActionItem> > *)previewActionItems {
@@ -55,7 +52,6 @@
 }
 
 - (void)shareText:(NSString *)text andImage:(UIImage *)image andUrl:(NSURL *)url {
-
     NSMutableArray *sharingItems = [NSMutableArray new];
 
     if (text) {
