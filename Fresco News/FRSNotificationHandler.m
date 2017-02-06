@@ -33,9 +33,8 @@ static BOOL isSegueingToAssignment;
 
     
     // smooch
-    
     // smoochSupportTempNotification checks are temporary and should be removed when support is added on the web platform for this feature
-    if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame) || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame)) {
+    if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame && [title length] != 0)) {
         [Smooch track:smoochNotificationEventName];
         [Smooch show];
         return;
