@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Fresco.h"
 #import "SDAVAssetExportSession.h"
 #import "FRSAPIClient.h"
 #import <Photos/Photos.h>
