@@ -10,10 +10,8 @@
 #import <AWSCore/AWSCore.h>
 #import <AWSS3/AWSS3.h>
 #import "FRSUpload+CoreDataProperties.h"
-#import "Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
-#import "SDAVAssetExportSession.h"
 #import "EndpointManager.h"
 #import "NSDate+ISO.h"
 
@@ -48,9 +46,6 @@ static NSDate *lastDate;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)exportSession:(SDAVAssetExportSession *)exportSession renderFrame:(CVPixelBufferRef)pixelBuffer withPresentationTime:(CMTime)presentationTime toBuffer:(CVPixelBufferRef)renderBuffer {
 }
 
 - (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
@@ -484,6 +479,7 @@ static NSDate *lastDate;
     
     [geocoder reverseGeocodeLocation:location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
+                       
                        if (placemarks && placemarks.count > 0) {
                            CLPlacemark *placemark = [placemarks objectAtIndex:0];
                            
