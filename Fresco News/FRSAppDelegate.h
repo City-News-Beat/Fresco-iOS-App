@@ -16,6 +16,11 @@
 #import "Adjust.h"
 #import "FRSCoreDataController.h"
 
+// quick actions -- app delegate
+static NSString *const assignmentsAction = @"FRSAssignmentsAction";
+static NSString *const takeVideoAction = @"FRSVideoAction";
+static NSString *const takePhotoAction = @"FRSPhotoAction";
+
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate> {
     NSTimer *notificationTimer;
 }
@@ -35,12 +40,11 @@
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
 
-
-
 /**
  Returns the managed object context from FRSCoreDataController
 
  @return NSManagedObjectContext from FRSCoreDataController
  */
 - (NSManagedObjectContext *)managedObjectContext;
+
 @end

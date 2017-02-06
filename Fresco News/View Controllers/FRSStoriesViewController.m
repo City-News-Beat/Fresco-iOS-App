@@ -6,7 +6,6 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "Fresco.h"
 #import "FRSStoriesViewController.h"
 #import "FRSSearchViewController.h"
 #import "FRSStoryCell.h"
@@ -14,7 +13,6 @@
 #import "MagicalRecord.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSLoadingTableViewCell.h"
-#import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSStoryManager.h"
 

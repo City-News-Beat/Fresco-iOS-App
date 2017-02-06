@@ -14,7 +14,6 @@
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <Haneke/Haneke.h>
-#import "FRSAppDelegate.h"
 #import "FRSLocationManager.h"
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
@@ -989,8 +988,6 @@
 - (void)notificationToggle:(id)sender {
     [self checkNotificationStatus];
     [self checkLocationStatus];
-
-    __block BOOL state;
 
     if ([sender isOn]) {
         FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];

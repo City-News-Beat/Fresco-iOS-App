@@ -35,7 +35,6 @@
     }
 
     self.navBarHeight = 20;
-    //NSLog(@"Nav Bar Height: %f", self.navBarHeight);
 
     self.enabled = YES;
     self.backButtonHidden = NO;
@@ -94,27 +93,14 @@
 
     NSInteger scrollDifference = currentContentOffY - self.prevDirectOffSetY;
 
-    //NSLog(@"Scrolling");
-    //NSLog(@"Difference: %ld", (long)difference);
-
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-
-    //NSLog(@"\n");
-
-    //NSLog(@"Nav Bar Bounds Y: %f", navBarHeight);
-
-    //NSLog(@"PREV NAV BAR Y: %f",self.prevNavBarY);
-    //NSLog(@"BOUNDS Y: %f",self.navigationController.navigationBar.bounds.origin.y);
 
     if (currentContentOffY > 0) {
         //If the users scrolls down (scrollview condenses)
         float scrollingDifference = self.navigationController.navigationBar.frame.origin.y + (self.prevDirectOffSetY - difference);
         self.navBarYValue = scrollingDifference;
-
-        //NSLog(@"%f",self.navigationController.navigationBar.frame.origin.y);
-        //NSLog(@"Scrolling Difference %f",scrollingDifference);
 
         if ((scrollingDifference > -self.navBarHeight - 3) && self.scrollDirection == UIScrollViewScrollDirectionDown) {
             [self condenseNavBarBy:scrollingDifference BarButtonItems:barButtonItems];

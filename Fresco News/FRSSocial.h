@@ -13,7 +13,6 @@
 #import "FBSDKCoreKit.h"
 #import "FBSDKLoginKit.h"
 #import <Twitter/Twitter.h>
-#import "FRSAPIClient.h"
 
 @interface FRSSocial : NSObject
 typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user);

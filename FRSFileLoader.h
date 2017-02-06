@@ -13,8 +13,7 @@
 
 /*
     Class to manage pulling assets from the users library & managing permissions. Also responsible for generation of asset thumbnails.
- 
- */
+*/
 @protocol FRSFileLoaderDelegate
 - (void)applicationNotAuthorized;
 - (void)filesLoaded;
@@ -33,10 +32,14 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
 
     BOOL wasPreviouslyAuthorized;
 }
-- (id)initWithDelegate:(id<FRSFileLoaderDelegate>)del;
+
 @property (nonatomic, weak) id<FRSFileLoaderDelegate> delegate;
+
+- (id)initWithDelegate:(id<FRSFileLoaderDelegate>)del;
+
 - (NSInteger)numberOfAssets;
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback;
 - (void)getDataFromAsset:(PHAsset *)asset callback:(DataCallback)callback;
 - (PHAsset *)assetAtIndex:(NSInteger)index;
+
 @end

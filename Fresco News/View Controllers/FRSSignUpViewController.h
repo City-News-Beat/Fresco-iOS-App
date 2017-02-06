@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
-#import "FRSAPIClient.h"
-
 @protocol FRSAppDelegate <NSObject>
 - (void)registerForPushNotifications;
 @end

@@ -15,7 +15,6 @@
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <QuartzCore/QuartzCore.h>
-#import "FRSAppDelegate.h"
 #import "FRSNavigationController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
@@ -131,7 +130,7 @@
         [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     }
 
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUserLocationOnMap) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUserLocationOnMap) userInfo:nil repeats:YES];
 }
 
 - (void)back {

@@ -10,5 +10,8 @@
 #define FrescoNews_PrefixHeader_pch
 
 #import "Fresco.h"
+#import "FRSAppDelegate.h"
+#import "FRSAPIClient.h"
+#import "FRSTracker.h"
 
 #endif

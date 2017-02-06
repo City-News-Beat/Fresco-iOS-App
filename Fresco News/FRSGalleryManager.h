@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FRSBaseManager.h"
+#import "FRSGallery.h"
 
 @interface FRSGalleryManager : FRSBaseManager
 

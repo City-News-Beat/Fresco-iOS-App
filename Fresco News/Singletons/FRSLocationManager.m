@@ -126,9 +126,7 @@
         return;
 
     self.lastAcquiredLocation = [locations lastObject];
-
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
-
+    
     if (self.monitoringState == FRSLocationMonitoringStateForeground) {
         [self stopUpdatingLocation];
     } else {

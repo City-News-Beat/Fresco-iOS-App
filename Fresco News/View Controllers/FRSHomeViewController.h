@@ -9,7 +9,6 @@
 #import "FRSScrollingViewController.h"
 #import "Fresco.h"
 #import "FRSGalleryView.h"
-#import "FRSSplitTableView.h"
 #import "FRSFollowingController.h"
 #import "FRSAlertView.h"
 #import "FRSStoryView.h"
@@ -23,7 +22,6 @@
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
 
-    FRSSplitTableView *tableScroller;
     FRSFollowingController *followingController;
     UITableView *followTable;
     NSDate *entry;

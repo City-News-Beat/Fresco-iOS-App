@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection) {
     UIScrollViewScrollDirectionDown
 };
 
-@interface FRSScrollingViewController : FRSBaseViewController <UIGestureRecognizerDelegate, UINavigationBarDelegate, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate, UIViewControllerInteractiveTransitioning, UIViewControllerAnimatedTransitioning>
+@interface FRSScrollingViewController : FRSBaseViewController <UIGestureRecognizerDelegate, UINavigationBarDelegate, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 

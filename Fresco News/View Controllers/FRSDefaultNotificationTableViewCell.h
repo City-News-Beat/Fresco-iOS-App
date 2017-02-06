@@ -14,6 +14,25 @@
 
 @end
 
+typedef NS_ENUM(NSUInteger, FRSNotificationType) {
+    
+    /* Social */
+    FRSNotificationTypeFollow,
+    FRSNotificationTypeLike,
+    FRSNotificationTypeRepost,
+    FRSNotificationTypeComment,
+    FRSNotificationTypeGalleryMention,
+    FRSNotificationTypeCommentMention
+    
+    /* News */
+    
+    /* Dispatch */
+    
+    /* Payment */
+    
+    /* Promo */
+};
+
 @interface FRSDefaultNotificationTableViewCell : UITableViewCell
 
 @property (nonatomic, retain) id<FRSDefaultNotificationCellDelegate> delegate;

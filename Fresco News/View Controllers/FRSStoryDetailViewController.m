@@ -10,7 +10,6 @@
 #import "FRSGalleryCell.h"
 #import "MagicalRecord.h"
 #import "FRSStory+CoreDataProperties.h"
-#import "FRSAppDelegate.h"
 #import "DGElasticPullToRefresh.h"
 #import "Haneke.h"
 #import "FRSGalleryExpandedViewController.h"
@@ -324,7 +323,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [[FRSStoryManager sharedInstance] fetchGalleriesInStory:self.story.uid
                                                  completion:^(NSArray *galleries, NSError *error) {
 
-                                                   FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+                                                   FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                    NSArray *galleriesArray = galleries;
 
                                                    for (NSDictionary *gallery in galleriesArray) {

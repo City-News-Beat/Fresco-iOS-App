@@ -16,6 +16,7 @@
 - (void)expandGallery:(FRSGallery *)gallery;
 - (void)expandStory:(FRSStory *)story;
 @end
+
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate, FRSStoryViewDelegate> {
     NSInteger numberOfPosts;
     UIView *awkwardView;
@@ -26,9 +27,11 @@
     NSTimeInterval lastOffsetCapture;
     BOOL isScrollingFast;
 }
+
 @property (retain, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
+
 - (void)reloadFollowing;
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath;
 

@@ -10,9 +10,7 @@
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSStory.h"
-
 #import "MagicalRecord.h"
-#import "FRSAppDelegate.h"
 
 @implementation FRSUser
 @synthesize dueBy = _dueBy, requiredFields = _requiredFields;

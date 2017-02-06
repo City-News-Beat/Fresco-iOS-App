@@ -7,7 +7,6 @@
 //
 
 #import "FRSComment.h"
-#import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
 #import "NSString+Fresco.h"
 

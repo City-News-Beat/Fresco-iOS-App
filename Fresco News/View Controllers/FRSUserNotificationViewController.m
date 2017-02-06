@@ -7,7 +7,6 @@
 //
 
 #import "FRSUserNotificationViewController.h"
-#import "FRSAppDelegate.h"
 #import "FRSTabBarController.h"
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSDefaultNotificationTableViewCell.h"

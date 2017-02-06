@@ -9,7 +9,6 @@
 #import "FRSEmailViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
-#import "FRSAppDelegate.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
 

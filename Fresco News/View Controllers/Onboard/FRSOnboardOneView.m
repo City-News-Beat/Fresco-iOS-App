@@ -51,14 +51,14 @@
     [self addSubview:container];
 
     UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(144 - 109, 0, 218, 19)]; //144 = containerWidth/2, 109 = headerWidth/2
-    [header setText:MAIN_HEADER_1];
+    [header setText:@"Find breaking news around you"];
     [header setTextColor:[UIColor frescoDarkTextColor]];
     [header setFont:[UIFont notaBoldWithSize:17]];
     header.textAlignment = NSTextAlignmentCenter;
     [container addSubview:header];
 
     UILabel *subHeader = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, 288, 40)]; //144 = containerWidth/2, 109 = headerWidth/2
-    [subHeader setText:SUB_HEADER_1];
+    [subHeader setText:@"Use Fresco’s map to browse and accept paid assignments from news outlets."];
     [subHeader setTextColor:[UIColor frescoMediumTextColor]];
     [subHeader setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]];
     subHeader.textAlignment = NSTextAlignmentCenter;

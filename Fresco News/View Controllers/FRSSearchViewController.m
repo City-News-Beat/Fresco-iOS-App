@@ -11,7 +11,6 @@
 #import "FRSGallery.h"
 #import "FRSGalleryCell.h"
 #import "FRSGalleryExpandedViewController.h"
-#import "FRSScrollingViewController.h"
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
@@ -20,7 +19,7 @@
 #import "FRSAlertView.h"
 #import "FRSSearchManager.h"
 
-@interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate>
+@interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;

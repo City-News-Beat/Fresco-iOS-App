@@ -17,7 +17,6 @@
 #import "FRSPlayer.h"
 #import <Photos/Photos.h>
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import "FRSAppDelegate.h"
 #import "FRSUploadManager.h"
 #import "FRSAuthManager.h"
 #import "FRSAssignmentManager.h"
@@ -1279,15 +1278,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
     NSURLRequest *request = [client URLRequestWithMethod:@"POST" URL:tweetEndpoint parameters:params error:&clientError];
     if (request) {
         [client sendTwitterRequest:request
-                        completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-
-                          if (data) {
-                              NSError *jsonError;
-                              NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-                          } else {
-                          }
+                        completion:^(NSURLResponse *response, NSData *data, NSError *connectionError){
                         }];
-    } else {
     }
 }
 
@@ -1305,9 +1297,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                             }];
                                           }];
     }
-}
-
-- (void)square {
 }
 
 /* Bottom Bar */

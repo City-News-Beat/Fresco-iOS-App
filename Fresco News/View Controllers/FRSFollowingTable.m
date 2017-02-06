@@ -8,8 +8,6 @@
 
 #import "FRSFollowingTable.h"
 #import "UIColor+Fresco.h"
-#import "FRSAPIClient.h"
-#import "FRSAppDelegate.h"
 #import "FRSScrollingViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSAwkwardView.h"

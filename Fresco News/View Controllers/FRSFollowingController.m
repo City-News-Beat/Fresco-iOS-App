@@ -9,8 +9,6 @@
 #import "FRSFollowingController.h"
 #import "FRSGalleryCell.h"
 #import "FRSStoryCell.h"
-#import "FRSAPIClient.h"
-#import "Fresco.h"
 #import "FRSAwkwardView.h"
 #import "UIColor+Fresco.h"
 #import "FRSGalleryExpandedViewController.h"
@@ -154,6 +152,7 @@
         [storyCell configureCell];
     }
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     float height = 100;
 

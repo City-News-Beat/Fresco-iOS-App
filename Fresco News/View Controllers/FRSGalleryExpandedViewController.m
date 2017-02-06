@@ -19,7 +19,7 @@
 #import "FRSModerationManager.h"
 #import "FRSGalleryManager.h"
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
 @property (nonatomic) BOOL touchEnabled;
 

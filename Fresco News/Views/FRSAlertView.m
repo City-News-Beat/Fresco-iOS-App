@@ -13,7 +13,6 @@
 #import "UIView+Helpers.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <MapKit/MapKit.h>
-#import "FRSAppDelegate.h"
 #import <Contacts/Contacts.h>
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
@@ -1433,7 +1432,6 @@
 
     [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
                                                         completion:^(id responseObject, NSError *error) {
-                                                          FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                           [[FRSUserManager sharedInstance] saveUserFields:responseObject];
 
                                                           if (responseObject && !error) {

@@ -12,8 +12,7 @@
 
 @class FRSGallery;
 
-@interface FRSGalleryExpandedViewController : FRSBaseViewController <UITextViewDelegate>
-{
+@interface FRSGalleryExpandedViewController : FRSBaseViewController <UITextViewDelegate> {
     NSDate *dateEntered;
     float percentageScrolled;
 }
@@ -21,9 +20,7 @@
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) NSString *openedFrom;
 
--(void)focusOnPost:(NSString *)postID;
--(instancetype)initWithGallery:(FRSGallery *)gallery;
--(void)loadGallery:(FRSGallery *)gallery;
--(void)presentFlagCommentSheet:(FRSComment *)comment;
+- (instancetype)initWithGallery:(FRSGallery *)gallery;
+- (void)presentFlagCommentSheet:(FRSComment *)comment;
 
 @end
