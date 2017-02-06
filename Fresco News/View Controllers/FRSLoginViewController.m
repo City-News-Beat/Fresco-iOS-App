@@ -164,13 +164,11 @@
 
     //Animate transition
     NSString *username = _userField.text;
-
-    if ([[username substringToIndex:1] isEqualToString:@"@"]) {
+    if (username.length > 1 && [[username substringToIndex:1] isEqualToString:@"@"]) {
         username = [username substringFromIndex:1];
     }
-
+    
     NSString *password = _passwordField.text;
-
     if ([password isEqualToString:@""] || [username isEqualToString:@""]) {
         // error out
         [self presentInvalidInfo];
