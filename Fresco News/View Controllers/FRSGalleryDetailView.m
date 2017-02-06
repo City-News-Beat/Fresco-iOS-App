@@ -552,6 +552,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         } else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
             cell.delegate = self;
+            cell.cellDelegate = self;
             if (indexPath.row < self.comments.count + showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row - showsMoreButton];
                 [cell configureCell:comment delegate:self];
