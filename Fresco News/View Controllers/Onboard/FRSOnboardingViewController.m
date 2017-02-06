@@ -466,7 +466,6 @@
 }
 
 - (void)animateIn {
-
     [self prepareForAnimation];
 
     /* Animate scrollView xPos */
