@@ -10,10 +10,13 @@
 #import <AWSCore/AWSCore.h>
 #import <AWSS3/AWSS3.h>
 #import "FRSUpload+CoreDataProperties.h"
+<<<<<<< HEAD
 #import "Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
 #import "SDAVAssetExportSession.h"
+=======
+>>>>>>> 0bb432b... Fix black video upload
 #import "EndpointManager.h"
 #import "NSDate+ISO.h"
 
