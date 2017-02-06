@@ -20,6 +20,7 @@
 #import "FRSAuthManager.h"
 #import "FRSFollowManager.h"
 #import "FRSNotificationManager.h"
+#import "FRSSnapKit.h"
 
 @interface FRSTableViewCell () <FRSAlertViewDelegate>
 
@@ -687,7 +688,7 @@
     topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
     [self addSubview:topLine];
 
-    [self constrainSubview:topLine ToBottomOfParentView:self WithHeight:0.5];
+    [FRSSnapKit constrainSubview:topLine ToBottomOfParentView:self WithHeight:0.5];
 
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
@@ -760,57 +761,6 @@
     self.currentUser = user;
 
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
-}
-
-- (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
-
-    subView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTrailing
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTrailing
-                multiplier:1
-                  constant:0];
-
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeLeading
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeLeading
-                multiplier:1
-                  constant:72];
-
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeBottom
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeBottom
-                multiplier:1
-                  constant:0];
-
-    //Height
-    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeHeight
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:nil
-                 attribute:0
-                multiplier:0
-                  constant:height];
-
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:leading];
-
-    [subView addConstraint:constantHeight];
 }
 
 - (void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {

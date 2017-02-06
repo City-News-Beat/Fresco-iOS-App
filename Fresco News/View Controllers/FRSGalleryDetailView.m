@@ -20,6 +20,7 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSSnapKit.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
@@ -649,9 +650,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     } else {
         [self.actionBar setCurrentUser:NO];
     }
+    
+    [FRSSnapKit constrainSubview:self.actionBar ToBottomOfParentView:_parentVC.view WithHeight:44];
 }
-
-
 
 #pragma mark - Action Bar Delegate
 

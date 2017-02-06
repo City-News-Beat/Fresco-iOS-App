@@ -6,6 +6,8 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 #import "FRSCarouselCell.h"
+#import "FRSSnapKit.h"
+
 @implementation FRSCarouselCell
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -36,7 +38,7 @@
                          imageView.image = result;
                          imageView.contentMode = UIViewContentModeScaleAspectFill;
 
-                         [self constrainSubview:imageView ToBottomOfParentView:self];
+                         [FRSSnapKit constrainSubview:imageView ToBottomOfParentView:self WithHeight:imageView.frame.size.height];
                          //self.asset = asset;
                        });
                      }];
@@ -134,104 +136,7 @@
         [self bringSubviewToFront:self.muteImageView];
     }
 }
-#pragma mark - Constraints
-- (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView {
-    subView.translatesAutoresizingMaskIntoConstraints = NO;
 
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTrailing
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTrailing
-                multiplier:1
-                  constant:0];
-
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeLeading
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeLeading
-                multiplier:1
-                  constant:0];
-
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeBottom
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeBottom
-                multiplier:1
-                  constant:0];
-
-    //top
-    NSLayoutConstraint *top = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTop
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTop
-                multiplier:1
-                  constant:0];
-
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:leading];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:top];
-}
-- (void)constrainLayer:(AVPlayerLayer *)subView ToBottomOfParentView:(UIView *)parentView {
-
-    //    subView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTrailing
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTrailing
-                multiplier:1
-                  constant:0];
-
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeLeading
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeLeading
-                multiplier:1
-                  constant:0];
-
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeBottom
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeBottom
-                multiplier:1
-                  constant:0];
-
-    //top
-    NSLayoutConstraint *top = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTop
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTop
-                multiplier:1
-                  constant:0];
-
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:leading];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:top];
-}
 - (void)layoutSubviews {
     [super layoutSubviews];
     if (playerLayer) {

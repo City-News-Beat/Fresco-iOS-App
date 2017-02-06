@@ -305,7 +305,8 @@ static BOOL isSegueingToAssignment;
                                                  [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
 
                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                   [detailVC loadGallery:galleryToSave];
+                                                     detailVC.gallery = galleryToSave;
+                                                     [detailVC viewDidLoad];
                                                  });
                                                }];
 }
