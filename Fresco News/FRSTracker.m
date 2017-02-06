@@ -82,7 +82,6 @@
 #if DEBUG // Avoid tracking when debugging
 #else
     [UXCam startWithKey:UXCamKey];
-    [self tagUXCamUser];
 #endif
 }
 
