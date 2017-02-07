@@ -158,7 +158,12 @@
 - (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     _currentContext = context;
     save = TRUE;
+    
+    // Configure the gallery
     [self configureWithDictionary:dict];
+    
+    // User configuration needs to happen once the gallery has completed configuring
+    // to avoid a nil entity name 'FRSUser'
     [self configureCreatorWithDictionary:dict];
 }
 
@@ -181,6 +186,7 @@
         self.creator = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
         [self.creator configureWithDictionary:dict[dictKey]];
     }
+    NSLog(@"GALLERY CREATOR: %@", self.creator.username);
 }
 
 - (void)addPostsWithArray:(NSArray *)posts {

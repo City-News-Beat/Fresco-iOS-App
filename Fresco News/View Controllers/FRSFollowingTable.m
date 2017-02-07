@@ -245,6 +245,8 @@
         if (!cell) {
             cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         }
+    } else {
+        cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -378,7 +380,7 @@
     if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         FRSGallery *gallery = _galleries[indexPath.row];
         height = [gallery heightForGallery];
-    } else {
+    } else if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
         FRSStory *story = _galleries[indexPath.row];
         height = [story heightForStory];
     }
