@@ -94,6 +94,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
                 action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.galleryView addGestureRecognizer:tap];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];

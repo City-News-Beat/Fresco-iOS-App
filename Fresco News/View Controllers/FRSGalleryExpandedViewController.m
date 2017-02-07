@@ -80,6 +80,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 
 }
