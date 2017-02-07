@@ -100,6 +100,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
     
     self.scrollView.showsVerticalScrollIndicator = NO;
+    
+    // This sizes the scrollview to the height of the gallery view and the articles tableview
+    // only if there are no comments, or the comments tableview has not yet loaded.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.comments.count == 0) {
+            self.scrollView.contentSize = CGSizeMake(self.frame.size.width, self.galleryView.frame.size.height + self.articlesTableView.frame.size.height + TOP_NAV_BAR_HEIGHT);
+        }
+    });
 }
 
 
