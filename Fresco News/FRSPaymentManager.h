@@ -17,6 +17,8 @@
 - (void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion;
 - (void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)updateIdentityWithDigestion:(NSDictionary *)digestion andSsn:(NSString *)ssn completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)uploadStateIDWithParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion;
 

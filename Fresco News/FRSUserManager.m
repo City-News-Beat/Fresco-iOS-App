@@ -16,7 +16,6 @@
 static NSString *const userEndpoint = @"user/";
 static NSString *const setAvatarEndpoint = @"user/avatar";
 static NSString *const updateUserEndpoint = @"user/update";
-static NSString *const updateUserIdentityEndpoint = @"user/identity/update";
 static NSString *const authenticatedUserEndpoint = @"user/me";
 static NSString *const locationEndpoint = @"user/locate";
 static NSString *const getTermsEndpoint = @"terms";
@@ -109,14 +108,6 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
                           completion:^(id responseObject, NSError *error) {
                             completion(responseObject, error);
                           }];
-}
-
-- (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    [[FRSAPIClient sharedClient] post:updateUserIdentityEndpoint
-                       withParameters:digestion
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
 }
 
 - (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {

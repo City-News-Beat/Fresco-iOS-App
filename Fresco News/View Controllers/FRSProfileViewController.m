@@ -27,13 +27,9 @@
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
-//@property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) UIView *profileContainer;
 
 @property (strong, nonatomic) UIView *profileBG;
-
-//@property (strong, nonatomic) UIImageView *profileIV;
 
 @property (strong, nonatomic) UIView *sectionView;
 @property (strong, nonatomic) UIButton *feedButton;
@@ -78,6 +74,7 @@
 
 @property (strong, nonatomic) NSString *reportUserReasonString;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
+
 @end
 
 @implementation FRSProfileViewController
@@ -103,13 +100,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    //
-    //    [[appDelegate.tabBarController tabBar] setHidden:NO];
-    //
-    //    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
-    //    self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
-
     self.editedProfile = false;
 
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
@@ -120,22 +110,16 @@
         return;
     }
 
-    if (FALSE) {
-        _representedUser = [[FRSUserManager sharedInstance] authenticatedUser];
-        self.authenticatedProfile = TRUE;
-        [self configureWithUser:_representedUser];
-    } else {
-        [[FRSUserManager sharedInstance] getUserWithUID:_representedUser.uid
-                                             completion:^(id responseObject, NSError *error) {
-                                               if (error || !responseObject) {
-                                                   return;
-                                               }
+    [[FRSUserManager sharedInstance] getUserWithUID:_representedUser.uid
+                                         completion:^(id responseObject, NSError *error) {
+                                           if (error || !responseObject) {
+                                               return;
+                                           }
 
-                                               _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
-                                               [self configureWithUser:_representedUser];
+                                           _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
+                                           [self configureWithUser:_representedUser];
 
-                                             }];
-    }
+                                         }];
 
     [self setupUI];
     [self configureUI];
@@ -206,7 +190,6 @@
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report"
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction *action) {
-
                                                      if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
                                                          self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"@%@", _representedUser.username] delegate:self];
                                                      } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
@@ -234,13 +217,11 @@
         [view addAction:sunblock];
         [view addAction:cancel];
     } else {
-
         if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
             [view addAction:unfollow];
         } else {
             [view addAction:follow];
         }
-
         [view addAction:report];
         [view addAction:block];
         [view addAction:cancel];
@@ -263,23 +244,6 @@
     }
 }
 
-//-(void)showTabBarAnimated:(BOOL)animated{
-//
-//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-//
-//    if (![appDelegate.tabBarController tabBar]) return;
-//
-//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
-//
-//    if ([appDelegate.tabBarController tabBar].frame.origin.y == yOrigin) return;
-//
-//    self.hiddenTabBar = NO;
-//
-//    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//        [appDelegate.tabBarController tabBar].frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
-//    } completion:nil];
-//}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
@@ -288,11 +252,6 @@
 
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
-    // Default tab bar in profile to visible
-    //    [self.tabBarController.tabBar setHidden:NO];
-    //
-
-    //    [self showTabBarAnimated:YES];
 
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {
@@ -390,6 +349,7 @@
 
     return self;
 }
+
 - (void)setupUI {
 
     self.presentingUser = YES;
@@ -644,7 +604,6 @@
 }
 
 - (void)fetchLikes {
-
     BOOL reload = FALSE;
 
     if (self.currentFeed == self.likes && self.likes != Nil) {
@@ -709,7 +668,6 @@
                                          loadingViewSize:20
                                                 velocity:0
                                            actionHandler:^{
-
                                              [weakSelf fetchGalleries];
                                              [weakSelf.tableView dg_stopLoading];
 
@@ -750,9 +708,7 @@
 
         self.navigationItem.rightBarButtonItems = @[ gearItem, editItem ];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
-
     } else {
-
         if (![self.representedUser.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
 
             self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
@@ -941,28 +897,10 @@
 
                          }
                          completion:nil];
-
-        //Set default transform
-        //        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
-
-        //        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        //
-        //            self.socialButtonContainer.transform = CGAffineTransformMakeScale(1.05, 1.05);
-        //            self.socialButtonContainer.alpha = 1;
-        //            self.whiteOverlay.alpha = 1;
-        //
-        //        } completion:^(BOOL finished) {
-        //            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        //
-        //                self.socialButtonContainer.transform = CGAffineTransformMakeScale(1, 1);
-        //
-        //            } completion:nil];
-        //        }];
     }
 }
 
 - (void)dismissSocialOverlay {
-
     //Set overlay presented state to prevent animating if double tapped
     self.overlayPresented = NO;
 
@@ -970,19 +908,9 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-
                        self.profileMaskView.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
-
                      }
                      completion:nil];
-
-    //    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-    //
-    //        self.socialButtonContainer.alpha = 0;
-    //        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
-    //        self.whiteOverlay.alpha = 0;
-    //
-    //    } completion:nil];
 }
 
 - (void)configureLabels {
@@ -1185,22 +1113,6 @@
         if (!self.currentFeed) {
             self.currentFeed = self.galleries;
         }
-
-        //        //Awkward View
-        //        if(tableView == self.tableView){
-        //            if(self.currentFeed.count == 0){
-        //                [self displayAwkwardView:true feedTable:false];
-        //            }else{
-        //                [self displayAwkwardView:false feedTable:false];
-        //            }
-        //        }else if(tableView == self.contentTable){
-        //            if(self.currentFeed.count == 0){
-        //                [self displayAwkwardView:true feedTable:true];
-        //            }else{
-        //                [self displayAwkwardView:false feedTable:true];
-        //            }
-        //        }
-
         if (self.currentFeed.count == 0) {
             return 1;
         } else {
@@ -1717,7 +1629,6 @@
 - (void)blockUser:(FRSUser *)user {
     [[FRSModerationManager sharedInstance] blockUser:user.uid
                                       withCompletion:^(id responseObject, NSError *error) {
-
                                         if (responseObject) {
 
                                             NSString *username;

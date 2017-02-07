@@ -30,7 +30,6 @@
     NSDate *dateOpened;
 }
 
-- (void)resizeProfileContainer;
 
 @property BOOL userIsBlocking;
 @property BOOL userIsBlocked;
@@ -40,20 +39,20 @@
 @property (nonatomic, weak) NSArray *currentFeed;
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;
-- (instancetype)initWithUser:(FRSUser *)user;
-- (instancetype)initWithUserID:(NSString *)userName;
 
-- (void)loadAuthenticatedUser;
-- (FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
-//@property (strong, nonatomic) UILabel *bioLabel;
 @property (strong, nonatomic) UITextView *bioTextView;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
 @property (strong, nonatomic) FRSBorderedImageView *profileIV;
 @property BOOL editedProfile;
 @property BOOL shouldShowNotificationsOnLoad;
+
+- (instancetype)initWithUser:(FRSUser *)user;
+- (instancetype)initWithUserID:(NSString *)userName;
+- (void)resizeProfileContainer;
+- (void)loadAuthenticatedUser;
 - (void)showNotificationsNotAnimated;
 
 @end

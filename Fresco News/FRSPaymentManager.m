@@ -14,7 +14,9 @@ static NSString *const createPayment = @"user/payment/create";
 static NSString *const getPaymentsEndpoint = @"user/payment";
 static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
 static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
+static NSString *const updateUserIdentityEndpoint = @"user/identity/update";
 static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/files";
+static NSString *const getTaxTokenEndpoint = @"https://api.stripe.com/v1/tokens";
 static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
 
 @implementation FRSPaymentManager
@@ -73,13 +75,42 @@ static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
                            }];
 }
 
+- (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    [[FRSAPIClient sharedClient] post:updateUserIdentityEndpoint
+                       withParameters:digestion
+                           completion:^(id responseObject, NSError *error) {
+                             completion(responseObject, error);
+                           }];
+}
+
+- (void)updateIdentityWithDigestion:(NSDictionary *)digestion andSsn:(NSString *)ssn completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
+    manager.requestSerializer = [[FRSRequestSerializer alloc] init];
+    [manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
+    NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
+    [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
+
+    [manager POST:getTaxTokenEndpoint
+        parameters:@{ @"pii[personal_id_number]" : ssn }
+        progress:^(NSProgress *_Nonnull downloadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          NSString *ssnPidToken = responseObject[@"id"];
+          [digestion setValue:ssnPidToken forKey:@"stripe_pid_token"];
+          [self updateIdentityWithDigestion:digestion completion:completion];
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+        }];
+}
+
 - (void)uploadStateIDWithParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
     manager.requestSerializer = [[FRSRequestSerializer alloc] init];
     [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
     manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
     [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
 
     [manager POST:setStateIDEndpoint
