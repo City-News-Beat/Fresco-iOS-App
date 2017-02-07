@@ -340,26 +340,65 @@
     if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
         if ([self.socialField.placeholder isEqualToString:@"Last 4 Digits of Social Security Number"]) {
             [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
-        } else if ([self.socialField.placeholder isEqualToString:@"Social Security Number"]) {
-            [addressInfo setObject:_socialField.text forKey:@"personal_id_number"];
         }
     }
 
     self.savingInfo = true;
-    [[FRSUserManager sharedInstance] updateIdentityWithDigestion:addressInfo
-                                                      completion:^(id responseObject, NSError *error) {
-                                                        self.savingInfo = false;
 
-                                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                                          [self stopSpinner:self.loadingView onButton:self.saveIDInfoButton];
+    if ([self.socialField.placeholder isEqualToString:@"Social Security Number"]) {
+        [[FRSPaymentManager sharedInstance] updateIdentityWithDigestion:addressInfo
+                                                                 andSsn:self.socialField.text
+                                                             completion:^(id responseObject, NSError *error) {
+                                                               self.savingInfo = false;
 
-                                                          if (error) {
-                                                              [self presentGenericError];
-                                                          } else {
-                                                              [self.navigationController popViewControllerAnimated:YES];
-                                                          }
-                                                        });
-                                                      }];
+                                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                                 [self stopSpinner:self.loadingView onButton:self.saveIDInfoButton];
+                                                               });
+
+                                                               if (error) {
+                                                                   NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                                   if (response && (response.statusCode == 500 || response.statusCode == 400)) {
+                                                                       NSString *errorString = [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSASCIIStringEncoding];
+                                                                       NSData *data = [errorString dataUsingEncoding:NSUTF8StringEncoding];
+                                                                       id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                                                                       NSDictionary *errorDict = json[@"error"];
+                                                                       NSString *errorMessage = errorDict[@"msg"];
+                                                                       FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                                       [alert show];
+                                                                   } else {
+                                                                       [self presentGenericError];
+                                                                   }
+                                                               } else {
+                                                                   [self.navigationController popViewControllerAnimated:YES];
+                                                               }
+                                                             }];
+    } else {
+        [[FRSPaymentManager sharedInstance] updateIdentityWithDigestion:addressInfo
+                                                             completion:^(id responseObject, NSError *error) {
+                                                               self.savingInfo = false;
+
+                                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                                 [self stopSpinner:self.loadingView onButton:self.saveIDInfoButton];
+
+                                                                 if (error) {
+                                                                     NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                                     if (response && (response.statusCode == 500 || response.statusCode == 400)) {
+                                                                         NSString *errorString = [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSASCIIStringEncoding];
+                                                                         NSData *data = [errorString dataUsingEncoding:NSUTF8StringEncoding];
+                                                                         id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                                                                         NSDictionary *errorDict = json[@"error"];
+                                                                         NSString *errorMessage = errorDict[@"msg"];
+                                                                         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                                         [alert show];
+                                                                     } else {
+                                                                         [self presentGenericError];
+                                                                     }
+                                                                 } else {
+                                                                     [self.navigationController popViewControllerAnimated:YES];
+                                                                 }
+                                                               });
+                                                             }];
+    }
 }
 
 - (void)startDateSelected:(UIDatePicker *)sender {
@@ -454,12 +493,10 @@
     [self presentViewController:cameraUI animated:YES completion:nil];
 }
 
-
 #pragma mark - UXCam
 
--(void)hideSensitiveViews {
+- (void)hideSensitiveViews {
     [UXCam occludeSensitiveView:self.ssnView];
 }
-
 
 @end

@@ -15,7 +15,6 @@
 
 + (instancetype)sharedInstance;
 
-- (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateLocalUser;
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
