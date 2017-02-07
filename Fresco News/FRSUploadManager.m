@@ -399,15 +399,15 @@ static NSDate *lastDate;
       NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
       float percentageOfSecond = 1 / secondsSinceLastUpdate;
 
-        float kBPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */;
-        float averagekBPerSecond = kBPerSecond;
+      float megabitsPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */ / 1024 /* mb */;
+      float averageMegabitsPerSecond = megabitsPerSecond;
 
       if (uploadUpdates > 0) {
-          averagekBPerSecond = uploadSpeed / uploadUpdates;
-          averagekBPerSecond = ((averagekBPerSecond * uploadUpdates) + kBPerSecond) / (uploadUpdates + 1);
+          averageMegabitsPerSecond = uploadSpeed / uploadUpdates;
+          averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / (uploadUpdates + 1);
       }
 
-      uploadSpeed = averagekBPerSecond;
+      uploadSpeed = averageMegabitsPerSecond;
 
       lastDate = [NSDate date];
       uploadUpdates++;
