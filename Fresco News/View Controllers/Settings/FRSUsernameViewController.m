@@ -350,21 +350,31 @@
         if ((![self.cell.textField.text isEqualToString:@""])) {
             [[FRSUserManager sharedInstance] checkUsername:self.username
                                                 completion:^(id responseObject, NSError *error) {
-                                                  if (!error && responseObject) {
-                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                      self.usernameTaken = NO;
-                                                      [self stopUsernameTimer];
-                                                      [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                                                      self.cell.rightAlignedButton.userInteractionEnabled = NO;
-                                                  } else if (error.code == -1009) {
-                                                      if (!self.alert) {
-                                                          self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                          [self.alert show];
+                                                  //Return if no internet
+                                                  if (error) {
+                                                      if (error.code == -1009) {
+                                                          if (!self.alert) {
+                                                              self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                              [self.alert show];
+                                                          }
+                                                          return;
                                                       }
-                                                  } else {
                                                       [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                                                       self.usernameTaken = YES;
                                                       [self stopUsernameTimer];
+                                                  } else {
+                                                      BOOL available = [responseObject[@"available"] boolValue];
+                                                      if (available) {
+                                                          [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                          self.usernameTaken = NO;
+                                                          [self stopUsernameTimer];
+                                                          [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                                                          self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                                                      } else {
+                                                          [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                          self.usernameTaken = YES;
+                                                          [self stopUsernameTimer];
+                                                      }
                                                   }
                                                 }];
         }

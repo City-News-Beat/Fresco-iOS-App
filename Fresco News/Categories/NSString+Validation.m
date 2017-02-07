@@ -35,6 +35,10 @@
         return NO;
     }
     
+    if (self.length < 3 || self.length > 20) {
+        return NO;
+    }
+    
     NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
     NSCharacterSet *disallowedSet = [allowedSet invertedSet];
     return ([self rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);

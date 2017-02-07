@@ -14,6 +14,7 @@
 #import "FRSLocationManager.h"
 
 static NSString *const userEndpoint = @"user/";
+static NSString *const checkEndpoint = @"user/check";
 static NSString *const setAvatarEndpoint = @"user/avatar";
 static NSString *const updateUserEndpoint = @"user/update";
 static NSString *const authenticatedUserEndpoint = @"user/me";
@@ -348,21 +349,19 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 #pragma mark - Check User
 
 - (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self check:email completion:completion];
+    [[FRSAPIClient sharedClient] get:checkEndpoint
+                       withParameters:@{ @"email" : email }
+                           completion:^(id responseObject, NSError *error) {
+                               completion(responseObject, error);
+                           }];
 }
 
 - (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self check:username completion:completion];
-}
-
-- (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-
     [[FRSAPIClient sharedClient] get:checkEndpoint
-                      withParameters:Nil
-                          completion:^(id responseObject, NSError *error) {
-                            completion(responseObject, error);
-                          }];
+        withParameters:@{ @"username" : username }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
 }
 
 #pragma mark - Location

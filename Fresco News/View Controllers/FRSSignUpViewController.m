@@ -598,9 +598,6 @@
     [self.promoContainer addSubview:self.promoDescription];
 
     self.y += self.promoDescription.frame.size.height + 24;
-
-    //    self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
-    //    self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
 }
 
 - (void)adjustScrollViewContentSize {
@@ -922,25 +919,27 @@
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
                                                 completion:^(id responseObject, NSError *error) {
                                                   //Return if no internet
-                                                  if (error.code == -1009) {
-                                                      return;
-                                                  }
-
-                                                  NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                  NSInteger responseCode = response.statusCode;
-                                                  NSLog(@"Check Username Error: %ld", (long)responseCode);
-
-                                                  if (responseCode == 404) { //
-                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                      self.usernameTaken = NO;
-                                                      [self stopUsernameTimer];
-                                                      [self checkCreateAccountButtonState];
-                                                      return;
-                                                  } else {
+                                                  if (error) {
+                                                      if (error.code == -1009) {
+                                                          return;
+                                                      }
                                                       [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                                                       self.usernameTaken = YES;
                                                       [self stopUsernameTimer];
                                                       [self checkCreateAccountButtonState];
+                                                  } else {
+                                                      BOOL available = [responseObject[@"available"] boolValue];
+                                                      if (available) {
+                                                          [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                          self.usernameTaken = NO;
+                                                          [self stopUsernameTimer];
+                                                          [self checkCreateAccountButtonState];
+                                                      } else {
+                                                          [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                          self.usernameTaken = YES;
+                                                          [self stopUsernameTimer];
+                                                          [self checkCreateAccountButtonState];
+                                                      }
                                                   }
                                                 }];
         }
@@ -1276,13 +1275,23 @@
 - (void)checkEmail {
     [[FRSUserManager sharedInstance] checkEmail:self.emailTF.text
                                      completion:^(id responseObject, NSError *error) {
-                                       if (!error) {
-                                           self.emailTaken = YES;
-                                           [self shouldShowEmailDialogue:YES];
-                                           [self presentInvalidEmail];
-                                       } else {
+                                       if (error) {
+                                           if (error.code == -1009) {
+                                               return;
+                                           }
                                            self.emailTaken = NO;
                                            [self shouldShowEmailDialogue:NO];
+
+                                       } else {
+                                           BOOL available = [responseObject[@"available"] boolValue];
+                                           if (available) { //
+                                               self.emailTaken = NO;
+                                               [self shouldShowEmailDialogue:NO];
+                                           } else {
+                                               self.emailTaken = YES;
+                                               [self shouldShowEmailDialogue:YES];
+                                               [self presentInvalidEmail];
+                                           }
                                        }
 
                                        [self checkCreateAccountButtonState];
