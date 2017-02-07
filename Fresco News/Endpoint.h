@@ -25,7 +25,7 @@ static NSString *const clientAuthorizationDev = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString *const twitterConsumeyKey = @"kT772ISFiuWQdVQblU4AmBWw3";
 static NSString *const twitterConsumerSecret = @"navenvTSRCcyUL7F4Ait3gACnxfc7YXWyaee2bAX1sWnYGe4oY";
 static NSString *const smoochToken = @"bmk6otjwgrb5wyaiohse0qbr0";
-static NSString *const UXCamKey = @"1619e08cdca91f8";
+static NSString *const UXCamKey = @"641451390ede123";
 
 static NSString *const baseURLDev = @"https://api.dev.fresconews.com/v2/";
 static NSString *const baseURLProd = @"https://api.fresconews.com/v2/";
