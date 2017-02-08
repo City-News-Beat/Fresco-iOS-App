@@ -62,7 +62,6 @@
 @property BOOL didFollow;
 
 @property (strong, nonatomic) UIImageView *placeholderUserIcon;
-
 @property (strong, nonatomic) FRSAlertView *reportUserAlertView;
 
 @property BOOL didDisplayReport;
@@ -538,12 +537,16 @@
 }
 
 - (void)configureSpinner {
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.loadingView.frame = CGRectMake(self.view.frame.size.width / 2 - 10, (self.view.frame.size.height - self.profileContainer.frame.size.height) / 2 + 20 / 2, 20, 20);
-    self.loadingView.tintColor = [UIColor frescoOrangeColor];
-    [self.loadingView setPullProgress:90];
-    [self.loadingView startAnimating];
-    [self.view addSubview:self.loadingView];
+    if (!self.loadingView) {
+        self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+        self.loadingView.frame = CGRectMake(self.view.frame.size.width / 2 - 10, (self.view.frame.size.height - self.profileContainer.frame.size.height) / 2 + 20 / 2, 20, 20);
+        self.loadingView.tintColor = [UIColor frescoOrangeColor];
+        [self.loadingView setPullProgress:90];
+    }
+    if (![self.loadingView isDescendantOfView:self.view]) {
+        [self.loadingView startAnimating];
+        [self.view addSubview:self.loadingView];
+    }
 }
 
 #pragma mark - UITabBarDelegate
@@ -629,6 +632,7 @@
 }
 
 #pragma mark - UI Elements
+
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 
@@ -639,7 +643,6 @@
 }
 
 - (void)configureFrogForFeed:(UITableView *)feed {
-
     if (self.feedAwkwardView) {
         if (self.feedAwkwardView.superview != feed) {
             [feed addSubview:self.feedAwkwardView];
@@ -655,7 +658,6 @@
 }
 
 - (void)configurePullToRefresh {
-
     [super removeNavigationBarLine];
 
     DGElasticPullToRefreshLoadingViewCircle *loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
