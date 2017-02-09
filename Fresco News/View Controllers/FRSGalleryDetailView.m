@@ -75,7 +75,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)loadGalleryDetailViewWithGallery:(FRSGallery *)gallery parentVC:(FRSGalleryExpandedViewController *)parentVC {
     self.gallery = gallery;
     self.parentVC = parentVC;
-    self.scrollView.delegate = parentVC;
+    self.scrollView.delegate = self;
     self.totalCommentCount = [[gallery valueForKey:@"comments"] intValue];
 
     [self configureUI];
@@ -827,6 +827,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
+#pragma mark - UIScrollView Delegate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // Only update the text if user is scrolling down. Updating when the user is scrolling up looks ugly.
+    if (scrollView.contentOffset.y >= 0) {
+        [self.actionBar actionButtonTitleNeedsUpdate];
+    }
+}
 
 #pragma mark - Default
 
