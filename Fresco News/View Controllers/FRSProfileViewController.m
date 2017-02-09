@@ -607,8 +607,7 @@
                                                 completion:^(id responseObject, NSError *error) {
                                                   [self.loadingView stopLoading];
                                                   [self.loadingView removeFromSuperview];
-                                                    
-#warning These moderations have nothing to do with this response and should be moved elsewhere.
+                                                  // FIXME: These moderation features have nothing to do with this response and should be moved elsewhere.
                                                   if (self.userIsBlocked) {
                                                       [self configureBlockedUserWithButton:NO];
                                                       self.likesButton.userInteractionEnabled = NO;
@@ -625,7 +624,6 @@
                                                       [self configureDisabledUser];
                                                       return;
                                                   }
-#warning These moderations have nothing to do with this response and should be moved elsewhere.
 
                                                   self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
 

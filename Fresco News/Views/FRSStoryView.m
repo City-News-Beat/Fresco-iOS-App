@@ -55,7 +55,7 @@
         self.delegate = delegate;
         self.story = story;
         //self.delegate.navigationController = self.navigationController;
-
+        
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
             [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
