@@ -37,6 +37,15 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void) delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion;
+
+
+/**
+ Takes an array response and parses it for us into CoreData objects
+
+ @param response API response
+ @param cache If we should cache or not
+ @return An NSArray with the core data objects
+ */
 - (NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType;
 

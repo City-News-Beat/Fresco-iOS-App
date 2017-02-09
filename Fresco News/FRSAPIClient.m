@@ -179,7 +179,7 @@
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
-        NSManagedObjectContext *managedObjectContext = (cache) ? [appDelegate managedObjectContext] : Nil;
+        NSManagedObjectContext *managedObjectContext = (cache) ? [appDelegate.coreDataController managedObjectContext] : Nil;
         NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
         NSArray *keys = [response allKeys];
 
@@ -225,12 +225,10 @@
     NSString *objectType = dictionary[@"object"];
 
     if ([objectType isEqualToString:galleryObjectType]) {
-        NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
-
-        FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
-        gallery.currentContext = [appDelegate managedObjectContext];
-        [gallery configureWithDictionary:dictionary];
-        return gallery;
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate.coreDataController managedObjectContext]];
+        [galleryToSave configureWithDictionary:dictionary context:[appDelegate.coreDataController managedObjectContext]];
+        
+        return galleryToSave;
     } else if ([objectType isEqualToString:storyObjectType]) {
         NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
         FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:storyEntity insertIntoManagedObjectContext:nil];
