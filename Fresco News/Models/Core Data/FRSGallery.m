@@ -172,9 +172,9 @@
     NSString *dictKey = @"";
 
     // Default to the the gallerys owner, fall back on the curator if the owner is not found
-    if (dict[@"owner"] != [NSNull null]) {
+    if (dict[@"owner"] != [NSNull null] && dict[@"owner"] != nil) {
         dictKey = @"owner";
-    } else if (dict[@"curator"] != [NSNull null]) {
+    } else if (dict[@"curator"] != [NSNull null] && dict[@"curator"] != nil) {
         dictKey = @"curator";
     } else {
         NSLog(@"Unable to find owner or curator on gallery");
@@ -186,7 +186,6 @@
         self.creator = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
         [self.creator configureWithDictionary:dict[dictKey]];
     }
-    NSLog(@"GALLERY CREATOR: %@", self.creator.username);
 }
 
 - (void)addPostsWithArray:(NSArray *)posts {
