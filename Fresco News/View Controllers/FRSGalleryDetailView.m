@@ -303,6 +303,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [self.actionBar actionButtonTitleNeedsUpdate];
     [commentsTableView reloadData];
+    
+    commentsTableView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)configureCommentsSpinner {
@@ -541,7 +543,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [showCommentsButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
             showCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             showCommentsButton.contentEdgeInsets = UIEdgeInsetsMake(0, DEFAULT_PADDING, 0, 0);
-
+            showCommentsButton.backgroundColor = [UIColor whiteColor];
             [showCommentsButton addTarget:self action:@selector(loadMoreComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:showCommentsButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -566,8 +568,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if (indexPath.row < self.comments.count + showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row - showsMoreButton];
                 [cell configureCell:comment delegate:self];
-                cell.backgroundColor = [UIColor clearColor];
-                cell.contentView.backgroundColor = [UIColor clearColor];
+                cell.backgroundColor = [UIColor whiteColor];
+                cell.contentView.backgroundColor = [UIColor whiteColor];
                 return cell;
             }
         }
