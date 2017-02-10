@@ -185,6 +185,9 @@ static NSDate *lastDate;
 }
 
 - (void)commonInit {
+    if (self.uploadMeta) {
+        [self.uploadMeta removeAllObjects];
+    }
     self.currentUploads = [[NSMutableArray alloc] init];
     self.uploadsToComplete = 0;
     self.completedUploads = 0;
@@ -318,9 +321,7 @@ static NSDate *lastDate;
                                                       totalVideoFilesSize += fileSize;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
                                                       [self.uploadMeta addObject:uploadMeta];
-                                                      if (self.uploadMeta.count == self.uploadsToComplete) {
-                                                          [self restart];
-                                                      }
+                                                      [self restart];
                                                     }];
                                                   }];
     }
