@@ -355,7 +355,8 @@ static NSDate *lastDate;
     [self addUploadForPost:request[1]
                        url:request[0]
                     postID:request[2]
-                completion:^(id responseObject, NSError *error){
+                completion:^(id responseObject, NSError *error) {
+                  [[NSFileManager defaultManager] removeItemAtPath:request[0] error:nil];
                 }];
 }
 
@@ -456,7 +457,6 @@ static NSDate *lastDate;
 }
 
 - (void)uploadDidErrorWithError:(NSError *)error {
-
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
     if (uploadSpeed > 0) {
         [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
