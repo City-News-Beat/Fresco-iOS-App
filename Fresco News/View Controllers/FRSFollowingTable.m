@@ -246,7 +246,11 @@
             cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         }
     } else {
-        cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+        
+        NSLog(@"ERROR: Object at index %ld (%@) is neither a gallery or a story and will not be rendered in the Following Feed.", indexPath.row, [[_galleries objectAtIndex:indexPath.row] class]);
+
+        UITableViewCell *defaultCell = [[UITableViewCell alloc] init];
+        return defaultCell;
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -367,7 +371,7 @@
         }
         
         NSMutableArray *newGalleries = [self.galleries mutableCopy];
-        [newGalleries addObjectsFromArray:galleries];
+        [newGalleries addObjectsFromArray:[NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]]];
         self.galleries = newGalleries;
         [self reloadData];
     }];
