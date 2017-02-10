@@ -73,30 +73,17 @@
     }];
 }
 
+
+#pragma mark - UIScrollView
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollDelegate) {
         [self.scrollDelegate scrollViewDidScroll:scrollView];
     }
 }
 
-- (void)setTableView:(UITableView *)tableView {
-    _tableView = tableView;
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    loadingView.frame = CGRectMake((_tableView.frame.size.width - loadingView.frame.size.width) / 2, _tableView.frame.size.height / 2, loadingView.frame.size.width, loadingView.frame.size.height);
 
-    [loadingView startAnimating];
-    [_tableView addSubview:loadingView];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.tableView reloadData];
-    });
-}
-
-- (UITableView *)tableView {
-    return _tableView;
-}
+#pragma mark - UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -125,6 +112,7 @@
 
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self) weakSelf = self;
 
