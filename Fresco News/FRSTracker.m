@@ -80,8 +80,9 @@
 
 + (void)startUXCam {
 #if DEBUG // Avoid tracking when debugging
+//    [UXCam startWithKey:UXCamKey appVariantIdentifier:@"joinedDev"];
 #else
-    [UXCam startWithKey:UXCamKey];
+    [UXCam startWithKey:UXCamKey appVariantIdentifier:@"joinedProd"];
 #endif
 }
 
