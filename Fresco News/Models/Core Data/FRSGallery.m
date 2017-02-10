@@ -26,6 +26,7 @@
 @dynamic comments;
 @dynamic createdDate;
 @dynamic editedDate;
+@dynamic highlightedDate;
 @dynamic relatedStories;
 @dynamic tags;
 @dynamic uid;
@@ -68,6 +69,12 @@
     } else if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
         self.createdDate = [NSString dateFromString:dict[@"created_at"]];
     }
+    
+    
+    if (dict[@"highlighted_at"] && ![dict[@"highlighted_at"] isEqual:[NSNull null]]) {
+        self.highlightedDate = [NSString dateFromString:dict[@"highlighted_at"]];
+    }
+
 
     if (dict[@"rating"] && ![dict[@"rating"] isEqual:[NSNull null]]) {
         self.rating = dict[@"rating"];
