@@ -36,17 +36,22 @@
     if ([self.user.following boolValue]) {
         [[FRSFollowManager sharedInstance] unfollowUser:self.user
                                              completion:^(id responseObject, NSError *error) {
-                                               if (!error && responseObject) {
-                                                   [self updateIconForFollowing:[self.user.following boolValue]];
-                                               }
+                                               [self handleResponse:responseObject error:error];
                                              }];
     } else {
         [[FRSFollowManager sharedInstance] followUser:self.user
                                            completion:^(id responseObject, NSError *error) {
-                                             if (!error && responseObject) {
-                                                 [self updateIconForFollowing:[self.user.following boolValue]];
-                                             }
+                                               [self handleResponse:responseObject error:error];
                                            }];
+    }
+}
+
+-(void)handleResponse:(id)responseObject error:(NSError *)error {
+    if (!error && responseObject) {
+        [self updateIconForFollowing:[self.user.following boolValue]];
+    } else if (error) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+        [alert show];
     }
 }
 
