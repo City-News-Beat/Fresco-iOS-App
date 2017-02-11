@@ -30,13 +30,12 @@
 - (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
 - (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 
-@property (nonatomic, retain) NSMutableArray *currentUploads;
+@property (nonatomic, strong) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;
-@property (nonatomic, assign) int uploadsToComplete;
-@property (nonatomic, retain) NSMutableArray *uploadMeta;
+@property (nonatomic, strong) NSMutableArray *uploadMeta;
 @property (nonatomic, weak) NSManagedObjectContext *context;
-@property (nonatomic, retain) NSMutableDictionary *managedObjects;
-@property (nonatomic, retain) NSString *currentGalleryID;
-@property (nonatomic, retain) NSMutableDictionary *transcodingProgressDictionary;
+@property (nonatomic, strong) NSMutableDictionary *managedObjects;
+@property (nonatomic, strong) NSString *currentGalleryID;
+@property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
 
 @end

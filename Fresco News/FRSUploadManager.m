@@ -189,7 +189,6 @@ static NSDate *lastDate;
         [self.uploadMeta removeAllObjects];
     }
     self.currentUploads = [[NSMutableArray alloc] init];
-    self.uploadsToComplete = 0;
     self.completedUploads = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
     self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
@@ -280,10 +279,9 @@ static NSDate *lastDate;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
 
                                                       [self.uploadMeta addObject:uploadMeta];
-                                                      if (self.uploadMeta.count == self.uploadsToComplete) {
-                                                          [self restart];
+                                                      if (self.uploadMeta.count == toComplete) {
+                                                          [self startUploads];
                                                       }
-
                                                     }];
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         numberOfVideos++;
@@ -321,9 +319,22 @@ static NSDate *lastDate;
                                                       totalVideoFilesSize += fileSize;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
                                                       [self.uploadMeta addObject:uploadMeta];
-                                                      [self restart];
+                                                      if (self.uploadMeta.count == toComplete) {
+                                                          [self startUploads];
+                                                      }
                                                     }];
                                                   }];
+    }
+}
+
+- (void)startUploads {
+    for (NSArray *request in self.uploadMeta) {
+        [self addUploadForPost:request[1]
+                           url:request[0]
+                        postID:request[2]
+                    completion:^(id responseObject, NSError *error) {
+                        [[NSFileManager defaultManager] removeItemAtPath:request[0] error:nil];
+                    }];
     }
 }
 
@@ -349,17 +360,7 @@ static NSDate *lastDate;
         }
 
         [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
-
-        return;
     }
-
-    NSArray *request = [self.uploadMeta objectAtIndex:currentIndex];
-    [self addUploadForPost:request[1]
-                       url:request[0]
-                    postID:request[2]
-                completion:^(id responseObject, NSError *error) {
-                  [[NSFileManager defaultManager] removeItemAtPath:request[0] error:nil];
-                }];
 }
 
 - (void)startAWS {
@@ -429,6 +430,23 @@ static NSDate *lastDate;
                 upload.completed = @(YES);
                 [self.context save:nil];
                 completion(nil, nil);
+
+                NSArray *metaToRemove = nil;
+                for (NSArray *meta in self.uploadMeta) {
+                    if ([meta[2] isEqualToString:postID]) {
+                        metaToRemove = meta;
+                    }
+                }
+                if (metaToRemove) {
+                    __weak typeof(self.uploadMeta) weakSelf = self.uploadMeta;
+                    [self addUploadForPost:metaToRemove[1]
+                                       url:metaToRemove[0]
+                                    postID:metaToRemove[2]
+                                completion:^(id responseObject, NSError *error) {
+                                  [[NSFileManager defaultManager] removeItemAtPath:metaToRemove[0] error:nil];
+                                  [weakSelf removeObject:metaToRemove];
+                                }];
+                }
               }];
           }
 
