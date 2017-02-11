@@ -10,22 +10,22 @@
 #import <Photos/Photos.h>
 #import <PhotosUI/PhotosUI.h>
 #import "FRSFileLoader.h"
-#import "FRSCheckBox.h"
 
 /*
     Simple cell w/ nib just so I could easily lay out everything needed
  */
 
 @interface FRSImageViewCell : UICollectionViewCell
-{
-    IBOutlet UIImageView *imageView;
-    IBOutlet UILabel *timeLabel;
-    IBOutlet FRSCheckBox *checkBox;
-    IBOutlet UIView *coverView;
-}
--(void)loadAsset:(PHAsset *)asset;
+
+@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic, weak) IBOutlet UIView *coverView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UIImageView *checkBox;
 @property (nonatomic, weak) PHAsset *currentAsset;
 @property (nonatomic, strong) AVAsset *currentAVAsset;
 @property (nonatomic, weak) FRSFileLoader *fileLoader;
--(void)selected:(BOOL)selected;
+
+- (void)selected:(BOOL)selected;
+- (void)loadAsset:(PHAsset *)asset;
+
 @end

@@ -1,5 +1,5 @@
 //
-//  MissingSomethingCollectionReusableView.h
+//  FRSFileFooterCell.h
 //  Fresco
 //
 //  Created by Omar Elfanek on 4/7/16.
@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MissingSomethingCollectionReusableView : UICollectionReusableView
+@interface FRSFileFooterCell : UICollectionReusableView
 
--(void)setup;
+- (void)setup;
+
 @end

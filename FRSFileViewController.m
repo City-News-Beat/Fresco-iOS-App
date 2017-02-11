@@ -10,6 +10,11 @@
 #import "VideoTrimmerViewController.h"
 #import "FRSUploadViewController.h"
 #import "UIFont+Fresco.h"
+#import "FRSImageViewCell.h"
+#import "FRSScrollingViewController.h"
+#import "FRSFileFooterCell.h"
+
+static NSString *const imageTile = @"ImageTile";
 
 @interface FRSFileViewController ()
 @property CMTime currentTime;
@@ -19,21 +24,15 @@
 
 @implementation FRSFileViewController
 
-// NOTE last cell in collection view must be the "last 24 hour" prompt
-static NSString *imageTile = @"ImageTile";
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self addObservers];
 
     selectedAssets = [[NSMutableArray alloc] init];
 
     [self.navigationController.navigationBar setTitleTextAttributes:
                                                  @{ NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                    NSFontAttributeName : [UIFont notaBoldWithSize:18] }]; // why'd you send me a font w this name
-
-    self.automaticallyAdjustsScrollViewInsets = NO; // keeps collection view from misbehaving
+                                                    NSFontAttributeName : [UIFont notaBoldWithSize:18] }];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [self setupCollectionView];
     [self setupSecondaryUI];
 
@@ -81,43 +80,12 @@ static NSString *imageTile = @"ImageTile";
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-
-    //    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    //    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    //    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
-
-    //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
-    //Navigation bar color is not Fresco Yellow. Not sure where it's set
-
-    //    self.backTapButton.userInteractionEnabled = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
-    if (self.twitterButton.selected) {
-        self.uploadViewController.twitterButton.selected = YES;
-    } else {
-        self.uploadViewController.twitterButton.selected = NO;
-    }
-
-    if (self.facebookButton.selected) {
-        self.uploadViewController.facebookButton.selected = YES;
-    } else {
-        self.uploadViewController.facebookButton.selected = NO;
-    }
-
-    if (self.anonButton.selected) {
-        self.uploadViewController.anonButton.selected = YES;
-        self.uploadViewController.anonLabel.alpha = 1;
-    } else {
-        self.uploadViewController.anonButton.selected = NO;
-        self.uploadViewController.anonLabel.alpha = 0;
-    }
-
+    
     self.backTapButton.userInteractionEnabled = NO;
-
-    //    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void)back {
@@ -142,34 +110,6 @@ static NSString *imageTile = @"ImageTile";
     [nextButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
     nextButton.userInteractionEnabled = NO;
     [self.view addSubview:nextButton];
-
-    self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.twitterButton addTarget:self action:@selector(twitterTapped:) forControlEvents:UIControlEventTouchDown];
-    self.twitterButton.frame = CGRectMake(16, self.view.frame.size.height - 24 - 10, 24, 24);
-    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [self.twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
-    //[self.view addSubview:self.twitterButton];
-
-    self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.facebookButton addTarget:self action:@selector(facebookTapped:) forControlEvents:UIControlEventTouchDown];
-    self.facebookButton.frame = CGRectMake(56, self.view.frame.size.height - 24 - 10, 24, 24);
-    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
-    // [self.view addSubview:self.facebookButton];
-
-    //    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];
-    //    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
-    //    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
-    //    self.anonButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
-    //    [self.view addSubview:self.anonButton];
-    //
-    //    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, self.view.frame.size.height -17 -12, 83, 17)];
-    //    self.anonLabel.text = @"ANONYMOUS";
-    //    self.anonLabel.font = [UIFont notaBoldWithSize:15];
-    //    self.anonLabel.textColor = [UIColor frescoOrangeColor];
-    //    self.anonLabel.alpha = 0;
-    //    [self.view addSubview:self.anonLabel];
 }
 
 - (void)setupCollectionView {
@@ -215,7 +155,6 @@ static NSString *imageTile = @"ImageTile";
 }
 
 - (void)next:(id)sender {
-
     int numberOfVideos = 0;
     int numberOfPhotos = 0;
 
@@ -240,7 +179,6 @@ static NSString *imageTile = @"ImageTile";
 /* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-
     int numberOfAssets = (int)[fileLoader numberOfAssets];
     int currentAsset = (int)indexPath.row;
 
@@ -280,24 +218,21 @@ static NSString *imageTile = @"ImageTile";
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-
     if (kind == UICollectionElementKindSectionFooter) {
-        MissingSomethingCollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
+        FRSFileFooterCell *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
 
         CGRect newFrame = footer.frame;
         newFrame.size.height = 225;
         [footer setFrame:newFrame];
-
         [footer setup];
 
         return footer;
     }
 
-    return Nil;
+    return nil;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
 
     // dequeues cell, as we've registered a nib we will always get a non-nil value
@@ -321,7 +256,6 @@ static NSString *imageTile = @"ImageTile";
 
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
-
         [cell selected:NO];
     } else {
 
@@ -332,7 +266,6 @@ static NSString *imageTile = @"ImageTile";
 
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
-            [self presentVideoTrimmerViewController];
         }
         [selectedAssets addObject:representedAsset];
         [cell selected:YES];
@@ -370,14 +303,6 @@ static NSString *imageTile = @"ImageTile";
     });
 }
 
-- (void)presentVideoTrimmerViewController {
-
-    //    VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
-    //    [self presentViewController:vc animated:YES completion:nil];
-    //
-    //    [self shouldShowStatusBar:NO animated:YES];
-}
-
 - (void)filesLoaded {
     if ([fileLoader numberOfAssets] == 0) {
         return;
@@ -386,76 +311,6 @@ static NSString *imageTile = @"ImageTile";
     dispatch_async(dispatch_get_main_queue(), ^{
       [fileCollectionView reloadData];
     });
-}
-
-#pragma mark - Bottom Bar Buttons
-
-- (void)twitterTapped:(UIButton *)sender {
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"twitter-tapped-filevc" object:self];
-
-    [self updateStateForButton:sender];
-}
-
-- (void)facebookTapped:(UIButton *)sender {
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"facebook-tapped-filevc" object:self];
-
-    [self updateStateForButton:sender];
-}
-
-- (void)anonTapped:(UIButton *)sender {
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"anon-tapped-filevc" object:self];
-
-    [self updateStateForButton:sender];
-}
-
-- (void)updateStateForButton:(UIButton *)button {
-    if (button.selected) {
-        button.selected = NO;
-    } else {
-        button.selected = YES;
-    }
-
-    /* Check for self.anonButton to change associated label */
-    if (button == self.anonButton && self.anonButton.selected) {
-        self.anonLabel.alpha = 1;
-    } else if (button == self.anonButton) {
-        self.anonLabel.alpha = 0;
-    }
-}
-
-#pragma mark - NSNotification Center
-
-- (void)dealloc {
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)addObservers {
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-uploadvc" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-uploadvc" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"facebook-tapped-uploadvc" object:nil];
-}
-
-- (void)receiveNotifications:(NSNotification *)notification {
-
-    NSString *notif = [notification name];
-
-    if ([notif isEqualToString:@"twitter-tapped-uploadvc"]) {
-
-        [self updateStateForButton:self.twitterButton];
-
-    } else if ([notif isEqualToString:@"facebook-tapped-uploadvc"]) {
-
-        [self updateStateForButton:self.facebookButton];
-
-    } else if ([notif isEqualToString:@"anon-tapped-uploadvc"]) {
-
-        [self updateStateForButton:self.anonButton];
-    }
 }
 
 @end

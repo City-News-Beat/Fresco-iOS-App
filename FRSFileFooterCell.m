@@ -1,18 +1,18 @@
 //
-//  MissingSomethingCollectionReusableView.m
+//  FRSFileFooterCell.h
 //  Fresco
 //
 //  Created by Omar Elfanek on 4/7/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "MissingSomethingCollectionReusableView.h"
+#import "FRSFileFooterCell.h"
 #import "UIColor+Fresco.h"
 #import <Smooch/Smooch.h>
 #import "FRSUserManager.h"
 #import "FRSModerationManager.h"
 
-@interface MissingSomethingCollectionReusableView ()
+@interface FRSFileFooterCell ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *settingsTopConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *questionLeftConstraint;
@@ -27,7 +27,7 @@
 @property BOOL isSetup;
 @end
 
-@implementation MissingSomethingCollectionReusableView
+@implementation FRSFileFooterCell
 
 - (IBAction)pressedSettings:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
@@ -38,9 +38,6 @@
 }
 
 - (void)setup {
-
-    // This should be refactored..
-
     if (!self.isSetup) {
         self.isSetup = TRUE;
         self.textView.delegate = (id<UITextViewDelegate>)self;
