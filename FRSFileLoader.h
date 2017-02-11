@@ -28,7 +28,6 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
     MediaCallback returnCallback;
     NSRange currentRange;
     NSMutableArray *allAssets;
-    PHCachingImageManager *assetLoader;
 
     BOOL wasPreviouslyAuthorized;
 }

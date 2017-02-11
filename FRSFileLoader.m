@@ -1,3 +1,5 @@
+
+
 //
 //  FRSFileLoader.m
 //  fresco
@@ -9,17 +11,23 @@
 #import "FRSFileLoader.h"
 
 @implementation FRSFileLoader
-@synthesize delegate = _delegate;
 
-- (NSInteger)numberOfAssets {
-    return [allAssets count];
+// only overrode so that we'd immediately load assets, and, by design, request authorization upon open
+- (id)init {
+    self = [super init];
+
+    if (self) {
+        [self getAssets];
+    }
+
+    return self;
 }
 
 - (id)initWithDelegate:(id<FRSFileLoaderDelegate>)del {
     self = [super init];
 
     if (self) {
-        _delegate = del;
+        self.delegate = del;
 
         if (![self checkAuthorization]) { // only request auth if we don't have auth
             [self getAuthorization];
@@ -31,7 +39,6 @@
     return self;
 }
 
-// deprecated, this would be a good design choice if we were working with larger representations of assets, but PHAsset is negligible in memory
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback {
     currentRange = range;
 
@@ -39,13 +46,11 @@
         [self getAuthorization];
     }
 
-    // now we finally get to indexes!!!!
     if (range.location + range.length >= [allAssets count]) {
         range.length = [allAssets count] - range.length - 1; // reached end of media
     }
 
     NSArray *toReturn = [allAssets objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
-
     callback(toReturn, Nil);
 }
 
@@ -57,9 +62,12 @@
     return [allAssets objectAtIndex:index];
 }
 
+- (NSInteger)numberOfAssets {
+    return [allAssets count];
+}
+
 // load a list of all photos / videos from the last 24 hours
 - (void)getAssets {
-
     if (!currentCollection) {
         [self getAlbumCollection];
     }
@@ -79,7 +87,6 @@
     options.predicate = dayPredicate;
 
     for (PHAssetCollection *collection in currentCollection) {
-
         // fetch assets based on the sort and date restrictions we set up
         PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
 
@@ -92,8 +99,8 @@
     }
 
     // delegate called to notify that we are authorized (only used first time user opens app, and gets the "Please allow access to photos" prompt
-    if (_delegate) {
-        [_delegate filesLoaded];
+    if (self.delegate) {
+        [self.delegate filesLoaded];
     }
 }
 
@@ -104,7 +111,6 @@
 
 // request authorization, take appropriate actions
 - (void)getAuthorization {
-
     if ([allAssets count] > 0)
         return;
 
@@ -120,14 +126,13 @@
           [self getAssets];
           break;
       case PHAuthorizationStatusDenied:
-          if (_delegate) { // non-optional not checking for conformity
-              [_delegate applicationNotAuthorized]; // can't re-ask, need to go into settings
+          if (self.delegate) { // non-optional not checking for conformity
+              [self.delegate applicationNotAuthorized]; // can't re-ask, need to go into settings
           }
 
           if (wasPreviouslyAuthorized) {
               [FRSTracker track:photosDisabled];
           }
-
           break;
       default:
           break;
@@ -160,51 +165,28 @@
 
 // used by image cell to load preview image (pretty quick & async)
 - (void)getDataFromAsset:(PHAsset *)phAsset callback:(DataCallback)callback {
-    if (!assetLoader) {
-        assetLoader = [[PHCachingImageManager alloc] init];
-    }
+    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+    options.resizeMode = PHImageRequestOptionsResizeModeNone;
+    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    options.version = PHImageRequestOptionsVersionOriginal;
+    NSError *error;
+    [[PHImageManager defaultManager] requestImageDataForAsset:phAsset
+                                                      options:options
+                                                resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
 
-    [assetLoader requestImageDataForAsset:phAsset
-                                  options:Nil
-                            resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
-                              NSError *error;
-                              //  float screenSize = [[UIScreen mainScreen] bounds].size.width/3.0;
+                                                  if (phAsset.mediaType == PHAssetMediaTypeVideo) {
+                                                      [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset
+                                                                                                      options:Nil
+                                                                                                resultHandler:^(AVAsset *_Nullable avAsset, AVAudioMix *_Nullable audioMix, NSDictionary *_Nullable info) {
+                                                                                                  callback([UIImage imageWithData:imageData], avAsset, phAsset.mediaType, error);
+                                                                                                }];
 
-                              PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-                              options.resizeMode = PHImageRequestOptionsResizeModeNone;
-                              options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-                              options.version = PHImageRequestOptionsVersionOriginal;
+                                                      return;
+                                                  }
 
-                              [[PHImageManager defaultManager] requestImageDataForAsset:phAsset
-                                                                                options:options
-                                                                          resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
-                                                                            if (phAsset.mediaType == PHAssetMediaTypeVideo) {
-
-                                                                                [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset
-                                                                                                                                options:Nil
-                                                                                                                          resultHandler:^(AVAsset *_Nullable avAsset, AVAudioMix *_Nullable audioMix, NSDictionary *_Nullable info) {
-                                                                                                                            callback([UIImage imageWithData:imageData], avAsset, phAsset.mediaType, error);
-                                                                                                                          }];
-
-                                                                                return; // don't want 2 callbacks
-                                                                            }
-
-                                                                            callback([UIImage imageWithData:imageData], Nil, phAsset.mediaType, error);
-
-                                                                          }];
-
-                            }];
-}
-
-// only overrode so that we'd immediately load assets, and, by design, request authorization upon open
-- (id)init {
-    self = [super init];
-
-    if (self) {
-        [self getAssets];
-    }
-
-    return self;
+                                                  callback([UIImage imageWithData:imageData], Nil, phAsset.mediaType, error);
+                                                }];
 }
 
 @end
+

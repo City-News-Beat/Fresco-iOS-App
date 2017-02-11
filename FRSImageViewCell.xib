@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,10 +15,11 @@
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JWL-yc-nzD">
                         <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xu7-4R-gIY">
                         <rect key="frame" x="158" y="198" width="59" height="21"/>
@@ -24,40 +28,54 @@
                             <constraint firstAttribute="width" constant="59" id="wMA-R0-sru"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="textColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view hidden="YES" alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VM9-a9-GDE">
                         <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aam-wl-Qve" customClass="FRSCheckBox">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkboxBlankCircleOutline24W2.png" translatesAutoresizingMaskIntoConstraints="NO" id="ofu-qJ-ZEY">
                         <rect key="frame" x="194" y="5" width="20" height="20"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="20" id="GuO-NO-5aZ"/>
-                            <constraint firstAttribute="width" constant="20" id="uG7-3b-lZq"/>
+                            <constraint firstAttribute="width" constant="20" id="WJx-NK-hah"/>
+                            <constraint firstAttribute="height" constant="20" id="j2e-q8-0Ik"/>
                         </constraints>
-                    </view>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowColor">
+                                <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                <size key="value" width="0.0" height="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                <real key="value" value="0.20000000000000001"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="JWL-yc-nzD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1Qt-Uh-LS2"/>
                 <constraint firstAttribute="trailing" secondItem="xu7-4R-gIY" secondAttribute="trailing" constant="2" id="EDK-jf-lEn"/>
                 <constraint firstItem="VM9-a9-GDE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Jbv-iL-BJw"/>
-                <constraint firstItem="aam-wl-Qve" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="TeB-4g-2S7"/>
+                <constraint firstAttribute="trailing" secondItem="ofu-qJ-ZEY" secondAttribute="trailing" constant="5" id="OS1-xD-lkM"/>
                 <constraint firstAttribute="bottom" secondItem="xu7-4R-gIY" secondAttribute="bottom" id="dCp-fe-9mw"/>
-                <constraint firstAttribute="trailing" secondItem="aam-wl-Qve" secondAttribute="trailing" constant="5" id="e6U-fU-TMu"/>
                 <constraint firstAttribute="bottom" secondItem="VM9-a9-GDE" secondAttribute="bottom" id="i61-ms-9G2"/>
                 <constraint firstItem="VM9-a9-GDE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="n2c-yx-HuS"/>
                 <constraint firstAttribute="trailing" secondItem="VM9-a9-GDE" secondAttribute="trailing" id="nJA-AM-oJq"/>
                 <constraint firstAttribute="trailing" secondItem="JWL-yc-nzD" secondAttribute="trailing" id="nv5-81-Pv0"/>
+                <constraint firstItem="ofu-qJ-ZEY" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="vhQ-fV-UXh"/>
                 <constraint firstAttribute="bottom" secondItem="JWL-yc-nzD" secondAttribute="bottom" id="vyZ-Yi-pEK"/>
                 <constraint firstItem="JWL-yc-nzD" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="wvE-DM-NX7"/>
             </constraints>
             <size key="customSize" width="219" height="219"/>
             <connections>
-                <outlet property="checkBox" destination="aam-wl-Qve" id="eBj-jD-wki"/>
+                <outlet property="checkBox" destination="ofu-qJ-ZEY" id="LNY-33-Tpi"/>
                 <outlet property="coverView" destination="VM9-a9-GDE" id="2ud-SL-1FM"/>
                 <outlet property="imageView" destination="JWL-yc-nzD" id="0Wc-EO-RIl"/>
                 <outlet property="timeLabel" destination="xu7-4R-gIY" id="2Dd-50-NEZ"/>
@@ -65,4 +83,7 @@
             <point key="canvasLocation" x="389.5" y="249.5"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="checkboxBlankCircleOutline24W2.png" width="20" height="20"/>
+    </resources>
 </document>

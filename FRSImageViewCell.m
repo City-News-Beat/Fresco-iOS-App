@@ -22,7 +22,7 @@
                           options:nil
                     resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
                       dispatch_async(dispatch_get_main_queue(), ^{
-                        imageView.image = result;
+                        self.imageView.image = result;
                         [self updateUIForAsset];
                       });
                     }];
@@ -32,10 +32,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
 
       if (_currentAsset.mediaType == PHAssetMediaTypeVideo) { // we need timing shown & updated
-          timeLabel.hidden = FALSE;
-          timeLabel.text = [self readableTimeForSeconds:_currentAsset.duration milliseconds:FALSE];
+          self.timeLabel.hidden = FALSE;
+          self.timeLabel.text = [self readableTimeForSeconds:_currentAsset.duration milliseconds:FALSE];
       } else { // we need timing hidden
-          timeLabel.hidden = TRUE;
+          self.timeLabel.hidden = TRUE;
       }
     });
 }
@@ -78,7 +78,6 @@
     }
 
     NSString *toReturn = [NSString stringWithFormat:@"%@:%@", minutesString, secondsString];
-
     if ([toReturn isEqualToString:@":00"]) {
         toReturn = @":01"; // this is specific for fresco
     }
@@ -87,8 +86,12 @@
 }
 
 - (void)selected:(BOOL)selected {
-    checkBox.selected = selected;
-    coverView.hidden = !selected;
+    if (selected) {
+        self.checkBox.image = [UIImage imageNamed:@"picker-checkmark"];
+    } else {
+        self.checkBox.image = [UIImage imageNamed:@"checkboxBlankCircleOutline24W2"];
+    }
+    self.coverView.hidden = !selected;
 }
 
 @end
