@@ -29,7 +29,6 @@
 - (void)checkCachedUploads;
 - (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
 - (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
-- (void)setUploadsCountToComplete:(int)uploadsCount;
 
 @property (nonatomic, strong) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;
