@@ -314,9 +314,6 @@ static NSDate *lastDate;
                                                     NSLog(@"STARTING EXPORT");
                                                     [encoder exportAsynchronouslyWithCompletionHandler:^{
                                                       NSLog(@"ENDING EXPORT %@", encoder.error);
-                                                        if (!encoder.error) {
-                                                            
-                                                        }
                                                       unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                                                       totalFileSize += fileSize;
                                                       totalVideoFilesSize += fileSize;
