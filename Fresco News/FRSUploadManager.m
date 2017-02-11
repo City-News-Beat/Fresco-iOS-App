@@ -332,7 +332,7 @@ static NSDate *lastDate;
                            url:request[0]
                         postID:request[2]
                     completion:^(id responseObject, NSError *error) {
-                        [[NSFileManager defaultManager] removeItemAtPath:request[0] error:nil];
+                      [[NSFileManager defaultManager] removeItemAtPath:request[0] error:nil];
                     }];
     }
 }
@@ -437,14 +437,8 @@ static NSDate *lastDate;
                     }
                 }
                 if (metaToRemove) {
-                    __weak typeof(self.uploadMeta) weakSelf = self.uploadMeta;
-                    [self addUploadForPost:metaToRemove[1]
-                                       url:metaToRemove[0]
-                                    postID:metaToRemove[2]
-                                completion:^(id responseObject, NSError *error) {
-                                  [[NSFileManager defaultManager] removeItemAtPath:metaToRemove[0] error:nil];
-                                  [weakSelf removeObject:metaToRemove];
-                                }];
+                    [[NSFileManager defaultManager] removeItemAtPath:metaToRemove[0] error:nil];
+                    [self.uploadMeta removeObject:metaToRemove];
                 }
               }];
           }
