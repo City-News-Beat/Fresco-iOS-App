@@ -18,6 +18,7 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSAlertView.h"
 #import "FRSSearchManager.h"
+#import "FRSStory.h"
 
 @interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate>
 

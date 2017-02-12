@@ -7,7 +7,6 @@
 //
 
 #import "FRSDebitCardViewController.h"
-#import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"

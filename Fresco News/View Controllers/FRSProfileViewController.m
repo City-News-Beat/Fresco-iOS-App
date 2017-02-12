@@ -24,6 +24,7 @@
 #import "FRSModerationManager.h"
 #import "FRSFeedManager.h"
 #import "FRSNotificationManager.h"
+#import "FRSStory.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 

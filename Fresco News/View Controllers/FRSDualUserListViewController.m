@@ -12,6 +12,7 @@
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSGalleryManager.h"
+#import "FRSUserTableViewCell.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -105,6 +106,9 @@ int const FETCH_LIMIT = 20;
     [self.horizontalScrollView addSubview:self.repostsTableView];
     [self.repostsTableView setSeparatorColor:[UIColor clearColor]];
     self.repostsTableView.backgroundColor = [UIColor clearColor];
+
+    [self.likesTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"user-cell"];
+    [self.repostsTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"user-cell"];
 }
 
 - (void)configureNavigationButtons {
@@ -178,9 +182,6 @@ int const FETCH_LIMIT = 20;
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 56;
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.likesTableView) {
@@ -198,56 +199,17 @@ int const FETCH_LIMIT = 20;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentifier;
+    NSString *cellIdentifier = @"user-cell";
 
-    FRSTableViewCell *cell = [self.likesTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
+    FRSUserTableViewCell *cell = [self.likesTableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
     if (tableView == self.likesTableView && self.likedUsersArray.count > 0) {
-
         FRSUser *user = [self.likedUsersArray objectAtIndex:indexPath.row];
-
-        NSString *avatarURL;
-        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
-            avatarURL = user.profileImage;
-        }
-
-        NSURL *avatarURLObject;
-        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
-            avatarURLObject = [NSURL URLWithString:avatarURL];
-        }
-
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
-                                             fullName:user.firstName
-                                             userName:user.username
-                                          isFollowing:[user.following boolValue]
-                                             userDict:nil
-                                                 user:user];
+        [cell loadDataWithUser:user];
     }
-
-    if (tableView == self.repostsTableView && self.repostedUsersArray.count > 0) {
-
+    else if (tableView == self.repostsTableView && self.repostedUsersArray.count > 0) {
         FRSUser *user = [self.repostedUsersArray objectAtIndex:indexPath.row];
-
-        NSString *avatarURL;
-        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
-            avatarURL = user.profileImage;
-        }
-
-        NSURL *avatarURLObject;
-        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
-            avatarURLObject = [NSURL URLWithString:avatarURL];
-        }
-
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
-                                             fullName:user.firstName
-                                             userName:user.username
-                                          isFollowing:[user.following boolValue]
-                                             userDict:nil
-                                                 user:user];
+        [cell loadDataWithUser:user];
     }
 
     return cell;
@@ -335,7 +297,6 @@ int const FETCH_LIMIT = 20;
 }
 
 - (void)fetchReposters {
-
     if (self.isLoadingReposters) {
         return;
     }

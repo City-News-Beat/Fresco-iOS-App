@@ -15,6 +15,7 @@
 #import "FRSStoryDetailViewController.h"
 #import "FRSUserManager.h"
 #import "FRSFeedManager.h"
+#import "FRSStory.h"
 
 @implementation FRSFollowingTable
 @synthesize navigationController = _navigationController;
