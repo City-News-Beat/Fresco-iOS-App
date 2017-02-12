@@ -7,14 +7,11 @@
 //
 
 #import "FRSDualUserListViewController.h"
-#import "FRSTableViewCell.h"
 #import "FRSProfileViewController.h"
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSGalleryManager.h"
 #import "FRSUserTableViewCell.h"
-
-static NSString *const userCellIdentifier = @"user-cell";
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -212,6 +209,11 @@ int const FETCH_LIMIT = 20;
 
     return cell;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return userCellHeight;
+}
+
 
 #pragma mark - Navigation Bar Actions
 

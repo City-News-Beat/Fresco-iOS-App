@@ -8,7 +8,8 @@
 //
 
 #import "FRSScrollingViewController.h"
-#import "FRSUser.h"
+
+@class FRSUser;
 
 @interface FRSFollowersViewController : FRSScrollingViewController <UITableViewDelegate, UITableViewDataSource> {
     BOOL isAtBottomFollowers;
@@ -19,4 +20,5 @@
 
 @property (nonatomic, weak) FRSUser *representedUser;
 @property BOOL shouldUpdateOnReturn;
+
 @end

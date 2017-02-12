@@ -68,11 +68,21 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d09-31-2FG">
+                        <rect key="frame" x="0.0" y="54.5" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="7w5-S8-8JU"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="d09-31-2FG" secondAttribute="trailing" id="4Sf-QF-uWW"/>
                     <constraint firstItem="e9B-rg-TOO" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Hh3-hM-WQN"/>
                     <constraint firstAttribute="trailing" secondItem="eae-ds-Q2J" secondAttribute="trailing" constant="8" id="MA9-4p-sLX"/>
                     <constraint firstItem="9Q2-m8-R2N" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="OIZ-r9-w8a"/>
+                    <constraint firstItem="d09-31-2FG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="OUV-CF-5GY"/>
+                    <constraint firstAttribute="bottom" secondItem="d09-31-2FG" secondAttribute="bottom" id="YAC-XO-xQb"/>
                     <constraint firstItem="9Q2-m8-R2N" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="ZpY-ha-6Tc"/>
                     <constraint firstItem="DGH-ME-xPD" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ff2-FF-MY1"/>
                     <constraint firstItem="DGH-ME-xPD" firstAttribute="leading" secondItem="9Q2-m8-R2N" secondAttribute="trailing" constant="16" id="gN6-F3-hym"/>
