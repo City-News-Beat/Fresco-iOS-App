@@ -28,19 +28,11 @@
 
 - (void)configureLogOut;
 
-- (void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected;
-- (void)configureEditableCellWithDefaultTextWithMultipleFields:(NSArray *)titles withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
 - (void)configureDisableAccountCell;
 - (void)configureSliderCell;
 - (void)configureMapCell;
 
 - (void)configureSettingsHeaderCellWithTitle:(NSString *)title;
-- (void)configureSearchSeeAllCellWithTitle:(NSString *)title;
-- (void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user;
-- (void)configureSearchNearbyUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user;
-- (void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString;
-
-- (void)configureFindFriendsCell;
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
 @property (strong, nonatomic) UITextField *textField;
