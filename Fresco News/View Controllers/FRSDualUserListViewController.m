@@ -14,6 +14,8 @@
 #import "FRSGalleryManager.h"
 #import "FRSUserTableViewCell.h"
 
+static NSString *const userCellIdentifier = @"user-cell";
+
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) NSString *galleryID;
@@ -107,8 +109,8 @@ int const FETCH_LIMIT = 20;
     [self.repostsTableView setSeparatorColor:[UIColor clearColor]];
     self.repostsTableView.backgroundColor = [UIColor clearColor];
 
-    [self.likesTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"user-cell"];
-    [self.repostsTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"user-cell"];
+    [self.likesTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
+    [self.repostsTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
 }
 
 - (void)configureNavigationButtons {
@@ -182,7 +184,6 @@ int const FETCH_LIMIT = 20;
     return 0;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.likesTableView) {
         FRSUser *user = [self.likedUsersArray objectAtIndex:indexPath.row];
@@ -199,15 +200,12 @@ int const FETCH_LIMIT = 20;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentifier = @"user-cell";
-
-    FRSUserTableViewCell *cell = [self.likesTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FRSUserTableViewCell *cell = [self.likesTableView dequeueReusableCellWithIdentifier:userCellIdentifier];
 
     if (tableView == self.likesTableView && self.likedUsersArray.count > 0) {
         FRSUser *user = [self.likedUsersArray objectAtIndex:indexPath.row];
         [cell loadDataWithUser:user];
-    }
-    else if (tableView == self.repostsTableView && self.repostedUsersArray.count > 0) {
+    } else if (tableView == self.repostsTableView && self.repostedUsersArray.count > 0) {
         FRSUser *user = [self.repostedUsersArray objectAtIndex:indexPath.row];
         [cell loadDataWithUser:user];
     }

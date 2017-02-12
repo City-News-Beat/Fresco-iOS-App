@@ -34,7 +34,7 @@
 
 - (void)loadDataWithUser:(FRSUser *)user {
     self.user = user;
-    self.following = user.following;
+    self.following = [user.following boolValue];
 
     NSURL *avatarURL;
     if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
@@ -51,7 +51,7 @@
       self.usernameLabel.text = (user.username && ![user.username isEqual:[NSNull null]] && ![user.username isEqualToString:@""]) ? [@"@" stringByAppendingString:user.username] : @"";
       self.nameLabel.text = user.firstName;
 
-      [self updateFollowButton:user.following];
+      [self updateFollowButton:self.following];
 
       if (user.uid && [[FRSUserManager sharedInstance] authenticatedUser].uid && [user.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
           self.followButton.hidden = YES;
@@ -62,8 +62,6 @@
 }
 
 - (void)updateFollowButton:(BOOL)isFollowing {
-    self.following = isFollowing;
-
     if (isFollowing) {
         [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
         self.followButton.tintColor = [UIColor frescoOrangeColor];
@@ -80,7 +78,9 @@
                                                if (error) {
                                                    return;
                                                }
-                                               [self updateFollowButton:NO];
+                                               self.following = NO;
+                                               [self updateFollowButton:self.following];
+
                                              }];
     } else {
         [[FRSFollowManager sharedInstance] followUser:self.user
@@ -88,7 +88,8 @@
                                              if (error) {
                                                  return;
                                              }
-                                             [self updateFollowButton:YES];
+                                             self.following = YES;
+                                             [self updateFollowButton:self.following];
                                            }];
     }
 }
