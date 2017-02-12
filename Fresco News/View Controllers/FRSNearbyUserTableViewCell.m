@@ -1,20 +1,22 @@
 //
-//  FRSUserTableViewCell.m
+//  FRSNearbyUserTableViewCell.m
 //  Fresco
 //
-//  Created by User on 2/11/17.
+//  Created by User on 2/12/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
-#import "FRSUserTableViewCell.h"
+
+#import "FRSNearbyUserTableViewCell.h"
 #import "Haneke.h"
 #import "FRSUserManager.h"
 #import "FRSFollowManager.h"
 
-@interface FRSUserTableViewCell ()
+@interface FRSNearbyUserTableViewCell ()
 
 @property (nonatomic, weak) IBOutlet UIImageView *profileImageView;
 @property (nonatomic, weak) IBOutlet UILabel *usernameLabel;
 @property (nonatomic, weak) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UILabel *bioLabel;
 @property (nonatomic, weak) IBOutlet UIButton *followButton;
 
 @property (nonatomic, strong) FRSUser *user;
@@ -22,7 +24,7 @@
 
 @end
 
-@implementation FRSUserTableViewCell
+@implementation FRSNearbyUserTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -57,6 +59,8 @@
       } else {
           self.followButton.hidden = NO;
       }
+
+      self.bioLabel.text = (user.bio && ![user.bio isEqual:[NSNull null]] && ![user.bio isEqualToString:@""]) ? user.bio : @"";
     });
 }
 

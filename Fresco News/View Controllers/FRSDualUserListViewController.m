@@ -78,7 +78,6 @@ int const FETCH_LIMIT = 20;
 }
 
 - (void)configureScrollers {
-
     int tabBarHeight = 49;
     int navBarHeight = 64;
 

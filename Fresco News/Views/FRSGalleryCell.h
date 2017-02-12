@@ -11,6 +11,8 @@
 
 @class FRSGallery;
 
+static NSString *const galleryCellIdentifier = @"gallery-cell";
+
 @interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate> {
     BOOL hasPlayed;
 }
@@ -23,9 +25,11 @@
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
 @property BOOL hasVideoAsFirstPost;
+
 - (void)clearCell;
 - (void)configureCell;
 - (void)offScreen;
 - (void)play;
 - (void)pause;
+
 @end

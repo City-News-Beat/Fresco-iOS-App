@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Nota-Bold.otf">
+            <string>Nota-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="see-all-cell" rowHeight="56" id="KGk-i7-Jjw" customClass="FRSSeeAllLabelTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2i-a4-XV9">
+                        <rect key="frame" x="8" y="0.0" width="304" height="55"/>
+                        <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.2784313725" blue="0.74901960779999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfx-H0-aKV">
+                        <rect key="frame" x="0.0" y="55" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.87843137250000003" green="0.87843137250000003" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="cAZ-ne-W1D"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Lfx-H0-aKV" secondAttribute="trailing" id="Q0e-G0-eEq"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="P2i-a4-XV9" secondAttribute="trailing" id="ewq-oE-QsG"/>
+                    <constraint firstItem="Lfx-H0-aKV" firstAttribute="top" secondItem="P2i-a4-XV9" secondAttribute="bottom" id="nEH-Fs-H0S"/>
+                    <constraint firstItem="Lfx-H0-aKV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="pkU-Ar-IYs"/>
+                    <constraint firstAttribute="bottom" secondItem="Lfx-H0-aKV" secondAttribute="bottom" id="rkL-h8-bfS"/>
+                    <constraint firstItem="P2i-a4-XV9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="urn-T1-t9R"/>
+                </constraints>
+            </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="P2i-a4-XV9" firstAttribute="top" secondItem="KGk-i7-Jjw" secondAttribute="top" id="5FB-SJ-IAY"/>
+            </constraints>
+            <connections>
+                <outlet property="seeAllLabel" destination="P2i-a4-XV9" id="TT3-T8-4lZ"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

@@ -151,6 +151,12 @@
 		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
 		CE1322401E4FDAFC00A46D4D /* FRSUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */; };
 		CE1322411E4FDAFC00A46D4D /* FRSUserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */; };
+		CE1322451E5031F400A46D4D /* FRSNearbyUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */; };
+		CE1322461E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */; };
+		CE13224A1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1322481E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m */; };
+		CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */; };
+		CE13224F1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */; };
+		CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */; };
 		CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */; };
 		CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */; };
 		CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */; };
@@ -583,6 +589,15 @@
 		CE13223D1E4FDAFC00A46D4D /* FRSUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserTableViewCell.h; sourceTree = "<group>"; };
 		CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserTableViewCell.m; sourceTree = "<group>"; };
 		CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSUserTableViewCell.xib; sourceTree = "<group>"; };
+		CE1322421E5031F400A46D4D /* FRSNearbyUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNearbyUserTableViewCell.h; sourceTree = "<group>"; };
+		CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNearbyUserTableViewCell.m; sourceTree = "<group>"; };
+		CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSNearbyUserTableViewCell.xib; sourceTree = "<group>"; };
+		CE1322471E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSeeAllLabelTableViewCell.h; sourceTree = "<group>"; };
+		CE1322481E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSeeAllLabelTableViewCell.m; sourceTree = "<group>"; };
+		CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSeeAllLabelTableViewCell.xib; sourceTree = "<group>"; };
+		CE13224C1E5112FF00A46D4D /* FRSStorySearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStorySearchTableViewCell.h; sourceTree = "<group>"; };
+		CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStorySearchTableViewCell.m; sourceTree = "<group>"; };
+		CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStorySearchTableViewCell.xib; sourceTree = "<group>"; };
 		CE1E6EF51E1C828600236AC7 /* FRSBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseManager.h; sourceTree = "<group>"; };
 		CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseManager.m; sourceTree = "<group>"; };
 		CE1E6EF81E1C82F900236AC7 /* NSString+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Fresco.h"; path = "Categories/NSString+Fresco.h"; sourceTree = "<group>"; };
@@ -978,6 +993,15 @@
 				CE13223D1E4FDAFC00A46D4D /* FRSUserTableViewCell.h */,
 				CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */,
 				CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */,
+				CE1322421E5031F400A46D4D /* FRSNearbyUserTableViewCell.h */,
+				CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */,
+				CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */,
+				CE1322471E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.h */,
+				CE1322481E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m */,
+				CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */,
+				CE13224C1E5112FF00A46D4D /* FRSStorySearchTableViewCell.h */,
+				CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */,
+				CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */,
 			);
 			name = "Social Feeds";
 			sourceTree = "<group>";
@@ -2525,9 +2549,11 @@
 				CA1637451E27F05500779A92 /* FRSGalleryStatusTableViewCell.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
+				CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
 				CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */,
+				CE1322461E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
@@ -2543,6 +2569,7 @@
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
+				CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
@@ -2685,6 +2712,7 @@
 				D453CC841CCA80850091A004 /* NSManagedObject+MagicalRequests.m in Sources */,
 				CE0A6FD01E3E9E5800E67766 /* FRSNotificationManager.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
+				CE1322451E5031F400A46D4D /* FRSNearbyUserTableViewCell.m in Sources */,
 				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
 				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
@@ -2766,6 +2794,8 @@
 				CE1322401E4FDAFC00A46D4D /* FRSUserTableViewCell.m in Sources */,
 				07A2C14B1DEE2EE000B8445F /* FRSPlayer.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
+				CE13224F1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m in Sources */,
+				CE13224A1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m in Sources */,
 				0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */,
 				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,
 				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,

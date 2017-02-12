@@ -10,15 +10,7 @@
 #import "FRSUser.h"
 #import <CoreData/CoreData.h>
 
-@protocol FRSTableViewCellDelegate <NSObject>
-
-- (void)reloadDataDelegate;
-
-@end
-
 @interface FRSTableViewCell : UITableViewCell
-
-@property (weak, nonatomic) NSObject<FRSTableViewCellDelegate> *delegate;
 
 - (void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle rightAlignedTitleColor:(UIColor *)color;
 

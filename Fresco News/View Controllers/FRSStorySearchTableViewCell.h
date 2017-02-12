@@ -1,0 +1,17 @@
+//
+//  FRSStorySearchTableViewCell.h
+//  Fresco
+//
+//  Created by User on 2/12/17.
+//  Copyright © 2017 Fresco. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+static NSString *const storySearchCellIdentifier = @"story-search-cell";
+
+@interface FRSStorySearchTableViewCell : UITableViewCell
+
+- (void)loadDataWithTitle:(NSString *)title andImageURL:(NSURL *)imageURL;
+
+@end
