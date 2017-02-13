@@ -72,8 +72,10 @@
     // have most recently created assets at this top of list
     options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO] ];
     
-    #ifdef DEBUG
+    #if TARGET_OS_SIMULATOR
+        //Simulator
     #else
+        //Device
         // only load assets w/ creation date within the defined maximum age
         NSDate *yesterday = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
         NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", yesterday];
