@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 static NSString *const seeAllCellIdentifier = @"see-all-cell";
+static CGFloat const seeAllCellHeight = 44;
 
 @interface FRSSeeAllLabelTableViewCell : UITableViewCell
 

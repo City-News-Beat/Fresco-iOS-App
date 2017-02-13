@@ -441,7 +441,28 @@ static NSInteger const previewCount = 3;
     }
 }
 
-#pragma mark - UITableView Datasource
+- (void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
+    NSManagedObjectContext *context = [[FRSSearchManager sharedInstance] managedObjectContext];
+    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
+    
+    story.uid = storyID;
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+    
+    if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
+        detailView.title = self.stories[row][@"title"];
+    }
+    detailView.navigationController = self.navigationController;
+    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+- (FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
+
+#pragma mark - UITableView Methods
 
 - (void)configureTableView {
     self.title = @"";
@@ -462,6 +483,8 @@ static NSInteger const previewCount = 3;
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSSeeAllLabelTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:seeAllCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSStorySearchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storySearchCellIdentifier];
     [self.tableView registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCellIdentifier];
+//    self.tableView.estimatedRowHeight = 400.0;
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -532,35 +555,26 @@ static NSInteger const previewCount = 3;
     return 0;
 }
 
-- (BOOL)isNoData {
-    return TRUE;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (indexPath.section == storyIndex) {
-
         if (_stories.count == 0) {
             return 0;
         }
-        if (indexPath.row == 3 && !_storyExtended) {
-            return 44;
+        if (indexPath.row == previewCount && !_storyExtended) {
+            return seeAllCellHeight;
         }
-
-        return 56;
+        return storySearchCellHeight;
     }
 
     if (indexPath.section == userIndex) {
-
         if (self.usersDicts.count <= 0) {
             return 0;
         }
-        if (indexPath.row == 3 && !self.userExtended) {
-            return 44;
+        if (indexPath.row == previewCount && !self.userExtended) {
+            return seeAllCellHeight;
         }
 
         if (self.configuredNearby) {
-
             NSDictionary *user = [self.usersDicts objectAtIndex:indexPath.row];
 
             if ([user[@"bio"] isEqualToString:@""] || [user[@"bio"] isEqual:[NSNull null]] || user[@"bio"] == nil) {
@@ -581,40 +595,17 @@ static NSInteger const previewCount = 3;
             }
         }
 
-        return 56;
+        return userCellHeight;
     } else {
         // galleries
-
         if (self.galleries.count <= 0) {
             return 0;
         }
-
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
         return [gallery heightForGallery] - 19 + 12; //-19px is the default bottom space height, should be 12px
     }
-
+    
     return 0;
-}
-
-- (void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
-    NSManagedObjectContext *context = [[FRSSearchManager sharedInstance] managedObjectContext];
-    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
-
-    story.uid = storyID;
-    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
-
-    if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
-        detailView.title = self.stories[row][@"title"];
-    }
-    detailView.navigationController = self.navigationController;
-    [self.navigationController pushViewController:detailView animated:YES];
-}
-
-- (FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
-    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
-    detailView.story = story;
-    [detailView reloadData];
-    return detailView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

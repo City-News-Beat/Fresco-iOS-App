@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 static NSString *const storySearchCellIdentifier = @"story-search-cell";
+static CGFloat const storySearchCellHeight = 56;
 
 @interface FRSStorySearchTableViewCell : UITableViewCell
 
