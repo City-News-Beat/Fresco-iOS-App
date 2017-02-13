@@ -48,7 +48,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ASS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJ8-iX-pBp">
-                        <rect key="frame" x="64" y="17" width="30" height="21"/>
+                        <rect key="frame" x="64" y="17" width="29.5" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="hbB-ny-eTG"/>
                         </constraints>
@@ -67,7 +67,7 @@
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1" verticalHuggingPriority="251" text="DDDD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKV-yZ-rKO">
-                        <rect key="frame" x="102" y="17" width="162" height="21"/>
+                        <rect key="frame" x="101.5" y="17" width="162.5" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Mav-9p-DnO"/>
                         </constraints>
@@ -106,8 +106,8 @@
             <connections>
                 <outlet property="bioLabel" destination="eSi-B6-1XW" id="uD2-U7-qAl"/>
                 <outlet property="followButton" destination="pF3-uz-B8X" id="pbb-Jt-QTb"/>
-                <outlet property="nameLabel" destination="CJ8-iX-pBp" id="GQO-rw-Qhr"/>
-                <outlet property="profileImageView" destination="kQV-hH-gNq" id="IXW-ip-Eop"/>
+                <outlet property="nameLabel" destination="CJ8-iX-pBp" id="IIk-yR-oBf"/>
+                <outlet property="profileImageView" destination="kQV-hH-gNq" id="BOu-KL-Kra"/>
                 <outlet property="usernameLabel" destination="wKV-yZ-rKO" id="FfG-dz-CH2"/>
             </connections>
             <point key="canvasLocation" x="25" y="130.5"/>

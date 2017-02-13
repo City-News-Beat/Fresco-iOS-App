@@ -586,12 +586,12 @@
 		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
 		CE12A5F71E14747A0032E72F /* EndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndpointManager.h; sourceTree = "<group>"; };
 		CE12A5F81E14747A0032E72F /* EndpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndpointManager.m; sourceTree = "<group>"; };
-		CE13223D1E4FDAFC00A46D4D /* FRSUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserTableViewCell.h; sourceTree = "<group>"; };
-		CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserTableViewCell.m; sourceTree = "<group>"; };
-		CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSUserTableViewCell.xib; sourceTree = "<group>"; };
-		CE1322421E5031F400A46D4D /* FRSNearbyUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNearbyUserTableViewCell.h; sourceTree = "<group>"; };
-		CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNearbyUserTableViewCell.m; sourceTree = "<group>"; };
-		CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSNearbyUserTableViewCell.xib; sourceTree = "<group>"; };
+		CE13223D1E4FDAFC00A46D4D /* FRSUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSUserTableViewCell.h; path = "../View Controllers/FRSUserTableViewCell.h"; sourceTree = "<group>"; };
+		CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSUserTableViewCell.m; path = "../View Controllers/FRSUserTableViewCell.m"; sourceTree = "<group>"; };
+		CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSUserTableViewCell.xib; path = "../View Controllers/FRSUserTableViewCell.xib"; sourceTree = "<group>"; };
+		CE1322421E5031F400A46D4D /* FRSNearbyUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNearbyUserTableViewCell.h; path = "../View Controllers/FRSNearbyUserTableViewCell.h"; sourceTree = "<group>"; };
+		CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNearbyUserTableViewCell.m; path = "../View Controllers/FRSNearbyUserTableViewCell.m"; sourceTree = "<group>"; };
+		CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSNearbyUserTableViewCell.xib; path = "../View Controllers/FRSNearbyUserTableViewCell.xib"; sourceTree = "<group>"; };
 		CE1322471E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSeeAllLabelTableViewCell.h; sourceTree = "<group>"; };
 		CE1322481E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSeeAllLabelTableViewCell.m; sourceTree = "<group>"; };
 		CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSeeAllLabelTableViewCell.xib; sourceTree = "<group>"; };
@@ -990,18 +990,6 @@
 			children = (
 				078A536B1E084B100018F112 /* FRSDualUserListViewController.h */,
 				078A536C1E084B100018F112 /* FRSDualUserListViewController.m */,
-				CE13223D1E4FDAFC00A46D4D /* FRSUserTableViewCell.h */,
-				CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */,
-				CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */,
-				CE1322421E5031F400A46D4D /* FRSNearbyUserTableViewCell.h */,
-				CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */,
-				CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */,
-				CE1322471E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.h */,
-				CE1322481E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m */,
-				CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */,
-				CE13224C1E5112FF00A46D4D /* FRSStorySearchTableViewCell.h */,
-				CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */,
-				CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */,
 			);
 			name = "Social Feeds";
 			sourceTree = "<group>";
@@ -1157,6 +1145,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CE1322511E51539A00A46D4D /* User Cell */,
 				D43AA8B71DCA29A50002DF00 /* Stabilization */,
 				D41B2EF71D53E5810007C61F /* Search */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
@@ -1417,6 +1406,12 @@
 		4AB98C9E1C8A7F3B005E7AB2 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				CE1322471E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.h */,
+				CE1322481E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m */,
+				CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */,
+				CE13224C1E5112FF00A46D4D /* FRSStorySearchTableViewCell.h */,
+				CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */,
+				CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */,
 				07A30C0E1C50497E00C536EB /* FRSSearchViewController.h */,
 				07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */,
 			);
@@ -1561,6 +1556,19 @@
 				02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		CE1322511E51539A00A46D4D /* User Cell */ = {
+			isa = PBXGroup;
+			children = (
+				CE13223D1E4FDAFC00A46D4D /* FRSUserTableViewCell.h */,
+				CE13223E1E4FDAFC00A46D4D /* FRSUserTableViewCell.m */,
+				CE13223F1E4FDAFC00A46D4D /* FRSUserTableViewCell.xib */,
+				CE1322421E5031F400A46D4D /* FRSNearbyUserTableViewCell.h */,
+				CE1322431E5031F400A46D4D /* FRSNearbyUserTableViewCell.m */,
+				CE1322441E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib */,
+			);
+			name = "User Cell";
 			sourceTree = "<group>";
 		};
 		D400FA531D6DE6C1008842E1 /* Comment */ = {

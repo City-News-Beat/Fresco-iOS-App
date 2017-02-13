@@ -7,13 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSUserTableViewCell.h"
 
 @class FRSUser;
 
 static NSString *const nearbyUserCellIdentifier = @"nearby-user-cell";
 
-@interface FRSNearbyUserTableViewCell : UITableViewCell
-
-- (void)loadDataWithUser:(FRSUser *)user;
+@interface FRSNearbyUserTableViewCell : FRSUserTableViewCell
 
 @end

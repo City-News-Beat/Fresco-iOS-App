@@ -12,14 +12,6 @@
 
 @interface FRSUserTableViewCell ()
 
-@property (nonatomic, weak) IBOutlet UIImageView *profileImageView;
-@property (nonatomic, weak) IBOutlet UILabel *usernameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
-@property (nonatomic, weak) IBOutlet UIButton *followButton;
-
-@property (nonatomic, strong) FRSUser *user;
-@property (nonatomic) BOOL following;
-
 @end
 
 @implementation FRSUserTableViewCell
