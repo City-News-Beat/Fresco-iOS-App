@@ -2,7 +2,7 @@
 //  FRSNearbyUserTableViewCell.m
 //  Fresco
 //
-//  Created by User on 2/12/17.
+//  Created by Maurice Wu on 2/12/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 

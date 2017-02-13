@@ -2,7 +2,7 @@
 //  Endpoint.m
 //  Fresco
 //
-//  Created by User on 12/29/16.
+//  Created by Maurice Wu on 12/29/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
