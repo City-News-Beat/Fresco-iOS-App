@@ -112,37 +112,13 @@
     if (self.locationTF.text) {
         profileInfo[@"location"] = self.locationTF.text;
     }
-    if (self.profileIV.image != nil) {
-        //Send image to backend and set the url to the avatar :)
-        NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
-
-        [[FRSUserManager sharedInstance] postAvatarWithParameters:@{ @"avatar" : imageData }
-            completion:^(id responseObject, NSError *error) {
-              NSLog(@"Digestion Update Error: %@", error);
-
-              if (!error) {
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                    [[FRSUserManager sharedInstance] authenticatedUser].profileImage = self.profileIV.image;
-                    [[FRSUserManager sharedInstance] authenticatedUser].profileImage = [responseObject valueForKey:@"avatar"];
-                  });
-              }
-            }];
-        //profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
-    }
 
     return profileInfo;
 }
 
-- (void)addUserProfile {
-
-    if (self.nameTF.text == nil) {
-
-        return;
-    }
-
+- (void)updateUserProfile {
     [[FRSUserManager sharedInstance] updateUserWithDigestion:[self updateDigest]
                                                   completion:^(id responseObject, NSError *error) {
-
                                                     if (error.code == -1009) {
                                                         FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                         [alert show];
@@ -150,9 +126,7 @@
                                                     }
 
                                                     if (error) {
-
                                                         [self presentGenericError];
-
                                                         return;
                                                     }
                                                     // dismiss modal
@@ -209,6 +183,33 @@
                                                         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
                                                     }
                                                   }];
+}
+
+- (void)addUserProfile {
+    if (self.nameTF.text == nil) {
+        return;
+    }
+
+    if (self.profileIV.image != nil) {
+        //Send image to backend and set the url to the avatar :)
+        NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
+        [[FRSUserManager sharedInstance] postAvatarWithParameters:@{ @"avatar" : imageData }
+            completion:^(id responseObject, NSError *error) {
+              if (error) {
+                  NSLog(@"Digestion Update Error: %@", error);
+                  [self presentGenericError];
+              } else {
+                  dispatch_async(dispatch_get_main_queue(), ^{
+                    [[FRSUserManager sharedInstance] authenticatedUser].profileImage = self.profileIV.image;
+                    [[FRSUserManager sharedInstance] authenticatedUser].profileImage = [responseObject valueForKey:@"avatar"];
+                    [self updateUserProfile];
+                  });
+              }
+            }];
+    }
+    else {
+        [self updateUserProfile];
+    }
 }
 
 - (void)configureImagePicker {
@@ -497,8 +498,6 @@
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.doneButton.userInteractionEnabled = YES;
     }
-
-    //    [self constrainSubview:bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
 
 - (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
