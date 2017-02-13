@@ -35,10 +35,11 @@
     return self;
 }
 
-/*
+
+
+/**
  Sets up CLLocationManager, and sets us up to receive UIApplicationState change notifications
  */
-
 - (void)checkForCachedLocation {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-longitude"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"]) {
         NSNumber *latitude = [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"];
@@ -79,7 +80,7 @@
         NSDictionary *userLocation = @{ @"lat" : @(currentLocation.coordinate.latitude),
                                         @"lng" : @(currentLocation.coordinate.longitude) };
 
-        [[FRSUserManager sharedInstance] pingLocation:userLocation
+        [[FRSUserManager sharedInstance] updateUserLocation:userLocation
                                        completion:^(id responseObject, NSError *error) {
                                          if (error) {
                                              NSLog(@"Location Error");

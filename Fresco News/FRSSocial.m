@@ -11,31 +11,21 @@
 
 @implementation FRSSocial
 
-// TODO: for login w/ twitter & login w/ facebook, use register, and add extra api layer
 + (void)loginWithTwitter:(LoginCompletionBlock)completion {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
-
-      if (session) {
-          [[FRSAuthManager sharedInstance] signInWithTwitter:session
-                                                  completion:^(id responseObject, NSError *error) {
-                                                    if (responseObject) {
-
-                                                        /*if ([[responseObject objectForKey:@"valid_password"] boolValue]) {
-                        completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], session, Nil, responseObject);
-                        return;
-                    }*/
-                                                        completion(TRUE, error, session, Nil, responseObject);
-                                                        return;
-                                                    }
-
-                                                    if (error) {
-                                                        completion(FALSE, error, session, Nil, nil);
-                                                    }
-                                                  }];
-
-      } else {
-          completion(FALSE, error, Nil, Nil, nil);
-      }
+        if (session) {
+            [[FRSAuthManager sharedInstance] signInWithTwitter:session
+                                                    completion:^(id responseObject, NSError *error) {
+                                                        if (error) {
+                                                            completion(FALSE, error, Nil, Nil, nil);
+                                                        } else {
+                                                            completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken], responseObject);
+                                                        }
+                                                    }];
+            
+        } else {
+            completion(FALSE, error, nil, nil, nil);
+        }
     }];
 }
 
@@ -46,21 +36,13 @@
                                 if (error) {
                                     completion(FALSE, error, Nil, Nil, nil);
                                 } else if (result.isCancelled) {
-                                    completion(FALSE, [NSError errorWithDomain:@"com.fresconews.fresco" code:301 userInfo:Nil], Nil, Nil, nil);
+                                    completion(FALSE, [NSError errorWithDomain:@"com.fresconews.fresco" code:301 userInfo:Nil], nil, nil, nil);
                                 } else {
                                     [[FRSAuthManager sharedInstance] signInWithFacebook:[FBSDKAccessToken currentAccessToken]
                                                                              completion:^(id responseObject, NSError *error) {
                                                                                if (error) {
                                                                                    completion(FALSE, error, Nil, Nil, nil);
-
                                                                                } else {
-                                                                                   [[FRSAuthManager sharedInstance] handleUserLogin:responseObject];
-
-                                                                                   /*if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
-                            completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken], responseObject);
-                            return;
-                        }*/
-
                                                                                    completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken], responseObject);
                                                                                }
                                                                              }];

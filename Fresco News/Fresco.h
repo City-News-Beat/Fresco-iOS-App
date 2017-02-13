@@ -22,6 +22,10 @@ static NSString *const largeImageSize = @""; // actual image
 static int const chunkSize = 5;
 static int const megabyteDefinition = 1048576;
 
+// file loading
+
+static int const maxFileAge = 86400; //1 day, in seconds
+
 // notifications
 static NSString *const kStatusBarTappedNotification = @"statusBarTappedNotification";
 
@@ -48,6 +52,9 @@ static NSString *const settingsPaymentLastFour = @"payment-last-four";
 static NSString *const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString *const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString *const startDate = @"startDate";
+static NSString *const facebookConnected = @"facebook-connected";
+static NSString *const twitterConnected = @"twitter-connected";
+static NSString *const twitterHandle = @"twitter-handle";
 
 // nsnotification
 static NSString *const enableAssignmentAccept = @"enableAssignmentAccept";
@@ -109,6 +116,9 @@ typedef void (^FRSAPIResponseBlock)(id responseObject, NSError *error);
 typedef void (^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void (^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void (^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
+
+// errors
+static NSString *const errorDomain = @"com.fresconews.Fresco";
 
 // fields needed
 static NSString *const lineOneField = @"legal_entity.address.line1";
@@ -206,7 +216,8 @@ static NSString *const galleryShared = @"Gallery shared";
 static NSString *const signupsWithTwitter = @"Signups with Twitter";
 static NSString *const signupsWithFacebook = @"Signups with Facebook";
 static NSString *const signupsWithEmail = @"Signups with email";
-static NSString *const loginEvent = @"Logins";
+static NSString *const signupEvent = @"Signup";
+static NSString *const loginEvent = @"Login";
 static NSString *const addressError = @"Address Error";
 static NSString *const notificationsEnabled = @"Permissions notification enables";
 static NSString *const notificationsDisabled = @"Permissions notification disables";

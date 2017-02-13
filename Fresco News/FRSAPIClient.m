@@ -68,15 +68,15 @@
 
 - (BOOL)shouldSendClientToken:(NSString *)endpoint {
     NSString *clientToken = [[FRSSessionManager sharedInstance] clientToken];
-    return (![[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/signin"] && ![endpoint containsString:@"auth/token"] && clientToken);
+    return (![[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/token"] && clientToken);
 }
 
 - (BOOL)shouldSendUserToken:(NSString *)endpoint {
-    return ([[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/signin"] && ![endpoint containsString:@"auth/token"]);
+    return ([[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/token"]);
 }
 
 - (BOOL)shouldSendBasic:(NSString *)endpoint withRequestType:(NSString *)requestType {
-    return ![requestType isEqualToString:@"DELETE"] && ([endpoint containsString:@"auth/signin"] || [endpoint containsString:@"auth/token"]);
+    return ![requestType isEqualToString:@"DELETE"] && ([endpoint containsString:@"auth/token"]);
 }
 
 - (NSString *)basicAuthorization {
@@ -107,6 +107,7 @@
         failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
           if (response && response.statusCode == 401) {
+              //When receiving a 401, it's a signal to refresh the token from the Fresco API
               [[FRSSessionManager sharedInstance] refreshToken:[[FRSAuthManager sharedInstance] isAuthenticated]
                                                     completion:^(id responseObject, NSError *error) {
                                                       if (!error) {
