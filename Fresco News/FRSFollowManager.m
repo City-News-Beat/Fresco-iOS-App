@@ -3,7 +3,7 @@
 //  FRSFollowManager.m
 //  Fresco
 //
-//  Created by User on 1/29/17.
+//  Created by Maurice Wu on 1/29/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 

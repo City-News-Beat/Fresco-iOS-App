@@ -17,6 +17,7 @@
 #import "FRSSessionManager.h"
 #import "NSDate+ISO.h"
 #import "FRSGallery.h"
+#import "FRSStory.h"
 
 @implementation FRSAPIClient
 

@@ -26,4 +26,5 @@
 - (void)configureCell;
 - (void)play;
 - (void)pause;
+
 @end

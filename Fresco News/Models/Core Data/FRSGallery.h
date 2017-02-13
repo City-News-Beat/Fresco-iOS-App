@@ -9,11 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "FRSCoreData.h"
-#import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSArticle.h"
-#import "FRSStory.h"
-#import "FRSUser.h"
 #import "FRSCoreData.h"
 
 #import "FRSDateFormatter.h"

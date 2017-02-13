@@ -18,8 +18,16 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSAlertView.h"
 #import "FRSSearchManager.h"
+#import "FRSStory.h"
+#import "FRSUserManager.h"
+#import "FRSUserTableViewCell.h"
+#import "FRSNearbyUserTableViewCell.h"
+#import "FRSSeeAllLabelTableViewCell.h"
+#import "FRSStorySearchTableViewCell.h"
 
-@interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate>
+static NSInteger const previewCount = 3;
+
+@interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;
@@ -62,6 +70,8 @@
 
     // Tab bar should always be visible in this view controller
     [self showTabBarAnimated:NO];
+
+    self.usersArray = [[NSMutableArray alloc] init];
 }
 
 - (void)search:(NSString *)string {
@@ -151,14 +161,6 @@
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
 
-    //    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    //    [self.backTapButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-    //    self.backTapButton.backgroundColor = [UIColor blueColor];
-    //    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
-
-    //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
-    //    [view addGestureRecognizer:tap];
-
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
@@ -187,36 +189,17 @@
 }
 
 - (void)showClearButton {
-
-    //    //Scale clearButton up with a little jiggle
-    //    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-    //        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
-    //    } completion:^(BOOL finished) {
-    //        [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
     self.clearButton.transform = CGAffineTransformMakeScale(1, 1);
-    //        } completion:nil];
-    //    }];
-
-    //    //Fade in clearButton over total duration of scale
-    //    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
     self.clearButton.alpha = 1;
-    //    } completion:nil];
 }
 
 - (void)hideClearButton {
-
-    //    //Scale clearButton down with anticipation
-    //    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-    //        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
-    //    } completion:^(BOOL finished) {
-    //        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-    self.clearButton.transform = CGAffineTransformMakeScale(0.0001, 0.0001); //iOS does not scale to (0,0) for some reason :(
+    self.clearButton.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
     self.clearButton.alpha = 0;
-    //        } completion:nil];
-    //    }];
 }
 
 #pragma mark - UITextField Delegate
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
@@ -247,7 +230,7 @@
 
 - (void)performSearchWithQuery:(NSString *)query {
     _storyExtended = NO;
-    _userExtended = NO;
+    self.userExtended = NO;
 
     if ([query isEqualToString:@""]) {
         return;
@@ -259,7 +242,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
       self.nearbyHeaderContainer.alpha = 0;
     });
-    self.users = @[];
+    self.usersDicts = @[];
     self.galleries = @[];
     self.stories = @[];
     [self reloadData];
@@ -282,21 +265,24 @@
 
                                               self.userSectionTitleString = @"USERS";
 
-                                              //NSString *filePath = @"";
-                                              //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
-
                                               NSDictionary *storyObject = responseObject[@"stories"];
                                               NSDictionary *galleryObject = responseObject[@"galleries"];
                                               NSDictionary *userObject = responseObject[@"users"];
                                               self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
-                                              self.users = userObject[@"results"];
+                                              self.usersDicts = userObject[@"results"];
                                               self.stories = storyObject[@"results"];
+
+                                              [self.usersArray removeAllObjects];
+                                              for (NSDictionary *user in self.usersDicts) {
+                                                  FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSUserManager sharedInstance] managedObjectContext]];
+                                                  [self.usersArray addObject:newUser];
+                                              }
 
                                               [self rearrangeIndexes];
 
                                               [self reloadData];
 
-                                              if (self.users.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
+                                              if (self.usersDicts.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
                                                   [self configureNoResults];
                                               } else {
                                                   self.awkwardView.alpha = 0;
@@ -310,7 +296,6 @@
 }
 
 - (void)configureNearbyUsers {
-
     [[FRSSearchManager sharedInstance] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
 
       if (error) {
@@ -343,7 +328,12 @@
       subtitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
       [self.nearbyHeaderContainer addSubview:subtitleLabel];
 
-      self.users = responseObject;
+      self.usersDicts = responseObject;
+      [self.usersArray removeAllObjects];
+      for (NSDictionary *user in self.usersDicts) {
+          FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSUserManager sharedInstance] managedObjectContext]];
+          [self.usersArray addObject:newUser];
+      }
       self.tableView.contentInset = UIEdgeInsetsMake(82, 0, 0, 0);
       self.tableView.bounces = YES;
       userIndex = 0;
@@ -353,7 +343,7 @@
       [self removeSpinner];
       [self reloadData];
 
-      _userExtended = YES;
+      self.userExtended = YES;
       [self.tableView reloadData];
 
     }];
@@ -363,21 +353,21 @@
     //By changing the index we bump the given tableview group up when there aren't any results for that query.
 
     //If no users and no stories are returned, bump galleries to top
-    if (self.users.count == 0 && self.stories.count == 0) {
+    if (self.usersDicts.count == 0 && self.stories.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-70, 0, -70, 0);
         userIndex = 2;
         storyIndex = 1;
         galleryIndex = 0;
-    } else if (self.users.count != 0 && self.stories.count != 0) {
+    } else if (self.usersDicts.count != 0 && self.stories.count != 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -32, 0);
     }
 
     //If no users are returned, bump stories and galleries up one index
-    if (self.users.count == 0) {
+    if (self.usersDicts.count == 0) {
         userIndex = 2;
         storyIndex = 0;
         galleryIndex = 1;
-    } else if (self.users.count != 0 && self.stories.count == 0 && self.galleries.count == 0) { //Only users are returned
+    } else if (self.usersDicts.count != 0 && self.stories.count == 0 && self.galleries.count == 0) { //Only users are returned
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
         userIndex = 0;
         storyIndex = 1;
@@ -389,7 +379,7 @@
         userIndex = 0;
         storyIndex = 2;
         galleryIndex = 1;
-    } else if (self.stories.count != 0 && self.users.count == 0 && self.galleries.count == 0) { //Only stories are returned
+    } else if (self.stories.count != 0 && self.usersDicts.count == 0 && self.galleries.count == 0) { //Only stories are returned
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
         userIndex = 1;
         storyIndex = 0;
@@ -397,14 +387,14 @@
     }
 
     //If users, stories, and galleries are returned
-    if (self.users.count != 0 && self.stories.count != 0 && self.galleries.count != 0) {
+    if (self.usersDicts.count != 0 && self.stories.count != 0 && self.galleries.count != 0) {
         userIndex = 0;
         storyIndex = 1;
         galleryIndex = 2;
     }
 
     //If users are returned with galleries
-    if (self.users.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
+    if (self.usersDicts.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -67, 0);
         userIndex = 0;
         storyIndex = 2;
@@ -412,7 +402,7 @@
     }
 
     //If stories are returned with galleries
-    if (self.stories.count != 0 && self.galleries.count != 0 && self.users.count == 0) {
+    if (self.stories.count != 0 && self.galleries.count != 0 && self.usersDicts.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -68, 0);
         userIndex = 2;
         storyIndex = 0;
@@ -420,7 +410,7 @@
     }
 
     //If users are returned with stories
-    if (self.stories.count != 0 && self.users.count != 0 && self.galleries.count == 0) {
+    if (self.stories.count != 0 && self.usersDicts.count != 0 && self.galleries.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
         userIndex = 0;
         storyIndex = 1;
@@ -429,7 +419,6 @@
 }
 
 - (void)reloadData {
-
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.tableView reloadData];
     });
@@ -452,7 +441,28 @@
     }
 }
 
-#pragma mark - UITableView Datasource
+- (void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
+    NSManagedObjectContext *context = [[FRSSearchManager sharedInstance] managedObjectContext];
+    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
+    
+    story.uid = storyID;
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+    
+    if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
+        detailView.title = self.stories[row][@"title"];
+    }
+    detailView.navigationController = self.navigationController;
+    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+- (FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
+
+#pragma mark - UITableView Methods
 
 - (void)configureTableView {
     self.title = @"";
@@ -467,12 +477,20 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
     self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, -32, 0);
+
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSNearbyUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:nearbyUserCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSSeeAllLabelTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:seeAllCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStorySearchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storySearchCellIdentifier];
+    [self.tableView registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCellIdentifier];
+//    self.tableView.estimatedRowHeight = 400.0;
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
     int numberOfSections = 0;
-    if (_users && ![_users isEqual:[NSNull null]]) {
+    if (self.usersDicts && ![self.usersDicts isEqual:[NSNull null]]) {
         numberOfSections++;
     }
     if (_stories && ![_stories isEqual:[NSNull null]]) {
@@ -489,25 +507,25 @@
 
     if (section == userIndex) {
 
-        if (_users.count == 0) {
+        if (self.usersDicts.count == 0) {
             return 0;
         }
 
-        if (_userExtended) {
-            return _users.count;
+        if (self.userExtended) {
+            return self.usersDicts.count;
         }
 
-        if (_users.count == 0) {
+        if (self.usersDicts.count == 0) {
             return 0;
         }
 
-        if (_users.count > 3) {
+        if (self.usersDicts.count > 3) {
             return 4;
         } else {
-            return _users.count;
+            return self.usersDicts.count;
         }
 
-        return _users.count + 2;
+        return self.usersDicts.count + 2;
     }
     if (section == storyIndex) {
 
@@ -537,36 +555,27 @@
     return 0;
 }
 
-- (BOOL)isNoData {
-    return TRUE;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (indexPath.section == storyIndex) {
-
         if (_stories.count == 0) {
             return 0;
         }
-        if (indexPath.row == 3 && !_storyExtended) {
-            return 44;
+        if (indexPath.row == previewCount && !_storyExtended) {
+            return seeAllCellHeight;
         }
-
-        return 56;
+        return storySearchCellHeight;
     }
 
     if (indexPath.section == userIndex) {
-
-        if (_users.count <= 0) {
+        if (self.usersDicts.count <= 0) {
             return 0;
         }
-        if (indexPath.row == 3 && !_userExtended) {
-            return 44;
+        if (indexPath.row == previewCount && !self.userExtended) {
+            return seeAllCellHeight;
         }
 
         if (self.configuredNearby) {
-
-            NSDictionary *user = [self.users objectAtIndex:indexPath.row];
+            NSDictionary *user = [self.usersDicts objectAtIndex:indexPath.row];
 
             if ([user[@"bio"] isEqualToString:@""] || [user[@"bio"] isEqual:[NSNull null]] || user[@"bio"] == nil) {
                 return 66;
@@ -586,44 +595,21 @@
             }
         }
 
-        return 56;
+        return userCellHeight;
     } else {
         // galleries
-
         if (self.galleries.count <= 0) {
             return 0;
         }
-
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
         return [gallery heightForGallery] - 19 + 12; //-19px is the default bottom space height, should be 12px
     }
-
+    
     return 0;
 }
 
-- (void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
-    NSManagedObjectContext *context = [[FRSSearchManager sharedInstance] managedObjectContext];
-    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
-
-    story.uid = storyID;
-    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
-
-    if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
-        detailView.title = self.stories[row][@"title"];
-    }
-    detailView.navigationController = self.navigationController;
-    [self.navigationController pushViewController:detailView animated:YES];
-}
-
-- (FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
-    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
-    detailView.story = story;
-    [detailView reloadData];
-    return detailView;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if ((section == userIndex && self.users.count > 0 && self.users)) {
+    if ((section == userIndex && self.usersDicts.count > 0 && self.usersDicts)) {
         return 30;
     }
 
@@ -640,7 +626,7 @@
         return [UIView new];
     }
 
-    if (section == userIndex && self.users.count == 0) {
+    if (section == userIndex && self.usersDicts.count == 0) {
         return [UIView new];
     }
     if (section == storyIndex && self.stories.count == 0) {
@@ -653,7 +639,7 @@
     [label setTextColor:[UIColor frescoMediumTextColor]];
     NSString *title = @"";
 
-    if (section == userIndex && self.users.count > 0) {
+    if (section == userIndex && self.usersDicts.count > 0) {
         title = self.userSectionTitleString;
     }
 
@@ -668,85 +654,58 @@
 }
 
 - (UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *galleryIdentifier;
-    NSString *cellIdentifier;
-
-    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
-
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
-    }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
+    static NSString *const emptyCellIdentifier = @"empty-cell";
 
     if (indexPath.section == userIndex) {
-        cell.delegate = self;
-        if (self.users.count == 0) {
-            return Nil;
+        if (self.usersDicts.count == 0) {
+            return nil;
         }
 
-        if (indexPath.row == 3 && !_userExtended) {
-            [cell configureSearchSeeAllCellWithTitle:[NSString stringWithFormat:@"SEE ALL %lu USERS", self.users.count]];
+        if (indexPath.row == previewCount && !self.userExtended) {
+            FRSSeeAllLabelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:seeAllCellIdentifier];
+            [cell setLabelText:[NSString stringWithFormat:@"SEE ALL %lu USERS", self.usersDicts.count]];
             return cell;
         }
 
-        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended) || (self.users.count < 5 && indexPath.row == self.users.count)) {
-            [cell configureEmptyCellSpace:NO];
+        if ((indexPath.row == self.usersDicts.count + 1) || (indexPath.row == 6 && !self.userExtended) || (self.usersDicts.count < 5 && indexPath.row == self.usersDicts.count)) {
+            UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:emptyCellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:emptyCellIdentifier];
+                cell.alpha = 0;
+                cell.userInteractionEnabled = NO;
+                cell.backgroundColor = [UIColor clearColor];
+            }
             return cell;
         }
-
-        // users
-        NSDictionary *user = self.users[indexPath.row];
-
-        NSString *avatarURL;
-        if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
-            avatarURL = user[@"avatar"];
-        }
-
-        NSURL *avatarURLObject;
-
-        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
-            avatarURLObject = [NSURL URLWithString:avatarURL];
-        }
-
-        NSString *firstname = @" ";
-        if (user[@"full_name"] || ![user[@"full_name"] isEqual:[NSNull null]]) {
-            firstname = user[@"full_name"];
-        }
-
-        NSString *username = @" ";
-        if (user[@"username"] || ![user[@"username"] isEqual:[NSNull null]]) {
-            username = user[@"username"];
-        }
-
+        FRSUser *user = self.usersArray[indexPath.row];
         if (self.configuredNearby) {
-
-            [cell configureSearchNearbyUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+            FRSNearbyUserTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:nearbyUserCellIdentifier];
+            [cell loadDataWithUser:user];
+            return cell;
         } else {
-            [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+            FRSUserTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:userCellIdentifier];
+            [cell loadDataWithUser:user];
+            return cell;
         }
-
-        return cell;
     } else if (indexPath.section == storyIndex) {
-
         if (self.stories.count == 0) {
-            return Nil;
+            return nil;
         }
 
-        if (indexPath.row == 3 && !_storyExtended) {
-            [cell configureSearchSeeAllCellWithTitle:[NSString stringWithFormat:@"SEE ALL %lu STORIES", self.stories.count]];
+        if (indexPath.row == previewCount && !_storyExtended) {
+            FRSSeeAllLabelTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:seeAllCellIdentifier];
+            [cell setLabelText:[NSString stringWithFormat:@"SEE ALL %lu STORIES", self.stories.count]];
             return cell;
         }
 
         if (indexPath.row == self.stories.count + 1 && !_storyExtended) {
-            [cell configureEmptyCellSpace:NO];
+            UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:emptyCellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+                cell.alpha = 0;
+                cell.userInteractionEnabled = NO;
+                cell.backgroundColor = [UIColor clearColor];
+            }
             return cell;
         }
 
@@ -760,22 +719,19 @@
             }
         }
 
-        NSString *title = @" ";
+        NSString *title = @"";
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
         }
-
-        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
+        FRSStorySearchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:storySearchCellIdentifier];
+        [cell loadDataWithTitle:title andImageURL:photo];
         return cell;
     }
-
-    if (indexPath.section == galleryIndex) {
-
-        FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryIdentifier];
+    else if (indexPath.section == galleryIndex) {
+        FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
         if (!cell) {
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];
         }
-        //        cell.delegate = self;
         cell.navigationController = self.navigationController;
 
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -799,12 +755,7 @@
         return cellToReturn;
     }
 
-    return Nil;
-}
-
-- (void)reloadDataDelegate {
-    [self reloadData];
-    [self performSearchWithQuery:self.searchTextField.text];
+    return nil;
 }
 
 - (void)showShareSheetWithContent:(NSArray *)content {
@@ -833,18 +784,18 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     if (indexPath.section == userIndex) {
-        if (indexPath.row >= self.users.count) {
+        if (indexPath.row >= self.usersDicts.count) {
             return;
         }
 
-        if (indexPath.row == 3 && !_userExtended) { // see all users cell
-            _userExtended = YES;
+        if (indexPath.row == 3 && !self.userExtended) { // see all users cell
+            self.userExtended = YES;
             [tableView reloadData];
 
             return;
         }
 
-        NSDictionary *user = self.users[indexPath.row];
+        NSDictionary *user = self.usersDicts[indexPath.row];
         FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSSearchManager sharedInstance] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
         [self.navigationController pushViewController:controller animated:TRUE];

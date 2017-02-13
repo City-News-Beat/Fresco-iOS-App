@@ -1,4 +1,5 @@
-//
+
+    //
 //  FRSFollowersViewController.m
 //  Fresco
 //
@@ -7,15 +8,12 @@
 //
 
 #import "FRSFollowersViewController.h"
-
-#import "FRSTableViewCell.h"
 #import "FRSTabbedNavigationTitleView.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSProfileViewController.h"
 #import "FRSAwkwardView.h"
 #import "FRSFollowManager.h"
-
-#define CELL_HEIGHT 56
+#import "FRSUserTableViewCell.h"
 
 @interface FRSFollowersViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 
@@ -33,12 +31,10 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (nonatomic, strong) UITableView *followingTable;
 @property (strong, nonatomic) UIBarButtonItem *backTapButton;
-@property (strong, nonatomic) FRSTableViewCell *selectedCell;
 @property (strong, nonatomic) FRSAwkwardView *followingAwkward;
 @property (strong, nonatomic) FRSAwkwardView *followerAwkward;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followingSpinner;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followerSpinner;
-@property (strong, nonatomic) FRSUser *currentUser;
 @property BOOL didLoadOnce;
 
 @end
@@ -110,7 +106,6 @@
 }
 
 - (void)configurePullToRefresh {
-
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.tintColor = [UIColor frescoBlueColor];
 
@@ -133,16 +128,10 @@
 }
 
 - (void)configureNavigationBar {
-    //    [super configureNavigationBar];
     [self removeNavigationBarLine];
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-
-    //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
-    //    [view addGestureRecognizer:tap];
-
-    //    int offset = 8;
 
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
@@ -205,7 +194,6 @@
     [[FRSFollowManager sharedInstance] getFollowingForUser:_representedUser
                                                       last:user
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   if (error || !responseObject) {
                                                       NSLog(@"Load More Following Error: %@", error);
                                                       return;
@@ -261,7 +249,6 @@
 }
 
 - (void)reloadFollowing {
-
     if (!self.didLoadOnce) {
         [self configureSpinner];
     }
@@ -291,8 +278,6 @@
                                                   [self.tableView dg_stopLoading];
                                                   [self.followingTable reloadData];
                                                   [self.followingTable dg_stopLoading];
-                                                  //[self.followingSpinner stopLoading];
-                                                  //self.followingSpinner.hidden = true;
 
                                                   self.hasLoadedOnce = TRUE;
                                                 }];
@@ -388,6 +373,7 @@
 
     CGRect newFrame = self.view.frame;
     newFrame.origin.y = self.view.frame.origin.y + 64;
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height + 20);
     //self.tableView = [[UITableView alloc] initWithFrame:newFrame style:UITableViewStylePlain];
@@ -480,78 +466,32 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return CELL_HEIGHT;
+    return userCellHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 125;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    [self configurePullToRefresh]; //?
+    [self configurePullToRefresh];
 
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 125)];
-    //header.backgroundColor = [UIColor redColor];
-
     return header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    NSString *cellIdentifier;
-
-    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
+    FRSUserTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:userCellIdentifier];
 
     if (self.followingArray.count > 0 && self.followingTable == tableView) {
         FRSUser *user = [self.followingArray objectAtIndex:indexPath.row];
-        self.currentUser = user;
-
-        NSString *avatarURL;
-        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
-            avatarURL = user.profileImage;
-        }
-
-        NSURL *avatarURLObject;
-        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
-            avatarURLObject = [NSURL URLWithString:avatarURL];
-        }
-
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
-                                             fullName:user.firstName
-                                             userName:user.username
-                                          isFollowing:[user.following boolValue]
-                                             userDict:nil
-                                                 user:user];
-
+        [cell loadDataWithUser:user];
         if (indexPath.row >= self.followingArray.count - 3) {
             [self loadMoreFollowing];
         }
-    }
-
-    if (self.followerArray.count > 0 && self.tableView == tableView) {
-
+    } else if (self.followerArray.count > 0 && self.tableView == tableView) {
         FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
-        self.currentUser = user;
-
-        NSString *avatarURL;
-        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
-            avatarURL = user.profileImage;
-        }
-
-        NSURL *avatarURLObject;
-        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
-            avatarURLObject = [NSURL URLWithString:avatarURL];
-        }
-
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
-                                             fullName:user.firstName
-                                             userName:user.username
-                                          isFollowing:[user.following boolValue]
-                                             userDict:nil
-                                                 user:user];
-
+        [cell loadDataWithUser:user];
         if (indexPath.row >= self.followerArray.count - 3) {
             [self loadMoreFollowers];
         }
@@ -561,9 +501,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     if (self.tableView == tableView) {
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followerArray[indexPath.row])];
         [self.navigationController pushViewController:controller animated:TRUE];
@@ -573,15 +511,6 @@
 
         [self.navigationController pushViewController:controller animated:TRUE];
     }
-}
-
-- (BOOL)isFollowingUser:(FRSUser *)user {
-    for (FRSUser *userFollowed in self.followingArray) {
-        if ([userFollowed.uid isEqualToString:user.uid]) {
-            return true;
-        }
-    }
-    return false;
 }
 
 #pragma mark - Scrolling
