@@ -84,9 +84,7 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
                        withParameters:params
                            completion:^(id responseObject, NSError *error) {
                                if (!error) {
-                                   [self handleUserLogin:responseObject completion:^(id responseObject, NSError *error){
-                                       completion(responseObject, error);
-                                   }];
+                                   [self handleUserLogin:responseObject completion:completion];
                                } else {
                                    completion(nil, error);
                                }
