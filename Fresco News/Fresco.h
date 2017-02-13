@@ -248,6 +248,8 @@ static NSString *const registrationError = @"Registration Error";
 static NSString *const signupRadiusChange = @"Signup radius changes";
 static NSString *const submissionsEvent = @"Submissions";
 static NSString *const itemsInGallery = @"Submission item in gallery";
+static NSString *const notificationOpened = @"Notification opened";
+static NSString *const notificationReceived = @"Notification received";
 
 // scrolling, video playback
 static float const maxScrollVelocity = 2.1;
