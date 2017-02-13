@@ -174,7 +174,7 @@ static NSDate *lastDate;
                 PHAsset *asset = [assetArray firstObject];
                 [self addAsset:asset withToken:upload.key withPostID:upload.uploadID];
             }
-
+            
             [self.context performBlock:^{
               upload.completed = @(TRUE);
               [self.context save:Nil];

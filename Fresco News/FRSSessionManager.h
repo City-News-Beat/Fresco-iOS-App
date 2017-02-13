@@ -13,13 +13,52 @@
 
 + (instancetype)sharedInstance;
 
-- (void)generateClientCredentials;
-- (void)refreshToken:(BOOL)isUserToken completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)saveCientToken:(NSString *)clientToken;
-- (void)saveRefreshCientToken:(NSString *)refreshClientToken;
 - (NSString *)clientToken;
-- (void)saveUserToken:(NSString *)token;
-- (void)deleteTokens;
 - (NSString *)authenticationToken;
+
+
+/**
+ Generates client credentials and saves them to the app
+ */
+- (void)generateClientCredentials;
+
+
+/**
+ Generates a new token with the app's current refresh token
+
+ @param isUserToken whether the token being refreshed is a user token
+ @param completion response block with response data
+ */
+- (void)refreshToken:(BOOL)isUserToken completion:(FRSAPIDefaultCompletionBlock)completion;
+
+
+/**
+ Saves client token to user defaults
+
+ @param clientToken The token to save
+ */
+- (void)saveCientToken:(NSString *)clientToken;
+
+
+/**
+ Save refresh token to user defautls
+
+ @param refreshClientToken the refresh token to save
+ */
+- (void)saveRefreshCientToken:(NSString *)refreshClientToken;
+
+
+/**
+ Saves user token to the app
+
+ @param token The user token to save
+ */
+- (void)saveUserToken:(NSString *)token;
+
+
+/**
+ Deletes all token data from the app
+ */
+- (void)deleteTokens;
 
 @end

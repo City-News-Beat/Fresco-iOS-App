@@ -225,7 +225,6 @@
                                    [self stopSpinner:self.loadingView onButton:self.loginButton];
 
                                    if (error.code == 0) {
-                                       [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
                                        [self setMigrateState:responseObject];
 
                                        [self popToOrigin];
@@ -243,23 +242,7 @@
                                        }
 
                                        [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-
-                                       NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
-
-                                       if (socialLinksDict[@"facebook"] != nil) {
-                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-                                       }
-
-                                       if (socialLinksDict[@"twitter"] != nil) {
-                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-                                       }
-
-                                       if (responseObject[@"twitter_handle"] != nil) {
-                                           [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
-                                       }
-
-                                       // Update the tag on the UXCam and Segment sessions on login
-                                       [FRSTracker trackUser];
+                                       
                                        return;
                                    }
 
@@ -340,11 +323,18 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
-//This response object comes back from login
+
+/**
+ This response object comes back from login
+ */
 - (void)setMigrateState:(NSDictionary *)responseObject {
     BOOL shouldSync = false;
 
-    if (responseObject != nil && ![[responseObject valueForKey:@"valid_password"] boolValue]) {
+    if (
+        responseObject != nil
+        && [responseObject valueForKey:@"valid_password"] != nil
+        && ![[responseObject valueForKey:@"valid_password"] boolValue]
+    ) {
         shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"needs-password"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
@@ -373,7 +363,7 @@
     [self.twitterButton.superview addSubview:spinner];
     [spinner setFrame:CGRectMake(self.twitterButton.frame.origin.x, self.twitterButton.frame.origin.y, self.twitterButton.frame.size.width, self.twitterButton.frame.size.width)];
 
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, id responseObject) {
 
       if (error) {
           [FRSTracker track:loginError
@@ -385,14 +375,9 @@
           NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
 
           if (socialLinksDict[@"facebook"] != nil) {
-              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
           }
-
-          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-          [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
-          [[NSUserDefaults standardUserDefaults] synchronize];
-
-          [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
+          
           [self setMigrateState:responseObject];
 
           self.didAuthenticateSocial = YES;
@@ -426,8 +411,6 @@
 }
 
 - (void)popToOrigin {
-    [[FRSUserManager sharedInstance] reloadUser];
-
     NSArray *viewControllers = [self.navigationController viewControllers];
 
     if ([viewControllers count] == 3) {
@@ -457,73 +440,58 @@
     [spinner startAnimating];
     [self.facebookButton.superview addSubview:spinner];
     [spinner setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
-
+    
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
-
-      if (error) {
-          [FRSTracker track:loginError
-                 parameters:@{ @"method" : @"facebook",
-                               @"error" : error.localizedDescription }];
-      }
-
-      if (authenticated) {
-
-          if (responseObject[@"twitter_handle"] != nil) {
-              [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
-          }
-          NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
-          if (socialLinksDict[@"twitter"] != nil) {
-              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-          }
-
-          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-
-          NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-
-          [[FRSUserManager sharedInstance] saveUserFields:responseObject[@"user"]];
-          [self setMigrateState:responseObject];
-          
-          [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
-                                                        completion:^(id responseObject, NSError *error) {
-                                                          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-
-                                                          [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                                            if (!error) {
-                                                                [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
-                                                            }
+        
+        if (error) {
+            [FRSTracker track:loginError
+                   parameters:@{ @"method" : @"facebook",
+                                 @"error" : error.localizedDescription }];
+            
+            if (error.code == -1009) {
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                [self.alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.facebookButton.hidden = false;
+                return;
+            } else if (error.code == 301) {
+                //User dismisses view controller (done/cancel top left)
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [alert show];
+        }
+        
+        if (authenticated) {
+            
+            NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+            
+            [self setMigrateState:responseObject];
+            
+            [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
+                                                          completion:^(id responseObject, NSError *error) {
+                                                              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+                                                              
+                                                              [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                                                  if (!error) {
+                                                                      [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                                                                  }
+                                                              }];
                                                           }];
-                                                        }];
-          self.didAuthenticateSocial = YES;
-          [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-          [self popToOrigin];
-
-          [spinner stopLoading];
-          [spinner removeFromSuperview];
-          self.facebookButton.hidden = false;
-          return;
-      } else {
-      }
-
-      if (error) {
-
-          if (error.code == -1009) {
-              self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
-              [self.alert show];
-              [spinner stopLoading];
-              [spinner removeFromSuperview];
-              self.facebookButton.hidden = false;
-              return;
-          } else if (error.code == 301) {
-              //User dismisses view controller (done/cancel top left)
-          }
-
-          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-          [alert show];
-      }
-
-      [spinner stopLoading];
-      [spinner removeFromSuperview];
-      self.facebookButton.hidden = false;
+            self.didAuthenticateSocial = YES;
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+            [self popToOrigin];
+            
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            self.facebookButton.hidden = false;
+            return;
+        }
+        
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.facebookButton.hidden = false;
     }
                           parent:self
                          manager:self.fbLoginManager];

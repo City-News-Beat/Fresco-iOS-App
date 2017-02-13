@@ -107,8 +107,9 @@
     }
 
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-        [self handleLocationUpdate];
+
     }
+    
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
         [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
     }
@@ -385,9 +386,6 @@
               NSLog(@"Updated user installation");
             }];
     }
-}
-
-- (void)handleLocationUpdate {
 }
 
 - (void)restartUpload {

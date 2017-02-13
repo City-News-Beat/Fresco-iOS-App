@@ -15,8 +15,8 @@
 #import "FRSOnboardingViewController.h"
 
 // sign in / sign up (authorization) methods
-static NSString *const loginEndpoint = @"auth/signin";
-static NSString *const signUpEndpoint = @"auth/register";
+static NSString *const loginEndpoint = @"auth/token";
+static NSString *const signUpEndpoint = @"user/create";
 static NSString *const socialLoginEndpoint = @"auth/signin/social";
 static NSString *const addSocialEndpoint = @"user/social/connect/";
 static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
@@ -39,60 +39,145 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     return FALSE;
 }
 
-- (void)handleUserLogin:(id)responseObject {
-    if ([responseObject objectForKey:@"token"]) {
-        [[FRSSessionManager sharedInstance] saveUserToken:[responseObject objectForKey:@"token"]];
-    }
-
-    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
-
-    if (!authenticatedUser) {
-        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
-    }
-
-    [[FRSUserManager sharedInstance] updateLocalUser];
-
-    NSDictionary *currentInstallation = [self currentInstallation];
-
-    if ([currentInstallation objectForKey:@"device_token"]) {
-        NSDictionary *update = @{ @"installation" : currentInstallation };
-        [[FRSUserManager sharedInstance] updateUserWithDigestion:update
-                                                      completion:^(id responseObject, NSError *error){
-                                                      }];
-    }
-}
+#pragma mark - Register
 
 - (void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    // email
-    // username
-    // password
-    // twitter_handle
-    // social_links
-    // installation
-
     if (digestion[@"password"]) {
         self.passwordUsed = digestion[@"password"];
     } else {
         self.socialUsed = digestion[@"social_links"];
     }
-
+    
+    //First create the user
     [[FRSAPIClient sharedClient] post:signUpEndpoint
                        withParameters:digestion
                            completion:^(id responseObject, NSError *error) {
-
-                             if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-                                 [self handleUserLogin:responseObject];
-                             }
-
-                             completion(responseObject, error);
+                               if(error) {
+                                   completion(nil, error);
+                               } else {
+                                   [FRSTracker
+                                    track:signupEvent
+                                    parameters:@{
+                                                 @"social_links" : @"none"
+                                                 }];
+                                   
+                                   //Now sign in with the newly created user
+                                   [self
+                                    signIn:responseObject[@"username"]
+                                    password:digestion[@"password"]
+                                    completion:completion];
+                               }
                            }];
 }
+
+#pragma mark - Sign In
+
+- (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    self.passwordUsed = password;
+    
+    NSDictionary *params = @{ @"username" : user,
+                              @"password" : password,
+                              @"grant_type": @"password",
+                              @"scope" : @"write" };
+    
+    [[FRSAPIClient sharedClient] post:loginEndpoint
+                       withParameters:params
+                           completion:^(id responseObject, NSError *error) {
+                               if (!error) {
+                                   [self handleUserLogin:responseObject completion:^(id responseObject, NSError *error){
+                                       completion(responseObject, error);
+                                   }];
+                               } else {
+                                   completion(nil, error);
+                               }
+                           }];
+}
+
+- (void)handleUserLogin:(id)tokenObject completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    //Either of these keys may be used for the token from the API
+    NSString *token = [[tokenObject objectForKey:@"access_token"] objectForKey:@"token"] ? : [tokenObject objectForKey:@"token"];
+    
+    if (!token) {
+        return completion(nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
+    }
+    
+    [[FRSSessionManager sharedInstance] saveUserToken:token];
+    
+    //Grab the actual user after setting the token
+    [[FRSUserManager sharedInstance] updateLocalUser:^(id userResponseObject, NSError *error) {
+        if(error) {
+            return completion(nil, error);
+        }
+        
+        //Save the user
+        [[FRSUserManager sharedInstance] saveUserFields:userResponseObject andSynchronously:YES];
+        [[FRSUserManager sharedInstance] updateUserDefaultsWithResponseObject:userResponseObject];
+        
+        //Begin tracking user
+        [FRSTracker trackUser];
+        [FRSTracker track:loginEvent];
+        
+        NSDictionary *currentInstallation = [self currentInstallation];
+        
+        if ([currentInstallation objectForKey:@"device_token"]) {
+            NSDictionary *update = @{ @"installation" : currentInstallation };
+            [[FRSUserManager sharedInstance] updateUserWithDigestion:update completion:nil];
+        }
+        
+        completion(userResponseObject, nil);
+    }];
+}
+
+- (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *twitterAccessToken = session.authToken;
+    NSString *twitterAccessTokenSecret = session.authTokenSecret;
+    NSDictionary *authDictionary = @{ @"platform" : @"twitter",
+                                      @"token" : twitterAccessToken,
+                                      @"secret" : twitterAccessTokenSecret };
+    self.socialUsed = authDictionary;
+    
+    [[FRSAPIClient sharedClient] post:socialLoginEndpoint
+                       withParameters:authDictionary
+                           completion:^(id responseObject, NSError *error) {
+                               if (!error) {
+                                   [self handleUserLogin:responseObject completion:^(id responseObject, NSError *error){
+                                       completion(responseObject, error);
+                                   }];
+                               } else {
+                                   completion(nil, error);
+                               }
+                           }];
+}
+
+- (void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *facebookAccessToken = token.tokenString;
+    NSDictionary *authDictionary = @{ @"platform" : @"facebook",
+                                      @"token" : facebookAccessToken };
+    self.socialUsed = authDictionary;
+    
+    [[FRSAPIClient sharedClient] post:socialLoginEndpoint
+                       withParameters:authDictionary
+                           completion:^(id responseObject, NSError *error) {
+                               if (!error) {
+                                   
+                                   [self handleUserLogin:responseObject completion:^(id responseObject, NSError *error){
+                                       completion(responseObject, error);
+                                   }];
+                               } else {
+                                   completion(nil, error);
+                               }
+                           }];
+}
+
+#pragma mark - Logout
 
 - (void)logout {
     [[FRSSessionManager sharedInstance] deleteTokens];
 }
 
-// all info needed for "installation" field of registration/signin
+#pragma mark - Installation
+
 - (NSDictionary *)currentInstallation {
 
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
@@ -139,100 +224,7 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     return currentInstallation;
 }
 
-- (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    self.passwordUsed = password;
-
-    NSDictionary *params = @{ @"username" : user,
-                              @"password" : password };
-
-    [[FRSAPIClient sharedClient] post:loginEndpoint
-                       withParameters:params
-                           completion:^(id responseObject, NSError *error) {
-
-                             completion(responseObject, error);
-                             if (!error) {
-                                 [self handleUserLogin:responseObject];
-                             }
-                           }];
-}
-
-/*
- Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
- */
-- (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *twitterAccessToken = session.authToken;
-    NSString *twitterAccessTokenSecret = session.authTokenSecret;
-    NSDictionary *authDictionary = @{ @"platform" : @"twitter",
-                                      @"token" : twitterAccessToken,
-                                      @"secret" : twitterAccessTokenSecret };
-    self.socialUsed = authDictionary;
-
-    [[FRSAPIClient sharedClient] post:socialLoginEndpoint
-                       withParameters:authDictionary
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                             // handle cacheing of authentication
-                             if (!error) {
-                                 [self handleUserLogin:responseObject];
-                             }
-
-                           }];
-}
-
-- (void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *twitterDictionary = [[NSMutableDictionary alloc] init];
-    [twitterDictionary setObject:@"Twitter" forKey:@"platform"];
-
-    if (twitterSession.authToken && twitterSession.authTokenSecret) {
-        [twitterDictionary setObject:twitterSession.authToken forKey:@"token"];
-        [twitterDictionary setObject:twitterSession.authTokenSecret forKey:@"secret"];
-    } else {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
-        return;
-    }
-
-    [[FRSAPIClient sharedClient] post:addSocialEndpoint
-                       withParameters:twitterDictionary
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
-}
-
-- (void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *tokenString = facebookToken.tokenString;
-
-    if (!tokenString) {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
-        return;
-    }
-
-    NSDictionary *facebookDictionary = @{ @"platform" : @"Facebook",
-                                          @"token" : tokenString };
-
-    [[FRSAPIClient sharedClient] post:addSocialEndpoint
-                       withParameters:facebookDictionary
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
-}
-
-- (void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *facebookAccessToken = token.tokenString;
-    NSDictionary *authDictionary = @{ @"platform" : @"facebook",
-                                      @"token" : facebookAccessToken };
-    self.socialUsed = authDictionary;
-
-    [[FRSAPIClient sharedClient] post:socialLoginEndpoint
-                       withParameters:authDictionary
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error); // burden of error handling falls on sender
-
-                             // handle internal cacheing of authentication
-                             if (!error) {
-                                 [self handleUserLogin:responseObject];
-                             }
-                           }];
-}
+#pragma mark - Social Networks
 
 - (void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion {
     if (token && secret) {
@@ -277,7 +269,6 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
         }];
 }
 
-// all the info needed for "social_links" field of registration/signin
 - (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken {
     // side note, twitter_handle is outside social links, needs to be handled outside this method
     NSMutableDictionary *socialDigestion = [[NSMutableDictionary alloc] init];
@@ -301,6 +292,8 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 
     return socialDigestion;
 }
+
+#pragma mark - Utilities
 
 - (BOOL)checkAuthAndPresentOnboard {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {

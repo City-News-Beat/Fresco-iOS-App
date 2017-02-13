@@ -309,13 +309,13 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         case ConnectTwitter:
             self.twitterCell = cell;
             self.twitterCell.parentTableView = tableView;
-            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+            if ([[NSUserDefaults standardUserDefaults] valueForKey:twitterHandle]) {
                 [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
                 self.twitterCell.twitterSwitch.on = YES;
             } else {
                 self.twitterCell.twitterSwitch.on = NO;
                 self.twitterHandle = nil;
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:twitterConnected]) {
                     [self.twitterCell configureSocialCellWithTitle:@"Twitter Connected" andTag:1 enabled:YES];
                 } else {
                     [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
@@ -329,7 +329,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
                 [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
             } else {
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:facebookConnected]) {
                     [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];
                 } else {
                     [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];

@@ -71,12 +71,14 @@
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
     // have most recently created assets at this top of list
     options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO] ];
-
-    // only load assets w/ creation date within the last 24 hours (86400 seconds)
-    NSDate *today = [NSDate date];
-    NSDate *yesterday = [today dateByAddingTimeInterval:-86400];
-    NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", yesterday];
-    options.predicate = dayPredicate;
+    
+    #ifdef DEBUG
+    #else
+        // only load assets w/ creation date within the defined maximum age
+        NSDate *yesterday = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
+        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", yesterday];
+        options.predicate = dayPredicate;
+    #endif
 
     for (PHAssetCollection *collection in currentCollection) {
 

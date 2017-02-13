@@ -31,8 +31,10 @@
             identityDictionary[@"email"] = user.email;
         }
         
-        [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
-        [self tagUXCamUser:userID];
+        if(userID != nil) {
+            [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
+            [self tagUXCamUser:userID];
+        }
     }
 }
 
@@ -45,8 +47,8 @@
     [[SEGAnalytics sharedAnalytics] track:eventName
                                properties:parameters];
 }
-+ (void)track:(NSString *)eventName {
 
++ (void)track:(NSString *)eventName {
     [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] track:eventName];
 }
