@@ -112,103 +112,110 @@
     if (self.locationTF.text) {
         profileInfo[@"location"] = self.locationTF.text;
     }
-    if (self.profileIV.image != nil) {
-        //Send image to backend and set the url to the avatar :)
-        NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
-
-        [[FRSUserManager sharedInstance] postAvatarWithParameters:@{ @"avatar" : imageData }
-            completion:^(id responseObject, NSError *error) {
-              NSLog(@"Digestion Update Error: %@", error);
-
-              if (!error) {
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                    [[FRSUserManager sharedInstance] authenticatedUser].profileImage = self.profileIV.image;
-                    [[FRSUserManager sharedInstance] authenticatedUser].profileImage = [responseObject valueForKey:@"avatar"];
-                  });
-              }
-            }];
-        //profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
-    }
-
+    
     return profileInfo;
 }
 
-- (void)addUserProfile {
+- (void)updateUserProfile {
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:[self updateDigest]
+                                                  completion:^(id responseObject, NSError *error) {
+                                                      
+                                                      if (error.code == -1009) {
+                                                          FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                          [alert show];
+                                                          return;
+                                                      }
+                                                      
+                                                      if (error) {
+                                                          
+                                                          [self presentGenericError];
+                                                          
+                                                          return;
+                                                      }
+                                                      // dismiss modal
+                                                      
+                                                      self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+                                                      
+                                                      CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+                                                      [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
+                                                      [translate setToValue:[NSNumber numberWithFloat:self.view.center.y + 50]];
+                                                      [translate setDuration:0.6];
+                                                      [translate setRemovedOnCompletion:NO];
+                                                      [translate setFillMode:kCAFillModeForwards];
+                                                      [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4:0:0:1.0]];
+                                                      [[self.view layer] addAnimation:translate forKey:@"translate"];
+                                                      
+                                                      [UIView animateWithDuration:0.3
+                                                                            delay:0.0
+                                                                          options:UIViewAnimationOptionCurveEaseInOut
+                                                                       animations:^{
+                                                                           self.view.alpha = 0;
+                                                                       }
+                                                                       completion:^(BOOL finished){
+                                                                           
+                                                                       }];
+                                                      
+                                                      CATransition *transition = [CATransition animation];
+                                                      transition.duration = 0.3;
+                                                      transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                                                      transition.type = kCATransitionFade;
+                                                      transition.subtype = kCATransitionFromTop;
+                                                      if (_isEditingProfile) {
+                                                          [self.navigationController.view.layer addAnimation:transition forKey:nil];
+                                                          FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex:0];
+                                                          profileController.nameLabel.text = self.nameTF.text;
+                                                          profileController.locationLabel.text = self.locationTF.text;
+                                                          profileController.bioTextView.text = self.bioTV.text;
+                                                          if (![self.bioTV.text isEqualToString:@"Bio"]) {
+                                                              [profileController.bioTextView frs_setTextWithResize:self.bioTV.text];
+                                                          } else {
+                                                              [profileController.bioTextView frs_setTextWithResize:@""];
+                                                          }
+                                                          [profileController resizeProfileContainer];
+                                                          [profileController.profileIV setImage:self.profileIV.image];
+                                                          profileController.editedProfile = true;
+                                                          //profileController.profileIV.image = self.profileIV.image;
+                                                          [[self navigationController] popToRootViewControllerAnimated:NO];
+                                                          
+                                                          [FRSUserManager sharedInstance].authenticatedUser.bio = self.bioTV.text;
+                                                          
+                                                      } else {
+                                                          [self.navigationController.view.layer addAnimation:transition forKey:nil];
+                                                          [[self navigationController] setNavigationBarHidden:YES];
+                                                          [[self navigationController] popToRootViewControllerAnimated:NO];
+                                                          [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+                                                      }
+                                                  }];
+}
 
+- (void)addUserProfile {
     if (self.nameTF.text == nil) {
 
         return;
     }
 
-    [[FRSUserManager sharedInstance] updateUserWithDigestion:[self updateDigest]
-                                                  completion:^(id responseObject, NSError *error) {
+    if (self.profileIV.image != nil) {
+        //Send image to backend and set the url to the avatar :)
+        NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
+        
+        [[FRSUserManager sharedInstance] postAvatarWithParameters:@{ @"avatar" : imageData }
+                                                       completion:^(id responseObject, NSError *error) {
+                                                           NSLog(@"Digestion Update Error: %@", error);
+                                                           if (error) {
+                                                               [self presentGenericError];
+                                                           }
+                                                           else {
+                                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                                   [[FRSUserManager sharedInstance] authenticatedUser].profileImage = self.profileIV.image;
+                                                                   [[FRSUserManager sharedInstance] authenticatedUser].profileImage = [responseObject valueForKey:@"avatar"];
+                                                                   [self updateUserProfile];
+                                                               });
+                                                           }
+                                                       }];
+    }
 
-                                                    if (error.code == -1009) {
-                                                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                        [alert show];
-                                                        return;
-                                                    }
-
-                                                    if (error) {
-
-                                                        [self presentGenericError];
-
-                                                        return;
-                                                    }
-                                                    // dismiss modal
-
-                                                    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-
-                                                    CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
-                                                    [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
-                                                    [translate setToValue:[NSNumber numberWithFloat:self.view.center.y + 50]];
-                                                    [translate setDuration:0.6];
-                                                    [translate setRemovedOnCompletion:NO];
-                                                    [translate setFillMode:kCAFillModeForwards];
-                                                    [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4:0:0:1.0]];
-                                                    [[self.view layer] addAnimation:translate forKey:@"translate"];
-
-                                                    [UIView animateWithDuration:0.3
-                                                                          delay:0.0
-                                                                        options:UIViewAnimationOptionCurveEaseInOut
-                                                                     animations:^{
-                                                                       self.view.alpha = 0;
-                                                                     }
-                                                                     completion:^(BOOL finished){
-
-                                                                     }];
-
-                                                    CATransition *transition = [CATransition animation];
-                                                    transition.duration = 0.3;
-                                                    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                                                    transition.type = kCATransitionFade;
-                                                    transition.subtype = kCATransitionFromTop;
-                                                    if (_isEditingProfile) {
-                                                        [self.navigationController.view.layer addAnimation:transition forKey:nil];
-                                                        FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex:0];
-                                                        profileController.nameLabel.text = self.nameTF.text;
-                                                        profileController.locationLabel.text = self.locationTF.text;
-                                                        profileController.bioTextView.text = self.bioTV.text;
-                                                        if (![self.bioTV.text isEqualToString:@"Bio"]) {
-                                                            [profileController.bioTextView frs_setTextWithResize:self.bioTV.text];
-                                                        } else {
-                                                            [profileController.bioTextView frs_setTextWithResize:@""];
-                                                        }
-                                                        [profileController resizeProfileContainer];
-                                                        [profileController.profileIV setImage:self.profileIV.image];
-                                                        profileController.editedProfile = true;
-                                                        //profileController.profileIV.image = self.profileIV.image;
-                                                        [[self navigationController] popToRootViewControllerAnimated:NO];
-
-                                                        [FRSUserManager sharedInstance].authenticatedUser.bio = self.bioTV.text;
-
-                                                    } else {
-                                                        [self.navigationController.view.layer addAnimation:transition forKey:nil];
-                                                        [[self navigationController] setNavigationBarHidden:YES];
-                                                        [[self navigationController] popToRootViewControllerAnimated:NO];
-                                                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-                                                    }
-                                                  }];
+    
+   
 }
 
 - (void)configureImagePicker {
@@ -497,8 +504,6 @@
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.doneButton.userInteractionEnabled = YES;
     }
-
-    //    [self constrainSubview:bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
 
 - (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
