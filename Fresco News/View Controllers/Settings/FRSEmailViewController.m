@@ -15,17 +15,12 @@
 
 @interface FRSEmailViewController ()
 
-@property (strong, nonatomic) FRSAlertView *alert;
-@property (strong, nonatomic) UIImageView *errorImageView;
-@property (strong, nonatomic) NSString *email;
-@property (strong, nonatomic) NSString *password;
-
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIImageView *errorImageView;
 
-@property BOOL emailIsValid;
-@property BOOL passwordIsValid;
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -43,21 +38,20 @@
 #pragma mark - Actions
 
 - (IBAction)saveEmail:(id)sender {
-
-    if (!self.emailIsValid || !self.passwordIsValid) {
+    if (self.passwordTextField.text.length == 0 || ![self.emailTextField.text isValidEmail]) {
         return;
     }
 
     [self.view endEditing:YES];
 
-    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"email" : self.email,
-                                                                @"verify_password" : self.password }
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"email" : self.emailTextField.text,
+                                                                @"verify_password" : self.passwordTextField.text }
         completion:^(id responseObject, NSError *error) {
           [[FRSUserManager sharedInstance] reloadUser];
 
           if (!error && responseObject) {
               FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
-              userToUpdate.email = self.email;
+              userToUpdate.email = self.emailTextField.text;
               [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
 
               [self popViewController];
@@ -79,74 +73,32 @@
           NSLog(@"Update User Error: %ld", (long)responseCode);
 
           if (responseCode == 403 || responseCode == 401) {
-              if (!self.errorImageView) {
-                  [self addErrorToView];
-              }
-
+              self.errorImageView.hidden = NO;
+              self.saveButton.enabled = NO;
           } else if (responseCode == 400) {
               self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this email. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
               [self.alert show];
-
           } else {
               self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
               [self.alert show];
           }
-          return;
         }];
 }
 
 #pragma mark - TextField Delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if (textField.isSecureTextEntry) {
-        if (self.errorImageView) {
-            textField.text = 0;
-            self.errorImageView.alpha = 0;
-            self.errorImageView = nil;
-            [self.errorImageView removeFromSuperview];
-        }
-    }
-}
-
-- (void)addErrorToView {
-    if (!self.errorImageView) {
-        self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
-        self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 55, 24, 24);
-        self.errorImageView.alpha = 1; // 0 when animating
-        [self.view addSubview:self.errorImageView];
-
-        [self.saveButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.saveButton.userInteractionEnabled = NO;
+    if (textField == self.passwordTextField) {
+        textField.text = 0;
+        self.errorImageView.hidden = YES;
     }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-    if (textField.isSecureTextEntry) {
-        //User is editing password textField
-        self.password = textField.text;
-        if ([self.password isValidPassword]) {
-            self.passwordIsValid = YES;
-        } else {
-            self.passwordIsValid = NO;
-        }
-
+    if ([self.passwordTextField.text isValidPassword] && [self.emailTextField.text isValidEmail]) {
+        self.saveButton.enabled = YES;
     } else {
-        //User is editing email textField
-        self.email = textField.text;
-        if ([self.email isValidEmail]) {
-            self.emailIsValid = YES;
-        } else {
-            self.emailIsValid = NO;
-        }
-    }
-
-    if (self.emailIsValid && self.passwordIsValid) {
-
-        [self.saveButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.saveButton.userInteractionEnabled = YES;
-    } else {
-        [self.saveButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.saveButton.userInteractionEnabled = NO;
+        self.saveButton.enabled = NO;
     }
 
     return YES;
@@ -173,9 +125,8 @@
 
 #pragma mark - UXCam
 
--(void)hideSensitiveViews {
+- (void)hideSensitiveViews {
     [UXCam occludeSensitiveView:self.passwordTextField];
 }
-
 
 @end

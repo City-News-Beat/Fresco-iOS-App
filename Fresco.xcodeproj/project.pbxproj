@@ -157,6 +157,7 @@
 		CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1322491E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib */; };
 		CE13224F1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */; };
 		CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */; };
+		CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1322521E51680200A46D4D /* FRSUsernameViewController.xib */; };
 		CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */; };
 		CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */; };
 		CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */; };
@@ -598,6 +599,7 @@
 		CE13224C1E5112FF00A46D4D /* FRSStorySearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStorySearchTableViewCell.h; sourceTree = "<group>"; };
 		CE13224D1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStorySearchTableViewCell.m; sourceTree = "<group>"; };
 		CE13224E1E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStorySearchTableViewCell.xib; sourceTree = "<group>"; };
+		CE1322521E51680200A46D4D /* FRSUsernameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSUsernameViewController.xib; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.xib"; sourceTree = "<group>"; };
 		CE1E6EF51E1C828600236AC7 /* FRSBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseManager.h; sourceTree = "<group>"; };
 		CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseManager.m; sourceTree = "<group>"; };
 		CE1E6EF81E1C82F900236AC7 /* NSString+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Fresco.h"; path = "Categories/NSString+Fresco.h"; sourceTree = "<group>"; };
@@ -904,18 +906,18 @@
 		073F624C1C3D71D300E07977 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				D43C7FEE1C8F35A300A7A7A7 /* Username */,
+				D43C7FE71C8F355D00A7A7A7 /* Email */,
+				D43C7FE81C8F356200A7A7A7 /* Password */,
 				D4C217C71D63ADCC0076172D /* Identity */,
 				D4C217CB1D63B7230076172D /* Manage Payment */,
 				D43C7FE51C8F354F00A7A7A7 /* Add Payment */,
 				D43C7FE61C8F355500A7A7A7 /* Disable Account */,
-				D43C7FE71C8F355D00A7A7A7 /* Email */,
-				D43C7FE81C8F356200A7A7A7 /* Password */,
 				D43C7FE91C8F356800A7A7A7 /* Promo */,
 				D43C7FEA1C8F358A00A7A7A7 /* Radius */,
 				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
 				D43C7FEC1C8F359700A7A7A7 /* Table View */,
 				07FD8BAD1CE66EAA00F93705 /* About */,
-				D43C7FEE1C8F35A300A7A7A7 /* Username */,
 			);
 			name = Settings;
 			path = ../..;
@@ -1824,6 +1826,7 @@
 			children = (
 				07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */,
 				07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */,
+				CE1322521E51680200A46D4D /* FRSUsernameViewController.xib */,
 			);
 			name = Username;
 			sourceTree = "<group>";
@@ -2575,6 +2578,7 @@
 				CE1322411E4FDAFC00A46D4D /* FRSUserTableViewCell.xib in Resources */,
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
+				CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
 				CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */,

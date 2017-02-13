@@ -16,6 +16,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSEmailViewController">
             <connections>
                 <outlet property="emailTextField" destination="1EE-Oq-SjY" id="lxA-eS-sbE"/>
+                <outlet property="errorImageView" destination="P47-Ou-CQg" id="7xn-LC-tPe"/>
                 <outlet property="passwordTextField" destination="tza-pk-Nn1" id="zA1-iD-zJb"/>
                 <outlet property="saveButton" destination="pkY-bA-GCb" id="S1c-wj-1nz"/>
                 <outlet property="view" destination="iN0-l3-epB" id="b5h-UJ-8ag"/>
@@ -41,10 +42,19 @@
                                 <outlet property="delegate" destination="-1" id="ySq-10-6af"/>
                             </connections>
                         </textField>
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-red" translatesAutoresizingMaskIntoConstraints="NO" id="P47-Ou-CQg">
+                            <rect key="frame" x="335" y="10" width="24" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="SDz-wH-Yrd"/>
+                                <constraint firstAttribute="height" constant="24" id="iMw-C1-9yK"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="1EE-Oq-SjY" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="top" id="1L3-1b-Ja0"/>
+                        <constraint firstItem="P47-Ou-CQg" firstAttribute="centerY" secondItem="MCC-ew-T4L" secondAttribute="centerY" id="1eA-8y-y86"/>
+                        <constraint firstAttribute="trailing" secondItem="P47-Ou-CQg" secondAttribute="trailing" constant="16" id="IMw-qW-ebj"/>
                         <constraint firstItem="1EE-Oq-SjY" firstAttribute="leading" secondItem="MCC-ew-T4L" secondAttribute="leading" constant="16" id="UJe-bi-Ksd"/>
                         <constraint firstAttribute="height" constant="44" id="YDH-gj-UqY"/>
                         <constraint firstAttribute="trailing" secondItem="1EE-Oq-SjY" secondAttribute="trailing" constant="16" id="YYa-LB-bf1"/>
@@ -73,16 +83,18 @@
                         <constraint firstAttribute="height" constant="44" id="hx8-qI-DjI"/>
                     </constraints>
                 </view>
-                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkY-bA-GCb">
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkY-bA-GCb">
                     <rect key="frame" x="266" y="90" width="109" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="2Ii-Jn-r4j"/>
                         <constraint firstAttribute="height" constant="44" id="Sif-Bt-esw"/>
                         <constraint firstAttribute="width" constant="109" id="dGX-1n-3Wr"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                     <state key="normal" title="SAVE EMAIL">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.2784313725" blue="0.74901960779999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <state key="disabled">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.23999999999999999" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
                         <action selector="saveEmail:" destination="-1" eventType="touchUpInside" id="ZUQ-ja-Uyo"/>
@@ -101,7 +113,10 @@
                 <constraint firstItem="yzd-t5-Fdw" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="bottom" constant="1" id="dZ9-uF-GqR"/>
                 <constraint firstItem="MCC-ew-T4L" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="v7P-pM-UMI"/>
             </constraints>
-            <point key="canvasLocation" x="25.5" y="51.5"/>
+            <point key="canvasLocation" x="14" y="44"/>
         </view>
     </objects>
+    <resources>
+        <image name="check-red" width="24" height="24"/>
+    </resources>
 </document>

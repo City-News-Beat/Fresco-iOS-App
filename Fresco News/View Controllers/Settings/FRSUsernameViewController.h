@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-@interface FRSUsernameViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
-
+@interface FRSUsernameViewController : FRSBaseViewController
 @end
