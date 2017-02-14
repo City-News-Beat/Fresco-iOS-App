@@ -1575,7 +1575,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
                                                        self.acceptedAssignmentDictionary = dict;
                                                        
-                                                       [self trackAssignment:assignment accepted:YES];
+                                                       [self trackAssignmentAcceptStatus:assignment didAccept:YES];
                                                        
                                                        return;
                                                    }
@@ -1708,7 +1708,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                      FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                                                      [assignment configureWithDictionary:(NSDictionary *)responseObject];
                                                        
-                                                     [self trackAssignment:assignment accepted:NO];
+                                                     [self trackAssignmentAcceptStatus:assignment didAccept:NO];
                                                    }];
 }
 
@@ -1842,7 +1842,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 #pragma mark - Tracking
 
--(void)trackAssignment:(FRSAssignment *)assignment accepted:(BOOL)accepted {
+
+
+/**
+ Tracks whether the user accepted or unaccepted the given assignment.
+
+ @param assignment FRSAssignment to be tracked.
+ @param accepted BOOL to determine if the accepted|unaccepted key will be sent.
+ */
+-(void)trackAssignmentAcceptStatus:(FRSAssignment *)assignment didAccept:(BOOL)accepted {
     
     NSDictionary *trackedParams = @{ASSIGNMENT_ID: assignment.uid, DISTANCE_AWAY: @([FRSLocationManager calculatedDistanceFromAssignment:assignment])};
     
@@ -1852,5 +1860,34 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [FRSTracker track:assignmentUnaccepted parameters:trackedParams];
     }
 }
+
+/**
+ Tracks whether the user clicked or dismissed the given assignment.
+ 
+ @param assignment FRSAssignment to be tracked.
+ @param accepted BOOL to determine if the clicked|dismissed key will be sent.
+ */
+-(void)trackAssignmentViewStatus:(FRSAssignment *)assignment didView:(BOOL)viewStatus {
+    
+    //todo
+
+}
+
+
++ (NSDictionary *)trackedParamsFromAssignment:(FRSAssignment *)assignment {
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
