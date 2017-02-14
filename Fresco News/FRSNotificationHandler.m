@@ -245,7 +245,7 @@ BOOL isSegueingToAssignment;
 
     UITabBarController *tab = (UITabBarController *)appDelegate.tabBarController;
     FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
-
+    detailVC.isComingFromNotification = YES;
     detailVC.navigationController = tab.navigationController;
     detailVC.title = title;
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
@@ -351,7 +351,7 @@ BOOL isSegueingToAssignment;
 
     UITabBarController *tab = (UITabBarController *)appDelegate.tabBarController;
     FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
-
+    detailVC.isComingFromNotification = YES;
     detailVC.navigationController = tab.navigationController;
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     [navController setNavigationBarHidden:FALSE];
@@ -389,6 +389,7 @@ BOOL isSegueingToAssignment;
 + (FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
     FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
     detailView.story = story;
+    detailView.isComingFromNotification = YES;
     [detailView reloadData];
     return detailView;
 }
