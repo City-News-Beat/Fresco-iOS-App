@@ -250,6 +250,8 @@ static NSString *const submissionsEvent = @"Submissions";
 static NSString *const itemsInGallery = @"Submission item in gallery";
 static NSString *const notificationOpened = @"Notification opened";
 static NSString *const notificationReceived = @"Notification received";
+static NSString *const assignmentAccepted = @"Assignment accepted";
+static NSString *const assignmentUnaccepted = @"Assignment un_accepted";
 
 #define OBJECT @"object"
 #define OBJECT_ID @"object_id"

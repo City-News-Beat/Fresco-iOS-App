@@ -40,10 +40,6 @@
 
 @implementation FRSUserNotificationViewController
 
-NSString *const TEXT_ID = @"textNotificationCell";
-NSString *const DEFAULT_ID = @"notificationCell";
-NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self getNotifications];

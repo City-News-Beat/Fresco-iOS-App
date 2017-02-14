@@ -67,7 +67,7 @@ BOOL isSegueingToAssignment;
             [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
             [FRSTracker track:notificationOpened parameters:paramsToTrack]; // Track notificationOpened event
         } else { // If not global make request to get assignment and track distance away
-            [FRSLocationManager calculatedDistanceFromAssignment:assignmentID completion:^(id responseObject, NSError *error) {
+            [FRSLocationManager calculatedDistanceFromAssignmentWithID:assignmentID completion:^(id responseObject, NSError *error) {
                 
                 if (responseObject && !error) {
                     [paramsToTrack setObject:responseObject forKey:DISTANCE_AWAY]; // check error

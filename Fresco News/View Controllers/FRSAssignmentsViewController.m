@@ -1574,7 +1574,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                        [self configureAcceptedAssignment:assignment];
 
                                                        self.acceptedAssignmentDictionary = dict;
-
+                                                       
+                                                       [self trackAssignment:assignment accepted:YES];
+                                                       
                                                        return;
                                                    }
 
@@ -1700,6 +1702,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                    completion:^(id responseObject, NSError *error) {
                                                      // error or response, user should be able to unaccept. at least visually
                                                      [self configureUnacceptedAssignment];
+                                                       
+                                                     // todo: create FRSObjectCreator class that configures and returns core data objects from a response object
+                                                     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                     FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                                                     [assignment configureWithDictionary:(NSDictionary *)responseObject];
+                                                       
+                                                     [self trackAssignment:assignment accepted:NO];
                                                    }];
 }
 
@@ -1828,6 +1837,20 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [button setTitleColor:color forState:UIControlStateNormal];
     [spinner stopLoading];
     [spinner removeFromSuperview];
+}
+
+
+#pragma mark - Tracking
+
+-(void)trackAssignment:(FRSAssignment *)assignment accepted:(BOOL)accepted {
+    
+    NSDictionary *trackedParams = @{ASSIGNMENT_ID: assignment.uid, DISTANCE_AWAY: @([FRSLocationManager calculatedDistanceFromAssignment:assignment])};
+    
+    if (accepted) {
+        [FRSTracker track:assignmentAccepted parameters:trackedParams];
+    } else {
+        [FRSTracker track:assignmentUnaccepted parameters:trackedParams];
+    }
 }
 
 @end

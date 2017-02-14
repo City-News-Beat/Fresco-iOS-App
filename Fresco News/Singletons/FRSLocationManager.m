@@ -152,7 +152,7 @@
 }
 
 
-+ (void)calculatedDistanceFromAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
++ (void)calculatedDistanceFromAssignmentWithID:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
     
     [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
 
@@ -172,5 +172,19 @@
         }
     }];
 }
+
+
++ (float)calculatedDistanceFromAssignment:(FRSAssignment *)assignment {
+    CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
+    CLLocationManager *userLocation = [[CLLocationManager alloc] init];
+    float distance = (float)[assignmentLocation distanceFromLocation:[userLocation location]];
+    return (distance / 1609.34);
+}
+
+
+
+
+
+
 
 @end

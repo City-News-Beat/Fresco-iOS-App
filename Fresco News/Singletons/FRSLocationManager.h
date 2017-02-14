@@ -8,6 +8,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import "FRSAssignmentManager.h"
+#import "FRSAssignment.h"
 
 typedef NS_ENUM(NSInteger, FRSLocationMonitoringState) {
     FRSLocationMonitoringStateOff,
@@ -38,6 +39,14 @@ typedef NS_ENUM(NSInteger, FRSLocationMonitoringState) {
  @param assignmentID NSString ID of the assignment to be used when requesting the associated assignment object.
  @param completion FRSAPIDefaultCompletionBlock to notify the caller when the assignment has been fetched.
  */
-+ (void)calculatedDistanceFromAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
++ (void)calculatedDistanceFromAssignmentWithID:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
+
+/**
+ This method takes an assignment and returns the distance away from the authenticated user.
+
+ @param assignment FRSAssignment to compare against the authenticated users location.
+ @return float Distance away from the authenticated user in miles.
+ */
++ (float)calculatedDistanceFromAssignment:(FRSAssignment *)assignment;
 
 @end
