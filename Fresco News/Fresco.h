@@ -171,8 +171,8 @@ static NSString *const followedNotification = @"user-social-followed";
 static NSString *const likedNotification = @"user-social-gallery-liked";
 static NSString *const repostedNotification = @"user-social-reposted";
 static NSString *const commentedNotification = @"user-social-commented";
-static NSString *const mentionCommentNotification = @"user-social-mentioned-comment"; //cc: api
-static NSString *const mentionGalleryNotification = @"user-social-mentioned-gallery"; //cc: api
+static NSString *const mentionCommentNotification = @"user-social-mentioned-comment";
+static NSString *const mentionGalleryNotification = @"user-social-mentioned-gallery";
 
 // Payment
 static NSString *const purchasedContentNotification = @"user-dispatch-purchased";
@@ -250,6 +250,40 @@ static NSString *const submissionsEvent = @"Submissions";
 static NSString *const itemsInGallery = @"Submission item in gallery";
 static NSString *const notificationOpened = @"Notification opened";
 static NSString *const notificationReceived = @"Notification received";
+
+#define OBJECT @"object"
+#define OBJECT_ID @"object_id"
+#define DISTANCE_AWAY @"distance_away"
+
+
+// API dictionary response keys
+    // todo: add other keys and create new class for all response keys
+// Notification
+#define TYPE @"type"
+#define TITLE @"title"
+#define META @"meta"
+#define PUSH_KEY @"push_key"
+
+// Assignment
+#define ASSIGNMENT @"assignment"
+#define ASSIGNMENT_ID @"assignment_id"
+#define IS_GLOBAL @"is_global"
+#define GLOBAL @"global"
+
+// Gallery
+#define GALLERY @"gallery"
+#define GALLERY_IDS @"gallery_ids"
+#define GALLERY_ID @"gallery_id"
+
+// User
+#define USER @"user"
+#define USER_IDS @"user_ids"
+#define HAS_PAYMENT @"has_payment"
+
+// Story
+#define STORY @"story"
+#define STORY_ID @"story_id"
+
 
 // scrolling, video playback
 static float const maxScrollVelocity = 2.1;

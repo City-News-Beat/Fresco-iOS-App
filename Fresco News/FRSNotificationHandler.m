@@ -19,27 +19,23 @@
 #import "FRSStoryManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSLocationManager.h"
 
 static BOOL isDeeplinking;
 static
 
 /* BOOL used to determine if the push handler is navigating to an assignment */
-static BOOL isSegueingToAssignment;
+BOOL isSegueingToAssignment;
 
 @implementation FRSNotificationHandler
 
+
 + (void)handleNotification:(NSDictionary *)push {
-    NSString *type = push[@"type"];
-    NSString *title = push[@"title"];
+    NSString *type = push[TYPE];
+    NSString *title = push[TITLE];
     
     NSMutableDictionary *paramsToTrack = [[NSMutableDictionary alloc] init];
-    
-    
-    // make all strings static
-    NSString *objectKey    = @"object";
-    NSString *objectIDKey  = @"object_id";
-    NSString *distanceAway = @"distance_away";
-    
+
     // smooch
     // smoochSupportTempNotification checks are temporary and should be removed when support is added on the web platform for this feature
     if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame && [title length] != 0)) {
@@ -48,38 +44,54 @@ static BOOL isSegueingToAssignment;
         return;
     }
 
-    // payment
+    // New assignment notifications need to be tracked independantly from the others because of the GET request required to fetch the distance away.
     if ([type isEqualToString:newAssignmentNotification]) {
-        NSString *assignment = [[push objectForKey:@"meta"] objectForKey:@"assignment_id"];
+        
+        NSString *assignment = [[push objectForKey:META] objectForKey:ASSIGNMENT_ID];
         NSString *assignmentID;
         
+        [paramsToTrack setObject:type forKey:PUSH_KEY]; // Add notif-type to tracking dictionary
+        [paramsToTrack setObject:ASSIGNMENT forKey:OBJECT]; // Add object type to tracking dictionary
+        [paramsToTrack setObject:assignmentID forKey:OBJECT_ID]; // Add object_id to tracking dictionary
+        
+
         if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
             assignmentID = assignment;
             [FRSNotificationHandler segueToAssignment:assignmentID];
         } else {
-            assignmentID = [push objectForKey:@"assignment_id"];
+            assignmentID = [push objectForKey:ASSIGNMENT_ID];
             [FRSNotificationHandler segueToAssignment:assignmentID];
         }
-        [paramsToTrack setObject:@"assignment" forKey:objectKey];
-        [paramsToTrack setObject:assignmentID forKey:objectIDKey];
         
-        if ([[[push objectForKey:@"meta"] objectForKey:@"is_global"] boolValue]) {
-            [paramsToTrack setObject:@"global" forKey:distanceAway];
-        } else {
-            [paramsToTrack setObject:@"" forKey:distanceAway];
+        if ([[[push objectForKey:META] objectForKey:IS_GLOBAL] boolValue]) { // Check if global before making request for distance
+            [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
+            [FRSTracker track:notificationOpened parameters:paramsToTrack]; // Track notificationOpened event
+        } else { // If not global make request to get assignment and track distance away
+            [FRSLocationManager calculatedDistanceFromAssignment:assignmentID completion:^(id responseObject, NSError *error) {
+                
+                if (responseObject && !error) {
+                    [paramsToTrack setObject:responseObject forKey:DISTANCE_AWAY]; // check error
+                } else {
+                    // Soft fail, user does not need to know the status of this request
+                    NSLog(@"Error calculating distance away for `Notification opened` event.");
+                }
+                
+                [FRSTracker track:notificationOpened parameters:paramsToTrack]; // Track notificationOpened event, with or without distance away (if error).
+            }];
         }
         
+        return; // return to avoid double call to [FRSTracker track:]
     }
     
     if ([type isEqualToString:purchasedContentNotification]) {
         
-        if ([[push valueForKey:@"has_payment"] boolValue]) {
+        if ([[push valueForKey:HAS_PAYMENT] boolValue]) {
             [self segueToGallery:[self galleryIDFromPush:push]];
         } else {
             [FRSNotificationHandler segueToPayment];
         }
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
     }
 
     if ([type isEqualToString:paymentExpiringNotification]) {
@@ -108,77 +120,77 @@ static BOOL isSegueingToAssignment;
 
     // social
     if ([type isEqualToString:followedNotification]) {
-        NSString *user = [[[push objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
+        NSString *user = [[[push objectForKey:META] objectForKey:USER_IDS] firstObject];
 
         if (user && [[user class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToUser:user];
         } else {
-            user = [[push objectForKey:@"user_ids"] firstObject];
+            user = [[push objectForKey:USER_IDS] firstObject];
             [FRSNotificationHandler segueToUser:user];
         }
-        [paramsToTrack setObject:@"user" forKey:objectKey];
+        [paramsToTrack setObject:USER forKey:OBJECT];
     }
 
-    if ([type isEqualToString:@"user-news-gallery"]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+    if ([type isEqualToString:userNewsGalleryNotification]) {
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
-    if ([type isEqualToString:@"user-news-story"]) {
-        NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
+    if ([type isEqualToString:userNewsStoryNotification]) {
+        NSString *story = [[push objectForKey:META] objectForKey:STORY_ID];
 
         if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToStory:story];
         } else {
-            NSString *story = [push objectForKey:@"story_id"];
+            NSString *story = [push objectForKey:STORY_ID];
             [FRSNotificationHandler segueToGallery:story];
         }
-        [paramsToTrack setObject:@"story" forKey:objectKey];
-        [paramsToTrack setObject:@"story_id" forKey:objectIDKey];
+        [paramsToTrack setObject:STORY forKey:OBJECT];
+        [paramsToTrack setObject:STORY_ID forKey:OBJECT_ID];
     }
 
-    if ([type isEqualToString:@"user-social-gallery-liked"]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+    if ([type isEqualToString:likedNotification]) {
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
     if ([type isEqualToString:repostedNotification]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
     if ([type isEqualToString:galleryApprovedNotification]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
     if ([type isEqualToString:commentedNotification]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
     if ([type isEqualToString:photoOfDayNotification]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
     if ([type isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs;
 
-        if ([[push objectForKey:@"meta"] objectForKey:@"gallery_ids"]) {
-            galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        if ([[push objectForKey:META] objectForKey:GALLERY_IDS]) {
+            galleryIDs = [[push objectForKey:META] objectForKey:GALLERY_IDS];
         } else {
-            galleryIDs = [push objectForKey:@"gallery_ids"];
+            galleryIDs = [push objectForKey:GALLERY_IDS];
         }
         [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
         
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
         // Not tracking objectID for multiple objects
     }
 
@@ -186,13 +198,13 @@ static BOOL isSegueingToAssignment;
         [FRSNotificationHandler restartUpload];
     }
 
-    if ([type isEqualToString:@"user-social-mentioned-comment"]) {
-        [paramsToTrack setObject:@"gallery" forKey:objectKey];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:objectIDKey];
+    if ([type isEqualToString:mentionCommentNotification]) {
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
     
-    [paramsToTrack setObject:type forKey:@"push_key"];
+    [paramsToTrack setObject:type forKey:PUSH_KEY];
     [FRSTracker track:notificationOpened parameters:paramsToTrack];
 }
 
@@ -204,13 +216,15 @@ static BOOL isSegueingToAssignment;
  */
 + (NSString *)galleryIDFromPush:(NSDictionary *)push {
 
-    NSString *response = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
+    NSString *response = [[push objectForKey:META] objectForKey:GALLERY_ID];
     NSString *galleryID;
     
+    // The gallery ID is sometimes under 'meta' and other times directly in the push dictionary.
+    // This checks 'meta' first and falls back on the push dictionary.
     if (response && ![response isEqual:[NSNull null]] && [[response class] isSubclassOfClass:[NSString class]]) {
         galleryID = response;
     } else {
-        galleryID = [push objectForKey:@"gallery_id"];
+        galleryID = [push objectForKey:GALLERY_ID];
     }
     
     return galleryID;
@@ -222,7 +236,7 @@ static BOOL isSegueingToAssignment;
 }
 
 + (void)segueToPhotosOfTheDay:(NSArray *)postIDs {
-    //Not part of the initial 3.0 release
+    // This is not setup on the API yet.
 }
 
 + (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {

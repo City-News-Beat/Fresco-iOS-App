@@ -7,6 +7,8 @@
 //
 
 #import "FRSLocationManager.h"
+#import "FRSAppDelegate.h"
+#import "FRSAssignment.h"
 
 #define TIMER_INTERVAL 30
 
@@ -147,6 +149,28 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"FRSLocationManager failed to retrieve locations with error : %@", error.localizedDescription);
+}
+
+
++ (void)calculatedDistanceFromAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+
+        if (responseObject != nil && !error) {
+            
+            FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
+            
+            CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
+            CLLocationManager *userLocation = [[CLLocationManager alloc] init];
+            float distance = (float)[assignmentLocation distanceFromLocation:[userLocation location]];
+            float miles = (distance / 1609.34);
+            completion([NSNumber numberWithFloat:miles], error);
+        } else {
+            NSLog(@"Could not fetch distance from assignment: %@", error.description);
+            completion(responseObject, error);
+        }
+    }];
 }
 
 @end
