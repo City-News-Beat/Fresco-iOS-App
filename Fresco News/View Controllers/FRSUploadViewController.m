@@ -1163,7 +1163,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     [FRSTracker track:submissionsEvent
            parameters:@{ @"videos_submitted" : @(videosCounted),
-                         @"photos_submitted" : @(photosCounted) }];
+                         @"photos_submitted" : @(photosCounted),
+                         ASSIGNMENT_ID       : self.selectedAssignment.uid}];
 
     [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
 }
