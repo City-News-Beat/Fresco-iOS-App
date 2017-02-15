@@ -795,6 +795,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (assAnn.title == nil) { //Checks for user annotation
         return;
     }
+    
+    self.currentAssignment = assAnn.assignment;
 
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
@@ -1244,6 +1246,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)animateAssignmentCard {
 
+    [self trackAssignmentClick:self.currentAssignment didClick:YES];
+    
     self.assignmentCardIsOpen = YES;
     self.mapShouldFollowUser = NO;
 
@@ -1302,6 +1306,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 - (void)dismissAssignmentCard {
+    
+    [self trackAssignmentClick:self.currentAssignment didClick:NO];
 
     self.assignmentCardIsOpen = NO;
 
@@ -1575,7 +1581,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
                                                        self.acceptedAssignmentDictionary = dict;
                                                        
-                                                       [self trackAssignmentAcceptStatus:assignment didAccept:YES];
+                                                       [self trackAssignmentAccept:assignment didAccept:YES];
                                                        
                                                        return;
                                                    }
@@ -1708,7 +1714,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                      FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                                                      [assignment configureWithDictionary:(NSDictionary *)responseObject];
                                                        
-                                                     [self trackAssignmentAcceptStatus:assignment didAccept:NO];
+                                                     [self trackAssignmentAccept:assignment didAccept:NO];
                                                    }];
 }
 
@@ -1850,15 +1856,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
  @param assignment FRSAssignment to be tracked.
  @param accepted BOOL to determine if the accepted|unaccepted key will be sent.
  */
--(void)trackAssignmentAcceptStatus:(FRSAssignment *)assignment didAccept:(BOOL)accepted {
-    
-    NSDictionary *trackedParams = @{ASSIGNMENT_ID: assignment.uid, DISTANCE_AWAY: @([FRSLocationManager calculatedDistanceFromAssignment:assignment])};
-    
-    if (accepted) {
-        [FRSTracker track:assignmentAccepted parameters:trackedParams];
-    } else {
-        [FRSTracker track:assignmentUnaccepted parameters:trackedParams];
-    }
+-(void)trackAssignmentAccept:(FRSAssignment *)assignment didAccept:(BOOL)accepted {
+    [FRSTracker track:(accepted ? assignmentAccepted : assignmentUnaccepted) parameters:[self trackedParamsFromAssignment:assignment]];
 }
 
 /**
@@ -1867,15 +1866,19 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
  @param assignment FRSAssignment to be tracked.
  @param accepted BOOL to determine if the clicked|dismissed key will be sent.
  */
--(void)trackAssignmentViewStatus:(FRSAssignment *)assignment didView:(BOOL)viewStatus {
-    
-    //todo
-
+-(void)trackAssignmentClick:(FRSAssignment *)assignment didClick:(BOOL)clicked {
+    [FRSTracker track:(clicked ? assignmentClicked : assignmentDismissed)];
 }
 
+/**
+ Creates an NSDictionary formatted for assignment tracking.
 
-+ (NSDictionary *)trackedParamsFromAssignment:(FRSAssignment *)assignment {
-    
+ @param assignment FRSAssignment
+ @return NSDictionary formatted with the assignment id and the distance away from the current user.
+ */
+-(NSDictionary *)trackedParamsFromAssignment:(FRSAssignment *)assignment {
+    NSDictionary *trackedParams = @{ASSIGNMENT_ID: assignment.uid, DISTANCE_AWAY: @([FRSLocationManager calculatedDistanceFromAssignment:assignment])};
+    return trackedParams;
 }
 
 

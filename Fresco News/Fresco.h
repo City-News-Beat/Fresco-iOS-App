@@ -252,6 +252,8 @@ static NSString *const notificationOpened = @"Notification opened";
 static NSString *const notificationReceived = @"Notification received";
 static NSString *const assignmentAccepted = @"Assignment accepted";
 static NSString *const assignmentUnaccepted = @"Assignment un_accepted";
+static NSString *const assignmentClicked = @"Assignment clicked";
+static NSString *const assignmentDismissed = @"Assignment dismissed";
 
 #define OBJECT @"object"
 #define OBJECT_ID @"object_id"

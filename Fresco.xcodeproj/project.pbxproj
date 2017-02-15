@@ -256,7 +256,6 @@
 		D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */; };
 		D4C83D861DC298BB00F5FA9D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C83D831DC298BB00F5FA9D /* AWSCore.framework */; };
 		D4C83D871DC298BB00F5FA9D /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C83D841DC298BB00F5FA9D /* AWSS3.framework */; };
-		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
 		D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */; };
@@ -2670,7 +2669,6 @@
 				CA2D87341E1C1033009BBB5A /* FRSGalleryDetailView.xib in Resources */,
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
-				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
