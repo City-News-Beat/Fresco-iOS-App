@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Fresco.h"
+
+// Trackers
+#import "FRSAssignmentTracker.h"
+
+// Frameworks
 #import <Analytics/SEGAnalytics.h>
 #import <UXCam/UXCam.h>
 

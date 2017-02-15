@@ -9,6 +9,7 @@
 #import "FRSTracker.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
+#import "FRSAssignment.h"
 
 @implementation FRSTracker
 
@@ -104,5 +105,10 @@
         [UXCam tagUsersName:userID];
     }
 }
+
+
+
+
+
 
 @end

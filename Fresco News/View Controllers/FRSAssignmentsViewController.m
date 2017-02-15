@@ -1246,7 +1246,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)animateAssignmentCard {
 
-    [self trackAssignmentClick:self.currentAssignment didClick:YES];
+    [FRSAssignmentTracker trackAssignmentClick:self.currentAssignment didClick:YES];
     
     self.assignmentCardIsOpen = YES;
     self.mapShouldFollowUser = NO;
@@ -1307,7 +1307,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)dismissAssignmentCard {
     
-    [self trackAssignmentClick:self.currentAssignment didClick:NO];
+    [FRSAssignmentTracker trackAssignmentClick:self.currentAssignment didClick:NO];
 
     self.assignmentCardIsOpen = NO;
 
@@ -1581,7 +1581,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
                                                        self.acceptedAssignmentDictionary = dict;
                                                        
-                                                       [self trackAssignmentAccept:assignment didAccept:YES];
+                                                       [FRSAssignmentTracker trackAssignmentAccept:assignment didAccept:YES];
                                                        
                                                        return;
                                                    }
@@ -1714,7 +1714,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                      FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                                                      [assignment configureWithDictionary:(NSDictionary *)responseObject];
                                                        
-                                                     [self trackAssignmentAccept:assignment didAccept:NO];
+                                                     [FRSAssignmentTracker trackAssignmentAccept:assignment didAccept:NO];
                                                    }];
 }
 
@@ -1844,53 +1844,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [spinner stopLoading];
     [spinner removeFromSuperview];
 }
-
-
-#pragma mark - Tracking
-
-
-
-/**
- Tracks whether the user accepted or unaccepted the given assignment.
-
- @param assignment FRSAssignment to be tracked.
- @param accepted BOOL to determine if the accepted|unaccepted key will be sent.
- */
--(void)trackAssignmentAccept:(FRSAssignment *)assignment didAccept:(BOOL)accepted {
-    [FRSTracker track:(accepted ? assignmentAccepted : assignmentUnaccepted) parameters:[self trackedParamsFromAssignment:assignment]];
-}
-
-/**
- Tracks whether the user clicked or dismissed the given assignment.
- 
- @param assignment FRSAssignment to be tracked.
- @param accepted BOOL to determine if the clicked|dismissed key will be sent.
- */
--(void)trackAssignmentClick:(FRSAssignment *)assignment didClick:(BOOL)clicked {
-    [FRSTracker track:(clicked ? assignmentClicked : assignmentDismissed)];
-}
-
-/**
- Creates an NSDictionary formatted for assignment tracking.
-
- @param assignment FRSAssignment
- @return NSDictionary formatted with the assignment id and the distance away from the current user.
- */
--(NSDictionary *)trackedParamsFromAssignment:(FRSAssignment *)assignment {
-    NSDictionary *trackedParams = @{ASSIGNMENT_ID: assignment.uid, DISTANCE_AWAY: @([FRSLocationManager calculatedDistanceFromAssignment:assignment])};
-    return trackedParams;
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 @end
