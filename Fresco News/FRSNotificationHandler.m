@@ -31,15 +31,23 @@ BOOL isSegueingToAssignment;
 
 
 + (void)handleNotification:(NSDictionary *)push {
-    NSString *type = push[TYPE];
-    NSString *title = push[TITLE];
+    NSString *type = (push[TYPE]) ? push[TYPE]  : @"";
+    NSString *title = push[TITLE] ? push[TITLE] : @"";
     
     NSMutableDictionary *paramsToTrack = [[NSMutableDictionary alloc] init];
 
     // smooch
     // smoochSupportTempNotification checks are temporary and should be removed when support is added on the web platform for this feature
     if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame && [title length] != 0)) {
+        
+        // Setup whisper tracking
         [Smooch track:smoochNotificationEventName];
+        
+        // Mixpanel track
+        [paramsToTrack setObject:type forKey:PUSH_KEY];
+        [FRSTracker track:notificationOpened parameters:paramsToTrack];
+        
+        // Display Smooch view
         [Smooch show];
         return;
     }
@@ -50,11 +58,6 @@ BOOL isSegueingToAssignment;
         NSString *assignment = [[push objectForKey:META] objectForKey:ASSIGNMENT_ID];
         NSString *assignmentID;
         
-        [paramsToTrack setObject:type forKey:PUSH_KEY]; // Add notif-type to tracking dictionary
-        [paramsToTrack setObject:ASSIGNMENT forKey:OBJECT]; // Add object type to tracking dictionary
-        [paramsToTrack setObject:assignmentID forKey:OBJECT_ID]; // Add object_id to tracking dictionary
-        
-
         if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
             assignmentID = assignment;
             [FRSNotificationHandler segueToAssignment:assignmentID];
@@ -63,7 +66,11 @@ BOOL isSegueingToAssignment;
             [FRSNotificationHandler segueToAssignment:assignmentID];
         }
         
-        if ([[[push objectForKey:META] objectForKey:IS_GLOBAL] boolValue]) { // Check if global before making request for distance
+        [paramsToTrack setObject:type forKey:PUSH_KEY]; // Add notif-type to tracking dictionary
+        [paramsToTrack setObject:ASSIGNMENT forKey:OBJECT]; // Add object type to tracking dictionary
+        [paramsToTrack setObject:assignmentID forKey:OBJECT_ID]; // Add object_id to tracking dictionary
+        
+        if ([[push objectForKey:IS_GLOBAL] boolValue]) { // Check if global before making request for distance
             [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
             [FRSTracker track:notificationOpened parameters:paramsToTrack]; // Track notificationOpened event
         } else { // If not global make request to get assignment and track distance away
@@ -191,11 +198,12 @@ BOOL isSegueingToAssignment;
         [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
         
         [paramsToTrack setObject:GALLERY forKey:OBJECT];
-        // Not tracking objectID for multiple objects
+        // We don't want to track objectID for notifications with multiple objects
     }
 
     if ([type isEqualToString:restartUploadNotification]) {
         [FRSNotificationHandler restartUpload];
+        return; // We don't want to track this notification
     }
 
     if ([type isEqualToString:mentionCommentNotification]) {

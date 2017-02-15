@@ -44,8 +44,8 @@
     
     // questions
     // when should this get called? on l/r swipes on a gallery carousel?
-    // Gallery detail start right away
-    // If they stop in a scroll view and 'hover' (same logic as gallery hover event)
+        // Gallery detail start right away
+        // If they stop in a scroll view and 'hover' (same logic as gallery hover event)
     // Get frame from cell, grab gallery from cell
     // what if they don't swipe but mute/unmute. still track?
     // `post_id_swiped_from` = post id?
