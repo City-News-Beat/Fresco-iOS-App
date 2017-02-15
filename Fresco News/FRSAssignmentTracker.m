@@ -19,7 +19,7 @@
 }
 
 + (void)trackAssignmentClick:(FRSAssignment *)assignment didClick:(BOOL)clicked {
-    [FRSTracker track:(clicked ? assignmentClicked : assignmentDismissed)];
+    [FRSTracker track:(clicked ? assignmentClicked : assignmentDismissed) parameters:[self trackedParamsFromAssignment:assignment]];
 }
 
 /**
