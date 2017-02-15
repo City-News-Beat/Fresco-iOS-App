@@ -190,33 +190,32 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 
 - (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
     [self refreshCurrentUser:^(id responseObject, NSError *error) {
-      // check against existing user
-      if (error || responseObject[@"error"]) {
-          // throw up sign in
-
-          return;
-      }
-
-      [self.managedObjectContext performBlock:^{
-        [self saveUserFields:responseObject andSynchronously:NO];
-      }];
-
-      FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-      if ([[FRSAuthManager sharedInstance] isAuthenticated] && !appDelegate.didPresentPermissionsRequest) {
-          if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
-              [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-          }
-      }
-
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (completion) {
-            completion(Nil, Nil);
+        // check against existing user
+        if (error || responseObject[@"error"]) {
+            // throw up sign in
+            return;
         }
-      });
-
+        
+        [self.managedObjectContext performBlock:^{
+            [self saveUserFields:responseObject andSynchronously:NO];
+        }];
+        
+        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if ([[FRSAuthManager sharedInstance] isAuthenticated] && !appDelegate.didPresentPermissionsRequest) {
+            if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+                [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+            }
+        }
+        
+        [self refreshSettings];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(Nil, Nil);
+            }
+        });
+        
     }];
-
-    [self refreshSettings];
 }
 
 - (void)saveUserFields:(NSDictionary *)responseObject andSynchronously:(BOOL)synchronously {

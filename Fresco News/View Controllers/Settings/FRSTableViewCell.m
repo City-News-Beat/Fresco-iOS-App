@@ -260,7 +260,7 @@
               self.facebookSwitch.on = YES;
           } else {
               [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
-              [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
+              [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:facebookName];
               self.facebookSwitch.on = NO;
           }
           if (self.parentTableView) {
@@ -305,7 +305,7 @@
                                                                                  if (!error) {
                                                                                      self.facebookName = [result valueForKey:@"name"];
                                                                                      self.socialTitleLabel.text = self.facebookName;
-                                                                                     [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
+                                                                                     [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:facebookName];
                                                                                      self.facebookSwitch.on = YES;
                                                                                      if (self.parentTableView) {
                                                                                          [self.parentTableView reloadData];

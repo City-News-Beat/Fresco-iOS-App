@@ -353,13 +353,17 @@ static NSDate *lastDate;
         self.uploadMeta = [[NSMutableArray alloc] init];
         self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
 
-        NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : @"Upload completed" } mutableCopy];
-        if (uploadSpeed > 0) {
-            [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
-        }
-
-        [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
+        [self trackDebugWithMessage:@"Upload Completed"];
     }
+}
+
+- (void)trackDebugWithMessage:(NSString *)message {
+    NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : message } mutableCopy];
+    if (uploadSpeed > 0) {
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
+    }
+    
+    [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
 }
 
 - (void)startAWS {
@@ -371,7 +375,7 @@ static NSDate *lastDate;
 }
 
 - (void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
-    __block int uploadUpdates;
+    __block double lastUploadSpeed;
 
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
@@ -393,24 +397,21 @@ static NSDate *lastDate;
     lastDate = [NSDate date];
 
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+        //Send progress to be notified
+        [self updateProgress:bytesSent];
+        //Get time interval since lastDate (set at the bottom of this method)
+        NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
+        //Calculate speed at current runtime
+        float currentUploadSpeed = (bytesSent / 1024.0) / secondsSinceLastUpdate; //kBps
+        
+        if (lastUploadSpeed > 0) {
+            uploadSpeed = (currentUploadSpeed + lastUploadSpeed) / 2;
+            lastUploadSpeed = uploadSpeed;
+        } else {
+            uploadSpeed = currentUploadSpeed;
+        }
 
-      [self updateProgress:bytesSent];
-
-      NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
-      float percentageOfSecond = 1 / secondsSinceLastUpdate;
-
-      float kBPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */;
-      float averagekBPerSecond = kBPerSecond;
-
-      if (uploadUpdates > 0) {
-          averagekBPerSecond = uploadSpeed / uploadUpdates;
-          averagekBPerSecond = ((averagekBPerSecond * uploadUpdates) + kBPerSecond) / (uploadUpdates + 1);
-      }
-
-      uploadSpeed = averagekBPerSecond;
-
-      lastDate = [NSDate date];
-      uploadUpdates++;
+        lastDate = [NSDate date];
     };
     __weak typeof(self) weakSelf = self;
 
@@ -442,9 +443,10 @@ static NSDate *lastDate;
                 }
               }];
           }
-
+          
           completed++;
           currentIndex++;
+          [self trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", post]];
           [self taskDidComplete:task];
           [self restart];
       }
@@ -471,9 +473,11 @@ static NSDate *lastDate;
 
 - (void)uploadDidErrorWithError:(NSError *)error {
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
+    
     if (uploadSpeed > 0) {
         [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
+    
     NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize];
     NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize];
 

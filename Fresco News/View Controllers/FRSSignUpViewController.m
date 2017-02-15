@@ -160,7 +160,7 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
@@ -1308,7 +1308,7 @@
         
         [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
 
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
         return;
@@ -1329,7 +1329,7 @@
                                     //Make request for facebook user's profile meta
                                     [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"picture.width(300).height(300), name, email" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                                         if (!error) {
-                                            [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                                            [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
                                             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
                                             
                                             if (result[@"email"]) {

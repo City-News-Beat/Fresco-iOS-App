@@ -99,6 +99,7 @@
         if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
                 NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
+                if(startDateString == nil) return;
                 NSDate *startDate = [NSString dateFromString:startDateString];
                 NSDate *today = [NSDate date];
 

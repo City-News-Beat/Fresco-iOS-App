@@ -75,7 +75,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
       self.feed = [responseObject objectForKey:@"feed"];
 
-      NSLog(@"GET NOTIFICATIONS: %@", responseObject);
       [self configureTableView];
       [self registerNibs];
       [self.spinner stopLoading];
