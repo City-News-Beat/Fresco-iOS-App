@@ -28,4 +28,5 @@
  */
 + (void)trackAssignmentClick:(FRSAssignment *)assignment didClick:(BOOL)clicked;
 
+
 @end
