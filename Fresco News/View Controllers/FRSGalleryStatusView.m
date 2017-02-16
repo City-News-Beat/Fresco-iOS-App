@@ -61,6 +61,7 @@ enum {
     Highlighted = 3,
     Deleted = 4
 };
+
 typedef int GalleryStatusRating;
 
 - (void)configureWithArray:(NSArray *)postPurchases rating:(int)rating {

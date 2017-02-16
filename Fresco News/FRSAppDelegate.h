@@ -27,7 +27,6 @@
 
 - (void)saveContext;
 - (UITabBarController *)tabBar;
-- (BOOL)isFirstRun;
 - (void)updateTabBarToUser;
 - (void)clearKeychain;
 - (void)restartUpload;

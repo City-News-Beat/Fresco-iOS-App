@@ -174,6 +174,8 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     [[FRSSessionManager sharedInstance] deleteUserData];
     [self setPasswordUsed:nil];
     [self setEmailUsed:nil];
+    [FRSTracker reset];
+    [FRSTracker track:logoutEvent];
 }
 
 #pragma mark - Installation

@@ -162,8 +162,6 @@
         [[[FRSUserManager sharedInstance] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
     }
 
-    [FRSTracker reset];
-
     dispatch_async(dispatch_get_main_queue(), ^{
       [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
     });
@@ -180,7 +178,8 @@
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
     [tab updateUserIcon];
-    [FRSTracker track:logoutEvent];
+
+    
     [self popViewController];
 }
 

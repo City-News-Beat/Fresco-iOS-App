@@ -71,12 +71,11 @@
 
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
-    if ([self isFirstRun] && !launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+    if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[FRSAuthManager sharedInstance] logout];
     }
 
     [self configureWindow];
-    [self configureThirdPartyApplicationsWithOptions:launchOptions];
 
     //Migration checks
     if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
@@ -106,9 +105,6 @@
         return YES; // no other stuff going on (no quick action handling, etc)
     }
 
-    if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-
-    }
     
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
         [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
@@ -187,10 +183,15 @@
     return FALSE;
 }
 
-- (BOOL)isFirstRun {
 
-    BOOL firstRun = [[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"];
-    [[NSUserDefaults standardUserDefaults] setObject:@"Yeah It Totally Is" forKey:@"isFirstRun"];
+/**
+ Tells us if the user is running the app the first time and also sets it to true from there on out
+
+ @return True if the first run, No if not he first run
+ */
+- (BOOL)isFirstRun {
+    BOOL firstRun = [[NSUserDefaults standardUserDefaults] boolForKey:isFirstRun];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isFirstRun];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     return !firstRun;
@@ -472,8 +473,6 @@
     [self.window makeKeyAndVisible];
 }
 
-- (void)configureThirdPartyApplicationsWithOptions:(NSDictionary *)options {
-}
 
 #pragma mark - Quick Actions
 

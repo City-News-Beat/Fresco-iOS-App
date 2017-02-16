@@ -52,6 +52,7 @@ static NSString *const settingsPaymentLastFour = @"payment-last-four";
 static NSString *const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString *const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString *const startDate = @"startDate";
+static NSString *const isFirstRun = @"isFirstRun";
 static NSString *const facebookConnected = @"facebook-connected";
 static NSString *const facebookName = @"facebook-name";
 static NSString *const twitterConnected = @"twitter-connected";
