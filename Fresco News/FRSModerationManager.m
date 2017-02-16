@@ -9,6 +9,7 @@
 #import "FRSModerationManager.h"
 #import "FRSUserManager.h"
 #import "FRSAppDelegate.h"
+#import <Smooch/Smooch.h>
 
 static NSString *const blockedUsersEndpoint = @"user/blocked";
 static NSString *const blockUserEndpoint = @"user/%@/block";

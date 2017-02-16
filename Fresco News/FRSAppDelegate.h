@@ -7,13 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Fabric/Fabric.h>
-#import <TwitterKit/TwitterKit.h>
-#import <Crashlytics/Crashlytics.h>
-#import <Smooch/Smooch.h>
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotifications/UserNotifications.h>
-#import "Adjust.h"
 #import "FRSCoreDataController.h"
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate> {
@@ -33,7 +28,6 @@
 - (void)startNotificationTimer;
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
-
 
 
 /**

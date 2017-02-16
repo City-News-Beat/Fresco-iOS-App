@@ -206,7 +206,6 @@ static NSString *const tokenEndpoint = @"auth/token";
         [[FRSAPIClient sharedClient] delete:tokenEndpoint
                              withParameters:nil
                                  completion:^(id responseObject, NSError *error) {
-                                     
                                      clearTokens();
                                  }];
     } else {

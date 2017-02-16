@@ -20,6 +20,7 @@
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
 #import "FRSLocationManager.h"
+#import <Smooch/Smooch.h>
 
 static BOOL isDeeplinking;
 
