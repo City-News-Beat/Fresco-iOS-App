@@ -22,7 +22,6 @@
 #import "FRSLocationManager.h"
 
 static BOOL isDeeplinking;
-static
 
 /* BOOL used to determine if the push handler is navigating to an assignment */
 BOOL isSegueingToAssignment;
