@@ -21,14 +21,6 @@
  @param shouldTrack BOOL that logs the notificationOpened event with all associated data when enabled.
  */
 + (void)handleNotification:(NSDictionary *)push track:(BOOL)shouldTrack;
-
-/*
- * @discussion This method is used to retrieve the assignment from the passed IDs and subsequnetly navigate to the assignment view controller
- where the presentation of the assignment is handled
- * @param assignmentID The ID of the assignment we want to segue to
- */
-+ (void)segueToAssignment:(NSString *)assignment;
-
 + (void)segueToUser:(NSString *)user;
 + (void)segueToGallery:(NSString *)gallery;
 + (void)segueToStory:(NSString *)story;

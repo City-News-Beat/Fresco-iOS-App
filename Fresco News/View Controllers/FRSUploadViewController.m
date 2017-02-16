@@ -988,11 +988,10 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                              for (PHAsset *asset in self.content) {
                                                                  CLLocation *location = asset.location;
                                                                  CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
-                                                                 float miles = distanceFromAssignment / 1609.34;
+                                                                 float miles = distanceFromAssignment / metersInAMile;
                                                                  if (miles < radius) {
                                                                      shouldAdd = TRUE;
                                                                  }
-                                                                 //1609.34
                                                              }
 
                                                              if (shouldAdd) {

@@ -155,19 +155,12 @@
 + (void)calculatedDistanceFromAssignmentWithID:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
     
     [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-
         if (responseObject != nil && !error) {
-            
             FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            
-            CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
-            CLLocationManager *userLocation = [[CLLocationManager alloc] init];
-            float distance = (float)[assignmentLocation distanceFromLocation:[userLocation location]];
-            float miles = (distance / 1609.34);
-            completion([NSNumber numberWithFloat:miles], error);
+            completion([NSNumber numberWithFloat:[self calculatedDistanceFromAssignment:assignment]], error);
         } else {
-            NSLog(@"Could not fetch distance from assignment: %@", error.description);
+            NSLog(@"Could not fetch distance from assignment (%@): %@", assignmentID, error.description);
             completion(responseObject, error);
         }
     }];
@@ -178,7 +171,7 @@
     CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
     CLLocationManager *userLocation = [[CLLocationManager alloc] init];
     float distance = (float)[assignmentLocation distanceFromLocation:[userLocation location]];
-    return (distance / 1609.34);
+    return (distance / metersInAMile);
 }
 
 
