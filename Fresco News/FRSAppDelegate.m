@@ -104,13 +104,13 @@
 
     
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
+        [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo] track:YES];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         // If we don't check for <iOS 10, multiple calls to handleRemotePush will be made.
         // Once here, and once in userNotificationCenter:didReceiveNotificationResponse.
         if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
-            [FRSNotificationHandler handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+            [FRSNotificationHandler handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] track:YES];
         }
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
@@ -210,7 +210,7 @@
     NSLog(@"Handle push from background or closed");
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
     NSLog(@"%@", response.notification.request.content.userInfo);
-    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo];
+    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo track:YES];
 }
 
 
@@ -303,13 +303,13 @@
     // custom code to handle notification content
 
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
-        [FRSNotificationHandler handleNotification:userInfo];
+        [FRSNotificationHandler handleNotification:userInfo track:YES];
     }
 
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        [FRSNotificationHandler handleNotification:userInfo];
+        [FRSNotificationHandler handleNotification:userInfo track:YES];
         completionHandler(UIBackgroundFetchResultNewData);
     } else {
         completionHandler(UIBackgroundFetchResultNewData);
@@ -321,7 +321,7 @@
         didReceiveRemoteNotification:userInfo
               fetchCompletionHandler:^(UIBackgroundFetchResult result) {
                 // nothing
-                  [FRSNotificationHandler handleNotification:userInfo];
+                  [FRSNotificationHandler handleNotification:userInfo track:YES];
               }];
 }
 
@@ -359,7 +359,7 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(nonnull UILocalNotification *)notification {
-    [FRSNotificationHandler handleNotification:notification.userInfo];
+    [FRSNotificationHandler handleNotification:notification.userInfo track:NO];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

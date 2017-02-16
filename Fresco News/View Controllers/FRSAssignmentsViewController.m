@@ -24,6 +24,7 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSAssignmentManager.h"
+#import "FRSAssignmentTracker.h"
 
 @import MapKit;
 
@@ -404,11 +405,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     NSNumber *assignmentRadius = assignment.radius;
     float milesRadius = [assignmentRadius floatValue];
 
-    CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
-    float distance = (float)[assignmentLocation distanceFromLocation:location];
-    float distanceInMiles = distance / 1609.34;
-
-    if (distanceInMiles < milesRadius) {
+    if ([FRSLocationManager calculatedDistanceFromAssignment:assignment] < milesRadius) {
         return TRUE;
     }
 
@@ -537,7 +534,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
 
     // create MKCircle surroudning the annotation
-    CLLocationDistance distance = [assignment.radius floatValue] * 1609.34;
+    CLLocationDistance distance = [assignment.radius floatValue] * metersInAMile;
     FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:distance];
     circle.circleType = FRSMapCircleTypeAssignment;
     ann.outlets = assignment.outlets;
@@ -631,7 +628,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:(center.latitude - span.latitudeDelta * 0.5) longitude:center.longitude];
     CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:(center.latitude + span.latitudeDelta * 0.5) longitude:center.longitude];
     NSInteger metersLatitude = [loc1 distanceFromLocation:loc2];
-    NSInteger milesLatitude = metersLatitude / 1609.34;
+    NSInteger milesLatitude = metersLatitude / metersInAMile;
 
     CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
     [self fetchAssignmentsNearLocation:location radius:milesLatitude];
@@ -795,6 +792,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (assAnn.title == nil) { //Checks for user annotation
         return;
     }
+    
+    self.currentAssignment = assAnn.assignment;
 
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
@@ -840,7 +839,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
 
-    CGFloat miles = distance / 1609.34;
+    CGFloat miles = distance / metersInAMile;
     CGFloat feet = miles * 5280;
 
     NSString *distanceString;
@@ -1244,6 +1243,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)animateAssignmentCard {
 
+    [FRSAssignmentTracker trackAssignmentClick:self.currentAssignment didClick:YES];
+    
     self.assignmentCardIsOpen = YES;
     self.mapShouldFollowUser = NO;
 
@@ -1302,6 +1303,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 - (void)dismissAssignmentCard {
+    
+    [FRSAssignmentTracker trackAssignmentClick:self.currentAssignment didClick:NO];
 
     self.assignmentCardIsOpen = NO;
 
@@ -1574,7 +1577,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                        [self configureAcceptedAssignment:assignment];
 
                                                        self.acceptedAssignmentDictionary = dict;
-
+                                                       
+                                                       [FRSAssignmentTracker trackAssignmentAccept:assignment didAccept:YES];
+                                                       
                                                        return;
                                                    }
 
@@ -1700,6 +1705,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                    completion:^(id responseObject, NSError *error) {
                                                      // error or response, user should be able to unaccept. at least visually
                                                      [self configureUnacceptedAssignment];
+                                                       
+                                                     // todo: create FRSObjectCreator class that configures and returns core data objects from a response object
+                                                     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                     FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                                                     [assignment configureWithDictionary:(NSDictionary *)responseObject];
+                                                       
+                                                     [FRSAssignmentTracker trackAssignmentAccept:assignment didAccept:NO];
                                                    }];
 }
 
@@ -1829,5 +1841,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [spinner stopLoading];
     [spinner removeFromSuperview];
 }
+
 
 @end

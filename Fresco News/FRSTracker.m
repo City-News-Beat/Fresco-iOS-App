@@ -9,6 +9,7 @@
 #import "FRSTracker.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
+#import "FRSAssignment.h"
 #import "Adjust.h"
 #import <Fabric/Fabric.h>
 #import <TwitterKit/TwitterKit.h>

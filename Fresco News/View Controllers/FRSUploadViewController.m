@@ -988,11 +988,10 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                              for (PHAsset *asset in self.content) {
                                                                  CLLocation *location = asset.location;
                                                                  CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
-                                                                 float miles = distanceFromAssignment / 1609.34;
+                                                                 float miles = distanceFromAssignment / metersInAMile;
                                                                  if (miles < radius) {
                                                                      shouldAdd = TRUE;
                                                                  }
-                                                                 //1609.34
                                                              }
 
                                                              if (shouldAdd) {
@@ -1161,11 +1160,14 @@ static NSString *const cellIdentifier = @"assignment-cell";
             photosCounted++;
         }
     }
-
+    
+    NSString *assignmentID = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
+    
     [FRSTracker track:submissionsEvent
            parameters:@{ @"videos_submitted" : @(videosCounted),
-                         @"photos_submitted" : @(photosCounted) }];
-
+                         @"photos_submitted" : @(photosCounted),
+                         ASSIGNMENT_ID       : assignmentID.length > 0 ? assignmentID : @""}];
+    
     [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
 }
 
