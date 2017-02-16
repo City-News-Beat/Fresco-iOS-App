@@ -488,7 +488,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     NSDictionary *push = [self.feed objectAtIndex:indexPath.row];
-    [FRSNotificationHandler handleNotification:push];
+    [FRSNotificationHandler handleNotification:push track:NO];
 }
 
 // TODO: Reuse these errors

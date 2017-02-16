@@ -30,13 +30,16 @@ BOOL isSegueingToAssignment;
 @implementation FRSNotificationHandler
 
 
-+ (void)handleNotification:(NSDictionary *)push {
-    NSString *type = (push[TYPE]) ? push[TYPE]  : @"";
++ (void)handleNotification:(NSDictionary *)push track:(BOOL)shouldTrack {
+    
+    NSString *type  = push[TYPE]  ? push[TYPE]  : @"";
     NSString *title = push[TITLE] ? push[TITLE] : @"";
     
-    NSMutableDictionary *paramsToTrack = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *paramsToTrack = [[NSMutableDictionary alloc] init]; // Create an NSMutableDictionary that will be populated according to the push[TYPE]
 
-    // smooch
+
+    /* SMOOCH */
+    
     // smoochSupportTempNotification checks are temporary and should be removed when support is added on the web platform for this feature
     if ([type isEqualToString:smoochSupportNotification] || ([title caseInsensitiveCompare:smoochSupportTempNotification] == NSOrderedSame && [title length] != 0)) {
         
@@ -45,13 +48,16 @@ BOOL isSegueingToAssignment;
         
         // Mixpanel track
         [paramsToTrack setObject:type forKey:PUSH_KEY];
-        [FRSTracker track:notificationOpened parameters:paramsToTrack];
+        [self trackNotification:shouldTrack withParams:paramsToTrack];
         
         // Display Smooch view
         [Smooch show];
         return;
     }
 
+    
+    /* ASSIGNMENTS */
+    
     // New assignment notifications need to be tracked independantly from the others because of the GET request required to fetch the distance away.
     if ([type isEqualToString:newAssignmentNotification]) {
         
@@ -72,7 +78,7 @@ BOOL isSegueingToAssignment;
         
         if ([[push objectForKey:IS_GLOBAL] boolValue]) { // Check if global before making request for distance
             [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
-            [FRSTracker track:notificationOpened parameters:paramsToTrack]; // Track notificationOpened event
+            [self trackNotification:shouldTrack withParams:paramsToTrack]; // Track notificationOpened event
         } else { // If not global make request to get assignment and track distance away
             [FRSLocationManager calculatedDistanceFromAssignmentWithID:assignmentID completion:^(id responseObject, NSError *error) {
                 
@@ -83,12 +89,15 @@ BOOL isSegueingToAssignment;
                     NSLog(@"Error calculating distance away for `Notification opened` event.");
                 }
                 
-                [FRSTracker track:notificationOpened parameters:paramsToTrack]; // Track notificationOpened event, with or without distance away (if error).
+                [self trackNotification:shouldTrack withParams:paramsToTrack]; // Track notificationOpened event, with or without distance away (if error).
             }];
         }
         
         return; // return to avoid double call to [FRSTracker track:]
     }
+    
+    
+    /* PAYMENT */
     
     if ([type isEqualToString:purchasedContentNotification]) {
         
@@ -125,7 +134,9 @@ BOOL isSegueingToAssignment;
         [FRSNotificationHandler segueToPayment];
     }
 
-    // social
+    
+    /* SOCIAL */
+    
     if ([type isEqualToString:followedNotification]) {
         NSString *user = [[[push objectForKey:META] objectForKey:USER_IDS] firstObject];
 
@@ -136,25 +147,6 @@ BOOL isSegueingToAssignment;
             [FRSNotificationHandler segueToUser:user];
         }
         [paramsToTrack setObject:USER forKey:OBJECT];
-    }
-
-    if ([type isEqualToString:userNewsGalleryNotification]) {
-        [paramsToTrack setObject:GALLERY forKey:OBJECT];
-        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
-        [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
-    }
-
-    if ([type isEqualToString:userNewsStoryNotification]) {
-        NSString *story = [[push objectForKey:META] objectForKey:STORY_ID];
-
-        if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-            [FRSNotificationHandler segueToStory:story];
-        } else {
-            NSString *story = [push objectForKey:STORY_ID];
-            [FRSNotificationHandler segueToGallery:story];
-        }
-        [paramsToTrack setObject:STORY forKey:OBJECT];
-        [paramsToTrack setObject:STORY_ID forKey:OBJECT_ID];
     }
 
     if ([type isEqualToString:likedNotification]) {
@@ -181,15 +173,24 @@ BOOL isSegueingToAssignment;
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
 
+    if ([type isEqualToString:mentionCommentNotification]) {
+        [paramsToTrack setObject:GALLERY forKey:OBJECT];
+        [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
+        [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
+    }
+    
+    
+    /* NEWS */
+
     if ([type isEqualToString:photoOfDayNotification]) {
         [paramsToTrack setObject:GALLERY forKey:OBJECT];
         [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
-
+    
     if ([type isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs;
-
+        
         if ([[push objectForKey:META] objectForKey:GALLERY_IDS]) {
             galleryIDs = [[push objectForKey:META] objectForKey:GALLERY_IDS];
         } else {
@@ -200,21 +201,49 @@ BOOL isSegueingToAssignment;
         [paramsToTrack setObject:GALLERY forKey:OBJECT];
         // We don't want to track objectID for notifications with multiple objects
     }
-
-    if ([type isEqualToString:restartUploadNotification]) {
-        [FRSNotificationHandler restartUpload];
-        return; // We don't want to track this notification
+    
+    if ([type isEqualToString:userNewsStoryNotification]) {
+        NSString *story = [[push objectForKey:META] objectForKey:STORY_ID];
+        
+        if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToStory:story];
+        } else {
+            NSString *story = [push objectForKey:STORY_ID];
+            [FRSNotificationHandler segueToGallery:story];
+        }
+        [paramsToTrack setObject:STORY forKey:OBJECT];
+        [paramsToTrack setObject:STORY_ID forKey:OBJECT_ID];
     }
-
-    if ([type isEqualToString:mentionCommentNotification]) {
+    
+    if ([type isEqualToString:userNewsGalleryNotification]) {
         [paramsToTrack setObject:GALLERY forKey:OBJECT];
         [paramsToTrack setObject:[self galleryIDFromPush:push] forKey:OBJECT_ID];
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
     
-    [paramsToTrack setObject:type forKey:PUSH_KEY];
-    [FRSTracker track:notificationOpened parameters:paramsToTrack];
+    /* UPLOAD */
+    if ([type isEqualToString:restartUploadNotification]) {
+        [FRSNotificationHandler restartUpload];
+        return; // We don't want to track this notification
+    }
+    
+    
+    [paramsToTrack setObject:type forKey:PUSH_KEY]; // Track PUSH_KEY by default
+    [self trackNotification:shouldTrack withParams:paramsToTrack];
 }
+
+
+/**
+ This method checks if track is enabled before calling [FRSTracker track:]
+
+ @param params NSDictionary of parameters that should be tracked with the notificationOpened event.
+ */
++ (void)trackNotification:(BOOL)shouldTrack withParams:(NSDictionary *)params {
+    if (shouldTrack) {
+        [FRSTracker track:notificationOpened parameters:params];
+    }
+}
+
 
 /**
  Checks the given dictionary and returns a valid string.
