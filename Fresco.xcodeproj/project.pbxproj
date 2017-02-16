@@ -167,6 +167,7 @@
 		CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */; };
 		CEC20DEC1E1C795400532D75 /* FRSUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEB1E1C795400532D75 /* FRSUserManager.m */; };
 		CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */; };
+		CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */; };
 		CECB2C9A1E46B4750035FDCE /* FRSAddDebitCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */; };
 		CECB2C9C1E46B48F0035FDCE /* FRSAddDebitCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */; };
 		CECB2C9E1E46CE360035FDCE /* FRSAddBankAccountView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */; };
@@ -615,6 +616,7 @@
 		CEC20DEB1E1C795400532D75 /* FRSUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserManager.m; sourceTree = "<group>"; };
 		CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAuthManager.h; sourceTree = "<group>"; };
 		CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAuthManager.m; sourceTree = "<group>"; };
+		CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSDisableAccountViewController.xib; path = "Fresco News/View Controllers/Settings/FRSDisableAccountViewController.xib"; sourceTree = "<group>"; };
 		CECB2C981E46B4750035FDCE /* FRSAddDebitCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAddDebitCardView.h; path = "Fresco News/Views/FRSAddDebitCardView.h"; sourceTree = "<group>"; };
 		CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAddDebitCardView.m; path = "Fresco News/Views/FRSAddDebitCardView.m"; sourceTree = "<group>"; };
 		CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAddDebitCardView.xib; path = "Fresco News/Views/FRSAddDebitCardView.xib"; sourceTree = "<group>"; };
@@ -1760,6 +1762,7 @@
 			children = (
 				07A30BEB1C50488800C536EB /* FRSDisableAccountViewController.h */,
 				07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */,
+				CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */,
 			);
 			name = "Disable Account";
 			sourceTree = "<group>";
@@ -2584,6 +2587,7 @@
 				CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
+				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
