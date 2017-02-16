@@ -9,6 +9,11 @@
 #import "FRSTracker.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
+#import "Adjust.h"
+#import <Fabric/Fabric.h>
+#import <TwitterKit/TwitterKit.h>
+#import <Crashlytics/Crashlytics.h>
+#import <Smooch/Smooch.h>
 
 @implementation FRSTracker
 
@@ -43,13 +48,11 @@
 #pragma mark - Segment
 
 + (void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
-    [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] track:eventName
                                properties:parameters];
 }
 
 + (void)track:(NSString *)eventName {
-    [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] track:eventName];
 }
 
@@ -62,12 +65,10 @@
 }
 
 + (void)screen:(NSString *)screen {
-    [FRSTracker startSegmentAnalytics];
     [FRSTracker screen:screen parameters:@{}];
 }
 
 + (void)screen:(NSString *)screen parameters:(NSDictionary *)parameters {
-    [FRSTracker startSegmentAnalytics];
     [[SEGAnalytics sharedAnalytics] screen:screen
                                 properties:parameters];
 }
@@ -104,5 +105,35 @@
         [UXCam tagUsersName:userID];
     }
 }
+
+#pragma mark - Adjust
+
++ (void)launchAdjust{
+    NSString *yourAppToken = adjustAppKey;
+    NSString *environment = ADJEnvironmentProduction;
+    
+    #if DEBUG
+        environment = ADJEnvironmentSandbox;
+    #endif
+    
+    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
+                                                environment:environment];
+    
+    [Adjust appDidLaunch:adjustConfig];
+}
+
+#pragma mark - Fabric
+
++ (void)configureFabric {
+    [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
+    [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
+}
+
+#pragma mark - Smooch
+
++ (void)configureSmooch {
+    [Smooch initWithSettings:[SKTSettings settingsWithAppToken:[EndpointManager sharedInstance].currentEndpoint.smoochToken]];
+}
+
 
 @end

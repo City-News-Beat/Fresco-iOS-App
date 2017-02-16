@@ -124,7 +124,11 @@
 
 
 /**
- Tells us whether we should refresh token in this case
+ Tells us whether we should refresh the currently being used token. If not, this method will log the user out once a certain
+ number of refreshes have been attempted to avoid an endless refresh cycle
+ 
+ @param response Response to determine form
+ @param authHeader The authorization header used in the request sent
 
  @return Yes if we should refresh, No if should not
  */

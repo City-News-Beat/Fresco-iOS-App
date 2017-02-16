@@ -12,6 +12,7 @@
 //Analytics
 static NSString *const segmentWriteKeyProd = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
 static NSString *const segmentWriteKeyDev = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
+static NSString *const adjustAppKey = @"bxk48kwhbx8g";
 
 //AWS
 static NSString *const awsBucketDev = @"com.fresconews.dev";

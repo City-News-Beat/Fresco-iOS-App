@@ -37,4 +37,15 @@
  */
 + (void)startUXCam;
 
+
+/**
+ Launches Adjust for us
+ */
++ (void)launchAdjust;
+
++ (void)configureFabric;
+
++ (void)configureSmooch;
+
+
 @end

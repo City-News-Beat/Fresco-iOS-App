@@ -1,5 +1,4 @@
-
-    //
+//
 //  FRSAppDelegate.m
 //  Fresco
 //
@@ -40,6 +39,7 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationManager.h"
+#import "Adjust.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -51,15 +51,16 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
 
-    NSString *yourAppToken = @"bxk48kwhbx8g";
-    NSString *environment = ADJEnvironmentSandbox;
-    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
-                                                environment:environment];
-
-    [Adjust appDidLaunch:adjustConfig];
-
-    [self startFabric]; // crashlytics first yall
-    [self configureSmooch];
+    [FRSTracker configureFabric]; // crashlytics first yall
+    [FRSTracker launchAdjust];
+    [FRSTracker configureSmooch];
+    [FRSTracker startSegmentAnalytics];
+    [FRSTracker trackUser];
+    
+    if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
+        [[FRSAuthManager sharedInstance] logout];
+    }
+    
     [self configureStartDate];
     [self clearUploadCache];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
@@ -70,10 +71,6 @@
     [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-
-    if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        [[FRSAuthManager sharedInstance] logout];
-    }
 
     [self configureWindow];
 
@@ -123,9 +120,6 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedInstance] checkCachedUploads];
-
-    [FRSTracker startSegmentAnalytics];
-    [FRSTracker trackUser];
 
     return YES;
 }
@@ -208,17 +202,6 @@
     // Add any custom logic here.
     return handled;
 }
-
-- (void)startFabric {
-
-    [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
-    [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
-}
-
-- (void)configureSmooch {
-    [Smooch initWithSettings:[SKTSettings settingsWithAppToken:[EndpointManager sharedInstance].currentEndpoint.smoochToken]];
-}
-
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response

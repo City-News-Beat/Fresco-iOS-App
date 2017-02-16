@@ -14,13 +14,15 @@
 #import "UIView+Helpers.h"
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import <QuartzCore/QuartzCore.h>
 #import "FRSAppDelegate.h"
 #import "FRSNavigationController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
-#import <UXCam/UXCam.h>
 #import "FRSSnapKit.h"
+
+#import <QuartzCore/QuartzCore.h>
+#import <UXCam/UXCam.h>
+#import <Crashlytics/Crashlytics.h>
 
 @import MapKit;
 

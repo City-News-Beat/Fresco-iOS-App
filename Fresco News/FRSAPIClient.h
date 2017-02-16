@@ -17,9 +17,14 @@
 #import "FRSAlertView.h"
 #import "UIColor+Fresco.h"
 
+
+/**
+ All of the API Client's possible completion blocks
+ */
 typedef void (^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void (^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
+
 typedef NS_ENUM(NSUInteger, FRSRequestAuth) {
     FRSUserAuth,
     FRSClientAuth,

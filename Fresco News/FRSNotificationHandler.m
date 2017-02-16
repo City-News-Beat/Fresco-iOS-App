@@ -19,6 +19,7 @@
 #import "FRSStoryManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
+#import <Smooch/Smooch.h>
 
 static BOOL isDeeplinking;
 
