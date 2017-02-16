@@ -13,6 +13,7 @@
 #import "NSString+Fresco.h"
 #import "FRSModerationManager.h"
 #import "FRSOnboardingViewController.h"
+#import "NSError+Fresco.h"
 
 // sign in / sign up (authorization) methods
 static NSString *const loginEndpoint = @"auth/token";
@@ -72,35 +73,19 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 
 #pragma mark - Sign In
 
-- (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    self.passwordUsed = password;
-    
-    NSDictionary *params = @{ @"username" : user,
-                              @"password" : password,
-                              @"grant_type": @"password",
-                              @"scope" : @"write" };
-    
-    [[FRSAPIClient sharedClient] post:loginEndpoint
-                       withParameters:params
-                           completion:^(id responseObject, NSError *error) {
-                               if (!error) {
-                                   [self handleUserLogin:responseObject completion:completion];
-                               } else {
-                                   completion(nil, error);
-                               }
-                           }];
-}
-
 - (void)handleUserLogin:(id)tokenObject completion:(FRSAPIDefaultCompletionBlock)completion {
     
-    //Either of these keys may be used for the token from the API
+    //Either of these keys may be used for the token from the API, as social signin gives us an older type of response
     NSString *token = [[tokenObject objectForKey:@"access_token"] objectForKey:@"token"] ? : [tokenObject objectForKey:@"token"];
+    NSString *refreshToken = [[tokenObject objectForKey:@"access_token"] objectForKey:@"refresh_token"] ? : [tokenObject objectForKey:@"refresh_token"];
     
     if (!token) {
-        return completion(nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
+        return completion(nil, [NSError errorWithMessage:@"Invalid token response" andCode:500]);
     }
     
+    //Save tokens to disk
     [[FRSSessionManager sharedInstance] saveUserToken:token];
+    [[FRSSessionManager sharedInstance] saveRefreshToken:refreshToken];
     
     //Grab the actual user after setting the token
     [[FRSUserManager sharedInstance] updateLocalUser:^(id userResponseObject, NSError *error) {
@@ -127,6 +112,25 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
     }];
 }
 
+- (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    self.passwordUsed = password;
+    
+    NSDictionary *params = @{ @"username" : user,
+                              @"password" : password,
+                              @"grant_type": @"password",
+                              @"scope" : @"write" };
+    
+    [[FRSAPIClient sharedClient] post:loginEndpoint
+                       withParameters:params
+                           completion:^(id responseObject, NSError *error) {
+                               if (!error) {
+                                   [self handleUserLogin:responseObject completion:completion];
+                               } else {
+                                   completion(nil, error);
+                               }
+                           }];
+}
+
 - (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
@@ -139,9 +143,7 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
                        withParameters:authDictionary
                            completion:^(id responseObject, NSError *error) {
                                if (!error) {
-                                   [self handleUserLogin:responseObject completion:^(id responseObject, NSError *error){
-                                       completion(responseObject, error);
-                                   }];
+                                   [self handleUserLogin:responseObject completion:completion];
                                } else {
                                    completion(nil, error);
                                }
@@ -159,9 +161,7 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
                            completion:^(id responseObject, NSError *error) {
                                if (!error) {
                                    
-                                   [self handleUserLogin:responseObject completion:^(id responseObject, NSError *error){
-                                       completion(responseObject, error);
-                                   }];
+                                   [self handleUserLogin:responseObject completion:completion];
                                } else {
                                    completion(nil, error);
                                }
@@ -171,7 +171,11 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 #pragma mark - Logout
 
 - (void)logout {
-    [[FRSSessionManager sharedInstance] deleteTokens];
+    [[FRSSessionManager sharedInstance] deleteUserData];
+    [self setPasswordUsed:nil];
+    [self setEmailUsed:nil];
+    [FRSTracker reset];
+    [FRSTracker track:logoutEvent];
 }
 
 #pragma mark - Installation

@@ -1,6 +1,3 @@
- 
-    
-
 //
 //  FRSAPIClient.m
 //  Fresco
@@ -37,7 +34,7 @@
     return client;
 }
 
-- (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType {
+- (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType{
     if (!self.requestManager) {
         AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
         self.requestManager = manager;
@@ -50,37 +47,58 @@
     return self.requestManager;
 }
 
-/*
- Keychain-Based interaction & authentication
+#pragma mark - Authorizaiton headers
+
+/**
+  Keychain-Based interaction & authentication
+
+ @param endpoint Endpoint the request is being made to
+ @param requestType Request type e.g. "POST", "DELETE", "GET"
  */
 - (void)reevaluateAuthorization:(NSString *)endpoint withRequestType:(NSString *)requestType {
-    if ([self shouldSendBasic:endpoint withRequestType:requestType]) {
-        [self.requestManager.requestSerializer setValue:[self basicAuthorization] forHTTPHeaderField:@"Authorization"];
-    } else if ([self shouldSendClientToken:endpoint]) {
-        [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
-    } else if ([self shouldSendUserToken:endpoint]) {
+    if ([self shouldSendUserToken:endpoint withRequestType:requestType]) {
         [self.requestManager.requestSerializer setValue:[self userAuthorization] forHTTPHeaderField:@"Authorization"];
+        self.requestAuth = FRSUserAuth;
+    } else if ([self shouldSendClient:endpoint withRequestType:requestType]) {
+        [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
+        self.requestAuth = FRSClientAuth;
     } else {
+        //Generate credentials if needed
         [[FRSSessionManager sharedInstance] generateClientCredentials];
+        //Fallback to basic auth
         [self.requestManager.requestSerializer setValue:[self basicAuthorization] forHTTPHeaderField:@"Authorization"];
+        self.requestAuth = FRSBasicAuth;
     }
 }
 
-- (BOOL)shouldSendClientToken:(NSString *)endpoint {
+
+/**
+ Lets us know if we need a user token to be sent
+ 
+ @return Authorization header with user-level authorization
+ */
+- (BOOL)shouldSendUserToken:(NSString *)endpoint withRequestType:(NSString *)requestType {
+    //If we're authenticated && we're not requesting an auth endpoint or we're trying to delete
+    return (
+            [[FRSAuthManager sharedInstance] isAuthenticated] &&
+            (![endpoint containsString:@"auth/"] || [requestType isEqualToString:@"DELETE"])
+            );
+}
+
+/**
+ Lets us know if we need a client token to be sent
+ 
+ @return Authorization header with client-level authorization
+ */
+- (BOOL)shouldSendClient:(NSString *)endpoint withRequestType:(NSString *)requestType {
     NSString *clientToken = [[FRSSessionManager sharedInstance] clientToken];
-    return (![[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/token"] && clientToken);
-}
-
-- (BOOL)shouldSendUserToken:(NSString *)endpoint {
-    return ([[FRSAuthManager sharedInstance] isAuthenticated] && ![endpoint containsString:@"auth/token"]);
-}
-
-- (BOOL)shouldSendBasic:(NSString *)endpoint withRequestType:(NSString *)requestType {
-    return ![requestType isEqualToString:@"DELETE"] && ([endpoint containsString:@"auth/token"]);
-}
-
-- (NSString *)basicAuthorization {
-    return [NSString stringWithFormat:@"Basic %@", [EndpointManager sharedInstance].currentEndpoint.frescoClientId];
+    
+    //Check if not an auth endpoint or we're deleting && we're not authenticated && we actually have a client token to use
+    return (
+            (![endpoint containsString:@"auth/"] || [requestType isEqualToString:@"DELETE"]) &&
+            ![[FRSAuthManager sharedInstance] isAuthenticated] &&
+            ![clientToken isEqualToString:@""]
+            );
 }
 
 - (NSString *)userAuthorization {
@@ -91,71 +109,104 @@
     return [NSString stringWithFormat:@"Bearer %@", [[FRSSessionManager sharedInstance] clientToken]];
 }
 
-/*
- Generic HTTP methods for use within class
+
+- (NSString *)basicAuthorization {
+    // Create NSData object
+    NSData *nsdata = [
+                      [NSString stringWithFormat:@"%@:%@", [EndpointManager sharedInstance].currentEndpoint.frescoClientId, [EndpointManager sharedInstance].currentEndpoint.frescoClientSecret]
+                      dataUsingEncoding:NSUTF8StringEncoding];
+    
+    // Get NSString from NSData object in Base64
+    NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+    
+    return [NSString stringWithFormat:@"Basic %@", base64Encoded];
+}
+
+
+/**
+ Tells us whether we should refresh token in this case
+
+ @return Yes if we should refresh, No if should not
  */
+- (BOOL)shouldRefresh:(NSHTTPURLResponse *)response usingHeader:(NSString *)authHeader {
+    //Only refresh on 401s and requests made *not* using a basic header
+    return response && response.statusCode == 401 && ![authHeader containsString:@"Basic"];
+}
+
+#pragma mark - HTTP Methods
+
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"GET"];
-
+    FRSRequestAuth requestAuthUsed = self.requestAuth;
+    
     [manager GET:endPoint
-        parameters:parameters
+      parameters:parameters
         progress:^(NSProgress *_Nonnull downloadProgress) {
         }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
-          if (response && response.statusCode == 401) {
-              //When receiving a 401, it's a signal to refresh the token from the Fresco API
-              [[FRSSessionManager sharedInstance] refreshToken:[[FRSAuthManager sharedInstance] isAuthenticated]
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      if (!error) {
-                                                          [self get:endPoint withParameters:parameters completion:completion];
-                                                      }
-                                                    }];
-          } else {
-              completion(Nil, error);
-          }
-        }];
+         success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+             completion(responseObject, Nil);
+         }
+         failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+             if([self
+                 shouldRefresh:(NSHTTPURLResponse *)task.response
+                 usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"]]
+                ) {
+                 [[FRSSessionManager sharedInstance] refreshToken:(requestAuthUsed == FRSUserAuth)
+                                                       completion:^(id responseObject, NSError *error) {
+                                                           if (!error) {
+                                                               [self get:endPoint withParameters:parameters completion:completion];
+                                                           } else {
+                                                               completion(nil, error);
+                                                           }
+                                                       }];
+             } else {
+                 completion(Nil, error);
+             }
+         }];
 }
 
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"POST"];
-
+    FRSRequestAuth requestAuthUsed = self.requestAuth;
+    
     [manager POST:endPoint
-        parameters:parameters
-        progress:^(NSProgress *_Nonnull downloadProgress) {
-        }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
-          if (response && response.statusCode == 401) {
-              [[FRSSessionManager sharedInstance] refreshToken:[[FRSAuthManager sharedInstance] isAuthenticated]
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      if (!error) {
-                                                          [self post:endPoint withParameters:parameters completion:completion];
-                                                      }
-                                                    }];
-          } else {
-              completion(Nil, error);
+       parameters:parameters
+         progress:^(NSProgress *_Nonnull downloadProgress) {
+         }
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+              completion(responseObject, nil);
           }
-        }];
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+              if([self
+                  shouldRefresh:(NSHTTPURLResponse *)task.response
+                  usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"]]
+                 ) {
+                  [[FRSSessionManager sharedInstance] refreshToken:(requestAuthUsed == FRSUserAuth)
+                                                        completion:^(id responseObject, NSError *error) {
+                                                            if (!error) {
+                                                                [self post:endPoint withParameters:parameters completion:completion];
+                                                            } else {
+                                                                completion(nil, error);
+                                                            }
+                                                        }];
+                  
+              } else {
+                  completion(Nil, error);
+              }
+          }];
 }
 
 - (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations:endPoint withRequestType:@"DELETE"];
-
+    
     [manager DELETE:endPoint
-        parameters:parameters
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-        }];
+         parameters:parameters
+            success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+                if(completion) completion(responseObject, Nil);
+            }
+            failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+                if(completion) completion(Nil, error);
+            }];
 }
 
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -176,6 +227,8 @@
           completion(nil, error);
         }];
 }
+
+#pragma mark - Helpers
 
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];

@@ -62,7 +62,7 @@
 
 
 /**
- This method is responsbile for taking the token response and handle saving the new user to the app's sesion
+ This method is responsbile for taking the token response and handling saving the new user to the app's sesion
  
  @param tokenObject token response from the API after authenticating
  */

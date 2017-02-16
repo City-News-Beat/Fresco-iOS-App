@@ -239,7 +239,7 @@
 
     [NSUserDefaults resetStandardUserDefaults];
 
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];

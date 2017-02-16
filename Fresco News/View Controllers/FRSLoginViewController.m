@@ -475,7 +475,7 @@
                                                               
                                                               [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                                                                   if (!error) {
-                                                                      [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                                                                      [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
                                                                   }
                                                               }];
                                                           }];

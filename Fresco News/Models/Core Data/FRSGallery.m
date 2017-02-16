@@ -35,7 +35,6 @@
 @dynamic stories;
 @dynamic articles;
 @dynamic isLiked;
-@dynamic verificationRating;
 @dynamic numberOfLikes;
 @dynamic numberOfReposts;
 @dynamic externalAccountID;
@@ -97,11 +96,13 @@
         NSDictionary *source = (NSDictionary *)[results firstObject];
         NSString *userID = source[@"user_id"];
 
-        [[FRSUserManager sharedInstance] getUserWithUID:userID
-                                             completion:^(id responseObject, NSError *error) {
-                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
-                                               self.sourceUser = user;
-                                             }];
+        if(userID != nil) {
+            [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                                 completion:^(id responseObject, NSError *error) {
+                                                     FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
+                                                     self.sourceUser = user;
+                                                 }];
+        }
     }
 
     if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
@@ -122,10 +123,6 @@
 
     if ([dict valueForKey:@"external_url"] != [NSNull null]) {
         self.externalURL = [dict objectForKey:@"external_url"];
-    }
-
-    if ([dict valueForKey:@"rating"] != [NSNull null]) {
-        self.verificationRating = [[dict objectForKey:@"rating"] integerValue];
     }
 
     if (!self.posts || self.posts.count == 0) {

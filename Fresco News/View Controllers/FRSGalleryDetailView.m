@@ -146,16 +146,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         [self getGalleryPurchases];
         
-        if (self.gallery.verificationRating == 0) { // Not Rated
+        if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:0]]) { // Not Rated
             verificationLabel.text = @"PENDING VERIFICATION";
             verificationContainerView.backgroundColor = [UIColor frescoOrangeColor];
-        } else if (self.gallery.verificationRating == 1) { // Skipped
+        } else if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:1]]) { // Skipped
             verificationLabel.text = @"NOT VERIFIED";
             verificationContainerView.backgroundColor = [UIColor frescoLightTextColor];
-        } else if (self.gallery.verificationRating == 2 || self.gallery.verificationRating == 3) { // Verified or Highlighted
+        } else if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:2]]|| [self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:3]]) { // Verified or Highlighted
             verificationLabel.text = @"VERIFIED";
             verificationContainerView.backgroundColor = [UIColor frescoGreenColor];
-        } else if (self.gallery.verificationRating == 4) { // Deleted
+        } else if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:4]]) { // Deleted
             verificationLabel.text = @"DELETED";
             verificationContainerView.backgroundColor = [UIColor frescoRedColor];
         }
@@ -226,7 +226,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (IBAction)showGalleryStatus:(id)sender {
     galleryStatusPopup = (FRSGalleryStatusView *)[[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryStatusView" owner:self options:nil] objectAtIndex:0];
-    [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)self.gallery.verificationRating];
+    [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)[self.gallery.rating integerValue]];
     [[UIApplication sharedApplication].keyWindow addSubview:galleryStatusPopup];
     galleryStatusPopup.parentVC = self.parentVC;
     galleryStatusPopup.parentView = self;

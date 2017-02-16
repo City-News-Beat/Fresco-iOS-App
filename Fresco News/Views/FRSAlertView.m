@@ -834,7 +834,7 @@
 - (void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
 
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];

@@ -326,8 +326,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
             self.facebookCell = cell;
             self.facebookCell.parentTableView = tableView;
 
-            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
-                [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+            if ([[NSUserDefaults standardUserDefaults] valueForKey:facebookName]) {
+                [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:facebookName] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:facebookConnected]];
             } else {
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:facebookConnected]) {
                     [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];

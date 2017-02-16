@@ -7,15 +7,18 @@
 //
 
 #import "FRSSessionManager.h"
+#import "FRSAuthManager.h"
 #import "EndpointManager.h"
 
 static NSString *const kClientToken = @"kClientToken";
 static NSString *const kRefreshClientToken = @"kRefreshClientToken";
+static NSString *const kRefreshUserToken = @"kRefreshUserToken";
 static NSString *const tokenEndpoint = @"auth/token";
 
 @interface FRSSessionManager ()
 
 @property (nonatomic) BOOL generatingClientToken;
+@property (nonatomic) BOOL isRefreshing;
 
 @end
 
@@ -30,94 +33,119 @@ static NSString *const tokenEndpoint = @"auth/token";
     return instance;
 }
 
-#pragma mark - API Calls
+#pragma mark - API Operations
 
 - (void)generateClientCredentials {
-    if (!self.generatingClientToken) {
-        self.generatingClientToken = YES;
-        NSDictionary *params = @{ @"grant_type" : @"client_credentials",
-                                  @"scope" : @"write" };
+    if (self.generatingClientToken) return;
+    
+    //If we already have a client token
+    if(![[[FRSSessionManager sharedInstance] clientToken] isEqualToString:@""]) return;
+    
+    self.generatingClientToken = YES;
+    
+    NSDictionary *params = @{ @"grant_type" : @"client_credentials",
+                              @"scope" : @"write" };
+    
+    [[FRSAPIClient sharedClient] post:tokenEndpoint
+                       withParameters:params
+                           completion:^(id responseObject, NSError *error) {
+                               self.generatingClientToken = NO;
+                               if (!error) {
+                                   NSDictionary *accessTokenDict = responseObject[@"access_token"];
+                                   if (accessTokenDict) {
+                                       [self saveClientToken:accessTokenDict[@"token"]];
+                                       [self saveRefreshClientToken:accessTokenDict[@"refresh_token"]];
+                                   }
+                               }
+                           }];
 
-        [[FRSAPIClient sharedClient] post:tokenEndpoint
-                           withParameters:params
-                               completion:^(id responseObject, NSError *error) {
-                                 self.generatingClientToken = NO;
-                                 if (!error) {
-                                     NSDictionary *accessTokenDict = responseObject[@"access_token"];
-                                     if (accessTokenDict) {
-                                         [self saveCientToken:accessTokenDict[@"token"]];
-                                         [self saveRefreshCientToken:accessTokenDict[@"refresh_token"]];
-                                     }
-                                 }
-                               }];
-    }
 }
 
 - (void)refreshToken:(BOOL)isUserToken completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSDictionary *params = @{ @"grant_type" : @"refresh_token",
-                              @"scope" : @"write" };
+    if(self.isRefreshing) return;
+    self.isRefreshing = YES;
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]
+                                   initWithDictionary:@{ @"grant_type" : @"refresh_token",
+                                                         @"scope" : @"write"
+                                                         }];
+    
+    if(isUserToken) {
+        [params setValue:[self refreshUserToken] forKey:@"refresh_token"];
+    } else {
+        [params setValue:[self refreshClientToken] forKey:@"refresh_token"];
+    }
 
     [[FRSAPIClient sharedClient] post:tokenEndpoint
                        withParameters:params
                            completion:^(id responseObject, NSError *error) {
-                             if (!error) {
-                                 NSDictionary *accessTokenDict = responseObject[@"access_token"];
-                                 if (accessTokenDict) {
-                                     if (isUserToken) {
-                                         [self saveCientToken:accessTokenDict[@"token"]];
-                                         [self saveRefreshCientToken:accessTokenDict[@"refresh_token"]];
-                                     } else {
-                                         [self saveUserToken:accessTokenDict[@"token"]];
-                                         [self saveRefreshToken:accessTokenDict[@"refresh_token"]];
-                                     }
-                                 }
-                                 completion(responseObject, nil);
-                             } else {
-                                 completion(nil, error);
-                             }
+                               self.isRefreshing = NO;
+                               
+                               if (!error) {
+                                   NSDictionary *accessTokenDict = responseObject[@"access_token"];
+                                   if (accessTokenDict) {
+                                       if (isUserToken) {
+                                           [self saveUserToken:accessTokenDict[@"token"]];
+                                           [self saveRefreshToken:accessTokenDict[@"refresh_token"]];
+                                       } else {
+                                           [self saveClientToken:accessTokenDict[@"token"]];
+                                           [self saveRefreshClientToken:accessTokenDict[@"refresh_token"]];                              }
+                                   }
+                                   completion(responseObject, nil);
+                               } else {
+                                   if(isUserToken) {
+                                       //Log user out due to failed refresh. At this point, there's no other way for the app to authenticate the user
+                                       [[FRSAuthManager sharedInstance] logout];
+                                   } else {
+                                       //Prevent deleting client tokens while new ones may be generating
+                                       //In this case, the generation of the new ones will override the current ones
+                                       if(!self.generatingClientToken) {
+                                           [self deleteClientTokens];
+                                       }
+                                   }
+                                   
+                                   completion(nil, error);
+                               }
                            }];
-}
-
-- (void)deleteTokens {
-    [[FRSAPIClient sharedClient] delete:tokenEndpoint
-                         withParameters:nil
-                             completion:^(id responseObject, NSError *error){
-                             }];
-
-    NSArray *allAccounts = [SAMKeychain allAccounts];
-
-    for (NSDictionary *account in allAccounts) {
-        NSString *accountName = account[kSAMKeychainAccountKey];
-        [SAMKeychain deletePasswordForService:serviceName account:accountName];
-    }
-
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kClientToken];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kRefreshClientToken];
 }
 
 #pragma mark - Client Token
 
 - (NSString *)clientToken {
     NSString *clientToken = [[NSUserDefaults standardUserDefaults] stringForKey:kClientToken];
+    if(clientToken == nil) return @"";
     return clientToken;
 }
 
-- (void)saveCientToken:(NSString *)clientToken {
+- (NSString *)refreshClientToken {
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kRefreshClientToken];
+    if(token == nil) return @"";
+    return token;
+}
+
+- (void)saveClientToken:(NSString *)clientToken {
     [[NSUserDefaults standardUserDefaults] setObject:clientToken forKey:kClientToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSString *)refreshClientToken {
-    NSString *refreshClientToken = [[NSUserDefaults standardUserDefaults] stringForKey:kRefreshClientToken];
-    return refreshClientToken;
-}
-
-- (void)saveRefreshCientToken:(NSString *)refreshClientToken {
+- (void)saveRefreshClientToken:(NSString *)refreshClientToken {
     [[NSUserDefaults standardUserDefaults] setObject:refreshClientToken forKey:kRefreshClientToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark - User/Auth Token
+- (void)deleteClientTokens{
+    //Delete token off the API
+    [[FRSAPIClient sharedClient] delete:tokenEndpoint
+                         withParameters:nil
+                             completion:^(id responseObject, NSError *error) {
+                                 //Remove client refresh and regular token
+                                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:kClientToken];
+                                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:kRefreshClientToken];
+                                 [[NSUserDefaults standardUserDefaults] synchronize];
+                             }];
+}
+
+#pragma mark - User Tokens
 
 - (NSString *)authenticationToken {
     NSArray *allAccounts = [SAMKeychain accountsForService:serviceName];
@@ -136,12 +164,56 @@ static NSString *const tokenEndpoint = @"auth/token";
     [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
 }
 
+/**
+ Returns the user's refresh token
+
+ @return Refresh token as a string
+ */
 - (NSString *)refreshUserToken {
-    return [SAMKeychain passwordForService:serviceName account:[NSString stringWithFormat:@"%@Refresh", [EndpointManager sharedInstance].currentEndpoint.frescoClientId]];
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kRefreshUserToken];
+    if(token == nil) return @"";
+    return token;
 }
 
-- (void)saveRefreshToken:(NSString *)token {
-    [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:[NSString stringWithFormat:@"%@Refresh", [EndpointManager sharedInstance].currentEndpoint.frescoClientId]];
+- (void)saveRefreshToken:(NSString *)refreshUserToken{
+    [[NSUserDefaults standardUserDefaults] setObject:refreshUserToken forKey:kRefreshUserToken];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+- (void)deleteUserData {
+    void (^clearTokens)(void) = ^ {
+        NSArray *allAccounts = [SAMKeychain allAccounts];
+        
+        //Delete user bearer
+        for (NSDictionary *account in allAccounts) {
+            NSString *accountName = account[kSAMKeychainAccountKey];
+            [SAMKeychain deletePasswordForService:serviceName account:accountName];
+        }
+        
+        //Clear UserDefaults except client tokens
+        NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+        for (NSString *key in [defaultsDictionary allKeys]) {
+            if (![key isEqualToString:kClientToken] && ![key isEqualToString:kRefreshClientToken]) {
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+            }
+        }
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    };
+    
+    if([[FRSAuthManager sharedInstance] isAuthenticated]) {
+        //Delete token off the API
+        [[FRSAPIClient sharedClient] delete:tokenEndpoint
+                             withParameters:nil
+                                 completion:^(id responseObject, NSError *error) {
+                                     
+                                     clearTokens();
+                                 }];
+    } else {
+        clearTokens();
+    }
+}
+
+
 
 @end

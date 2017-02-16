@@ -37,7 +37,7 @@
 
  @param clientToken The token to save
  */
-- (void)saveCientToken:(NSString *)clientToken;
+- (void)saveClientToken:(NSString *)clientToken;
 
 
 /**
@@ -45,7 +45,7 @@
 
  @param refreshClientToken the refresh token to save
  */
-- (void)saveRefreshCientToken:(NSString *)refreshClientToken;
+- (void)saveRefreshClientToken:(NSString *)refreshClientToken;
 
 
 /**
@@ -55,10 +55,21 @@
  */
 - (void)saveUserToken:(NSString *)token;
 
+/**
+ Saves refresh token to disk
+ 
+ @param refreshUserToken refresh token to save
+ */
+- (void)saveRefreshToken:(NSString *)refreshUserToken;
 
 /**
- Deletes all token data from the app
+ Deletes all user related tokens & data from the app
  */
-- (void)deleteTokens;
+- (void)deleteUserData;
+
+/**
+ Deletes all client realted tokens from the app
+ */
+- (void)deleteClientTokens;
 
 @end

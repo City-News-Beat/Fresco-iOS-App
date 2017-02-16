@@ -17,7 +17,8 @@
         self.baseUrl = baseURLDev;
         self.stripeKey = stripeTest;
         self.frescoWebsite = webURLDev;
-        self.frescoClientId = clientAuthorizationDev;
+        self.frescoClientId = clientIdDev;
+        self.frescoClientSecret = clientSecretDev;
         self.twitterConsumerKey = twitterConsumeyKey;
         self.twitterConsumerSecret = twitterConsumerSecret;
         self.smoochToken = smoochToken;
@@ -30,7 +31,8 @@
         self.baseUrl = baseURLProd;
         self.stripeKey = stripeLive;
         self.frescoWebsite = webURLProd;
-        self.frescoClientId = clientAuthorizationProd;
+        self.frescoClientId = clientIdProd;
+        self.frescoClientSecret = clientSecretProd;
         self.twitterConsumerKey = twitterConsumeyKey;
         self.twitterConsumerSecret = twitterConsumerSecret;
         self.smoochToken = smoochToken;
