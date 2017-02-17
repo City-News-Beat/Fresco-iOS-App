@@ -295,53 +295,56 @@
 
 - (void)reloadData {
     [self.followingTable reloadFollowing];
-   
+    
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
-                                         offsetGalleryID:Nil
-                                              completion:^(NSArray *galleries, NSError *error) {
-                                                [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
-                                                  NSInteger index = 0;
-
-                                                  NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
-                                                  for (NSDictionary *gallery in galleries) {
-                                                      NSString *galleryID = gallery[@"id"];
-                                                      NSInteger galleryIndex = [self galleryExists:galleryID];
-
-                                                      /*
-                 Gallery does not exist -- create it in persistence layer & volotile memory
-                 */
-                                                      if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-                                                          FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
-                                                          [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
-                                                          [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                          [newGalleries addObject:galleryToSave];
-                                                          index++;
-                                                          continue;
-                                                      }
-
-                                                      /*
-                 Gallery already exists, update its index & meta information (things change)
-                 */
-
-                                                      FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
-                                                      [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                      [newGalleries addObject:galleryToSave];
-                                                      index++;
-                                                  }
-
-                                                  /*
-             Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
-             */
-                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                    self.dataSource = newGalleries;
-                                                    [self.tableView reloadData];
-                                                    isLoading = FALSE;
-                                                    [self.tableView dg_stopLoading];
-                                                    [self.followingTable dg_stopLoading];
-                                                  });
-                                                }];
-                                              }];
+                                                offsetGalleryID:Nil
+                                                     completion:^(NSArray *galleries, NSError *error) {
+                                                         [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
+                                                             NSInteger index = 0;
+                                                             
+                                                             NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
+                                                             for (NSDictionary *gallery in galleries) {
+                                                                 NSString *galleryID = gallery[@"id"];
+                                                                 NSInteger galleryIndex = [self galleryExists:galleryID];
+                                                                 
+                                                                 /*
+                                                                  Gallery does not exist -- create it in persistence layer & volotile memory
+                                                                  */
+                                                                 if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                                                                     FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
+                                                                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+                                                                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                                                                     [newGalleries addObject:galleryToSave];
+                                                                     index++;
+                                                                     continue;
+                                                                 }
+                                                                 
+                                                                 /*
+                                                                  Gallery already exists, update its index & meta information (things change)
+                                                                  */
+                                                                 
+                                                                 FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                                                                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+                                                                 [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                                                                 [newGalleries addObject:galleryToSave];
+                                                                 index++;
+                                                             }
+                                                             
+                                                             /*
+                                                              Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
+                                                              */
+                                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                                 if([newGalleries count] > 0) {
+                                                                     self.dataSource = newGalleries;
+                                                                     [self.tableView reloadData];
+                                                                 }
+                                                                 
+                                                                 isLoading = FALSE;
+                                                                 [self.tableView dg_stopLoading];
+                                                                 [self.followingTable dg_stopLoading];
+                                                             });
+                                                         }];
+                                                     }];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
