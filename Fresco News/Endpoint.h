@@ -8,12 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
-//Analytics
-static NSString *const segmentWriteKeyProd = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
-static NSString *const segmentWriteKeyDev = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
-static NSString *const adjustAppKey = @"bxk48kwhbx8g";
-
 //AWS
 static NSString *const awsBucketDev = @"com.fresconews.dev";
 static NSString *const awsAccessKeyDev = @"AKIAJRQQA26XTXPGVAKA";
@@ -24,13 +18,16 @@ static NSString *const awsAccessKeyProd = @"AKIAJRQQA26XTXPGVAKA";
 static NSString *const awsSecretKeyProd = @"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";
 
 //Authorization
-static NSString *const clientIdProd = @"";
-static NSString *const clientSecretProd = @"";
+static NSString *const clientIdProd = @"NkaQ3byyrcvDcS42cN4g3ZdMZyJBB9EC3iz5WTNW4BvO6acrtTvShWB1RV4R";
+static NSString *const clientSecretProd = @"YwoofO1b3uTyryUpxfcWAQdBvk2iXOaohV09q6PMKt8nauEOweowJbqzXOsbSeEVRxsE4xRHHhIwV1nZ8sPLRE8Avp9OlLzP6nZ7A09VzdNbcPKhwxdgv82uX48b6scmfMvPoV64uIHql37mkI30xn9yxjHTXR1alePH65Hu23UvIJncjtuUYaEQZ0lyTp";
 
 static NSString *const clientIdDev = @"FggpZkXKiur4zzFWOhkQJRcDQpsg0g8jgbazLYNcCf2RfSukoYutk2wSJLFf";
 static NSString *const clientSecretDev = @"tI8a6k1oRuwi32hozZfLloVmyEzbpAvSxRnc6eKyiLUSq0eP61NFT03WOAewPcKQENayE986q6e2ajA97O9vr5PvnG9m3wNG6DGMkCNWpzKtkDBuYL1wBL8LOK7EDJJWYXljzzxcI6paSULEvAtI6YvneQmlBOYShvzhR0IMHl3roMNi3sK2MMIB3EKDQM";
 
 //SDKs
+static NSString *const segmentWriteKeyProd = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
+static NSString *const segmentWriteKeyDev = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
+static NSString *const adjustAppKey = @"bxk48kwhbx8g";
 static NSString *const twitterConsumeyKey = @"kT772ISFiuWQdVQblU4AmBWw3";
 static NSString *const twitterConsumerSecret = @"navenvTSRCcyUL7F4Ait3gACnxfc7YXWyaee2bAX1sWnYGe4oY";
 static NSString *const smoochToken = @"bmk6otjwgrb5wyaiohse0qbr0";

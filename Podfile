@@ -6,6 +6,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'Fresco' do
     pod 'AFNetworking', '~> 3.0’
     pod 'Analytics'
+    pod 'Segment-Flurry'
+    pod 'Segment-Localytics'
     pod 'STKWebKitViewController'
     pod 'BTBadgeView'
     pod 'Mantle', '~>1.5.1'

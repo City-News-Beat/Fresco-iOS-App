@@ -15,6 +15,10 @@
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
 #import <Smooch/Smooch.h>
+#import <Analytics/SEGAnalytics.h>
+#import <Segment_Flurry/SEGFlurryIntegrationFactory.h>
+#import <Segment_Localytics/SEGLocalyticsIntegrationFactory.h>
+#import <UXCam/UXCam.h>
 
 @implementation FRSTracker
 
@@ -50,15 +54,18 @@
 
 + (void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
     [[SEGAnalytics sharedAnalytics] track:eventName
-                               properties:parameters];
+                               properties:parameters
+                                  options:@{ @"integrations": @{ @"All": @YES }}];
 }
 
 + (void)track:(NSString *)eventName {
-    [[SEGAnalytics sharedAnalytics] track:eventName];
+    [self track:eventName parameters:@{}];
 }
 
 + (void)startSegmentAnalytics {
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:[EndpointManager sharedInstance].currentEndpoint.segmentKey];
+    [configuration use:[SEGFlurryIntegrationFactory instance]];
+    [configuration use:[SEGLocalyticsIntegrationFactory instance]];
     configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
     configuration.recordScreenViews = NO; // Enable this to record screen views automatically!
 
@@ -83,11 +90,11 @@
 #pragma mark - UXCam
 
 + (void)startUXCam {
-#if DEBUG // Avoid tracking when debugging
-//    [UXCam startWithKey:UXCamKey appVariantIdentifier:@"joinedDev"];
-#else
-    [UXCam startWithKey:UXCamKey appVariantIdentifier:@"joinedProd"];
-#endif
+    #if DEBUG // Avoid tracking when debugging
+        //    [UXCam startWithKey:UXCamKey appVariantIdentifier:@"joinedDev"];
+    #else
+        [UXCam startWithKey:UXCamKey appVariantIdentifier:@"joinedProd"];
+    #endif
 }
 
 + (void)stopUXCam {
