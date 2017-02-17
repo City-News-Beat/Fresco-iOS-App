@@ -51,7 +51,7 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
 
-    [FRSTracker configureFabric]; // crashlytics first yall
+    [FRSTracker configureFabric];
     [FRSTracker launchAdjust];
     [FRSTracker configureSmooch];
     [FRSTracker startSegmentAnalytics];
