@@ -13,9 +13,26 @@
 
 + (instancetype)sharedInstance;
 
-- (NSString *)clientToken;
+/**
+ Returns user's bearer token
+
+ @return NSString User bearer token
+ */
 - (NSString *)authenticationToken;
 
+/**
+ Returns the bearer for the passed token type
+ 
+ @return NSString Token's bearer
+ */
+- (NSString *)bearerForToken:(NSString *)tokenType;
+
+/**
+ Returns the the refresh token for the passed token type
+ 
+ @return Refresh token as a string
+ */
+- (NSString *)refreshTokenForToken:(NSString *)tokenType;
 
 /**
  Generates client credentials and saves them to the app
@@ -33,19 +50,11 @@
 
 
 /**
- Saves client token to user defaults
+ Saves client token object to user defaults
 
- @param clientToken The token to save
+ @param clientToken The token object to save
  */
-- (void)saveClientToken:(NSString *)clientToken;
-
-
-/**
- Save refresh token to user defautls
-
- @param refreshClientToken the refresh token to save
- */
-- (void)saveRefreshClientToken:(NSString *)refreshClientToken;
+- (void)saveClientToken:(NSDictionary *)clientToken;
 
 
 /**
@@ -53,14 +62,8 @@
 
  @param token The user token to save
  */
-- (void)saveUserToken:(NSString *)token;
+- (void)saveUserToken:(NSDictionary *)token;
 
-/**
- Saves refresh token to disk
- 
- @param refreshUserToken refresh token to save
- */
-- (void)saveRefreshToken:(NSString *)refreshUserToken;
 
 /**
  Deletes all user related tokens & data from the app
@@ -68,7 +71,7 @@
 - (void)deleteUserData;
 
 /**
- Deletes all client realted tokens from the app
+ Deletes all client related tokens from the app
  */
 - (void)deleteClientTokens;
 

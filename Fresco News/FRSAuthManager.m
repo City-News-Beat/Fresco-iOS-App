@@ -76,16 +76,14 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 - (void)handleUserLogin:(id)tokenObject completion:(FRSAPIDefaultCompletionBlock)completion {
     
     //Either of these keys may be used for the token from the API, as social signin gives us an older type of response
-    NSString *token = [[tokenObject objectForKey:@"access_token"] objectForKey:@"token"] ? : [tokenObject objectForKey:@"token"];
-    NSString *refreshToken = [[tokenObject objectForKey:@"access_token"] objectForKey:@"refresh_token"] ? : [tokenObject objectForKey:@"refresh_token"];
+    NSDictionary *tokenToSave = [tokenObject objectForKey:@"access_token"] ?: tokenObject;
     
-    if (!token) {
+    if (!tokenToSave) {
         return completion(nil, [NSError errorWithMessage:@"Invalid token response" andCode:500]);
     }
     
     //Save tokens to disk
-    [[FRSSessionManager sharedInstance] saveUserToken:token];
-    [[FRSSessionManager sharedInstance] saveRefreshToken:refreshToken];
+    [[FRSSessionManager sharedInstance] saveUserToken:tokenToSave];
     
     //Grab the actual user after setting the token
     [[FRSUserManager sharedInstance] updateLocalUser:^(id userResponseObject, NSError *error) {

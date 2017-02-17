@@ -29,5 +29,8 @@
 
 + (NSError *)unAuthenticatedError;
 
++ (NSHTTPURLResponse *)responseFromAPIError:(NSError *)error;
+
++ (NSString *)errorStringFromAPIError:(NSError *)error;
 
 @end

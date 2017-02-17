@@ -57,6 +57,8 @@ static NSString *const facebookConnected = @"facebook-connected";
 static NSString *const facebookName = @"facebook-name";
 static NSString *const twitterConnected = @"twitter-connected";
 static NSString *const twitterHandle = @"twitter-handle";
+static NSString *const kClientToken = @"kClientToken";
+static NSString *const kUserToken = @"kUserToken";
 
 // nsnotification
 static NSString *const enableAssignmentAccept = @"enableAssignmentAccept";

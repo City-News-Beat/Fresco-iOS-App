@@ -20,6 +20,7 @@
 #import "FRSUserManager.h"
 #import "FRSSessionManager.h"
 #import "NSDate+ISO.h"
+#import "NSError+Fresco.h"
 
 @implementation FRSAPIClient
 
@@ -91,7 +92,7 @@
  @return Authorization header with client-level authorization
  */
 - (BOOL)shouldSendClient:(NSString *)endpoint withRequestType:(NSString *)requestType {
-    NSString *clientToken = [[FRSSessionManager sharedInstance] clientToken];
+    NSString *clientToken = [[FRSSessionManager sharedInstance] bearerForToken:kClientToken];
     
     //Check if not an auth endpoint or we're deleting && we're not authenticated && we actually have a client token to use
     return (
@@ -106,7 +107,7 @@
 }
 
 - (NSString *)clientAuthorization {
-    return [NSString stringWithFormat:@"Bearer %@", [[FRSSessionManager sharedInstance] clientToken]];
+    return [NSString stringWithFormat:@"Bearer %@", [[FRSSessionManager sharedInstance] bearerForToken:kClientToken]];
 }
 
 
@@ -124,17 +125,19 @@
 
 
 /**
- Tells us whether we should refresh the currently being used token. If not, this method will log the user out once a certain
- number of refreshes have been attempted to avoid an endless refresh cycle
+ Tells us whether we should refresh the currently being used token.
  
- @param response Response to determine form
+ @param error Error from the request made
  @param authHeader The authorization header used in the request sent
 
  @return Yes if we should refresh, No if should not
  */
-- (BOOL)shouldRefresh:(NSHTTPURLResponse *)response usingHeader:(NSString *)authHeader {
-    //Only refresh on 401s and requests made *not* using a basic header
-    return response && response.statusCode == 401 && ![authHeader containsString:@"Basic"];
+- (BOOL)shouldRefresh:(NSError *)error usingHeader:(NSString *)authHeader {
+    NSString *responseError = [NSError errorStringFromAPIError:error];
+    //Only refresh when the token has expired via the key in the response
+    BOOL responseConstitutesRefresh = ([responseError containsString:@"token-expired"]);
+
+    return responseConstitutesRefresh && ![authHeader containsString:@"Basic"];
 }
 
 #pragma mark - HTTP Methods
@@ -145,16 +148,12 @@
     
     [manager GET:endPoint
       parameters:parameters
-        progress:^(NSProgress *_Nonnull downloadProgress) {
-        }
+        progress:nil
          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
              completion(responseObject, Nil);
          }
          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-             if([self
-                 shouldRefresh:(NSHTTPURLResponse *)task.response
-                 usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"]]
-                ) {
+             if([self shouldRefresh:error usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"]]) {
                  [[FRSSessionManager sharedInstance] refreshToken:(requestAuthUsed == FRSUserAuth)
                                                        completion:^(id responseObject, NSError *error) {
                                                            if (!error) {
@@ -163,6 +162,7 @@
                                                                completion(nil, error);
                                                            }
                                                        }];
+                 
              } else {
                  completion(Nil, error);
              }
@@ -175,16 +175,12 @@
     
     [manager POST:endPoint
        parameters:parameters
-         progress:^(NSProgress *_Nonnull downloadProgress) {
-         }
+         progress:nil
           success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
               completion(responseObject, nil);
           }
           failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-              if([self
-                  shouldRefresh:(NSHTTPURLResponse *)task.response
-                  usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"]]
-                 ) {
+              if([self shouldRefresh:error usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"]]) {
                   [[FRSSessionManager sharedInstance] refreshToken:(requestAuthUsed == FRSUserAuth)
                                                         completion:^(id responseObject, NSError *error) {
                                                             if (!error) {

@@ -9,10 +9,8 @@
 #import "FRSSessionManager.h"
 #import "FRSAuthManager.h"
 #import "EndpointManager.h"
+#import "NSString+Fresco.h"
 
-static NSString *const kClientToken = @"kClientToken";
-static NSString *const kRefreshClientToken = @"kRefreshClientToken";
-static NSString *const kRefreshUserToken = @"kRefreshUserToken";
 static NSString *const tokenEndpoint = @"auth/token";
 
 @interface FRSSessionManager ()
@@ -39,7 +37,7 @@ static NSString *const tokenEndpoint = @"auth/token";
     if (self.generatingClientToken) return;
     
     //If we already have a client token
-    if(![[[FRSSessionManager sharedInstance] clientToken] isEqualToString:@""]) return;
+    if(![[[FRSSessionManager sharedInstance] bearerForToken:kClientToken] isEqualToString:@""]) return;
     
     self.generatingClientToken = YES;
     
@@ -53,12 +51,10 @@ static NSString *const tokenEndpoint = @"auth/token";
                                if (!error) {
                                    NSDictionary *accessTokenDict = responseObject[@"access_token"];
                                    if (accessTokenDict) {
-                                       [self saveClientToken:accessTokenDict[@"token"]];
-                                       [self saveRefreshClientToken:accessTokenDict[@"refresh_token"]];
+                                       [self saveClientToken:accessTokenDict];
                                    }
                                }
                            }];
-
 }
 
 - (void)refreshToken:(BOOL)isUserToken completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -71,9 +67,9 @@ static NSString *const tokenEndpoint = @"auth/token";
                                                          }];
     
     if(isUserToken) {
-        [params setValue:[self refreshUserToken] forKey:@"refresh_token"];
+        [params setValue:[self refreshTokenForToken:kUserToken] forKey:@"refresh_token"];
     } else {
-        [params setValue:[self refreshClientToken] forKey:@"refresh_token"];
+        [params setValue:[self refreshTokenForToken:kClientToken] forKey:@"refresh_token"];
     }
 
     [[FRSAPIClient sharedClient] post:tokenEndpoint
@@ -85,12 +81,12 @@ static NSString *const tokenEndpoint = @"auth/token";
                                    NSDictionary *accessTokenDict = responseObject[@"access_token"];
                                    if (accessTokenDict) {
                                        if (isUserToken) {
-                                           [self saveUserToken:accessTokenDict[@"token"]];
-                                           [self saveRefreshToken:accessTokenDict[@"refresh_token"]];
+                                           [self saveUserToken:accessTokenDict];
                                        } else {
-                                           [self saveClientToken:accessTokenDict[@"token"]];
-                                           [self saveRefreshClientToken:accessTokenDict[@"refresh_token"]];                              }
+                                           [self saveClientToken:accessTokenDict];
+                                       }
                                    }
+                                   
                                    completion(responseObject, nil);
                                } else {
                                    if(isUserToken) {
@@ -109,27 +105,27 @@ static NSString *const tokenEndpoint = @"auth/token";
                            }];
 }
 
+#pragma mark - Token Accessors
+
+- (NSString *)bearerForToken:(NSString *)tokenType {
+    NSDictionary *token = [[NSUserDefaults standardUserDefaults] dictionaryForKey:tokenType];
+    if(token == nil || token[@"token"] == nil) return @"";
+    return token[@"token"];
+}
+
+- (NSString *)refreshTokenForToken:(NSString *)tokenType {
+    NSDictionary *token = (NSDictionary *)[[NSUserDefaults standardUserDefaults] dictionaryForKey:tokenType];
+    if(token == nil || token[@"refresh_token"] == nil) return @"";
+    return token[@"refresh_token"];
+}
+
 #pragma mark - Client Token
 
-- (NSString *)clientToken {
-    NSString *clientToken = [[NSUserDefaults standardUserDefaults] stringForKey:kClientToken];
-    if(clientToken == nil) return @"";
-    return clientToken;
-}
-
-- (NSString *)refreshClientToken {
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kRefreshClientToken];
-    if(token == nil) return @"";
-    return token;
-}
-
-- (void)saveClientToken:(NSString *)clientToken {
-    [[NSUserDefaults standardUserDefaults] setObject:clientToken forKey:kClientToken];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)saveRefreshClientToken:(NSString *)refreshClientToken {
-    [[NSUserDefaults standardUserDefaults] setObject:refreshClientToken forKey:kRefreshClientToken];
+- (void)saveClientToken:(NSDictionary *)clientToken {
+    [[NSUserDefaults standardUserDefaults] setObject:@{
+                                                       @"token": clientToken[@"token"],
+                                                       @"refresh_token": clientToken[@"refresh_token"]
+                                                       } forKey:kClientToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -140,7 +136,6 @@ static NSString *const tokenEndpoint = @"auth/token";
                              completion:^(id responseObject, NSError *error) {
                                  //Remove client refresh and regular token
                                  [[NSUserDefaults standardUserDefaults] removeObjectForKey:kClientToken];
-                                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:kRefreshClientToken];
                                  [[NSUserDefaults standardUserDefaults] synchronize];
                              }];
 }
@@ -160,23 +155,15 @@ static NSString *const tokenEndpoint = @"auth/token";
     return [SAMKeychain passwordForService:serviceName account:accountName];
 }
 
-- (void)saveUserToken:(NSString *)token {
-    [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
-}
-
-/**
- Returns the user's refresh token
-
- @return Refresh token as a string
- */
-- (NSString *)refreshUserToken {
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kRefreshUserToken];
-    if(token == nil) return @"";
-    return token;
-}
-
-- (void)saveRefreshToken:(NSString *)refreshUserToken{
-    [[NSUserDefaults standardUserDefaults] setObject:refreshUserToken forKey:kRefreshUserToken];
+- (void)saveUserToken:(NSDictionary *)userToken {
+    NSString *bearer = [userToken objectForKey:@"token"];
+    
+    //Save the bearer string to our keychain
+    [SAMKeychain setPasswordData:[bearer dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@{
+                                                       @"refresh_token": userToken[@"refresh_token"],
+                                                       } forKey:kUserToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -193,7 +180,7 @@ static NSString *const tokenEndpoint = @"auth/token";
         //Clear UserDefaults except client tokens
         NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
         for (NSString *key in [defaultsDictionary allKeys]) {
-            if (![key isEqualToString:kClientToken] && ![key isEqualToString:kRefreshClientToken]) {
+            if (![key isEqualToString:kClientToken]) {
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
             }
         }

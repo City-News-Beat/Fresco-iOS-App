@@ -27,4 +27,16 @@
     return [self errorWithMessage:@"Sorry, but there is no one logged in!" andCode:401];
 }
 
++ (NSHTTPURLResponse *)responseFromAPIError:(NSError *)error {
+    if([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] isKindOfClass:[NSHTTPURLResponse class]]) {
+        return error.userInfo[@"com.alamofire.serialization.response.error.response"];
+    }
+    
+    return nil;
+}
+
++ (NSString *)errorStringFromAPIError:(NSError *)error{
+    return [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+}
+
 @end
