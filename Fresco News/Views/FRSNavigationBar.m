@@ -58,7 +58,7 @@
     [self addSubview:_progressView];
     [self sendSubviewToBack:_progressView];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSUploadUpdate"
+    [[NSNotificationCenter defaultCenter] addObserverForName:FRSUploadNotification
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *notification) {
@@ -117,10 +117,31 @@
 
                                                   }];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload"
+                                                [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload"
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *notification) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          [UIView animateWithDuration:.2
+                                                                           animations:^{
+                                                                               [_failureView removeFromSuperview];
+                                                                           }];
+                                                          
+                                                          CGRect navFrame = self.frame;
+                                                          navFrame.origin.y -= 20;
+                                                          navFrame.size.height += 20;
+                                                          navFrame.size.width = 0;
+                                                          
+                                                          _progressView.frame = navFrame;
+                                                      });
+
+                                                  }];
+
+                                                [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload"
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *notification) {
+
                                                     dispatch_async(dispatch_get_main_queue(), ^{
                                                       [UIView animateWithDuration:.2
                                                                        animations:^{
@@ -134,40 +155,10 @@
 
                                                       _progressView.frame = navFrame;
                                                     });
-
                                                   }];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload"
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *notification) {
-
-                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                      [UIView animateWithDuration:.2
-                                                                       animations:^{
-                                                                         [_failureView removeFromSuperview];
-                                                                       }];
-
-                                                      CGRect navFrame = self.frame;
-                                                      navFrame.origin.y -= 20;
-                                                      navFrame.size.height += 20;
-                                                      navFrame.size.width = 0;
-
-                                                      _progressView.frame = navFrame;
-                                                    });
-                                                  }];
-
-    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assignmentAccepted:)      name:enableAssignmentAccept  object:nil];
-    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disableAssignmentAccept:) name:disableAssignmentAccept object:nil];
 }
 
-//-(void)assignmentAccepted:(NSNotification *)assignment {
-//    self.tintColor = [UIColor frescoGreenColor];
-//}
-//
-//-(void)disableAssignmentAccept:(NSNotification *)assignment {
-//    self.tintColor = [UIColor frescoOrangeColor];
-//}
 
 - (void)showFailureView {
 

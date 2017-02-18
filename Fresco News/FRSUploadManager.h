@@ -20,16 +20,10 @@
     float lastProgress;
     int toComplete;
     int completed;
-    BOOL isFromFresh;
     float uploadSpeed;
     int numberOfVideos;
     SDAVAssetExportSession *exporter;
 }
-
-+ (id)sharedInstance;
-- (void)checkCachedUploads;
-- (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 
 @property (nonatomic, strong) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;
@@ -38,5 +32,39 @@
 @property (nonatomic, strong) NSMutableDictionary *managedObjects;
 @property (nonatomic, strong) NSString *currentGalleryID;
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
+
++ (id)sharedInstance;
+
+
+
+/**
+ Starts uploading posts
+
+ @param posts Array of posts from API to upload
+ @param assets Upload of matching PHAssets to upload
+ */
+- (void)uploadPosts:(NSArray *)posts withAssets:(NSArray *)assets;
+
+    
+/**
+ Checks for existence of cached and uploads and reseums uploads
+ */
+- (void)checkCachedUploads;
+
+
+/**
+ Clears cached uploads from the system
+ */
+- (void)clearCachedUploads;
+
+
+/**
+ Adds asset to upload queue
+ */
+- (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
+
+
+- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
+
 
 @end

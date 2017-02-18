@@ -394,7 +394,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     _sendButton.frame = CGRectMake(self.view.frame.size.width - 64, 0, 64, 44);
     [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     _sendButton.userInteractionEnabled = NO;
-    [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    [_sendButton addTarget:self action:@selector(sendClicked) forControlEvents:UIControlEventTouchUpInside];
     _sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:_sendButton];
 }
@@ -1130,8 +1130,12 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [self.carouselCell removeFromSuperview];
     [self.galleryCollectionView reloadData];
 }
-//Next button action
-- (void)send {
+
+
+/**
+ Send button action
+ */
+- (void)sendClicked {
 
     /* if authenticated */
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
@@ -1150,76 +1154,34 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     [self dismissKeyboard];
 
-    NSInteger videosCounted = 0;
-    NSInteger photosCounted = 0;
-
-    for (PHAsset *asset in self.content) {
-        if (asset.mediaType == PHAssetMediaTypeVideo) {
-            videosCounted++;
-        } else {
-            photosCounted++;
-        }
+    //Assemble params for gallery
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    if (self.selectedAssignment) {
+        params[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
+    } else if (selectedRow < self.assignmentsArray.count) {
+        params[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
     }
     
-    NSString *assignmentID = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
+    params[@"caption"] = self.captionTextView.text;
     
-    [FRSTracker track:submissionsEvent
-           parameters:@{ @"videos_submitted" : @(videosCounted),
-                         @"photos_submitted" : @(photosCounted),
-                         ASSIGNMENT_ID       : assignmentID.length > 0 ? assignmentID : @""}];
-    
-    [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
-}
-
-- (void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
-    if (posts.count > 0) {
-        PHAsset *firstAsset = posts[0];
-        [[FRSUploadManager sharedInstance] digestForAsset:firstAsset
-                                                 callback:^(id responseObject, NSError *error) {
-                                                   NSNumber *fileSize = responseObject[@"fileSize"];
-                                                   contentSize += [fileSize longLongValue];
-
-                                                   [posts removeObject:firstAsset];
-                                                   [current addObject:responseObject];
-
-                                                   if (error) {
-                                                       [self creationError:error];
-                                                       [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                                       self.sendButton.userInteractionEnabled = YES;
-                                                       return;
-                                                   }
-
-                                                   [self getPostData:posts current:current];
-                                                 }];
-    } else {
-        // upload
-        NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
-
-        if (self.selectedAssignment) {
-            gallery[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
-        } else if (selectedRow < self.assignmentsArray.count) {
-            gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
-        }
-
-        gallery[@"posts_new"] = current;
-        gallery[@"caption"] = self.captionTextView.text;
-
-        if (_showingOutlets && selectedOutlet) {
-            gallery[@"outlet_id"] = selectedOutlet;
-        }
-
-        [[FRSGalleryManager sharedInstance] createGallery:gallery
-                                               completion:^(id responseObject, NSError *error) {
-                                                 if (!error) {
-                                                     [self moveToUpload:responseObject];
-                                                 } else {
-                                                     [self creationError:error];
-                                                     [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                                     self.sendButton.userInteractionEnabled = YES;
-                                                     return;
-                                                 }
-                                               }];
+    if (_showingOutlets && selectedOutlet) {
+        params[@"outlet_id"] = selectedOutlet;
     }
+
+    [[FRSGalleryManager sharedInstance] createGalleryWithParams:params
+                                                      andAssets:self.content
+                                                     completion:^(id responseObject, NSError *error) {
+                                                         //Make sure we're good and we have posts
+                                                         if (!error && responseObject[@"posts_new"] != nil) {
+                                                             [self moveToUpload:responseObject];
+                                                         } else {
+                                                             [self creationError:error];
+                                                             [self stopSpinner:self.loadingView onButton:self.sendButton];
+                                                             self.sendButton.userInteractionEnabled = YES;
+                                                         }
+                                                     }];
+    
 }
 
 - (void)creationError:(NSError *)error {
@@ -1228,7 +1190,13 @@ static NSString *const cellIdentifier = @"assignment-cell";
         return;
     }
 
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY ERROR" message:@"We encountered an issue creating your gallery. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+    FRSAlertView *alert = [[FRSAlertView alloc]
+                           initWithTitle:@"GALLERY ERROR"
+                           message:@"We encountered an issue creating your gallery. Please try again later."
+                           actionTitle:@"OK"
+                           cancelTitle:@""
+                           cancelTitleColor:nil
+                           delegate:nil];
     [alert show];
 }
 
@@ -1237,9 +1205,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [alert show];
 }
 
-- (void)moveToUpload:(NSDictionary *)postData {
+- (void)moveToUpload:(NSDictionary *)galleryResponse {
     /* upload started */
-    NSString *galleryID = postData[@"id"];
+    NSString *galleryID = galleryResponse[@"id"];
 
     if (galleryID && ![galleryID isEqual:[NSNull null]]) {
 
@@ -1253,18 +1221,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
             [self facebook:shareString];
         }
     }
-    // instantiate upload process
-    // start upload process
-    NSArray *posts = postData[@"posts_new"];
-
-    int i = 0;
-    for (PHAsset *asset in self.content) {
-        NSDictionary *post = posts[i];
-        NSString *key = post[@"key"];
-        [[FRSUploadManager sharedInstance] addAsset:asset withToken:key withPostID:post[@"post_id"]];
-        i++;
-    }
-
+    
+    [[FRSUploadManager sharedInstance] uploadPosts:galleryResponse[@"posts_news"] withAssets:self.content];
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

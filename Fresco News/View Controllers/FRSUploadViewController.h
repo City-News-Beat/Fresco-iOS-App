@@ -12,7 +12,6 @@
 @interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
     NSInteger selectedRow;
     NSInteger numberOfOutlets;
-    unsigned long long contentSize;
     NSString *selectedOutlet;
 }
 @property (retain, nonatomic) UIButton *twitterButton;

@@ -7,7 +7,9 @@
 //
 
 #import "FRSGalleryManager.h"
+#import "FRSUploadManager.h"
 #import "FRSAuthManager.h"
+#import <Photos/Photos.h>
 
 static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
@@ -46,6 +48,53 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
                              completion(responseObject, error);
                            }];
 }
+
+- (void)createGalleryWithParams:(NSDictionary*)params andAssets:(NSArray *)assets completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSInteger videosCounted = 0;
+    NSInteger photosCounted = 0;
+    NSMutableArray *posts = [NSMutableArray new];
+    
+    //Block to create the gallery once done
+    void (^createGallery)(void) = ^ {
+        NSMutableDictionary *updateParams = [params mutableCopy];
+        [updateParams setObject:posts forKey:@"posts_new"];
+        
+        [self createGallery:updateParams completion:^(id responseObject, NSError *error) {
+            if(!error) {
+                [FRSTracker track:submissionsEvent
+                       parameters:@{ @"videos_submitted" : @(videosCounted),
+                                     @"photos_submitted" : @(photosCounted),
+                                     ASSIGNMENT_ID       : params[@"assignment_id"] != nil ? params[@"assignment_id"] : @"" }];
+                
+                completion(responseObject, error);
+            } else {
+                completion(responseObject, error);
+            }
+        }];
+    };
+    
+    //Loop through assets and generate digests with addresses
+    for (PHAsset *asset in assets) {
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+            videosCounted++;
+        } else {
+            photosCounted++;
+        }
+        
+        [[FRSUploadManager sharedInstance] digestForAsset:asset
+                                                 callback:^(id responseObject, NSError *error) {
+                                                     if (error) {
+                                                         completion(error, nil);
+                                                     } else {
+                                                         [posts addObject:responseObject];
+                                                         if([posts count] == [assets count]) {
+                                                             createGallery();
+                                                         }
+                                                     }
+                                                 }];
+    }
+}
+
 
 #pragma mark - Loading Galleries
 

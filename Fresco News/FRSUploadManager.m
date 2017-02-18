@@ -15,6 +15,7 @@
 #import "FRSTracker.h"
 #import "SDAVAssetExportSession.h"
 #import "EndpointManager.h"
+#import "FRSLocator.h"
 #import "NSDate+ISO.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
@@ -50,29 +51,35 @@ static NSDate *lastDate;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
-    [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
-    __block float transcodingProgress = 0;
-    [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
-      transcodingProgress += value.floatValue;
-    }];
-
-    float totalTranscodingProgress = 0.5f * transcodingProgress / numberOfVideos;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
-                                                        object:nil
-                                                      userInfo:@{ @"type" : @"progress",
-                                                                  @"percentage" : @(totalTranscodingProgress) }];
-}
-
-- (void)notifyExit:(NSNotification *)notification {
-    if (completed == toComplete || toComplete == 0) {
-        return;
+- (void)commonInit {
+    if (self.uploadMeta) {
+        [self.uploadMeta removeAllObjects];
     }
-
-    [FRSTracker track:uploadClose
-           parameters:@{ @"percent_complete" : @(lastProgress),
-                         @"gallery_id" : _currentGalleryID }];
+    self.currentUploads = [[NSMutableArray alloc] init];
+    self.completedUploads = 0;
+    self.uploadMeta = [[NSMutableArray alloc] init];
+    self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
+    [self startAWS];
+    currentIndex = 0;
+    numberOfVideos = 0;
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.context = delegate.coreDataController.managedObjectContext;
+    
+    [self subscribeToEvents];
 }
+
+- (void)uploadPosts:(NSArray *)posts withAssets:(NSArray *)assets {
+    NSInteger i = 0;
+    for (PHAsset *asset in assets) {
+        NSDictionary *post = posts[i];
+        NSString *key = post[@"key"];
+        [[FRSUploadManager sharedInstance] addAsset:asset withToken:key withPostID:post[@"post_id"]];
+        i++;
+    }
+}
+
+#pragma mark - Files
 
 - (void)checkCachedUploads {
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
@@ -108,8 +115,40 @@ static NSDate *lastDate;
 
         self.managedObjects = uploadsDictionary;
         [self retryUpload];
+    } else {
+        //Otherwise clear cached uploads
+        [self clearCachedUploads];
     }
 }
+
+
+- (void)clearCachedUploads {
+    BOOL isDir;
+    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:directory isDirectory:&isDir]) {
+        if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil]) {
+            NSLog(@"Error: Create folder failed %@", directory);
+            return;
+        }
+    }
+    
+    //Purge old un-needed files
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
+        NSError *error = nil;
+        for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
+            NSString *filePath =[NSString stringWithFormat:@"%@/%@", directory, file];
+            BOOL success = [fileManager removeItemAtPath:filePath error:&error];
+            
+            if (!success || error) {
+                NSLog(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
+            }
+        }
+    });
+}
+
+#pragma mark - Events
 
 - (void)appWillResignActive {
     if (completed == toComplete) {
@@ -153,6 +192,31 @@ static NSDate *lastDate;
              }];
 }
 
+
+- (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
+    [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
+    __block float transcodingProgress = 0;
+    [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
+        transcodingProgress += value.floatValue;
+    }];
+    
+    float totalTranscodingProgress = 0.5f * transcodingProgress / numberOfVideos;
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification
+                                                        object:nil
+                                                      userInfo:@{ @"type" : @"progress",
+                                                                  @"percentage" : @(totalTranscodingProgress) }];
+}
+
+- (void)notifyExit:(NSNotification *)notification {
+    if (completed == toComplete || toComplete == 0) {
+        return;
+    }
+    
+    [FRSTracker track:uploadClose
+           parameters:@{ @"percent_complete" : @(lastProgress),
+                         @"gallery_id" : _currentGalleryID }];
+}
+
 - (void)retryUpload {
     currentIndex = 0;
     totalFileSize = 0;
@@ -183,24 +247,6 @@ static NSDate *lastDate;
     }
 }
 
-- (void)commonInit {
-    if (self.uploadMeta) {
-        [self.uploadMeta removeAllObjects];
-    }
-    self.currentUploads = [[NSMutableArray alloc] init];
-    self.completedUploads = 0;
-    self.uploadMeta = [[NSMutableArray alloc] init];
-    self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
-    [self startAWS];
-    currentIndex = 0;
-    numberOfVideos = 0;
-
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = delegate.coreDataController.managedObjectContext;
-
-    [self subscribeToEvents];
-}
-
 - (void)subscribeToEvents {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
 
@@ -226,6 +272,24 @@ static NSDate *lastDate;
 
                                                   }];
 }
+
+- (void)updateProgress:(int64_t)bytes {
+    uploadedFileSize += bytes;
+    
+    float progress;
+    if (numberOfVideos > 0) {
+        progress = 0.5f + (0.5f * (uploadedFileSize * 1.0) / (totalFileSize * 1.0));
+    } else {
+        progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification
+                                                        object:nil
+                                                      userInfo:@{ @"type" : @"progress",
+                                                                  @"percentage" : @(progress) }];
+}
+
+#pragma mark - Assets
 
 - (void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
     FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
@@ -326,6 +390,71 @@ static NSDate *lastDate;
     }
 }
 
+
+- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
+    NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
+    
+    [self fetchAddressFromLocation:asset.location
+                        completion:^(id responseObject, NSError *error) {
+                            
+                            digest[@"address"] = responseObject;
+                            digest[@"lat"] = @(asset.location.coordinate.latitude);
+                            digest[@"lng"] = @(asset.location.coordinate.longitude);
+                            digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
+                            
+                            if (asset.mediaType == PHAssetMediaTypeImage) {
+                                digest[@"contentType"] = @"image/jpeg";
+                                [self fetchFileSizeForImage:asset
+                                                   callback:^(NSInteger size, NSError *err) {
+                                                       digest[@"fileSize"] = @(size);
+                                                       digest[@"chunkSize"] = @(size);
+                                                       callback(digest, err);
+                                                   }];
+                            } else {
+                                [self fetchFileSizeForVideo:asset
+                                                   callback:^(NSInteger size, NSError *err) {
+                                                       digest[@"fileSize"] = @(size);
+                                                       digest[@"chunkSize"] = @(chunkSize * megabyteDefinition);
+                                                       digest[@"contentType"] = @"video/mp4";
+                                                       callback(digest, err);
+                                                   }];
+                            }
+                        }];
+    
+    return digest;
+}
+
+- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback {
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionOriginal;
+    
+    [[PHImageManager defaultManager] requestAVAssetForVideo:video
+                                                    options:options
+                                              resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+                                                  if ([asset isKindOfClass:[AVURLAsset class]]) {
+                                                      AVURLAsset *urlAsset = (AVURLAsset *)asset;
+                                                      
+                                                      NSNumber *size;
+                                                      NSError *fetchError;
+                                                      
+                                                      [urlAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:&fetchError];
+                                                      callback([size integerValue], fetchError);
+                                                  }
+                                              }];
+}
+
+- (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSAPISizeCompletionBlock)callback {
+    [[PHImageManager defaultManager] requestImageDataForAsset:image
+                                                      options:nil
+                                                resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                                                    float imageSize = imageData.length;
+                                                    callback([@(imageSize) integerValue], Nil);
+                                                }];
+}
+
+
+#pragma mark - Upload Events
+
 - (void)startUploads {
     for (NSArray *request in self.uploadMeta) {
         [self addUploadForPost:request[1]
@@ -340,7 +469,7 @@ static NSDate *lastDate;
 - (void)restart {
     if (completed == toComplete) {
         // complete
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"completion" }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:nil userInfo:@{ @"type" : @"completion" }];
         currentIndex = 0;
         totalFileSize = 0;
         totalImageFilesSize = 0;
@@ -357,45 +486,36 @@ static NSDate *lastDate;
     }
 }
 
-- (void)trackDebugWithMessage:(NSString *)message {
-    NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : message } mutableCopy];
-    if (uploadSpeed > 0) {
-        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
-    }
-    
-    [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
-}
-
 - (void)startAWS {
     AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3AccessKey secretKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3SecretKey];
-
+    
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWS_REGION credentialsProvider:credentialsProvider];
-
+    
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
 }
 
 - (void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
     __block double lastUploadSpeed;
-
+    
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
-
+    
     if ([body containsString:@".jpeg"]) {
         upload.contentType = @"image/jpeg";
     } else {
         upload.contentType = @"video/mp4";
     }
-
+    
     upload.body = [NSURL fileURLWithPath:body];
     upload.key = postID;
     upload.metadata = @{ @"post_id" : post };
     upload.bucket = [EndpointManager sharedInstance].currentEndpoint.amazonS3Bucket;
-
+    
     /*
      MixPanel speed tracking
      */
     lastDate = [NSDate date];
-
+    
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         //Send progress to be notified
         [self updateProgress:bytesSent];
@@ -410,66 +530,63 @@ static NSDate *lastDate;
         } else {
             uploadSpeed = currentUploadSpeed;
         }
-
+        
         lastDate = [NSDate date];
     };
     __weak typeof(self) weakSelf = self;
-
+    
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
-
-      if (task.error) {
-          NSLog(@"Upload Error: %@", task.error);
-          [weakSelf uploadDidErrorWithError:task.error];
-      }
-
-      if (task.result) {
-          FRSUpload *upload = [self.managedObjects objectForKey:post];
-
-          if (upload) {
-              [self.context performBlock:^{
-                upload.completed = @(YES);
-                [self.context save:nil];
-                completion(nil, nil);
-
-                NSArray *metaToRemove = nil;
-                for (NSArray *meta in self.uploadMeta) {
-                    if ([meta[2] isEqualToString:postID]) {
-                        metaToRemove = meta;
+        
+        if (task.error) {
+            NSLog(@"Upload Error: %@", task.error);
+            [weakSelf uploadDidErrorWithError:task.error];
+        }
+        
+        if (task.result) {
+            FRSUpload *upload = [self.managedObjects objectForKey:post];
+            
+            if (upload) {
+                [self.context performBlock:^{
+                    upload.completed = @(YES);
+                    [self.context save:nil];
+                    completion(nil, nil);
+                    
+                    NSArray *metaToRemove = nil;
+                    for (NSArray *meta in self.uploadMeta) {
+                        if ([meta[2] isEqualToString:postID]) {
+                            metaToRemove = meta;
+                        }
                     }
-                }
-                if (metaToRemove) {
-                    [[NSFileManager defaultManager] removeItemAtPath:metaToRemove[0] error:nil];
-                    [self.uploadMeta removeObject:metaToRemove];
-                }
-              }];
-          }
-          
-          completed++;
-          currentIndex++;
-          [self trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", post]];
-          [self taskDidComplete:task];
-          [self restart];
-      }
-
-      return nil;
+                    if (metaToRemove) {
+                        [[NSFileManager defaultManager] removeItemAtPath:metaToRemove[0] error:nil];
+                        [self.uploadMeta removeObject:metaToRemove];
+                    }
+                }];
+            }
+            
+            completed++;
+            currentIndex++;
+            [self trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", post]];
+            [self restart];
+        }
+        
+        return nil;
     }];
 }
 
-- (void)updateProgress:(int64_t)bytes {
-    uploadedFileSize += bytes;
 
-    float progress;
-    if (numberOfVideos > 0) {
-        progress = 0.5f + (0.5f * (uploadedFileSize * 1.0) / (totalFileSize * 1.0));
-    } else {
-        progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
+#pragma mark - Tracking
+
+- (void)trackDebugWithMessage:(NSString *)message {
+    NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : message } mutableCopy];
+    
+    if (uploadSpeed > 0) {
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
-                                                        object:nil
-                                                      userInfo:@{ @"type" : @"progress",
-                                                                  @"percentage" : @(progress) }];
+    
+    [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
 }
+
 
 - (void)uploadDidErrorWithError:(NSError *)error {
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
@@ -480,106 +597,43 @@ static NSDate *lastDate;
     
     NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize];
     NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize];
-
+    
     NSDictionary *filesDictionary = @{ @"video" : videoFilesSize,
                                        @"photo" : imageFilesSize };
     [uploadErrorSummary setObject:filesDictionary forKey:@"files"];
-
+    
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{ @"type" : @"failure" }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:Nil userInfo:@{ @"type" : @"failure" }];
 }
 
-- (void)taskDidComplete:(AWSTask *)task {
-}
+#pragma mark - GeoCoding
 
 - (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     __block NSString *address;
-
+    
     [geocoder reverseGeocodeLocation:location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
-                     if (placemarks && placemarks.count > 0) {
-                         CLPlacemark *placemark = [placemarks objectAtIndex:0];
-
-                         NSString *thoroughFare = @"";
-                         if ([placemark thoroughfare] && [[placemark thoroughfare] length] > 0) {
-                             thoroughFare = [[placemark thoroughfare] stringByAppendingString:@", "];
-
-                             if ([placemark subThoroughfare]) {
-                                 thoroughFare = [[[placemark subThoroughfare] stringByAppendingString:@" "] stringByAppendingString:thoroughFare];
-                             }
-                         }
-
-                         address = [NSString stringWithFormat:@"%@%@, %@", thoroughFare, [placemark locality], [placemark administrativeArea]];
-                         completion(address, Nil);
-                     } else {
-                         completion(@"No address found.", Nil);
-                         [FRSTracker track:addressError parameters:@{ @"coordinates" : @[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] }];
-                     }
-
+                       if (placemarks && placemarks.count > 0) {
+                           CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                           
+                           NSString *thoroughFare = @"";
+                           if ([placemark thoroughfare] && [[placemark thoroughfare] length] > 0) {
+                               thoroughFare = [[placemark thoroughfare] stringByAppendingString:@", "];
+                               
+                               if ([placemark subThoroughfare]) {
+                                   thoroughFare = [[[placemark subThoroughfare] stringByAppendingString:@" "] stringByAppendingString:thoroughFare];
+                               }
+                           }
+                           
+                           address = [NSString stringWithFormat:@"%@%@, %@", thoroughFare, [placemark locality], [placemark administrativeArea]];
+                           completion(address, Nil);
+                       } else {
+                           completion(@"No address found.", Nil);
+                           [FRSTracker track:addressError parameters:@{ @"coordinates" : @[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] }];
+                       }
+                       
                    }];
-}
-
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
-    NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
-
-    [self fetchAddressFromLocation:asset.location
-                        completion:^(id responseObject, NSError *error) {
-
-                          digest[@"address"] = responseObject;
-                          digest[@"lat"] = @(asset.location.coordinate.latitude);
-                          digest[@"lng"] = @(asset.location.coordinate.longitude);
-
-                          digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
-
-                          if (asset.mediaType == PHAssetMediaTypeImage) {
-                              digest[@"contentType"] = @"image/jpeg";
-                              [self fetchFileSizeForImage:asset
-                                                 callback:^(NSInteger size, NSError *err) {
-                                                   digest[@"fileSize"] = @(size);
-                                                   digest[@"chunkSize"] = @(size);
-                                                   callback(digest, err);
-                                                 }];
-                          } else {
-                              [self fetchFileSizeForVideo:asset
-                                                 callback:^(NSInteger size, NSError *err) {
-                                                   digest[@"fileSize"] = @(size);
-                                                   digest[@"chunkSize"] = @(chunkSize * megabyteDefinition);
-                                                   digest[@"contentType"] = @"video/mp4";
-                                                   callback(digest, err);
-                                                 }];
-                          }
-                        }];
-
-    return digest;
-}
-
-- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback {
-    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-    options.version = PHVideoRequestOptionsVersionOriginal;
-
-    [[PHImageManager defaultManager] requestAVAssetForVideo:video
-                                                    options:options
-                                              resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                if ([asset isKindOfClass:[AVURLAsset class]]) {
-                                                    AVURLAsset *urlAsset = (AVURLAsset *)asset;
-
-                                                    NSNumber *size;
-                                                    NSError *fetchError;
-
-                                                    [urlAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:&fetchError];
-                                                    callback([size integerValue], fetchError);
-                                                }
-                                              }];
-}
-
-- (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSAPISizeCompletionBlock)callback {
-    [[PHImageManager defaultManager] requestImageDataForAsset:image
-                                                      options:nil
-                                                resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                                                  float imageSize = imageData.length;
-                                                  callback([@(imageSize) integerValue], Nil);
-                                                }];
 }
 
 @end

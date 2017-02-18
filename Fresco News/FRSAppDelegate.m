@@ -62,8 +62,9 @@
     }
     
     [self configureStartDate];
-    [self clearUploadCache];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
+    
+    [[FRSUploadManager sharedInstance] checkCachedUploads];
     
     EndpointManager *manager = [EndpointManager sharedInstance];
     [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
@@ -119,7 +120,6 @@
 
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[FRSUploadManager sharedInstance] checkCachedUploads];
 
     return YES;
 }
@@ -130,27 +130,6 @@
     }
 }
 
-- (void)clearUploadCache {
-    BOOL isDir;
-    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:directory isDirectory:&isDir])
-        if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL])
-            NSLog(@"Error: Create folder failed %@", directory);
-
-    // purge old un-needed files
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
-      NSError *error = nil;
-      for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
-          BOOL success = [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@%@", directory, file] error:&error];
-
-          if (!success || error) {
-              NSLog(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
-          }
-      }
-    });
-}
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
       restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
