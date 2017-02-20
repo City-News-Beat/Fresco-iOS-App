@@ -8,13 +8,20 @@
 
 #import "FRSImageViewCell.h"
 
+@interface FRSImageViewCell()
+
+@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic, weak) IBOutlet UIView *coverView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UIImageView *checkBox;
+@property (nonatomic, weak) PHAsset *currentAsset;
+
+@end
+
 @implementation FRSImageViewCell
-@synthesize currentAsset = _currentAsset, fileLoader = _fileLoader, currentAVAsset = _currentAVAsset;
 
 - (void)loadAsset:(PHAsset *)asset {
-    _currentAsset = asset;
-    //imageView.image = Nil;
-
+    self.currentAsset = asset;
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
                        targetSize:CGSizeMake(100.0, 100.0)
@@ -30,19 +37,18 @@
 
 - (void)updateUIForAsset { // always called on main thread
     dispatch_async(dispatch_get_main_queue(), ^{
-
       if (_currentAsset.mediaType == PHAssetMediaTypeVideo) { // we need timing shown & updated
-          self.timeLabel.hidden = FALSE;
+          self.timeLabel.hidden = NO;
           self.timeLabel.text = [self readableTimeForSeconds:_currentAsset.duration milliseconds:FALSE];
       } else { // we need timing hidden
-          self.timeLabel.hidden = TRUE;
+          self.timeLabel.hidden = YES;
       }
     });
 }
 
 // made this @ overture hence the ms
-- (NSString *)readableTimeForSeconds:(float)seconds milliseconds:(BOOL)showMilliseconds { // utility to convert 95 to 1:35 || 07 to :07; now has option to get down to thousands of a second
-
+- (NSString *)readableTimeForSeconds:(float)seconds milliseconds:(BOOL)showMilliseconds {
+    // utility to convert 95 to 1:35 || 07 to :07; now has option to get down to thousands of a second
     int minutes = (int)seconds / 60;
     int remainder = fmodf(seconds, 60);
 
