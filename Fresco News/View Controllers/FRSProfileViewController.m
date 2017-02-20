@@ -311,7 +311,7 @@
       if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
           [tabBarController updateUserIcon];
       } else {
-          [tabBarController updateBellIcon:NO];
+          [tabBarController updateBellIcon];
       }
     }];
 }
