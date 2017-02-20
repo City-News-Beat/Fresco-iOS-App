@@ -6,18 +6,17 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 #import "FRSCarouselCell.h"
+
 @implementation FRSCarouselCell
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.didUnmute = NO;
 }
+
 #pragma mark - Asset Initialization
+
 - (void)loadImage:(PHAsset *)asset {
-
-    //    if (self.asset != nil) {
-    //        return;
-    //    }
-
     [self removePlayers];
 
     if (!imageView) {
@@ -37,18 +36,12 @@
                          imageView.contentMode = UIViewContentModeScaleAspectFill;
 
                          [self constrainSubview:imageView ToBottomOfParentView:self];
-                         //self.asset = asset;
                        });
                      }];
         });
     }
 }
 - (void)loadVideo:(PHAsset *)asset {
-
-    //    if (self.asset != nil) {
-    //        return;
-    //    }
-
     [self removePlayers];
     [self playPlayer];
 
@@ -73,49 +66,37 @@
                          [self.layer addSublayer:playerLayer];
                          [videoView play];
 
-                         //self.asset = asset;
-
                          UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                          [self addGestureRecognizer:tap];
 
-                         //[self configureMuteIcon];
                          [self bringSubviewToFront:self.muteImageView];
                        });
                      }];
     }
 }
 #pragma mark - Player
+
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     AVPlayerItem *playerItem = [notification object];
     [playerItem seekToTime:kCMTimeZero];
 }
+
 - (void)tapPlayer {
-
     if (videoView.rate != 0) {
-        //if (!self.didUnmute) {
-        //    if (videoView.volume == 0) {
-        //        videoView.volume = 1;
-        //        self.muteImageView.alpha = 0;
-        //        self.didUnmute = YES;
-        //        return;
-        //    }
-        //}
-
         [self pausePlayer];
     } else {
         [self playPlayer];
     }
 }
+
 - (void)pausePlayer {
     [videoView pause];
 }
+
 - (void)playPlayer {
     [videoView play];
-    if (!self.didUnmute) {
-        //videoView.volume = 0.0;
-        //self.muteImageView.alpha = 1;
-    }
 }
+
 - (void)removePlayers {
     imageView = nil;
     [playerLayer removeFromSuperlayer];
@@ -124,7 +105,9 @@
     playerLayer = nil;
     videoView = nil;
 }
+
 #pragma mark - Mute Icon
+
 - (void)configureMuteIcon {
     if (!self.muteImageView) {
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
@@ -134,7 +117,9 @@
         [self bringSubviewToFront:self.muteImageView];
     }
 }
+
 #pragma mark - Constraints
+
 - (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView {
     subView.translatesAutoresizingMaskIntoConstraints = NO;
 
@@ -183,6 +168,7 @@
     [parentView addConstraint:bottom];
     [parentView addConstraint:top];
 }
+
 - (void)constrainLayer:(AVPlayerLayer *)subView ToBottomOfParentView:(UIView *)parentView {
 
     //    subView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -232,11 +218,12 @@
     [parentView addConstraint:bottom];
     [parentView addConstraint:top];
 }
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     if (playerLayer) {
-        //        [self pausePlayer];
         playerLayer.frame = self.bounds;
     }
 }
+
 @end

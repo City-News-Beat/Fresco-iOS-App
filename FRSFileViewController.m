@@ -7,17 +7,15 @@
 //
 
 #import "FRSFileViewController.h"
-#import "VideoTrimmerViewController.h"
 #import "FRSUploadViewController.h"
 #import "UIFont+Fresco.h"
 #import "FRSImageViewCell.h"
 #import "FRSScrollingViewController.h"
 #import "FRSFileFooterCell.h"
 
-static NSString *const imageTile = @"ImageTile";
+static NSInteger const maxAssets = 8;
 
 @interface FRSFileViewController ()
-@property CMTime currentTime;
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
 @end
@@ -65,7 +63,9 @@ static NSString *const imageTile = @"ImageTile";
     [self shouldShowStatusBar:YES animated:YES];
 
     if (selectedAssets.count >= 1) {
-        [nextButton setTintColor:[UIColor frescoBlueColor]];
+        nextButton.enabled = YES;
+    } else {
+        nextButton.enabled = NO;
     }
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
@@ -84,12 +84,10 @@ static NSString *const imageTile = @"ImageTile";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     self.backTapButton.userInteractionEnabled = NO;
 }
 
 - (void)back {
-
     [self.navigationController popViewControllerAnimated:YES];
     [self.backTapButton removeFromSuperview];
 }
@@ -104,11 +102,12 @@ static NSString *const imageTile = @"ImageTile";
 
     nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [nextButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [nextButton setTintColor:[UIColor frescoLightTextColor]];
+    [nextButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [nextButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateDisabled];
     nextButton.frame = CGRectMake(screenWidth - 64, [UIScreen mainScreen].bounds.size.height - 41, 60, 40);
     [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
-    nextButton.userInteractionEnabled = NO;
+    nextButton.enabled = NO;
     [self.view addSubview:nextButton];
 }
 
@@ -133,7 +132,7 @@ static NSString *const imageTile = @"ImageTile";
     // actual collection view
     fileCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 10, 10) collectionViewLayout:fileLayout];
 
-    [fileCollectionView registerNib:imageNib forCellWithReuseIdentifier:imageTile];
+    [fileCollectionView registerNib:imageNib forCellWithReuseIdentifier:imageCellIdentifier];
     [fileCollectionView registerNib:footerNib forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter];
     [self.view addSubview:fileCollectionView];
     fileCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -236,7 +235,7 @@ static NSString *const imageTile = @"ImageTile";
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
 
     // dequeues cell, as we've registered a nib we will always get a non-nil value
-    FRSImageViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:imageTile forIndexPath:indexPath];
+    FRSImageViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:imageCellIdentifier forIndexPath:indexPath];
     cell.fileLoader = fileLoader; // gives the cell our (weakly stored) instance of our file loader
     [cell loadAsset:representedAsset]; // gives instruction to update UI
 
@@ -258,26 +257,19 @@ static NSString *const imageTile = @"ImageTile";
         [selectedAssets removeObject:representedAsset];
         [cell selected:NO];
     } else {
-
-        if ([selectedAssets count] == 8) {
+        if ([selectedAssets count] == maxAssets) {
             //should tell user why they can't select anymore cc:imogen
             return;
         }
 
-        if (cell.currentAVAsset) {
-            self.currentTime = cell.currentAVAsset.duration;
-        }
         [selectedAssets addObject:representedAsset];
         [cell selected:YES];
     }
 
     if (selectedAssets.count >= 1) {
-        [nextButton setTintColor:[UIColor frescoBlueColor]];
-        nextButton.userInteractionEnabled = YES;
-
+        nextButton.enabled = YES;
     } else {
-        [nextButton setTintColor:[UIColor frescoLightTextColor]];
-        nextButton.userInteractionEnabled = NO;
+        nextButton.enabled = NO;
     }
 
     NSMutableArray *locations = [[NSMutableArray alloc] init];
