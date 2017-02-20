@@ -1749,10 +1749,10 @@
 
 - (void)checkLocationStatus {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:locationEnabled];
         self.locationEnabled = YES;
     } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:locationEnabled];
         self.locationEnabled = NO;
     }
 }

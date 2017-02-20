@@ -162,12 +162,20 @@
 		CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */; };
 		CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */; };
 		CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3621B21E3922FB00C4330E /* FRSSessionManager.m */; };
+		CE3799B01E58239200B6743A /* FRSSocialToggleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3799AE1E58239200B6743A /* FRSSocialToggleTableViewCell.m */; };
+		CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3799AF1E58239200B6743A /* FRSSocialToggleTableViewCell.xib */; };
+		CE3799B51E5825C600B6743A /* FRSLogOutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3799B31E5825C600B6743A /* FRSLogOutTableViewCell.m */; };
+		CE3799B61E5825C600B6743A /* FRSLogOutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3799B41E5825C600B6743A /* FRSLogOutTableViewCell.xib */; };
+		CE3799BA1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */; };
+		CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */; };
 		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
 		CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */; };
 		CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */; };
 		CEC20DEC1E1C795400532D75 /* FRSUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEB1E1C795400532D75 /* FRSUserManager.m */; };
 		CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */; };
 		CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */; };
+		CEC5700A1E55641C000CCD95 /* FRSSettingsTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC570081E55641C000CCD95 /* FRSSettingsTextTableViewCell.m */; };
+		CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEC570091E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib */; };
 		CECB2C9A1E46B4750035FDCE /* FRSAddDebitCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */; };
 		CECB2C9C1E46B48F0035FDCE /* FRSAddDebitCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */; };
 		CECB2C9E1E46CE360035FDCE /* FRSAddBankAccountView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2C9D1E46CE360035FDCE /* FRSAddBankAccountView.xib */; };
@@ -608,6 +616,15 @@
 		CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSEmailViewController.xib; path = "Fresco News/View Controllers/Settings/FRSEmailViewController.xib"; sourceTree = "<group>"; };
 		CE3621B11E3922FB00C4330E /* FRSSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSessionManager.h; sourceTree = "<group>"; };
 		CE3621B21E3922FB00C4330E /* FRSSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSessionManager.m; sourceTree = "<group>"; };
+		CE3799AD1E58239200B6743A /* FRSSocialToggleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSocialToggleTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSSocialToggleTableViewCell.h"; sourceTree = "<group>"; };
+		CE3799AE1E58239200B6743A /* FRSSocialToggleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSocialToggleTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSSocialToggleTableViewCell.m"; sourceTree = "<group>"; };
+		CE3799AF1E58239200B6743A /* FRSSocialToggleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSocialToggleTableViewCell.xib; path = "Fresco News/View Controllers/Settings/FRSSocialToggleTableViewCell.xib"; sourceTree = "<group>"; };
+		CE3799B21E5825C600B6743A /* FRSLogOutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSLogOutTableViewCell.h; path = "Fresco News/View Controllers/FRSLogOutTableViewCell.h"; sourceTree = "<group>"; };
+		CE3799B31E5825C600B6743A /* FRSLogOutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSLogOutTableViewCell.m; path = "Fresco News/View Controllers/FRSLogOutTableViewCell.m"; sourceTree = "<group>"; };
+		CE3799B41E5825C600B6743A /* FRSLogOutTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSLogOutTableViewCell.xib; path = "Fresco News/View Controllers/FRSLogOutTableViewCell.xib"; sourceTree = "<group>"; };
+		CE3799B71E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignmentNotificationsSwitchTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.h"; sourceTree = "<group>"; };
+		CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignmentNotificationsSwitchTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.m"; sourceTree = "<group>"; };
+		CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAssignmentNotificationsSwitchTableViewCell.xib; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.xib"; sourceTree = "<group>"; };
 		CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsViewController.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.xib"; sourceTree = "<group>"; };
 		CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPaymentViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPaymentViewController.xib"; sourceTree = "<group>"; };
 		CEC20DE71E1C6BC000532D75 /* FRSIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSIdentityViewController.h; path = "Fresco News/View Controllers/FRSIdentityViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -617,6 +634,9 @@
 		CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAuthManager.h; sourceTree = "<group>"; };
 		CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAuthManager.m; sourceTree = "<group>"; };
 		CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSDisableAccountViewController.xib; path = "Fresco News/View Controllers/Settings/FRSDisableAccountViewController.xib"; sourceTree = "<group>"; };
+		CEC570071E55641C000CCD95 /* FRSSettingsTextTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSettingsTextTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSSettingsTextTableViewCell.h"; sourceTree = "<group>"; };
+		CEC570081E55641C000CCD95 /* FRSSettingsTextTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSettingsTextTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSSettingsTextTableViewCell.m"; sourceTree = "<group>"; };
+		CEC570091E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsTextTableViewCell.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsTextTableViewCell.xib"; sourceTree = "<group>"; };
 		CECB2C981E46B4750035FDCE /* FRSAddDebitCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAddDebitCardView.h; path = "Fresco News/Views/FRSAddDebitCardView.h"; sourceTree = "<group>"; };
 		CECB2C991E46B4750035FDCE /* FRSAddDebitCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAddDebitCardView.m; path = "Fresco News/Views/FRSAddDebitCardView.m"; sourceTree = "<group>"; };
 		CECB2C9B1E46B48F0035FDCE /* FRSAddDebitCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAddDebitCardView.xib; path = "Fresco News/Views/FRSAddDebitCardView.xib"; sourceTree = "<group>"; };
@@ -1811,6 +1831,18 @@
 				07A30BF51C50488800C536EB /* FRSSettingsViewController.h */,
 				07A30BF61C50488800C536EB /* FRSSettingsViewController.m */,
 				CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */,
+				CEC570071E55641C000CCD95 /* FRSSettingsTextTableViewCell.h */,
+				CEC570081E55641C000CCD95 /* FRSSettingsTextTableViewCell.m */,
+				CEC570091E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib */,
+				CE3799AD1E58239200B6743A /* FRSSocialToggleTableViewCell.h */,
+				CE3799AE1E58239200B6743A /* FRSSocialToggleTableViewCell.m */,
+				CE3799AF1E58239200B6743A /* FRSSocialToggleTableViewCell.xib */,
+				CE3799B21E5825C600B6743A /* FRSLogOutTableViewCell.h */,
+				CE3799B31E5825C600B6743A /* FRSLogOutTableViewCell.m */,
+				CE3799B41E5825C600B6743A /* FRSLogOutTableViewCell.xib */,
+				CE3799B71E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.h */,
+				CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */,
+				CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */,
 			);
 			name = "Settings VC";
 			sourceTree = "<group>";
@@ -2556,13 +2588,16 @@
 				D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */,
 				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
 				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
+				CE3799B61E5825C600B6743A /* FRSLogOutTableViewCell.xib in Resources */,
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
 				CA1637451E27F05500779A92 /* FRSGalleryStatusTableViewCell.xib in Resources */,
+				CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
+				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
 				CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
@@ -2580,6 +2615,7 @@
 				CA2D87341E1C1033009BBB5A /* FRSGalleryDetailView.xib in Resources */,
 				CE1322411E4FDAFC00A46D4D /* FRSUserTableViewCell.xib in Resources */,
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
+				CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
@@ -2727,8 +2763,10 @@
 				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,
 				D453CC841CCA80850091A004 /* NSManagedObject+MagicalRequests.m in Sources */,
 				CE0A6FD01E3E9E5800E67766 /* FRSNotificationManager.m in Sources */,
+				CE3799B01E58239200B6743A /* FRSSocialToggleTableViewCell.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
 				CE1322451E5031F400A46D4D /* FRSNearbyUserTableViewCell.m in Sources */,
+				CEC5700A1E55641C000CCD95 /* FRSSettingsTextTableViewCell.m in Sources */,
 				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
 				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
@@ -2762,6 +2800,7 @@
 				D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */,
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
 				D453CC881CCA80850091A004 /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				CE3799BA1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
@@ -2880,6 +2919,7 @@
 				CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				CA70746A1E2EAEB70072643B /* NSURL+Fresco.m in Sources */,
+				CE3799B51E5825C600B6743A /* FRSLogOutTableViewCell.m in Sources */,
 				D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -445,36 +445,7 @@
     }
 }
 
-- (void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType {
 
-    self.textField = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.self.rightPadding + self.leftPadding), 44)];
-    self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.textField.placeholder = string;
-    self.textField.delegate = (id<UITextFieldDelegate>)self;
-    self.textField.textColor = [UIColor frescoDarkTextColor];
-    self.textField.tintColor = [UIColor frescoBlueColor];
-    [self addSubview:self.textField];
-
-    self.textField.keyboardType = keyboardType;
-
-    if (topSeperator) {
-        UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
-        top.alpha = 0.2;
-        top.backgroundColor = [UIColor frescoDarkTextColor];
-        [self addSubview:top];
-    }
-
-    if (bottomSeperator) {
-        UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
-        bottom.alpha = 0.2;
-        bottom.backgroundColor = [UIColor frescoDarkTextColor];
-        [self addSubview:bottom];
-    }
-
-    if (secure) {
-        self.textField.secureTextEntry = YES;
-    }
-}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (range.length + range.location > textField.text.length) {
@@ -485,39 +456,7 @@
     return newLength <= 40;
 }
 
-- (void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color {
 
-    self.backgroundColor = [UIColor clearColor];
-    self.rightAlignedButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.rightAlignedButton.frame = CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height);
-    [self.rightAlignedButton setTitle:title forState:UIControlStateNormal];
-    [self.rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    self.rightAlignedButton.userInteractionEnabled = NO;
-    [self.rightAlignedButton setTitleColor:color forState:UIControlStateNormal];
-    [self addSubview:self.rightAlignedButton];
-}
-
-- (void)configureDisableAccountCell {
-
-    self.backgroundColor = [UIColor frescoBackgroundColorDark];
-
-    self.disableAccountTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 207, 22)];
-    [self.disableAccountTitleLabel setFont:[UIFont notaMediumWithSize:17]];
-    [self.disableAccountTitleLabel setTextColor:[UIColor frescoDarkTextColor]];
-    self.disableAccountTitleLabel.text = @"It doesn’t have to end like this";
-    [self addSubview:self.disableAccountTitleLabel];
-
-    self.disableAccountSubtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 52, 288, 29)];
-    [self.disableAccountSubtitleLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightRegular]];
-    [self.disableAccountSubtitleLabel setTextColor:[UIColor frescoMediumTextColor]];
-    self.disableAccountSubtitleLabel.numberOfLines = 2;
-    self.disableAccountSubtitleLabel.text = @"Just in case you decide to come back, we’ll back up your account for one year before we delete it.";
-    [self addSubview:self.disableAccountSubtitleLabel];
-
-    self.sadEmojiIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sad-emoticon"]];
-    self.sadEmojiIV.frame = CGRectMake(231, 16, 24, 24);
-    [self addSubview:self.sadEmojiIV];
-}
 
 - (void)configureSliderCell {
 
@@ -631,10 +570,10 @@
 
 - (void)checkLocationStatus {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:locationEnabled];
         self.locationEnabled = YES;
     } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:locationEnabled];
         self.locationEnabled = NO;
     }
 }

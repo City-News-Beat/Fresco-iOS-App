@@ -483,8 +483,6 @@ static NSInteger const previewCount = 3;
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSSeeAllLabelTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:seeAllCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSStorySearchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storySearchCellIdentifier];
     [self.tableView registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCellIdentifier];
-//    self.tableView.estimatedRowHeight = 400.0;
-//    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

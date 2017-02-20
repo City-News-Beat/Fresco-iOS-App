@@ -18,17 +18,12 @@
 
 - (void)configureAssignmentCellEnabled:(BOOL)enabled;
 
-- (void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
-
 - (void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag enabled:(BOOL)enabled;
-
-- (void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color;
 
 - (void)configureEmptyCellSpace:(BOOL)yes;
 
 - (void)configureLogOut;
 
-- (void)configureDisableAccountCell;
 - (void)configureSliderCell;
 - (void)configureMapCell;
 

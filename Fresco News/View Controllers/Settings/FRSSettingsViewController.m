@@ -26,8 +26,14 @@
 #import "FRSSocial.h"
 #import "SAMKeychain.h"
 #import "NSDate+ISO.h"
+#import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSModerationManager.h"
+#import "FRSNotificationManager.h"
+#import "FRSSettingsTextTableViewCell.h"
+#import "FRSSocialToggleTableViewCell.h"
+#import "FRSLogOutTableViewCell.h"
+#import "FRSAssignmentNotificationsSwitchTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, SettingsSection) {
     Me,
@@ -66,13 +72,13 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     DisableAccount
 };
 
-@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
+@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate, FRSAssignmentNotificationsSwitchTableViewCellDelegate, FRSSocialToggleTableViewCellDelegate>
 
-@property (strong, nonatomic) NSString *twitterHandle;
-@property (strong, nonatomic) FRSTableViewCell *twitterCell;
-@property (strong, nonatomic) FRSTableViewCell *facebookCell;
-@property (strong, nonatomic) UISwitch *twitterSwitch;
-@property (strong, nonatomic) UISwitch *facebookSwitch;
+//@property (strong, nonatomic) NSString *twitterHandle;
+//@property (strong, nonatomic) FRSTableViewCell *twitterCell;
+//@property (strong, nonatomic) FRSTableViewCell *facebookCell;
+//@property (strong, nonatomic) UISwitch *twitterSwitch;
+//@property (strong, nonatomic) UISwitch *facebookSwitch;
 @property (strong, nonatomic) FRSTableViewCell *notifCell;
 
 @end
@@ -86,6 +92,11 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self configureKenny];
+
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSSettingsTextTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:settingsTextCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSSocialToggleTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:socialToggleCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLogOutTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:logOutCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationsSwitchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:assignmentNotficationsSwitchCellIdentifier];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -208,168 +219,274 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 
 #pragma mark - UITableViewDataSource
 
-- (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentifier;
-    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
-    }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *const emptyCellIdentifier = @"empty-cell";
     switch (indexPath.section) {
     case Me:
         switch (indexPath.row) {
-        case ChangeUsername:
-            if ([[FRSUserManager sharedInstance] authenticatedUser].username && ![[[FRSUserManager sharedInstance] authenticatedUser].username isEqual:[NSNull null]]) {
-                [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSUserManager sharedInstance] authenticatedUser].username]];
-            } else {
-                [cell configureCellWithUsername:@"@username"];
-            }
-            break;
-        case ChangeEmail:
-            if ([[FRSUserManager sharedInstance] authenticatedUser].email && ![[[FRSUserManager sharedInstance] authenticatedUser].email isEqual:[NSNull null]]) {
-                [cell configureDefaultCellWithTitle:[[FRSUserManager sharedInstance] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-            } else {
-                [cell configureDefaultCellWithTitle:@"Email" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-            }
-            break;
-        case ChangePassword:
-            [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-            break;
+        case ChangeUsername: {
+            NSString *username = [NSString stringWithFormat:@"@%@", [[FRSUserManager sharedInstance] authenticatedUser].username];
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            [cell loadText:username withSecondary:nil withDisclosureIndicator:YES andFont:[UIFont notaMediumWithSize:17]];
+            return cell;
+        }
+        case ChangeEmail: {
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            [cell loadText:[[FRSUserManager sharedInstance] authenticatedUser].email];
+            return cell;
+        }
+        case ChangePassword: {
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            [cell loadText:@"Update Password"];
+            return cell;
+        }
         default:
             break;
         }
         break;
-
     case AssignmentsPayments:
         switch (indexPath.row) {
-        case AssignmentNotifications:
-            [self checkNotificationStatus];
-
-            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            break;
-        case NotificationRadius:
-            if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
-                [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%@ mi", [[[FRSUserManager sharedInstance] authenticatedUser] notificationRadius]] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+        case AssignmentNotifications: {
+            FRSAssignmentNotificationsSwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:assignmentNotficationsSwitchCellIdentifier];
+            cell.delegate = self;
+            [cell notificationsEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+            return cell;
+        }
+        case NotificationRadius: {
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius]) {
+                [cell loadText:@"Notification radius" withSecondary:[NSString stringWithFormat:@"%@ mi", [[[FRSUserManager sharedInstance] authenticatedUser] notificationRadius]] withDisclosureIndicator:YES andFont:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]];
             } else {
-                [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                [cell loadText:@"Notification radius"];
             }
-            break;
+            return cell;
+        }
         case PaymentMethod: {
-            NSString *card = [[NSUserDefaults standardUserDefaults] objectForKey:settingsPaymentLastFour];
-            if (!card) {
-                card = @"";
-            }
-
-            [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-            break;
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            [cell loadText:@"Payment Method"];
+            return cell;
         }
         case TaxInfo: {
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
             NSString *dueBy = [[FRSUserManager sharedInstance] authenticatedUser].dueBy;
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
             dateFormat.dateStyle = NSDateFormatterMediumStyle;
             NSDate *date = [dateFormat dateFromString:dueBy];
             NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
-
-            if (dueBy != nil) {
-                [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
-
+            if (dueBy) {
+                [cell loadText:@"ID Info" withSecondary:dateString withSecondaryColor:[UIColor frescoBlueColor]];
             } else {
                 if ([[FRSUserManager sharedInstance] authenticatedUser].fieldsNeeded.count == 0) {
-                    [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    [cell loadText:@"ID Info" withSecondary:@"Verified" withSecondaryColor:[UIColor frescoMediumTextColor]];
                 } else {
-                    [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    [cell loadText:@"ID Info"];
                 }
             }
-            break;
+            return cell;
         }
         default:
             break;
         }
         break;
-
-    case Social:
-        switch (indexPath.row) {
-        case ConnectTwitter:
-            self.twitterCell = cell;
-            self.twitterCell.parentTableView = tableView;
-            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
-                [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
-                self.twitterCell.twitterSwitch.on = YES;
-            } else {
-                self.twitterCell.twitterSwitch.on = NO;
-                self.twitterHandle = nil;
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
-                    [self.twitterCell configureSocialCellWithTitle:@"Twitter Connected" andTag:1 enabled:YES];
-                } else {
-                    [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+        case Social:
+            switch (indexPath.row) {
+                case ConnectTwitter:
+                {
+                    FRSSocialToggleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:socialToggleCellIdentifier];
+                    cell.delegate = self;
+                    [cell setupText:@"Connect Twitter" withImage:[UIImage imageNamed:@"social-twitter"] andSwitchColor:[UIColor twitterBlueColor]];
+                    return cell;
                 }
+                case ConnectFacebook: {
+                    FRSSocialToggleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:socialToggleCellIdentifier];
+                    cell.delegate = self;
+                    [cell setupText:@"Connect Facebook" withImage:[UIImage imageNamed:@"social-facebook"] andSwitchColor:[UIColor twitterBlueColor]];
+                    return cell;
+                }
+                default:
+                    break;
             }
             break;
-        case ConnectFacebook:
-            self.facebookCell = cell;
-            self.facebookCell.parentTableView = tableView;
-
-            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
-                [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
-            } else {
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-                    [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];
-                } else {
-                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
+        case About: {
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            [cell loadText:@"About Fresco"];
+            return cell;
+        }
+        case Misc:
+            switch (indexPath.row) {
+                case LogOut:{
+                    FRSLogOutTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:logOutCellIdentifier];
+                    return cell;
                 }
+                case Support: {
+                    FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+                    [cell loadText:@"Ask us anything"];
+                    return cell;
+                }
+                case DisableAccount: {
+                    FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+                    [cell loadText:@"Disable my account"];
+                    return cell;
+                }
+                default:
+                    break;
             }
             break;
-
-        default:
-            break;
-        }
-        break;
-
-    case About:
-        [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-        break;
-
-    case Misc:
-        switch (indexPath.row) {
-        case LogOut:
-            [cell configureLogOut];
-            break;
-        case Support:
-            [cell configureDefaultCellWithTitle:@"Ask us anything" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-            break;
-        case DisableAccount:
-            [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-            break;
-        }
-        break;
-
-    case Divider1:
-    case Divider2:
-    case Divider3:
-    case Divider4:
-        [cell configureEmptyCellSpace:NO];
-        break;
-
-    default:
-        break;
     }
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:emptyCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:emptyCellIdentifier];
+        cell.alpha = 0;
+        cell.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor clearColor];
+    }
+    return cell;
 }
+//
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    switch (indexPath.section) {
+//    case Me:
+//        switch (indexPath.row) {
+//        case ChangeUsername:
+//            if ([[FRSUserManager sharedInstance] authenticatedUser].username && ![[[FRSUserManager sharedInstance] authenticatedUser].username isEqual:[NSNull null]]) {
+//                [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSUserManager sharedInstance] authenticatedUser].username]];
+//            } else {
+//                [cell configureCellWithUsername:@"@username"];
+//            }
+//            break;
+//        case ChangeEmail:
+//            if ([[FRSUserManager sharedInstance] authenticatedUser].email && ![[[FRSUserManager sharedInstance] authenticatedUser].email isEqual:[NSNull null]]) {
+//                [cell configureDefaultCellWithTitle:[[FRSUserManager sharedInstance] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            } else {
+//                [cell configureDefaultCellWithTitle:@"Email" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            }
+//            break;
+//        case ChangePassword:
+//            [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            break;
+//        default:
+//            break;
+//        }
+//        break;
+//
+//    case AssignmentsPayments:
+//        switch (indexPath.row) {
+//        case AssignmentNotifications:
+//            [self checkNotificationStatus];
+//
+//            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+//
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            break;
+//        case NotificationRadius:
+//            if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
+//                [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%@ mi", [[[FRSUserManager sharedInstance] authenticatedUser] notificationRadius]] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            } else {
+//                [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            }
+//            break;
+//        case PaymentMethod: {
+//            NSString *card = [[NSUserDefaults standardUserDefaults] objectForKey:settingsPaymentLastFour];
+//            if (!card) {
+//                card = @"";
+//            }
+//
+//            [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            break;
+//        }
+//        case TaxInfo: {
+//            NSString *dueBy = [[FRSUserManager sharedInstance] authenticatedUser].dueBy;
+//            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//            dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+//            dateFormat.dateStyle = NSDateFormatterMediumStyle;
+//            NSDate *date = [dateFormat dateFromString:dueBy];
+//            NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
+//
+//            if (dueBy != nil) {
+//                [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+//
+//            } else {
+//                if ([[FRSUserManager sharedInstance] authenticatedUser].fieldsNeeded.count == 0) {
+//                    [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//                } else {
+//                    [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//                }
+//            }
+//            break;
+//        }
+//        default:
+//            break;
+//        }
+//        break;
+//
+//    case Social:
+//        switch (indexPath.row) {
+//        case ConnectTwitter:
+//            self.twitterCell = cell;
+//            self.twitterCell.parentTableView = tableView;
+//            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+//                [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
+//                self.twitterCell.twitterSwitch.on = YES;
+//            } else {
+//                self.twitterCell.twitterSwitch.on = NO;
+//                self.twitterHandle = nil;
+//                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
+//                    [self.twitterCell configureSocialCellWithTitle:@"Twitter Connected" andTag:1 enabled:YES];
+//                } else {
+//                    [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+//                }
+//            }
+//            break;
+//        case ConnectFacebook:
+//            self.facebookCell = cell;
+//            self.facebookCell.parentTableView = tableView;
+//
+//            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
+//                [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+//            } else {
+//                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+//                    [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];
+//                } else {
+//                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
+//                }
+//            }
+//            break;
+//
+//        default:
+//            break;
+//        }
+//        break;
+//
+//    case About:
+//        [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//        break;
+//
+//    case Misc:
+//        switch (indexPath.row) {
+//        case LogOut:
+//            [cell configureLogOut];
+//            break;
+//        case Support:
+//            [cell configureDefaultCellWithTitle:@"Ask us anything" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            break;
+//        case DisableAccount:
+//            [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//            break;
+//        }
+//        break;
+//
+//    case Divider1:
+//    case Divider2:
+//    case Divider3:
+//    case Divider4:
+//        [cell configureEmptyCellSpace:NO];
+//        break;
+//
+//    default:
+//        break;
+//    }
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
@@ -516,32 +633,234 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         }];
 }
 
-#pragma mark - MFMailComposeViewControllerDelegate
+- (void)checkNotificationStatus {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
 
-- (void)presentMail {
-    [self presentModalMailComposerViewController:YES];
-}
-
-- (void)presentModalMailComposerViewController:(BOOL)animated {
-
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] init];
-        composeViewController.mailComposeDelegate = self;
-
-        [composeViewController setSubject:@"Help!"];
-        [composeViewController setMessageBody:@"I've fallen and I can't get up!!!" isHTML:YES];
-        [composeViewController setToRecipients:@[ @"support@fresconews.com" ]];
-
-        [self presentViewController:composeViewController animated:animated completion:nil];
-    } else {
-        //cc:imogen
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Cannot Send Mail Message", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+        if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
+        }
     }
 }
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+- (void)checkLocationStatus {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:locationEnabled];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:locationEnabled];
+    }
+}
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (void)didToggleNotifications:(id)sender {
+    [self checkNotificationStatus];
+    [self checkLocationStatus];
+
+    if ([sender isOn]) {
+        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
+        float radius = 10;
+
+        if ([user.notificationRadius floatValue] > 0) {
+            radius = [user.notificationRadius floatValue];
+        }
+
+        [[FRSNotificationManager sharedInstance] setPushNotificationWithBool:YES
+                                                                  completion:^(id responseObject, NSError *error) {
+                                                                    if (responseObject && !error) {
+                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+                                                                        [[NSUserDefaults standardUserDefaults] synchronize];
+
+                                                                    } else {
+                                                                        [sender setOn:NO];
+                                                                        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                                        [alert show];
+                                                                    }
+                                                                  }];
+    } else {
+        [[FRSNotificationManager sharedInstance] setPushNotificationWithBool:NO
+                                                                  completion:^(id responseObject, NSError *error) {
+                                                                    if (responseObject && !error) {
+                                                                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+                                                                        [[NSUserDefaults standardUserDefaults] synchronize];
+                                                                    } else {
+                                                                        [sender setOn:YES];
+                                                                        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                                        [alert show];
+                                                                    }
+                                                                  }];
+    }
+}
+
+- (void)didToggleTwitter:(id)sender withLabel:(UILabel *)label {
+
+//    self.didToggleTwitter = YES;
+    
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+        
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedColor] delegate:self];
+        alert.delegate = self;
+        [alert show];
+        
+        [[FRSAuthManager sharedInstance] unlinkTwitter:^(id responseObject, NSError *error) {
+            NSLog(@"Disconnect Twitter Error: %@", error);
+        }];
+        
+    } else {
+        [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
+        
+            [sender setUserInteractionEnabled:YES];
+            
+            if (session) {
+                [[FRSAuthManager sharedInstance] linkTwitter:session.authToken
+                                                      secret:session.authTokenSecret
+                                                  completion:^(id responseObject, NSError *error) {
+                                                      if (responseObject && !error) {
+                                                          [sender setOn:YES animated:YES];
+                                                          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+                                                          label.text = session.userName;
+                                                          [[NSUserDefaults standardUserDefaults] setValue:label.text forKey:@"twitter-handle"];
+                                                      } else {
+                                                          NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                          NSInteger responseCode = response.statusCode;
+                                                          
+                                                          if (responseCode == 412) {
+                                                              [sender setOn:NO animated:YES];
+                                                              [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+                                                              
+                                                              NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                                                              NSError *jsonError;
+                                                              
+                                                              NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                                                              NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                                                              
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                              [alert show];
+                                                              return;
+                                                          } else {
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                              [alert show];
+                                                              return;
+                                                          }
+                                                      }
+                                                  }];
+                
+            } else if (error) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [alert show];
+            }
+        }];
+    }
+}
+
+- (void)didToggleFacebook:(id)sender withLabel:(UILabel *)label {
+    
+//    self.didToggleFacebook = YES;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedColor] delegate:self];
+        alert.delegate = self;
+        [alert show];
+        
+        [sender setOn:NO];
+//        sender.
+//        self.facebookSwitch.on = NO;
+//        self.facebookSwitch.enabled = NO;
+        [[FRSAuthManager sharedInstance] unlinkFacebook:^(id responseObject, NSError *error) {
+            NSLog(@"Disconnect Facebook Error: %@", error);
+//            self.facebookSwitch.enabled = YES;
+            if (error) {
+                [sender setOn:YES];
+            } else {
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+                [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
+                  [sender setOn:YES];
+            }
+            [self.tableView reloadData];
+        }];
+        
+    } else {
+        
+        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+         [sender setOn:YES];
+//        self.facebookSwitch.enabled = NO;
+//        self.facebookSwitch.on = YES;
+        [login logInWithReadPermissions:@[ @"public_profile", @"email", @"user_friends" ]
+                     fromViewController:self.inputViewController
+                                handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                                    
+                                    if (error) {
+                                         [sender setOn:NO];
+//                                        self.facebookSwitch.on = NO;
+//                                        self.facebookSwitch.enabled = YES;
+                                    }
+                                    
+                                    if (result && !error) {
+                                        
+                                        [[FRSAuthManager sharedInstance] linkFacebook:[FBSDKAccessToken currentAccessToken].tokenString
+                                                                           completion:^(id responseObject, NSError *error) {
+                                                                               [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                                                                                [sender setOn:NO animated:YES];
+//                                                                               [self.facebookSwitch setOn:YES animated:YES];
+//                                                                               self.facebookSwitch.alpha = 0;
+                                                                               
+//                                                                               self.facebookSwitch.enabled = YES;
+                                                                               
+                                                                               if (error) {
+                                                                                    [sender setOn:NO];
+//                                                                                   self.facebookSwitch.on = NO;
+//                                                                                   self.facebookSwitch.enabled = YES;
+                                                                               } else {
+                                                                                    [sender setOn:YES];
+//                                                                                   self.facebookSwitch.on = YES;
+                                                                               }
+                                                                               
+                                                                               if (responseObject && !error) {
+                                                                                   [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                                                                       if (!error) {
+                                                                                           label.text = [result valueForKey:@"name"];
+                                                                                           [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                                                                                           [sender setOn:YES];
+                                                                                           [self.tableView reloadData];
+                                                                                       }
+                                                                                   }];
+                                                                               } else if (error) {
+                                                                                   [sender setOn:NO];
+//                                                                                   self.facebookSwitch.on = NO;
+//                                                                                   self.facebookSwitch.enabled = YES;
+                                                                                   NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                                                   NSInteger responseCode = response.statusCode;
+                                                                                   
+                                                                                   if (responseCode == 412) {
+                                                                                       [sender setOn:NO animated:YES];
+//                                                                                       [self.facebookSwitch setOn:FALSE animated:YES];
+                                                                                       [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-connected"];
+                                                                                       
+                                                                                       NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                                                                                       NSError *jsonError;
+                                                                                       
+                                                                                       NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                                                                                       NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                                                                                       
+                                                                                       FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                                                       [alert show];
+                                                                                       return;
+                                                                                   } else {
+                                                                                       FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                                                       [alert show];
+                                                                                       return;
+                                                                                   }
+                                                                               }
+                                                                               if (self.tableView) {
+                                                                                   [self.tableView reloadData];
+                                                                               }
+                                                                           }];
+                                    }
+                                    if (self.tableView) {
+                                        [self.tableView reloadData];
+                                    }
+                                }];
+    }
 }
 
 #pragma mark - FRSAlertView Delegate
@@ -550,20 +869,6 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     if (index == 0) {
     } else if (index == 1) {
         [self logoutWithPop:YES];
-    }
-}
-
-#pragma mark - Notifications
-
-- (void)checkNotificationStatus {
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
-        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-
-        if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
-            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
-        } else {
-            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationTogglet];
-        }
     }
 }
 
