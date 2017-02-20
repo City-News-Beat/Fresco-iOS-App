@@ -34,8 +34,7 @@
                        dispatch_async(dispatch_get_main_queue(), ^{
                          imageView.image = result;
                          imageView.contentMode = UIViewContentModeScaleAspectFill;
-
-                         [self constrainSubview:imageView ToBottomOfParentView:self];
+                         imageView.translatesAutoresizingMaskIntoConstraints = NO;
                        });
                      }];
         });
@@ -116,107 +115,6 @@
         [self addSubview:self.muteImageView];
         [self bringSubviewToFront:self.muteImageView];
     }
-}
-
-#pragma mark - Constraints
-
-- (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView {
-    subView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTrailing
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTrailing
-                multiplier:1
-                  constant:0];
-
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeLeading
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeLeading
-                multiplier:1
-                  constant:0];
-
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeBottom
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeBottom
-                multiplier:1
-                  constant:0];
-
-    //top
-    NSLayoutConstraint *top = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTop
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTop
-                multiplier:1
-                  constant:0];
-
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:leading];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:top];
-}
-
-- (void)constrainLayer:(AVPlayerLayer *)subView ToBottomOfParentView:(UIView *)parentView {
-
-    //    subView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTrailing
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTrailing
-                multiplier:1
-                  constant:0];
-
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeLeading
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeLeading
-                multiplier:1
-                  constant:0];
-
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeBottom
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeBottom
-                multiplier:1
-                  constant:0];
-
-    //top
-    NSLayoutConstraint *top = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTop
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTop
-                multiplier:1
-                  constant:0];
-
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:leading];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:top];
 }
 
 - (void)layoutSubviews {

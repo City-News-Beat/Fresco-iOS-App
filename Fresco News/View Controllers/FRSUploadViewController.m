@@ -5,6 +5,7 @@
 //  Created by Omar Elfanek on 5/3/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
+
 #import "FRSUploadViewController.h"
 #import "FRSAssignmentPickerTableViewCell.h"
 #import "FRSOnboardingViewController.h"
@@ -134,7 +135,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)configureUI {
-
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
 
     [self addObservers];
@@ -153,20 +153,20 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateDisabled];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
 
-    button.enabled = FALSE;
+    button.enabled = YES;
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateDisabled];
     [spinner removeFromSuperview];
     [spinner startAnimating];
 
-    button.enabled = TRUE;
+    button.enabled = YES;
 }
 
 - (void)resetFrames:(BOOL)animate {
@@ -378,15 +378,15 @@ static NSString *const cellIdentifier = @"assignment-cell";
     //    [self.bottomContainer addSubview:self.anonLabel];
 
     //Configure next button
-    self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
-    [_sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [_sendButton setTintColor:[UIColor frescoLightTextColor]];
-    _sendButton.frame = CGRectMake(self.view.frame.size.width - 64, 0, 64, 44);
-    [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
-    _sendButton.userInteractionEnabled = NO;
-    [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-    _sendButton.userInteractionEnabled = NO;
-    [self.bottomContainer addSubview:_sendButton];
+    self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.sendButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [self.sendButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateDisabled];
+    self.sendButton.frame = CGRectMake(self.view.frame.size.width - 64, 0, 64, 44);
+    [self.sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    [self.sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    self.sendButton.enabled = NO;
+    [self.bottomContainer addSubview:self.sendButton];
 }
 
 #pragma mark - UIScrollView
@@ -574,7 +574,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.assignmentsTableView) {
         if (indexPath.row < _assignmentsArray.count + numberOfOutlets) {
-            if (_showingOutlets) {
+            if (self.showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
@@ -584,7 +584,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
             NSInteger row = 0;
 
-            if (_showingOutlets && indexPath.row > selectedRow) {
+            if (self.showingOutlets && indexPath.row > selectedRow) {
                 row = indexPath.row - numberOfOutlets;
             } else {
                 row = indexPath.row;
@@ -599,7 +599,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
         }
     } else if (tableView == self.globalAssignmentsTableView) {
         if (indexPath.row < _globalAssignments.count + numberOfOutlets) {
-            if (_showingOutlets) {
+            if (self.showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
 
@@ -610,7 +610,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
             NSInteger row = 0;
 
-            if (_showingOutlets && indexPath.row > selectedRow) {
+            if (self.showingOutlets && indexPath.row > selectedRow) {
                 row = indexPath.row - numberOfOutlets;
             } else {
                 row = indexPath.row;
@@ -631,7 +631,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = 0;
 
-    if (_showingOutlets && indexPath.row > selectedRow) {
+    if (self.showingOutlets && indexPath.row > selectedRow) {
         row = indexPath.row - numberOfOutlets;
     } else {
         row = indexPath.row;
@@ -853,14 +853,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)textViewDidChange:(UITextView *)textView {
     //Check the send button state
-    self.sendButton.userInteractionEnabled = (_captionTextView.text.length > 0);
-    if (self.sendButton.userInteractionEnabled) {
-        [self.sendButton setTintColor:[UIColor frescoBlueColor]];
-    } else {
-        [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
-        self.sendButton.userInteractionEnabled = NO;
-    }
-    [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
+    self.sendButton.enabled = (_captionTextView.text.length > 0);
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
@@ -884,7 +877,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)handleKeyboardWillHide:(NSNotification *)sender {
     [self toggleGestureRecognizer];
-
     self.view.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
@@ -1065,8 +1057,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
 
     [self startSpinner:self.loadingView onButton:self.sendButton];
-    self.sendButton.userInteractionEnabled = NO;
-    [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
+    self.sendButton.enabled = NO;
 
     [self dismissKeyboard];
 
@@ -1102,7 +1093,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                    if (error) {
                                                        [self creationError:error];
                                                        [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                                       self.sendButton.userInteractionEnabled = YES;
+                                                       self.sendButton.enabled = YES;
                                                        return;
                                                    }
 
@@ -1121,7 +1112,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
         gallery[@"posts_new"] = current;
         gallery[@"caption"] = self.captionTextView.text;
 
-        if (_showingOutlets && selectedOutlet) {
+        if (self.showingOutlets && selectedOutlet) {
             gallery[@"outlet_id"] = selectedOutlet;
         }
 
@@ -1132,7 +1123,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                  } else {
                                                      [self creationError:error];
                                                      [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                                     self.sendButton.userInteractionEnabled = YES;
+                                                     self.sendButton.enabled = YES;
                                                      return;
                                                  }
                                                }];
