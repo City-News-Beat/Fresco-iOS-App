@@ -45,6 +45,8 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection) {
 
 - (void)determineScrollDirection:(UIScrollView *)scrollView;
 
+@property (nonatomic) BOOL disableCollapse;
+
 #pragma mark - Status Bar
 - (void)statusBarTappedAction:(NSNotification *)notification;
 - (void)addStatusBarNotification;

@@ -77,6 +77,11 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if (self.disableCollapse) {
+        return;
+    }
+    
     NSInteger currentContentOffY = scrollView.contentOffset.y;
     NSInteger currentContentOffX = scrollView.contentOffset.x;
     NSInteger difference = currentContentOffY - self.prevContentOffY;

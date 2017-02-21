@@ -98,6 +98,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.disableCollapse = YES;
 
     self.editedProfile = false;
 
@@ -1017,6 +1019,8 @@
 
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
+    
+    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
 }
 
 - (void)handleLikesButtonTapped {
@@ -1037,6 +1041,8 @@
         self.currentFeed = self.likes;
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
+    
+    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
 }
 
 - (void)showShareSheetWithContent:(NSArray *)content {
@@ -1316,6 +1322,12 @@
     }
 
     [self.sectionView setFrame:newFrame];
+    
+    if (basePoint.y >= self.profileContainer.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height) {
+        CGRect sectionViewFrame = self.sectionView.frame;
+        sectionViewFrame.origin.y = 0;
+        [self.sectionView setFrame:sectionViewFrame];
+    }
 
     NSArray *visibleCells = [self.tableView visibleCells];
 
