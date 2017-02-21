@@ -175,7 +175,7 @@
 
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     
-    [(FRSTabBarController *)self.tabBarController updateUserIcon];
+    [(FRSTabBarController *)self.tabBarController showBell:NO];
     
     [self popViewController];
 }

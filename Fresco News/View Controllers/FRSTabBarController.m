@@ -7,38 +7,40 @@
 //
 
 #import "FRSTabBarController.h"
+#import "FRSAppDelegate.h"
+
+/* VIEW CONTROLLERS */
+#import "FRSBaseViewController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSNavigationController.h"
-#import "FRSProfileViewController.h"
 #import "FRSHomeViewController.h"
-#import "FRSAssignmentsViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSCameraViewController.h"
-#import "UIColor+Fresco.h"
-#import "FRSNavigationBar.h"
-#import "FRSAppDelegate.h"
+#import "FRSAssignmentsViewController.h"
+#import "FRSProfileViewController.h"
 #import "FRSUserNotificationViewController.h"
+
+/* MANAGERS */
 #import "FRSLocationManager.h"
-#import "FRSBaseViewController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+
+/* UI */
+#import "FRSNavigationBar.h"
 #import "FRSIndicatorDot.h"
+#import "UIColor+Fresco.h"
+
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
-//@property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
+@property CGFloat xOffset;
 
 @end
 
 @implementation FRSTabBarController
-
-- (void)presentAssignments {
-}
-- (void)returnToGalleryPost {
-}
 
 - (void)respondToQuickAction:(NSString *)quickAction {
     if ([quickAction isEqualToString:assignmentsAction]) {
@@ -150,18 +152,21 @@
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
         item4.imageInsets = UIEdgeInsetsMake(5, -6, -5, 6);
+        self.xOffset = 40;
     } else if (IS_IPHONE_6_PLUS) {
         item0.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
         item1.imageInsets = UIEdgeInsetsMake(5, -8, -5, 8);
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 8, -5, -8);
         item4.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
+        self.xOffset = 45;
     } else if (IS_IPHONE_5) {
         item0.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
         item1.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
         item4.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
+        self.xOffset = 33;
     }
 }
 
@@ -416,7 +421,7 @@
 
     case 4: {
         
-        [self updateTabBarIconAtIndex:4 withImageName:@"tab-bar-profile" selectedImageName:@"tab-bar-profile-sel"];
+        [self showBell:NO];
         
         if (self.lastActiveIndex == 4) {
             FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
@@ -461,16 +466,17 @@
     }];
 }
 
-- (void)updateUserIcon {
-    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    [frsTabBar updateTabBarIconAtIndex:4 withImageName:@"tab-bar-user" selectedImageName:@"tab-bar-user-sel"];
-    [FRSIndicatorDot removeDotInView:frsTabBar.tabBar atIndex:4];
-}
 
-- (void)updateBellIcon {
-    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    [frsTabBar updateTabBarIconAtIndex:4 withImageName:@"tab-bar-bell" selectedImageName:@"tab-bar-bell-sel"];
-    [FRSIndicatorDot addDotToTabBar:self.tabBar atIndex:4 animated:YES];
+#pragma mark - Icon Updating
+
+- (void)showBell:(BOOL)bell {
+    if (bell) {
+        [self updateTabBarIconAtIndex:4 withImageName:@"tab-bar-bell" selectedImageName:@"tab-bar-bell-sel"];
+        [FRSIndicatorDot addDotToTabBar:self.tabBar atPosition:self.view.frame.size.width - self.xOffset atIndex:4 animated:YES];
+    } else {
+        [self updateTabBarIconAtIndex:4 withImageName:@"tab-bar-profile" selectedImageName:@"tab-bar-profile-sel"];
+        [FRSIndicatorDot removeDotInView:self.tabBar atIndex:4];
+    }
 }
 
 - (void)updateTabBarIconAtIndex:(NSInteger)index withImageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName {
@@ -478,24 +484,6 @@
     item.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item.selectedImage = [[UIImage imageNamed:selectedImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @end

@@ -13,21 +13,8 @@
 
 @property (nonatomic) NSInteger lastActiveIndex;
 
-- (void)returnToGalleryPost;
-- (void)presentAssignments;
 - (void)setIrisItemColor:(UIColor *)color;
-- (void)handleNotification:(NSDictionary *)notification;
 - (void)respondToQuickAction:(NSString *)quickAction;
-- (void)openGalleryID:(NSString *)galleryID;
-- (void)openStoryID:(NSString *)storyID;
-- (void)openUserID:(NSString *)userID;
-- (void)openGalleryIDS:(NSArray *)galleryIDS;
-- (void)openAssignmentID:(NSString *)assignmentID;
-//- (void)updateBellIcon:(BOOL)unread;
-- (void)updateUserIcon;
-- (void)updateBellIcon;
-//@property (strong, nonatomic) UIView *dot;
-
 - (void)configureViewControllersWithNotif:(BOOL)notif;
 
 /**
@@ -38,5 +25,13 @@
  @param selectedImageName NSString name of the selected image.
  */
 - (void)updateTabBarIconAtIndex:(NSInteger)index withImageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName;
+
+
+/**
+ Shows or hides the user notification bell.
+
+ @param bell BOOL to show the user icon or the bell icon.
+ */
+- (void)showBell:(BOOL)bell;
 
 @end
