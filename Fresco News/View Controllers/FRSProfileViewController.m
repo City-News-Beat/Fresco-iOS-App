@@ -130,6 +130,8 @@
     }
 
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
+    
+    [self configureTitleLabelFromUser:_representedUser];
 }
 
 - (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
@@ -686,17 +688,25 @@
     [self.tableView dg_removePullToRefresh];
 }
 
-- (void)configureNavigationBar {
-    [super removeNavigationBarLine];
-
+- (void)configureTitleLabelFromUser:(FRSUser *)user {
+    
+    // Avoid creating more than one instance of titleLabel
+    if (titleLabel) {
+        titleLabel = nil;
+        [titleLabel removeFromSuperview];
+    }
+    
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
-    titleLabel.text = @"";
+    titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
-    // titleLabel.text = [NSString stringWithFormat:@"@%@", self.representedUser.username];
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
+}
+
+- (void)configureNavigationBar {
+    [super removeNavigationBarLine];
 
     if (self.representedUser.isLoggedIn && [self.navigationController.childViewControllers objectAtIndex:0] == self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotificationsAnimated)];
@@ -1517,17 +1527,8 @@
       [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
       self.locationLabel.text = [user valueForKey:@"location"];
       self.usernameLabel.text = user.username;
-      titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
 
-      if ([user.username isEqualToString:@""] || !user.username || [user.username isEqual:[NSNull null]]) {
-          if (![user.firstName isEqualToString:@""]) {
-              titleLabel.adjustsFontSizeToFitWidth = YES;
-              titleLabel.text = user.firstName;
-          } else {
-              titleLabel.text = @"";
-          }
-      }
-
+      [self configureTitleLabelFromUser:user];
       [self configureNavigationBar];
     });
 }
