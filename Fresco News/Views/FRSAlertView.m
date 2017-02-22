@@ -192,7 +192,7 @@
     [self animateOut];
 
     if (self.delegate) {
-        [self.delegate didPressButtonAtIndex:1];
+        [self.delegate didPressButton:self atIndex:1];
     }
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -203,7 +203,7 @@
     [self animateOut];
 
     if (self.delegate) {
-        [self.delegate didPressButtonAtIndex:0];
+        [self.delegate didPressButton:self atIndex:0];
     }
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -845,10 +845,6 @@
 
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self removeFromSuperview];
-
-    //    if (self.delegate) {
-    //        [self.delegate didPressButtonAtIndex:1];
-    //    }
 }
 
 - (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton {

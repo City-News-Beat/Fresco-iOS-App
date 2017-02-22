@@ -34,6 +34,7 @@
     default:
         break;
     }
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (void)setupTwitterCell {

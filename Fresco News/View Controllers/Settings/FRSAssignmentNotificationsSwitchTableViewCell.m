@@ -18,6 +18,7 @@
 
 - (void)notificationsEnabled:(BOOL)enabled {
     [self.notificationSwitch setOn:enabled animated:NO];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (IBAction)notificationToggle:(id)sender {

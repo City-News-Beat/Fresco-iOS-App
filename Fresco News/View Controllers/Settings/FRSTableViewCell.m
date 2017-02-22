@@ -137,7 +137,7 @@
     }
 }
 
-- (void)didPressButtonAtIndex:(NSInteger)index {
+- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
     if (self.didToggleTwitter) {
         self.didToggleTwitter = NO;
         if (index == 0) {

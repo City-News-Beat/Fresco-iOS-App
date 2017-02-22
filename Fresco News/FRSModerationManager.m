@@ -75,7 +75,7 @@ static NSString *const reportGalleryEndpoint = @"gallery/%@/report";
     }
 }
 
-- (void)didPressButtonAtIndex:(NSInteger)index {
+- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
     if (self.suspendedAlert) {
         switch (index) {
         case 0:

@@ -280,9 +280,6 @@
     [spinner startAnimating];
 }
 
-- (void)didPressButtonAtIndex:(NSInteger)index {
-}
-
 - (void)dismissKeyboard {
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
