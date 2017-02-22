@@ -59,10 +59,11 @@
 /**
  This method will reset the state of the upload manager to a blank slate. 
  Should typically be called once an upload is finished or before starting a new one.
+ 
+ Note: Managed objects are cleared on a forcel cancel of the upload, not here
  */
 - (void)resetState {
     self.uploadMeta = [[NSMutableArray alloc] init];
-    self.managedObjects = [[NSMutableDictionary alloc] init];
     self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
     totalFileSize = 0;
     totalVideoFilesSize = 0;
@@ -438,9 +439,6 @@
                            andPath:uploadForPost[@"path"]
                             andKey:uploadForPost[@"key"]
                         completion:^(id responseObject, NSError *error) {
-                            
-                            return [weakSelf uploadDidErrorWithError:error];
-                            
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
                             } else if (completed == toComplete) {
@@ -561,7 +559,7 @@
 
 
 /**
- Starts the AWS upload for the passed post
+ Starts the AWS upload for the passed post. If completed, will set the managed object to complete and return on completion block.
 
  @param postID ID of the post being uploaded
  @param path File Path string in local system
