@@ -9,6 +9,16 @@
 #import "FRSNavigationBar.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
+#import "FRSAlertView.h"
+
+@interface FRSNavigationBar ()
+
+@property (nonatomic, retain) UIView *progressView;
+@property (nonatomic, retain) UIView *failureView;
+@property (nonatomic, retain) NSDate *lastAnimated;
+@property (nonatomic, strong) FRSAlertView *errorAlertView;
+
+@end
 
 @implementation FRSNavigationBar
 
@@ -62,62 +72,10 @@
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *notification) {
-                                                    NSDictionary *update = notification.userInfo;
-
-                                                    if ([update[@"type"] isEqualToString:@"progress"]) {
-                                                        NSNumber *uploadPercentage = update[@"percentage"];
-                                                        float percentage = [uploadPercentage floatValue];
-
-                                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                                          CGRect navFrame = self.frame;
-                                                          navFrame.origin.y = -20;
-                                                          navFrame.size.height += 20;
-                                                          navFrame.size.width = self.frame.size.width * percentage;
-
-                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                            // [UIView animateWithDuration:.05 animations:^{
-                                                            [self sendSubviewToBack:_progressView];
-                                                            _progressView.frame = navFrame;
-                                                            // }];
-                                                          });
-                                                        });
-
-                                                        _lastAnimated = [NSDate date];
-                                                    } else if ([update[@"type"] isEqualToString:@"completion"]) {
-                                                        
-                                                        CGRect navFrame = self.frame;
-                                                        navFrame.origin.y = -20;
-                                                        navFrame.size.height += 20;
-                                                        navFrame.size.width = 0;
-
-                                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                                          [UIView animateWithDuration:.2
-                                                              animations:^{
-                                                                _progressView.alpha = 0;
-
-                                                              }
-                                                              completion:^(BOOL finished) {
-                                                                _progressView.frame = navFrame;
-                                                                _progressView.alpha = 1;
-                                                              }];
-                                                        });
-                                                    } else if ([update[@"type"] isEqualToString:@"failure"]) {
-
-                                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                                          CGRect navFrame = self.frame;
-                                                          navFrame.origin.y -= 20;
-                                                          navFrame.size.height += 20;
-                                                          navFrame.size.width = 0;
-                                                          [self showFailureView];
-
-                                                          _progressView.frame = navFrame;
-                                                          _progressView.alpha = 1;
-                                                        });
-                                                    }
-
+                                                      [self handleUploadNotificaiton:notification.userInfo];
                                                   }];
-
-                                                [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload"
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:FRSDismissUpload
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *notification) {
@@ -134,34 +92,110 @@
                                                           
                                                           _progressView.frame = navFrame;
                                                       });
-
+                                                      
                                                   }];
-
-                                                [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload"
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:FRSRetryUpload
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *notification) {
-
-                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                      [UIView animateWithDuration:.2
-                                                                       animations:^{
-                                                                         [_failureView removeFromSuperview];
-                                                                       }];
-
-                                                      CGRect navFrame = self.frame;
-                                                      navFrame.origin.y -= 20;
-                                                      navFrame.size.height += 20;
-                                                      navFrame.size.width = 0;
-
-                                                      _progressView.frame = navFrame;
-                                                    });
+                                                      
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          [UIView animateWithDuration:.2
+                                                                           animations:^{
+                                                                               [_failureView removeFromSuperview];
+                                                                           }];
+                                                          
+                                                          CGRect navFrame = self.frame;
+                                                          navFrame.origin.y -= 20;
+                                                          navFrame.size.height += 20;
+                                                          navFrame.size.width = 0;
+                                                          
+                                                          _progressView.frame = navFrame;
+                                                      });
                                                   }];
 
 }
 
 
-- (void)showFailureView {
+/**
+ Handles regular upload notification based on type passed in the info dictionary
 
+ @param notificationInfo NSDictionary of the notification's user info
+ */
+- (void)handleUploadNotificaiton:(NSDictionary *)notificationInfo {
+    if ([notificationInfo[@"type"] isEqualToString:@"progress"]) {
+        NSNumber *uploadPercentage = notificationInfo[@"percentage"];
+        float percentage = [uploadPercentage floatValue];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGRect navFrame = self.frame;
+            navFrame.origin.y = -20;
+            navFrame.size.height += 20;
+            navFrame.size.width = self.frame.size.width * percentage;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // [UIView animateWithDuration:.05 animations:^{
+                [self sendSubviewToBack:_progressView];
+                _progressView.frame = navFrame;
+                // }];
+            });
+        });
+        
+        _lastAnimated = [NSDate date];
+    } else if ([notificationInfo[@"type"] isEqualToString:@"completion"]) {
+        
+        CGRect navFrame = self.frame;
+        navFrame.origin.y = -20;
+        navFrame.size.height += 20;
+        navFrame.size.width = 0;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:.2
+                             animations:^{
+                                 _progressView.alpha = 0;
+                                 
+                             }
+                             completion:^(BOOL finished) {
+                                 _progressView.frame = navFrame;
+                                 _progressView.alpha = 1;
+                             }];
+        });
+    } else if ([notificationInfo[@"type"] isEqualToString:@"failure"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGRect navFrame = self.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width = 0;
+            [self showFailureView];
+            
+            _progressView.frame = navFrame;
+            _progressView.alpha = 1;
+            
+            //Present error to user if needed and there currently is not one in view
+            if([notificationInfo[@"error"] isKindOfClass:[NSError class]] && self.errorAlertView.window == nil){
+                
+                NSError *uploadError = (NSError *) notificationInfo[@"error"];
+                
+                self.errorAlertView = [[FRSAlertView alloc]
+                                       initWithTitle:[@"Uploading error" uppercaseString]
+                                       message:uploadError.localizedDescription ?: @"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."
+                                       actionTitle:@"OK"
+                                       cancelTitle:@""
+                                       cancelTitleColor:[UIColor frescoBlueColor]
+                                       delegate:nil];
+                [self.errorAlertView show];
+            }
+        });
+    }
+}
+
+
+
+/**
+ Presents failure view in navigation bar
+ */
+- (void)showFailureView {
     dispatch_async(dispatch_get_main_queue(), ^{
       if (!_failureView) {
           _failureView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.frame.size.width, self.frame.size.height + 20)];
@@ -201,9 +235,13 @@
     });
 }
 
+
+/**
+ Dimisses upload and cancels
+ */
 - (void)dismissFailureView {
     [FRSTracker track:uploadCancel];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSDismissUpload" object:nil userInfo:@{ @"type" : @"dismiss" }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSDismissUpload object:nil userInfo:@{ @"type" : @"dismiss" }];
 
     [UIView animateWithDuration:.2
                      animations:^{
@@ -211,9 +249,13 @@
                      }];
 }
 
+
+/**
+ Triggers an upload retry
+ */
 - (void)retryUpload {
     [FRSTracker track:uploadRetry];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSRetryUpload" object:nil userInfo:@{ @"type" : @"retry" }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSRetryUpload object:nil userInfo:@{ @"type" : @"retry" }];
 
     [UIView animateWithDuration:.2
                      animations:^{

@@ -23,7 +23,6 @@
  */
 typedef void (^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void (^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
-typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 typedef NS_ENUM(NSUInteger, FRSRequestAuth) {
     FRSUserAuth,

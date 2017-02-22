@@ -1222,7 +1222,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
         }
     }
     
-    [[FRSUploadManager sharedInstance] uploadPosts:galleryResponse[@"posts_news"] withAssets:self.content];
+    
+    [[FRSUploadManager sharedInstance] startNewUploadWithPosts:galleryResponse[@"posts_new"] withAssets:self.content];
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

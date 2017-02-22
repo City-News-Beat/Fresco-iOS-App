@@ -11,8 +11,11 @@
 #import "FRSAPIClient.h"
 #import <Photos/Photos.h>
 
+typedef void (^FRSUploadSizeCompletionBlock)(NSInteger size, NSError *error);
+typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error);
+
+
 @interface FRSUploadManager : NSObject <SDAVAssetExportSessionDelegate> {
-    int currentIndex;
     unsigned long long totalFileSize;
     unsigned long long totalVideoFilesSize;
     unsigned long long totalImageFilesSize;
@@ -22,29 +25,24 @@
     int completed;
     float uploadSpeed;
     int numberOfVideos;
-    SDAVAssetExportSession *exporter;
 }
 
-@property (nonatomic, strong) NSMutableArray *currentUploads;
-@property (nonatomic, assign) int completedUploads;
 @property (nonatomic, strong) NSMutableArray *uploadMeta;
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSMutableDictionary *managedObjects;
-@property (nonatomic, strong) NSString *currentGalleryID;
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
+@property (nonatomic, assign) NSInteger completedUploads;
 
 + (id)sharedInstance;
 
 
-
 /**
- Starts uploading posts
-
- @param posts Array of posts from API to upload
- @param assets Upload of matching PHAssets to upload
+ Stars a new upload with the passed parameters
+ 
+ @param posts Array of dictionaries to represent the posts, containing - "post_id", and "key"
+ @param assets Array of PHAssets that correspond to indices of the passed posts array
  */
-- (void)uploadPosts:(NSArray *)posts withAssets:(NSArray *)assets;
-
+- (void)startNewUploadWithPosts:(NSArray *)posts withAssets:(NSArray *)assets;
     
 /**
  Checks for existence of cached and uploads and reseums uploads
@@ -58,13 +56,15 @@
 - (void)clearCachedUploads;
 
 
+
 /**
- Adds asset to upload queue
+ Returns API digest to be sent up for creating a post from an asset
+
+ @param asset PHAsset the digest is dervied from
+ @param callback Completion handler that will return the digest
+ @return <#return value description#>
  */
-- (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
-
-
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
+- (void)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 
 
 @end

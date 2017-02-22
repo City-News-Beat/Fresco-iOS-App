@@ -17,12 +17,11 @@
 #import "EndpointManager.h"
 #import "FRSLocator.h"
 #import "NSDate+ISO.h"
+#import "NSError+Fresco.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
-
-static NSDate *lastDate;
 
 + (id)sharedInstance {
     static FRSUploadManager *sharedInstance = nil;
@@ -36,12 +35,18 @@ static NSDate *lastDate;
     return sharedInstance;
 }
 
+#pragma mark - Object lifecycle
+
 - (instancetype)init {
     self = [super init];
 
     if (self) {
-        self.currentGalleryID = @"";
-        [self commonInit];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        self.context = delegate.coreDataController.managedObjectContext;
+        
+        [self subscribeToEvents];
+        [self resetState];
+        [self startAWS];
     }
 
     return self;
@@ -51,33 +56,40 @@ static NSDate *lastDate;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)commonInit {
-    if (self.uploadMeta) {
+/**
+ This method will reset the state of the upload manager to a blank slate. 
+ Should typically be called once an upload is finished or before starting a new one.
+ */
+- (void)resetState {
+    if (self.uploadMeta && [self.uploadMeta count] > 0) {
         [self.uploadMeta removeAllObjects];
     }
-    self.currentUploads = [[NSMutableArray alloc] init];
+    
     self.completedUploads = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
     self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
-    [self startAWS];
-    currentIndex = 0;
     numberOfVideos = 0;
-    
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = delegate.coreDataController.managedObjectContext;
-    
-    [self subscribeToEvents];
+    totalFileSize = 0;
+    uploadedFileSize = 0;
+    lastProgress = 0;
+    toComplete = 0;
+    totalImageFilesSize = 0;
+    totalVideoFilesSize = 0;
+    completed = 0;
 }
 
-- (void)uploadPosts:(NSArray *)posts withAssets:(NSArray *)assets {
-    NSInteger i = 0;
-    for (PHAsset *asset in assets) {
-        NSDictionary *post = posts[i];
-        NSString *key = post[@"key"];
-        [[FRSUploadManager sharedInstance] addAsset:asset withToken:key withPostID:post[@"post_id"]];
-        i++;
-    }
+
+/**
+ Configures AWS for us
+ */
+- (void)startAWS {
+    AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3AccessKey secretKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3SecretKey];
+    
+    AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWS_REGION credentialsProvider:credentialsProvider];
+    
+    [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
 }
+
 
 #pragma mark - Files
 
@@ -92,6 +104,9 @@ static NSDate *lastDate;
     // no need to sort response, because theoretically there is 1
     NSError *fetchError;
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
+    
+    if(uploads == nil && fetchError != nil) return;
+    
     NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
 
     if (uploads.count > 0) {
@@ -193,6 +208,41 @@ static NSDate *lastDate;
 }
 
 
+
+- (void)notifyExit:(NSNotification *)notification {
+    if (completed == toComplete || toComplete == 0) {
+        return;
+    }
+    
+    [FRSTracker track:uploadClose
+           parameters:@{ @"percent_complete" : @(lastProgress) }];
+}
+
+- (void)subscribeToEvents {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:FRSRetryUpload
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *notification) {
+                                                      [self retryUpload];
+                                                  }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:FRSDismissUpload
+                                                      object:nil
+                                                       queue:nil
+     
+                                                  usingBlock:^(NSNotification *notification) {
+                                                      [self cancelUploadWithForce:YES];
+                                                  }];
+}
+
+/**
+ Updates trancoding progress in state and subsequently broadcasts progress
+ 
+ @param progress Floating point of current progress for a post
+ @param postID The ID of the post progress is being reported on
+ */
 - (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
     [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
     __block float transcodingProgress = 0;
@@ -205,72 +255,6 @@ static NSDate *lastDate;
                                                         object:nil
                                                       userInfo:@{ @"type" : @"progress",
                                                                   @"percentage" : @(totalTranscodingProgress) }];
-}
-
-- (void)notifyExit:(NSNotification *)notification {
-    if (completed == toComplete || toComplete == 0) {
-        return;
-    }
-    
-    [FRSTracker track:uploadClose
-           parameters:@{ @"percent_complete" : @(lastProgress),
-                         @"gallery_id" : _currentGalleryID }];
-}
-
-- (void)retryUpload {
-    currentIndex = 0;
-    totalFileSize = 0;
-    uploadedFileSize = 0;
-    lastProgress = 0;
-    toComplete = 0;
-    totalImageFilesSize = 0;
-    totalVideoFilesSize = 0;
-    completed = 0;
-    numberOfVideos = 0;
-    self.uploadMeta = [[NSMutableArray alloc] init];
-    self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
-
-    for (NSString *uploadPost in [self.managedObjects allKeys]) {
-        FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
-        if ([upload.completed boolValue] == NO) {
-            if (upload.key && upload.uploadID && upload.resourceURL) {
-                PHFetchResult *assetArray = [PHAsset fetchAssetsWithLocalIdentifiers:@[ upload.resourceURL ] options:nil];
-                PHAsset *asset = [assetArray firstObject];
-                [self addAsset:asset withToken:upload.key withPostID:upload.uploadID];
-            }
-            
-            [self.context performBlock:^{
-              upload.completed = @(TRUE);
-              [self.context save:Nil];
-            }];
-        }
-    }
-}
-
-- (void)subscribeToEvents {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload"
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *notification) {
-                                                    [self retryUpload];
-                                                  }];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload"
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *notification) {
-                                                    for (NSString *uploadPost in [self.managedObjects allKeys]) {
-                                                        FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
-
-                                                        [self.context performBlock:^{
-                                                          upload.completed = @(TRUE);
-                                                          [self.context save:Nil];
-                                                        }];
-                                                    }
-
-                                                  }];
 }
 
 - (void)updateProgress:(int64_t)bytes {
@@ -291,107 +275,7 @@ static NSDate *lastDate;
 
 #pragma mark - Assets
 
-- (void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
-    FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
-
-    [self.context performBlock:^{
-      upload.resourceURL = asset.localIdentifier;
-      upload.key = token;
-      upload.uploadID = post;
-      upload.completed = @(FALSE);
-      upload.creationDate = [NSDate date];
-      [self.context save:Nil];
-    }];
-
-    if (!self.managedObjects) {
-        self.managedObjects = [[NSMutableDictionary alloc] init];
-    }
-
-    [self.managedObjects setObject:upload forKey:post];
-}
-
-- (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID {
-    if (!asset || !token) {
-        return;
-    }
-
-    toComplete++;
-
-    NSString *revisedToken = [@"raw/" stringByAppendingString:token];
-
-    [self createUploadWithAsset:asset token:token post:postID];
-
-    if (asset.mediaType == PHAssetMediaTypeImage) {
-
-        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-        options.resizeMode = PHImageRequestOptionsResizeModeNone;
-        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-        options.version = PHImageRequestOptionsVersionOriginal;
-
-        [[PHImageManager defaultManager] requestImageDataForAsset:asset
-                                                          options:options
-                                                    resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
-                                                      NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
-
-                                                      // write data to temp path (background thread, async)
-                                                      [imageData writeToFile:tempPath atomically:NO];
-
-                                                      unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-                                                      totalFileSize += fileSize;
-                                                      totalImageFilesSize += fileSize;
-                                                      NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
-
-                                                      [self.uploadMeta addObject:uploadMeta];
-                                                      if (self.uploadMeta.count == toComplete) {
-                                                          [self startUploads];
-                                                      }
-                                                    }];
-    } else if (asset.mediaType == PHAssetMediaTypeVideo) {
-        numberOfVideos++;
-        [[PHImageManager defaultManager] requestAVAssetForVideo:asset
-                                                        options:nil
-                                                  resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                    // create temp location to move data (PHAsset can not be weakly linked to)
-                                                    NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-                                                    SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
-                                                    encoder.delegate = self;
-                                                    encoder.outputFileType = AVFileTypeMPEG4;
-                                                    encoder.outputURL = [NSURL fileURLWithPath:tempPath];
-                                                    encoder.videoSettings = @{
-                                                        AVVideoCodecKey : AVVideoCodecH264,
-                                                        AVVideoWidthKey : @1920,
-                                                        AVVideoHeightKey : @1080,
-                                                        AVVideoCompressionPropertiesKey : @{
-                                                            AVVideoProfileLevelKey : AVVideoProfileLevelH264High41,
-                                                            AVVideoMaxKeyFrameIntervalDurationKey : @16
-                                                        },
-                                                    };
-                                                    encoder.audioSettings = @{
-                                                        AVFormatIDKey : @(kAudioFormatMPEG4AAC),
-                                                        AVNumberOfChannelsKey : @2,
-                                                        AVSampleRateKey : @44100,
-                                                        AVEncoderBitRateKey : @64000,
-                                                    };
-                                                    encoder.postID = postID;
-
-                                                    NSLog(@"STARTING EXPORT");
-                                                    [encoder exportAsynchronouslyWithCompletionHandler:^{
-                                                      NSLog(@"ENDING EXPORT %@", encoder.error);
-                                                      unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-                                                      totalFileSize += fileSize;
-                                                      totalVideoFilesSize += fileSize;
-                                                      NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
-                                                      [self.uploadMeta addObject:uploadMeta];
-                                                      if (self.uploadMeta.count == toComplete) {
-                                                          [self startUploads];
-                                                      }
-                                                    }];
-                                                  }];
-    }
-}
-
-
-- (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
+- (void)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
     NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
     
     [self fetchAddressFromLocation:asset.location
@@ -420,11 +304,9 @@ static NSDate *lastDate;
                                                    }];
                             }
                         }];
-    
-    return digest;
 }
 
-- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback {
+- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSUploadSizeCompletionBlock)callback {
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionOriginal;
     
@@ -443,7 +325,7 @@ static NSDate *lastDate;
                                               }];
 }
 
-- (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSAPISizeCompletionBlock)callback {
+- (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSUploadSizeCompletionBlock)callback {
     [[PHImageManager defaultManager] requestImageDataForAsset:image
                                                       options:nil
                                                 resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
@@ -452,73 +334,261 @@ static NSDate *lastDate;
                                                 }];
 }
 
+/**
+ Creates an an asset for uploading by writing to local file system and returning information
+ on the location and size of the asset
+ 
+ @param asset The PHAsset to genereate for upload
+ @param key The AWS file key we're uploading to
+ @param postID The ID of the post which correpsonds to this asset
+ @param completion completion handler returning metadata on the asset
+ */
+- (void)createAssetForUpload:(PHAsset *)asset withKey:(NSString *)key withPostID:(NSString *)postID completion:(FRSUploadPostAssetCompletionBlock)completion {
+    NSString *revisedKey = [@"raw/" stringByAppendingString:key];
+    
+    [self createUploadWithAsset:asset key:key post:postID];
+    
+    if (asset.mediaType == PHAssetMediaTypeImage) {
+        
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.resizeMode = PHImageRequestOptionsResizeModeNone;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        options.version = PHImageRequestOptionsVersionOriginal;
+        
+        [[PHImageManager defaultManager] requestImageDataForAsset:asset
+                                                          options:options
+                                                    resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
+                                                        NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
+                                                        NSError *imageError;
+                                                        
+                                                        // write data to temp path (background thread, async)
+                                                        if([imageData writeToFile:tempPath options:NSDataWritingAtomic error:&imageError]) {
+                                                            NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&imageError];
+                                                            
+                                                            //Handle possible read error
+                                                            if(attributes != nil && !imageError) {
+                                                                NSDictionary *uploadMeta = [self uploadDictionaryForPost:tempPath key:revisedKey post:postID];
+                                                                completion(uploadMeta, NO, [attributes fileSize], nil);
+                                                            } else {
+                                                                completion(nil, NO, 0, imageError);
+                                                            }
+                                                        } else {
+                                                            completion(nil, NO, 0, imageError);
+                                                        }
+                                                    }];
+        
+    } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        //Request asset and trasncode into a the desired bitrate
+        [[PHImageManager defaultManager] requestAVAssetForVideo:asset
+                                                        options:nil
+                                                  resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
+                                                      // create temp location to move data (PHAsset can not be weakly linked to)
+                                                      NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+                                                      SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
+                                                      encoder.delegate = self;
+                                                      encoder.outputFileType = AVFileTypeMPEG4;
+                                                      encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+                                                      encoder.videoSettings = @{
+                                                                                AVVideoCodecKey : AVVideoCodecH264,
+                                                                                AVVideoWidthKey : @1920,
+                                                                                AVVideoHeightKey : @1080,
+                                                                                AVVideoCompressionPropertiesKey : @{
+                                                                                        AVVideoProfileLevelKey : AVVideoProfileLevelH264High41,
+                                                                                        AVVideoMaxKeyFrameIntervalDurationKey : @16
+                                                                                        },
+                                                                                };
+                                                      encoder.audioSettings = @{
+                                                                                AVFormatIDKey : @(kAudioFormatMPEG4AAC),
+                                                                                AVNumberOfChannelsKey : @2,
+                                                                                AVSampleRateKey : @44100,
+                                                                                AVEncoderBitRateKey : @64000,
+                                                                                };
+                                                      encoder.postID = postID;
+                                                      
+                                                      //Begin encoding the video, delegate responder will update the progress
+                                                      [encoder exportAsynchronouslyWithCompletionHandler:^{
+                                                          if(encoder.error) {
+                                                              completion(nil, YES, 0, encoder.error);
+                                                          } else {
+                                                              NSError *videoError;
+                                                              NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&videoError];
+                                                              
+                                                              //Handle possible read error
+                                                              if(attributes != nil && !videoError) {
+                                                                  NSDictionary *uploadMeta = [self uploadDictionaryForPost:tempPath key:revisedKey post:postID];
+                                                                  completion(uploadMeta, NO, [attributes fileSize], nil);
+                                                              } else {
+                                                                  completion(nil, NO, 0, videoError);
+                                                              }
+                                                          }
+                                                      }];
+                                                  }];
+    }
+}
+
 
 #pragma mark - Upload Events
 
-- (void)startUploads {
-    for (NSArray *request in self.uploadMeta) {
-        [self addUploadForPost:request[1]
-                           url:request[0]
-                        postID:request[2]
-                    completion:^(id responseObject, NSError *error) {
-                      [[NSFileManager defaultManager] removeItemAtPath:request[0] error:nil];
-                    }];
+- (void)startNewUploadWithPosts:(NSArray *)posts withAssets:(NSArray *)assets {
+    __weak typeof(self) weakSelf = self;
+
+    //Clear state before we begin
+    [self resetState];
+    
+    //Block to start uploads once we're done
+    void (^startUploads)(void) = ^ {
+        for (NSDictionary *uploadForPost in self.uploadMeta) {
+            [self addUploadForPost:uploadForPost[@"post_id"]
+                           andPath:uploadForPost[@"path"]
+                            andKey:uploadForPost[@"key"]
+                        completion:^(id responseObject, NSError *error) {
+                            if(error) {
+                                [weakSelf uploadDidErrorWithError:error];
+                            } else if (completed == toComplete) {
+                                // complete
+                                [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:nil userInfo:@{ @"type" : @"completion" }];
+                                [weakSelf trackDebugWithMessage:@"Upload Completed"];
+                            }
+                        }];
+        }
+    };
+    
+    //Loop through and create assets
+    for (NSInteger i = 0; i < [assets count]; i++) {
+        NSDictionary *post = posts[i];
+        
+        [self createAssetForUpload:assets[i]
+                            withKey:post[@"key"]
+                         withPostID:post[@"post_id"]
+                         completion:^(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
+                             if(!error) {
+                                 toComplete++;
+                                 totalFileSize += fileSize;
+                                 if(isVideo) {
+                                     totalVideoFilesSize += fileSize;
+                                     numberOfVideos++;
+                                 } else {
+                                     totalImageFilesSize += fileSize;
+                                 }
+                                 
+                                 [self.uploadMeta addObject:postUploadMeta];
+                                 
+                                 //If the upload errors at some point and state is reset,
+                                 //this count will never add up, hence will not start uploading
+                                 if([self.uploadMeta count] == [assets count]) {
+                                     startUploads();
+                                 }
+                             } else {
+                                 [self uploadDidErrorWithError:error];
+                             }
+                         }];
     }
 }
 
-- (void)restart {
-    if (completed == toComplete) {
-        // complete
-        [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:nil userInfo:@{ @"type" : @"completion" }];
-        currentIndex = 0;
-        totalFileSize = 0;
-        totalImageFilesSize = 0;
-        totalVideoFilesSize = 0;
-        uploadedFileSize = 0;
-        lastProgress = 0;
-        toComplete = 0;
-        completed = 0;
-        numberOfVideos = 0;
-        self.uploadMeta = [[NSMutableArray alloc] init];
-        self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
-
-        [self trackDebugWithMessage:@"Upload Completed"];
+/**
+ Method responsible for trigger a restart on an upload. Will check managed object context for existing uploads and proceed
+ to trigger a new upload cycle if there are hanging uploads.
+ */
+- (void)retryUpload {
+    NSMutableArray *posts = [NSMutableArray new];
+    NSMutableArray *assets = [NSMutableArray new];
+    
+    //Retrieve cached uploads from CoreData
+    for (NSString *uploadPost in [self.managedObjects allKeys]) {
+        FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
+        if ([upload.completed boolValue] == NO) {
+            
+            [posts addObject:@{
+                               @"post_id": upload.uploadID,
+                               @"key": upload.key
+                               }];
+            
+            if (upload.key && upload.uploadID && upload.resourceURL) {
+                PHFetchResult *assetArray = [PHAsset fetchAssetsWithLocalIdentifiers:@[ upload.resourceURL ] options:nil];
+                [assets addObject:[assetArray firstObject]];
+            }
+            
+            [self.context performBlock:^{
+                upload.completed = @(TRUE);
+                [self.context save:Nil];
+            }];
+        }
+    }
+    
+    if(posts.count > 0 && assets.count > 0 && posts.count == assets.count){
+        //Start new uploads once we've retrieved posts and assets
+        [self startNewUploadWithPosts:posts withAssets:assets];
     }
 }
 
-- (void)startAWS {
-    AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3AccessKey secretKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3SecretKey];
+
+
+/**
+ Cancels upload in progress
+
+ @param withForce BOOL value passed if the cancel should clear all of the cached uploads as well to do a full erase
+ */
+- (void)cancelUploadWithForce:(BOOL)withForce {
+    [self resetState];
+    [self clearCachedUploads];
     
-    AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWS_REGION credentialsProvider:credentialsProvider];
-    
-    [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
+    if(withForce) {
+        for (NSString *uploadPost in [self.managedObjects allKeys]) {
+            FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
+            
+            [self.context performBlock:^{
+                upload.completed = @(TRUE);
+                [self.context save:Nil];
+            }];
+        }
+    }
 }
 
-- (void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+/**
+ Utiltiy to create the dictionary representing the asset being uploaded.
+
+ @param path Path in local filesystem for the asset
+ @param key AWS Key for the post
+ @param post ID of the post
+ @return NSDictionary representing the post's asset
+ */
+- (NSDictionary *)uploadDictionaryForPost:(NSString *)path key:(NSString *)key post:(NSString *)post {
+    return @{
+             @"path": path,
+             @"key": key,
+             @"post_id": post
+             };
+}
+
+
+/**
+ Starts the AWS upload for the passed post
+
+ @param postID ID of the post being uploaded
+ @param path File Path string in local system
+ @param key AWS Key for the media file
+ @param completion Completion block returning success or error upload
+ */
+- (void)addUploadForPost:(NSString *)postID andPath:(NSString *)path andKey:(NSString *)key completion:(FRSAPIDefaultCompletionBlock)completion {
+    //Speed tracking
     __block double lastUploadSpeed;
+    __block NSDate *lastDate = [NSDate date];
+    __weak typeof(self) weakSelf = self;
     
+    //Configure AWS upload object
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
-    
-    if ([body containsString:@".jpeg"]) {
-        upload.contentType = @"image/jpeg";
-    } else {
-        upload.contentType = @"video/mp4";
-    }
-    
-    upload.body = [NSURL fileURLWithPath:body];
-    upload.key = postID;
-    upload.metadata = @{ @"post_id" : post };
+    upload.contentType = [path containsString:@".jpeg"] ? @"image/jpeg" :  @"video/mp4";
+    upload.body = [NSURL fileURLWithPath:path];
+    upload.key = key;
+    upload.metadata = @{ @"post_id" : postID };
     upload.bucket = [EndpointManager sharedInstance].currentEndpoint.amazonS3Bucket;
     
-    /*
-     MixPanel speed tracking
-     */
-    lastDate = [NSDate date];
-    
+    //Progress handler
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         //Send progress to be notified
         [self updateProgress:bytesSent];
+        
         //Get time interval since lastDate (set at the bottom of this method)
         NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
         //Calculate speed at current runtime
@@ -533,50 +603,74 @@ static NSDate *lastDate;
         
         lastDate = [NSDate date];
     };
-    __weak typeof(self) weakSelf = self;
     
+    //This actually starts the upload and takes a completion block when the upload is done
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
-        
         if (task.error) {
-            NSLog(@"Upload Error: %@", task.error);
-            [weakSelf uploadDidErrorWithError:task.error];
-        }
-        
-        if (task.result) {
-            FRSUpload *upload = [self.managedObjects objectForKey:post];
+            completion(nil, task.error);
+        } else if (task.result) {
+            FRSUpload *upload = [weakSelf.managedObjects objectForKey:postID];
             
             if (upload) {
-                [self.context performBlock:^{
+                [weakSelf.context performBlock:^{
                     upload.completed = @(YES);
-                    [self.context save:nil];
-                    completion(nil, nil);
+                    [weakSelf.context save:nil];
                     
-                    NSArray *metaToRemove = nil;
-                    for (NSArray *meta in self.uploadMeta) {
-                        if ([meta[2] isEqualToString:postID]) {
+                    NSDictionary *metaToRemove = nil;
+                    for (NSDictionary *meta in self.uploadMeta) {
+                        if ([meta[@"post_id"] isEqualToString:postID]) {
                             metaToRemove = meta;
+                            break;
                         }
                     }
+                    
                     if (metaToRemove) {
-                        [[NSFileManager defaultManager] removeItemAtPath:metaToRemove[0] error:nil];
-                        [self.uploadMeta removeObject:metaToRemove];
+                        [weakSelf.uploadMeta removeObject:metaToRemove];
                     }
+                    
+                    completion(nil, nil);
                 }];
+            } else {
+                completion(nil, nil);
             }
             
             completed++;
-            currentIndex++;
-            [self trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", post]];
-            [self restart];
+            [weakSelf trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", path]];
         }
         
         return nil;
     }];
 }
 
+- (void)createUploadWithAsset:(PHAsset *)asset key:(NSString *)key post:(NSString *)post {
+    FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
+    
+    [self.context performBlock:^{
+        upload.resourceURL = asset.localIdentifier;
+        upload.key = key;
+        upload.uploadID = post;
+        upload.completed = @(FALSE);
+        upload.creationDate = [NSDate date];
+        [self.context save:Nil];
+    }];
+    
+    if (!self.managedObjects) {
+        self.managedObjects = [[NSMutableDictionary alloc] init];
+    }
+    
+    //After saving to context, save to class's state as well for later user
+    [self.managedObjects setObject:upload forKey:post];
+}
+
 
 #pragma mark - Tracking
 
+
+/**
+ Tracks a debug message
+
+ @param message Message to pass along to the mobile event
+ */
 - (void)trackDebugWithMessage:(NSString *)message {
     NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : message } mutableCopy];
     
@@ -588,25 +682,36 @@ static NSDate *lastDate;
 }
 
 
+/**
+ Broadcasts failure upload notification to the app
+
+ @param error NSError representing the error, should pass a localizedDescription to be presented to the user
+ */
 - (void)uploadDidErrorWithError:(NSError *)error {
+    //No upload in progress, added this check due to this being called in a callback cycle
+    if(toComplete == 0) return;
+    
+    //Cancel the upload
+    [self cancelUploadWithForce:NO];
+    
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
     
     if (uploadSpeed > 0) {
         [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
     
-    NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize];
-    NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize];
+    NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize * 1024 * 1024]; //In bytes, convert to MB
+    NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize * 1024 * 1024]; //In bytes, convert to MB
     
     NSDictionary *filesDictionary = @{ @"video" : videoFilesSize,
                                        @"photo" : imageFilesSize };
     [uploadErrorSummary setObject:filesDictionary forKey:@"files"];
     
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:Nil userInfo:@{ @"type" : @"failure" }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:Nil userInfo:@{ @"type" : @"failure", @"error": error }];
 }
 
-#pragma mark - GeoCoding
+#pragma mark - GeoCoding
 
 - (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
