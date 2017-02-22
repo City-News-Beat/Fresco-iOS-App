@@ -18,6 +18,7 @@
 #import "FRSTabBarController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSIndicatorDot.h"
 
 @interface FRSBaseViewController ()
 
@@ -198,13 +199,15 @@
     [[FRSAuthManager sharedInstance] setPasswordUsed:nil];
     [[FRSAuthManager sharedInstance] setEmailUsed:nil];
 
-    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
-    [tabBarController updateUserIcon];
+    //FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    //[tabBarController updateUserIcon];
 
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
-    FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
-    [tab updateUserIcon];
     [FRSTracker track:logoutEvent];
+    [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
+    
+    [(FRSTabBarController *)self.tabBarController showBell:NO];
+    
     [self popViewController];
 }
 

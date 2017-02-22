@@ -27,6 +27,8 @@
 #import "FRSUserManager.h"
 #import "FRSNotificationManager.h"
 #import "FRSStripe.h"
+#import "Adjust.h"
+#import "FRSIndicatorDot.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -440,9 +442,8 @@
           FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
           if ([tbc isKindOfClass:[FRSTabBarController class]]) {
               if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                  [tbc updateBellIcon:YES];
-              } else {
-                  [tbc updateUserIcon];
+                  [(FRSTabBarController *)self.tabBar updateTabBarIconAtIndex:4 withImageName:@"tab-bar-bell" selectedImageName:@"tab-bar-bell-sel"];
+                  [FRSIndicatorDot addDotToTabBar:self.tabBar.tabBar atIndex:4 animated:YES];
               }
           }
       }
@@ -510,12 +511,6 @@
         // add the array to our app
         [UIApplication sharedApplication].shortcutItems = items;
     }
-}
-
-- (void)updateTabBarToUser {
-    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    [frsTabBar updateUserIcon];
-    frsTabBar.dot.alpha = 0;
 }
 
 #pragma mark - Status Bar

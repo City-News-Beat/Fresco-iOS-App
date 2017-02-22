@@ -11,6 +11,8 @@
 #import "FRSRequestSerializer.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSTabBarController.h"
+#import "FRSTracker.h"
+#import "FRSAppDelegate.h"
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
