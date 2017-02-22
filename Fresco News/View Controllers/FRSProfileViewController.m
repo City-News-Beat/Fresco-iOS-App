@@ -133,8 +133,7 @@
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 }
 
-- (void)didPressButtonAtIndex:(NSInteger)index {
-
+- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
     if (self.didDisplayReport) {
         self.didDisplayReport = NO;
         self.reportUserAlertView = nil;

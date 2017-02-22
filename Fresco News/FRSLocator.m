@@ -145,7 +145,7 @@
             if ([CLLocationManager locationServicesEnabled]) {
 
                 if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-                    [FRSTracker track:locationDisabled];
+                    [FRSTracker track:locationPermissionsDisabled];
                 }
             }
         }
@@ -221,7 +221,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location"];
         [[NSUserDefaults standardUserDefaults] synchronize];
 
-        [FRSTracker track:locationEnabled];
+        [FRSTracker track:locationPermissionsEnabled];
     }
 
     if ([locations count] == 0) {

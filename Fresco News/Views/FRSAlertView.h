@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
+@class FRSAlertView;
+
 @protocol FRSAlertViewDelegate <NSObject>
 
 @required
 @optional
-- (void)didPressButtonAtIndex:(NSInteger)index;
+- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index;
 - (void)logoutAlertAction;
 - (void)reportGalleryAlertAction;
 - (void)reportUserAlertAction;

@@ -16,8 +16,8 @@ static NSString *const galleryCellIdentifier = @"gallery-cell";
 @interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate> {
     BOOL hasPlayed;
 }
-@property (strong, nonatomic) FRSGalleryView *galleryView;
 
+@property (strong, nonatomic) FRSGalleryView *galleryView;
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;

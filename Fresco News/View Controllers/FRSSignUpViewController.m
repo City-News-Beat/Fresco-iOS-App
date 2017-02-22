@@ -1749,10 +1749,10 @@
 
 - (void)checkLocationStatus {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:locationEnabled];
         self.locationEnabled = YES;
     } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:locationEnabled];
         self.locationEnabled = NO;
     }
 }
@@ -1762,7 +1762,7 @@
 
 #pragma mark - FRSAlertViewDelegate
 
-- (void)didPressButtonAtIndex:(NSInteger)index {
+- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }

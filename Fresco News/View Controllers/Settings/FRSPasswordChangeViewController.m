@@ -160,7 +160,7 @@
 
 #pragma mark - FRSAlertView Delegate
 
-- (void)didPressButtonAtIndex:(NSInteger)index {
+- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
