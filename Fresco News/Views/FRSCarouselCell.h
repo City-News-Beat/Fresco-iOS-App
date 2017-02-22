@@ -10,6 +10,8 @@
 #import <Photos/Photos.h>
 #import "FRSPlayer.h"
 
+static NSString *const carouselCellIndentfier = @"carousel-cell";
+
 @interface FRSCarouselCell : UICollectionViewCell {
     UIImageView *imageView;
     FRSPlayer *videoView;
