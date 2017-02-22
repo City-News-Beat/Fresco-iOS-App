@@ -9,14 +9,13 @@
 #import "FRSNavigationBar.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
-#import "FRSAlertView.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSNavigationBar ()
 
 @property (nonatomic, retain) UIView *progressView;
 @property (nonatomic, retain) UIView *failureView;
 @property (nonatomic, retain) NSDate *lastAnimated;
-@property (nonatomic, strong) FRSAlertView *errorAlertView;
 
 @end
 
@@ -162,6 +161,8 @@
                              }];
         });
     } else if ([notificationInfo[@"type"] isEqualToString:@"failure"]) {
+        NSLog(@"handleUploadNotificaiton");
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             CGRect navFrame = self.frame;
             navFrame.origin.y -= 20;
@@ -172,19 +173,10 @@
             _progressView.frame = navFrame;
             _progressView.alpha = 1;
             
-            //Present error to user if needed and there currently is not one in view
-            if([notificationInfo[@"error"] isKindOfClass:[NSError class]] && self.errorAlertView.window == nil){
-                
+            //Present error to user if needed
+            if([notificationInfo[@"error"] isKindOfClass:[NSError class]]){
                 NSError *uploadError = (NSError *) notificationInfo[@"error"];
-                
-                self.errorAlertView = [[FRSAlertView alloc]
-                                       initWithTitle:[@"Uploading error" uppercaseString]
-                                       message:uploadError.localizedDescription ?: @"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."
-                                       actionTitle:@"OK"
-                                       cancelTitle:@""
-                                       cancelTitleColor:[UIColor frescoBlueColor]
-                                       delegate:nil];
-                [self.errorAlertView show];
+                [((FRSAppDelegate *)[[UIApplication sharedApplication] delegate]) presentError:uploadError withTitle:@"Upload error"];
             }
         });
     }

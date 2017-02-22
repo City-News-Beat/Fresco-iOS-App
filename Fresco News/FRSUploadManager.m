@@ -61,23 +61,19 @@
  Should typically be called once an upload is finished or before starting a new one.
  */
 - (void)resetState {
-    if (self.uploadMeta && [self.uploadMeta count] > 0) {
-        [self.uploadMeta removeAllObjects];
-    }
-    
-    self.completedUploads = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
+    self.managedObjects = [[NSMutableDictionary alloc] init];
     self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
-    numberOfVideos = 0;
     totalFileSize = 0;
+    totalVideoFilesSize = 0;
+    totalImageFilesSize = 0;
     uploadedFileSize = 0;
     lastProgress = 0;
     toComplete = 0;
-    totalImageFilesSize = 0;
-    totalVideoFilesSize = 0;
     completed = 0;
+    uploadSpeed = 0;
+    numberOfVideos = 0;
 }
-
 
 /**
  Configures AWS for us
@@ -442,6 +438,9 @@
                            andPath:uploadForPost[@"path"]
                             andKey:uploadForPost[@"key"]
                         completion:^(id responseObject, NSError *error) {
+                            
+                            return [weakSelf uploadDidErrorWithError:error];
+                            
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
                             } else if (completed == toComplete) {
@@ -616,16 +615,11 @@
                     upload.completed = @(YES);
                     [weakSelf.context save:nil];
                     
-                    NSDictionary *metaToRemove = nil;
                     for (NSDictionary *meta in self.uploadMeta) {
                         if ([meta[@"post_id"] isEqualToString:postID]) {
-                            metaToRemove = meta;
+                            [weakSelf.uploadMeta removeObject:meta];
                             break;
                         }
-                    }
-                    
-                    if (metaToRemove) {
-                        [weakSelf.uploadMeta removeObject:metaToRemove];
                     }
                     
                     completion(nil, nil);
@@ -642,6 +636,15 @@
     }];
 }
 
+
+/**
+ Creates FRSUpload CoreData object and saves to context, and also saves to 
+ manager's state to keep track of all managed objects currently being uploaded.
+
+ @param asset PHAsset assocaited with upload
+ @param key AWS File key assocaited with upload
+ @param post Post ID associated with upload
+ */
 - (void)createUploadWithAsset:(PHAsset *)asset key:(NSString *)key post:(NSString *)post {
     FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
     
@@ -658,7 +661,7 @@
         self.managedObjects = [[NSMutableDictionary alloc] init];
     }
     
-    //After saving to context, save to class's state as well for later user
+    //After saving to context, save to class's state as well for later use
     [self.managedObjects setObject:upload forKey:post];
 }
 
@@ -683,7 +686,9 @@
 
 
 /**
- Broadcasts failure upload notification to the app
+ Broadcasts failure upload notification to the app and also formally cancels the upload process.
+ When this is called, the cancel is called without a force so that it can be retried at a later time. Last, this
+ method also checks if there's no upload currently in progress to avoid re-broadcasting the failure.
 
  @param error NSError representing the error, should pass a localizedDescription to be presented to the user
  */
@@ -693,6 +698,10 @@
     
     //Cancel the upload
     [self cancelUploadWithForce:NO];
+    
+    if(!error || !error.localizedDescription){
+        error = [NSError errorWithMessage:@"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."];
+    }
     
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
     
@@ -708,6 +717,7 @@
     [uploadErrorSummary setObject:filesDictionary forKey:@"files"];
     
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
+    NSLog(@"Notified");
     [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:Nil userInfo:@{ @"type" : @"failure", @"error": error }];
 }
 

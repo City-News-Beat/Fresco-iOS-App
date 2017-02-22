@@ -335,8 +335,6 @@
     }
 }
 
-- (void)restartUpload {
-}
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(nonnull UILocalNotification *)notification {
     [FRSNotificationHandler handleNotification:notification.userInfo track:NO];
@@ -468,6 +466,7 @@
 }
 
 #pragma mark - Status Bar
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     CGPoint location = [[[event allTouches] anyObject] locationInView:[self window]];
@@ -487,6 +486,9 @@
     // [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
+#pragma mark - Errors
+
+
 // TODO: Reuse these errors
 - (void)error:(NSError *)error {
     if (!error) {
@@ -498,6 +500,26 @@
     } else {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
+    }
+}
+
+- (void)presentError:(NSError *)error withTitle:(NSString *)title {
+    //Present error to user if needed and there currently is not one in view
+    if(!self.isPresentingError && self.errorAlertView.window == nil){
+        self.isPresentingError = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.errorAlertView = [[FRSAlertView alloc]
+                                   initWithTitle:[title uppercaseString]
+                                   message:error.localizedDescription
+                                   actionTitle:@"OK"
+                                   cancelTitle:@""
+                                   cancelTitleColor:[UIColor frescoBlueColor]
+                                   delegate:nil];
+            
+            [self.errorAlertView show];
+            
+            self.isPresentingError = NO;
+        });
     }
 }
 

@@ -251,12 +251,6 @@ BOOL isSegueingToAssignment;
         [FRSNotificationHandler segueToGallery:[self galleryIDFromPush:push]];
     }
     
-    /* UPLOAD */
-    if ([type isEqualToString:restartUploadNotification]) {
-        [FRSNotificationHandler restartUpload];
-        return; // We don't want to track this notification
-    }
-    
     
     [paramsToTrack setObject:type forKey:PUSH_KEY]; // Track PUSH_KEY by default
     [self trackNotification:shouldTrack withParams:paramsToTrack];
@@ -297,10 +291,6 @@ BOOL isSegueingToAssignment;
     return galleryID;
 }
 
-+ (void)restartUpload {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate restartUpload];
-}
 
 + (void)segueToPhotosOfTheDay:(NSArray *)postIDs {
     // This is not setup on the API yet.

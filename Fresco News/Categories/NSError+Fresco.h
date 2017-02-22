@@ -8,12 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-
 /**
  Category for off-hand errors that are formatted for us
  */
 @interface NSError (Fresco)
-
 
 /**
  Returns a clean, generic error with descriptions and codes.

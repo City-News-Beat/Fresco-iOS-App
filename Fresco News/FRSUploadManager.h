@@ -31,7 +31,6 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSMutableDictionary *managedObjects;
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
-@property (nonatomic, assign) NSInteger completedUploads;
 
 + (id)sharedInstance;
 

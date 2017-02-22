@@ -162,8 +162,6 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 };
 
 static NSString *const settingsKey = @"notification-type";
-// Upload - local
-static NSString *const restartUploadNotification = @"user-local-upload";
 
 // News
 static NSString *const photoOfDayNotification = @"user-news-photos-of-day";

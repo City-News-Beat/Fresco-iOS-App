@@ -7,11 +7,12 @@
 //
 
 #import "FRSNavigationController.h"
-
+#import "FRSAlertView.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 #import "FRSNavigationBar.h"
+#import "FRSAlertView.h"
 
 #define BAR_BUTTON_WIDTH 24
 #define SIDE_MARGIN 6
@@ -33,6 +34,9 @@
 
 @property (strong, nonatomic) UIButton *extraBarItem;
 @property (strong, nonatomic) UIView *progressView;
+
+@property (nonatomic, strong) FRSAlertView *errorAlertView;
+@property (nonatomic, assign) BOOL presentingError;
 
 @end
 
@@ -58,31 +62,36 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
-- (void)configureFRSNavigationBarWithTitle:(NSString *)title {
-
-    if (!self.titleLabel) {
-        self.titleLabel = [[UILabel alloc] init];
-        [self.titleView addSubview:self.titleLabel];
-    }
-
-    self.titleLabel.text = title;
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = [UIFont notaBoldWithSize:17];
-    [self.titleLabel sizeToFit];
-    [self.titleLabel centerHorizontallyInView:self.titleView];
-    [self.titleLabel setOriginWithPoint:CGPointMake(self.titleLabel.frame.origin.x, 15)];
-
-    self.navigationBar.topItem.titleView = self.containerView;
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
 }
 
 - (void)scrollToTop {
     if ([[self.viewControllers firstObject] respondsToSelector:@selector(scrollToTop)]) {
         [[self.viewControllers firstObject] performSelector:@selector(scrollToTop)];
     }
+}
+
+- (void)configureFRSNavigationBarWithTitle:(NSString *)title {
+    
+    if (!self.titleLabel) {
+        self.titleLabel = [[UILabel alloc] init];
+        [self.titleView addSubview:self.titleLabel];
+    }
+    
+    self.titleLabel.text = title;
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.font = [UIFont notaBoldWithSize:17];
+    [self.titleLabel sizeToFit];
+    [self.titleLabel centerHorizontallyInView:self.titleView];
+    [self.titleLabel setOriginWithPoint:CGPointMake(self.titleLabel.frame.origin.x, 15)];
+    
+    self.navigationBar.topItem.titleView = self.containerView;
 }
 
 - (void)adjustFrames {
@@ -95,8 +104,5 @@
     self.secondTab.frame = CGRectMake(centerPadding / 2, 7, self.secondTab.frame.size.width, self.secondTab.frame.size.height);
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 
 @end
