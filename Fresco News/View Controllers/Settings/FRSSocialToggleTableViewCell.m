@@ -1,4 +1,5 @@
-//
+ 
+    //
 //  FRSSocialToggleTableViewCell.m
 //  Fresco
 //
@@ -8,55 +9,73 @@
 
 #import "FRSSocialToggleTableViewCell.h"
 
-@interface FRSSocialToggleTableViewCell()
+@interface FRSSocialToggleTableViewCell ()
 
-@property (nonatomic, weak) IBOutlet UILabel *socialLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *iconImageView;
-@property (nonatomic, weak) IBOutlet UISwitch *connectedSwitch;
+@property (nonatomic) SocialType socialType;
 
 @end
 
 @implementation FRSSocialToggleTableViewCell
 
-- (void)setupText:(NSString *)text withImage:(UIImage *)image andSwitchColor:(UIColor *)color {
+- (void)setupImage:(UIImage *)image andSwitchColor:(UIColor *)color type:(SocialType)type {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.socialLabel.text = text;
-        self.iconImageView.image = image;
-        self.connectedSwitch.tintColor = color;
+      self.iconImageView.image = image;
+      self.connectedSwitch.onTintColor = color;
     });
+    self.socialType = type;
+    switch (type) {
+    case TwitterType:
+        [self setupTwitterCell];
+        break;
+    case FacebookType:
+        [self setupFacebookCell];
+        break;
+    default:
+        break;
+    }
 }
 
-- (void)loadText:(NSString *)text connected:(BOOL)connected {
-    
+- (void)setupTwitterCell {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+        self.socialLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"twitter-handle"];
+        [self.connectedSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]];
+    } else {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
+            self.socialLabel.text = @"Twitter Connected";
+            [self.connectedSwitch setOn:YES];
+        } else {
+            self.socialLabel.text = @"Connect Twitter";
+            [self.connectedSwitch setOn:NO];
+        }
+    }
 }
 
+- (void)setupFacebookCell {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
+        self.socialLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"];
+        [self.connectedSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+    } else {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+            self.socialLabel.text = @"Facebook Connected";
+            [self.connectedSwitch setOn:YES];
+        } else {
+            self.socialLabel.text = @"Connect Facebook";
+            [self.connectedSwitch setOn:NO];
+        }
+    }
+}
 
-
-//- (void)didPressButtonAtIndex:(NSInteger)index {
-//    if (self.didToggleTwitter) {
-//        self.didToggleTwitter = NO;
-//        if (index == 0) {
-//            [self.twitterSwitch setOn:YES animated:YES];
-//            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-//        } else {
-//            [self.twitterSwitch setOn:NO animated:YES];
-//            self.twitterHandle = nil;
-//            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
-//            self.socialTitleLabel.text = @"Connect Twitter";
-//            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-//        }
-//    } else if (self.didToggleFacebook) {
-//        self.didToggleFacebook = NO;
-//        if (index == 0) {
-//            [self.facebookSwitch setOn:YES animated:YES];
-//        } else if (index == 1) {
-//            [self.facebookSwitch setOn:NO animated:YES];
-//            self.facebookName = nil;
-//            self.socialTitleLabel.text = @"Connect Facebook";
-//        }
-//    }
-//    
-//    self.alert = nil;
-//}
+- (IBAction)toggle:(id)sender {
+    switch (self.socialType) {
+    case FacebookType:
+        [self.delegate didToggleFacebook:self.connectedSwitch withLabel:self.socialLabel];
+        break;
+    case TwitterType:
+        [self.delegate didToggleTwitter:self.connectedSwitch withLabel:self.socialLabel];
+        break;
+    }
+}
 
 @end
+        

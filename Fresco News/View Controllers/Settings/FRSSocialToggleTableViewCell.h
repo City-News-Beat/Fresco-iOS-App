@@ -18,10 +18,18 @@ static CGFloat const socialToggleCellHeight = 44;
 
 @end
 
+typedef NS_ENUM(NSInteger, SocialType) {
+    TwitterType,
+    FacebookType
+};
+
 @interface FRSSocialToggleTableViewCell : UITableViewCell
+
+@property (nonatomic, weak) IBOutlet UILabel *socialLabel;
+@property (nonatomic, weak) IBOutlet UISwitch *connectedSwitch;
 
 @property (weak, nonatomic) id<FRSSocialToggleTableViewCellDelegate> delegate;
 
-- (void)setupText:(NSString *)text withImage:(UIImage *)image andSwitchColor:(UIColor *)color;
+- (void)setupImage:(UIImage *)image andSwitchColor:(UIColor *)color type:(SocialType)type;
 
 @end

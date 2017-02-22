@@ -40,6 +40,9 @@
                             <constraint firstAttribute="width" constant="49" id="3co-vL-lOd"/>
                             <constraint firstAttribute="height" constant="31" id="9EL-rU-yrw"/>
                         </constraints>
+                        <connections>
+                            <action selector="toggle:" destination="KGk-i7-Jjw" eventType="valueChanged" id="VVA-Ba-5aP"/>
+                        </connections>
                     </switch>
                 </subviews>
                 <constraints>
@@ -53,9 +56,9 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="connectedSwitch" destination="Wvj-u2-xXL" id="mKI-a6-HOa"/>
+                <outlet property="connectedSwitch" destination="Wvj-u2-xXL" id="D7q-II-i4w"/>
                 <outlet property="iconImageView" destination="cVW-ol-iKe" id="J54-bF-f0K"/>
-                <outlet property="socialLabel" destination="3o0-Ma-vod" id="CHF-jR-Q2w"/>
+                <outlet property="socialLabel" destination="3o0-Ma-vod" id="sdm-Nf-hLM"/>
             </connections>
         </tableViewCell>
     </objects>
