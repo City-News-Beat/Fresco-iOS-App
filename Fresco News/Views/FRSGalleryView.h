@@ -13,6 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "FRSPlayer.h"
 #import "FRSGalleryFooterView.h"
+#import "FRSActionBar.h"
 
 @class FRSGallery;
 
@@ -34,7 +35,7 @@
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
-@property (strong, nonatomic) FRSContentActionsBar *actionBar;
+@property (strong, nonatomic) FRSActionBar *actionBar;
 
 @property (strong, nonatomic) UILabel *captionLabel;
 

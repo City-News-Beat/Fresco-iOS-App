@@ -24,13 +24,14 @@
 #import "FRSUserManager.h"
 #import "FRSGalleryDetailView.h"
 #import "FRSGalleryManager.h"
+#import "FRSActionBar.h"
 
 #define TEXTVIEW_TOP_PAD 12
 #define LABEL_HEIGHT 20
 #define LABEL_PADDING 8
 #define CAPTION_PADDING 24
 
-@interface FRSGalleryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate>
+@interface FRSGalleryView () <UIScrollViewDelegate,/*remove>>*/FRSContentActionBarDelegate/*<<remove*/, UITextViewDelegate, FRSGalleryFooterViewDelegate, FRSActionBarDelegate>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
@@ -150,7 +151,7 @@
     [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
     [self.actionBar.actionButton.titleLabel sizeToFit];
 
-    [self.actionBar actionButtonTitleNeedsUpdate];
+    [self.actionBar updateTitle];
 }
 
 - (void)checkOwner {
@@ -179,25 +180,25 @@
 }
 
 - (void)updateSocial {
-    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
-    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-
-    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
-
-    [self.actionBar handleRepostState:isReposted];
-    [self.actionBar handleRepostAmount:[numReposts intValue]];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
-
-    [self.repostLabel removeFromSuperview];
-    self.repostLabel = Nil;
-    [self.repostImageView removeFromSuperview];
-    self.repostImageView = Nil;
-
-    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
-    }
+//    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
+//    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
+//
+//    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
+//    BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
+//
+//    [self.actionBar handleRepostState:isReposted];
+//    [self.actionBar handleRepostAmount:[numReposts intValue]];
+//    [self.actionBar handleHeartState:isLiked];
+//    [self.actionBar handleHeartAmount:[numLikes intValue]];
+//
+//    [self.repostLabel removeFromSuperview];
+//    self.repostLabel = Nil;
+//    [self.repostImageView removeFromSuperview];
+//    self.repostImageView = Nil;
+//
+//    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+//        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+//    }
 }
 
 - (void)updateScrollView {
@@ -226,8 +227,7 @@
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)handleActionButtonTapped {
-
+-(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
@@ -372,7 +372,7 @@
 
     [self configureCaptionLabel]; // this will stay similar
 
-    [self configureActionsBar]; // this will stay similar
+    [self configureActionBar]; // this will stay similar
 
     if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
         if (![self.gallery.creator.uid isEqualToString:@""] && [self.gallery.creator.uid length] > 0) {
@@ -918,17 +918,11 @@
     [self addSubview:self.captionLabel];
 }
 
-- (void)configureActionsBar {
-
-    if (![self.delegate shouldHaveActionBar]) {
-        self.actionBar = [[FRSContentActionsBar alloc] initWithFrame:CGRectZero];
-    } else {
-        self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
+- (void)configureActionBar {
+    if ([self.delegate shouldHaveActionBar]) {
+        self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
+        [self addSubview:self.actionBar];
     }
-
-    self.actionBar.delegate = self;
-
-    [self addSubview:self.actionBar];
 }
 
 - (void)adjustHeight {
@@ -945,13 +939,13 @@
     [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
 
     if (!self.borderLine) {
-        self.borderLine = [UIView lineAtPoint:CGPointMake(0, self.frame.size.height)];
-        [self addSubview:self.borderLine];
+//        self.borderLine = [UIView lineAtPoint:CGPointMake(0, self.frame.size.height)];
+//        [self addSubview:self.borderLine];
     } else {
-        self.borderLine.frame = CGRectMake(0, self.frame.size.height, self.borderLine.frame.size.width, self.borderLine.frame.size.height);
+//        self.borderLine.frame = CGRectMake(0, self.frame.size.height, self.borderLine.frame.size.width, self.borderLine.frame.size.height);
     }
 
-    [self bringSubviewToFront:self.borderLine];
+//    [self bringSubviewToFront:self.borderLine];
 }
 
 #pragma mark - Action Bar Delegate
@@ -969,9 +963,9 @@
     return [NSString stringWithFormat:@"%d COMMENTS", comments];
 }
 
-- (UIColor *)colorForActionButton {
-    return [UIColor frescoBlueColor];
-}
+//- (UIColor *)colorForActionButton {
+//    return [UIColor frescoBlueColor];
+//}
 
 - (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
 

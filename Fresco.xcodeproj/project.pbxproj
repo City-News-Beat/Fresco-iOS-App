@@ -52,6 +52,8 @@
 		07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */; };
 		07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */; };
 		07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C121C50499A00C536EB /* FRSStoryCell.m */; };
+		07A915C51E5F65060081D219 /* FRSActionBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A915C41E5F65060081D219 /* FRSActionBar.xib */; };
+		07A915CB1E5F65510081D219 /* FRSActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A915CA1E5F65510081D219 /* FRSActionBar.m */; };
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
 		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
@@ -417,6 +419,9 @@
 		07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchViewController.m; sourceTree = "<group>"; };
 		07A30C111C50499A00C536EB /* FRSStoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryCell.h; sourceTree = "<group>"; };
 		07A30C121C50499A00C536EB /* FRSStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryCell.m; sourceTree = "<group>"; };
+		07A915C41E5F65060081D219 /* FRSActionBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSActionBar.xib; sourceTree = "<group>"; };
+		07A915C91E5F65510081D219 /* FRSActionBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSActionBar.h; sourceTree = "<group>"; };
+		07A915CA1E5F65510081D219 /* FRSActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSActionBar.m; sourceTree = "<group>"; };
 		07B61ECB1CAF1C4900D3454F /* PeekPopArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeekPopArticleViewController.h; sourceTree = "<group>"; };
 		07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeekPopArticleViewController.m; sourceTree = "<group>"; };
 		07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentsTableViewController.h; sourceTree = "<group>"; };
@@ -1989,6 +1994,9 @@
 			children = (
 				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
 				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
+				07A915C41E5F65060081D219 /* FRSActionBar.xib */,
+				07A915C91E5F65510081D219 /* FRSActionBar.h */,
+				07A915CA1E5F65510081D219 /* FRSActionBar.m */,
 			);
 			name = "Content Action Bar";
 			sourceTree = "<group>";
@@ -2575,6 +2583,7 @@
 				D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */,
 				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
 				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
+				07A915C51E5F65060081D219 /* FRSActionBar.xib in Resources */,
 				CE3799B61E5825C600B6743A /* FRSLogOutTableViewCell.xib in Resources */,
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
@@ -2779,6 +2788,7 @@
 				CE0A6FCD1E3E998A00E67766 /* FRSSearchManager.m in Sources */,
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
 				CE0A6FD31E3EA95800E67766 /* FRSPaymentManager.m in Sources */,
+				07A915CB1E5F65510081D219 /* FRSActionBar.m in Sources */,
 				CE0AABAB1E3DF55700DD6A8A /* FRSFeedManager.m in Sources */,
 				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
 				D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */,
@@ -2907,7 +2917,6 @@
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				CA70746A1E2EAEB70072643B /* NSURL+Fresco.m in Sources */,
 				CE3799B51E5825C600B6743A /* FRSLogOutTableViewCell.m in Sources */,
-				D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

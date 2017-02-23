@@ -104,9 +104,9 @@
     return @"READ MORE";
 }
 
-- (UIColor *)colorForActionButton {
-    return [UIColor frescoBlueColor];
-}
+//- (UIColor *)colorForActionButton {
+//    return [UIColor frescoBlueColor];
+//}
 
 - (void)configureDismissButton {
 

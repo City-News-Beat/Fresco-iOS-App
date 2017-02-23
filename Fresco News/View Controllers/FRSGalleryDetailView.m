@@ -669,9 +669,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return @"ADD A COMMENT";
 }
 
-- (UIColor *)colorForActionButton {
-    return [UIColor frescoBlueColor];
-}
+//- (UIColor *)colorForActionButton {
+//    return [UIColor frescoBlueColor];
+//}
 
 - (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
