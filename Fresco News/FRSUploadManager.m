@@ -241,8 +241,9 @@
  @param postID The ID of the post progress is being reported on
  */
 - (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
-    [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
     __block float transcodingProgress = 0;
+    [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
+    
     [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
         transcodingProgress += value.floatValue;
     }];
@@ -303,6 +304,7 @@
                         }];
 }
 
+//TODO move out of here
 - (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSUploadSizeCompletionBlock)callback {
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionOriginal;
@@ -322,6 +324,7 @@
                                               }];
 }
 
+//TODO move out of here
 - (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSUploadSizeCompletionBlock)callback {
     [[PHImageManager defaultManager] requestImageDataForAsset:image
                                                       options:nil
@@ -379,6 +382,8 @@
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset
                                                         options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
+                                                      //Increment number of videos in state
+                                                      numberOfVideos++;
                                                       // create temp location to move data (PHAsset can not be weakly linked to)
                                                       NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
                                                       SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
@@ -432,6 +437,11 @@
     //Clear state before we begin
     [self resetState];
     
+    //Check if we have internet
+//    if(![[AFNetworkReachabilityManager sharedManager] isReachable]){
+//        return [self uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection"]];
+//    }
+    
     //Block to start uploads once we're done
     void (^startUploads)(void) = ^ {
         for (NSDictionary *uploadForPost in self.uploadMeta) {
@@ -463,7 +473,6 @@
                                  totalFileSize += fileSize;
                                  if(isVideo) {
                                      totalVideoFilesSize += fileSize;
-                                     numberOfVideos++;
                                  } else {
                                      totalImageFilesSize += fileSize;
                                  }
@@ -721,6 +730,7 @@
 
 #pragma mark - GeoCoding
 
+//TODO move out of here
 - (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     __block NSString *address;

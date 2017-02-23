@@ -153,7 +153,6 @@
             [UIView animateWithDuration:.2
                              animations:^{
                                  _progressView.alpha = 0;
-                                 
                              }
                              completion:^(BOOL finished) {
                                  _progressView.frame = navFrame;
