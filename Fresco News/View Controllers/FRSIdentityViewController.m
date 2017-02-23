@@ -109,7 +109,6 @@
         self.saveIdTopSpaceConstraint.constant = 12;
     } else {
         self.documentIDButton.hidden = NO;
-        [self addShadowToButton:self.documentIDButton];
         self.saveIdTopSpaceConstraint.constant = 12 + self.saveIDInfoButton.frame.size.height;
     }
 
@@ -457,15 +456,6 @@
     [self presentViewController:cameraUI animated:YES completion:nil];
 }
 
-// TODO: move to a UI helper class
-- (void)addShadowToButton:(UIButton *)view {
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.bounds];
-    view.layer.masksToBounds = NO;
-    view.layer.shadowColor = [UIColor blackColor].CGColor;
-    view.layer.shadowOffset = CGSizeMake(0, 3);
-    view.layer.shadowOpacity = 0.15;
-    view.layer.shadowPath = shadowPath.CGPath;
-}
 
 #pragma mark - UXCam
 

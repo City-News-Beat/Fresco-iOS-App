@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12100" systemVersion="16E154a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12072"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -53,10 +53,11 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="136"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WiH-3d-M3R">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="fg4-SX-v8o"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="FIJ-7V-PxE"/>
+                                                <constraint firstAttribute="height" constant="1" id="fg4-SX-v8o"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vj3-ei-fR0">
@@ -76,10 +77,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5yA-TZ-5ax">
-                                            <rect key="frame" x="0.0" y="45" width="375" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="45" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="O1v-1m-KIG"/>
+                                                <constraint firstAttribute="height" constant="1" id="O1v-1m-KIG"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0ag-L0-kkY">
@@ -99,10 +100,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wcc-Dy-w5j">
-                                            <rect key="frame" x="0.0" y="90" width="375" height="0.5"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.13" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="0.0" y="90" width="375" height="1"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="d0Q-o7-whn"/>
+                                                <constraint firstAttribute="height" constant="1" id="d0Q-o7-whn"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date of birth" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ze0-Pf-Nhz">
@@ -122,10 +123,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CBS-Gp-Qzq">
-                                            <rect key="frame" x="0.0" y="135.5" width="375" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="135" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="gF0-57-mS5"/>
+                                                <constraint firstAttribute="height" constant="1" id="gF0-57-mS5"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -133,8 +134,8 @@
                                     <constraints>
                                         <constraint firstItem="Ze0-Pf-Nhz" firstAttribute="top" secondItem="Wcc-Dy-w5j" secondAttribute="bottom" id="4RF-f1-IBh"/>
                                         <constraint firstItem="Vj3-ei-fR0" firstAttribute="leading" secondItem="ATk-zk-Qbu" secondAttribute="leading" constant="16" id="4RH-7K-TOt"/>
-                                        <constraint firstAttribute="bottom" secondItem="CBS-Gp-Qzq" secondAttribute="bottom" id="8P2-H9-csY"/>
                                         <constraint firstAttribute="trailing" secondItem="Wcc-Dy-w5j" secondAttribute="trailing" id="93j-uF-pir"/>
+                                        <constraint firstItem="CBS-Gp-Qzq" firstAttribute="top" secondItem="Ze0-Pf-Nhz" secondAttribute="bottom" id="BFv-Yg-BTE"/>
                                         <constraint firstItem="WiH-3d-M3R" firstAttribute="top" secondItem="ATk-zk-Qbu" secondAttribute="top" id="Dfq-2W-wgH"/>
                                         <constraint firstItem="0ag-L0-kkY" firstAttribute="leading" secondItem="ATk-zk-Qbu" secondAttribute="leading" constant="16" id="Ec7-kM-cCY"/>
                                         <constraint firstItem="Wcc-Dy-w5j" firstAttribute="top" secondItem="0ag-L0-kkY" secondAttribute="bottom" id="MSZ-xK-5Ef"/>
@@ -159,10 +160,10 @@
                                     <rect key="frame" x="0.0" y="148" width="375" height="136"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7ne-ip-44N">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="HLe-ul-d0X"/>
+                                                <constraint firstAttribute="height" constant="1" id="HLe-ul-d0X"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FsK-cK-oPX">
@@ -182,10 +183,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FFr-rE-uOf">
-                                            <rect key="frame" x="0.0" y="45" width="375" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="45" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="lsH-6z-A6Q"/>
+                                                <constraint firstAttribute="height" constant="1" id="lsH-6z-A6Q"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Unit # (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cg0-V5-Seb">
@@ -205,10 +206,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPE-R9-DvE">
-                                            <rect key="frame" x="0.0" y="90" width="375" height="0.5"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.13" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="0.0" y="90" width="375" height="1"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="rxW-Ef-OwA"/>
+                                                <constraint firstAttribute="height" constant="1" id="rxW-Ef-OwA"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ZIP" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dFA-rK-yyg">
@@ -260,10 +261,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQx-5p-cpl">
-                                            <rect key="frame" x="0.0" y="137" width="375" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="135" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="3UD-vv-HVj"/>
+                                                <constraint firstAttribute="height" constant="1" id="3UD-vv-HVj"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -284,7 +285,7 @@
                                         <constraint firstItem="fPE-R9-DvE" firstAttribute="leading" secondItem="LlY-Zw-4F5" secondAttribute="leading" id="Pgm-RD-qtR"/>
                                         <constraint firstItem="FFr-rE-uOf" firstAttribute="leading" secondItem="LlY-Zw-4F5" secondAttribute="leading" id="ROG-QO-Foq"/>
                                         <constraint firstItem="fnn-hZ-LFx" firstAttribute="top" secondItem="fPE-R9-DvE" secondAttribute="bottom" id="TjK-zx-i5k"/>
-                                        <constraint firstItem="MQx-5p-cpl" firstAttribute="top" secondItem="fnn-hZ-LFx" secondAttribute="bottom" constant="2" id="YBW-F1-Kt4"/>
+                                        <constraint firstItem="MQx-5p-cpl" firstAttribute="top" secondItem="fnn-hZ-LFx" secondAttribute="bottom" id="YBW-F1-Kt4"/>
                                         <constraint firstItem="fnn-hZ-LFx" firstAttribute="leading" secondItem="LlY-Zw-4F5" secondAttribute="leading" constant="16" id="YJl-Vf-mDS"/>
                                         <constraint firstItem="kzj-zi-0Sq" firstAttribute="leading" secondItem="fnn-hZ-LFx" secondAttribute="trailing" constant="12" id="fh2-vI-dRX"/>
                                         <constraint firstItem="7ne-ip-44N" firstAttribute="top" secondItem="LlY-Zw-4F5" secondAttribute="top" id="hFn-xo-sdH"/>
@@ -301,10 +302,12 @@
                                     <rect key="frame" x="0.0" y="296" width="375" height="46"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oZV-8q-Du6">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.13" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="hXk-SQ-pzB"/>
+                                                <constraint firstAttribute="height" relation="lessThanOrEqual" constant="1" id="9Bm-R9-ObR"/>
+                                                <constraint firstAttribute="height" constant="1" id="hXk-SQ-pzB"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="mnH-RP-T2C"/>
                                             </constraints>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last 4 Digits of Social Security Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KRN-A7-UHz">
@@ -323,10 +326,10 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="paS-Jx-Wm1">
-                                            <rect key="frame" x="0.0" y="46" width="375" height="0.5"/>
+                                            <rect key="frame" x="0.0" y="45" width="375" height="1"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="0.5" id="1n6-dn-ceg"/>
+                                                <constraint firstAttribute="height" constant="1" id="1n6-dn-ceg"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -335,7 +338,7 @@
                                         <constraint firstItem="oZV-8q-Du6" firstAttribute="top" secondItem="C5T-is-bfA" secondAttribute="top" id="Fzz-cO-Pgu"/>
                                         <constraint firstItem="paS-Jx-Wm1" firstAttribute="leading" secondItem="C5T-is-bfA" secondAttribute="leading" id="Mzx-vn-AeG"/>
                                         <constraint firstAttribute="trailing" secondItem="KRN-A7-UHz" secondAttribute="trailing" constant="12" id="OKV-sX-e21"/>
-                                        <constraint firstItem="paS-Jx-Wm1" firstAttribute="top" secondItem="KRN-A7-UHz" secondAttribute="bottom" constant="1" id="Uoj-m9-BcB"/>
+                                        <constraint firstItem="paS-Jx-Wm1" firstAttribute="top" secondItem="KRN-A7-UHz" secondAttribute="bottom" id="Uoj-m9-BcB"/>
                                         <constraint firstItem="KRN-A7-UHz" firstAttribute="top" secondItem="oZV-8q-Du6" secondAttribute="bottom" id="WFv-RM-aqI"/>
                                         <constraint firstAttribute="height" constant="46" id="aga-zx-6ZE"/>
                                         <constraint firstItem="oZV-8q-Du6" firstAttribute="leading" secondItem="C5T-is-bfA" secondAttribute="leading" id="fTG-d3-qCB"/>

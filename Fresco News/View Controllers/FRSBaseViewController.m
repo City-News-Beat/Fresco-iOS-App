@@ -19,7 +19,6 @@
 #import "FRSAppDelegate.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
-#import "FRSIndicatorDot.h"
 
 @interface FRSBaseViewController ()
 
@@ -173,9 +172,13 @@
 
     [delegate stopNotificationTimer];
 
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    [tabBarController updateUserIcon];
+
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
-    
-    [(FRSTabBarController *)self.tabBarController showBell:NO];
+    FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
+    [tab updateUserIcon];
+
     
     [self popViewController];
 }

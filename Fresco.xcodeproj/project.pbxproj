@@ -14,7 +14,6 @@
 		072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E21E3951DF00A49DEC /* FRSUserView.m */; };
 		072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E41E3951DF00A49DEC /* FRSGalleryFooterView.m */; };
 		072654EA1E3951DF00A49DEC /* FRSFollowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E61E3951DF00A49DEC /* FRSFollowButton.m */; };
-		072971A51E5B67AC000AA8FD /* FRSIndicatorDot.m in Sources */ = {isa = PBXBuildFile; fileRef = 072971A41E5B67AC000AA8FD /* FRSIndicatorDot.m */; };
 		072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */; };
 		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
@@ -342,8 +341,6 @@
 		072654E51E3951DF00A49DEC /* FRSGalleryFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryFooterView.h; sourceTree = "<group>"; };
 		072654E61E3951DF00A49DEC /* FRSFollowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowButton.m; sourceTree = "<group>"; };
 		072654E71E3951DF00A49DEC /* FRSFollowButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowButton.h; sourceTree = "<group>"; };
-		072971A31E5B67AC000AA8FD /* FRSIndicatorDot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSIndicatorDot.h; sourceTree = "<group>"; };
-		072971A41E5B67AC000AA8FD /* FRSIndicatorDot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSIndicatorDot.m; sourceTree = "<group>"; };
 		072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Bold.otf"; sourceTree = "<group>"; };
 		072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Medium.otf"; sourceTree = "<group>"; };
 		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
@@ -1222,8 +1219,6 @@
 				D43C80021C9074C700A7A7A7 /* Scroll View Image */,
 				0713D12C1CE5121900F79F49 /* FRSAwkwardView.h */,
 				0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */,
-				072971A31E5B67AC000AA8FD /* FRSIndicatorDot.h */,
-				072971A41E5B67AC000AA8FD /* FRSIndicatorDot.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2851,7 +2846,6 @@
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */,
-				072971A51E5B67AC000AA8FD /* FRSIndicatorDot.m in Sources */,
 				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
 				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,
 				D453CC841CCA80850091A004 /* NSManagedObject+MagicalRequests.m in Sources */,

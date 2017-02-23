@@ -13,6 +13,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSTracker.h"
+#import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
