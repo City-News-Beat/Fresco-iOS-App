@@ -105,4 +105,7 @@
 }
 
 
+- (void)updateUserIcon {
+}
+
 @end

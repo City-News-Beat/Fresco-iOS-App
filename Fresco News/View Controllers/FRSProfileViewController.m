@@ -309,9 +309,9 @@
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
 
       if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
-          [tabBarController showBell:NO];
+          [tabBarController updateUserIcon];
       } else {
-          [tabBarController showBell:YES];
+          [tabBarController updateBellIcon:NO];
       }
     }];
 }

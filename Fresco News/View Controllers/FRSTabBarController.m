@@ -7,40 +7,37 @@
 //
 
 #import "FRSTabBarController.h"
-#import "FRSAppDelegate.h"
-
-/* VIEW CONTROLLERS */
-#import "FRSBaseViewController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSNavigationController.h"
+#import "FRSProfileViewController.h"
 #import "FRSHomeViewController.h"
+#import "FRSAssignmentsViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSCameraViewController.h"
-#import "FRSAssignmentsViewController.h"
-#import "FRSProfileViewController.h"
+#import "UIColor+Fresco.h"
+#import "FRSNavigationBar.h"
+#import "FRSAppDelegate.h"
 #import "FRSUserNotificationViewController.h"
-
-/* MANAGERS */
 #import "FRSLocationManager.h"
+#import "FRSBaseViewController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
-
-/* UI */
-#import "FRSNavigationBar.h"
-#import "FRSIndicatorDot.h"
-#import "UIColor+Fresco.h"
-
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
+@property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
-@property CGFloat xOffset;
 
 @end
 
 @implementation FRSTabBarController
+
+- (void)presentAssignments {
+}
+- (void)returnToGalleryPost {
+}
 
 - (void)respondToQuickAction:(NSString *)quickAction {
     if ([quickAction isEqualToString:assignmentsAction]) {
@@ -102,11 +99,6 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assignmentAccepted:) name:enableAssignmentAccept object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disableAssignmentAccept:) name:disableAssignmentAccept object:nil];
-    
-    // Creating a reference to the bell image here to check when user taps on button.
-    self.bellImage = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    
-    [self checkNewAssignments];
 }
 
 - (void)assignmentAccepted:(NSNotification *)assignment {
@@ -152,21 +144,21 @@
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
         item4.imageInsets = UIEdgeInsetsMake(5, -6, -5, 6);
-        self.xOffset = 40;
+        self.notificationDotXOffset = 30.5;
     } else if (IS_IPHONE_6_PLUS) {
         item0.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
         item1.imageInsets = UIEdgeInsetsMake(5, -8, -5, 8);
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 8, -5, -8);
         item4.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
-        self.xOffset = 45;
+        self.notificationDotXOffset = 35;
     } else if (IS_IPHONE_5) {
         item0.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
         item1.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
         item4.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
-        self.xOffset = 33;
+        self.notificationDotXOffset = 23;
     }
 }
 
@@ -205,6 +197,46 @@
 
 - (void)setIrisItemColor:(UIColor *)color {
     self.cameraBackgroundView.backgroundColor = color;
+}
+
+#pragma mark Delegate
+
+- (void)updateUserIcon {
+    UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
+    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.dot.alpha = 0;
+
+    //FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
+    //frsTabBar.dot.alpha = 0;
+    //[frsTabBar.dot removeFromSuperview];
+}
+
+- (void)updateBellIcon:(BOOL)unread {
+
+    UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
+    self.bellImage = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.image = self.bellImage;
+    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-bell-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.title = @"";
+
+    if (unread) {
+        if (!self.dot) {
+            self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - self.notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
+            self.dot.layer.masksToBounds = YES;
+            self.dot.layer.cornerRadius = 9 / 2;
+            self.dot.backgroundColor = [UIColor frescoTabBarColor];
+            self.dot.layer.zPosition = 1;
+            self.dot.userInteractionEnabled = NO;
+            [self.tabBar addSubview:self.dot];
+
+            UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
+            yellowCircle.backgroundColor = [UIColor frescoOrangeColor];
+            yellowCircle.layer.cornerRadius = 3.5;
+            [self.dot addSubview:yellowCircle];
+        }
+        self.dot.alpha = 1;
+    }
 }
 
 - (void)checkLocationAndPresentPermissionsAlert {
@@ -309,6 +341,7 @@
                  [profile loadAuthenticatedUser]; */
             [profile showNotificationsNotAnimated];
 
+            [self updateUserIcon];
         } else {
             if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
                 id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
@@ -377,7 +410,7 @@
     self.lastActiveIndex = tabBarController.selectedIndex;
 
     NSInteger index = [self.viewControllers indexOfObject:viewController];
-    [FRSIndicatorDot removeDotInView:self.tabBar atIndex:index]; // We may want to specify when we remove the notification dot in the future. For example, if accessing 'new content' when it's not directly in the view controller (global assignments).
+
     switch (index) {
     case 0: {
 
@@ -405,6 +438,7 @@
         return NO;
 
     case 3:
+
         if (self.lastActiveIndex == 3) {
             if (![selectedVC isKindOfClass:[FRSAssignmentsViewController class]])
                 break;
@@ -420,9 +454,6 @@
         break;
 
     case 4: {
-        
-        [self showBell:NO];
-        
         if (self.lastActiveIndex == 4) {
             FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
             [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
@@ -447,43 +478,5 @@
 
     return YES;
 }
-
--(void)checkNewAssignments {
-    
-    CLLocation *location = [[FRSLocator sharedLocator] currentLocation];
-    
-    [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:20 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] withCompletion:^(id responseObject, NSError *error) {
-        NSArray *assignments = (NSArray *)responseObject[@"nearby"];
-        
-        NSInteger savedCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"assignment-count"];
-        NSInteger currentCount = assignments.count;
-        
-        if (savedCount < currentCount) {
-            [FRSIndicatorDot addDotToTabBar:self.tabBar atIndex:3 animated:YES];
-        }
-        
-        [[NSUserDefaults standardUserDefaults] setInteger:assignments.count forKey:@"assignment-count"];
-    }];
-}
-
-
-#pragma mark - Icon Updating
-
-- (void)showBell:(BOOL)bell {
-    if (bell) {
-        [self updateTabBarIconAtIndex:4 withImageName:@"tab-bar-bell" selectedImageName:@"tab-bar-bell-sel"];
-        [FRSIndicatorDot addDotToTabBar:self.tabBar atPosition:self.view.frame.size.width - self.xOffset atIndex:4 animated:YES];
-    } else {
-        [self updateTabBarIconAtIndex:4 withImageName:@"tab-bar-profile" selectedImageName:@"tab-bar-profile-sel"];
-        [FRSIndicatorDot removeDotInView:self.tabBar atIndex:4];
-    }
-}
-
-- (void)updateTabBarIconAtIndex:(NSInteger)index withImageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName {
-    UITabBarItem *item = [self.tabBar.items objectAtIndex:index];
-    item.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item.selectedImage = [[UIImage imageNamed:selectedImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-}
-
 
 @end
