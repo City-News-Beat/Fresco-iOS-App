@@ -46,7 +46,6 @@
 		07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */; };
 		07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF41C50488800C536EB /* FRSRadiusViewController.m */; };
 		07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF61C50488800C536EB /* FRSSettingsViewController.m */; };
-		07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF81C50488800C536EB /* FRSTableViewCell.m */; };
 		07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */; };
 		07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C091C50494700C536EB /* FRSStoryView.m */; };
 		07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */; };
@@ -406,8 +405,6 @@
 		07A30BF41C50488800C536EB /* FRSRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSRadiusViewController.m; path = "Fresco News/View Controllers/Settings/FRSRadiusViewController.m"; sourceTree = "<group>"; };
 		07A30BF51C50488800C536EB /* FRSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSettingsViewController.h; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.h"; sourceTree = "<group>"; };
 		07A30BF61C50488800C536EB /* FRSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSettingsViewController.m; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.m"; sourceTree = "<group>"; };
-		07A30BF71C50488800C536EB /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSTableViewCell.h"; sourceTree = "<group>"; };
-		07A30BF81C50488800C536EB /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSTableViewCell.m"; sourceTree = "<group>"; };
 		07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSUsernameViewController.h; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.h"; sourceTree = "<group>"; };
 		07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSUsernameViewController.m; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.m"; sourceTree = "<group>"; };
 		07A30C081C50494700C536EB /* FRSStoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryView.h; sourceTree = "<group>"; };
@@ -937,7 +934,6 @@
 				D43C7FE91C8F356800A7A7A7 /* Promo */,
 				D43C7FEA1C8F358A00A7A7A7 /* Radius */,
 				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
-				D43C7FEC1C8F359700A7A7A7 /* Table View */,
 				07FD8BAD1CE66EAA00F93705 /* About */,
 			);
 			name = Settings;
@@ -1846,15 +1842,6 @@
 				CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */,
 			);
 			name = "Settings VC";
-			sourceTree = "<group>";
-		};
-		D43C7FEC1C8F359700A7A7A7 /* Table View */ = {
-			isa = PBXGroup;
-			children = (
-				07A30BF71C50488800C536EB /* FRSTableViewCell.h */,
-				07A30BF81C50488800C536EB /* FRSTableViewCell.m */,
-			);
-			name = "Table View";
 			sourceTree = "<group>";
 		};
 		D43C7FEE1C8F35A300A7A7A7 /* Username */ = {
@@ -2805,7 +2792,6 @@
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				CA1637441E27F05500779A92 /* FRSGalleryStatusTableViewCell.m in Sources */,
-				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,
 				D453CC7F1CCA80850091A004 /* MagicalRecordInternal.m in Sources */,
 				072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */,
 				D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,

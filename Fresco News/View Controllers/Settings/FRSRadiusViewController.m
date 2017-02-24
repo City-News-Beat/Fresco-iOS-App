@@ -7,7 +7,6 @@
 //
 
 #import "FRSRadiusViewController.h"
-#import "FRSTableViewCell.h"
 #import "FRSLocator.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"

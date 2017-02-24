@@ -8,7 +8,6 @@
 //
 
 #import "FRSPasswordChangeViewController.h"
-#import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"

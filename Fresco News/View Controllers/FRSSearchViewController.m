@@ -7,7 +7,6 @@
 //
 
 #import "FRSSearchViewController.h"
-#import "FRSTableViewCell.h"
 #import "FRSGallery.h"
 #import "FRSGalleryTableViewCell.h"
 #import "FRSGalleryExpandedViewController.h"
@@ -651,7 +650,7 @@ static NSInteger const previewCount = 3;
     return view;
 }
 
-- (UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const emptyCellIdentifier = @"empty-cell";
 
     if (indexPath.section == userIndex) {
@@ -772,9 +771,6 @@ static NSInteger const previewCount = 3;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
