@@ -25,7 +25,7 @@
 #define TOP_NAV_BAR_HEIGHT 64
 #define DEFAULT_PADDING 16
 
-@interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSContentActionBarDelegate, FRSCommentCellDelegate, MGSwipeTableCellDelegate, UITextViewDelegate, FRSAlertViewDelegate>
+@interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSCommentCellDelegate, MGSwipeTableCellDelegate, UITextViewDelegate, FRSAlertViewDelegate, FRSActionBarDelegate, UIScrollViewDelegate>
 
 @property BOOL didPrepareForReply;
 
@@ -74,7 +74,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)loadGalleryDetailViewWithGallery:(FRSGallery *)gallery parentVC:(FRSGalleryExpandedViewController *)parentVC {
     self.gallery = gallery;
     self.parentVC = parentVC;
-    self.scrollView.delegate = parentVC;
+    self.scrollView.delegate = self;
     self.totalCommentCount = [[gallery valueForKey:@"comments"] intValue];
 
     [self configureUI];
@@ -99,6 +99,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
     
     self.scrollView.showsVerticalScrollIndicator = NO;
+    
+    [self updateSocial];
 }
 
 
@@ -291,7 +293,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         commentsLabel.hidden = self.comments.count == 0;
     }
     
-    [self.actionBar actionButtonTitleNeedsUpdate];
+    [self.actionBar updateTitle];
     [commentsTableView reloadData];
 }
 
@@ -341,7 +343,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                   int comments = [[self.gallery valueForKey:@"comments"] intValue];
                                                   comments++;
                                                   [self.gallery setValue:[NSNumber numberWithInt:comments] forKey:@"comments"];
-                                                  [self.actionBar actionButtonTitleNeedsUpdate];
+                                                  [self.actionBar updateTitle];
 
                                                   self.totalCommentCount++;
 
@@ -611,7 +613,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             self.didPrepareForReply = NO;
         } else {
             self.didPrepareForReply = YES;
-            [self contentActionBarDidSelectActionButton:self.actionBar];
+            [self handleActionButtonTapped:self.actionBar];
             FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
             self.commentTextField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
         }
@@ -623,7 +625,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Action Bar
 
 - (void)configureActionBar {
-    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - TOP_NAV_BAR_HEIGHT - 44) delegate:self];
+    self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - 44) delegate:self];
     self.actionBar.delegate = self;
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
@@ -634,7 +636,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
+    BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
     
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
@@ -654,6 +656,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 #pragma mark - Action Bar Delegate
 
+/**
+ Set the title for the gallerys action button.
+ 
+ @return NSString title for action button.
+ */
 - (NSString *)titleForActionButton {
     CGRect visibleRect;
     visibleRect.origin = self.scrollView.contentOffset;
@@ -669,24 +676,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return @"ADD A COMMENT";
 }
 
-//- (UIColor *)colorForActionButton {
-//    return [UIColor frescoBlueColor];
-//}
 
-- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
-    
-    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
-    
-    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
-    [self.parentVC.navigationController presentViewController:activityController animated:YES completion:nil];
-    
-    [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
-}
-
-- (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
-    // comment text field comes up
+-(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
     if (![[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
         [self.commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
         self.commentTextField.delegate = self;
@@ -694,42 +685,112 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+/**
+ Presents share action sheet with a link to the current gallery.
+ 
+ @param actionbar FRSActionBar
+ */
+
+-(void)handleShare:(FRSActionBar *)actionbar {
+//    self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
+}
+
+//-(void)handleShare:(FRSActionBar *)actionbar {
+//    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+//    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
+//    
+//    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
+//    
+//    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
+//    [self.parentVC.navigationController presentViewController:activityController animated:YES completion:nil];
+//    
+//    [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
+//
+//}
+
+
+
+
+//- (void)handleLike:(FRSContentActionsBar *)actionBar {
+//    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
+//    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
+//        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
+//                                               completion:^(id responseObject, NSError *error) {
+//                                                   NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
+//                                                   if (error) {
+//                                                       [actionBar handleHeartState:TRUE];
+//                                                       [actionBar handleHeartAmount:likes];
+//                                                   }
+//                                               }];
+//    } else {
+//        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
+//                                             completion:^(id responseObject, NSError *error) {
+//                                                 NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+//                                                 if (error) {
+//                                                     [actionBar handleHeartState:FALSE];
+//                                                     [actionBar handleHeartAmount:likes];
+//                                                 }
+//                                             }];
+//    }
+//}
+//
+//- (void)handleRepost:(FRSContentActionsBar *)actionBar {
+//    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
+//    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
+//    
+//    [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
+//                                           completion:^(id responseObject, NSError *error) {
+//                                               NSLog(@"REPOSTED %@", error);
+//                                               
+//                                               if (error) {
+//                                                   [actionBar handleRepostState:!state];
+//                                                   [actionBar handleRepostAmount:repostCount];
+//                                               }
+//                                           }];
+//}
+
+
+
+- (void)updateSocial {
+    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
+    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
+    
+    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
+    BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
+    
+    [self.actionBar handleRepostState:isReposted];
+    [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
+
+}
+
 - (void)handleLike:(FRSContentActionsBar *)actionBar {
-    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
+    
+    // UI will update regardless of success or failure.
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
-                                               completion:^(id responseObject, NSError *error) {
-                                                   NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                                   if (error) {
-                                                       [actionBar handleHeartState:TRUE];
-                                                       [actionBar handleHeartAmount:likes];
-                                                   }
-                                               }];
+        self.gallery.likes = @([self.gallery.likes intValue] - 1);
+        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        }];
     } else {
-        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
-                                             completion:^(id responseObject, NSError *error) {
-                                                 NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                                 if (error) {
-                                                     [actionBar handleHeartState:FALSE];
-                                                     [actionBar handleHeartAmount:likes];
-                                                 }
-                                             }];
+        self.gallery.likes = @([self.gallery.likes intValue] + 1);
+        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        }];
     }
 }
 
 - (void)handleRepost:(FRSContentActionsBar *)actionBar {
-    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
-    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
     
-    [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
-                                           completion:^(id responseObject, NSError *error) {
-                                               NSLog(@"REPOSTED %@", error);
-                                               
-                                               if (error) {
-                                                   [actionBar handleRepostState:!state];
-                                                   [actionBar handleRepostAmount:repostCount];
-                                               }
-                                           }];
+    // UI will update regardless of success or failure.
+    if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
+        self.gallery.reposts = @([self.gallery.likes intValue] - 1);
+        [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        }];
+    } else {
+        self.gallery.reposts = @([self.gallery.likes intValue] + 1);
+        [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        }];
+    }
 }
 
 
@@ -816,6 +877,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.actionBar updateTitle];
+}
 
 #pragma mark - Default
 

@@ -18,8 +18,8 @@
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate;
 
 - (void)updateTitle;
-- (void)handleHeartState:(BOOL)state;
-- (void)handleRepostState:(BOOL)state;
+- (void)handleHeartState:(BOOL)enabled;
+- (void)handleRepostState:(BOOL)enabled;
 - (void)handleHeartAmount:(NSInteger)amount;
 - (void)handleRepostAmount:(NSInteger)amount;
 - (void)setCurrentUser:(BOOL)isAuth;

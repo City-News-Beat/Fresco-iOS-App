@@ -32,7 +32,7 @@
     if (self) {
 
         self.delegate = delegate;
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        self.backgroundColor = [UIColor redColor];
 
         [self configureActionButton];
 
@@ -213,7 +213,6 @@
 }
 
 - (void)handleHeartState:(BOOL)state {
-
     dispatch_async(dispatch_get_main_queue(), ^{
       if (state) {
           [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
@@ -251,10 +250,8 @@
 - (void)setCurrentUser:(BOOL)isAuth {
     if (isAuth) {
         self.repostButton.userInteractionEnabled = NO;
-        //self.backgroundColor = [UIColor redColor];
     } else {
         self.repostButton.userInteractionEnabled = YES;
-        //self.backgroundColor = [UIColor clearColor];
     }
 }
 

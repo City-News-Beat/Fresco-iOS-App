@@ -47,10 +47,111 @@
 
 -(void)configureUI {
     [self configureActionButton];
+    [self configureSocialButtons];
 }
 
 -(void)configureActionButton {
     [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+}
+
+-(void)configureSocialButtons {
+    
+    [self configureSocialButton:self.likeButton withImageName:@"liked-heart" selectedImageName:@"liked-heart-filled" tapAction:@selector(handleLikeButtonTapped) selectedAction:@selector(handleButtonSelected:) dragAction:@selector(handleButtonDrag:)];
+    
+    [self configureSocialButton:self.repostButton withImageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green" tapAction:@selector(handleRepostButtonTapped) selectedAction:@selector(handleButtonSelected:) dragAction:@selector(handleButtonDrag:)];
+}
+
+-(void)configureSocialButton:(UIButton *)button withImageName:(NSString *)image selectedImageName:(NSString *)selectedImage tapAction:(SEL)tapAction selectedAction:(SEL)selectedAction dragAction:(SEL)dragAction {
+    
+    [button setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:selectedImage] forState:UIControlStateSelected];
+    [button setImage:[UIImage imageNamed:selectedImage] forState:UIControlStateHighlighted];
+    button.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    button.contentMode = UIViewContentModeScaleAspectFit;
+    [button addTarget:self action:tapAction forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:selectedAction forControlEvents:UIControlEventTouchDown];
+    [button addTarget:self action:selectedAction forControlEvents:UIControlEventTouchDragEnter];
+    [button addTarget:self action:dragAction forControlEvents:UIControlEventTouchDragExit];
+    [self addSubview:button];
+}
+
+- (void)handleLikeButtonTapped {
+    [self handleSocialStateForButton:self.likeButton];
+}
+
+-(void)handleRepostButtonTapped {
+    [self handleSocialStateForButton:self.repostButton];
+}
+
+-(void)handleSocialStateForButton:(UIButton *)button {
+    
+    BOOL isLikeButton = [button isEqual:self.likeButton] ? YES : NO;
+
+    NSInteger count;
+    UIButton *socialButton;
+    UILabel  *socialLabel;
+    NSString *defaultImageName;
+    NSString *selectedImageName;
+    UIColor  *color;
+    
+    if (isLikeButton) {
+        count = [self.likeLabel.text integerValue];
+        socialButton = self.likeButton;
+        socialLabel  = self.likeLabel;
+        defaultImageName  = @"liked-heart";
+        selectedImageName = @"liked-heart-filled";
+        color = [UIColor frescoRedColor];
+        
+    } else {
+        count = [self.repostLabel.text integerValue];
+        socialButton = self.repostButton;
+        socialLabel  = self.repostLabel;
+        defaultImageName  = @"repost-icon-gray";
+        selectedImageName = @"repost-icon-green";
+        color = [UIColor frescoGreenColor];
+    }
+    
+    if ([[socialButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:defaultImageName]]) {
+        [socialButton setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
+        socialLabel.textColor = color;
+        count++;
+        
+    } else {
+        [socialButton setImage:[UIImage imageNamed:defaultImageName] forState:UIControlStateNormal];
+        socialLabel.textColor = [UIColor frescoMediumTextColor];
+        count--;
+    }
+    
+    socialLabel.text = [NSString stringWithFormat:@"%ld", count];
+    [self bounceButton:button];
+}
+
+
+
+- (void)handleButtonSelected:(UIButton *)button {
+//    [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+//        button.transform = CGAffineTransformMakeScale(1.1, 1.1);
+//    } completion:nil];
+}
+
+- (void)handleButtonDrag:(UIButton *)button {
+//    [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+//        button.transform = CGAffineTransformMakeScale(1, 1);
+//    } completion:nil];
+}
+
+- (void)bounceButton:(UIButton *)button {
+//    [UIView animateWithDuration:0.125 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+//        button.transform = CGAffineTransformMakeScale(1.15, 1.15);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.125 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+//            button.transform = CGAffineTransformMakeScale(0.95, 0.95);
+//        } completion:^(BOOL finished) {
+//            [UIView animateWithDuration:0.125 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//                button.transform = CGAffineTransformMakeScale(1, 1);
+//            } completion:nil];
+//        }];
+//    }];
 }
 
 
@@ -58,7 +159,10 @@
 #pragma mark - Public
 
 -(void)updateTitle {
+    [UIView setAnimationsEnabled:NO];
     [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+    [self.actionButton layoutIfNeeded]; // This disables the default fade animation when setting a system button title.
+    [UIView setAnimationsEnabled:YES];
 }
 
 - (void)setCurrentUser:(BOOL)isAuth {
@@ -97,7 +201,46 @@
     [self.delegate handleShare:self];
 }
 
+-(void)handleHeartState:(BOOL)enabled {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (enabled) {
+            [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+            self.likeLabel.textColor = [UIColor frescoRedColor];
+            
+        } else {
+            [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+            self.likeLabel.textColor = [UIColor frescoMediumTextColor];
+        }
+    });
+}
 
+-(void)handleHeartAmount:(NSInteger)amount {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+    });
+}
+
+-(void)handleRepostState:(BOOL)enabled {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (enabled) {
+            [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+            self.repostLabel.textColor = [UIColor frescoGreenColor];
+        } else {
+            [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+            self.repostLabel.textColor = [UIColor frescoMediumTextColor];
+        }
+    });
+}
+
+-(void)handleRepostAmount:(NSInteger)amount {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+    });
+}
 
 @end
 

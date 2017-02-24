@@ -44,18 +44,18 @@
                         <action selector="shareTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="bAa-en-qHo"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZYv-Pf-Sjx">
-                    <rect key="frame" x="304" y="0.0" width="15" height="44"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZYv-Pf-Sjx">
+                    <rect key="frame" x="311" y="0.0" width="8" height="44"/>
                     <gestureRecognizers/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.52000000000000002" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <connections>
-                        <outletCollection property="gestureRecognizers" destination="Flp-Ub-N9X" appends="YES" id="h4Z-rk-mbq"/>
+                        <outletCollection property="gestureRecognizers" destination="3ap-LF-Qds" appends="YES" id="fcc-dt-ewL"/>
                     </connections>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="elS-eQ-ot1">
-                    <rect key="frame" x="266" y="0.0" width="36" height="44"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="elS-eQ-ot1">
+                    <rect key="frame" x="273" y="0.0" width="36" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="36" id="TbX-o2-fH7"/>
                     </constraints>
@@ -65,18 +65,18 @@
                         <action selector="repostTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="5ji-q5-6ar"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nc4-7o-3gx">
-                    <rect key="frame" x="243" y="0.0" width="15" height="44"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nc4-7o-3gx">
+                    <rect key="frame" x="257" y="0.0" width="8" height="44"/>
                     <gestureRecognizers/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.52000000000000002" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <connections>
-                        <outletCollection property="gestureRecognizers" destination="3ap-LF-Qds" appends="YES" id="9Qd-6E-FrE"/>
+                        <outletCollection property="gestureRecognizers" destination="Flp-Ub-N9X" appends="YES" id="WNa-mz-m9W"/>
                     </connections>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVy-eJ-Txs">
-                    <rect key="frame" x="205" y="0.0" width="36" height="44"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVy-eJ-Txs">
+                    <rect key="frame" x="219" y="0.0" width="36" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="36" id="Xx4-ze-ddw"/>
                     </constraints>
@@ -87,7 +87,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WqZ-kz-zhR" userLabel="Line">
-                    <rect key="frame" x="0.0" y="44" width="375" height="0.5"/>
+                    <rect key="frame" x="0.0" y="43" width="375" height="1"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="9O5-Ls-RNV"/>
@@ -134,12 +134,12 @@
         </view>
         <tapGestureRecognizer id="Flp-Ub-N9X">
             <connections>
-                <action selector="repostLabelTapped:" destination="iN0-l3-epB" id="DIb-22-yqN"/>
+                <action selector="repostLabelTapped:" destination="iN0-l3-epB" id="U0B-To-dcr"/>
             </connections>
         </tapGestureRecognizer>
         <tapGestureRecognizer id="3ap-LF-Qds">
             <connections>
-                <action selector="likeLabelTapped:" destination="iN0-l3-epB" id="lSI-bo-yxF"/>
+                <action selector="likeLabelTapped:" destination="iN0-l3-epB" id="kVz-wJ-URb"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

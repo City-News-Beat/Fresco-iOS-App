@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FRSGallery (CoreDataProperties)
 
 @property (nullable, nonatomic, retain) FRSUser *creator;
+@property (nonatomic) NSNumber *reposts;
 @property (nonatomic) NSNumber *likes;
 @property (nonatomic) NSNumber *liked;
 @property (nonatomic) NSNumber *rating;
