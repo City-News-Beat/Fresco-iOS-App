@@ -156,20 +156,16 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)setupTableView {
-    // [self.galleriesTable registerClass:[FRSGalleryTableViewCell class] forCellReuseIdentifier:@"gallery-cell"];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
-    //self.galleriesTable.scrollEnabled = NO;
 }
 
 - (void)configureNavigationBar {
-
     [self configureBackButtonAnimated:YES];
 
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 
-    //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
@@ -203,11 +199,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSGalleryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+    FRSGalleryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
 
     if (!cell) {
-        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
     }

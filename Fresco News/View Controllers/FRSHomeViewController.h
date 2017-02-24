@@ -8,9 +8,10 @@
 
 #import "FRSScrollingViewController.h"
 #import "FRSGalleryView.h"
-#import "FRSFollowingController.h"
 #import "FRSAlertView.h"
 #import "FRSStoryView.h"
+
+@class DGElasticPullToRefreshLoadingViewCircle;
 
 @interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate, FRSStoryViewDelegate, FRSAlertViewDelegate> {
     BOOL delayClear;
@@ -21,7 +22,6 @@
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
 
-    FRSFollowingController *followingController;
     UITableView *followTable;
     NSDate *entry;
     NSDate *exit;
@@ -32,6 +32,7 @@
     NSTimeInterval lastOffsetCapture;
     BOOL isScrollingFast;
 }
+
 @property BOOL loadNoMore;
 
 - (void)presentTOS;

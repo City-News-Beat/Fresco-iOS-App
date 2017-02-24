@@ -117,7 +117,7 @@
     [FRSTracker screen:@"Home"];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    [self.tabBarController.tabBar setHidden:FALSE];
+    [self.tabBarController.tabBar setHidden:NO];
 
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     [[FRSUserManager sharedInstance] reloadUser];
@@ -153,6 +153,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
     [self expandNavBar:nil animated:NO];
 }
+
 - (void)logoutNotification {
     [self logoutWithPop:NO];
 }
@@ -231,7 +232,6 @@
 
     if ([[FRSUserManager sharedInstance] authenticatedUser]) {
         if (![[FRSUserManager sharedInstance] authenticatedUser].username) {
-
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
         }
     }
@@ -354,8 +354,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
-        needsUpdate = FALSE;
-        // [self.tableView reloadData];
+        needsUpdate = NO;
     }
 
     if (scrollView == self.pageScroller) {
@@ -364,8 +363,7 @@
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
-        needsUpdate = FALSE;
-        // [self.tableView reloadData];
+        needsUpdate = NO;
     }
 }
 
@@ -581,9 +579,7 @@
 }
 
 - (UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
-
-    if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
-
+    if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != nil) {
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         CGRect cellFrame = cell.frame;
         cellFrame.size.height = 20;
@@ -591,10 +587,10 @@
         return cell;
     }
 
-    FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+    FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
 
     if (!cell) {
-        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
     }

@@ -51,6 +51,7 @@
 - (void)loadGalleries:(NSArray *)galleries {
     [self reloadData];
 }
+
 - (void)commonInit {
     self.showsVerticalScrollIndicator = FALSE;
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -75,8 +76,8 @@
       }
 
       dispatch_async(dispatch_get_main_queue(), ^{
-        _galleries = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
-        numberOfPosts = [_galleries count];
+        self.feed = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
+        numberOfPosts = [self.feed count];
         [self reloadData];
         isFinished = FALSE;
       });
@@ -118,7 +119,7 @@
 }
 
 - (void)readMore:(NSIndexPath *)indexPath {
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.feed objectAtIndex:indexPath.row]];
     [vc configureBackButtonAnimated:YES];
 
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
@@ -143,9 +144,6 @@
     detailView.story = story;
     [detailView reloadData];
     return detailView;
-}
-
-- (void)followStory {
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -193,17 +191,14 @@
       BOOL taken = FALSE;
 
       for (FRSGalleryTableViewCell *cell in visibleCells) {
-
           /*
              Start playback mid frame -- at least 300 from top & at least 100 from bottom
              */
           if (cell.frame.origin.y - self.contentOffset.y < 300 && cell.frame.origin.y - self.contentOffset.y > 0) {
-
               if (!taken && !isScrollingFast) {
                   taken = TRUE;
                   [cell play];
               }
-
           } else {
               [cell pause];
           }
@@ -223,15 +218,15 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_galleries count];
+    return [self.feed count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
 
-    if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+    if ([[[self.feed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         return [self highlightCellForIndexPath:indexPath];
-    } else if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+    } else if ([[[self.feed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
         cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
 
         if (!cell) {
@@ -245,9 +240,7 @@
 }
 
 - (UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
-
-    if (indexPath.row == self.galleries.count && self.galleries.count != 0 && self.galleries != Nil) { // we're reloading
-
+    if (indexPath.row == self.feed.count && self.feed.count != 0 && self.feed != Nil) { // we're reloading
         UITableViewCell *cell = [self dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         CGRect cellFrame = cell.frame;
         cellFrame.size.height = 20;
@@ -263,7 +256,7 @@
         cell.navigationController = self.navigationController;
     }
 
-    cell.gallery = self.galleries[indexPath.row];
+    cell.gallery = self.feed[indexPath.row];
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [cell configureCell];
@@ -287,8 +280,8 @@
 }
 
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath {
-    if (_galleries.count > indexPath.row) {
-        id representedObject = _galleries[indexPath.row];
+    if (self.feed.count > indexPath.row) {
+        id representedObject = self.feed[indexPath.row];
 
         if ([[representedObject class] isSubclassOfClass:[FRSGallery class]]) {
             if (self.leadDelegate) {
@@ -311,7 +304,7 @@
         storyCell.storyView.delegate.navigationController = self.navigationController;
         [storyCell clearCell];
 
-        storyCell.story = _galleries[indexPath.row];
+        storyCell.story = self.feed[indexPath.row];
         [storyCell configureCell];
 
         __weak typeof(self) weakSelf = self;
@@ -321,12 +314,11 @@
         };
 
         storyCell.readMoreBlock = ^(NSArray *bullshit) {
-          //            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
           [weakSelf readMoreStory:indexPath];
         };
     }
 
-    if (indexPath.row >= self.galleries.count - 5) {
+    if (indexPath.row >= self.feed.count - 5) {
         [self loadMore];
     }
 }
@@ -337,7 +329,7 @@
     }
 
     isReloading = YES;
-    FRSGallery *gallery = [self.galleries lastObject];
+    FRSGallery *gallery = [self.feed lastObject];
 
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -355,9 +347,9 @@
             isFinished = YES;
         }
         
-        NSMutableArray *newGalleries = [self.galleries mutableCopy];
+        NSMutableArray *newGalleries = [self.feed mutableCopy];
         [newGalleries addObjectsFromArray:galleries];
-        self.galleries = newGalleries;
+        self.feed = newGalleries;
         [self reloadData];
     }];
 }
@@ -365,11 +357,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     float height = 0;
 
-    if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-        FRSGallery *gallery = _galleries[indexPath.row];
+    if ([[self.feed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        FRSGallery *gallery = self.feed[indexPath.row];
         height = [gallery heightForGallery];
-    } else if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
-        FRSStory *story = _galleries[indexPath.row];
+    } else if ([[self.feed[indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+        FRSStory *story = self.feed[indexPath.row];
         height = [story heightForStory];
     }
 

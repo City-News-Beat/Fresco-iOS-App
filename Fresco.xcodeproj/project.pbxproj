@@ -244,7 +244,6 @@
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
-		D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722A1D10C502000677BF /* FRSFollowingController.m */; };
 		D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */; };
 		D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C722F1D11D2EB000677BF /* FRSActivityViewController.xib */; };
 		D48C72371D11D312000677BF /* FRSGenericActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72351D11D312000677BF /* FRSGenericActivityCell.m */; };
@@ -763,8 +762,6 @@
 		D47999681C96AA1700B46D01 /* FRSLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocator.m; sourceTree = "<group>"; };
 		D48C72251D0B3D5C000677BF /* FRSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDevice.h; sourceTree = "<group>"; };
 		D48C72261D0B3D5C000677BF /* FRSDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDevice.m; sourceTree = "<group>"; };
-		D48C72291D10C502000677BF /* FRSFollowingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingController.h; sourceTree = "<group>"; };
-		D48C722A1D10C502000677BF /* FRSFollowingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingController.m; sourceTree = "<group>"; };
 		D48C722D1D11D2EB000677BF /* FRSActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSActivityViewController.h; sourceTree = "<group>"; };
 		D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSActivityViewController.m; sourceTree = "<group>"; };
 		D48C722F1D11D2EB000677BF /* FRSActivityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSActivityViewController.xib; sourceTree = "<group>"; };
@@ -1382,8 +1379,8 @@
 		4AB98C991C8A7EF7005E7AB2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D48C72281D10C4EB000677BF /* Following Controller */,
-				D4D60D0D1CC8365B00059EBA /* Highlights */,
+				D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */,
+				D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */,
 				65046E031C3EFC81003E02B5 /* FRSHomeViewController.h */,
 				65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */,
 			);
@@ -2125,15 +2122,6 @@
 			name = Player;
 			sourceTree = "<group>";
 		};
-		D48C72281D10C4EB000677BF /* Following Controller */ = {
-			isa = PBXGroup;
-			children = (
-				D48C72291D10C502000677BF /* FRSFollowingController.h */,
-				D48C722A1D10C502000677BF /* FRSFollowingController.m */,
-			);
-			name = "Following Controller";
-			sourceTree = "<group>";
-		};
 		D48C722C1D11D2C6000677BF /* Notification */ = {
 			isa = PBXGroup;
 			children = (
@@ -2277,15 +2265,6 @@
 				D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */,
 			);
 			name = "Add Cell";
-			sourceTree = "<group>";
-		};
-		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
-			isa = PBXGroup;
-			children = (
-				D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */,
-				D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */,
-			);
-			name = Highlights;
 			sourceTree = "<group>";
 		};
 		D4E76A2D1CB423C200AC7A45 /* Trim Tool */ = {
@@ -2773,7 +2752,6 @@
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
-				D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */,
 				65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */,
 				D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,

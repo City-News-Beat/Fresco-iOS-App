@@ -28,7 +28,7 @@
     BOOL isScrollingFast;
 }
 
-@property (retain, nonatomic) NSArray *galleries;
+@property (retain, nonatomic) NSArray *feed;
 @property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 

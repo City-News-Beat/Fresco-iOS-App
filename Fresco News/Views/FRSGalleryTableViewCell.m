@@ -7,9 +7,7 @@
 //
 
 #import "FRSGalleryTableViewCell.h"
-
 #import "FRSGallery.h"
-
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
@@ -26,7 +24,7 @@
 }
 
 - (void)playerWillPlay:(FRSPlayer *)player {
-    if (self.delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(playerWillPlay:)]) {
         [self.delegate playerWillPlay:player];
     }
 }
@@ -37,7 +35,6 @@
 
         [self.galleryView loadGallery:self.gallery];
         [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
-        self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
     hasPlayed = NO;
