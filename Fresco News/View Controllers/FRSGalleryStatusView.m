@@ -9,6 +9,7 @@
 #import "FRSGalleryStatusView.h"
 #import "FRSGalleryStatusTableViewCell.h"
 #import "FRSGalleryDetailView.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "Haneke.h"
 #import "FRSModerationManager.h"
 

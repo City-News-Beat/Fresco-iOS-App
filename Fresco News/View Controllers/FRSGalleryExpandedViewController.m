@@ -9,6 +9,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSGallery.h"
 #import "FRSArticle.h"
+#import "FRSComment.h"
 #import "PeekPopArticleViewController.h"
 #import "Haneke.h"
 #import "FRSAlertView.h"

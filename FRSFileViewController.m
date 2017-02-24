@@ -10,7 +10,6 @@
 #import "FRSUploadViewController.h"
 #import "UIFont+Fresco.h"
 #import "FRSImageViewCell.h"
-#import "FRSScrollingViewController.h"
 #import "FRSFileFooterCell.h"
 
 static NSInteger const maxAssets = 8;

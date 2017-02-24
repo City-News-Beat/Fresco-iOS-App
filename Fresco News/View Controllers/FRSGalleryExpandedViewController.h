@@ -6,11 +6,10 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSScrollingViewController.h"
-#import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import "FRSComment.h"
+#import "FRSBaseViewController.h"
 
 @class FRSGallery;
+@class FRSComment;
 
 @interface FRSGalleryExpandedViewController : FRSBaseViewController <UITextViewDelegate> {
     NSDate *dateEntered;
