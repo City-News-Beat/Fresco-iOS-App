@@ -7,7 +7,7 @@
 //
 
 #import "FRSFollowingController.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "FRSStoryCell.h"
 #import "FRSAwkwardView.h"
 #import "UIColor+Fresco.h"
@@ -108,16 +108,15 @@
     UITableViewCell *cell;
 
     if ([[[self.feed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-
+        cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
         if (!cell) {
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+            cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
         }
     } else if ([[[self.feed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+        cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
 
         if (!cell) {
-            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
         }
     }
 
@@ -126,10 +125,8 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self) weakSelf = self;
 
-    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-        [galCell clearCell];
-
+    if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+        FRSGalleryTableViewCell *galCell = (FRSGalleryTableViewCell *)cell;
         galCell.gallery = self.feed[indexPath.row];
 
         galCell.readMoreBlock = ^(NSArray *bullshit) {

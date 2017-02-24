@@ -9,7 +9,7 @@
 #import "FRSSearchViewController.h"
 #import "FRSTableViewCell.h"
 #import "FRSGallery.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
@@ -482,7 +482,7 @@ static NSInteger const previewCount = 3;
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSNearbyUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:nearbyUserCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSSeeAllLabelTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:seeAllCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSStorySearchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storySearchCellIdentifier];
-    [self.tableView registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCellIdentifier];
+    [self.tableView registerClass:[FRSGalleryTableViewCell class] forCellReuseIdentifier:galleryCellIdentifier];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -726,9 +726,9 @@ static NSInteger const previewCount = 3;
         return cell;
     }
     else if (indexPath.section == galleryIndex) {
-        FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
+        FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
         if (!cell) {
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];
+            cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];
         }
         cell.navigationController = self.navigationController;
 
@@ -746,7 +746,6 @@ static NSInteger const previewCount = 3;
         };
 
         dispatch_async(dispatch_get_main_queue(), ^{
-          [cell clearCell];
           [cell configureCell];
         });
         UITableViewCell *cellToReturn = (UITableViewCell *)cell;

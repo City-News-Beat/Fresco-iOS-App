@@ -424,10 +424,10 @@
         numberRead = indexPath.row;
     }
 
-    FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+    FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
 
     if (!cell) {
-        cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+        cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 
@@ -448,8 +448,6 @@
     if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
         return;
     }
-
-    [cell clearCell];
 
     if (indexPath.row < self.stories.count) {
 

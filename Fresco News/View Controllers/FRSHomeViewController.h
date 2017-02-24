@@ -33,6 +33,7 @@
     BOOL isScrollingFast;
 }
 @property BOOL loadNoMore;
-- (void)loadData;
+
 - (void)presentTOS;
+
 @end

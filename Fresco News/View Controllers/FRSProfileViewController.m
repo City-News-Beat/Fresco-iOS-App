@@ -2,7 +2,7 @@
 #import "FRSSettingsViewController.h"
 #import "FRSFollowersViewController.h"
 #import "FRSNavigationController.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSTrimTool.h"
@@ -773,8 +773,8 @@
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        [(FRSGalleryCell *)cell pause];
+    if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+        [(FRSGalleryTableViewCell *)cell pause];
     }
 }
 
@@ -1172,20 +1172,19 @@
             CGRect newFrame = tableView.frame;
             newFrame.size.height = 40;
             newFrame.origin.y = tableView.frame.size.height / 6;
-            //            [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
             [cell.contentView setBackgroundColor:[UIColor frescoBackgroundColorDark]];
             [cell setBackgroundColor:[UIColor frescoBackgroundColorDark]];
         } else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
 
             if (!cell) {
-                cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+                cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
             }
         } else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
 
             if (!cell) {
-                cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+                cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
             }
         }
 
@@ -1272,10 +1271,9 @@
     } else {
         __weak typeof(self) weakSelf = self;
 
-        if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-            FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+            FRSGalleryTableViewCell *galCell = (FRSGalleryTableViewCell *)cell;
             galCell.galleryView.delegate.navigationController = self.navigationController;
-            [galCell clearCell];
 
             galCell.shareBlock = ^void(NSArray *sharedContent) {
               [weakSelf showShareSheetWithContent:sharedContent];
@@ -1397,8 +1395,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       BOOL taken = FALSE;
 
-      for (FRSGalleryCell *cell in visibleCells) {
-          if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+      for (FRSGalleryTableViewCell *cell in visibleCells) {
+          if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
               if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                   if (!taken && !isScrollingFast) {
                       [cell play];

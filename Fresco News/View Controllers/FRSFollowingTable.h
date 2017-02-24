@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSGallery.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "FRSScrollingViewController.h"
 #import "FRSStoryView.h"
 

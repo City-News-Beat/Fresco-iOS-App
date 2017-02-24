@@ -84,8 +84,8 @@
 }
 
 - (void)playerWillPlay:(AVPlayer *)player {
-    for (FRSGalleryCell *cell in [self visibleCells]) {
-        if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
+    for (FRSGalleryTableViewCell *cell in [self visibleCells]) {
+        if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]] || !cell.galleryView.players) {
             continue;
         }
         for (FRSPlayer *cellPlayer in cell.players) {
@@ -115,13 +115,6 @@
     [FRSTracker track:galleryShared
            parameters:@{ @"gallery_id" : url,
                          @"shared_from" : @"following" }];
-}
-
-- (void)reloadData {
-    [super reloadData];
-}
-
-- (void)fetchGalleries {
 }
 
 - (void)readMore:(NSIndexPath *)indexPath {
@@ -199,7 +192,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       BOOL taken = FALSE;
 
-      for (FRSGalleryCell *cell in visibleCells) {
+      for (FRSGalleryTableViewCell *cell in visibleCells) {
 
           /*
              Start playback mid frame -- at least 300 from top & at least 100 from bottom
@@ -239,10 +232,10 @@
     if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         return [self highlightCellForIndexPath:indexPath];
     } else if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+        cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
 
         if (!cell) {
-            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
         }
     }
 
@@ -262,10 +255,10 @@
         return cell;
     }
 
-    FRSGalleryCell *cell = [self dequeueReusableCellWithIdentifier:@"gallery-cell"];
+    FRSGalleryTableViewCell *cell = [self dequeueReusableCellWithIdentifier:galleryCellIdentifier];
 
     if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
     }
@@ -310,7 +303,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+    if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
 
     } else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
@@ -339,12 +332,11 @@
 }
 
 - (void)loadMore {
-
     if (isReloading || isFinished) {
         return;
     }
 
-    isReloading = TRUE;
+    isReloading = YES;
     FRSGallery *gallery = [self.galleries lastObject];
 
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -360,7 +352,7 @@
 
     [[FRSFeedManager sharedInstance] fetchFollowing:timeStamp completion:^(NSArray *galleries, NSError *error) {
         if (galleries.count == 0) {
-            isFinished = TRUE;
+            isFinished = YES;
         }
         
         NSMutableArray *newGalleries = [self.galleries mutableCopy];
@@ -371,13 +363,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     float height = 0;
 
     if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         FRSGallery *gallery = _galleries[indexPath.row];
         height = [gallery heightForGallery];
-    } else {
+    } else if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
         FRSStory *story = _galleries[indexPath.row];
         height = [story heightForStory];
     }
