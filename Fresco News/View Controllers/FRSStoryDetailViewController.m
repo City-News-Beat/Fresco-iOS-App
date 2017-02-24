@@ -7,7 +7,7 @@
 //
 
 #import "FRSStoryDetailViewController.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "MagicalRecord.h"
 #import "FRSStory+CoreDataProperties.h"
 #import "DGElasticPullToRefresh.h"
@@ -156,20 +156,16 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)setupTableView {
-    // [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:@"gallery-cell"];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
-    //self.galleriesTable.scrollEnabled = NO;
 }
 
 - (void)configureNavigationBar {
-
     [self configureBackButtonAnimated:YES];
 
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 
-    //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
@@ -203,11 +199,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+    FRSGalleryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
 
     if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
     }
@@ -231,7 +226,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)playerWillPlay:(AVPlayer *)play {
     for (UITableView *tableView in @[ self.galleriesTable ]) {
-        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
             for (FRSPlayer *player in cell.galleryView.players) {
                 if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
                     [player pause];
@@ -248,7 +243,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
           BOOL taken = FALSE;
 
-          for (FRSGalleryCell *cell in visibleCells) {
+          for (FRSGalleryTableViewCell *cell in visibleCells) {
 
               if (cell.frame.origin.y - self.galleriesTable.contentOffset.y < 300 && cell.frame.origin.y - self.galleriesTable.contentOffset.y > 100) {
 
@@ -274,9 +269,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
     }
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // sloppy not to have a check here
-    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+    if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
         return;
     }
 
@@ -287,7 +282,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     cell.gallery = self.stories[indexPath.row];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-      [cell clearCell];
       [cell configureCell];
     });
 
@@ -403,7 +397,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)pausePlayers {
     for (UITableView *tableView in @[ self.galleriesTable ]) {
-        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
             for (FRSPlayer *player in cell.galleryView.players) {
                 if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
                     [player pause];

@@ -1306,7 +1306,6 @@
 #pragma mark - Base Meta Data Configuration
 
 - (void)configureBaseMetaData {
-
     // Configure the view
     self.galleryFooterView = [[FRSGalleryFooterView alloc] initWithFrame:CGRectMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height + CAPTION_PADDING, self.frame.size.width, self.galleryFooterView.calculatedHeight) gallery:self.gallery delegate:self];
     self.galleryFooterView.delegate = self;

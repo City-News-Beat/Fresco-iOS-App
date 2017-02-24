@@ -1,19 +1,17 @@
 //
-//  FRSGalleryCell.m
+//  FRSGalleryTableViewCell.m
 //  Fresco
 //
 //  Created by Daniel Sun on 1/4/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSGalleryCell.h"
-
+#import "FRSGalleryTableViewCell.h"
 #import "FRSGallery.h"
-
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
-@implementation FRSGalleryCell
+@implementation FRSGalleryTableViewCell
 
 - (void)awakeFromNib {
     // Initialization code
@@ -26,26 +24,20 @@
 }
 
 - (void)playerWillPlay:(FRSPlayer *)player {
-    if (self.delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(playerWillPlay:)]) {
         [self.delegate playerWillPlay:player];
     }
 }
 
 - (void)configureCell {
-
-    if (self.galleryView != Nil) {
-
-        hasPlayed = FALSE;
+    if (self.galleryView != nil) {
+        hasPlayed = NO;
 
         [self.galleryView loadGallery:self.gallery];
         [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
-        self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
-
-    hasPlayed = FALSE;
-
-    self.clipsToBounds = YES;
+    hasPlayed = NO;
 
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 
@@ -71,22 +63,12 @@
     };
 }
 
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
-}
-- (void)clearCell {
-
-    //[self.galleryView removeFromSuperview];
-}
-
-- (void)prepareForReuse {
-    [super prepareForReuse];
-}
 - (void)offScreen {
     [self.galleryView offScreen];
 }
 
 #pragma mark - DataSource For Action Bar
+
 - (BOOL)shouldHaveActionBar {
     return YES;
 }
@@ -98,7 +80,9 @@
 - (void)play {
     [self.galleryView play];
 }
+
 - (void)pause {
     [self.galleryView pause];
 }
+
 @end
