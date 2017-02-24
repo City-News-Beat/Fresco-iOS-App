@@ -53,7 +53,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.appDelegate = [[UIApplication sharedApplication] delegate];
+    self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self configureUI];
     [self fetchStories];
 
@@ -448,6 +448,8 @@
     if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
         return;
     }
+
+    [cell clearCell];
 
     if (indexPath.row < self.stories.count) {
 
