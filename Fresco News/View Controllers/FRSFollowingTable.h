@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FRSGallery.h"
 #import "FRSGalleryTableViewCell.h"
-#import "FRSScrollingViewController.h"
 #import "FRSStoryView.h"
 
 @protocol FRSFollowingTableDelegate

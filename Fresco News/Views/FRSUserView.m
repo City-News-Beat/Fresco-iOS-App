@@ -28,9 +28,9 @@
 - (instancetype)initWithUser:(FRSUser *)user {
     self = [super init];
     if (self) {
-        
+
         self.user = user;
-        
+
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userAvatarTapped)];
         [self addGestureRecognizer:tap];
 
@@ -41,9 +41,9 @@
 
         NSURL *avatar = [NSURL URLWithString:user.profileImage];
         [profileIV hnk_setImageFromURL:avatar];
-        
+
         profileIV.backgroundColor = [UIColor frescoLightTextColor];
-        
+
         UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
         if (user.profileImage == nil || [user.profileImage isEqual:[NSNull null]] || [user.profileImage length] <= 0) {
             profileIcon.frame = CGRectMake(8, 8, 24, 24);
@@ -71,8 +71,7 @@
             usernameLabel.frame = CGRectMake(LABEL_LEFT_PADDING + nameLabel.frame.size.width, 17, SCREEN_WIDTH - LABEL_LEFT_PADDING, 14);
         }
         [self addSubview:usernameLabel];
-        
-        
+
         UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH - LABEL_LEFT_PADDING - BIO_RIGHT_PADDING, CGFLOAT_MAX)];
         bioLabel.text = user.bio;
         bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -87,15 +86,14 @@
         self.followingButton = [[FRSFollowButton alloc] initWithDelegate:self user:user];
         self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - BUTTON_SIZE - STANDARD_PADDING, BUTTON_TOP_PADDING, BUTTON_SIZE, BUTTON_SIZE);
         [self addSubview:self.followingButton];
-        
+
         [self.followingButton updateIconForFollowing:[user.following boolValue]];
-        
+
         if (![user.profileImage isEqual:[NSNull null]] && user.profileImage != nil) {
             NSURL *avatarURL = [NSURL URLWithString:user.profileImage];
             [profileIV hnk_setImageFromURL:avatarURL];
             profileIcon.alpha = 0;
         }
-        
 
         // Size bio label before setting calculated height
         if (user.bio && ![user.bio isEqual:[NSNull null]] && [[user.bio class] isSubclassOfClass:[NSString class]] && [user.bio length] > 0) {
@@ -104,13 +102,13 @@
             // Set text to an empty space to avoid overlapping UI when calling sizeToFit
             bioLabel.text = @" ";
         }
-        
+
         [bioLabel sizeToFit];
-        
+
         // Set calculatedHeight after all UI elements have been configured
         self.calculatedHeight = NAME_TOP_PADDING + BIO_TOP_PADDING + bioLabel.frame.size.height;
     }
-    
+
     return self;
 }
 
@@ -119,6 +117,5 @@
         [self.delegate userAvatarTapped];
     }
 }
-
 
 @end

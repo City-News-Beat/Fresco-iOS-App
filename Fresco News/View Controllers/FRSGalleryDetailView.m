@@ -20,6 +20,7 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSGalleryManager.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
