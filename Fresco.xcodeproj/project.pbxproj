@@ -54,7 +54,7 @@
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
 		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
-		07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */; };
+		07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */; };
 		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
 		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
 		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
@@ -416,8 +416,8 @@
 		07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentsTableViewController.h; sourceTree = "<group>"; };
 		07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentsTableViewController.m; sourceTree = "<group>"; };
 		07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGlobalAssignmentTableViewCell.xib; sourceTree = "<group>"; };
-		07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalAssignmentsTableViewCell.h; sourceTree = "<group>"; };
-		07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalAssignmentsTableViewCell.m; sourceTree = "<group>"; };
+		07B6FB531D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentTableViewCell.h; sourceTree = "<group>"; };
+		07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentTableViewCell.m; sourceTree = "<group>"; };
 		07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLaunchScreen.xib; sourceTree = "<group>"; };
 		07ED92D71C752037000DBEA8 /* DGElasticPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefresh.h; sourceTree = "<group>"; };
 		07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefresh.m; sourceTree = "<group>"; };
@@ -1330,9 +1330,9 @@
 				CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */,
 				07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */,
 				07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */,
+				07B6FB531D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.h */,
+				07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */,
 				07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */,
-				07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */,
-				07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -2751,7 +2751,7 @@
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
-				07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */,
+				07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */,
 				CE1322401E4FDAFC00A46D4D /* FRSUserTableViewCell.m in Sources */,
 				07A2C14B1DEE2EE000B8445F /* FRSPlayer.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
