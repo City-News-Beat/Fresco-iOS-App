@@ -8,9 +8,6 @@
 
 #import "FRSCameraViewController.h"
 
-//#import "BaseNavigationController.h"
-//#import "AssetsPickerController.h"
-
 //Apple APIs
 @import Photos;
 @import AVFoundation;
@@ -25,7 +22,6 @@
 #import "CLLocation+EXIFGPS.h"
 #import "FRSTabBarController.h"
 #import "FRSBaseViewController.h"
-#import "FRSTrimTool.h"
 
 #define ICON_WIDTH 24
 #define PREVIEW_WIDTH 56

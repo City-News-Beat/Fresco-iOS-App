@@ -11,7 +11,7 @@
 
 @interface FRSDualUserListViewController : FRSBaseViewController
 
--(instancetype)initWithGallery:(NSString *)galleryID;
+- (instancetype)initWithGallery:(NSString *)galleryID;
 
 @property BOOL didTapRepostLabel; // used to determine which navigation bar tab should be selected
 

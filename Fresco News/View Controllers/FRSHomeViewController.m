@@ -13,7 +13,6 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSGalleryTableViewCell.h"
 #import "FRSLoadingTableViewCell.h"
-#import "FRSTrimTool.h"
 #import "FRSAwkwardView.h"
 #import "FRSAlertView.h"
 #import "MagicalRecord.h"

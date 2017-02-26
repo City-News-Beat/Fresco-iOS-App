@@ -54,7 +54,7 @@
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
 		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
-		07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */; };
+		07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */; };
 		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
 		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
 		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
@@ -169,6 +169,7 @@
 		CE3799BA1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */; };
 		CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */; };
 		CE5A6FE41E6276F90001255F /* FRSStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */; };
+		CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */; };
 		CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */; };
 		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
 		CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */; };
@@ -203,12 +204,7 @@
 		D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */; };
 		D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E34B1CCC1B240003B080 /* FRSSocial.m */; };
 		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
-		D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */; };
 		D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CA1CE9A54900F96B25 /* FRSStripe.m */; };
-		D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */; };
-		D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */; };
-		D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */; };
-		D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */; };
 		D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42A138E1D89A451008909E6 /* Mixpanel.framework */; };
 		D433E5621DF1D574007440EC /* FRSNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D433E5601DF1D574007440EC /* FRSNotificationHandler.m */; };
 		D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */; };
@@ -273,7 +269,6 @@
 		D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */; };
 		D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */; };
 		D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */; };
-		D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */; };
 		D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */; };
 		D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */; };
 		D4F23AC91DC64BF000B0B6DF /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4F23AC81DC64BF000B0B6DF /* CoreTelephony.framework */; };
@@ -421,8 +416,8 @@
 		07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentsTableViewController.h; sourceTree = "<group>"; };
 		07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentsTableViewController.m; sourceTree = "<group>"; };
 		07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGlobalAssignmentTableViewCell.xib; sourceTree = "<group>"; };
-		07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalAssignmentsTableViewCell.h; sourceTree = "<group>"; };
-		07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalAssignmentsTableViewCell.m; sourceTree = "<group>"; };
+		07B6FB531D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentTableViewCell.h; sourceTree = "<group>"; };
+		07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentTableViewCell.m; sourceTree = "<group>"; };
 		07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLaunchScreen.xib; sourceTree = "<group>"; };
 		07ED92D71C752037000DBEA8 /* DGElasticPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefresh.h; sourceTree = "<group>"; };
 		07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefresh.m; sourceTree = "<group>"; };
@@ -626,6 +621,7 @@
 		CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignmentNotificationsSwitchTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.m"; sourceTree = "<group>"; };
 		CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAssignmentNotificationsSwitchTableViewCell.xib; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.xib"; sourceTree = "<group>"; };
 		CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryTableViewCell.xib; sourceTree = "<group>"; };
+		CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAssignmentsViewController.xib; sourceTree = "<group>"; };
 		CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryTableViewCell.xib; sourceTree = "<group>"; };
 		CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsViewController.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.xib"; sourceTree = "<group>"; };
 		CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPaymentViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPaymentViewController.xib"; sourceTree = "<group>"; };
@@ -677,16 +673,8 @@
 		D418E34B1CCC1B240003B080 /* FRSSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocial.m; sourceTree = "<group>"; };
 		D418E34D1CCC1C360003B080 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D418E3571CCC1DE50003B080 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/AFNetworking.framework"; sourceTree = "<group>"; };
-		D41B2EF81D53E5960007C61F /* FRSSearchResultsTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchResultsTable.h; sourceTree = "<group>"; };
-		D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchResultsTable.m; sourceTree = "<group>"; };
 		D41C10C91CE9A54900F96B25 /* FRSStripe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStripe.h; sourceTree = "<group>"; };
 		D41C10CA1CE9A54900F96B25 /* FRSStripe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStripe.m; sourceTree = "<group>"; };
-		D421FC4D1D5B7ACF004C76B7 /* FRSSearchStoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchStoryCell.h; sourceTree = "<group>"; };
-		D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchStoryCell.m; sourceTree = "<group>"; };
-		D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSearchStoryCell.xib; sourceTree = "<group>"; };
-		D421FC521D5B7AE3004C76B7 /* FRSSearchUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchUserCell.h; sourceTree = "<group>"; };
-		D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchUserCell.m; sourceTree = "<group>"; };
-		D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSearchUserCell.xib; sourceTree = "<group>"; };
 		D42A138E1D89A451008909E6 /* Mixpanel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mixpanel.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/Mixpanel.framework"; sourceTree = "<group>"; };
 		D433E5601DF1D574007440EC /* FRSNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationHandler.m; sourceTree = "<group>"; };
 		D433E5611DF1D574007440EC /* FRSNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationHandler.h; sourceTree = "<group>"; };
@@ -806,8 +794,6 @@
 		D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLoginViewController.xib; sourceTree = "<group>"; };
-		D4E76A2E1CB423F600AC7A45 /* FRSTrimTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTrimTool.h; sourceTree = "<group>"; };
-		D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTrimTool.m; sourceTree = "<group>"; };
 		D4EE64221D830DD60034B5EA /* FRSReadMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSReadMoreCell.h; sourceTree = "<group>"; };
 		D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSReadMoreCell.m; sourceTree = "<group>"; };
 		D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSReadMoreCell.xib; sourceTree = "<group>"; };
@@ -1169,11 +1155,9 @@
 			children = (
 				CE1322511E51539A00A46D4D /* User Cell */,
 				D43AA8B71DCA29A50002DF00 /* Stabilization */,
-				D41B2EF71D53E5810007C61F /* Search */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
 				07EAFF281CEA226D00E224E2 /* Launch Screen */,
 				D487F1B81CBD6BE5005742F3 /* Media Scroll */,
-				D4E76A2D1CB423C200AC7A45 /* Trim Tool */,
 				D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */,
 				D43C7FF51C90745F00A7A7A7 /* Title Nav */,
 				D43C7FF71C90746C00A7A7A7 /* Story Cell */,
@@ -1343,11 +1327,12 @@
 			children = (
 				65EBEDB21C44116700BE671F /* FRSAssignmentsViewController.h */,
 				65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */,
+				CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */,
 				07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */,
 				07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */,
+				07B6FB531D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.h */,
+				07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */,
 				07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */,
-				07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */,
-				07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -1651,17 +1636,6 @@
 			name = Social;
 			sourceTree = "<group>";
 		};
-		D41B2EF71D53E5810007C61F /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				D421FC4C1D5B7A8A004C76B7 /* Story Cell */,
-				D421FC4A1D5B7A0D004C76B7 /* User Cell */,
-				D41B2EF81D53E5960007C61F /* FRSSearchResultsTable.h */,
-				D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */,
-			);
-			name = Search;
-			sourceTree = "<group>";
-		};
 		D41C10C81CE9A4AF00F96B25 /* Stripe */ = {
 			isa = PBXGroup;
 			children = (
@@ -1669,26 +1643,6 @@
 				D41C10CA1CE9A54900F96B25 /* FRSStripe.m */,
 			);
 			name = Stripe;
-			sourceTree = "<group>";
-		};
-		D421FC4A1D5B7A0D004C76B7 /* User Cell */ = {
-			isa = PBXGroup;
-			children = (
-				D421FC521D5B7AE3004C76B7 /* FRSSearchUserCell.h */,
-				D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */,
-				D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */,
-			);
-			name = "User Cell";
-			sourceTree = "<group>";
-		};
-		D421FC4C1D5B7A8A004C76B7 /* Story Cell */ = {
-			isa = PBXGroup;
-			children = (
-				D421FC4D1D5B7ACF004C76B7 /* FRSSearchStoryCell.h */,
-				D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */,
-				D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */,
-			);
-			name = "Story Cell";
 			sourceTree = "<group>";
 		};
 		D433E5631DF1D57C007440EC /* Notifications */ = {
@@ -2262,16 +2216,6 @@
 			name = "Add Cell";
 			sourceTree = "<group>";
 		};
-		D4E76A2D1CB423C200AC7A45 /* Trim Tool */ = {
-			isa = PBXGroup;
-			children = (
-				D4E76A2E1CB423F600AC7A45 /* FRSTrimTool.h */,
-				D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */,
-			);
-			name = "Trim Tool";
-			path = ..;
-			sourceTree = "<group>";
-		};
 		D4EE64201D830DAE0034B5EA /* Comment */ = {
 			isa = PBXGroup;
 			children = (
@@ -2563,7 +2507,6 @@
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
 				CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */,
-				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
 				CE5A6FE41E6276F90001255F /* FRSStoryTableViewCell.xib in Resources */,
 				CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */,
@@ -2584,13 +2527,13 @@
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
-				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
 				CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
+				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
 				CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
@@ -2734,7 +2677,6 @@
 				CE1322451E5031F400A46D4D /* FRSNearbyUserTableViewCell.m in Sources */,
 				CEC5700A1E55641C000CCD95 /* FRSSettingsTextTableViewCell.m in Sources */,
 				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
-				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
 				0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */,
 				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
@@ -2809,7 +2751,7 @@
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
-				07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */,
+				07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */,
 				CE1322401E4FDAFC00A46D4D /* FRSUserTableViewCell.m in Sources */,
 				07A2C14B1DEE2EE000B8445F /* FRSPlayer.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
@@ -2835,7 +2777,6 @@
 				CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */,
 				072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
-				D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
@@ -2843,7 +2784,6 @@
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
-				D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */,
@@ -2862,7 +2802,6 @@
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
-				D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */,
