@@ -30,6 +30,10 @@
     BOOL hasSnapped;
 }
 
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UIView *globalAssignmentsBottomContainer;
+@property (weak, nonatomic) IBOutlet UILabel *globalAssignmentsLabel;
+
 @property (nonatomic) BOOL isFetching;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @property (strong, nonatomic) FRSMapCircle *userCircle;
@@ -54,10 +58,9 @@
 @property (strong, nonatomic) UILabel *distanceLabel;
 @property (strong, nonatomic) UILabel *photoCashLabel;
 @property (strong, nonatomic) UILabel *videoCashLabel;
-@property (strong, nonatomic) UILabel *globalAssignmentsLabel;
+
 @property (strong, nonatomic) NSArray *globalAssignmentsArray;
 @property (strong, nonatomic) UIView *assignmentStatsContainer;
-@property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
 @property (strong, nonatomic) UILabel *postedLabel;
 @property (strong, nonatomic) UIButton *navigateButton;
@@ -88,50 +91,6 @@
 
 static NSString *const ACTION_TITLE_ONE = @"ACCEPT";
 static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
-
-- (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        [self commonInit];
-    }
-
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-
-    if (self) {
-        [self commonInit];
-    }
-
-    return self;
-}
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-
-    if (self) {
-        [self commonInit];
-    }
-
-    return self;
-}
-- (void)commonInit {
-    //    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-    //
-    //
-    //    if (lastLocation) {
-    //        [self fetchAssignmentsNearLocation:lastLocation radius:10];
-    //    }
-}
-
-- (instancetype)initWithActiveAssignment:(NSString *)assignmentID {
-    self = [super init];
-
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -210,6 +169,28 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    self.hasDefault = NO;
+    self.defaultID = nil;
+    
+    if (self.closeButton) {
+        self.closeButton.alpha = 0;
+    }
+    
+    if (self.seguedToGlobalAssignment) {
+        self.seguedToGlobalAssignment = false;
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    self.isPresented = NO;
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -235,7 +216,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-
     if (self.assignmentCardIsOpen) {
         return;
     }
@@ -254,36 +234,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    self.hasDefault = NO;
-    self.defaultID = nil;
-
-    if (self.closeButton) {
-        self.closeButton.alpha = 0;
-    }
-
-    if (self.seguedToGlobalAssignment) {
-        self.seguedToGlobalAssignment = false;
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    self.isPresented = NO;
-}
-
 - (void)configureMap {
-    self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
-    self.mapView.delegate = self;
-    self.mapView.showsCompass = NO;
-    self.mapView.showsUserLocation = YES;
     [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-    self.mapView.showsBuildings = NO;
-    [self.view addSubview:self.mapView];
 }
 
 - (void)checkForAcceptedAssignment {
@@ -328,7 +280,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                          NSMutableArray *mSerializedAssignments = [NSMutableArray new];
 
                                                          if (globalAssignments.count > 0) {
-                                                             [self configureGlobalAssignmentsBar];
                                                              if (self.defaultID) {
                                                                  [self showGlobalAssignmentsBar];
                                                              }
@@ -414,7 +365,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 - (BOOL)assignmentExists:(NSString *)assignment {
-
     __block BOOL returnValue = FALSE;
 
     [self.assignmentIDs enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
@@ -435,7 +385,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 // gets called when user taps on map icon in tab bar
 - (void)setInitialMapRegion {
-
     // disable snap if already tracking
     if (self.mapShouldFollowUser) {
         // zoom in only if tracking user
@@ -637,7 +586,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
 
-    if (/*([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) ||*/ [annotation isKindOfClass:[MKUserLocation class]]) {
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
         static NSString *annotationIdentifer = @"user-annotation";
         MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
         if (annotationView == nil) {
@@ -1191,7 +1140,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 #pragma mark - Assignment Card
 
 - (void)configureAssignmentCard {
-
     if (_scrollView) {
         self.assignmentTitleLabel.text = self.assignmentTitle;
         self.assignmentTextView.text = self.assignmentCaption;
@@ -1441,34 +1389,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 #pragma mark - Assignment Bars
 
-- (void)configureGlobalAssignmentsBar {
-
-    if (self.globalAssignmentsBottomContainer) {
-        return;
-    }
-
-    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, self.view.frame.size.width, 44)];
-    self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.view addSubview:self.globalAssignmentsBottomContainer];
-
-    self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width - 56 - 24 - 18 - 6, 20)];
-    self.globalAssignmentsLabel.text = @"  global assignments";
-    self.globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
-    [self.globalAssignmentsBottomContainer addSubview:self.globalAssignmentsLabel];
-
-    UIImageView *globeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-small"]];
-    globeImageView.frame = CGRectMake(16, 10, 24, 24);
-    [self.globalAssignmentsBottomContainer addSubview:globeImageView];
-
-    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right-caret"]];
-    caret.frame = CGRectMake(self.view.frame.size.width - 24 - 6, 10, 24, 24);
-    [self.globalAssignmentsBottomContainer addSubview:caret];
-
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsAnimatedSegue)];
-    [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
-}
-
 - (void)showGlobalAssignmentsBar {
     if (self.didAcceptAssignment) {
         return;
@@ -1520,7 +1440,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 //Redundant, but we need two because the deep link is not an animated transition
 //and we can't pass in a BOOL value to a selector
-- (void)globalAssignmentsAnimatedSegue {
+- (IBAction)globalAssignmentsAnimatedSegue:(id)sender {
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
     self.seguedToGlobalAssignment = YES;

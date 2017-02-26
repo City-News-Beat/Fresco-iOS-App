@@ -26,14 +26,13 @@
 @property (nonatomic) BOOL hasDefault;
 @property (strong, nonatomic) UIButton *closeButton;
 @property (nonatomic, retain) NSString *defaultID;
-@property (strong, nonatomic) MKMapView *mapView;
+
 @property BOOL mapShouldFollowUser;
 @property BOOL assignmentCardIsOpen;
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
 - (void)globalAssignmentsSegue;
 - (void)setInitialMapRegion;
-- (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 - (void)configureMap;
 
 @end

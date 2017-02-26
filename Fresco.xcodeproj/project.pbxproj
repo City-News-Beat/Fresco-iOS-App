@@ -169,6 +169,7 @@
 		CE3799BA1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */; };
 		CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */; };
 		CE5A6FE41E6276F90001255F /* FRSStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */; };
+		CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */; };
 		CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */; };
 		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
 		CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */; };
@@ -620,6 +621,7 @@
 		CE3799B81E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignmentNotificationsSwitchTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.m"; sourceTree = "<group>"; };
 		CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAssignmentNotificationsSwitchTableViewCell.xib; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.xib"; sourceTree = "<group>"; };
 		CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryTableViewCell.xib; sourceTree = "<group>"; };
+		CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAssignmentsViewController.xib; sourceTree = "<group>"; };
 		CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryTableViewCell.xib; sourceTree = "<group>"; };
 		CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsViewController.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.xib"; sourceTree = "<group>"; };
 		CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPaymentViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPaymentViewController.xib"; sourceTree = "<group>"; };
@@ -1325,6 +1327,7 @@
 			children = (
 				65EBEDB21C44116700BE671F /* FRSAssignmentsViewController.h */,
 				65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */,
+				CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */,
 				07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */,
 				07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */,
 				07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */,
@@ -2530,6 +2533,7 @@
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
+				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
 				CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
