@@ -222,7 +222,7 @@ static NSInteger const storiesPerPage = 12;
     [super configureTableView];
 
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
-
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyCellIdentifier];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -400,10 +400,6 @@ static NSInteger const storiesPerPage = 12;
     }
 
     FRSStoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
-    if (!cell) {
-        cell = [[FRSStoryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
 
     if (indexPath.row == self.stories.count - 5 || (indexPath.row == self.stories.count && self.stories.count < 4)) {
         [self fetchMoreStories];

@@ -350,7 +350,6 @@
 }
 
 - (void)setupUI {
-
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
 
@@ -686,7 +685,6 @@
 }
 
 - (void)configureNavigationBar {
-    //  [super configureNavigationBar];
     [super removeNavigationBarLine];
 
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
@@ -725,7 +723,6 @@
               }
 
               if (!self.userIsDisabled || !self.userIsSuspended) {
-
                   if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                       UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
                       dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
@@ -752,7 +749,6 @@
 }
 
 - (void)configureTableView {
-
     [self createProfileSection];
 
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -775,7 +771,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
         [(FRSGalleryTableViewCell *)cell pause];
     }
@@ -1092,7 +1087,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     if (section == 0) {
         return 1;
     } else {
@@ -1624,7 +1618,6 @@
 }
 
 - (void)unblockUser:(FRSUser *)user {
-
     [self configureSpinner];
 
     [[FRSModerationManager sharedInstance] unblockUser:user.uid
