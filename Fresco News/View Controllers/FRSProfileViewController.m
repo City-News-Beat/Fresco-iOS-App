@@ -5,7 +5,6 @@
 #import "FRSGalleryTableViewCell.h"
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
-#import "FRSTrimTool.h"
 #import "FRSUser.h"
 #import "FRSAlertView.h"
 #import "FRSStoryTableViewCell.h"
@@ -1166,21 +1165,20 @@
 }
 
 - (void)loadMoreInCurrentFeed {
+    if (isReloading || isFinishedLikes) {
+        return;
+    }
+    
+    isReloading = YES;
+    FRSGallery *gallery = [self.likes lastObject];
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
+    
+    FRSUser *authUser = self.representedUser;
+    
     if (self.currentFeed == self.likes) {
-
-        if (isReloading || isFinishedLikes) {
-            return;
-        }
-
-        isReloading = YES;
-        FRSGallery *gallery = [self.likes lastObject];
-
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-
-        FRSUser *authUser = self.representedUser;
-
         [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
                                                           last:timeStamp
                                                     completion:^(id responseObject, NSError *error) {
@@ -1199,20 +1197,6 @@
 
                                                     }];
     } else if (self.currentFeed == self.galleries) {
-
-        if (isReloading || isFinishedUser) {
-            return;
-        }
-
-        isReloading = YES;
-        FRSGallery *gallery = [self.galleries lastObject];
-
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-
-        FRSUser *authUser = self.representedUser;
-
         [[FRSFeedManager sharedInstance] fetchGalleriesForUser:authUser
                                                           last:timeStamp
                                                     completion:^(id responseObject, NSError *error) {
@@ -1451,12 +1435,8 @@
 }
 
 - (void)showEditProfile {
-    [self segueToSetup];
-}
-
-- (void)segueToSetup {
     [[FRSUserManager sharedInstance] reloadUser];
-
+    
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     setupProfileVC.nameStr = self.nameLabel.text;
     setupProfileVC.locStr = self.locationLabel.text;

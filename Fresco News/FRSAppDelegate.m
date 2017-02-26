@@ -450,26 +450,6 @@
     }];
 }
 
-#pragma mark - App Path
-
-- (void)determineAppPath {
-    NSString *versionString = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
-    NSArray *versionComps = [versionString componentsSeparatedByString:@"."];
-    NSInteger firstVersionNum = [[versionComps firstObject] integerValue];
-
-    /*
-     Focus on this -- pull old persistance (however its managed) into new magical record / core data layer
-     */
-    if (firstVersionNum < 3) { // This is a legacy user from prior to the redesign and persistance layer
-
-
-    } else if (firstVersionNum == 3) { // This is the current high level version number we are working with.
-        
-
-    } else { //We will eventually need this if our high level verison numbers increment, but for now, it will never get called.
-    }
-}
-
 #pragma mark - Config
 
 - (void)configureWindow {
