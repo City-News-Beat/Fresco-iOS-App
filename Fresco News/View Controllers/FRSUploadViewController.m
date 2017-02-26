@@ -1184,30 +1184,16 @@ static NSString *const cellIdentifier = @"assignment-cell";
     
 }
 
-- (void)creationError:(NSError *)error {
-    if (error.code == -1009) {
-        [self connectionError:error];
-        return;
-    }
 
-    FRSAlertView *alert = [[FRSAlertView alloc]
-                           initWithTitle:@"GALLERY ERROR"
-                           message:@"We encountered an issue creating your gallery. Please try again later."
-                           actionTitle:@"OK"
-                           cancelTitle:@""
-                           cancelTitleColor:nil
-                           delegate:nil];
-    [alert show];
-}
+/**
+ Starts the process of creating and sending the files to upload
 
-- (void)connectionError:(NSError *)error {
-    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
-    [alert show];
-}
-
+ @param galleryResponse Response object from creating the gallery being submitted
+ */
 - (void)moveToUpload:(NSDictionary *)galleryResponse {
     /* upload started */
     NSString *galleryID = galleryResponse[@"id"];
+    NSMutableArray *postsWithAssets = [NSMutableArray new];
 
     if (galleryID && ![galleryID isEqual:[NSNull null]]) {
 
@@ -1222,10 +1208,38 @@ static NSString *const cellIdentifier = @"assignment-cell";
         }
     }
     
+    //Add assets to posts from response, posts from response will be in the same order as the assets we create them with
+    for (NSInteger i = 0; i < [galleryResponse[@"posts_new"] count]; i++) {
+        NSMutableDictionary *post = [galleryResponse[@"posts_new"][i] mutableCopy];
+        post[@"asset"] = [self.content objectAtIndex:i];
+        [postsWithAssets addObject:post];
+    }
     
-    [[FRSUploadManager sharedInstance] startNewUploadWithPosts:galleryResponse[@"posts_new"] withAssets:self.content];
+    
+    [[FRSUploadManager sharedInstance] startNewUploadWithPosts:postsWithAssets];
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)creationError:(NSError *)error {
+    if (error.code == -1009) {
+        [self connectionError:error];
+        return;
+    }
+    
+    FRSAlertView *alert = [[FRSAlertView alloc]
+                           initWithTitle:@"GALLERY ERROR"
+                           message:@"We encountered an issue creating your gallery. Please try again later."
+                           actionTitle:@"OK"
+                           cancelTitle:@""
+                           cancelTitleColor:nil
+                           delegate:nil];
+    [alert show];
+}
+
+- (void)connectionError:(NSError *)error {
+    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+    [alert show];
 }
 
 - (void)tweet:(NSString *)string {

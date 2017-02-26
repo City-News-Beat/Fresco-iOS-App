@@ -24,7 +24,8 @@
 
 
 /**
- Creates a new gallery that is being submitted
+ Creates a new gallery that is being submitted. Ensures order of the assets passed is in the same
+ order when sent up in the body of the request
 
  @param params Parameters of the gallery being created
  @param assets Assets to create with

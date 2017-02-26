@@ -2,7 +2,7 @@
 //  FRSUploadManager.h
 //  Fresco
 //
-//  Created by Philip Bernstein on 10/27/16.
+//  Created by Elmir Kouev on 2/23/17.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
@@ -34,17 +34,17 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
 
 + (id)sharedInstance;
 
-
 /**
  Stars a new upload with the passed parameters
  
- @param posts Array of dictionaries to represent the posts, containing - "post_id", and "key"
- @param assets Array of PHAssets that correspond to indices of the passed posts array
+ @param posts Array of dictionaries to represent the posts, containing - "post_id", "key" and "asset"
  */
-- (void)startNewUploadWithPosts:(NSArray *)posts withAssets:(NSArray *)assets;
+- (void)startNewUploadWithPosts:(NSArray *)posts;
     
 /**
- Checks for existence of cached and uploads and reseums uploads
+ Method responsible for checking managed object context for existing uploads and proceeding
+ to trigger a new upload cycle if there are hanging uploads. In the case of there being no cached uploads, the local sandbox
+ will be cleared of cached files
  */
 - (void)checkCachedUploads;
 
@@ -54,14 +54,11 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
  */
 - (void)clearCachedUploads;
 
-
-
 /**
  Returns API digest to be sent up for creating a post from an asset
 
  @param asset PHAsset the digest is dervied from
  @param callback Completion handler that will return the digest
- @return <#return value description#>
  */
 - (void)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 

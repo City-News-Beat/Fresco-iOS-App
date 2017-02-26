@@ -52,7 +52,12 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 - (void)createGalleryWithParams:(NSDictionary*)params andAssets:(NSArray *)assets completion:(FRSAPIDefaultCompletionBlock)completion {
     NSInteger videosCounted = 0;
     NSInteger photosCounted = 0;
-    NSMutableArray *posts = [NSMutableArray new];
+    //Keep track of total assets added to signify completion of digest creationg
+    __block NSInteger assetsAdded = 0;
+    NSMutableArray *posts = [[NSMutableArray alloc] initWithCapacity:[assets count]];
+    //Init empty so we can choose ordering later
+    for (NSInteger i = 0; i < [assets count]; i++) [posts addObject:[NSNull null]];
+    
     
     //Block to create the gallery once done
     void (^createGallery)(void) = ^ {
@@ -66,15 +71,17 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
                                      @"photos_submitted" : @(photosCounted),
                                      ASSIGNMENT_ID       : params[@"assignment_id"] != nil ? params[@"assignment_id"] : @"" }];
                 
-                completion(responseObject, error);
+                completion(responseObject, nil);
             } else {
-                completion(responseObject, error);
+                completion(nil, error);
             }
         }];
     };
     
     //Loop through assets and generate digests with addresses
-    for (PHAsset *asset in assets) {
+    for (NSInteger i = 0; i < [assets count]; i++) {
+        PHAsset *asset = assets[i];
+        
         if (asset.mediaType == PHAssetMediaTypeVideo) {
             videosCounted++;
         } else {
@@ -86,8 +93,10 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
                                                      if (error) {
                                                          completion(error, nil);
                                                      } else {
-                                                         [posts addObject:responseObject];
-                                                         if([posts count] == [assets count]) {
+                                                         //This is an async operation, but we need the same ordering
+                                                         [posts replaceObjectAtIndex:i withObject:responseObject];
+                                                         assetsAdded++;
+                                                         if(assetsAdded == [assets count]) {
                                                              createGallery();
                                                          }
                                                      }
