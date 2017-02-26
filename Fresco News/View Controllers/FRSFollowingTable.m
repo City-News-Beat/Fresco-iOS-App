@@ -11,11 +11,12 @@
 #import "FRSScrollingViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSAwkwardView.h"
-#import "FRSStoryCell.h"
+#import "FRSStoryTableViewCell.h"
 #import "FRSStoryDetailViewController.h"
 #import "FRSUserManager.h"
 #import "FRSFeedManager.h"
 #import "FRSStory.h"
+#import "FRSLoadingTableViewCell.h"
 
 @implementation FRSFollowingTable
 @synthesize navigationController = _navigationController;
@@ -133,7 +134,7 @@
 }
 
 - (void)readMoreStory:(NSIndexPath *)indexPath {
-    FRSStoryCell *storyCell = [self cellForRowAtIndexPath:indexPath];
+    FRSStoryTableViewCell *storyCell = [self cellForRowAtIndexPath:indexPath];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:storyCell.story];
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
@@ -230,7 +231,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
 
         if (!cell) {
-            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
+            cell = [[FRSStoryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
         }
     }
 
@@ -299,7 +300,7 @@
     if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
 
     } else {
-        FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+        FRSStoryTableViewCell *storyCell = (FRSStoryTableViewCell *)cell;
         storyCell.storyView.navigationController = self.navigationController;
         storyCell.storyView.delegate.navigationController = self.navigationController;
         [storyCell clearCell];

@@ -501,9 +501,7 @@ static NSInteger const previewCount = 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     if (section == userIndex) {
-
         if (self.usersDicts.count == 0) {
             return 0;
         }
@@ -525,7 +523,6 @@ static NSInteger const previewCount = 3;
         return self.usersDicts.count + 2;
     }
     if (section == storyIndex) {
-
         if (_stories.count == 0) {
             return 0;
         }
@@ -618,7 +615,6 @@ static NSInteger const previewCount = 3;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-
     if (section == galleryIndex) {
         return [UIView new];
     }

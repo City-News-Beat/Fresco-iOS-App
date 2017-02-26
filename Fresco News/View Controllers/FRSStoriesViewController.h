@@ -16,6 +16,9 @@
     NSDate *exit;
     NSInteger numberRead;
 }
+
 @property BOOL loadNoMore;
+
 - (void)reloadData;
+
 @end
