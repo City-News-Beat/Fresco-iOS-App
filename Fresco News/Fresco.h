@@ -46,9 +46,6 @@ static NSString *const validUsernameChars = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
 // map + location
 static float const metersInAMile = 1609.34;
 
-// UI
-static NSString *const loadingCellIdentifier = @"LoadingMoreCell";
-
 // callbacks / blocks
 typedef void (^StoryImageBlock)(NSInteger storyImageIndex);
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);

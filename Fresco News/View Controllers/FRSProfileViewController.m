@@ -8,7 +8,7 @@
 #import "FRSTrimTool.h"
 #import "FRSUser.h"
 #import "FRSAlertView.h"
-#import "FRSStoryCell.h"
+#import "FRSStoryTableViewCell.h"
 #import "FRSSetupProfileViewController.h"
 #import "FRSAwkwardView.h"
 #import "FRSGalleryExpandedViewController.h"
@@ -769,6 +769,9 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.showsVerticalScrollIndicator = FALSE;
     [self.view addSubview:self.tableView];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyCellIdentifier];
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -826,7 +829,6 @@
 }
 
 - (void)configureProfileSocialOverlay {
-
     self.whiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
     self.whiteOverlay.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7];
     [self.profileIV addSubview:self.whiteOverlay];
@@ -848,8 +850,7 @@
     self.socialButtonContainer.alpha = 1;
 
     [self.whiteOverlay addSubview:self.socialButtonContainer];
-    //    [self.whiteOverlay insertSubview:self.socialButtonContainer aboveSubview:self.view];
-
+    
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
     UIImage *twitter = [[UIImage imageNamed:@"social-twitter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -886,7 +887,6 @@
 - (void)presentSocialOverlay {
 
     if (!self.overlayPresented) {
-
         //Set overlay presented state to prevent animating if double tapped
         self.overlayPresented = YES;
 
@@ -894,9 +894,7 @@
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-
                            self.profileMaskView.transform = CGAffineTransformMakeScale(1, 1);
-
                          }
                          completion:nil];
     }
@@ -928,9 +926,7 @@
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
-
-    //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
-
+    
     CGFloat width = 0;
     if (IS_IPHONE_5) {
         width = 176;
@@ -946,21 +942,9 @@
     self.bioTextView.backgroundColor = [UIColor clearColor];
     self.bioTextView.userInteractionEnabled = NO;
     self.bioTextView.textColor = [UIColor whiteColor];
-
-    //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 65, width, self.profileContainer.frame.size.width - (origin-4) - 16)];
-    //
-    //    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
-    //    self.bioLabel.backgroundColor = [UIColor redColor];
-    //    self.bioLabel.textColor = [UIColor whiteColor];
-    //    self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
-    //    //    [self.bioLabel sizeToFit];
-    //    [self.profileContainer addSubview:self.bioLabel];
 }
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if (textView.text) {
-        /*[[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"bio":textView.text} completion:^(id responseObject, NSError *error) {
-         NSLog(@"%@ %@", responseObject, error);
-         }];*/
         [textView resignFirstResponder];
     }
 }
@@ -1085,7 +1069,7 @@
 }
 
 - (void)readMoreStory:(NSIndexPath *)indexPath {
-    FRSStoryCell *storyCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    FRSStoryTableViewCell *storyCell = [self.tableView cellForRowAtIndexPath:indexPath];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:storyCell.story];
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
@@ -1152,7 +1136,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (self.currentFeed == self.likes) {
         if (indexPath.row > currentLikesCount) {
             currentLikesCount = indexPath.row;
@@ -1162,11 +1145,12 @@
             currentProfileCount = indexPath.row;
         }
     }
-    UITableViewCell *cell;
     if (indexPath.section == 0) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
     } else {
+        UITableViewCell *cell;
         if (self.currentFeed.count == 0) {
             cell = [[UITableViewCell alloc] init];
             CGRect newFrame = tableView.frame;
@@ -1176,26 +1160,15 @@
             [cell setBackgroundColor:[UIColor frescoBackgroundColorDark]];
         } else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
-
-            if (!cell) {
-                cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
-            }
         } else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
-
-            if (!cell) {
-                cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
-            }
         }
 
         if (indexPath.row > self.currentFeed.count - 5) {
             [self loadMoreInCurrentFeed];
         }
+        return cell;
     }
-
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-    return cell;
 }
 
 - (void)loadMoreInCurrentFeed {
@@ -1290,7 +1263,7 @@
         } else if (self.currentFeed.count == 0) {
 
         } else {
-            FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+            FRSStoryTableViewCell *storyCell = (FRSStoryTableViewCell *)cell;
             storyCell.storyView.navigationController = self.navigationController;
             storyCell.storyView.delegate.navigationController = self.navigationController;
             [storyCell clearCell];
@@ -1310,7 +1283,6 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-
     UIView *view;
 
     view.backgroundColor = [UIColor clearColor];
@@ -1319,12 +1291,9 @@
     if (section == 0) {
         view = [UIView new];
     } else if (section == 1) {
-        //[self configureSectionView];
-
         if (topView) {
             return topView;
         }
-        //[self configureSectionView];
 
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
         [self.sectionView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -1343,8 +1312,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [super scrollViewDidScroll:scrollView];
-    //Bounce only at the bottom of the tableview
-    //    scrollView.bounces = (scrollView.contentOffset.y > 10);
 
     CGRect newFrame = self.sectionView.frame;
 
@@ -1363,12 +1330,6 @@
     }
 
     [self.sectionView setFrame:newFrame];
-
-    //if (scrollView.contentOffset.y > self.view.frame.size.height) {
-    //    scrollView.bounces = NO;
-    //} else {
-    //    scrollView.bounces = YES;
-    //}
 
     NSArray *visibleCells = [self.tableView visibleCells];
 
@@ -1393,14 +1354,14 @@
     }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      BOOL taken = FALSE;
+      BOOL taken = NO;
 
       for (FRSGalleryTableViewCell *cell in visibleCells) {
           if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
               if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                   if (!taken && !isScrollingFast) {
                       [cell play];
-                      taken = TRUE;
+                      taken = YES;
                   } else {
                       [cell pause];
                   }
@@ -1436,7 +1397,6 @@
 }
 
 - (void)followUser {
-
     self.didFollow = YES;
     [self shouldRefresh:YES];
 
@@ -1448,7 +1408,6 @@
 
                                          if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
                                              [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-
                                          } else {
                                              [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
                                              [self unfollowUser];
@@ -1468,7 +1427,6 @@
                                            } else {
                                                [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
                                            }
-
                                          }];
 }
 
@@ -1535,7 +1493,6 @@
 
 - (void)facebookTapped {
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, id responseObject) {
-
     }
                           parent:self
                          manager:self.fbLoginManager]; // presenting view controller
@@ -1544,9 +1501,7 @@
 #pragma mark - User
 
 - (void)configureWithUser:(FRSUser *)user {
-
     dispatch_async(dispatch_get_main_queue(), ^{
-      // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
       self.nameLabel.text = user.username;
       if (user.profileImage != [NSNull null]) {
           self.profileImageURL = [NSURL URLWithString:user.profileImage];
@@ -1580,7 +1535,7 @@
                            completion:nil];
       }
 
-      if ([[user valueForKey:@"following"] boolValue] == TRUE) {
+      if ([[user valueForKey:@"following"] boolValue]) {
           [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
       } else {
           [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];

@@ -6,12 +6,12 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSStoryCell.h"
+#import "FRSStoryTableViewCell.h"
 #import "FRSStory.h"
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
-@implementation FRSStoryCell
+@implementation FRSStoryTableViewCell
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

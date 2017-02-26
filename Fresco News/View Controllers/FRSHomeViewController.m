@@ -12,6 +12,7 @@
 #import "FRSLoginViewController.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSGalleryTableViewCell.h"
+#import "FRSLoadingTableViewCell.h"
 #import "FRSTrimTool.h"
 #import "FRSAwkwardView.h"
 #import "FRSAlertView.h"
@@ -28,6 +29,8 @@
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 
+static NSInteger const galleriesPerPage = 12;
+
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
     NSInteger lastOffset;
@@ -43,10 +46,7 @@
 
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
-//@property (strong, nonatomic) CAShapeLayer *maskView;
-
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *pulled;
@@ -259,8 +259,8 @@
 - (void)reloadData {
     [self.followingTable reloadFollowing];
 
-    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
-                                                offsetGalleryID:Nil
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
+                                                offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                        [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
                                                          NSInteger index = 0;
@@ -425,7 +425,7 @@
 - (void)configureTableView {
     [super configureTableView];
 
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height + 20);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -441,8 +441,8 @@
     [self fetchLocalData];
 
     // network call
-    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
-                                                offsetGalleryID:Nil
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
+                                                offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                        if ([galleries count] == 0) {
 
@@ -551,7 +551,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.tableView) {
-        return (self.dataSource.count == 0 || _loadNoMore) ? self.dataSource.count : self.dataSource.count + 1;
+        return (self.dataSource.count == 0 || self.loadNoMore) ? self.dataSource.count : self.dataSource.count + 1;
     }
 
     return 0;
@@ -562,7 +562,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    if (indexPath.row >= self.dataSource.count) {
+        return loadingCellHeight;
+    }
+    
     if (tableView == self.tableView) {
         return [self heightForItemAtDataSourceIndex:indexPath.row];
     }
@@ -580,10 +583,7 @@
 
 - (UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != nil) {
-        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
-        CGRect cellFrame = cell.frame;
-        cellFrame.size.height = 20;
-        cell.frame = cellFrame;
+        FRSLoadingTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         return cell;
     }
 
@@ -619,7 +619,6 @@
 }
 
 - (void)loadMore {
-
     if (!hasLoadedOnce) {
         return;
     }
@@ -642,12 +641,12 @@
 
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
 
-    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:offsetID
                                                      completion:^(NSArray *galleries, NSError *error) {
 
                                                        if ([galleries count] == 0) {
-                                                           _loadNoMore = TRUE;
+                                                           self.loadNoMore = TRUE;
                                                            [self.tableView reloadData];
                                                            return;
                                                        }
@@ -722,7 +721,7 @@
         }
 
         if (indexPath.row == self.dataSource.count - 4) {
-            if (!isLoading && !_loadNoMore) {
+            if (!isLoading && !self.loadNoMore) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                   [self loadMore];
                 });

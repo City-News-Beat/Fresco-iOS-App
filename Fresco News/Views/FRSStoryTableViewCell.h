@@ -13,7 +13,7 @@
 
 static NSString *const storyCellIdentifier = @"story-cell";
 
-@interface FRSStoryCell : UITableViewCell <FRSStoryViewDelegate>
+@interface FRSStoryTableViewCell : UITableViewCell <FRSStoryViewDelegate>
 
 @property (strong, nonatomic) FRSStoryView *storyView;
 @property (strong, nonatomic) FRSStory *story;
