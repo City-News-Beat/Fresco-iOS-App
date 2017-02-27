@@ -261,17 +261,21 @@ static NSInteger const galleriesPerPage = 12;
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                         [self.tableView dg_stopLoading];
+                                                         [self.followingTable dg_stopLoading];
+                                                         isLoading = NO;
+                                                       });
+                                                       if (error) {
+                                                           return;
+                                                       }
                                                        [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
                                                          NSInteger index = 0;
-
                                                          NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
                                                          for (NSDictionary *gallery in galleries) {
                                                              NSString *galleryID = gallery[@"id"];
                                                              NSInteger galleryIndex = [self galleryExists:galleryID];
-
-                                                             /*
-                 Gallery does not exist -- create it in persistence layer & volotile memory
-                 */
+                                                             // Gallery does not exist -- create it in persistence layer & volotile memory
                                                              if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
                                                                  FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
                                                                  [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
@@ -281,10 +285,7 @@ static NSInteger const galleriesPerPage = 12;
                                                                  continue;
                                                              }
 
-                                                             /*
-                 Gallery already exists, update its index & meta information (things change)
-                 */
-
+                                                             // Gallery already exists, update its index & meta information (things change)
                                                              FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
                                                              [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                                                              [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
@@ -292,32 +293,14 @@ static NSInteger const galleriesPerPage = 12;
                                                              index++;
                                                          }
 
-                                                         /*
-             Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
-             */
+                                                         //Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
+
                                                          dispatch_async(dispatch_get_main_queue(), ^{
                                                            self.dataSource = newGalleries;
                                                            [self.tableView reloadData];
-                                                           isLoading = FALSE;
-                                                           [self.tableView dg_stopLoading];
-                                                           [self.followingTable dg_stopLoading];
                                                          });
                                                        }];
                                                      }];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 125)];
-    head.backgroundColor = [UIColor clearColor];
-    return head;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 125;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0;
 }
 
 #pragma mark - UI
@@ -425,6 +408,7 @@ static NSInteger const galleriesPerPage = 12;
     [super configureTableView];
 
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height + 20);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -548,6 +532,20 @@ static NSInteger const galleriesPerPage = 12;
 
 #pragma mark - UITableView DataSource
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 125)];
+    head.backgroundColor = [UIColor clearColor];
+    return head;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 125;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.tableView) {
         return (self.dataSource.count == 0 || self.loadNoMore) ? self.dataSource.count : self.dataSource.count + 1;
@@ -564,7 +562,7 @@ static NSInteger const galleriesPerPage = 12;
     if (indexPath.row >= self.dataSource.count) {
         return loadingCellHeight;
     }
-    
+
     if (tableView == self.tableView) {
         return [self heightForItemAtDataSourceIndex:indexPath.row];
     }
@@ -587,13 +585,7 @@ static NSInteger const galleriesPerPage = 12;
     }
 
     FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
-
-    if (!cell) {
-        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.navigationController = self.navigationController;
-    }
-
+    cell.navigationController = self.navigationController;
     cell.gallery = self.dataSource[indexPath.row];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -643,7 +635,6 @@ static NSInteger const galleriesPerPage = 12;
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:offsetID
                                                      completion:^(NSArray *galleries, NSError *error) {
-
                                                        if ([galleries count] == 0) {
                                                            self.loadNoMore = TRUE;
                                                            [self.tableView reloadData];

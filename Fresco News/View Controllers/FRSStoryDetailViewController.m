@@ -25,7 +25,6 @@
 
 @implementation FRSStoryDetailViewController
 @synthesize stories = _stories, story = _story, navigationController;
-static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,7 +47,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureWithGalleries:(NSArray *)galleries {
-
     self.stories = [[NSMutableArray alloc] init];
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -61,7 +59,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
         //Loop is finished
         if (galleriesArray.count == self.stories.count) {
-
             dispatch_async(dispatch_get_main_queue(), ^{
               [self.galleriesTable reloadData];
               [self.loadingView stopLoading];
@@ -159,13 +156,13 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.galleriesTable registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
 }
 
 - (void)configureNavigationBar {
     [self configureBackButtonAnimated:YES];
 
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
@@ -182,7 +179,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)dismissDetail {
-
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -200,20 +196,13 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FRSGalleryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
-
-    if (!cell) {
-        cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.navigationController = self.navigationController;
-    }
-
+    cell.navigationController = self.navigationController;
     cell.delegate = self;
 
     return cell;
 }
 
 - (void)readMore:(NSIndexPath *)indexPath {
-
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
 
     [vc configureBackButtonAnimated:YES];
@@ -311,11 +300,17 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)fetchGalleries {
-
     self.stories = [[NSMutableArray alloc] init];
 
     [[FRSStoryManager sharedInstance] fetchGalleriesInStory:self.story.uid
                                                  completion:^(NSArray *galleries, NSError *error) {
+                                                   [self.loadingView stopLoading];
+                                                   [self.loadingView removeFromSuperview];
+                                                   self.loadingView.alpha = 0;
+
+                                                   if (error) {
+                                                       return;
+                                                   }
 
                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                    NSArray *galleriesArray = galleries;
@@ -324,30 +319,23 @@ static NSString *galleryCell = @"GalleryCellReuse";
                                                        FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
                                                        [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
                                                        [self.stories addObject:galleryObject];
-
-                                                       //self.galleriesTable.scrollEnabled = YES;
                                                    }
 
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                      [self.galleriesTable reloadData];
-                                                     [self.loadingView stopLoading];
-                                                     [self.loadingView removeFromSuperview];
-                                                     self.loadingView.alpha = 0;
                                                    });
                                                  }];
 }
 
 - (void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
-
     NSArray *filteredArray = [self.stories filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
 
-    if (!filteredArray.count)
+    if (!filteredArray.count) {
         return;
-    // push gallery detail view
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (indexPath.row >= self.stories.count) {
         return 0;
     }
@@ -363,7 +351,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureSpinner {
-
     if (self.loadingView) {
         return;
     }

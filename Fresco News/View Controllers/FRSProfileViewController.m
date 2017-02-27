@@ -563,9 +563,12 @@
 
     [[FRSFeedManager sharedInstance] fetchGalleriesForUser:self.representedUser
                                                 completion:^(id responseObject, NSError *error) {
-
                                                   [self.loadingView stopLoading];
                                                   [self.loadingView removeFromSuperview];
+
+                                                  if (error) {
+                                                      return;
+                                                  }
 
                                                   if (self.userIsBlocked) {
                                                       [self configureBlockedUserWithButton:NO];
@@ -764,7 +767,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.showsVerticalScrollIndicator = FALSE;
     [self.view addSubview:self.tableView];
-    
+
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyCellIdentifier];
 }
@@ -844,7 +847,7 @@
     self.socialButtonContainer.alpha = 1;
 
     [self.whiteOverlay addSubview:self.socialButtonContainer];
-    
+
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
     UIImage *twitter = [[UIImage imageNamed:@"social-twitter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -920,7 +923,7 @@
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
-    
+
     CGFloat width = 0;
     if (IS_IPHONE_5) {
         width = 176;
@@ -1168,16 +1171,16 @@
     if (isReloading || isFinishedLikes) {
         return;
     }
-    
+
     isReloading = YES;
     FRSGallery *gallery = [self.likes lastObject];
-    
+
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-    
+
     FRSUser *authUser = self.representedUser;
-    
+
     if (self.currentFeed == self.likes) {
         [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
                                                           last:timeStamp
@@ -1281,11 +1284,6 @@
     }
 
     return view;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0)
-        return;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -1436,7 +1434,7 @@
 
 - (void)showEditProfile {
     [[FRSUserManager sharedInstance] reloadUser];
-    
+
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     setupProfileVC.nameStr = self.nameLabel.text;
     setupProfileVC.locStr = self.locationLabel.text;

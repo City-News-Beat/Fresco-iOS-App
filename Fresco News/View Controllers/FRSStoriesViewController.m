@@ -1,3 +1,5 @@
+ 
+    
 //
 //  FRSStoriesViewController.m
 //  Fresco
@@ -66,7 +68,7 @@ static NSInteger const storiesPerPage = 12;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     if (!firstOpen) {
         firstOpen = TRUE;
     } else {
@@ -186,12 +188,11 @@ static NSInteger const storiesPerPage = 12;
 
 - (void)reloadData {
     [[FRSStoryManager sharedInstance] fetchStoriesWithLimit:storiesPerPage
-                                                lastStoryID:Nil
+                                                lastStoryID:nil
                                                  completion:^(NSArray *stories, NSError *error) {
-
-                                                   if ([stories count] == 0 || error) {
-                                                       self.loadNoMore = TRUE;
-                                                       [self.tableView reloadData];
+                                                   [self.tableView dg_stopLoading];
+                                                   if (error) {
+                                                       self.loadNoMore = YES;
                                                        return;
                                                    }
                                                    self.stories = [[NSMutableArray alloc] init];
@@ -210,7 +211,6 @@ static NSInteger const storiesPerPage = 12;
                                                    }
 
                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                     [self.tableView dg_stopLoading];
                                                      [self.tableView reloadData];
                                                      [self.appDelegate.managedObjectContext save:Nil];
                                                      [self.appDelegate saveContext];
@@ -254,7 +254,6 @@ static NSInteger const storiesPerPage = 12;
                                                    [self cacheLocalData:stories];
 
                                                    NSInteger index = 0;
-
                                                    for (NSDictionary *storyDict in stories) {
 
                                                        [self.loadingView stopLoading];
