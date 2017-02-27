@@ -7,21 +7,15 @@
 //
 
 #import "FRSOnboardingViewController.h"
-
 #import "FRSOnboardOneView.h"
 #import "FRSOnboardTwoView.h"
 #import "FRSOnboardThreeView.h"
-
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
-
-#import "FRSContentActionsBar.h"
-
 #import "FRSLoginViewController.h"
 #import "FRSSignUpViewController.h"
 #import "FRSTabBarController.h"
-
 #import "OEParallax.h"
 
 @interface FRSOnboardingViewController () <UIScrollViewDelegate>

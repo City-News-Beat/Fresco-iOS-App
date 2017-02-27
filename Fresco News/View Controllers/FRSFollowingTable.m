@@ -70,7 +70,11 @@
 
 - (void)reloadFollowing {
     [[FRSFeedManager sharedInstance] fetchFollowing:^(NSArray *galleries, NSError *error) {
-
+      if (error) {
+          isFinished = NO;
+          return;
+      }
+        
       if (galleries.count == 0) {
           if (!awkwardView) {
               awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width / 2 - 175 / 2, self.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
@@ -81,10 +85,9 @@
       }
 
       dispatch_async(dispatch_get_main_queue(), ^{
-        self.feed = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
+        self.feed = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:NO]];
         numberOfPosts = [self.feed count];
         [self reloadData];
-        isFinished = FALSE;
       });
     }];
 }

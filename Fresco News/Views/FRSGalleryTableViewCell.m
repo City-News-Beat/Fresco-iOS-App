@@ -39,13 +39,9 @@
     }
     hasPlayed = NO;
 
-    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-
     if (self.gallery == self.galleryView.gallery && self.galleryView && self.gallery) {
         return;
     }
-
-    self.backgroundColor = [UIColor frescoBackgroundColorDark];
 
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:self.gallery delegate:self];
     [self addSubview:self.galleryView];
