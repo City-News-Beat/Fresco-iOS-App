@@ -27,11 +27,12 @@
 + (instancetype)sharedClient {
     static FRSAPIClient *client = nil;
     static dispatch_once_t onceToken;
-
+    
     dispatch_once(&onceToken, ^{
-      client = [[FRSAPIClient alloc] init];
+        client = [[FRSAPIClient alloc] init];
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     });
-
+    
     return client;
 }
 

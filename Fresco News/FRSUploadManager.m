@@ -346,6 +346,9 @@
  on the location and size of the asset. The upload itself will also be saved to Core Data here if it's not already
  so that it can be pulled from cache or the upload fails mid-way
  
+ TODO: Make this save the local path to be re-used later instead on the FRSUpload
+ of trancoding every time if the user fails and retries the upload
+ 
  @param asset The PHAsset to genereate for upload
  @param key The AWS file key we're uploading to
  @param postID The ID of the post which correpsonds to this asset
@@ -399,13 +402,12 @@
                                                       NSString *tempPath = [self uniqueFileString];
                                                       SDAVAssetExportSession *encoder = [self encoderWithAsset:avasset postID:postID];
                                                       encoder.outputURL = [NSURL fileURLWithPath:tempPath];
-                                                      encoder.delegate = self;
                                                       
                                                       //Begin encoding the video, delegate responder will update the progress
                                                       [encoder exportAsynchronouslyWithCompletionHandler:^{
                                                           if(encoder.error) {
                                                               completion(nil, YES, 0, encoder.error);
-                                                          } else {
+                                                          } else if(encoder.status == AVAssetExportSessionStatusCompleted) {
                                                               NSError *videoError;
                                                               NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&videoError];
                                                               
@@ -429,9 +431,10 @@
 }
 
 - (SDAVAssetExportSession *)encoderWithAsset:(AVAsset *)asset postID:(NSString *)postID{
-    SDAVAssetExportSession *encoder = [[SDAVAssetExportSession alloc] initWithAsset:asset];
+    SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.postID = postID;
+    encoder.delegate = self;
     encoder.videoSettings = @{
                               AVVideoCodecKey : AVVideoCodecH264,
                               AVVideoWidthKey : @1920,
@@ -460,13 +463,14 @@
     //Clear state before we begin
     [self resetState];
     
-    //Check if we have internet
-//    if(![[AFNetworkReachabilityManager sharedManager] isReachable]){
-//        return [self uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection"]];
-//    }
-    
     //Block to start uploads once we're done
     void (^startUploads)(void) = ^ {
+        
+        //Check if we have internet
+        if(![[AFNetworkReachabilityManager sharedManager] isReachable]){
+            return [weakSelf uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection."]];
+        }
+        
         for (NSDictionary *uploadForPost in self.uploadMeta) {
             [self addUploadForPost:uploadForPost[@"post_id"]
                            andPath:uploadForPost[@"path"]
@@ -491,15 +495,15 @@
                             withKey:post[@"key"]
                          withPostID:post[@"post_id"]
                          completion:^(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
+                             toComplete++;
+                             totalFileSize += fileSize;
+                             if(isVideo) {
+                                 totalVideoFilesSize += fileSize;
+                             } else {
+                                 totalImageFilesSize += fileSize;
+                             }
+                             
                              if(!error) {
-                                 toComplete++;
-                                 totalFileSize += fileSize;
-                                 if(isVideo) {
-                                     totalVideoFilesSize += fileSize;
-                                 } else {
-                                     totalImageFilesSize += fileSize;
-                                 }
-                                 
                                  [self.uploadMeta addObject:postUploadMeta];
                                  
                                  //If the upload errors at some point and state is reset,
@@ -525,7 +529,7 @@
     for (NSString *uploadPost in [self.managedObjects allKeys]) {
         FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
 
-        if (upload.key && upload.uploadID && upload.resourceURL && [upload.completed boolValue] == NO) {
+        if (upload.key && upload.uploadID && upload.resourceURL && [upload.completed boolValue] == FALSE) {
             PHFetchResult *assetArray = [PHAsset fetchAssetsWithLocalIdentifiers:@[ upload.resourceURL ] options:nil];
             
             //Asset no longer available, skip this item
@@ -558,15 +562,14 @@
     [self.transferManager cancelAll];
     
     if(withForce == YES) {
-        for (NSString *uploadPost in [self.managedObjects allKeys]) {
-            FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
-            [self.context deleteObject:upload];
-            
-            NSError *error;
-            if (![self.context save:&error]) {
-                // Handle the error.
-            }
-        }
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
+        NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+        
+        NSManagedObjectContext *context = [[(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] coreDataController] managedObjectContext]; // temp (replace with internal or above method
+        
+        NSError *deleteError;
+        //Delete all FRSUploads
+        [context executeRequest:delete error:&deleteError];
     }
 }
 
@@ -648,7 +651,7 @@
             //Handle object in cache if it exists
             if (upload) {
                 [weakSelf.context performBlock:^{
-                    upload.completed = @(YES);
+                    upload.completed = @(TRUE);
                     [weakSelf.context save:nil];
                     completion(nil, nil);
                 }];
