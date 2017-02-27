@@ -224,7 +224,11 @@
 -(void)handleHeartAmount:(NSInteger)amount {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+        if (amount >= 0) {
+            self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+        } else {
+            self.likeLabel.text = @"0";
+        }
     });
 }
 
@@ -244,7 +248,11 @@
 -(void)handleRepostAmount:(NSInteger)amount {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+        if (amount >= 0) {
+            self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+        } else {
+            self.repostLabel.text = @"0";
+        }
     });
 }
 
