@@ -1147,12 +1147,6 @@
 
 #pragma mark - Action Bar
 
-
-/**
- Set the title for the gallerys action button.
-
- @return NSString title for action button.
- */
 - (NSString *)titleForActionButton {
     int comments = [[self.gallery valueForKey:@"comments"] intValue];
     
@@ -1165,49 +1159,28 @@
     return [NSString stringWithFormat:@"%d COMMENTS", comments];
 }
 
-/**
- Segues to the gallery expanded view when the user taps [READ MORE]
- 
- @param actionBar FRSActionBar
- */
 -(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
 }
 
-/**
- Segues to the like/repost view controller focused on the likes tab.
-
- @param actionBar FRSActionBar
- */
-- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
-/**
- Segues to the like/repost view controller focused on the reposts tab.
- 
- @param actionBar FRSActionBar
- */
-- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     vc.didTapRepostLabel = YES;
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
-/**
- Presents share action sheet with a link to the current gallery.
-
- @param actionbar FRSActionBar
- */
 -(void)handleShare:(FRSActionBar *)actionbar {
     self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
 }
 
-
-- (void)handleLike:(FRSContentActionsBar *)actionBar {
+- (void)handleLike:(FRSActionBar *)actionBar {
     
     // UI will update regardless of success or failure.
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
@@ -1221,7 +1194,7 @@
     }
 }
 
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
+- (void)handleRepost:(FRSActionBar *)actionBar {
     
     // UI will update regardless of success or failure.
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {

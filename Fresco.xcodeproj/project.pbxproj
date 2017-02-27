@@ -128,7 +128,6 @@
 		65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B61C24AACF002182DE /* UIColor+Fresco.m */; };
 		65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */; };
 		65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C11C24C28D002182DE /* FRSOnboardOneView.m */; };
-		65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C61C24D263002182DE /* FRSContentActionsBar.m */; };
 		65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C91C24D464002182DE /* UIFont+Fresco.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
@@ -556,8 +555,6 @@
 		65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardingViewController.m; sourceTree = "<group>"; };
 		65F237C01C24C28D002182DE /* FRSOnboardOneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardOneView.h; sourceTree = "<group>"; };
 		65F237C11C24C28D002182DE /* FRSOnboardOneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardOneView.m; sourceTree = "<group>"; };
-		65F237C51C24D263002182DE /* FRSContentActionsBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSContentActionsBar.h; sourceTree = "<group>"; };
-		65F237C61C24D263002182DE /* FRSContentActionsBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSContentActionsBar.m; sourceTree = "<group>"; };
 		65F237C81C24D464002182DE /* UIFont+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+Fresco.h"; path = "Categories/UIFont+Fresco.h"; sourceTree = "<group>"; };
 		65F237C91C24D464002182DE /* UIFont+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+Fresco.m"; path = "Categories/UIFont+Fresco.m"; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
@@ -1992,8 +1989,6 @@
 		D43C80001C9074BB00A7A7A7 /* Content Action Bar */ = {
 			isa = PBXGroup;
 			children = (
-				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
-				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
 				07A915C41E5F65060081D219 /* FRSActionBar.xib */,
 				07A915C91E5F65510081D219 /* FRSActionBar.h */,
 				07A915CA1E5F65510081D219 /* FRSActionBar.m */,
@@ -2773,7 +2768,6 @@
 				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */,
-				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
 				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
 				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,

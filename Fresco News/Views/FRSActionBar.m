@@ -171,6 +171,7 @@
     [UIView setAnimationsEnabled:YES];
 }
 
+
 - (void)setCurrentUser:(BOOL)isAuth {
     if (isAuth) {
         self.repostButton.userInteractionEnabled = NO;

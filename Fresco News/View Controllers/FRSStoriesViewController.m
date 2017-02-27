@@ -16,7 +16,7 @@
 #import "FRSDualUserListViewController.h"
 #import "FRSStoryManager.h"
 
-@interface FRSStoriesViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSContentActionBarDelegate>
+@interface FRSStoriesViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSMutableArray *stories;
 
@@ -53,12 +53,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.appDelegate = [[UIApplication sharedApplication] delegate];
+    self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self configureUI];
     [self fetchStories];
 
     if ([self.stories count] == 0) {
         [self configureSpinner];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (!firstOpen) {
+        firstOpen = TRUE;
+    } else {
+        [self reloadData];
     }
 }
 
@@ -68,17 +78,8 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
     [self configurePullToRefresh];
-    //    [self configureSpinner];
     [self configureNavigationBar];
 }
-
-//-(void)configureSpinner {
-//    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
-//    [self.view addSubview:self.spinner];
-//
-//    [self.spinner startAnimating];
-//}
 
 - (void)configureSpinner {
 
@@ -464,36 +465,18 @@
           [weakSelf showShareSheetWithContent:sharedContent];
         };
 
-        cell.imageBlock = ^(NSInteger imageIndex) {
-          [weakSelf handleImagePress:indexPath imageIndex:imageIndex];
-        };
-
         [cell configureCell];
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 
-    if (!firstOpen) {
-        firstOpen = TRUE;
-    } else {
-        [self reloadData];
-    }
-}
+
+
+#pragma mark - Action Bar Delegate
+
 - (void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-}
-
-- (void)handleImagePress:(NSIndexPath *)cellIndex imageIndex:(NSInteger)imageIndex {
-
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-
-    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:cellIndex.row]];
-    detailView.navigationController = self.navigationController;
-    [detailView scrollToGalleryIndex:imageIndex];
-    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -502,22 +485,12 @@
 }
 
 - (void)readMore:(NSInteger)index {
-
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
     [self expandNavBar:nil];
 }
 
-- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
-    //    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    //    [self.navigationController pushViewController:vc animated:YES];
-}
 
-- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
-    //    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    //    vc.didTapRepostLabel = YES;
-    //    [self.navigationController pushViewController:vc animated:YES];
-}
 
 @end

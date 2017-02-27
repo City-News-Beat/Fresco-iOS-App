@@ -686,33 +686,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
-
-/**
- Segues to the like/repost view controller focused on the likes tab.
- 
- @param actionBar FRSActionBar
- */
-- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-/**
- Segues to the like/repost view controller focused on the reposts tab.
- 
- @param actionBar FRSActionBar
- */
-- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     vc.didTapRepostLabel = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
-
-/**
- Presents share action sheet with a link to the current gallery.
- 
- @param actionbar FRSActionBar
- */
 
 -(void)handleShare:(FRSActionBar *)actionbar {
 
@@ -726,7 +709,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
 }
-
 
 - (void)updateSocial {
     NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
@@ -742,7 +724,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 }
 
-- (void)handleLike:(FRSContentActionsBar *)actionBar {
+- (void)handleLike:(FRSActionBar *)actionBar {
     
     // UI will update regardless of success or failure.
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
@@ -756,7 +738,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
+- (void)handleRepost:(FRSActionBar *)actionBar {
     
     // UI will update regardless of success or failure.
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {

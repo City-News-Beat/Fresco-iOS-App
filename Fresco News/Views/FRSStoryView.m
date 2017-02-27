@@ -16,7 +16,6 @@
 #import "UIFont+Fresco.h"
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
-#import "FRSContentActionsBar.h"
 #import <Haneke/Haneke.h>
 #import "FRSProfileViewController.h"
 #import "FRSDualUserListViewController.h"
@@ -326,7 +325,7 @@
     return @"READ MORE";
 }
 
--(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
+- (void)handleActionButtonTapped:(FRSActionBar *)actionBar {
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
@@ -335,11 +334,11 @@
     }
 }
 
--(void)handleShare:(FRSActionBar *)actionbar {
+- (void)handleShare:(FRSActionBar *)actionbar {
     self.shareBlock(@[ [@"https://fresconews.com/story/" stringByAppendingString:self.story.uid] ]);
 }
 
-- (void)handleLike:(FRSContentActionsBar *)actionBar {
+- (void)handleLike:(FRSActionBar *)actionBar {
     if ([[self.story valueForKey:@"liked"] boolValue]) {
         [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
         }];
@@ -349,7 +348,7 @@
     }
 }
 
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
+- (void)handleRepost:(FRSActionBar *)actionBar {
     if ([[self.story valueForKey:@"reposted"] boolValue]) {
         [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
         }];
@@ -359,11 +358,11 @@
     }
 }
 
--(void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
+- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
     // To be implemented in the future, pending API support.
 }
 
--(void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
+- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
     // To be implemented in the future, pending API support.
 }
 
