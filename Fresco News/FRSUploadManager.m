@@ -662,16 +662,18 @@
                 }
             }
             
-            completed++;
             [weakSelf trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", postID]];
-            
+            completed++;
             FRSUpload *upload = [weakSelf.managedObjects objectForKey:postID];
+            
             //Handle object in cache if it exists
             if (upload) {
                 [weakSelf.context performBlock:^{
                     upload.completed = @(TRUE);
                     [weakSelf.context save:nil];
                     completion(nil, nil);
+                    //Remove after completing
+                    [weakSelf.managedObjects removeObjectForKey:postID];
                 }];
             } else {
                 completion(nil, nil);
