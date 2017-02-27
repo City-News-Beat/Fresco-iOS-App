@@ -127,6 +127,8 @@
         NSNumber *uploadPercentage = notificationInfo[@"percentage"];
         float percentage = [uploadPercentage floatValue];
         
+        if (CGRectIsNull(self.frame)) return;
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             CGRect navFrame = self.frame;
             navFrame.origin.y = -20;
