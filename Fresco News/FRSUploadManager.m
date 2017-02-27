@@ -141,6 +141,9 @@
 }
 
 
+/**
+ Destroys all cached uploads in the local file system
+ */
 - (void)clearCachedUploads {
     BOOL isDir;
     NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
@@ -572,7 +575,7 @@
 /**
  Cancels upload in progress
 
- @param withForce BOOL value passed if the cancel should clear all of the cached uploads as well to do a full erase
+ @param withForce BOOL value passed if the cancel should clear all of the core data uploads as well to do a full erase
  */
 - (void)cancelUploadWithForce:(BOOL)withForce {
     [self resetState];
@@ -725,25 +728,24 @@
     //No upload in progress, added this check due to this being called in a callback cycle
     if(toComplete == 0) return;
     
-    //Cancel the upload
-    [self cancelUploadWithForce:NO];
-    
-    if(!error || !error.localizedDescription){
-        error = [NSError errorWithMessage:@"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."];
-    }
-    
+    //Do this before cancelling so we can use the active state variables
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
     
     if (uploadSpeed > 0) {
         [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
     
-    NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize * 1024 * 1024]; //In bytes, convert to MB
-    NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize * 1024 * 1024]; //In bytes, convert to MB
-    
-    [uploadErrorSummary setObject:@{ @"video" : videoFilesSize,
-                                     @"photo" : imageFilesSize }
+    //Convert from bytes to megabytes
+    [uploadErrorSummary setObject:@{ @"video" : [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize / 1024 / 1024],
+                                     @"photo" : [NSString stringWithFormat:@"%lluMB", totalImageFilesSize / 1024 / 1024] }
                            forKey:@"files"];
+    
+    //Cancel the upload
+    [self cancelUploadWithForce:NO];
+    
+    if(!error || !error.localizedDescription){
+        error = [NSError errorWithMessage:@"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."];
+    }
     
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
     [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:Nil userInfo:@{ @"type" : @"failure", @"error": error }];
