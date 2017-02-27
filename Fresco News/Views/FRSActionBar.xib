@@ -51,7 +51,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.52000000000000002" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <connections>
-                        <outletCollection property="gestureRecognizers" destination="3ap-LF-Qds" appends="YES" id="fcc-dt-ewL"/>
+                        <outletCollection property="gestureRecognizers" destination="e6V-pE-dwu" appends="YES" id="vV2-MY-LvN"/>
                     </connections>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="elS-eQ-ot1">
@@ -72,7 +72,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.52000000000000002" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <connections>
-                        <outletCollection property="gestureRecognizers" destination="Flp-Ub-N9X" appends="YES" id="WNa-mz-m9W"/>
+                        <outletCollection property="gestureRecognizers" destination="jT8-uk-QQB" appends="YES" id="PAQ-tU-0Ni"/>
                     </connections>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVy-eJ-Txs">
@@ -132,14 +132,14 @@
             </connections>
             <point key="canvasLocation" x="-92.5" y="-94"/>
         </view>
-        <tapGestureRecognizer id="Flp-Ub-N9X">
+        <tapGestureRecognizer id="e6V-pE-dwu" userLabel="Repost Tap">
             <connections>
-                <action selector="repostLabelTapped:" destination="iN0-l3-epB" id="U0B-To-dcr"/>
+                <action selector="repostLabelTapped:" destination="iN0-l3-epB" id="phj-Fj-FZy"/>
             </connections>
         </tapGestureRecognizer>
-        <tapGestureRecognizer id="3ap-LF-Qds">
+        <tapGestureRecognizer id="jT8-uk-QQB">
             <connections>
-                <action selector="likeLabelTapped:" destination="iN0-l3-epB" id="kVz-wJ-URb"/>
+                <action selector="likeLabelTapped:" destination="iN0-l3-epB" id="oat-BR-4uy"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

@@ -48,10 +48,16 @@
 -(void)configureUI {
     [self configureActionButton];
     [self configureSocialButtons];
+    [self configureLabels];
 }
 
 -(void)configureActionButton {
     [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+}
+
+-(void)configureLabels {
+    self.likeLabel.userInteractionEnabled = YES;
+    self.repostLabel.userInteractionEnabled = YES;
 }
 
 -(void)configureSocialButtons {
