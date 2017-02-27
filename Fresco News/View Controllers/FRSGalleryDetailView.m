@@ -20,6 +20,7 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSDualUserListViewController.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
@@ -685,6 +686,28 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+
+/**
+ Segues to the like/repost view controller focused on the likes tab.
+ 
+ @param actionBar FRSActionBar
+ */
+- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+/**
+ Segues to the like/repost view controller focused on the reposts tab.
+ 
+ @param actionBar FRSActionBar
+ */
+- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 /**
  Presents share action sheet with a link to the current gallery.
  
@@ -692,63 +715,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
  */
 
 -(void)handleShare:(FRSActionBar *)actionbar {
-//    self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
+
+    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
+    
+    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
+    [self.parentVC.navigationController presentViewController:activityController animated:YES completion:nil];
+    
+    [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
 }
-
-//-(void)handleShare:(FRSActionBar *)actionbar {
-//    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-//    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
-//    
-//    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
-//    
-//    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
-//    [self.parentVC.navigationController presentViewController:activityController animated:YES completion:nil];
-//    
-//    [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
-//
-//}
-
-
-
-
-//- (void)handleLike:(FRSContentActionsBar *)actionBar {
-//    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
-//    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-//        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
-//                                               completion:^(id responseObject, NSError *error) {
-//                                                   NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
-//                                                   if (error) {
-//                                                       [actionBar handleHeartState:TRUE];
-//                                                       [actionBar handleHeartAmount:likes];
-//                                                   }
-//                                               }];
-//    } else {
-//        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
-//                                             completion:^(id responseObject, NSError *error) {
-//                                                 NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-//                                                 if (error) {
-//                                                     [actionBar handleHeartState:FALSE];
-//                                                     [actionBar handleHeartAmount:likes];
-//                                                 }
-//                                             }];
-//    }
-//}
-//
-//- (void)handleRepost:(FRSContentActionsBar *)actionBar {
-//    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
-//    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
-//    
-//    [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
-//                                           completion:^(id responseObject, NSError *error) {
-//                                               NSLog(@"REPOSTED %@", error);
-//                                               
-//                                               if (error) {
-//                                                   [actionBar handleRepostState:!state];
-//                                                   [actionBar handleRepostAmount:repostCount];
-//                                               }
-//                                           }];
-//}
-
 
 
 - (void)updateSocial {

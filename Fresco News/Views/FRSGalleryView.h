@@ -32,45 +32,25 @@
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
-
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) FRSActionBar *actionBar;
-
 @property (strong, nonatomic) UILabel *captionLabel;
-
 @property (strong, nonatomic) UILabel *nameLabel;
-
 @property (strong, nonatomic) UILabel *locationLabel;
-
 @property (strong, nonatomic) UILabel *timeLabel;
-
 @property (strong, nonatomic) UIImageView *profileIV;
-
 @property (strong, nonatomic) UIImageView *locationIV;
-
 @property (strong, nonatomic) UIImageView *clockIV;
-
 @property (strong, nonatomic) UIPageControl *pageControl;
-
 @property (strong, nonatomic) NSMutableArray *imageViews;
-
 @property (strong, nonatomic) NSArray *orderedPosts;
-
 @property (nonatomic) NSInteger adjustedPage;
-
 @property (strong, nonatomic) UIImageView *parallaxImage;
-
 @property (strong, nonatomic) UIView *container;
-
 @property (strong, nonatomic) FRSPlayer *videoPlayer;
-
 @property (strong, nonatomic) AVPlayerLayer *playerLayer;
-
 @property (nonatomic) NSInteger currentPage;
-
 @property (nonatomic, retain) NSMutableArray *players;
-
 @property (strong, nonatomic) FRSGalleryFooterView *galleryFooterView;
 
 - (void)playerTap:(UITapGestureRecognizer *)tap;
