@@ -357,13 +357,7 @@
 - (void)createAssetForUpload:(PHAsset *)asset withKey:(NSString *)key withPostID:(NSString *)postID completion:(FRSUploadPostAssetCompletionBlock)completion {
     NSString *revisedKey = [@"raw/" stringByAppendingString:key];
     
-    //Check if the upload is already in memory as this can be populated before hand if the upload
-    if([self.managedObjects objectForKey:postID] == nil) {
-        [self createUploadWithAsset:asset key:key post:postID];
-    }
-    
     if (asset.mediaType == PHAssetMediaTypeImage) {
-        
         PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
         options.resizeMode = PHImageRequestOptionsResizeModeNone;
         options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
@@ -375,7 +369,7 @@
                                                         NSString *tempPath = [[self uniqueFileString] stringByAppendingString:@".jpeg"];
                                                         NSError *imageError;
                                                         
-                                                        // write data to temp path (background thread, async)
+                                                        //Write data to temp path (background thread, async)
                                                         if([imageData writeToFile:tempPath options:NSDataWritingAtomic error:&imageError]) {
                                                             NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&imageError];
                                                             
@@ -392,12 +386,10 @@
                                                     }];
         
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
-        //Request asset and trasncode into a the desired bitrate
+        //Request asset and transcode into a the desired bitrate
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset
                                                         options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                      //Increment number of videos in state
-                                                      numberOfVideos++;
                                                       // create temp location to move data (PHAsset can not be weakly linked to)
                                                       NSString *tempPath = [self uniqueFileString];
                                                       SDAVAssetExportSession *encoder = [self encoderWithAsset:avasset postID:postID];
@@ -459,13 +451,13 @@
 
 - (void)startNewUploadWithPosts:(NSArray *)posts {
     __weak typeof(self) weakSelf = self;
+    __block NSInteger currentIndex = 0;
 
     //Clear state before we begin
     [self resetState];
     
     //Block to start uploads once we're done
     void (^startUploads)(void) = ^ {
-        
         //Check if we have internet
         if(![[AFNetworkReachabilityManager sharedManager] isReachable]){
             return [weakSelf uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection."]];
@@ -487,35 +479,61 @@
         }
     };
     
-    //Loop through and create assets
+    //Loop through and create cached uploads
+    //We do this before in order to not have to wait for transcoding to finish
     for (NSInteger i = 0; i < [posts count]; i++) {
         NSDictionary *post = posts[i];
+
+        //Check if the upload is already in memory as this can be populated before hand if the upload
+        if([self.managedObjects objectForKey:post[@"post_id"]] == nil) {
+            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[@"post_id"]];
+        }
         
-        [self createAssetForUpload:post[@"asset"]
-                            withKey:post[@"key"]
-                         withPostID:post[@"post_id"]
-                         completion:^(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
-                             toComplete++;
-                             totalFileSize += fileSize;
-                             if(isVideo) {
-                                 totalVideoFilesSize += fileSize;
-                             } else {
-                                 totalImageFilesSize += fileSize;
-                             }
-                             
-                             if(!error) {
-                                 [self.uploadMeta addObject:postUploadMeta];
-                                 
-                                 //If the upload errors at some point and state is reset,
-                                 //this count will never add up, hence will not start uploading
-                                 if([self.uploadMeta count] == [posts count]) {
-                                     startUploads();
-                                 }
-                             } else {
-                                 [self uploadDidErrorWithError:error];
-                             }
-                         }];
+        //Count the number of videos for the transcoding progress
+        numberOfVideos = numberOfVideos + (((PHAsset *)post[@"asset"]).mediaType == PHAssetMediaTypeVideo ? 1 : 0);
     }
+    
+    __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
+
+    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us
+    FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
+        toComplete++;
+        totalFileSize += fileSize;
+        if(isVideo) {
+            totalVideoFilesSize += fileSize;
+        } else {
+            totalImageFilesSize += fileSize;
+        }
+        
+        if(!error) {
+            [self.uploadMeta addObject:postUploadMeta];
+            currentIndex++;
+            
+            //If the upload errors at some point and state is reset,
+            //this count will never add up, hence will not start uploading
+            if([self.uploadMeta count] == [posts count]) {
+                startUploads();
+            } else {
+                
+                FRSUploadPostAssetCompletionBlock strongHandleAssetCreation = weakHandleAssetCreation;
+                
+                //Recursive call to block to process next post
+                [self createAssetForUpload:posts[currentIndex][@"asset"]
+                                   withKey:posts[currentIndex][@"key"]
+                                withPostID:posts[currentIndex][@"post_id"]
+                                completion:strongHandleAssetCreation];
+            }
+        } else {
+            [self uploadDidErrorWithError:error];
+        }
+    };
+    
+    weakHandleAssetCreation = handleAssetCreation;
+    
+    [self createAssetForUpload:posts[currentIndex][@"asset"]
+                       withKey:posts[currentIndex][@"key"]
+                    withPostID:posts[currentIndex][@"post_id"]
+                    completion:handleAssetCreation];
 }
 
 /**
