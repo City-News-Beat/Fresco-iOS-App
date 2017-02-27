@@ -9,7 +9,7 @@
 #import "NSDate+ISO.h"
 
 NSString *const ISODateFormat = @"yyyy:MM:dd";
-NSString *const ISODateTimeZoneFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ";
+NSString *const ISODateTimeZoneFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 NSString *const ISOTimeFormat = @"HH:mm:ss";
 
 @implementation NSDate (ISO)
@@ -23,6 +23,7 @@ NSString *const ISOTimeFormat = @"HH:mm:ss";
 - (NSString *)ISODateWithTimeZone {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = ISODateTimeZoneFormat;
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     return [formatter stringFromDate:self];
 }
 
