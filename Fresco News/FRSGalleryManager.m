@@ -44,9 +44,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 - (void)createGallery:(NSDictionary *)galleryDict completion:(FRSAPIDefaultCompletionBlock)completion {
     [[FRSAPIClient sharedClient] post:createGalleryEndpoint
                        withParameters:galleryDict
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
+                           completion:completion];
 }
 
 - (void)createGalleryWithParams:(NSDictionary*)params andAssets:(NSArray *)assets completion:(FRSAPIDefaultCompletionBlock)completion {

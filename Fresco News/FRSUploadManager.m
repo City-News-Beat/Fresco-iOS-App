@@ -18,6 +18,8 @@
 #import "FRSLocator.h"
 #import "NSDate+ISO.h"
 #import "NSError+Fresco.h"
+#import "PHAsset+Fresco.h"
+#import "CLLocation+Fresco.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -286,62 +288,28 @@
 - (void)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
     NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
     
-    [self fetchAddressFromLocation:asset.location
-                        completion:^(id responseObject, NSError *error) {
-                            
-                            digest[@"address"] = responseObject;
-                            digest[@"lat"] = @(asset.location.coordinate.latitude);
-                            digest[@"lng"] = @(asset.location.coordinate.longitude);
-                            digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
-                            
-                            if (asset.mediaType == PHAssetMediaTypeImage) {
-                                digest[@"contentType"] = @"image/jpeg";
-                                [self fetchFileSizeForImage:asset
-                                                   callback:^(NSInteger size, NSError *err) {
-                                                       digest[@"fileSize"] = @(size);
-                                                       digest[@"chunkSize"] = @(size);
-                                                       callback(digest, err);
-                                                   }];
-                            } else {
-                                [self fetchFileSizeForVideo:asset
-                                                   callback:^(NSInteger size, NSError *err) {
-                                                       digest[@"fileSize"] = @(size);
-                                                       digest[@"chunkSize"] = @(chunkSize * megabyteDefinition);
-                                                       digest[@"contentType"] = @"video/mp4";
-                                                       callback(digest, err);
-                                                   }];
-                            }
-                        }];
-}
-
-//TODO move out of here
-- (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSUploadSizeCompletionBlock)callback {
-    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-    options.version = PHVideoRequestOptionsVersionOriginal;
-    
-    [[PHImageManager defaultManager] requestAVAssetForVideo:video
-                                                    options:options
-                                              resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                  if ([asset isKindOfClass:[AVURLAsset class]]) {
-                                                      AVURLAsset *urlAsset = (AVURLAsset *)asset;
-                                                      
-                                                      NSNumber *size;
-                                                      NSError *fetchError;
-                                                      
-                                                      [urlAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:&fetchError];
-                                                      callback([size integerValue], fetchError);
-                                                  }
-                                              }];
-}
-
-//TODO move out of here
-- (void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSUploadSizeCompletionBlock)callback {
-    [[PHImageManager defaultManager] requestImageDataForAsset:image
-                                                      options:nil
-                                                resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                                                    float imageSize = imageData.length;
-                                                    callback([@(imageSize) integerValue], Nil);
-                                                }];
+    [asset.location fetchAddress:^(id responseObject, NSError *error) {
+        digest[@"address"] = responseObject;
+        digest[@"lat"] = @(asset.location.coordinate.latitude);
+        digest[@"lng"] = @(asset.location.coordinate.longitude);
+        digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
+        
+        if (asset.mediaType == PHAssetMediaTypeImage) {
+            digest[@"contentType"] = @"image/jpeg";
+            
+            [asset fetchFileSize:^(NSInteger size, NSError *error) {
+                digest[@"fileSize"] = @(size);
+                digest[@"chunkSize"] = @(size);
+                callback(digest, error);
+            }];
+        } else {
+            [asset fetchFileSize:^(NSInteger size, NSError *error) {
+                digest[@"fileSize"] = @(size);
+                digest[@"chunkSize"] = @(size);
+                callback(digest, error);
+            }];
+        }
+    }];
 }
 
 /**
@@ -474,8 +442,11 @@
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
                             } else if (completed == toComplete) {
-                                // complete
-                                [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification object:nil userInfo:@{ @"type" : @"completion" }];
+                                //Upload has fully completed
+                                [[NSNotificationCenter defaultCenter]
+                                 postNotificationName:FRSUploadNotification
+                                 object:nil
+                                 userInfo:@{ @"type" : @"completion" }];
                                 [weakSelf trackDebugWithMessage:@"Upload Completed"];
                             }
                         }];
@@ -483,7 +454,7 @@
     };
     
     //Loop through and create cached uploads
-    //We do this before in order to not have to wait for transcoding to finish
+    //We do this before in order to not have to wait for transcoding to finish to have cached upload objects
     for (NSInteger i = 0; i < [posts count]; i++) {
         NSDictionary *post = posts[i];
 
@@ -518,6 +489,7 @@
                 startUploads();
             } else {
                 
+                //Needed for recursive defintion
                 FRSUploadPostAssetCompletionBlock strongHandleAssetCreation = weakHandleAssetCreation;
                 
                 //Recursive call to block to process next post
@@ -766,37 +738,6 @@
     }
     
     [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
-}
-
-#pragma mark - GeoCoding
-
-//TODO move out of here
-- (void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    __block NSString *address;
-    
-    [geocoder reverseGeocodeLocation:location
-                   completionHandler:^(NSArray *placemarks, NSError *error) {
-                       if (placemarks && placemarks.count > 0) {
-                           CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                           
-                           NSString *thoroughFare = @"";
-                           if ([placemark thoroughfare] && [[placemark thoroughfare] length] > 0) {
-                               thoroughFare = [[placemark thoroughfare] stringByAppendingString:@", "];
-                               
-                               if ([placemark subThoroughfare]) {
-                                   thoroughFare = [[[placemark subThoroughfare] stringByAppendingString:@" "] stringByAppendingString:thoroughFare];
-                               }
-                           }
-                           
-                           address = [NSString stringWithFormat:@"%@%@, %@", thoroughFare, [placemark locality], [placemark administrativeArea]];
-                           completion(address, Nil);
-                       } else {
-                           completion(@"No address found.", Nil);
-                           [FRSTracker track:addressError parameters:@{ @"coordinates" : @[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] }];
-                       }
-                       
-                   }];
 }
 
 @end
