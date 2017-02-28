@@ -994,7 +994,7 @@
     [self.feedButton setTitle:@"FEED" forState:UIControlStateNormal];
     [self.feedButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
     [self.feedButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.feedButton addTarget:self action:@selector(handleFeedbackButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.feedButton addTarget:self action:@selector(handleFeedButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.sectionView addSubview:self.feedButton];
 
     self.likesButton = [[UIButton alloc] initWithFrame:CGRectOffset(self.feedButton.frame, self.feedButton.frame.size.width, 0)];
@@ -1007,7 +1007,7 @@
     [self.view addSubview:self.sectionView];
 }
 
-- (void)handleFeedbackButtonTapped {
+- (void)handleFeedButtonTapped {
     if (self.feedButton.alpha > 0.7)
         return; //The button is already selected
 
@@ -1023,7 +1023,7 @@
 
     if (self.currentFeed != self.galleries) {
         self.currentFeed = self.galleries;
-
+        [self fetchGalleries];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
