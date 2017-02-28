@@ -126,6 +126,8 @@
     if (!self.didAnimate) {
         [self animateIn];
     }
+    
+    self.twitterButton.tintColor = [UIColor twitterBlueColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
