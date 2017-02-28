@@ -98,6 +98,7 @@ static NSInteger const maxCommentChar = 200;
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 static int const maxVideoAge = 86400; // seconds in a day
 static int const maxAssetCount = 8;
+static NSString *const localDirectory = @"frs";
 
 // UI
 static NSString *const loadingCellIdentifier = @"LoadingMoreCell";
@@ -138,9 +139,7 @@ static NSString *const ssnField = @"legal_entity.ssn_last_4";
 static NSString *const firstNameField = @"legal_entity.first_name";
 static NSString *const lastNameField = @"legal_entity.last_name";
 
-/*FRS
-    Notification types
- */
+//FRS Notification types
 
 typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 

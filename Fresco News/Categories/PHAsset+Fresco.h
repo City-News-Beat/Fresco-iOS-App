@@ -8,7 +8,6 @@
 
 #import <Photos/Photos.h>
 
-
 /**
  Response block for providing the size for a PHAsset
 
@@ -18,7 +17,6 @@
 typedef void (^PHAssetSizeCompletionBlock)(NSInteger size, NSError *error);
 
 @interface PHAsset (Fresco)
-
 
 /**
  Fetches file size, in bytes, of the PHAsset calling

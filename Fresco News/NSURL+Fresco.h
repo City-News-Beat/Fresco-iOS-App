@@ -19,4 +19,18 @@
  */
 + (NSURL *)URLResizedFromURLString:(NSString *)url width:(NSInteger)width;
 
+/**
+ Helper method for generating a unique file path for us
+ 
+ @return NSString of the file path
+ */
++ (NSString *)uniqueFileString;
+
+/**
+ Helper method for generating a unique file URL for us
+ 
+ @return NSURL of the file path
+ */
++ (NSURL *)uniqueFileURL;
+
 @end

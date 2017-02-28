@@ -22,4 +22,14 @@
     return [NSURL URLWithString:adjustedURL];
 }
 
++ (NSString *)uniqueFileString {
+    return [[NSTemporaryDirectory()
+             stringByAppendingPathComponent:localDirectory]
+            stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+}
+
++ (NSURL *)uniqueFileURL {
+    return [NSURL fileURLWithPath:[self uniqueFileString]];
+}
+
 @end

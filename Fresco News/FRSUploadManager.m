@@ -20,6 +20,7 @@
 #import "NSError+Fresco.h"
 #import "PHAsset+Fresco.h"
 #import "CLLocation+Fresco.h"
+#import "NSURL+Fresco.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -108,12 +109,10 @@
     NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
     signedInRequest.predicate = signedInPredicate;
 
-    //Get context from app deleegate (hate this dependency but no need to re-write rn to move up)
-    NSManagedObjectContext *context = [[(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] coreDataController] managedObjectContext]; // temp (replace with internal or above method
 
     //No need to sort response, because theoretically there is 1
     NSError *fetchError;
-    NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
+    NSArray *uploads = [self.context executeFetchRequest:signedInRequest error:&fetchError];
     
     if(uploads == nil && fetchError != nil) return;
 
@@ -149,7 +148,7 @@
  */
 - (void)clearCachedUploads {
     BOOL isDir;
-    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
+    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:localDirectory]; // temp directory where we store video
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:directory isDirectory:&isDir]) {
         if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil]) {
@@ -160,7 +159,7 @@
     
     //Purge old un-needed files
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
+        NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:localDirectory];
         NSError *error = nil;
         for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
             NSString *filePath =[NSString stringWithFormat:@"%@/%@", directory, file];
@@ -338,7 +337,7 @@
         [[PHImageManager defaultManager] requestImageDataForAsset:asset
                                                           options:options
                                                     resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
-                                                        NSString *tempPath = [[self uniqueFileString] stringByAppendingString:@".jpeg"];
+                                                        NSString *tempPath = [[NSURL uniqueFileString] stringByAppendingString:@".jpeg"];
                                                         NSError *imageError;
                                                         
                                                         //Write data to temp path (background thread, async)
@@ -363,7 +362,7 @@
                                                         options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
                                                       // create temp location to move data (PHAsset can not be weakly linked to)
-                                                      NSString *tempPath = [self uniqueFileString];
+                                                      NSString *tempPath = [NSURL uniqueFileString];
                                                       SDAVAssetExportSession *encoder = [self encoderWithAsset:avasset postID:postID];
                                                       encoder.outputURL = [NSURL fileURLWithPath:tempPath];
                                                       
@@ -388,12 +387,13 @@
     }
 }
 
-- (NSString *)uniqueFileString {
-    return [[NSTemporaryDirectory()
-             stringByAppendingPathComponent:@"frs"]
-            stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-}
+/**
+ Returns an SDAVAssetExportSession for use
 
+ @param asset AVAsset to initialize with
+ @param postID Post ID associated with the export session
+ @return New initialized SDAVAssetExportSession
+ */
 - (SDAVAssetExportSession *)encoderWithAsset:(AVAsset *)asset postID:(NSString *)postID{
     SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
     encoder.outputFileType = AVFileTypeMPEG4;
@@ -558,12 +558,9 @@
     if(withForce == YES) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
         NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-        
-        NSManagedObjectContext *context = [[(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] coreDataController] managedObjectContext]; // temp (replace with internal or above method
-        
         NSError *deleteError;
         //Delete all FRSUploads
-        [context executeRequest:delete error:&deleteError];
+        [self.context executeRequest:delete error:&deleteError];
     }
 }
 

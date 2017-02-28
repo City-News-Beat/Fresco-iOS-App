@@ -11,7 +11,6 @@
 
 @interface CLLocation (Fresco)
 
-
 /**
  Fetches address as string for the calling CLLocation
 

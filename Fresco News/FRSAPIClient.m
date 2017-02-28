@@ -38,9 +38,11 @@
 
 - (AFHTTPSessionManager *)managerWithFrescoConfigurations:(NSString *)endpoint withRequestType:(NSString *)requestType{
     if (!self.requestManager) {
-        AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
+        AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc]
+                                         initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
         self.requestManager = manager;
         self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
+        [self.requestManager.requestSerializer setTimeoutInterval:20.0];
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     }
 
@@ -110,7 +112,6 @@
 - (NSString *)clientAuthorization {
     return [NSString stringWithFormat:@"Bearer %@", [[FRSSessionManager sharedInstance] bearerForToken:kClientToken]];
 }
-
 
 - (NSString *)basicAuthorization {
     // Create NSData object
