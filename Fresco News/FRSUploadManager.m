@@ -303,9 +303,12 @@
                 callback(digest, error);
             }];
         } else {
+            digest[@"contentType"] = @"video/mp4";
+            
             [asset fetchFileSize:^(NSInteger size, NSError *error) {
                 digest[@"fileSize"] = @(size);
                 digest[@"chunkSize"] = @(size);
+                
                 callback(digest, error);
             }];
         }
@@ -428,10 +431,10 @@
     //Clear state before we begin
     [self resetState];
     
-    //Block to start uploads once we're done
+    //Block to start uploads once we're done, called below
     void (^startUploads)(void) = ^ {
         //Check if we have internet
-        if(![[AFNetworkReachabilityManager sharedManager] isReachable]){
+        if([[AFNetworkReachabilityManager sharedManager] isReachable] == FALSE){
             return [weakSelf uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection."]];
         }
         
