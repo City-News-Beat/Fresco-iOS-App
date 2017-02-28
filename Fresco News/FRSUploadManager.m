@@ -108,10 +108,10 @@
     NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
     signedInRequest.predicate = signedInPredicate;
 
-    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
+    //Get context from app deleegate (hate this dependency but no need to re-write rn to move up)
     NSManagedObjectContext *context = [[(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] coreDataController] managedObjectContext]; // temp (replace with internal or above method
 
-    // no need to sort response, because theoretically there is 1
+    //No need to sort response, because theoretically there is 1
     NSError *fetchError;
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
     
@@ -122,7 +122,7 @@
             NSTimeInterval sinceStart = [upload.creationDate timeIntervalSinceNow];
             sinceStart *= -1;
 
-            //If older than a day, in seconds
+            //If older than a day, in seconds, remove from persistence
             if (sinceStart >= (24 * 60 * 60)) {
                 [self.context performBlock:^{
                     [self.context deleteObject:upload];
@@ -133,7 +133,8 @@
                 [uploadsDictionary setObject:upload forKey:key];
             }
         }
-
+        
+        //Assign to class and retry
         self.managedObjects = uploadsDictionary;
         [self retryUpload];
     } else {
