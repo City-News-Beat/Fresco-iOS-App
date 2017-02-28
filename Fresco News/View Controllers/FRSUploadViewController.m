@@ -159,7 +159,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    [button setTintColor:[UIColor clearColor]];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
@@ -168,7 +168,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [button setTintColor:[UIColor frescoBlueColor]];
     [spinner removeFromSuperview];
     [spinner startAnimating];
 
