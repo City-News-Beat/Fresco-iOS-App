@@ -168,7 +168,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [spinner removeFromSuperview];
     [spinner startAnimating];
 
