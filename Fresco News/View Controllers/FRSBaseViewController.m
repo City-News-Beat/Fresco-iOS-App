@@ -154,59 +154,24 @@
 #pragma mark - Logout
 
 - (void)logoutWithPop:(BOOL)pop {
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-enabled"];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [[delegate managedObjectContext] save:nil];
 
-    if ([[FRSUserManager sharedInstance] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+        //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSUserManager sharedInstance] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
     }
-
-    [FRSTracker reset];
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
     });
-    [[FRSAuthManager sharedInstance] logout];
-
-    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
-
-    [delegate clearKeychain];
-    [delegate stopNotificationTimer];
-
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userHasFinishedMigrating];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [NSUserDefaults resetStandardUserDefaults];
-
-    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-    for (NSString *key in [defaultsDictionary allKeys]) {
-        if (![key isEqualToString:@"deviceToken"]) {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-        }
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [[FRSAuthManager sharedInstance] setPasswordUsed:nil];
-    [[FRSAuthManager sharedInstance] setEmailUsed:nil];
-
-    //FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
-    //[tabBarController updateUserIcon];
-
-    [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
-    [FRSTracker track:logoutEvent];
-    [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     
+    [[FRSAuthManager sharedInstance] logout];
+    [delegate stopNotificationTimer];
+    
+    [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     [(FRSTabBarController *)self.tabBarController showBell:NO];
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
     
     [self popViewController];
 }

@@ -56,7 +56,7 @@
         self.delegate = delegate;
         self.story = story;
         //self.delegate.navigationController = self.navigationController;
-
+        
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
             [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
@@ -93,7 +93,7 @@
 
     NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
 
-    for (NSURL *url in self.story.imageURLs) {
+    for (NSURL *url in (NSArray *)self.story.imageURLs) {
         if ([url.absoluteString containsString:@"cdn.fresconews"]) {
             NSString *newURL = [url.absoluteString stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/400"];
             [smallImageURLS addObject:[NSURL URLWithString:newURL]];

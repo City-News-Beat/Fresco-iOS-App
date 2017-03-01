@@ -33,10 +33,12 @@ static NSString *const galleryShared = @"Gallery shared";
 static NSString *const signupsWithTwitter = @"Signups with Twitter";
 static NSString *const signupsWithFacebook = @"Signups with Facebook";
 static NSString *const signupsWithEmail = @"Signups with email";
+static NSString *const signupEvent = @"Signup";
 static NSString *const loginEvent = @"Logins";
 static NSString *const addressError = @"Address Error";
 static NSString *const notificationsEnabled = @"Permissions notification enables";
 static NSString *const notificationsDisabled = @"Permissions notification disables";
+static NSString *const notificationOpened = @"Notification opened";
 static NSString *const cameraEnabled = @"Permissions camera enabled";
 static NSString *const cameraDisabled = @"Permissions camera disables";
 static NSString *const microphoneEnabled = @"Permissions microphone enables";
@@ -64,6 +66,10 @@ static NSString *const registrationError = @"Registration Error";
 static NSString *const signupRadiusChange = @"Signup radius changes";
 static NSString *const submissionsEvent = @"Submissions";
 static NSString *const itemsInGallery = @"Submission item in gallery";
+static NSString *const assignmentAccepted = @"Assignment accepted";
+static NSString *const assignmentUnaccepted = @"Assignment un_accepted";
+static NSString *const assignmentClicked = @"Assignment clicked";
+static NSString *const assignmentDismissed = @"Assignment dismissed";
 
 @interface FRSTracker : NSObject {
 }
@@ -89,5 +95,16 @@ static NSString *const itemsInGallery = @"Submission item in gallery";
  Starts tracking users screen using UXCam.
  */
 + (void)startUXCam;
+
+
+/**
+ Launches Adjust for us
+ */
++ (void)launchAdjust;
+
++ (void)configureFabric;
+
++ (void)configureSmooch;
+
 
 @end

@@ -74,4 +74,11 @@
     }
 }
 
+
+- (void)saveContextSynchornously{
+    [self.managedObjectContext performBlockAndWait:^{
+        [self saveContext];
+    }];
+}
+
 @end

@@ -1,5 +1,4 @@
-
-    //
+//
 //  FRSAppDelegate.m
 //  Fresco
 //
@@ -26,8 +25,8 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationManager.h"
-#import "FRSStripe.h"
 #import "Adjust.h"
+#import <Stripe/Stripe.h>
 #import "FRSIndicatorDot.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
@@ -40,18 +39,20 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
 
-    NSString *yourAppToken = @"bxk48kwhbx8g";
-    NSString *environment = ADJEnvironmentSandbox;
-    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
-                                                environment:environment];
-
-    [Adjust appDidLaunch:adjustConfig];
-
-    [self startFabric]; // crashlytics first yall
-    [self configureSmooch];
+    [FRSTracker configureFabric];
+    [FRSTracker launchAdjust];
+    [FRSTracker configureSmooch];
+    [FRSTracker startSegmentAnalytics];
+    [FRSTracker trackUser];
+    
+    if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
+        [[FRSAuthManager sharedInstance] logout];
+    }
+    
     [self configureStartDate];
-    [self clearUploadCache];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
+    
+    [[FRSUploadManager sharedInstance] checkCachedUploads];
     
     EndpointManager *manager = [EndpointManager sharedInstance];
     [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
@@ -60,12 +61,7 @@
 
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
-    if ([self isFirstRun] && !launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [[FRSAuthManager sharedInstance] logout];
-    }
-
     [self configureWindow];
-    [self configureThirdPartyApplicationsWithOptions:launchOptions];
 
     //Migration checks
     if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
@@ -95,17 +91,15 @@
         return YES; // no other stuff going on (no quick action handling, etc)
     }
 
-    if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-        [self handleLocationUpdate];
-    }
+    
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
+        [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo] track:YES];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         // If we don't check for <iOS 10, multiple calls to handleRemotePush will be made.
         // Once here, and once in userNotificationCenter:didReceiveNotificationResponse.
         if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
-            [FRSNotificationHandler handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+            [FRSNotificationHandler handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] track:YES];
         }
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
@@ -114,10 +108,6 @@
 
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[FRSUploadManager sharedInstance] checkCachedUploads];
-
-    [FRSTracker startSegmentAnalytics];
-    [FRSTracker trackUser];
 
     return YES;
 }
@@ -128,27 +118,6 @@
     }
 }
 
-- (void)clearUploadCache {
-    BOOL isDir;
-    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:directory isDirectory:&isDir])
-        if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL])
-            NSLog(@"Error: Create folder failed %@", directory);
-
-    // purge old un-needed files
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
-      NSError *error = nil;
-      for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
-          BOOL success = [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@%@", directory, file] error:&error];
-
-          if (!success || error) {
-              NSLog(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
-          }
-      }
-    });
-}
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
       restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
@@ -175,27 +144,15 @@
     return FALSE;
 }
 
-- (void)clearKeychain {
 
-    //    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
-    //
-    //    NSArray *accounts = [query fetchAll:nil];
-    //
-    //    for (id account in accounts) {
-    //
-    //        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
-    //
-    //        query.service = serviceName;
-    //        query.account = [account valueForKey:@"acct"];
-    //
-    //        [query deleteItem:nil];
-    //    }
-}
+/**
+ Tells us if the user is running the app the first time and also sets it to true from there on out
 
+ @return True if the first run, No if not he first run
+ */
 - (BOOL)isFirstRun {
-
-    BOOL firstRun = [[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"];
-    [[NSUserDefaults standardUserDefaults] setObject:@"Yeah It Totally Is" forKey:@"isFirstRun"];
+    BOOL firstRun = [[NSUserDefaults standardUserDefaults] boolForKey:isFirstRun];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isFirstRun];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     return !firstRun;
@@ -213,17 +170,6 @@
     return handled;
 }
 
-- (void)startFabric {
-
-    [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
-    [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
-}
-
-- (void)configureSmooch {
-    [Smooch initWithSettings:[SKTSettings settingsWithAppToken:[EndpointManager sharedInstance].currentEndpoint.smoochToken]];
-}
-
-
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response
              withCompletionHandler:(void (^)())completionHandler {
@@ -231,7 +177,7 @@
     NSLog(@"Handle push from background or closed");
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
     NSLog(@"%@", response.notification.request.content.userInfo);
-    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo];
+    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo track:YES];
 }
 
 
@@ -324,13 +270,13 @@
     // custom code to handle notification content
 
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
-        [FRSNotificationHandler handleNotification:userInfo];
+        [FRSNotificationHandler handleNotification:userInfo track:YES];
     }
 
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        [FRSNotificationHandler handleNotification:userInfo];
+        [FRSNotificationHandler handleNotification:userInfo track:YES];
         completionHandler(UIBackgroundFetchResultNewData);
     } else {
         completionHandler(UIBackgroundFetchResultNewData);
@@ -342,7 +288,7 @@
         didReceiveRemoteNotification:userInfo
               fetchCompletionHandler:^(UIBackgroundFetchResult result) {
                 // nothing
-                  [FRSNotificationHandler handleNotification:userInfo];
+                  [FRSNotificationHandler handleNotification:userInfo track:YES];
               }];
 }
 
@@ -376,14 +322,9 @@
     }
 }
 
-- (void)handleLocationUpdate {
-}
-
-- (void)restartUpload {
-}
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(nonnull UILocalNotification *)notification {
-    [FRSNotificationHandler handleNotification:notification.userInfo];
+    [FRSNotificationHandler handleNotification:notification.userInfo track:NO];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -414,7 +355,7 @@
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     [FRSTracker track:notificationsDisabled];
 }
-
+// TODO: Move out of App Delegate and into FRSTabBarController
 - (void)startNotificationTimer {
     if (!notificationTimer) {
         notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
@@ -442,8 +383,7 @@
           FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
           if ([tbc isKindOfClass:[FRSTabBarController class]]) {
               if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                  [(FRSTabBarController *)self.tabBar updateTabBarIconAtIndex:4 withImageName:@"tab-bar-bell" selectedImageName:@"tab-bar-bell-sel"];
-                  [FRSIndicatorDot addDotToTabBar:self.tabBar.tabBar atIndex:4 animated:YES];
+                  [(FRSTabBarController *)self.tabBar showBell:YES];
               }
           }
       }
@@ -459,8 +399,6 @@
     [self.window makeKeyAndVisible];
 }
 
-- (void)configureThirdPartyApplicationsWithOptions:(NSDictionary *)options {
-}
 
 #pragma mark - Quick Actions
 
@@ -494,6 +432,7 @@
 }
 
 #pragma mark - Status Bar
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     CGPoint location = [[[event allTouches] anyObject] locationInView:[self window]];
@@ -513,16 +452,40 @@
     // [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
+#pragma mark - Errors
+
+
+// TODO: Reuse these errors
 - (void)error:(NSError *)error {
     if (!error) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     } else {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
+    }
+}
+
+- (void)presentError:(NSError *)error withTitle:(NSString *)title {
+    //Present error to user if needed and there currently is not one in view
+    if(!self.isPresentingError && self.errorAlertView.window == nil){
+        self.isPresentingError = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.errorAlertView = [[FRSAlertView alloc]
+                                   initWithTitle:[title uppercaseString]
+                                   message:error.localizedDescription
+                                   actionTitle:@"OK"
+                                   cancelTitle:@""
+                                   cancelTitleColor:[UIColor frescoBlueColor]
+                                   delegate:nil];
+            
+            [self.errorAlertView show];
+            
+            self.isPresentingError = NO;
+        });
     }
 }
 

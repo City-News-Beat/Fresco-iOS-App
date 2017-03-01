@@ -374,10 +374,11 @@
 
     [self configureActionsBar]; // this will stay similar
 
-    if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
+    
+    // check if highlighted_at is <= now and if it's not null
+    if ([self.gallery.highlightedDate compare:[NSDate date]] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
         if (![self.gallery.creator.uid isEqualToString:@""] && [self.gallery.creator.uid length] > 0) {
             [self configureBaseMetaData];
-
         }
     }
 

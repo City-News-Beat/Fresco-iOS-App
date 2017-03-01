@@ -58,6 +58,16 @@
     self.expirationDate = [NSString dateFromString:dictionary[@"ends_at"]];
     self.caption = dictionary[@"caption"];
 
+
+//    NSString *dateStr = @"2012-05-03 06:03:00 +0000";
+    NSString *dateStr = dictionary[@"starts_at"];
+
+    NSDateFormatter *datFormatter = [[NSDateFormatter alloc] init];
+    [datFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    NSDate* date = [datFormatter dateFromString:dateStr];
+    NSLog(@"date: %@", [datFormatter stringFromDate:date]);
+    
+    
     if (dictionary[@"is_acceptable"]) {
         self.acceptable = dictionary[@"is_acceptable"];
     }
@@ -70,5 +80,20 @@
         self.outlets = dictionary[@"outlets"];
     }
 }
+
+-(NSString *)getLocalDateTimeFromUTC:(NSString *)strDate
+{
+    NSDateFormatter *dtFormat = [[NSDateFormatter alloc] init];
+    [dtFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dtFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    NSDate *aDate = [dtFormat dateFromString:strDate];
+    
+    [dtFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dtFormat setTimeZone:[NSTimeZone systemTimeZone]];
+    
+    return [dtFormat stringFromDate:aDate];
+}
+
+
 
 @end

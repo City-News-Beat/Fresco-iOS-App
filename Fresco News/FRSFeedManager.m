@@ -8,6 +8,7 @@
 
 #import "FRSFeedManager.h"
 #import "FRSUserManager.h"
+#import "NSError+Fresco.h"
 
 static NSString *const likeFeed = @"feeds/%@/likes";
 static NSString *const followingFeed = @"feeds/%@/following";
@@ -27,7 +28,7 @@ static NSString *const userFeed = @"feeds/%@/user";
 - (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion {
     FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
     if (!authenticatedUser) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.fresco" code:404 userInfo:@{ @"error" : @"no user u dingus" }]);
+        completion(Nil, [NSError errorWithMessage:@"No authenticated user in session"]);
     }
     
     NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
@@ -42,7 +43,7 @@ static NSString *const userFeed = @"feeds/%@/user";
 - (void)fetchFollowing:(NSString *)timeStamp completion:(void (^)(NSArray *galleries, NSError *error))completion {
     FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
     if (!authenticatedUser) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.fresco" code:404 userInfo:@{ @"error" : @"no user u dingus" }]);
+        completion(Nil, [NSError errorWithMessage:@"No authenticated user in session"]);
     }
     
     NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
@@ -56,6 +57,10 @@ static NSString *const userFeed = @"feeds/%@/user";
 }
 
 - (void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    if(user.uid == nil) {
+        return completion(nil, [NSError errorWithMessage:@"User is missing an ID!"]);
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:likeFeed, user.uid];
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
@@ -65,6 +70,10 @@ static NSString *const userFeed = @"feeds/%@/user";
 }
 
 - (void)fetchLikesFeedForUser:(FRSUser *)user last:(NSString *)timeStamp completion:(FRSAPIDefaultCompletionBlock)completion {
+    if(user.uid == nil) {
+        return completion(nil, [NSError errorWithMessage:@"User is missing an ID!"]);
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:likeFeed, user.uid];
     endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
     
@@ -76,6 +85,10 @@ static NSString *const userFeed = @"feeds/%@/user";
 }
 
 - (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    if(user.uid == nil) {
+        return completion(nil, [NSError errorWithMessage:@"User is missing an ID!"]);
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
 
     [[FRSAPIClient sharedClient] get:endpoint

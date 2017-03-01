@@ -33,4 +33,9 @@
 @property (strong, nonatomic) NSDictionary *preselectedGlobalAssignment;
 @property (strong, nonatomic) NSDictionary *preselectedAssignment;
 
+@property (strong, nonatomic) UIButton *twitterButton;
+@property (strong, nonatomic) UIButton *facebookButton;
+@property (strong, nonatomic) UIButton *anonButton;
+@property (strong, nonatomic) UILabel *anonLabel;
+
 @end

@@ -1,5 +1,3 @@
-
-
 //
 //  UserManager.m
 //  Fresco
@@ -12,6 +10,8 @@
 #import "FRSAuthManager.h"
 #import "FRSHomeViewController.h"
 #import "FRSLocationManager.h"
+#import "FRSAppDelegate.h"
+#import "NSError+Fresco.h"
 
 static NSString *const userEndpoint = @"user/";
 static NSString *const checkEndpoint = @"user/check";
@@ -71,44 +71,45 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
                           }];
 }
 
-- (void)updateLocalUser {
+- (void)updateLocalUser:(FRSAPIDefaultCompletionBlock)completion {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        return;
+        return completion(nil, [NSError unAuthenticatedError]);
     }
-
+    
     [[FRSAPIClient sharedClient] get:authenticatedUserEndpoint
                       withParameters:nil
                           completion:^(id responseObject, NSError *error) {
-                            if (error) {
-                                return;
-                            }
-
-                            [FRSTracker trackUser]; // This also updates the Segment and UXCam trackers on Login
-                            [FRSTracker track:loginEvent];
-
+                              if (error) {
+                                  if (completion) completion(nil, error);
+                              } else {
+                                  if (completion) completion(responseObject, nil);
+                              }
                           }];
 }
 
 - (void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    [[FRSAPIClient sharedClient] post:updateUserEndpoint
-                       withParameters:digestion
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
+    [[FRSAPIClient sharedClient]
+     post:updateUserEndpoint
+     withParameters:digestion
+     completion:^(id responseObject, NSError *error) {
+         if(completion)
+             completion(responseObject, error);
+     }];
 }
 
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.fresco" code:404 userInfo:Nil]); // no authenticated user, 404
+        completion(Nil, [NSError unAuthenticatedError]);
         return;
     }
 
     // authenticated request to user/me (essentially user/ozetadev w/ more fields)
-    [[FRSAPIClient sharedClient] get:authenticatedUserEndpoint
-                      withParameters:Nil
-                          completion:^(id responseObject, NSError *error) {
-                            completion(responseObject, error);
-                          }];
+    [[FRSAPIClient sharedClient]
+     get:authenticatedUserEndpoint
+     withParameters:Nil
+     completion:^(id responseObject, NSError *error) {
+         completion(responseObject, error);
+     }];
 }
 
 - (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -123,15 +124,15 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
     [[FRSUserManager sharedInstance] updateUserWithDigestion:mutableDigestion completion:completion];
 }
 
-- (void)updateUserLocation:(NSDictionary *)inputParams completion:(void (^)(NSDictionary *response, NSError *error))completion {
+- (void)updateUserLocation:(NSDictionary *)inputParams completion:(FRSAPIDefaultCompletionBlock)completion {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        return;
+        return completion(nil, [NSError unAuthenticatedError]);
     }
 
     [[FRSAPIClient sharedClient] post:locationEndpoint
                        withParameters:inputParams
                            completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
+                               if(completion) completion(responseObject, error);
                            }];
 }
 
@@ -179,36 +180,35 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 
 - (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
     [self refreshCurrentUser:^(id responseObject, NSError *error) {
-      // check against existing user
-      if (error || responseObject[@"error"]) {
-          // throw up sign in
-
-          return;
-      }
-
-      [self.managedObjectContext performBlock:^{
-        [self saveUserFields:responseObject];
-      }];
-
-      FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-      if ([[FRSAuthManager sharedInstance] isAuthenticated] && !appDelegate.didPresentPermissionsRequest) {
-          if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
-              [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-          }
-      }
-
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (completion) {
-            completion(Nil, Nil);
+        // check against existing user
+        if (error || responseObject[@"error"]) {
+            // throw up sign in
+            return;
         }
-      });
-
+        
+        [self.managedObjectContext performBlock:^{
+            [self saveUserFields:responseObject andSynchronously:NO];
+        }];
+        
+        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if ([[FRSAuthManager sharedInstance] isAuthenticated] && !appDelegate.didPresentPermissionsRequest) {
+            if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+                [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+            }
+        }
+        
+        [self refreshSettings];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(Nil, Nil);
+            }
+        });
+        
     }];
-
-    [self refreshSettings];
 }
 
-- (void)saveUserFields:(NSDictionary *)responseObject {
+- (void)saveUserFields:(NSDictionary *)responseObject andSynchronously:(BOOL)synchronously {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
     if (!authenticatedUser) {
@@ -335,14 +335,16 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
             [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-          @try {
-              [appDelegate saveContext];
-          } @catch (NSException *exception) {
-              NSLog(@"Error saving context.");
-          }
-        });
+    }
+    
+    @try {
+        if(synchronously) {
+            [appDelegate.coreDataController saveContextSynchornously];
+        } else {
+            [appDelegate.coreDataController saveContext];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"Error saving context.");
     }
 }
 
@@ -366,24 +368,11 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 
 #pragma mark - Location
 
-- (void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        return;
-    }
-
-    [[FRSAPIClient sharedClient] post:locationEndpoint
-                       withParameters:location
-                           completion:^(id responseObject, NSError *error){
-                           }];
-}
-
 - (void)handleLocationUpdate:(NSNotification *)userInfo {
     dispatch_async(dispatch_get_main_queue(), ^{
-
       [self updateUserLocation:userInfo.userInfo
                     completion:^(NSDictionary *response, NSError *error) {
-                      if (!error) {
-                      } else {
+                      if (error) {
                           NSLog(@"Location Error: %@ %@", response, error);
                       }
                     }];
@@ -436,5 +425,30 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 - (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     [[FRSAPIClient sharedClient] post:acceptTermsEndpoint withParameters:Nil completion:completion];
 }
+
+#pragma mark - User Defaults
+
+- (void)updateUserDefaultsWithResponseObject:(NSDictionary *)responseObject {
+    NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
+    
+    if (socialLinksDict[@"facebook"] != [NSNull null]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
+    }
+    
+    if (socialLinksDict[@"twitter"] != [NSNull null]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
+    }
+    
+    if (responseObject[@"twitter_handle"] != [NSNull null]) {
+        [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:twitterHandle];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
+    }
+}
+
 
 @end

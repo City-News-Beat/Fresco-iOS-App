@@ -6,6 +6,7 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 #import "FRSCarouselCell.h"
+#import "FRSSnapKit.h"
 
 @implementation FRSCarouselCell
 
@@ -34,7 +35,7 @@
                        dispatch_async(dispatch_get_main_queue(), ^{
                          imageView.image = result;
                          imageView.contentMode = UIViewContentModeScaleAspectFill;
-                         imageView.translatesAutoresizingMaskIntoConstraints = NO;
+                         [FRSSnapKit constrainSubview:imageView ToBottomOfParentView:self WithHeight:imageView.frame.size.height];
                        });
                      }];
         });

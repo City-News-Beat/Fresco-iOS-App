@@ -77,11 +77,11 @@
 
     [NSUserDefaults resetStandardUserDefaults];
 
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
 
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
