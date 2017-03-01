@@ -207,6 +207,10 @@
     numberRead = 0;
 
     [self presentMigrationAlert];
+    
+    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
+        [cell.galleryView updateSocial];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

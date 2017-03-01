@@ -211,7 +211,7 @@
 -(void)handleHeartState:(BOOL)enabled {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (enabled) {
+        if (enabled && ![self.likeLabel.text isEqualToString:@"0"]) {
             [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
             self.likeLabel.textColor = [UIColor frescoRedColor];
             
@@ -236,7 +236,7 @@
 -(void)handleRepostState:(BOOL)enabled {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (enabled) {
+        if (enabled && ![self.repostLabel.text isEqualToString:@"0"]) {
             [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
             self.repostLabel.textColor = [UIColor frescoGreenColor];
         } else {

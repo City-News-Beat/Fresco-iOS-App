@@ -94,6 +94,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
     self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
+    
+    [self.galleriesTable reloadData];
+    
 }
 
 - (void)configureCaptionHeader {

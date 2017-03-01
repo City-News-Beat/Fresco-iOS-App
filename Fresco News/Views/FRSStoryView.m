@@ -340,6 +340,7 @@
 
 - (void)handleLike:(FRSActionBar *)actionBar {
     if ([[self.story valueForKey:@"liked"] boolValue]) {
+        
         [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
         }];
     } else {
