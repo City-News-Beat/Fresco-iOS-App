@@ -47,7 +47,7 @@
 
 - (void)loadGallery:(FRSGallery *)gallery {
 
-    if ([self.gallery.uid isEqualToString:gallery.uid]) {
+    if ([self.gallery.uid isEqualToString:gallery.uid]) { // Gallery has been configured, update things that need to be updated and return.
         self.gallery = gallery;
         [self updateSocial];
         [self checkGalleryOwnerForActionBar];
@@ -169,19 +169,26 @@
 }
 
 - (void)updateSocial {
-    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
-    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-
-    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
-
-    [self.actionBar handleRepostState:isReposted];
-    [self.actionBar handleRepostAmount:[numReposts intValue]];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
-
-    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+    
+    if (self.actionBar != nil) {
+        NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
+        BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
+        
+        NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
+        BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
+        
+        if ([self.gallery.uid isEqualToString:@"mjZ09r2pN1eO"]) {
+            
+        }
+        
+        [self.actionBar handleRepostState:isReposted];
+        [self.actionBar handleRepostAmount:[numReposts intValue]];
+        [self.actionBar handleHeartState:isLiked];
+        [self.actionBar handleHeartAmount:[numLikes intValue]];
+        
+        if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+            [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+        }
     }
 }
 

@@ -626,23 +626,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Action Bar
 
 - (void)configureActionBar {
+    
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - 44) delegate:self];
+    
     self.actionBar.delegate = self;
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.actionBar addSubview:line];
-    
-    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
-    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-    
-    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
-    
-    [self.actionBar handleRepostState:isReposted];
-    [self.actionBar handleRepostAmount:[numReposts intValue]];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
     
     [self addSubview:self.actionBar];
     
@@ -721,7 +712,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
-
 }
 
 - (void)handleLike:(FRSActionBar *)actionBar {

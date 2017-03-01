@@ -208,9 +208,10 @@
 
     [self presentMigrationAlert];
     
-    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
-        [cell.galleryView updateSocial];
-    }
+//    // This calls updateSocial on all the visible cells. Ideally we would only call it on the cell where social was changed.
+//    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
+//        [cell.galleryView updateSocial];
+//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

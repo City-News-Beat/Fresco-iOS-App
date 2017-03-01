@@ -132,8 +132,6 @@
     [self bounceButton:button];
 }
 
-
-
 - (void)handleButtonSelected:(UIButton *)button {
 //    [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 //        button.transform = CGAffineTransformMakeScale(1.1, 1.1);
@@ -223,7 +221,6 @@
 }
 
 -(void)handleHeartAmount:(NSInteger)amount {
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (amount >= 0) {
             self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
@@ -247,7 +244,6 @@
 }
 
 -(void)handleRepostAmount:(NSInteger)amount {
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (amount >= 0) {
             self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
@@ -258,18 +254,3 @@
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
