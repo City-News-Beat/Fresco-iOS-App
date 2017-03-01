@@ -18,6 +18,7 @@
 #import "FRSNavigationController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSPermissionAlertView.h"
 #import "NSString+Validation.h"
 #import <UXCam/UXCam.h>
 
@@ -974,8 +975,7 @@
     if (toggle.on) {
 
         if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self];
-            alert.locationManager.delegate = self;
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self];
             [alert show];
         }
 

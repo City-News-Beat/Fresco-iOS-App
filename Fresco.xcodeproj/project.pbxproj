@@ -159,6 +159,7 @@
 		CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1322521E51680200A46D4D /* FRSUsernameViewController.xib */; };
 		CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */; };
 		CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */; };
+		CE25D7CC1E63E8510086461E /* FRSPermissionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE25D7CB1E63E8510086461E /* FRSPermissionAlertView.m */; };
 		CE2A155F1E5FE69D004BA72C /* NSDate+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2A155E1E5FE69D004BA72C /* NSDate+Fresco.m */; };
 		CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */; };
 		CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3621B21E3922FB00C4330E /* FRSSessionManager.m */; };
@@ -606,6 +607,8 @@
 		CE1E6EF61E1C828600236AC7 /* FRSBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseManager.m; sourceTree = "<group>"; };
 		CE1E6EF81E1C82F900236AC7 /* NSString+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Fresco.h"; path = "Categories/NSString+Fresco.h"; sourceTree = "<group>"; };
 		CE1E6EF91E1C82F900236AC7 /* NSString+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Fresco.m"; path = "Categories/NSString+Fresco.m"; sourceTree = "<group>"; };
+		CE25D7CA1E63E8510086461E /* FRSPermissionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPermissionAlertView.h; sourceTree = "<group>"; };
+		CE25D7CB1E63E8510086461E /* FRSPermissionAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPermissionAlertView.m; sourceTree = "<group>"; };
 		CE2A155D1E5FE69D004BA72C /* NSDate+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Fresco.h"; path = "Categories/NSDate+Fresco.h"; sourceTree = "<group>"; };
 		CE2A155E1E5FE69D004BA72C /* NSDate+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Fresco.m"; path = "Categories/NSDate+Fresco.m"; sourceTree = "<group>"; };
 		CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSEmailViewController.xib; path = "Fresco News/View Controllers/Settings/FRSEmailViewController.xib"; sourceTree = "<group>"; };
@@ -1947,6 +1950,8 @@
 			children = (
 				079CEEFA1C28740B00E559F3 /* FRSAlertView.h */,
 				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
+				CE25D7CA1E63E8510086461E /* FRSPermissionAlertView.h */,
+				CE25D7CB1E63E8510086461E /* FRSPermissionAlertView.m */,
 			);
 			name = "Alert View";
 			sourceTree = "<group>";
@@ -2656,6 +2661,7 @@
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */,
 				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
+				CE25D7CC1E63E8510086461E /* FRSPermissionAlertView.m in Sources */,
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */,
