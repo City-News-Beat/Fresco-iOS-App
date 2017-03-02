@@ -57,16 +57,6 @@
     self.createdDate = [NSString dateFromString:dictionary[@"starts_at"]];
     self.expirationDate = [NSString dateFromString:dictionary[@"ends_at"]];
     self.caption = dictionary[@"caption"];
-
-
-//    NSString *dateStr = @"2012-05-03 06:03:00 +0000";
-    NSString *dateStr = dictionary[@"starts_at"];
-
-    NSDateFormatter *datFormatter = [[NSDateFormatter alloc] init];
-    [datFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
-    NSDate* date = [datFormatter dateFromString:dateStr];
-    NSLog(@"date: %@", [datFormatter stringFromDate:date]);
-    
     
     if (dictionary[@"is_acceptable"]) {
         self.acceptable = dictionary[@"is_acceptable"];

@@ -179,13 +179,11 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 #pragma mark - Installation
 
 - (NSDictionary *)currentInstallation {
-
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
 
     if (deviceToken != Nil || [deviceToken isEqual:[NSNull null]]) {
         currentInstallation[@"device_token"] = deviceToken;
-    } else {
     }
 
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];

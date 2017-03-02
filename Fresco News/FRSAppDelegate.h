@@ -26,7 +26,6 @@
 - (void)saveContext;
 - (UITabBarController *)tabBar;
 - (void)updateTabBarToUser;
-- (void)clearKeychain;
 - (void)startNotificationTimer;
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;

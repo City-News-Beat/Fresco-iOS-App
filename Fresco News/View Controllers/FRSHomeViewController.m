@@ -606,7 +606,12 @@
         }
         
         if ([self.appDelegate.coreDataController.managedObjectContext hasChanges]) {
-            [self.appDelegate.coreDataController.managedObjectContext save:Nil];
+            @try {
+                [self.appDelegate.coreDataController.managedObjectContext save:Nil];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"Exception:%@", exception);
+            }
         }
         
         [self.appDelegate saveContext];

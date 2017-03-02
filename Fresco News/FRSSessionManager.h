@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "FRSBaseManager.h"
 
+static NSString *const tokenEndpoint = @"auth/token";
+static NSString *const tokenSelfEndpoint = @"auth/token/me";
+static NSString *const clientEndpoint = @"client/me";
+static NSString *const migrateEndpoint = @"auth/token/migrate";
+
+/**
+ Class used to manage the app's current user session and client session
+ */
 @interface FRSSessionManager : FRSBaseManager
 
 + (instancetype)sharedInstance;
@@ -48,6 +56,12 @@
  */
 - (void)refreshToken:(BOOL)isUserToken completion:(FRSAPIDefaultCompletionBlock)completion;
 
+
+/**
+ Checks the current version the user is on of the API against its client. If there is a mistmatch, 
+ this method will update the user's bearer to the latest version
+ */
+- (void)checkVersion;
 
 /**
  Saves client token object to user defaults

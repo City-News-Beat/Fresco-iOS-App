@@ -38,6 +38,7 @@
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSSessionManager.h"
 #import "FRSNotificationManager.h"
 #import "Adjust.h"
 
@@ -59,6 +60,8 @@
     
     if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[FRSAuthManager sharedInstance] logout];
+    } else {
+        [[FRSSessionManager sharedInstance] checkVersion];
     }
     
     [self configureStartDate];

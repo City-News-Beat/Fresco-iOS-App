@@ -10,8 +10,8 @@
 #import "FRSAuthManager.h"
 #import "EndpointManager.h"
 #import "NSString+Fresco.h"
-
-static NSString *const tokenEndpoint = @"auth/token";
+#import "NSError+Fresco.h"
+#import "SAMKeychain.h"
 
 @interface FRSSessionManager ()
 
@@ -85,9 +85,12 @@ static NSString *const tokenEndpoint = @"auth/token";
                                        } else {
                                            [self saveClientToken:accessTokenDict];
                                        }
+                                       
+                                       completion(responseObject, nil);
+                                   } else {
+                                       completion(nil, [NSError errorWithMessage:@"Access token missing from response!"]);
                                    }
                                    
-                                   completion(responseObject, nil);
                                } else {
                                    if(isUserToken) {
                                        //Log user out due to failed refresh. At this point, there's no other way for the app to authenticate the user
@@ -105,6 +108,59 @@ static NSString *const tokenEndpoint = @"auth/token";
                            }];
 }
 
+- (void)checkVersion {
+    __block NSDictionary *bearerVersion = [self versionForToken:kUserToken];
+    
+    void (^checkClientAgainstBearer)(NSDictionary*) = ^void(NSDictionary *clientVersion) {
+        if(![[self versionFromDictionary:bearerVersion] isEqualToString:[self versionFromDictionary:clientVersion]]){
+            //Upgrade the bearer if neccessary, this will return a new token for us
+            [[FRSAPIClient sharedClient] post:migrateEndpoint
+                               withParameters:@{
+                                                @"token": [self authenticationToken]
+                                                }
+                                   completion:^(id responseObject, NSError *error) {
+                                       if (!error && responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                           //Override the current token with the new one from the API
+                                           [self saveUserToken:responseObject];
+                                       }
+                                   }];
+        }
+    };
+    
+    [[FRSAPIClient sharedClient] get:clientEndpoint
+                       withParameters:nil
+                           completion:^(id responseObject, NSError *error) {
+                               if(!error) {
+                                   NSDictionary *clientVersion = responseObject[@"api_version"];
+                                   
+                                   if(bearerVersion != nil) {
+                                       checkClientAgainstBearer(clientVersion);
+                                   } else {
+                                       //Only request the bearer if we don't have the version locally
+                                       [[FRSAPIClient sharedClient] get:tokenSelfEndpoint
+                                                          withParameters:nil
+                                                              completion:^(id responseObject, NSError *error) {
+                                                                  if(!error) {
+                                                                      bearerVersion = responseObject[@"client"][@"api_version"];
+                                                                      checkClientAgainstBearer(clientVersion);
+                                                                  }
+                                                              }];
+                                   }
+                               }
+                           }];
+}
+
+
+/**
+ Returns a version string from a provided API version dictionary object
+
+ @param dictionary The dictionary containing the API version
+ @return The API version as a string e.g. 2.0, 2.5
+ */
+- (NSString *)versionFromDictionary:(NSDictionary *)dictionary {
+    return [NSString stringWithFormat:@"%@.%@", dictionary[@"version_major"], dictionary[@"version_minor"]];
+}
+
 #pragma mark - Token Accessors
 
 - (NSString *)bearerForToken:(NSString *)tokenType {
@@ -119,12 +175,19 @@ static NSString *const tokenEndpoint = @"auth/token";
     return token[@"refresh_token"];
 }
 
+- (NSDictionary *)versionForToken:(NSString *)tokenType {
+    NSDictionary *token = (NSDictionary *)[[NSUserDefaults standardUserDefaults] dictionaryForKey:tokenType];
+    if(token == nil || token[@"api_version"] == nil) return nil;
+    return token[@"api_version"];
+}
+
 #pragma mark - Client Token
 
 - (void)saveClientToken:(NSDictionary *)clientToken {
     [[NSUserDefaults standardUserDefaults] setObject:@{
                                                        @"token": clientToken[@"token"],
-                                                       @"refresh_token": clientToken[@"refresh_token"]
+                                                       @"refresh_token": clientToken[@"refresh_token"],
+                                                       @"api_version": clientToken[@"api_version"]
                                                        } forKey:kClientToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -158,11 +221,17 @@ static NSString *const tokenEndpoint = @"auth/token";
 - (void)saveUserToken:(NSDictionary *)userToken {
     NSString *bearer = [userToken objectForKey:@"token"];
     
+    if(!bearer || [bearer  isEqual: @""]) return;
+    
     //Save the bearer string to our keychain
-    [SAMKeychain setPasswordData:[bearer dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
+    [SAMKeychain
+     setPasswordData:[bearer dataUsingEncoding:NSUTF8StringEncoding]
+     forService:serviceName
+     account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
     
     [[NSUserDefaults standardUserDefaults] setObject:@{
                                                        @"refresh_token": userToken[@"refresh_token"],
+                                                       @"api_version": userToken[@"client"][@"api_version"]
                                                        } forKey:kUserToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -199,7 +268,6 @@ static NSString *const tokenEndpoint = @"auth/token";
         clearTokens();
     }
 }
-
 
 
 @end

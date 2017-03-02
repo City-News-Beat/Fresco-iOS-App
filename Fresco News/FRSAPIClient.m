@@ -8,16 +8,13 @@
 
 #import "FRSAPIClient.h"
 #import "Fresco.h"
-#import "FRSPost.h"
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
-#import "FRSOnboardingViewController.h"
 #import "FRSTracker.h"
-#import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
-#import "FRSUserManager.h"
+#import "FRSSessionManager.h"
 #import "FRSSessionManager.h"
 #import "NSDate+ISO.h"
 #import "NSError+Fresco.h"
@@ -82,10 +79,10 @@
  @return Authorization header with user-level authorization
  */
 - (BOOL)shouldSendUserToken:(NSString *)endpoint withRequestType:(NSString *)requestType {
-    //If we're authenticated && we're not requesting an auth endpoint or we're trying to delete
+    //If we're authenticated && we don't need to send basic auth
     return (
             [[FRSAuthManager sharedInstance] isAuthenticated] &&
-            (![endpoint containsString:@"auth/"] || [requestType isEqualToString:@"DELETE"])
+            ![self shouldSendBasic:endpoint withRequestType:requestType]
             );
 }
 
@@ -97,12 +94,30 @@
 - (BOOL)shouldSendClient:(NSString *)endpoint withRequestType:(NSString *)requestType {
     NSString *clientToken = [[FRSSessionManager sharedInstance] bearerForToken:kClientToken];
     
-    //Check if not an auth endpoint or we're deleting && we're not authenticated && we actually have a client token to use
+    //Check if we don't need to send basic && we're not authenticated && we actually have a client token to use
     return (
-            (![endpoint containsString:@"auth/"] || [requestType isEqualToString:@"DELETE"]) &&
+            ![self shouldSendBasic:endpoint withRequestType:requestType] &&
             ![[FRSAuthManager sharedInstance] isAuthenticated] &&
             ![clientToken isEqualToString:@""]
             );
+}
+
+
+/**
+ Lets us know if we need to send a Basic auth header
+ 
+ @return Yes if Basic is needed, No if not
+ */
+- (BOOL)shouldSendBasic:(NSString *)endpoint withRequestType:(NSString *)requestType {
+    //Check if using an auth endpointnot
+    //Not making a delete request i.e. deleting a token
+    //Or making a request to the client/me endpoint
+    return (
+            [endpoint containsString:@"auth/"] ||
+            [endpoint containsString:clientEndpoint]
+    ) &&
+    ![requestType isEqualToString:@"DELETE"] &&
+    ![endpoint containsString:tokenSelfEndpoint];
 }
 
 - (NSString *)userAuthorization {
