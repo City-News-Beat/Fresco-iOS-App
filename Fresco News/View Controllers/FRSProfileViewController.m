@@ -133,7 +133,6 @@
 
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
     
-    [self configureTitleLabelFromUser:_representedUser];
 }
 
 - (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
@@ -373,6 +372,8 @@
 
     [super removeNavigationBarLine];
     [self configureSectionView];
+    
+    [self configureTitleLabelFromUser:_representedUser];
 }
 
 - (void)configureBlockedUserWithButton:(BOOL)button {
@@ -691,12 +692,6 @@
 }
 
 - (void)configureTitleLabelFromUser:(FRSUser *)user {
-    
-    // Avoid creating more than one instance of titleLabel
-    if (titleLabel) {
-        titleLabel = nil;
-        [titleLabel removeFromSuperview];
-    }
     
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
     titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
@@ -1323,10 +1318,15 @@
 
     [self.sectionView setFrame:newFrame];
     
+    // This check pins the sectionView under the navigation bar.
+    // Uncomment the debug colors for a visual demo.
     if (basePoint.y >= self.profileContainer.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height) {
         CGRect sectionViewFrame = self.sectionView.frame;
         sectionViewFrame.origin.y = 0;
         [self.sectionView setFrame:sectionViewFrame];
+        // self.sectionView.backgroundColor = [UIColor redColor]; // Debug
+    } else {
+        // self.sectionView.backgroundColor = [UIColor greenColor]; // Debug
     }
 
     NSArray *visibleCells = [self.tableView visibleCells];
