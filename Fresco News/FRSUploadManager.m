@@ -366,14 +366,16 @@
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
                                                       // create temp location to move data (PHAsset can not be weakly linked to)
                                                       NSString *tempPath = [NSURL uniqueFileString];
-                                                      SDAVAssetExportSession *encoder = [self encoderWithAsset:avasset postID:postID];
+                                                      SDAVAssetExportSession *encoder = [self
+                                                                                         encoderWithAsset:avasset
+                                                                                         postID:postID
+                                                                                         andWidth:asset.pixelWidth
+                                                                                         andHeight:asset.pixelHeight];
                                                       encoder.outputURL = [NSURL fileURLWithPath:tempPath];
                                                       
                                                       //Begin encoding the video, delegate responder will update the progress
                                                       [encoder exportAsynchronouslyWithCompletionHandler:^{
-                                                          if(encoder.error) {
-                                                              completion(nil, YES, 0, encoder.error);
-                                                          } else if(encoder.status == AVAssetExportSessionStatusCompleted) {
+                                                          if(encoder.status == AVAssetExportSessionStatusCompleted) {
                                                               NSError *videoError;
                                                               NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&videoError];
                                                               
@@ -384,6 +386,10 @@
                                                               } else {
                                                                   completion(nil, YES, 0, videoError);
                                                               }
+                                                          } else if(encoder.error) {
+                                                              completion(nil, YES, 0, encoder.error);
+                                                          } else {
+                                                              completion(nil, YES, 0, [NSError errorWithMessage:@"Unknown error, possibly canceled"]);
                                                           }
                                                       }];
                                                   }];
@@ -397,19 +403,16 @@
  @param postID Post ID associated with the export session
  @return New initialized SDAVAssetExportSession
  */
-- (SDAVAssetExportSession *)encoderWithAsset:(AVAsset *)asset postID:(NSString *)postID{
+- (SDAVAssetExportSession *)encoderWithAsset:(AVAsset *)asset postID:(NSString *)postID andWidth:(NSInteger)width andHeight:(NSInteger)height{
     SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.postID = postID;
     encoder.delegate = self;
+    
     encoder.videoSettings = @{
                               AVVideoCodecKey : AVVideoCodecH264,
-                              AVVideoWidthKey : @1920,
-                              AVVideoHeightKey : @1080,
-                              AVVideoCompressionPropertiesKey : @{
-                                      AVVideoProfileLevelKey : AVVideoProfileLevelH264High41,
-                                      AVVideoMaxKeyFrameIntervalDurationKey : @16
-                                      },
+                              AVVideoWidthKey : [NSNumber numberWithInteger:width],
+                              AVVideoHeightKey : [NSNumber numberWithInteger:height]
                               };
     encoder.audioSettings = @{
                               AVFormatIDKey : @(kAudioFormatMPEG4AAC),
@@ -585,7 +588,8 @@
 
 
 /**
- Starts the AWS upload for the passed post. If completed, will set the managed object to complete and return on completion block.
+ Starts the AWS upload for the passed post. 
+ If completed, will set the managed object to complete and return on completion block.
 
  @param postID ID of the post being uploaded
  @param path File Path string in local system
