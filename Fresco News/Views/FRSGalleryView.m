@@ -24,14 +24,14 @@
 #import "FRSUserManager.h"
 #import "FRSGalleryDetailView.h"
 #import "FRSGalleryManager.h"
-#import "FRSActionBar.h"
+#import "FRSGalleryActionBar.h"
 
 #define TEXTVIEW_TOP_PAD 12
 #define LABEL_HEIGHT 20
 #define LABEL_PADDING 8
 #define CAPTION_PADDING 24
 
-@interface FRSGalleryView () <UIScrollViewDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate, FRSActionBarDelegate>
+@interface FRSGalleryView () <UIScrollViewDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate/*, FRSActionBarDelegate*/>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
@@ -41,6 +41,10 @@
 @property (strong, nonatomic) NSMutableArray *playerLayers;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
+
+@property BOOL didLike;
+@property BOOL didRepost;
+
 @end
 
 @implementation FRSGalleryView
@@ -49,8 +53,8 @@
 
     if ([self.gallery.uid isEqualToString:gallery.uid]) { // Gallery has been configured, update things that need to be updated and return.
         self.gallery = gallery;
-        [self updateSocial];
-        [self checkGalleryOwnerForActionBar];
+//        [self updateSocial]; // Called when the gallery exists
+//        [self checkGalleryOwnerForActionBar];
         return;
     }
 
@@ -137,7 +141,7 @@
 
 
     [self updateScrollView];
-    [self updateSocial];
+    [self updateSocial]; // Called when configuring a new gallery
     [self adjustHeight];
 
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
@@ -146,12 +150,12 @@
 
 
     
-    [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
-    [self.borderLine.superview bringSubviewToFront:self.borderLine];
-    [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
-    [self.actionBar.actionButton.titleLabel sizeToFit];
-    [self.actionBar updateTitle];
-    [self checkGalleryOwnerForActionBar];
+//    [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
+//    [self.borderLine.superview bringSubviewToFront:self.borderLine];
+//    [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
+//    [self.actionBar.actionButton.titleLabel sizeToFit];
+//    [self.actionBar updateTitle];
+//    [self checkGalleryOwnerForActionBar];
 }
 
 - (void)updateUser {
@@ -170,26 +174,25 @@
 
 - (void)updateSocial {
     
-    if (self.actionBar != nil) {
-        NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
-        BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-        
-        NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-        BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
-        
-        if ([self.gallery.uid isEqualToString:@"mjZ09r2pN1eO"]) {
-            
-        }
-        
-        [self.actionBar handleRepostState:isReposted];
-        [self.actionBar handleRepostAmount:[numReposts intValue]];
-        [self.actionBar handleHeartState:isLiked];
-        [self.actionBar handleHeartAmount:[numLikes intValue]];
-        
-        if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-            [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
-        }
-    }
+//    if (self.actionBar != nil) {
+//        NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
+//        self.didLike = [self.gallery valueForKey:@"liked"];
+//        
+//        NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
+//        self.didRepost = [self.gallery valueForKey:@"reposted"];
+//        
+//        [self.actionBar handleRepostAmount:[numReposts intValue]];
+//        [self.actionBar handleRepostState:self.didRepost];
+//        [self.actionBar handleHeartAmount:[numLikes intValue]];
+//        [self.actionBar handleHeartState:self.didLike];
+//        
+//        [self.gallery setValue:@(self.didLike) forKey:@"liked"];
+//        [self.gallery setValue:@(self.didRepost) forKey:@"reposted"];
+//
+//        if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+//            [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+//        }
+//    }
 }
 
 - (void)updateScrollView {
@@ -225,7 +228,7 @@
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
         [self configureUI];
-        [self updateSocial];
+        [self updateSocial]; // Called in a tableview cell
     }
     return self;
 }
@@ -248,7 +251,7 @@
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
     [self configureUI];
-    [self updateSocial];
+//    [self updateSocial]; // Called in the expanded VC
 }
 
 - (void)contentTap:(UITapGestureRecognizer *)sender {
@@ -817,13 +820,15 @@
 
 - (void)configureActionBar {
     if ([self.delegate shouldHaveActionBar]) {
-        self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
-        [self addSubview:self.actionBar];
+        CGFloat yPos = self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height;
+        
+        FRSGalleryActionBar *actionBar = [[FRSGalleryActionBar alloc] initWithFrame:CGRectMake(0, yPos, self.frame.size.width, 44) gallery:self.gallery];
+        [self addSubview:actionBar];
     }
 }
 
 - (void)adjustHeight {
-    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
+    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 /* + self.actionBar.frame.size.height */;
 
     if (self.galleryFooterView) {
         height += self.galleryFooterView.frame.size.height + CAPTION_PADDING;
@@ -1152,81 +1157,87 @@
 }
 
 
-#pragma mark - Action Bar
+//#pragma mark - Action Bar
 
-- (NSString *)titleForActionButton {
-    int comments = [[self.gallery valueForKey:@"comments"] intValue];
-    
-    if (comments == 1) {
-        return [NSString stringWithFormat:@"%d COMMENT", comments];
-    } else if (comments == 0) {
-        return @"READ MORE";
-    }
-    
-    return [NSString stringWithFormat:@"%d COMMENTS", comments];
-}
-
--(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
-    if (self.readMoreBlock) {
-        self.readMoreBlock(Nil);
-    }
-}
-
-- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    [self.delegate.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    vc.didTapRepostLabel = YES;
-    [self.delegate.navigationController pushViewController:vc animated:YES];
-}
-
--(void)handleShare:(FRSActionBar *)actionbar {
-    self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
-}
-
-- (void)handleLike:(FRSActionBar *)actionBar {
-    
-    // UI will update regardless of success or failure.
-    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        self.gallery.likes = @([self.gallery.likes intValue] - 1);
-        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        }];
-    } else {
-        self.gallery.likes = @([self.gallery.likes intValue] + 1);
-        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        }];
-    }
-}
-
-- (void)handleRepost:(FRSActionBar *)actionBar {
-    
-    // UI will update regardless of success or failure.
-    if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
-        self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
-        [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        }];
-    } else {
-        self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
-        [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        }];
-    }
-}
-
-/**
- Checks if the gallery owner is the authenticated user and disables user interaction on the repost button accordingly.
- */
-- (void)checkGalleryOwnerForActionBar {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
-            [self.actionBar setCurrentUser:YES];
-        } else {
-            [self.actionBar setCurrentUser:NO];
-        }
-    });
-}
+//- (NSString *)titleForActionButton {
+//    int comments = [[self.gallery valueForKey:@"comments"] intValue];
+//    
+//    if (comments == 1) {
+//        return [NSString stringWithFormat:@"%d COMMENT", comments];
+//    } else if (comments == 0) {
+//        return @"READ MORE";
+//    }
+//    
+//    return [NSString stringWithFormat:@"%d COMMENTS", comments];
+//}
+//
+//-(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
+//    if (self.readMoreBlock) {
+//        self.readMoreBlock(Nil);
+//    }
+//}
+//
+//- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
+//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+//    [self.delegate.navigationController pushViewController:vc animated:YES];
+//}
+//
+//- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
+//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+//    vc.didTapRepostLabel = YES;
+//    [self.delegate.navigationController pushViewController:vc animated:YES];
+//}
+//
+//-(void)handleShare:(FRSActionBar *)actionbar {
+//    self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
+//}
+//
+//- (void)handleLike:(FRSActionBar *)actionBar {
+//    
+//    // UI will update regardless of success or failure.
+//    if (self.didLike) {
+//        self.gallery.likes = @([self.gallery.likes intValue] - 1);
+//        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+//            
+//        }];
+//    } else {
+//        self.gallery.likes = @([self.gallery.likes intValue] + 1);
+//        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+//        }];
+//    }
+//    
+//    // Save the 'liked' state in the managed object context
+//    FRSAppDelegate *appDelegate = [[FRSAppDelegate alloc] init];
+//    NSError *error;
+//    [appDelegate.managedObjectContext save:&error];
+//}
+//
+//- (void)handleRepost:(FRSActionBar *)actionBar {
+//    
+//    // UI will update regardless of success or failure.
+//    if (self.didRepost) {
+//        self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
+//        [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+//        }];
+//    } else {
+//        self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
+//        [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+//        }];
+//    }
+//}
+//
+///**
+// Checks if the gallery owner is the authenticated user and disables user interaction on the repost button accordingly.
+// */
+//- (void)checkGalleryOwnerForActionBar {
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
+//            [self.actionBar setCurrentUser:YES];
+//        } else {
+//            [self.actionBar setCurrentUser:NO];
+//        }
+//    });
+//}
 
 
 

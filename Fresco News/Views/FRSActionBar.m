@@ -188,6 +188,12 @@
 
 - (IBAction)likeTapped:(id)sender {
     [self.delegate handleLike:self];
+    
+//    // Save the 'liked' state in the managed object context
+//    FRSAppDelegate *appDelegate = [[FRSAppDelegate alloc] init];
+//    NSError *error;
+//    [appDelegate.managedObjectContext save:&error];
+    
 }
 
 - (IBAction)likeLabelTapped:(id)sender {
@@ -196,6 +202,10 @@
 
 - (IBAction)repostTapped:(id)sender {
     [self.delegate handleRepost:self];
+    
+//    // Save the 'reposted' state in the managed object context
+//    FRSAppDelegate *appDelegate = [[FRSAppDelegate alloc] init];
+//    [appDelegate.managedObjectContext save:nil];
 }
 
 - (IBAction)repostLabelTapped:(id)sender {
@@ -221,6 +231,7 @@
 }
 
 -(void)handleHeartAmount:(NSInteger)amount {
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (amount >= 0) {
             self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
@@ -244,6 +255,7 @@
 }
 
 -(void)handleRepostAmount:(NSInteger)amount {
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (amount >= 0) {
             self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];

@@ -148,10 +148,10 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-
-                             [gallery setValue:@(TRUE) forKey:@"reposted"];
-                             [[self managedObjectContext] save:Nil];
+                               completion(responseObject, error);
+                               
+                               [gallery setValue:@(TRUE) forKey:@"reposted"];
+                               [[self managedObjectContext] save:nil];
                            }];
 }
 

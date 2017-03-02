@@ -20,6 +20,7 @@
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
 		0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */; };
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
+		0758AEEC1E68BB5D005F2B35 /* FRSGalleryActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0758AEEB1E68BB5D005F2B35 /* FRSGalleryActionBar.m */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
 		0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */; };
@@ -357,6 +358,8 @@
 		074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Helpers.h"; path = "Categories/UIImageView+Helpers.h"; sourceTree = "<group>"; };
 		074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+Helpers.m"; path = "Categories/UIImageView+Helpers.m"; sourceTree = "<group>"; };
 		075473561D19B5640020636E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0758AEEA1E68BB5D005F2B35 /* FRSGalleryActionBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryActionBar.h; sourceTree = "<group>"; };
+		0758AEEB1E68BB5D005F2B35 /* FRSGalleryActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryActionBar.m; sourceTree = "<group>"; };
 		0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
@@ -965,6 +968,22 @@
 				D43C7FF31C8F519A00A7A7A7 /* Parallax */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		0758AEE81E68BB31005F2B35 /* FRSGalleryActionBar */ = {
+			isa = PBXGroup;
+			children = (
+				0758AEEA1E68BB5D005F2B35 /* FRSGalleryActionBar.h */,
+				0758AEEB1E68BB5D005F2B35 /* FRSGalleryActionBar.m */,
+			);
+			name = FRSGalleryActionBar;
+			sourceTree = "<group>";
+		};
+		0758AEE91E68BB3C005F2B35 /* FRSStoryActionBar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = FRSStoryActionBar;
 			sourceTree = "<group>";
 		};
 		0767A55C1D5E2EDA00330761 /* Assignment Cell */ = {
@@ -1970,8 +1989,8 @@
 			isa = PBXGroup;
 			children = (
 				072654E11E3951D500A49DEC /* Gallery Footer */,
-				07A2C1461DEE2ED900B8445F /* FRSGalleryView.m */,
 				07A2C1471DEE2ED900B8445F /* FRSGalleryView.h */,
+				07A2C1461DEE2ED900B8445F /* FRSGalleryView.m */,
 				D487F1CB1CC14231005742F3 /* Player */,
 			);
 			name = "Gallery View";
@@ -1989,6 +2008,8 @@
 		D43C80001C9074BB00A7A7A7 /* Content Action Bar */ = {
 			isa = PBXGroup;
 			children = (
+				0758AEE81E68BB31005F2B35 /* FRSGalleryActionBar */,
+				0758AEE91E68BB3C005F2B35 /* FRSStoryActionBar */,
 				07A915C41E5F65060081D219 /* FRSActionBar.xib */,
 				07A915C91E5F65510081D219 /* FRSActionBar.h */,
 				07A915CA1E5F65510081D219 /* FRSActionBar.m */,
@@ -2884,6 +2905,7 @@
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
+				0758AEEC1E68BB5D005F2B35 /* FRSGalleryActionBar.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,

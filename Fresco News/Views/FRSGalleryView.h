@@ -12,7 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "FRSPlayer.h"
 #import "FRSGalleryFooterView.h"
-#import "FRSActionBar.h"
+//#import "FRSActionBar.h"
 
 @class FRSGallery;
 
@@ -32,7 +32,7 @@
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) FRSActionBar *actionBar;
+//@property (strong, nonatomic) FRSActionBar *actionBar;
 @property (strong, nonatomic) UILabel *captionLabel;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;

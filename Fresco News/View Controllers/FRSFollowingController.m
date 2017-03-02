@@ -132,7 +132,7 @@
 
         galCell.gallery = self.feed[indexPath.row];
 
-        galCell.readMoreBlock = ^(NSArray *bullshit) {
+        galCell.readMoreBlock = ^(NSArray *array) {
           [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
         };
 
@@ -142,7 +142,7 @@
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         [storyCell clearCell];
 
-        storyCell.readMoreBlock = ^(NSArray *bullshit) {
+        storyCell.readMoreBlock = ^(NSArray *array) {
           [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
         };
 
