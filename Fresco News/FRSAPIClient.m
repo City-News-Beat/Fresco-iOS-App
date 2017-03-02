@@ -42,7 +42,7 @@
                                          initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
         self.requestManager = manager;
         self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
-        [self.requestManager.requestSerializer setTimeoutInterval:20.0];
+//        [self.requestManager.requestSerializer setTimeoutInterval:20.0];
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     }
 
