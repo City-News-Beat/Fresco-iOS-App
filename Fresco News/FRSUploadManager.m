@@ -476,7 +476,7 @@
     
     __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
 
-    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us
+    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us and the transcode will fail
     FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
         toComplete++;
         totalFileSize += fileSize;
@@ -492,7 +492,7 @@
             
             //If the upload errors at some point and state is reset,
             //this count will never add up, hence will not start uploading
-            if([self.uploadMeta count] == [posts count]) {
+            if([self.uploadMeta count] == [posts count] || posts[currentIndex] == nil) {
                 startUploads();
             } else {
                 
