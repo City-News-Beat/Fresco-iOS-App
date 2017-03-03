@@ -184,10 +184,14 @@
 #pragma mark - Client Token
 
 - (void)saveClientToken:(NSDictionary *)clientToken {
+    if(clientToken[@"token"] == nil || clientToken[@"refresh_token"] == nil || clientToken[@"client"] == nil) {
+        return;
+    }
+    
     [[NSUserDefaults standardUserDefaults] setObject:@{
                                                        @"token": clientToken[@"token"],
                                                        @"refresh_token": clientToken[@"refresh_token"],
-                                                       @"api_version": clientToken[@"api_version"]
+                                                       @"api_version": clientToken[@"client"][@"api_version"]
                                                        } forKey:kClientToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
