@@ -109,10 +109,10 @@
 }
 
 - (void)checkVersion {
-    __block NSDictionary *bearerVersion = [self versionForToken:kUserToken];
+    __block NSString *bearerVersion = [self versionForToken:kUserToken];
     
-    void (^checkClientAgainstBearer)(NSDictionary*) = ^void(NSDictionary *clientVersion) {
-        if(![[self versionFromDictionary:bearerVersion] isEqualToString:[self versionFromDictionary:clientVersion]]){
+    void (^checkClientAgainstBearer)(NSString*) = ^void(NSString *clientVersion) {
+        if(![bearerVersion isEqualToString:clientVersion]){
             //Upgrade the bearer if neccessary, this will return a new token for us
             [[FRSAPIClient sharedClient] post:migrateEndpoint
                                withParameters:@{
@@ -133,16 +133,16 @@
                                if(!error) {
                                    NSDictionary *clientVersion = responseObject[@"api_version"];
                                    
-                                   if(bearerVersion != nil) {
-                                       checkClientAgainstBearer(clientVersion);
+                                   if(bearerVersion != nil && ![bearerVersion  isEqual: @""]) {
+                                       checkClientAgainstBearer([self versionFromDictionary:clientVersion]);
                                    } else {
                                        //Only request the bearer if we don't have the version locally
                                        [[FRSAPIClient sharedClient] get:tokenSelfEndpoint
                                                           withParameters:nil
                                                               completion:^(id responseObject, NSError *error) {
                                                                   if(!error) {
-                                                                      bearerVersion = responseObject[@"client"][@"api_version"];
-                                                                      checkClientAgainstBearer(clientVersion);
+                                                                      bearerVersion = [self versionFromDictionary:responseObject[@"client"][@"api_version"]];
+                                                                      checkClientAgainstBearer([self versionFromDictionary:clientVersion]);
                                                                   }
                                                               }];
                                    }
@@ -175,9 +175,9 @@
     return token[@"refresh_token"];
 }
 
-- (NSDictionary *)versionForToken:(NSString *)tokenType {
+- (NSString *)versionForToken:(NSString *)tokenType {
     NSDictionary *token = (NSDictionary *)[[NSUserDefaults standardUserDefaults] dictionaryForKey:tokenType];
-    if(token == nil || token[@"api_version"] == nil) return nil;
+    if(token == nil || token[@"api_version"] == nil) return @"";
     return token[@"api_version"];
 }
 
@@ -191,7 +191,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:@{
                                                        @"token": clientToken[@"token"],
                                                        @"refresh_token": clientToken[@"refresh_token"],
-                                                       @"api_version": clientToken[@"client"][@"api_version"]
+                                                       @"api_version": [self versionFromDictionary:clientToken[@"client"][@"api_version"]]
                                                        } forKey:kClientToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -235,7 +235,7 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:@{
                                                        @"refresh_token": userToken[@"refresh_token"],
-                                                       @"api_version": userToken[@"client"][@"api_version"]
+                                                       @"api_version": [self versionFromDictionary:userToken[@"client"][@"api_version"]]
                                                        } forKey:kUserToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
