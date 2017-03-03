@@ -360,17 +360,24 @@
                                                     }];
         
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
-        //Request asset and transcode into a the desired bitrate
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset
                                                         options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                      // create temp location to move data (PHAsset can not be weakly linked to)
+                                                      //Create temp location to move data (PHAsset can not be weakly linked to)
                                                       NSString *tempPath = [NSURL uniqueFileString];
-                                                      SDAVAssetExportSession *encoder = [self
-                                                                                         encoderWithAsset:avasset
-                                                                                         postID:postID
-                                                                                         andWidth:asset.pixelWidth
-                                                                                         andHeight:asset.pixelHeight];
+                                                      NSArray *videoTracks = [avasset tracksWithMediaType:AVMediaTypeVideo];
+                                                      AVAssetTrack *videoTrack;
+                                                      
+                                                      if ([videoTracks count] == 0) {
+                                                          completion(nil,
+                                                                     YES,
+                                                                     0,
+                                                                     [NSError
+                                                                      errorWithMessage:@"One of your videos couldn't be processed, please cancel your upload and try a different set of videos!"]);
+                                                      }
+                                                      
+                                                      videoTrack = [videoTracks objectAtIndex:0];
+                                                      SDAVAssetExportSession *encoder = [self encoderWithAVAsset:avasset phasset:asset videoTrack:videoTrack postID:postID];
                                                       encoder.outputURL = [NSURL fileURLWithPath:tempPath];
                                                       
                                                       //Begin encoding the video, delegate responder will update the progress
@@ -400,19 +407,28 @@
  Returns an SDAVAssetExportSession for use
 
  @param asset AVAsset to initialize with
+ @param phasset PHAsset to initialize with
+ @param videoTrack AVAssetTrack corresponding to the asset
  @param postID Post ID associated with the export session
  @return New initialized SDAVAssetExportSession
  */
-- (SDAVAssetExportSession *)encoderWithAsset:(AVAsset *)asset postID:(NSString *)postID andWidth:(NSInteger)width andHeight:(NSInteger)height{
+- (SDAVAssetExportSession *)encoderWithAVAsset:(AVAsset *)asset phasset:(PHAsset *)phasset videoTrack:(AVAssetTrack *)videoTrack postID:(NSString *)postID {
     SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.postID = postID;
     encoder.delegate = self;
+    float targetBitRate = [videoTrack estimatedDataRate] * .80; //Reduce bitrate by 80%
+    float targetFrameRate = [videoTrack nominalFrameRate];
     
     encoder.videoSettings = @{
                               AVVideoCodecKey : AVVideoCodecH264,
-                              AVVideoWidthKey : [NSNumber numberWithInteger:width],
-                              AVVideoHeightKey : [NSNumber numberWithInteger:height]
+                              AVVideoWidthKey : [NSNumber numberWithInteger:phasset.pixelWidth],
+                              AVVideoHeightKey : [NSNumber numberWithInteger:phasset.pixelHeight],
+                              AVVideoCompressionPropertiesKey: @
+                                  {
+                                  AVVideoAverageBitRateKey: [NSNumber numberWithFloat:targetBitRate],
+                                  AVVideoMaxKeyFrameIntervalKey: [NSNumber numberWithFloat:targetFrameRate]
+                                  }
                               };
     encoder.audioSettings = @{
                               AVFormatIDKey : @(kAudioFormatMPEG4AAC),
