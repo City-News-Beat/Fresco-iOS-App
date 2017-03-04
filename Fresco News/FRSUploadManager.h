@@ -37,13 +37,19 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
 @property (nonatomic, strong) NSMutableDictionary *uploadProgressDictionary;
 
-
 /**
  Used to access shared instance of this class as a singleton
 
  @return Shared instance object of this class
  */
 + (id)sharedInstance;
+
+/**
+ Tells us if the upload manager is currently uploading
+
+ @return BOOL True if currently uploading, False if not currently uploading
+ */
+- (BOOL)isUploading;
 
 /**
  Stars a new upload with the passed posts. Posts must follow the specified format below.

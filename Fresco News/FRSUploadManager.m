@@ -69,6 +69,10 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (BOOL)isUploading {
+    return (toComplete != 0 || completed != toComplete);
+}
+
 /**
  This method will reset the state of the upload manager to a blank slate. 
  Should typically be called once an upload is finished or before starting a new one.
@@ -113,7 +117,6 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
     NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
     signedInRequest.predicate = signedInPredicate;
-
 
     //No need to sort response, because theoretically there is 1
     NSError *fetchError;
