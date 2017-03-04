@@ -70,7 +70,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 }
 
 - (BOOL)isUploading {
-    return (toComplete != 0 || completed != toComplete);
+    return (toComplete != 0 && completed != toComplete);
 }
 
 /**
