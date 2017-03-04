@@ -36,6 +36,7 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
 @property (nonatomic, strong) NSMutableDictionary *managedObjects;
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
 @property (nonatomic, strong) NSMutableDictionary *uploadProgressDictionary;
+@property (nonatomic, strong) SDAVAssetExportSession *exportSession;
 
 /**
  Used to access shared instance of this class as a singleton

@@ -70,7 +70,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 }
 
 - (BOOL)isUploading {
-    return (toComplete != 0 && completed != toComplete);
+    return numberOfAssets > 0;
 }
 
 /**
@@ -419,12 +419,12 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                                       }
                                                       
                                                       videoTrack = [videoTracks objectAtIndex:0];
-                                                      SDAVAssetExportSession *encoder = [self encoderWithAVAsset:avasset phasset:asset videoTrack:videoTrack postID:postID];
-                                                      encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+                                                      [self updateEncoderWithAVAsset:avasset phasset:asset videoTrack:videoTrack postID:postID];
+                                                      self.exportSession.outputURL = [NSURL fileURLWithPath:tempPath];
                                                       
                                                       //Begin encoding the video, delegate responder will update the progress
-                                                      [encoder exportAsynchronouslyWithCompletionHandler:^{
-                                                          if(encoder.status == AVAssetExportSessionStatusCompleted) {
+                                                      [self.exportSession exportAsynchronouslyWithCompletionHandler:^{
+                                                          if(self.exportSession.status == AVAssetExportSessionStatusCompleted) {
                                                               NSError *videoError;
                                                               NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&videoError];
                                                               
@@ -435,8 +435,8 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                                               } else {
                                                                   completion(nil, YES, 0, videoError);
                                                               }
-                                                          } else if(encoder.error) {
-                                                              completion(nil, YES, 0, encoder.error);
+                                                          } else if(self.exportSession.error) {
+                                                              completion(nil, YES, 0, self.exportSession.error);
                                                           } else {
                                                               completion(nil, YES, 0, [NSError errorWithMessage:@"Unknown error, possibly canceled"]);
                                                           }
@@ -454,15 +454,15 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  @param postID Post ID associated with the export session
  @return New initialized SDAVAssetExportSession
  */
-- (SDAVAssetExportSession *)encoderWithAVAsset:(AVAsset *)asset phasset:(PHAsset *)phasset videoTrack:(AVAssetTrack *)videoTrack postID:(NSString *)postID {
-    SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
-    encoder.outputFileType = AVFileTypeMPEG4;
-    encoder.postID = postID;
-    encoder.delegate = self;
+- (void)updateEncoderWithAVAsset:(AVAsset *)asset phasset:(PHAsset *)phasset videoTrack:(AVAssetTrack *)videoTrack postID:(NSString *)postID {
+    self.exportSession = [SDAVAssetExportSession.alloc initWithAsset:asset];
+    self.exportSession.outputFileType = AVFileTypeMPEG4;
+    self.exportSession.postID = postID;
+    self.exportSession.delegate = self;
     float targetBitRate = [videoTrack estimatedDataRate] * .80; //Reduce bitrate by 80%
     float targetFrameRate = [videoTrack nominalFrameRate];
     
-    encoder.videoSettings = @{
+    self.exportSession.videoSettings = @{
                               AVVideoCodecKey : AVVideoCodecH264,
                               AVVideoWidthKey : [NSNumber numberWithInteger:phasset.pixelWidth],
                               AVVideoHeightKey : [NSNumber numberWithInteger:phasset.pixelHeight],
@@ -472,14 +472,13 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                   AVVideoMaxKeyFrameIntervalKey: [NSNumber numberWithFloat:targetFrameRate]
                                   }
                               };
-    encoder.audioSettings = @{
+    self.exportSession.audioSettings = @{
                               AVFormatIDKey : @(kAudioFormatMPEG4AAC),
                               AVNumberOfChannelsKey : @2,
                               AVSampleRateKey : @44100,
                               AVEncoderBitRateKey : @64000,
                               };
     
-    return encoder;
 }
 
 
@@ -504,8 +503,10 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
         
         //Count the number of videos for the transcoding progress
         numberOfVideos = numberOfVideos + (((PHAsset *)post[@"asset"]).mediaType == PHAssetMediaTypeVideo ? 1 : 0);
-        numberOfAssets++;
     }
+    
+    //Set of number assets in state
+    numberOfAssets = (int)[posts count];
     
     __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
 
@@ -513,7 +514,12 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
         toComplete++;
         
+        //No error, and we still have assets
         if(!error) {
+            //We have this check in case the state is reset
+            //and assets shouldn't continue to be transcoded and uploaded
+            if(numberOfAssets == 0) return;
+            
             totalFileSize += fileSize;
             if(isVideo) {
                 totalVideoFilesSize += fileSize;
@@ -535,8 +541,9 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                         completion:^(id responseObject, NSError *error) {
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
-                            } else if (completed == toComplete) {
+                            } else if (completed == numberOfAssets) {
                                 //Upload has fully completed
+                                numberOfAssets = 0;
                                 [[NSNotificationCenter defaultCenter]
                                  postNotificationName:FRSUploadNotification
                                  object:nil
@@ -616,6 +623,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     [self resetState];
     [self clearCachedUploads];
     [self.transferManager cancelAll];
+    [self.exportSession cancelExport];
     
     if(withForce == YES) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
