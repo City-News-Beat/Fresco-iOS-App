@@ -28,6 +28,7 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
     int toComplete;
     int completed;
     float uploadSpeed;
+    int numberOfAssets;
     int numberOfVideos;
 }
 
@@ -35,6 +36,7 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSMutableDictionary *managedObjects;
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
+@property (nonatomic, strong) NSMutableDictionary *uploadProgressDictionary;
 
 
 /**
