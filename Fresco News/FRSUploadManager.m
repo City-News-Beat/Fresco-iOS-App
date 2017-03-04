@@ -76,7 +76,6 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  Note: Managed objects are cleared on a forcel cancel of the upload, not here
  */
 - (void)resetState {
-    self.uploadMeta = [[NSMutableArray alloc] init];
     self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
     self.uploadProgressDictionary = [[NSMutableDictionary alloc] init];
     totalFileSize = 0;
@@ -689,13 +688,6 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
         if (task.error) {
             completion(nil, task.error);
         } else if (task.result) {
-            for (NSDictionary *meta in self.uploadMeta) {
-                if ([meta[postID] isEqualToString:postID]) {
-                    [weakSelf.uploadMeta removeObject:meta];
-                    break;
-                }
-            }
-            
             [weakSelf trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", postID]];
             completed++;
             FRSUpload *upload = [weakSelf.managedObjects objectForKey:postID];
