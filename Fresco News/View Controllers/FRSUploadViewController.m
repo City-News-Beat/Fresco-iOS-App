@@ -1142,6 +1142,15 @@ static NSString *const cellIdentifier = @"assignment-cell";
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         [self.navigationController pushViewController:onboardVC animated:NO];
         return;
+    } else if([[FRSUploadManager sharedInstance] isUploading]) {
+        FRSAlertView *alert = [[FRSAlertView alloc]
+                               initWithTitle:@"UPLOAD ERROR"
+                               message:@"There is currently an upload in progress! Please wait till your current upload is finished and then try again."
+                               actionTitle:@"OK"
+                               cancelTitle:@""
+                               cancelTitleColor:nil
+                               delegate:nil];
+        return [alert show];
     }
 
     if (!self.loadingView) {
