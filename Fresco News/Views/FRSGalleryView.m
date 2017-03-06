@@ -745,13 +745,8 @@
 
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
 
-    if (post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) {
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.username] fontSize:17];
-        ;
-    } else {
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.firstName] fontSize:17];
-        ;
-    }
+    self.nameLabel = [self galleryInfoLabelWithText:[FRSPost bylineForPost:post] fontSize:17];
+
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
