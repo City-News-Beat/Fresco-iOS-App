@@ -422,6 +422,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                                       [self updateEncoderWithAVAsset:avasset phasset:asset videoTrack:videoTrack postID:postID];
                                                       self.exportSession.outputURL = [NSURL fileURLWithPath:tempPath];
                                                       
+                   
                                                       //Begin encoding the video, delegate responder will update the progress
                                                       [self.exportSession exportAsynchronouslyWithCompletionHandler:^{
                                                           if(self.exportSession.status == AVAssetExportSessionStatusCancelled) {

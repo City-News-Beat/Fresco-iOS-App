@@ -90,7 +90,6 @@
                                    } else {
                                        completion(nil, [NSError errorWithMessage:@"Access token missing from response!"]);
                                    }
-                                   
                                } else {
                                    if(isUserToken) {
                                        //Log user out due to failed refresh. At this point, there's no other way for the app to authenticate the user
@@ -241,36 +240,31 @@
 }
 
 - (void)deleteUserData {
-    void (^clearTokens)(void) = ^ {
-        NSArray *allAccounts = [SAMKeychain allAccounts];
-        
-        //Delete user bearer
-        for (NSDictionary *account in allAccounts) {
-            NSString *accountName = account[kSAMKeychainAccountKey];
-            [SAMKeychain deletePasswordForService:serviceName account:accountName];
-        }
-        
-        //Clear UserDefaults except client tokens
-        NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-        for (NSString *key in [defaultsDictionary allKeys]) {
-            if (![key isEqualToString:kClientToken]) {
-                [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-            }
-        }
-        
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    };
-    
     if([[FRSAuthManager sharedInstance] isAuthenticated]) {
         //Delete token off the API
         [[FRSAPIClient sharedClient] delete:tokenEndpoint
                              withParameters:nil
-                                 completion:^(id responseObject, NSError *error) {
-                                     clearTokens();
-                                 }];
-    } else {
-        clearTokens();
+                                 completion:nil];
     }
+    
+    //Run after so we don't delete the bearer before the reuqest is sent
+    NSArray *allAccounts = [SAMKeychain allAccounts];
+    
+    //Delete user bearer
+    for (NSDictionary *account in allAccounts) {
+        NSString *accountName = account[kSAMKeychainAccountKey];
+        [SAMKeychain deletePasswordForService:serviceName account:accountName];
+    }
+    
+    //Clear UserDefaults except client tokens
+    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+    for (NSString *key in [defaultsDictionary allKeys]) {
+        if (![key isEqualToString:kClientToken]) {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 

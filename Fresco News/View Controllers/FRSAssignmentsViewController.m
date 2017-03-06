@@ -294,19 +294,22 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         return;
     }
     self.isCheckingForAcceptedAssignment = YES;
-    [[FRSAssignmentManager sharedInstance] getAcceptedAssignmentWithCompletion:^(id responseObject, NSError *error) {
-      self.isCheckingForAcceptedAssignment = NO;
-      if (responseObject) {
-          FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-          FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-          [assignment configureWithDictionary:responseObject];
-          self.acceptedAssignmentDictionary = assignment;
-          self.assignmentID = assignment.uid;
-          self.acceptedAssignment = assignment;
-          self.currentAssignment = assignment;
-          [self configureAcceptedAssignment:assignment];
-      }
-    }];
+    
+    if([[FRSAuthManager sharedInstance] isAuthenticated]) {
+        [[FRSAssignmentManager sharedInstance] getAcceptedAssignmentWithCompletion:^(id responseObject, NSError *error) {
+          self.isCheckingForAcceptedAssignment = NO;
+          if (responseObject) {
+              FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+              FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+              [assignment configureWithDictionary:responseObject];
+              self.acceptedAssignmentDictionary = assignment;
+              self.assignmentID = assignment.uid;
+              self.acceptedAssignment = assignment;
+              self.currentAssignment = assignment;
+              [self configureAcceptedAssignment:assignment];
+          }
+        }];
+    }
 }
 
 - (void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
