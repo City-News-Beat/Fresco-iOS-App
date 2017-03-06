@@ -48,8 +48,8 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 }
 
 - (void)createGalleryWithParams:(NSDictionary*)params andAssets:(NSArray *)assets completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSInteger videosCounted = 0;
-    NSInteger photosCounted = 0;
+    __block NSInteger videosCounted = 0;
+    __block NSInteger photosCounted = 0;
     //Keep track of total assets added to signify completion of digest creationg
     __block NSInteger assetsAdded = 0;
     NSMutableArray *posts = [[NSMutableArray alloc] initWithCapacity:[assets count]];

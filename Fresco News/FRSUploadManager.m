@@ -424,7 +424,11 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                                       
                                                       //Begin encoding the video, delegate responder will update the progress
                                                       [self.exportSession exportAsynchronouslyWithCompletionHandler:^{
-                                                          if(self.exportSession.status == AVAssetExportSessionStatusCompleted) {
+                                                          if(self.exportSession.status == AVAssetExportSessionStatusCancelled) {
+                                                              completion(nil, YES, 0, [NSError errorWithMessage:@"The export was canceled!"]);
+                                                          } else if(self.exportSession.error != nil) {
+                                                              completion(nil, YES, 0, self.exportSession.error);
+                                                          } else if(self.exportSession.status == AVAssetExportSessionStatusCompleted) {
                                                               NSError *videoError;
                                                               NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&videoError];
                                                               
@@ -435,10 +439,8 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                                               } else {
                                                                   completion(nil, YES, 0, videoError);
                                                               }
-                                                          } else if(self.exportSession.error) {
-                                                              completion(nil, YES, 0, self.exportSession.error);
                                                           } else {
-                                                              completion(nil, YES, 0, [NSError errorWithMessage:@"Unknown error, possibly canceled"]);
+                                                              completion(nil, YES, 0, [NSError errorWithMessage:@"Unknown error, possibly canceled."]);
                                                           }
                                                       }];
                                                   }];
@@ -446,7 +448,10 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 }
 
 /**
- Returns an SDAVAssetExportSession for use
+ Updates the classe's SDAVAssetExportSession for use. We have a single export session
+ as trancodes happen one at a time, and because uploads also occur concurrently we may need
+ to cancel the transcode in progress if the upload fails, in which we would need to be 
+ able to access the transcoder at any time.
 
  @param asset AVAsset to initialize with
  @param phasset PHAsset to initialize with
@@ -530,7 +535,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
             //Update index for next iteration
             currentIndex++;
             
-            //Create dictionary to track progress
+            //Create dictionary to track progress for the post
             NSMutableDictionary *uploadProgress = [NSMutableDictionary dictionaryWithDictionary:@{ totalUploadFileSize : @(fileSize) }];
             [self.uploadProgressDictionary setObject:uploadProgress forKey:postUploadMeta[postID]];
             
@@ -570,6 +575,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     
     weakHandleAssetCreation = handleAssetCreation;
     
+    //Start post processing process
     [self createAssetForUpload:posts[currentIndex][@"asset"]
                        withKey:posts[currentIndex][@"key"]
                     withPostID:posts[currentIndex][postID]
