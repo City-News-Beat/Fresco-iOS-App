@@ -24,6 +24,7 @@
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSSessionManager.h"
 #import "FRSNotificationManager.h"
 #import "Adjust.h"
 #import <Stripe/Stripe.h>
@@ -47,12 +48,12 @@
     
     if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[FRSAuthManager sharedInstance] logout];
+    } else {
+        [[FRSSessionManager sharedInstance] checkVersion];
     }
     
     [self configureStartDate];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
-    
-    [[FRSUploadManager sharedInstance] checkCachedUploads];
     
     EndpointManager *manager = [EndpointManager sharedInstance];
     [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];

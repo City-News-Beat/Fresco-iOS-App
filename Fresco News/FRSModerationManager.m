@@ -10,6 +10,7 @@
 #import "FRSUserManager.h"
 #import "FRSGallery.h"
 #import "FRSAppDelegate.h"
+#import "UIColor+Fresco.h"
 #import <Smooch/Smooch.h>
 
 static NSString *const blockedUsersEndpoint = @"user/blocked";
@@ -69,7 +70,7 @@ static NSString *const reportGalleryEndpoint = @"gallery/%@/report";
 }
 
 - (void)checkSuspended {
-    [[FRSUserManager sharedInstance] reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser:nil];
 
     if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
         self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];

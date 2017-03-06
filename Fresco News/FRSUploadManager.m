@@ -23,6 +23,10 @@
 #define AWS_REGION AWSRegionUSEast1
 
 
+static NSString *const postID = @"post_id";
+static NSString *const totalUploadProgress = @"uploadProgress";
+static NSString *const totalUploadFileSize = @"totalUploadFileSize";
+
 @interface FRSUploadManager ()
 
 @property (nonatomic, strong) AWSS3TransferManager *transferManager;
@@ -64,6 +68,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (BOOL)isUploading {
+    return numberOfAssets > 0;
+}
+
 /**
  This method will reset the state of the upload manager to a blank slate. 
  Should typically be called once an upload is finished or before starting a new one.
@@ -71,14 +79,15 @@
  Note: Managed objects are cleared on a forcel cancel of the upload, not here
  */
 - (void)resetState {
-    self.uploadMeta = [[NSMutableArray alloc] init];
     self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
+    self.uploadProgressDictionary = [[NSMutableDictionary alloc] init];
     totalFileSize = 0;
     totalVideoFilesSize = 0;
     totalImageFilesSize = 0;
     uploadedFileSize = 0;
     lastProgress = 0;
     toComplete = 0;
+    numberOfAssets = 0;
     completed = 0;
     uploadSpeed = 0;
     numberOfVideos = 0;
@@ -107,7 +116,6 @@
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
     NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
     signedInRequest.predicate = signedInPredicate;
-
 
     //No need to sort response, because theoretically there is 1
     NSError *fetchError;
@@ -246,34 +254,68 @@
 }
 
 /**
- Updates trancoding progress in state and subsequently broadcasts progress
+ Updates trancoding progress in state dictionary, then signals an update progress call to
+ broadcast to navigation bar
  
  @param progress Floating point of current progress for a post
  @param postID The ID of the post progress is being reported on
  */
 - (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
-    __block float transcodingProgress = 0;
     [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
-    
-    [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
-        transcodingProgress += value.floatValue;
-    }];
-    
-    float totalTranscodingProgress = 0.5f * transcodingProgress / numberOfVideos;
-    [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification
-                                                        object:nil
-                                                      userInfo:@{ @"type" : @"progress",
-                                                                  @"percentage" : @(totalTranscodingProgress) }];
+    [self updateProgress];
 }
 
-- (void)updateProgress:(int64_t)bytes {
-    uploadedFileSize += bytes;
+
+/**
+ Updates the upload progress in for the post passed in the 
+ state's upload progress dictionary
+
+ @param bytes Number of bytes just uploaded
+ @param postID The post on which to update the upload progress on
+ */
+- (void)updateUploadProgress:(int64_t)bytes forPost:(NSString *)postID{
+    NSMutableDictionary *uploadProgress = [self.uploadProgressDictionary objectForKey:postID];
     
-    float progress;
-    if (numberOfVideos > 0) {
-        progress = 0.5f + (0.5f * (uploadedFileSize * 1.0) / (totalFileSize * 1.0));
+    if([uploadProgress objectForKey:totalUploadProgress] != nil) {
+        float currentProgress = [((NSNumber *)[uploadProgress objectForKey:totalUploadProgress]) floatValue];
+        [uploadProgress setObject:@(bytes + currentProgress) forKey:totalUploadProgress];
     } else {
-        progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
+        [uploadProgress setObject:@(bytes) forKey:totalUploadProgress];
+    }
+    
+    [self updateProgress];
+}
+
+
+/**
+ Updates progress by adding together upload and trancoding progress in current state. The progresses are add together
+ to represent one signal percentage
+ */
+- (void)updateProgress {
+    //Total progress
+    float progress = 0;
+    __block float uploadingProgress = 0;
+    
+    if(toComplete > 0) {
+        [self.uploadProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *uploadProgress, BOOL *stop) {
+            uploadingProgress += [((NSNumber *)uploadProgress[totalUploadProgress]) floatValue] / [((NSNumber *)uploadProgress[totalUploadFileSize]) floatValue];
+        }];
+        //We user `numberOfAssets` instead because `toComplete` is set as trancoding occurs
+        uploadingProgress = uploadingProgress / numberOfAssets;
+    }
+    
+    //Add together by total percentages, which is 2, to consider trancoding time
+    if(numberOfVideos > 0) {
+        __block float transcodeProgress = 0;
+        
+        [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
+            transcodeProgress += value.floatValue;
+        }];
+        transcodeProgress = transcodeProgress / numberOfVideos;
+        
+        progress = (uploadingProgress + transcodeProgress) / 2;
+    } else {
+        progress = uploadingProgress;
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:FRSUploadNotification
@@ -360,21 +402,35 @@
                                                     }];
         
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
-        //Request asset and transcode into a the desired bitrate
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset
                                                         options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
 
-                                                      // create temp location to move data (PHAsset can not be weakly linked to)
+                                                      //Create temp location to move data (PHAsset can not be weakly linked to)
                                                       NSString *tempPath = [NSURL uniqueFileString];
-                                                      SDAVAssetExportSession *encoder = [self encoderWithAsset:avasset postID:postID];
-                                                      encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+                                                      NSArray *videoTracks = [avasset tracksWithMediaType:AVMediaTypeVideo];
+                                                      AVAssetTrack *videoTrack;
                                                       
+                                                      if ([videoTracks count] == 0) {
+                                                          completion(nil,
+                                                                     YES,
+                                                                     0,
+                                                                     [NSError
+                                                                      errorWithMessage:@"One of your videos couldn't be processed, please cancel your upload and try a different set of videos!"]);
+                                                      }
+                                                      
+                                                      videoTrack = [videoTracks objectAtIndex:0];
+                                                      [self updateEncoderWithAVAsset:avasset phasset:asset videoTrack:videoTrack postID:postID];
+                                                      self.exportSession.outputURL = [NSURL fileURLWithPath:tempPath];
+                                                      
+                   
                                                       //Begin encoding the video, delegate responder will update the progress
-                                                      [encoder exportAsynchronouslyWithCompletionHandler:^{
-                                                          if(encoder.error) {
-                                                              completion(nil, YES, 0, encoder.error);
-                                                          } else if(encoder.status == AVAssetExportSessionStatusCompleted) {
+                                                      [self.exportSession exportAsynchronouslyWithCompletionHandler:^{
+                                                          if(self.exportSession.status == AVAssetExportSessionStatusCancelled) {
+                                                              completion(nil, YES, 0, [NSError errorWithMessage:@"The export was canceled!"]);
+                                                          } else if(self.exportSession.error != nil) {
+                                                              completion(nil, YES, 0, self.exportSession.error);
+                                                          } else if(self.exportSession.status == AVAssetExportSessionStatusCompleted) {
                                                               NSError *videoError;
                                                               NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:&videoError];
                                                               
@@ -385,6 +441,8 @@
                                                               } else {
                                                                   completion(nil, YES, 0, videoError);
                                                               }
+                                                          } else {
+                                                              completion(nil, YES, 0, [NSError errorWithMessage:@"Unknown error, possibly canceled."]);
                                                           }
                                                       }];
                                                   }];
@@ -393,34 +451,42 @@
 
 
 /**
- Returns an SDAVAssetExportSession for use
+ Updates the classe's SDAVAssetExportSession for use. We have a single export session
+ as trancodes happen one at a time, and because uploads also occur concurrently we may need
+ to cancel the transcode in progress if the upload fails, in which we would need to be 
+ able to access the transcoder at any time.
 
  @param asset AVAsset to initialize with
+ @param phasset PHAsset to initialize with
+ @param videoTrack AVAssetTrack corresponding to the asset
  @param postID Post ID associated with the export session
  @return New initialized SDAVAssetExportSession
  */
-- (SDAVAssetExportSession *)encoderWithAsset:(AVAsset *)asset postID:(NSString *)postID{
-    SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
-    encoder.outputFileType = AVFileTypeMPEG4;
-    encoder.postID = postID;
-    encoder.delegate = self;
-    encoder.videoSettings = @{
+- (void)updateEncoderWithAVAsset:(AVAsset *)asset phasset:(PHAsset *)phasset videoTrack:(AVAssetTrack *)videoTrack postID:(NSString *)postID {
+    self.exportSession = [SDAVAssetExportSession.alloc initWithAsset:asset];
+    self.exportSession.outputFileType = AVFileTypeMPEG4;
+    self.exportSession.postID = postID;
+    self.exportSession.delegate = self;
+    float targetBitRate = [videoTrack estimatedDataRate] * .80; //Reduce bitrate by 80%
+    float targetFrameRate = [videoTrack nominalFrameRate];
+    
+    self.exportSession.videoSettings = @{
                               AVVideoCodecKey : AVVideoCodecH264,
-                              AVVideoWidthKey : @1920,
-                              AVVideoHeightKey : @1080,
-                              AVVideoCompressionPropertiesKey : @{
-                                      AVVideoProfileLevelKey : AVVideoProfileLevelH264High41,
-                                      AVVideoMaxKeyFrameIntervalDurationKey : @16
-                                      },
+                              AVVideoWidthKey : [NSNumber numberWithInteger:phasset.pixelWidth],
+                              AVVideoHeightKey : [NSNumber numberWithInteger:phasset.pixelHeight],
+                              AVVideoCompressionPropertiesKey: @
+                                  {
+                                  AVVideoAverageBitRateKey: [NSNumber numberWithFloat:targetBitRate],
+                                  AVVideoMaxKeyFrameIntervalKey: [NSNumber numberWithFloat:targetFrameRate]
+                                  }
                               };
-    encoder.audioSettings = @{
+    self.exportSession.audioSettings = @{
                               AVFormatIDKey : @(kAudioFormatMPEG4AAC),
                               AVNumberOfChannelsKey : @2,
                               AVSampleRateKey : @44100,
                               AVEncoderBitRateKey : @64000,
                               };
     
-    return encoder;
 }
 
 
@@ -433,22 +499,59 @@
     //Clear state before we begin
     [self resetState];
     
-    //Block to start uploads once we're done, called below
-    void (^startUploads)(void) = ^ {
-        //Check if we have internet
-        if([[AFNetworkReachabilityManager sharedManager] isReachable] == FALSE){
-            return [weakSelf uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection."]];
+    //Loop through and create cached uploads
+    //We do this before in order to not have to wait for transcoding to finish to have cached upload objects
+    for (NSInteger i = 0; i < [posts count]; i++) {
+        NSDictionary *post = posts[i];
+
+        //Check if the upload is already in memory as this can be populated before hand if the upload
+        if([self.managedObjects objectForKey:post[postID]] == nil) {
+            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[postID]];
         }
         
-        for (NSDictionary *uploadForPost in self.uploadMeta) {
-            [self addUploadForPost:uploadForPost[@"post_id"]
-                           andPath:uploadForPost[@"path"]
-                            andKey:uploadForPost[@"key"]
+        //Count the number of videos for the transcoding progress
+        numberOfVideos = numberOfVideos + (((PHAsset *)post[@"asset"]).mediaType == PHAssetMediaTypeVideo ? 1 : 0);
+    }
+    
+    //Set of number assets in state
+    numberOfAssets = (int)[posts count];
+    
+    __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
+
+    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us and the transcode will fail
+    FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
+        toComplete++;
+        
+        //No error, and we still have assets
+        if(!error) {
+            //We have this check in case the state is reset
+            //and assets shouldn't continue to be transcoded and uploaded
+            if(numberOfAssets == 0) return;
+            
+            totalFileSize += fileSize;
+            if(isVideo) {
+                totalVideoFilesSize += fileSize;
+            } else {
+                totalImageFilesSize += fileSize;
+            }
+            
+            //Update index for next iteration
+            currentIndex++;
+            
+            //Create dictionary to track progress for the post
+            NSMutableDictionary *uploadProgress = [NSMutableDictionary dictionaryWithDictionary:@{ totalUploadFileSize : @(fileSize) }];
+            [self.uploadProgressDictionary setObject:uploadProgress forKey:postUploadMeta[postID]];
+            
+            //Commence upload on the returned post
+            [self addUploadForPost:postUploadMeta[postID]
+                           andPath:postUploadMeta[@"path"]
+                            andKey:postUploadMeta[@"key"]
                         completion:^(id responseObject, NSError *error) {
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
-                            } else if (completed == toComplete) {
+                            } else if (completed == numberOfAssets) {
                                 //Upload has fully completed
+                                numberOfAssets = 0;
                                 [[NSNotificationCenter defaultCenter]
                                  postNotificationName:FRSUploadNotification
                                  object:nil
@@ -456,54 +559,18 @@
                                 [weakSelf trackDebugWithMessage:@"Upload Completed"];
                             }
                         }];
-        }
-    };
-    
-    //Loop through and create cached uploads
-    //We do this before in order to not have to wait for transcoding to finish to have cached upload objects
-    for (NSInteger i = 0; i < [posts count]; i++) {
-        NSDictionary *post = posts[i];
-
-        //Check if the upload is already in memory as this can be populated before hand if the upload
-        if([self.managedObjects objectForKey:post[@"post_id"]] == nil) {
-            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[@"post_id"]];
-        }
-        
-        //Count the number of videos for the transcoding progress
-        numberOfVideos = numberOfVideos + (((PHAsset *)post[@"asset"]).mediaType == PHAssetMediaTypeVideo ? 1 : 0);
-    }
-    
-    __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
-
-    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us
-    FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
-        toComplete++;
-        totalFileSize += fileSize;
-        if(isVideo) {
-            totalVideoFilesSize += fileSize;
-        } else {
-            totalImageFilesSize += fileSize;
-        }
-        
-        if(!error) {
-            [self.uploadMeta addObject:postUploadMeta];
-            currentIndex++;
             
-            //If the upload errors at some point and state is reset,
-            //this count will never add up, hence will not start uploading
-            if([self.uploadMeta count] == [posts count]) {
-                startUploads();
-            } else {
-                
-                //Needed for recursive defintion
-                FRSUploadPostAssetCompletionBlock strongHandleAssetCreation = weakHandleAssetCreation;
-                
-                //Recursive call to block to process next post
-                [self createAssetForUpload:posts[currentIndex][@"asset"]
-                                   withKey:posts[currentIndex][@"key"]
-                                withPostID:posts[currentIndex][@"post_id"]
-                                completion:strongHandleAssetCreation];
-            }
+            //Current index has exceeded posts array
+            if(currentIndex >= [posts count]) return;
+            
+            //Needed for recursive defintion
+            FRSUploadPostAssetCompletionBlock strongHandleAssetCreation = weakHandleAssetCreation;
+            
+            //Recursive call to block to process next post
+            [self createAssetForUpload:posts[currentIndex][@"asset"]
+                               withKey:posts[currentIndex][@"key"]
+                            withPostID:posts[currentIndex][postID]
+                            completion:strongHandleAssetCreation];
         } else {
             [self uploadDidErrorWithError:error];
         }
@@ -511,9 +578,10 @@
     
     weakHandleAssetCreation = handleAssetCreation;
     
+    //Start post processing process
     [self createAssetForUpload:posts[currentIndex][@"asset"]
                        withKey:posts[currentIndex][@"key"]
-                    withPostID:posts[currentIndex][@"post_id"]
+                    withPostID:posts[currentIndex][postID]
                     completion:handleAssetCreation];
 }
 
@@ -535,7 +603,7 @@
             if([assetArray count] == 0) continue;
             
             [posts addObject:@{
-                               @"post_id": upload.uploadID,
+                               postID: upload.uploadID,
                                @"key": upload.key,
                                @"asset": [assetArray firstObject]
                                }];
@@ -548,6 +616,14 @@
     }
 }
 
+
+- (void)checkInternet {
+    //Check if we have internet
+    if([[AFNetworkReachabilityManager sharedManager] isReachable] == FALSE){
+        return [self uploadDidErrorWithError:[NSError errorWithMessage:@"Unable to secure an internet connection! Please try again once you've connected to WiFi or have a celluar connection."]];
+    }
+}
+
 /**
  Cancels upload in progress
 
@@ -557,6 +633,7 @@
     [self resetState];
     [self clearCachedUploads];
     [self.transferManager cancelAll];
+    [self.exportSession cancelExport];
     
     if(withForce == YES) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
@@ -579,12 +656,13 @@
     return @{
              @"path": path,
              @"key": key,
-             @"post_id": post
+             postID: post
              };
 }
 
 /**
- Starts the AWS upload for the passed post. If completed, will set the managed object to complete and return on completion block.
+ Starts the AWS upload for the passed post. 
+ If completed, will set the managed object to complete and return on completion block.
 
  @param postID ID of the post being uploaded
  @param path File Path string in local system
@@ -608,8 +686,8 @@
     //Progress handler
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         //Send progress to be notified
-        [self updateProgress:bytesSent];
-        
+        [self updateUploadProgress:bytesSent forPost:postID];
+
         //Get time interval since lastDate (set at the bottom of this method)
         NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
         //Calculate speed at current runtime
@@ -630,13 +708,6 @@
         if (task.error) {
             completion(nil, task.error);
         } else if (task.result) {
-            for (NSDictionary *meta in self.uploadMeta) {
-                if ([meta[@"post_id"] isEqualToString:postID]) {
-                    [weakSelf.uploadMeta removeObject:meta];
-                    break;
-                }
-            }
-            
             [weakSelf trackDebugWithMessage:[NSString stringWithFormat:@"%@ completed", postID]];
             completed++;
             FRSUpload *upload = [weakSelf.managedObjects objectForKey:postID];

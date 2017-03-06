@@ -99,17 +99,12 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        completion(Nil, [NSError unAuthenticatedError]);
+        completion(nil, [NSError unAuthenticatedError]);
         return;
     }
 
-    // authenticated request to user/me (essentially user/ozetadev w/ more fields)
-    [[FRSAPIClient sharedClient]
-     get:authenticatedUserEndpoint
-     withParameters:Nil
-     completion:^(id responseObject, NSError *error) {
-         completion(responseObject, error);
-     }];
+    //Authenticated request to user/me
+    [[FRSAPIClient sharedClient] get:authenticatedUserEndpoint withParameters:Nil completion:completion];
 }
 
 - (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {

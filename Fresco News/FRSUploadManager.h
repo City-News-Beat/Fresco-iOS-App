@@ -27,14 +27,15 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
     int toComplete;
     int completed;
     float uploadSpeed;
+    int numberOfAssets;
     int numberOfVideos;
 }
 
-@property (nonatomic, strong) NSMutableArray *uploadMeta;
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSMutableDictionary *managedObjects;
 @property (nonatomic, strong) NSMutableDictionary *transcodingProgressDictionary;
-
+@property (nonatomic, strong) NSMutableDictionary *uploadProgressDictionary;
+@property (nonatomic, strong) SDAVAssetExportSession *exportSession;
 
 /**
  Used to access shared instance of this class as a singleton
@@ -42,6 +43,13 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
  @return Shared instance object of this class
  */
 + (id)sharedInstance;
+
+/**
+ Tells us if the upload manager is currently uploading
+
+ @return BOOL True if currently uploading, False if not currently uploading
+ */
+- (BOOL)isUploading;
 
 /**
  Stars a new upload with the passed posts. Posts must follow the specified format below.

@@ -30,13 +30,12 @@ typedef NS_ENUM(NSUInteger, FRSRequestAuth) {
     FRSBasicAuth
 };
 
-
 @protocol FRSApp
 - (UITabBarController *)tabBar;
 @property (nonatomic, retain) UIWindow *window;
 @end
 
-@interface FRSAPIClient : NSObject <FRSAlertViewDelegate>
+@interface FRSAPIClient : NSObject
 
 @property (nonatomic, retain) AFHTTPSessionManager *requestManager;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
@@ -48,7 +47,6 @@ typedef NS_ENUM(NSUInteger, FRSRequestAuth) {
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)delete:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters withData:(NSData *)data withName:(NSString *)name withFileName:(NSString *)fileName completion:(FRSAPIDefaultCompletionBlock)completion;
-
 
 /**
  Takes an array response and parses it for us into CoreData objects
