@@ -790,30 +790,8 @@
         return;
 
     FRSPost *post = self.orderedPosts[self.adjustedPage];
-
-    FRSGallery *parent = post.gallery;
-
-    if ((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]] && post.creator.username != nil && ![post.creator.username isEqualToString:@""]) {
-        self.nameLabel.text = [NSString stringWithFormat:@"@%@", post.creator.username];
-    } else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]) {
-        self.nameLabel.text = [NSString stringWithFormat:@"%@", post.creator.firstName];
-    } else {
-        self.nameLabel.text = @"";
-    }
-
-    if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
-
-        if ([parent.externalSource isEqualToString:@"twitter"]) {
-            NSString *toSet = [NSString stringWithFormat:@"@%@", parent.externalAccountName];
-
-            if ([toSet length] != 1) {
-                self.nameLabel.text = toSet;
-            }
-
-        } else {
-            self.nameLabel.text = parent.externalAccountName;
-        }
-    }
+    
+    self.nameLabel.text = [FRSPost bylineForPost:post];
 
     self.locationLabel.text = post.address;
     
