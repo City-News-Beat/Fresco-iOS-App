@@ -816,6 +816,11 @@
     }
 
     self.locationLabel.text = post.address;
+    
+    if ([self.locationLabel.text length] == 0) {
+        self.locationLabel.text = @"No Location";
+    }
+    
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
 
     self.nameLabel.numberOfLines = 1;

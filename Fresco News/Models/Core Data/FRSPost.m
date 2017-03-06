@@ -87,6 +87,8 @@
 
         self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
         self.creator.following = dict[@"owner"][@"following"];
+    } else if (![dict[@"parent"][@"external_account_name"] isEqual:[NSNull null]]) {
+        self.creator.firstName = (NSString *)dict[@"parent"][@"external_account_name"];
     }
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
