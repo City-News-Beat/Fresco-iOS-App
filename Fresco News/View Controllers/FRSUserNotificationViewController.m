@@ -746,6 +746,7 @@
 - (void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
+    [(FRSTabBarController *)self.tabBarController.tabBar showBell:NO];
 }
 
 #pragma mark - FRSDelegates
