@@ -384,7 +384,6 @@
           if ([tbc isKindOfClass:[FRSTabBarController class]]) {
               if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
                   [(FRSTabBarController *)self.tabBar showBell:YES];
-                  [self stopNotificationTimer];
               }
           }
       }
