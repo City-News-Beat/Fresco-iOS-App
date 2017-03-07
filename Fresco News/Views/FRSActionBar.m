@@ -11,6 +11,9 @@
 #import "UIView+Helpers.h"
 #import "FRSGallery.h"
 #import "FRSStory.h"
+#import "FRSGalleryExpandedViewController.h"
+#import "FRSStoryDetailViewController.h"
+
 
 @interface FRSActionBar ()
 
@@ -23,6 +26,8 @@
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) FRSStory *story;
 
+@property (strong, nonatomic) ShareSheetBlock readMoreBlock;
+
 @end
 
 @implementation FRSActionBar
@@ -30,7 +35,7 @@
 #define HEIGHT 44
 
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate {
-    self = [super init];
+    self = [super initWithFrame:CGRectMake(origin.x, origin.y, [UIScreen mainScreen].bounds.size.width, HEIGHT)];
 
     if (self) {
         self = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([self class]) owner:self options:nil] objectAtIndex:0];
@@ -42,10 +47,6 @@
     }
     return self;
 }
-
-
-
-#pragma mark - Private
 
 -(void)configureWithObject:(id)object {
     
@@ -62,6 +63,8 @@
     [self configureLabels];
 }
 
+#pragma mark - Action Button
+
 -(void)configureActionButton {
     NSString *actionButtonTitle;
     
@@ -75,9 +78,8 @@
         } else {
             actionButtonTitle = [NSString stringWithFormat:@"%d COMMENTS", comments];
         }
-    }
-    
-    if (self.story) {
+        
+    } else if (self.story) {
         actionButtonTitle = @"READ MORE";
     }
 
@@ -86,19 +88,76 @@
 
 }
 
+- (IBAction)actionButtonTapped:(id)sender {
+    
+    // TODO: Refactor how we push gallery/story detail views
+    
+    if (self.gallery) {
+        
+    } else if (self.story) {
+        
+    }
+}
+
+
+#pragma mark - Likes / Reposts
+
 -(void)configureLabels {
+    
     self.likeLabel.userInteractionEnabled = YES;
     self.repostLabel.userInteractionEnabled = YES;
+
+    NSNumber *likes = 0;
+    NSNumber *reposts = 0;
+    
+    BOOL liked = NO;
+    BOOL reposted = NO;
+    
+    if (self.gallery) {
+        likes = [self.gallery valueForKey:@"likes"];
+        liked = [[self.gallery valueForKey:@"liked"] boolValue];
+        reposts = [self.gallery valueForKey:@"reposts"];
+        reposted = [[self.gallery valueForKey:@"reposted"] boolValue];
+
+    } else if (self.story) {
+        likes = [self.story valueForKey:@"likes"];
+        liked = [[self.story valueForKey:@"liked"] boolValue];
+        reposts = [self.story valueForKey:@"reposts"];
+        reposted = [[self.story valueForKey:@"reposted"] boolValue];
+    }
+    
+    [self updateUIForLabel:self.likeLabel button:self.likeButton imageName:@"liked-heart" selectedImageName:@"liked-heart-filled" count:likes enabled:liked color:[UIColor frescoRedColor]];
+    
+    [self updateUIForLabel:self.repostLabel button:self.repostButton imageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green" count:reposts enabled:reposted color:[UIColor frescoGreenColor]];
+}
+
+-(void)updateUIForLabel:(UILabel *)label button:(UIButton *)button imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName count:(NSNumber *)count enabled:(BOOL)enabled color:(UIColor *)color {
+    
+    if (count >= 0) {
+        label.text = [NSString stringWithFormat:@"%@", count];
+    } else {
+        label.text = @"0";
+    }
+    
+    if (enabled && ![label.text isEqualToString:@"0"]) {
+        [button setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
+        label.textColor = color;
+        
+    } else {
+        [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+        label.textColor = [UIColor frescoMediumTextColor];
+    }
+    
 }
 
 -(void)configureSocialButtons {
     
-    [self configureSocialButton:self.likeButton withImageName:@"liked-heart" selectedImageName:@"liked-heart-filled" tapAction:@selector(handleLikeButtonTapped) selectedAction:@selector(handleButtonSelected:) dragAction:@selector(handleButtonDrag:)];
+    [self configureSocialButton:self.likeButton withImageName:@"liked-heart" selectedImageName:@"liked-heart-filled" tapAction:@selector(handleLikeButtonTapped)];
     
-    [self configureSocialButton:self.repostButton withImageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green" tapAction:@selector(handleRepostButtonTapped) selectedAction:@selector(handleButtonSelected:) dragAction:@selector(handleButtonDrag:)];
+    [self configureSocialButton:self.repostButton withImageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green" tapAction:@selector(handleRepostButtonTapped)];
 }
 
--(void)configureSocialButton:(UIButton *)button withImageName:(NSString *)image selectedImageName:(NSString *)selectedImage tapAction:(SEL)tapAction selectedAction:(SEL)selectedAction dragAction:(SEL)dragAction {
+-(void)configureSocialButton:(UIButton *)button withImageName:(NSString *)image selectedImageName:(NSString *)selectedImage tapAction:(SEL)tapAction {
     
     [button setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:selectedImage] forState:UIControlStateSelected];
@@ -106,9 +165,6 @@
     button.imageView.contentMode = UIViewContentModeScaleAspectFit;
     button.contentMode = UIViewContentModeScaleAspectFit;
     [button addTarget:self action:tapAction forControlEvents:UIControlEventTouchUpInside];
-    [button addTarget:self action:selectedAction forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:selectedAction forControlEvents:UIControlEventTouchDragEnter];
-    [button addTarget:self action:dragAction forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:button];
 }
 
@@ -160,35 +216,7 @@
     }
     
     socialLabel.text = [NSString stringWithFormat:@"%ld", count];
-    [self bounceButton:button];
 }
-
-- (void)handleButtonSelected:(UIButton *)button {
-//    [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//        button.transform = CGAffineTransformMakeScale(1.1, 1.1);
-//    } completion:nil];
-}
-
-- (void)handleButtonDrag:(UIButton *)button {
-//    [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//        button.transform = CGAffineTransformMakeScale(1, 1);
-//    } completion:nil];
-}
-
-- (void)bounceButton:(UIButton *)button {
-//    [UIView animateWithDuration:0.125 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-//        button.transform = CGAffineTransformMakeScale(1.15, 1.15);
-//    } completion:^(BOOL finished) {
-//        [UIView animateWithDuration:0.125 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//            button.transform = CGAffineTransformMakeScale(0.95, 0.95);
-//        } completion:^(BOOL finished) {
-//            [UIView animateWithDuration:0.125 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//                button.transform = CGAffineTransformMakeScale(1, 1);
-//            } completion:nil];
-//        }];
-//    }];
-}
-
 
 
 #pragma mark - Public
@@ -209,22 +237,8 @@
     }
 }
 
-
-
-#pragma mark - Delegate
-
-- (IBAction)actionButtonTapped:(id)sender {
-    [self.delegate handleActionButtonTapped:self];
-}
-
 - (IBAction)likeTapped:(id)sender {
     [self.delegate handleLike:self];
-    
-//    // Save the 'liked' state in the managed object context
-//    FRSAppDelegate *appDelegate = [[FRSAppDelegate alloc] init];
-//    NSError *error;
-//    [appDelegate.managedObjectContext save:&error];
-    
 }
 
 - (IBAction)likeLabelTapped:(id)sender {
@@ -233,10 +247,6 @@
 
 - (IBAction)repostTapped:(id)sender {
     [self.delegate handleRepost:self];
-    
-//    // Save the 'reposted' state in the managed object context
-//    FRSAppDelegate *appDelegate = [[FRSAppDelegate alloc] init];
-//    [appDelegate.managedObjectContext save:nil];
 }
 
 - (IBAction)repostLabelTapped:(id)sender {
@@ -245,55 +255,6 @@
 
 - (IBAction)shareTapped:(id)sender {
     [self.delegate handleShare:self];
-}
-
--(void)handleHeartState:(BOOL)enabled {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (enabled && ![self.likeLabel.text isEqualToString:@"0"]) {
-            [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
-            self.likeLabel.textColor = [UIColor frescoRedColor];
-            
-        } else {
-            [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
-            self.likeLabel.textColor = [UIColor frescoMediumTextColor];
-        }
-    });
-}
-
--(void)handleHeartAmount:(NSInteger)amount {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (amount >= 0) {
-            self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
-        } else {
-            self.likeLabel.text = @"0";
-        }
-    });
-}
-
--(void)handleRepostState:(BOOL)enabled {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (enabled && ![self.repostLabel.text isEqualToString:@"0"]) {
-            [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
-            self.repostLabel.textColor = [UIColor frescoGreenColor];
-        } else {
-            [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
-            self.repostLabel.textColor = [UIColor frescoMediumTextColor];
-        }
-    });
-}
-
--(void)handleRepostAmount:(NSInteger)amount {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (amount >= 0) {
-            self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
-        } else {
-            self.repostLabel.text = @"0";
-        }
-    });
 }
 
 @end

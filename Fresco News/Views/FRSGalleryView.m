@@ -180,12 +180,12 @@
 //        
 //        NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
 //        self.didRepost = [self.gallery valueForKey:@"reposted"];
-//        
+//
 //        [self.actionBar handleRepostAmount:[numReposts intValue]];
 //        [self.actionBar handleRepostState:self.didRepost];
 //        [self.actionBar handleHeartAmount:[numLikes intValue]];
 //        [self.actionBar handleHeartState:self.didLike];
-//        
+//
 //        [self.gallery setValue:@(self.didLike) forKey:@"liked"];
 //        [self.gallery setValue:@(self.didRepost) forKey:@"reposted"];
 //
@@ -824,6 +824,7 @@
         
         FRSActionBar *actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
         [actionBar configureWithObject:self.gallery];
+        actionBar.navigationController = self.delegate.navigationController;
         [self addSubview:actionBar];
     }
 }

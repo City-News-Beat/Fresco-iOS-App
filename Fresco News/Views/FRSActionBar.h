@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSNavigationBar.h"
 
 
 @protocol FRSActionBarDelegate;
@@ -16,6 +17,11 @@
 @property (weak, nonatomic) NSObject <FRSActionBarDelegate> *delegate;
 
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate;
+
+/**
+ <#Description#>
+ */
+@property (strong, nonatomic) UINavigationController *navigationController;
 
 /**
  Configures the UI with an FRSGallery or FRSStory object.
@@ -29,33 +35,33 @@
  */
 - (void)updateTitle;
 
-/**
- Updates the like button and label to reflect an enabled or disabled state.
- 
- @param enabled BOOL
- */
-- (void)handleHeartState:(BOOL)enabled;
-
-/**
- Updates the repost button and label to reflect an enabled or disabled state.
-
- @param enabled BOOL
- */
-- (void)handleRepostState:(BOOL)enabled;
-
-/**
- This updates the UILabel associated with the like button.
-
- @param amount NSInteger the amount of likes an object has.
- */
-- (void)handleHeartAmount:(NSInteger)amount;
-
-/**
- This updates the UILabel associated with the repost button.
-
- @param amount NSInteger the amount of reposts an object has.
- */
-- (void)handleRepostAmount:(NSInteger)amount;
+///**
+// Updates the like button and label to reflect an enabled or disabled state.
+// 
+// @param enabled BOOL
+// */
+//- (void)handleHeartState:(BOOL)enabled;
+//
+///**
+// Updates the repost button and label to reflect an enabled or disabled state.
+//
+// @param enabled BOOL
+// */
+//- (void)handleRepostState:(BOOL)enabled;
+//
+///**
+// This updates the UILabel associated with the like button.
+//
+// @param amount NSInteger the amount of likes an object has.
+// */
+//- (void)handleHeartAmount:(NSInteger)amount;
+//
+///**
+// This updates the UILabel associated with the repost button.
+//
+// @param amount NSInteger the amount of reposts an object has.
+// */
+//- (void)handleRepostAmount:(NSInteger)amount;
 
 /**
  This checks if the authenticated user owns the content being liked/reposted and disables the repost button accordingly.

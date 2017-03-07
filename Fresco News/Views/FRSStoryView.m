@@ -259,6 +259,7 @@
 
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar configureWithObject:self.story];
+    self.actionBar.navigationController = self.delegate.navigationController;
 
 //    [self.actionBar handleRepostState:isReposted];
 //    [self.actionBar handleRepostAmount:[numReposts intValue]];
