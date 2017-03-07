@@ -251,18 +251,19 @@
 
 - (void)configureActionsBar {
 
-    NSNumber *numLikes = [self.story valueForKey:@"likes"];
-    BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
-
-    NSNumber *numReposts = [self.story valueForKey:@"reposts"];
-    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
+//    NSNumber *numLikes = [self.story valueForKey:@"likes"];
+//    BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
+//
+//    NSNumber *numReposts = [self.story valueForKey:@"reposts"];
+//    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
 
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
+    [self.actionBar configureWithObject:self.story];
 
-    [self.actionBar handleRepostState:isReposted];
-    [self.actionBar handleRepostAmount:[numReposts intValue]];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
+//    [self.actionBar handleRepostState:isReposted];
+//    [self.actionBar handleRepostAmount:[numReposts intValue]];
+//    [self.actionBar handleHeartState:isLiked];
+//    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height - 12)];
@@ -321,50 +322,50 @@
 
 #pragma mark - Action Bar
 
-- (NSString *)titleForActionButton {
-    return @"READ MORE";
-}
-
-- (void)handleActionButtonTapped:(FRSActionBar *)actionBar {
-    if (self.readMoreBlock) {
-        self.readMoreBlock(Nil);
-    }
-    if (self.actionBlock) {
-        self.actionBlock();
-    }
-}
-
-- (void)handleShare:(FRSActionBar *)actionbar {
-    self.shareBlock(@[ [@"https://fresconews.com/story/" stringByAppendingString:self.story.uid] ]);
-}
-
-- (void)handleLike:(FRSActionBar *)actionBar {
-    if ([[self.story valueForKey:@"liked"] boolValue]) {
-        
-        [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
-        }];
-    } else {
-        [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
-        }];
-    }
-}
-
-- (void)handleRepost:(FRSActionBar *)actionBar {
-    if ([[self.story valueForKey:@"reposted"] boolValue]) {
-        [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
-        }];
-    } else {
-        [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
-        }];
-    }
-}
-
-- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-    // To be implemented in the future, pending API support.
-}
-
-- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-    // To be implemented in the future, pending API support.
-}
+//- (NSString *)titleForActionButton {
+//    return @"READ MORE";
+//}
+//
+//- (void)handleActionButtonTapped:(FRSActionBar *)actionBar {
+//    if (self.readMoreBlock) {
+//        self.readMoreBlock(Nil);
+//    }
+//    if (self.actionBlock) {
+//        self.actionBlock();
+//    }
+//}
+//
+//- (void)handleShare:(FRSActionBar *)actionbar {
+//    self.shareBlock(@[ [@"https://fresconews.com/story/" stringByAppendingString:self.story.uid] ]);
+//}
+//
+//- (void)handleLike:(FRSActionBar *)actionBar {
+//    if ([[self.story valueForKey:@"liked"] boolValue]) {
+//        
+//        [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
+//        }];
+//    } else {
+//        [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
+//        }];
+//    }
+//}
+//
+//- (void)handleRepost:(FRSActionBar *)actionBar {
+//    if ([[self.story valueForKey:@"reposted"] boolValue]) {
+//        [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
+//        }];
+//    } else {
+//        [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
+//        }];
+//    }
+//}
+//
+//- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
+//    // To be implemented in the future, pending API support.
+//}
+//
+//- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
+//    // To be implemented in the future, pending API support.
+//}
 
 @end

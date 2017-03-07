@@ -9,6 +9,8 @@
 #import "FRSActionBar.h"
 #import "FRSGalleryView.h"
 #import "UIView+Helpers.h"
+#import "FRSGallery.h"
+#import "FRSStory.h"
 
 @interface FRSActionBar ()
 
@@ -17,6 +19,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *repostButton;
 @property (weak, nonatomic) IBOutlet UILabel  *repostLabel;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
+
+@property (strong, nonatomic) FRSGallery *gallery;
+@property (strong, nonatomic) FRSStory *story;
 
 @end
 
@@ -34,9 +39,6 @@
         self.delegate = delegate;
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
         
-        [self configureUI];
-        
-        
     }
     return self;
 }
@@ -45,14 +47,43 @@
 
 #pragma mark - Private
 
--(void)configureUI {
+-(void)configureWithObject:(id)object {
+    
+    if ([object isKindOfClass:[FRSGallery class]]) {
+        self.gallery = object;
+    } else if ([object isKindOfClass:[FRSStory class]]) {
+        self.story = object;
+    } else {
+        NSLog(@"Unable to identify object for action bar: %@", object);
+    }
+    
     [self configureActionButton];
     [self configureSocialButtons];
     [self configureLabels];
 }
 
 -(void)configureActionButton {
-    [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+    NSString *actionButtonTitle;
+    
+    if (self.gallery) {
+        int comments = [[self.gallery valueForKey:@"comments"] intValue];
+        
+        if (comments == 1) {
+            actionButtonTitle = [NSString stringWithFormat:@"%d COMMENT", comments];
+        } else if (comments == 0) {
+            actionButtonTitle = @"READ MORE";
+        } else {
+            actionButtonTitle = [NSString stringWithFormat:@"%d COMMENTS", comments];
+        }
+    }
+    
+    if (self.story) {
+        actionButtonTitle = @"READ MORE";
+    }
+
+    
+    [self.actionButton setTitle:actionButtonTitle forState:UIControlStateNormal];
+
 }
 
 -(void)configureLabels {

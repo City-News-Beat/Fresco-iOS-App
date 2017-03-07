@@ -24,7 +24,7 @@
 #import "FRSUserManager.h"
 #import "FRSGalleryDetailView.h"
 #import "FRSGalleryManager.h"
-#import "FRSGalleryActionBar.h"
+#import "FRSActionBar.h"
 
 #define TEXTVIEW_TOP_PAD 12
 #define LABEL_HEIGHT 20
@@ -822,7 +822,8 @@
     if ([self.delegate shouldHaveActionBar]) {
         CGFloat yPos = self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height;
         
-        FRSGalleryActionBar *actionBar = [[FRSGalleryActionBar alloc] initWithFrame:CGRectMake(0, yPos, self.frame.size.width, 44) gallery:self.gallery];
+        FRSActionBar *actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
+        [actionBar configureWithObject:self.gallery];
         [self addSubview:actionBar];
     }
 }

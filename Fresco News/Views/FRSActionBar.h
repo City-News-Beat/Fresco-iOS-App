@@ -18,6 +18,13 @@
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate;
 
 /**
+ Configures the UI with an FRSGallery or FRSStory object.
+
+ @param object FRSGallery or FRSStory to be passed in and help configure the action bar.
+ */
+-(void)configureWithObject:(id)object;
+
+/**
  Updates the title using the titleForActionButton delegate method.
  */
 - (void)updateTitle;
