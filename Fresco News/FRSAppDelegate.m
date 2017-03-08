@@ -358,6 +358,7 @@
 // TODO: Move out of App Delegate and into FRSTabBarController
 - (void)startNotificationTimer {
     if (!notificationTimer) {
+        [self checkNotifications]; // Check notifications here to avoid 15 second delay on first call.
         notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
     }
 }
@@ -376,7 +377,7 @@
 
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
       if (error) {
-          //soft fail
+          // Return without error. The user should not be aware of this failure.
           return;
       }
       if (responseObject) {
