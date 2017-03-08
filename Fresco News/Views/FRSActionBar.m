@@ -88,7 +88,9 @@
 }
 
 - (IBAction)actionButtonTapped:(id)sender {
-    [self.delegate handleActionButtonTapped:sender];
+    if (self.delegate) {
+        [self.delegate handleActionButtonTapped:sender];
+    }
 }
 
 
@@ -296,7 +298,6 @@
         
         [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
     }
-
 }
 
 - (IBAction)likeLabelTapped:(id)sender {
@@ -308,7 +309,7 @@
 }
 
 - (IBAction)shareTapped:(id)sender {
-    
+
     NSString *shareString;;
     
     if (self.gallery) {

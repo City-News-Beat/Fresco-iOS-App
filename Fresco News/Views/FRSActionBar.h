@@ -32,34 +32,6 @@
  */
 - (void)updateTitle;
 
-///**
-// Updates the like button and label to reflect an enabled or disabled state.
-// 
-// @param enabled BOOL
-// */
-//- (void)handleHeartState:(BOOL)enabled;
-//
-///**
-// Updates the repost button and label to reflect an enabled or disabled state.
-//
-// @param enabled BOOL
-// */
-//- (void)handleRepostState:(BOOL)enabled;
-//
-///**
-// This updates the UILabel associated with the like button.
-//
-// @param amount NSInteger the amount of likes an object has.
-// */
-//- (void)handleHeartAmount:(NSInteger)amount;
-//
-///**
-// This updates the UILabel associated with the repost button.
-//
-// @param amount NSInteger the amount of reposts an object has.
-// */
-//- (void)handleRepostAmount:(NSInteger)amount;
-
 /**
  This checks if the authenticated user owns the content being liked/reposted and disables the repost button accordingly.
 
@@ -73,8 +45,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 
 @end
-
-
 
 @protocol FRSActionBarDelegate <NSObject>
 
@@ -106,23 +76,6 @@
  @param actionBar FRSActionBar
  */
 -(void)handleActionButtonTapped:(FRSActionBar *)actionBar;
-
-
-/**
- This method gets called when the user taps on the heart button.
-
- @param actionBar FRSActionBar
- */
--(void)handleLike:(FRSActionBar *)actionBar;
-
-
-/**
- This method gets called when the user taps on the repost button.
-
- @param actionBar FRSActionBar
- */
--(void)handleRepost:(FRSActionBar *)actionBar;
-
 
 /**
  Presents share action sheet with a link to the current gallery.

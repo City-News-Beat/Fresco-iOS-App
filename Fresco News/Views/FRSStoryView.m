@@ -66,7 +66,7 @@
     [self configureTopContainer];
     [self configureTitle];
     [self configureCaption];
-    [self configureActionsBar];
+    [self configureActionBar];
 
     UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height, self.frame.size.width, 0.5)];
     bottomLine.backgroundColor = [UIColor frescoShadowColor];
@@ -249,22 +249,11 @@
     [self addSubview:self.caption];
 }
 
-- (void)configureActionsBar {
-
-//    NSNumber *numLikes = [self.story valueForKey:@"likes"];
-//    BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
-//
-//    NSNumber *numReposts = [self.story valueForKey:@"reposts"];
-//    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
+- (void)configureActionBar {
 
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar configureWithObject:self.story];
     self.actionBar.navigationController = self.delegate.navigationController;
-
-//    [self.actionBar handleRepostState:isReposted];
-//    [self.actionBar handleRepostAmount:[numReposts intValue]];
-//    [self.actionBar handleHeartState:isLiked];
-//    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height - 12)];
