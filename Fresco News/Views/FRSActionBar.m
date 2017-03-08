@@ -89,21 +89,7 @@
 }
 
 - (IBAction)actionButtonTapped:(id)sender {
-    
-    // TODO: Refactor how we push gallery/story detail views
-    
-    if (self.gallery) {
-        
-        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:self.gallery];
-        [vc configureBackButtonAnimated:YES];
-        
-        [self.navigationController pushViewController:vc animated:YES];
-        
-    } else if (self.story) {
-        
-        
-        
-    }
+    [self.delegate handleActionButtonTapped:sender];
 }
 
 

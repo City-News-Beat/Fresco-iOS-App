@@ -31,7 +31,7 @@
 #define LABEL_PADDING 8
 #define CAPTION_PADDING 24
 
-@interface FRSGalleryView () <UIScrollViewDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate/*, FRSActionBarDelegate*/>
+@interface FRSGalleryView () <UIScrollViewDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate, FRSActionBarDelegate>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
@@ -42,8 +42,7 @@
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
 
-@property BOOL didLike;
-@property BOOL didRepost;
+@property (strong, nonatomic) FRSActionBar *actionBar;
 
 @end
 
@@ -818,18 +817,6 @@
     [self addSubview:self.captionLabel];
 }
 
-- (void)configureActionBar {
-    if ([self.delegate shouldHaveActionBar]) {
-        CGFloat yPos = self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height;
-        
-        FRSActionBar *actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
-        [actionBar configureWithObject:self.gallery];
-        actionBar.navigationController = self.delegate.navigationController;
-
-        [self addSubview:actionBar];
-    }
-}
-
 - (void)adjustHeight {
     NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 /* + self.actionBar.frame.size.height */;
 
@@ -1159,88 +1146,18 @@
     }
 }
 
-
-//#pragma mark - Action Bar
-
-//- (NSString *)titleForActionButton {
-//    int comments = [[self.gallery valueForKey:@"comments"] intValue];
-//    
-//    if (comments == 1) {
-//        return [NSString stringWithFormat:@"%d COMMENT", comments];
-//    } else if (comments == 0) {
-//        return @"READ MORE";
-//    }
-//    
-//    return [NSString stringWithFormat:@"%d COMMENTS", comments];
-//}
-//
-//-(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
-//    if (self.readMoreBlock) {
-//        self.readMoreBlock(Nil);
-//    }
-//}
-//
-//- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-//    [self.delegate.navigationController pushViewController:vc animated:YES];
-//}
-//
-//- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-//    vc.didTapRepostLabel = YES;
-//    [self.delegate.navigationController pushViewController:vc animated:YES];
-//}
-//
-//-(void)handleShare:(FRSActionBar *)actionbar {
-//    self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
-//}
-//
-//- (void)handleLike:(FRSActionBar *)actionBar {
-//    
-//    // UI will update regardless of success or failure.
-//    if (self.didLike) {
-//        self.gallery.likes = @([self.gallery.likes intValue] - 1);
-//        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-//            
-//        }];
-//    } else {
-//        self.gallery.likes = @([self.gallery.likes intValue] + 1);
-//        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-//        }];
-//    }
-//    
-//    // Save the 'liked' state in the managed object context
-//    FRSAppDelegate *appDelegate = [[FRSAppDelegate alloc] init];
-//    NSError *error;
-//    [appDelegate.managedObjectContext save:&error];
-//}
-//
-//- (void)handleRepost:(FRSActionBar *)actionBar {
-//    
-//    // UI will update regardless of success or failure.
-//    if (self.didRepost) {
-//        self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
-//        [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-//        }];
-//    } else {
-//        self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
-//        [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-//        }];
-//    }
-//}
-//
-///**
-// Checks if the gallery owner is the authenticated user and disables user interaction on the repost button accordingly.
-// */
-//- (void)checkGalleryOwnerForActionBar {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
-//            [self.actionBar setCurrentUser:YES];
-//        } else {
-//            [self.actionBar setCurrentUser:NO];
-//        }
-//    });
-//}
+/**
+ Checks if the gallery owner is the authenticated user and disables user interaction on the repost button accordingly.
+ */
+- (void)checkGalleryOwnerForActionBar {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
+            [self.actionBar setCurrentUser:YES];
+        } else {
+            [self.actionBar setCurrentUser:NO];
+        }
+    });
+}
 
 
 
@@ -1262,6 +1179,37 @@
     FRSProfileViewController *profile = [[FRSProfileViewController alloc] initWithUser:self.gallery.creator];
     [self.delegate.navigationController pushViewController:profile animated:YES];
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
+#pragma mark - Action Bar
+
+- (void)configureActionBar {
+    if ([self.delegate shouldHaveActionBar]) {
+        CGFloat yPos = self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height;
+        
+        self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
+        [self.actionBar configureWithObject:self.gallery];
+        self.actionBar.navigationController = self.delegate.navigationController;
+        
+        [self addSubview:self.actionBar];
+    }
+}
+
+- (void)handleActionButtonTapped:(FRSActionBar *)actionBar {
+    if (self.readMoreBlock) {
+        self.readMoreBlock(nil);
+    }
+}
+
+- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
+    [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
 @end
