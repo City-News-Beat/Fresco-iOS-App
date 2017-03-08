@@ -51,9 +51,9 @@
 -(void)configureWithObject:(id)object {
     
     if ([object isKindOfClass:[FRSGallery class]]) {
-        self.gallery = object;
+        self.gallery = (FRSGallery *)object;
     } else if ([object isKindOfClass:[FRSStory class]]) {
-        self.story = object;
+        self.story = (FRSStory *)object;
     } else {
         NSLog(@"Unable to identify object for action bar: %@", object);
     }
@@ -331,15 +331,18 @@
 
 - (IBAction)shareTapped:(id)sender {
 
-    NSString *shareString;;
+    NSString *shareString;
     
+    NSLog(@"gallery.uid: %@", self.gallery.uid);
+    NSLog(@"gallery.uid: %@", [self.gallery valueForKey:@"uid"]);
+
     if (self.gallery) {
-        shareString = [NSString stringWithFormat:@"Check out this gallery from Fresco News!!\nhttps://fresconews.com/gallery/%@", [self.gallery valueForKey:@"uid"]];
+        shareString = [NSString stringWithFormat:@"Check out this gallery from Fresco News!!\nhttps://fresconews.com/gallery/%@", self.gallery.uid];
     } else if (self.story) {
         shareString = [NSString stringWithFormat:@"Check out this story from Fresco News!!\nhttps://fresconews.com/story/%@", self.story.uid];
     }
     
-    UIActivityViewController* activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[shareString] applicationActivities:nil];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[shareString] applicationActivities:nil];
     [[self.navigationController.viewControllers firstObject] presentViewController:activityViewController animated:YES completion:nil];
 }
 
