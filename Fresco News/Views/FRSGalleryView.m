@@ -818,7 +818,7 @@
 }
 
 - (void)adjustHeight {
-    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 /* + self.actionBar.frame.size.height */;
+    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
 
     if (self.galleryFooterView) {
         height += self.galleryFooterView.frame.size.height + CAPTION_PADDING;
