@@ -83,7 +83,6 @@
         actionButtonTitle = @"READ MORE";
     }
 
-    
     [self.actionButton setTitle:actionButtonTitle forState:UIControlStateNormal];
 
 }
@@ -145,19 +144,18 @@
 
 -(void)configureSocialButtons {
     
-    [self configureSocialButton:self.likeButton withImageName:@"liked-heart" selectedImageName:@"liked-heart-filled" tapAction:@selector(handleLikeButtonTapped)];
+    [self configureSocialButton:self.likeButton withImageName:@"liked-heart" selectedImageName:@"liked-heart-filled"];
     
-    [self configureSocialButton:self.repostButton withImageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green" tapAction:@selector(handleRepostButtonTapped)];
+    [self configureSocialButton:self.repostButton withImageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green"];
 }
 
--(void)configureSocialButton:(UIButton *)button withImageName:(NSString *)image selectedImageName:(NSString *)selectedImage tapAction:(SEL)tapAction {
+-(void)configureSocialButton:(UIButton *)button withImageName:(NSString *)image selectedImageName:(NSString *)selectedImage {
     
     [button setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:selectedImage] forState:UIControlStateSelected];
     [button setImage:[UIImage imageNamed:selectedImage] forState:UIControlStateHighlighted];
     button.imageView.contentMode = UIViewContentModeScaleAspectFit;
     button.contentMode = UIViewContentModeScaleAspectFit;
-    [button addTarget:self action:tapAction forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:button];
 }
 
@@ -231,6 +229,7 @@
 }
 
 - (IBAction)likeTapped:(id)sender {
+    [self handleLikeButtonTapped];
 
     if (self.gallery) {
         if ([[self.gallery valueForKey:@"liked"] boolValue]) {
@@ -246,33 +245,62 @@
         }
     } else if (self.story) {
         
-        NSNumber *storyLikes = [self.story valueForKey:@"likes"];
-
-        
+        NSInteger storyLikes = (long)[self.story valueForKey:@"likes"];
         
         if ([[self.story valueForKey:@"liked"] boolValue]) {
-            
-//            storyLikes = [NSNumber numberWithInteger:storyLikes -1];
-            
-//            [self.story setValue:storyLikes forKey:@"likes"];
+            storyLikes--;
             [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
                 //Revert on failure
             }];
         } else {
-//            [self.story setValue:storyLikes forKey:@"likes"];
+            storyLikes++;
             [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
                 //Revert on failure
             }];
         }
+        
+        [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
     }
+}
+
+- (IBAction)repostTapped:(id)sender {
+    [self handleRepostButtonTapped];
+    
+    if (self.gallery) {
+        if ([[self.gallery valueForKey:@"reposts"] boolValue]) {
+            self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
+            [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        } else {
+            self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
+            [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        }
+    } else if (self.story) {
+        
+        NSInteger storyReposts = (long)[self.story valueForKey:@"reposts"];
+        
+        if ([[self.story valueForKey:@"reposts"] boolValue]) {
+            storyReposts--;
+            [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        } else {
+            storyReposts++;
+            [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        }
+        
+        [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
+    }
+
 }
 
 - (IBAction)likeLabelTapped:(id)sender {
     [self.delegate handleLikeLabelTapped:self];
-}
-
-- (IBAction)repostTapped:(id)sender {
-    [self.delegate handleRepost:self];
 }
 
 - (IBAction)repostLabelTapped:(id)sender {
@@ -292,17 +320,5 @@
     UIActivityViewController* activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[shareString] applicationActivities:nil];
     [[self.navigationController.viewControllers firstObject] presentViewController:activityViewController animated:YES completion:nil];
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end
