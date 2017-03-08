@@ -237,27 +237,37 @@
         if ([[self.gallery valueForKey:@"liked"] boolValue]) {
             self.gallery.likes = @([self.gallery.likes intValue] - 1);
             [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    self.gallery.likes = @([self.gallery.likes intValue] + 1);
+                }
             }];
         } else {
             self.gallery.likes = @([self.gallery.likes intValue] + 1);
             [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    self.gallery.likes = @([self.gallery.likes intValue] - 1);
+                }
             }];
         }
     } else if (self.story) {
         
-        NSInteger storyLikes = (long)[self.story valueForKey:@"likes"];
+        __block NSInteger storyLikes = (long)[self.story valueForKey:@"likes"];
         
         if ([[self.story valueForKey:@"liked"] boolValue]) {
             storyLikes--;
             [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    storyLikes++;
+                    [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
+                }
             }];
         } else {
             storyLikes++;
             [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    storyLikes--;
+                    [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
+                }
             }];
         }
         
@@ -272,33 +282,44 @@
         if ([[self.gallery valueForKey:@"reposts"] boolValue]) {
             self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
             [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
+                }
             }];
         } else {
             self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
             [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
+                }
             }];
         }
     } else if (self.story) {
         
-        NSInteger storyReposts = (long)[self.story valueForKey:@"reposts"];
+        __block NSInteger storyReposts = (long)[self.story valueForKey:@"reposts"];
         
         if ([[self.story valueForKey:@"reposts"] boolValue]) {
             storyReposts--;
             [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    storyReposts++;
+                    [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
+                }
             }];
         } else {
             storyReposts++;
             [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
-                //Revert on failure
+                if (error) { // Revert on failure
+                    storyReposts--;
+                    [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
+                }
             }];
         }
         
         [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
     }
 }
+
 
 - (IBAction)likeLabelTapped:(id)sender {
     [self.delegate handleLikeLabelTapped:self];
