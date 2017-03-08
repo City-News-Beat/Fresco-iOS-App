@@ -20,6 +20,9 @@
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 
+@property (strong, nonatomic) NSString *actionKeyToTrack;
+@property (strong, nonatomic) NSString *shareKeyToTrack;
+
 /**
  Configures the UI with an FRSGallery or FRSStory object.
 

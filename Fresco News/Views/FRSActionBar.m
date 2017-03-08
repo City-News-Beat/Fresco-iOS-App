@@ -89,6 +89,11 @@
 
 - (IBAction)actionButtonTapped:(id)sender {
     if (self.delegate) {
+        
+        if (self.actionKeyToTrack) {
+            [FRSTracker track:self.actionKeyToTrack];
+        }
+        
         [self.delegate handleActionButtonTapped:sender];
     }
 }
@@ -330,11 +335,15 @@
 }
 
 - (IBAction)shareTapped:(id)sender {
-
-    NSString *shareString;
     
-    NSLog(@"gallery.uid: %@", self.gallery.uid);
-    NSLog(@"gallery.uid: %@", [self.gallery valueForKey:@"uid"]);
+    if (self.shareKeyToTrack) {
+        [FRSTracker track:self.shareKeyToTrack];
+    }
+
+    // DEBUG: Gallery objects are returning <fault>
+    //    NSLog(@"gallery.uid: %@", self.gallery.uid);
+    //    NSLog(@"gallery.uid: %@", [self.gallery valueForKey:@"uid"]);
+    NSString *shareString;
 
     if (self.gallery) {
         shareString = [NSString stringWithFormat:@"Check out this gallery from Fresco News!!\nhttps://fresconews.com/gallery/%@", self.gallery.uid];
