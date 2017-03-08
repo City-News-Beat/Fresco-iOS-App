@@ -374,20 +374,21 @@
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         return;
     }
-
+    
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-      if (error) {
-          // Return without error. The user should not be aware of this failure.
-          return;
-      }
-      if (responseObject) {
-          FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
-          if ([tbc isKindOfClass:[FRSTabBarController class]]) {
-              if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                  [(FRSTabBarController *)self.tabBar showBell:YES];
-              }
-          }
-      }
+        if (error) {
+            // Return without error. The user should not be aware of this failure.
+            return;
+        }
+        if (responseObject) {
+            FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
+            if ([tbc isKindOfClass:[FRSTabBarController class]]) {
+                NSNumber *unseenCount = [responseObject objectForKey:@"unseen_count"];
+                if (![unseenCount isEqual:@0]) {
+                    [(FRSTabBarController *)self.tabBar showBell:YES];
+                }
+            }
+        }
     }];
 }
 
