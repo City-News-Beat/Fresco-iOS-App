@@ -13,6 +13,8 @@
 #import "FRSStory.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSStoryDetailViewController.h"
+#import "FRSGalleryManager.h"
+#import "FRSStoryManager.h"
 
 
 @interface FRSActionBar ()
@@ -25,8 +27,6 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) FRSStory *story;
-
-@property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 
 @end
 
@@ -94,7 +94,14 @@
     
     if (self.gallery) {
         
+        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:self.gallery];
+        [vc configureBackButtonAnimated:YES];
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
     } else if (self.story) {
+        
+        
         
     }
 }
@@ -238,7 +245,40 @@
 }
 
 - (IBAction)likeTapped:(id)sender {
-    [self.delegate handleLike:self];
+
+    if (self.gallery) {
+        if ([[self.gallery valueForKey:@"liked"] boolValue]) {
+            self.gallery.likes = @([self.gallery.likes intValue] - 1);
+            [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        } else {
+            self.gallery.likes = @([self.gallery.likes intValue] + 1);
+            [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        }
+    } else if (self.story) {
+        
+        NSNumber *storyLikes = [self.story valueForKey:@"likes"];
+
+        
+        
+        if ([[self.story valueForKey:@"liked"] boolValue]) {
+            
+//            storyLikes = [NSNumber numberWithInteger:storyLikes -1];
+            
+//            [self.story setValue:storyLikes forKey:@"likes"];
+            [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        } else {
+//            [self.story setValue:storyLikes forKey:@"likes"];
+            [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
+                //Revert on failure
+            }];
+        }
+    }
 }
 
 - (IBAction)likeLabelTapped:(id)sender {
@@ -254,7 +294,29 @@
 }
 
 - (IBAction)shareTapped:(id)sender {
-    [self.delegate handleShare:self];
+    
+    NSString *shareString;;
+    
+    if (self.gallery) {
+        shareString = [NSString stringWithFormat:@"Check out this gallery from Fresco News!!\nhttps://fresconews.com/gallery/%@", [self.gallery valueForKey:@"uid"]];
+    } else if (self.story) {
+        shareString = [NSString stringWithFormat:@"Check out this story from Fresco News!!\nhttps://fresconews.com/story/%@", self.story.uid];
+    }
+    
+    UIActivityViewController* activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[shareString] applicationActivities:nil];
+    [[self.navigationController.viewControllers firstObject] presentViewController:activityViewController animated:YES completion:nil];
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end

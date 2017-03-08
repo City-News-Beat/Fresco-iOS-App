@@ -825,6 +825,7 @@
         FRSActionBar *actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
         [actionBar configureWithObject:self.gallery];
         actionBar.navigationController = self.delegate.navigationController;
+
         [self addSubview:actionBar];
     }
 }

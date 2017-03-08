@@ -18,9 +18,6 @@
 
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate;
 
-/**
- <#Description#>
- */
 @property (strong, nonatomic) UINavigationController *navigationController;
 
 /**
