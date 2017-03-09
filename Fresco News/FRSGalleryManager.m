@@ -106,8 +106,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
         return;
     }
 
-    [FRSTracker track:galleryLiked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
@@ -119,7 +117,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 }
 
 - (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    [FRSTracker track:galleryUnliked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [[FRSAPIClient sharedClient] post:endpoint
@@ -141,7 +138,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
         return;
     }
 
-    [FRSTracker track:galleryReposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
 
@@ -157,8 +153,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 
 - (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
-
-    [FRSTracker track:galleryUnreposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil

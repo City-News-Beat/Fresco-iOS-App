@@ -235,18 +235,24 @@
     if (self.gallery) {
         
         NSLog(@"LIKED_FROM: %@", [self stringToTrack]);
-
+    
         if ([[self.gallery valueForKey:@"liked"] boolValue]) {
+            
+            [FRSTracker track:galleryUnliked parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"unliked_from" : [self stringToTrack]}];
+
             self.gallery.likes = @([self.gallery.likes intValue] - 1);
             [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     self.gallery.likes = @([self.gallery.likes intValue] + 1);
                 }
             }];
         } else {
+            
+            [FRSTracker track:galleryLiked parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"liked_from" : [self stringToTrack]}];
+            
             self.gallery.likes = @([self.gallery.likes intValue] + 1);
             [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     self.gallery.likes = @([self.gallery.likes intValue] - 1);
                 }
             }];
@@ -258,7 +264,7 @@
         if ([[self.story valueForKey:@"liked"] boolValue]) {
             storyLikes--;
             [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     storyLikes++;
                     [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
                 }
@@ -266,7 +272,7 @@
         } else {
             storyLikes++;
             [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     storyLikes--;
                     [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
                 }
@@ -285,16 +291,22 @@
         NSLog(@"REPOSTED_FROM: %@", [self stringToTrack]);
         
         if ([[self.gallery valueForKey:@"reposts"] boolValue]) {
+            
+            [FRSTracker track:galleryUnreposted parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"un_reposted" : [self stringToTrack]}];
+            
             self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
             [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
                 }
             }];
         } else {
+            
+            [FRSTracker track:galleryReposted parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"reposted" : [self stringToTrack]}];
+            
             self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
             [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
                 }
             }];
@@ -306,7 +318,7 @@
         if ([[self.story valueForKey:@"reposts"] boolValue]) {
             storyReposts--;
             [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     storyReposts++;
                     [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
                 }
@@ -314,7 +326,7 @@
         } else {
             storyReposts++;
             [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
-                if (error) { // Revert on failure
+                if (error) {
                     storyReposts--;
                     [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
                 }
@@ -337,7 +349,7 @@
 - (IBAction)shareTapped:(id)sender {
     
     NSLog(@"SHARED_FROM: %@", [self stringToTrack]); // Check app for other places where we might be tracking share (shareBlock implementations in view controllers)
-
+    
     // DEBUG: Gallery objects data field is returning <fault>
     //    NSLog(@"gallery.uid: %@", self.gallery.uid);
     //    NSLog(@"gallery.uid: %@", [self.gallery valueForKey:@"uid"]);
@@ -345,6 +357,8 @@
 
     if (self.gallery) {
         shareString = [NSString stringWithFormat:@"Check out this gallery from Fresco News!!\nhttps://fresconews.com/gallery/%@", self.gallery.uid];
+        [FRSTracker track:galleryShared parameters:@{@"gallery_id" : self.gallery.uid, @"shared_from" : [self stringToTrack]}];
+        
     } else if (self.story) {
         shareString = [NSString stringWithFormat:@"Check out this story from Fresco News!!\nhttps://fresconews.com/story/%@", self.story.uid];
     }
