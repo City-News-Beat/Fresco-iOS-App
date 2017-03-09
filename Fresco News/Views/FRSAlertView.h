@@ -40,8 +40,6 @@
 - (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
 - (instancetype)initTOS;
 - (instancetype)initNewStuffWithPasswordField:(BOOL)password;
-- (instancetype)initUserReportWithUsername:(NSString *)username delegate:(id)delegate;
-- (instancetype)initGalleryReportDelegate:(id)delegate;
 
 - (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 

@@ -177,6 +177,7 @@
 		CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */; };
 		CEC20DEC1E1C795400532D75 /* FRSUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEB1E1C795400532D75 /* FRSUserManager.m */; };
 		CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */; };
+		CEC468F41E691C88008FBC5A /* FRSModerationAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC468F31E691C88008FBC5A /* FRSModerationAlertView.m */; };
 		CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */; };
 		CEC5700A1E55641C000CCD95 /* FRSSettingsTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC570081E55641C000CCD95 /* FRSSettingsTextTableViewCell.m */; };
 		CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEC570091E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib */; };
@@ -634,6 +635,8 @@
 		CEC20DEB1E1C795400532D75 /* FRSUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserManager.m; sourceTree = "<group>"; };
 		CEC20DED1E1C7A0100532D75 /* FRSAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAuthManager.h; sourceTree = "<group>"; };
 		CEC20DEE1E1C7A0100532D75 /* FRSAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAuthManager.m; sourceTree = "<group>"; };
+		CEC468F21E691C88008FBC5A /* FRSModerationAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSModerationAlertView.h; sourceTree = "<group>"; };
+		CEC468F31E691C88008FBC5A /* FRSModerationAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSModerationAlertView.m; sourceTree = "<group>"; };
 		CEC570051E5559B9000CCD95 /* FRSDisableAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSDisableAccountViewController.xib; path = "Fresco News/View Controllers/Settings/FRSDisableAccountViewController.xib"; sourceTree = "<group>"; };
 		CEC570071E55641C000CCD95 /* FRSSettingsTextTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSettingsTextTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSSettingsTextTableViewCell.h"; sourceTree = "<group>"; };
 		CEC570081E55641C000CCD95 /* FRSSettingsTextTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSettingsTextTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSSettingsTextTableViewCell.m"; sourceTree = "<group>"; };
@@ -1952,6 +1955,8 @@
 				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
 				CE25D7CA1E63E8510086461E /* FRSPermissionAlertView.h */,
 				CE25D7CB1E63E8510086461E /* FRSPermissionAlertView.m */,
+				CEC468F21E691C88008FBC5A /* FRSModerationAlertView.h */,
+				CEC468F31E691C88008FBC5A /* FRSModerationAlertView.m */,
 			);
 			name = "Alert View";
 			sourceTree = "<group>";
@@ -2814,6 +2819,7 @@
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryTableViewCell.m in Sources */,
 				076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */,
+				CEC468F41E691C88008FBC5A /* FRSModerationAlertView.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,

@@ -674,9 +674,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 #pragma mark - Annotations and Overlays
 
 - (void)addUserLocationCircleOverlay {
-
-    //    CGFloat radius = self.mapView.usergLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
-
     CGFloat radius = 200;
 
     if (self.userCircle) {

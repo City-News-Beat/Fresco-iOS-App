@@ -18,6 +18,7 @@
 #import "FRSAuthManager.h"
 #import "FRSModerationManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSModerationAlertView.h"
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
@@ -25,8 +26,8 @@
 
 @property (strong, nonatomic) UILabel *titleLabel;
 
-@property (strong, nonatomic) FRSAlertView *galleryReportAlertView;
-@property (strong, nonatomic) FRSAlertView *reportUserAlertView;
+@property (strong, nonatomic) FRSModerationAlertView *galleryReportAlertView;
+@property (strong, nonatomic) FRSModerationAlertView *reportUserAlertView;
 @property (strong, nonatomic) FRSAlertView *errorAlertView;
 
 @property (strong, nonatomic) NSString *reportReasonString;
@@ -208,7 +209,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction *action) {
 
-                                                            self.galleryReportAlertView = [[FRSAlertView alloc] initGalleryReportDelegate:self];
+                                                            self.galleryReportAlertView = [[FRSModerationAlertView alloc] initGalleryReportDelegate:self];
                                                             self.galleryReportAlertView.delegate = self;
                                                             [self.galleryReportAlertView show];
 
@@ -219,7 +220,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction *action) {
 
-                                                     self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+                                                     self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
                                                      self.reportUserAlertView.delegate = self;
                                                      self.didDisplayReport = YES;
                                                      [self.reportUserAlertView show];
@@ -315,7 +316,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                    handler:^(UIAlertAction *action) {
 
                                                      self.isReportingComment = YES;
-                                                     self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+                                                     self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
                                                      self.reportUserAlertView.delegate = self;
                                                      self.didDisplayReport = YES;
                                                      [self.reportUserAlertView show];
