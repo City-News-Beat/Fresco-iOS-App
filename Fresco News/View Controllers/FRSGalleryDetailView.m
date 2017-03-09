@@ -114,7 +114,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.galleryView configureWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 500) gallery:self.gallery delegate:self];
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
     self.galleryView.delegate.navigationController = self.navigationController;
-
+    
     [self.galleryView play];
     [self focusOnPost];
     [self layoutSubviews];
@@ -725,7 +725,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - 44) delegate:self];
     [self.actionBar configureWithObject:self.gallery];
+    if (self.trackedScreen) {
+        self.actionBar.trackedScreen = FRSTrackedScreenPush;
+    } else {
+        self.actionBar.trackedScreen = FRSTrackedScreenDetail;
+    }
     self.actionBar.delegate = self;
+    
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];

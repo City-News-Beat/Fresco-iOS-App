@@ -442,8 +442,7 @@
           FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
           if ([tbc isKindOfClass:[FRSTabBarController class]]) {
               if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                  [(FRSTabBarController *)self.tabBar updateTabBarIconAtIndex:4 withImageName:@"tab-bar-bell" selectedImageName:@"tab-bar-bell-sel"];
-                  [FRSIndicatorDot addDotToTabBar:self.tabBar.tabBar atIndex:4 animated:YES];
+                  [(FRSTabBarController *)self.tabBar showBell:YES];
               }
           }
       }

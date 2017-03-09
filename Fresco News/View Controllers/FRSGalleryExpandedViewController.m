@@ -135,6 +135,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     galleryDetailView.frame = self.view.frame;
     galleryDetailView.parentVC = self;
+    galleryDetailView.trackedScreen = self.trackedScreen;
 
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
 

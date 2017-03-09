@@ -14,14 +14,24 @@
 
 @interface FRSActionBar : UIView
 
+typedef NS_ENUM(NSUInteger, FRSTrackedScreen) {
+    FRSTrackedScreenUnknown, // Enum defaults to 0 if not defined, avoid setting default to highlights.
+    FRSTrackedScreenHighlights,
+    FRSTrackedScreenStories,
+    FRSTrackedScreenProfile,
+    FRSTrackedScreenSearch,
+    FRSTrackedScreenFollowing,
+    FRSTrackedScreenPush,
+    FRSTrackedScreenDetail
+};
+
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
+
 @property (weak, nonatomic) NSObject <FRSActionBarDelegate> *delegate;
 
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate;
 
 @property (strong, nonatomic) UINavigationController *navigationController;
-
-@property (strong, nonatomic) NSString *actionKeyToTrack;
-@property (strong, nonatomic) NSString *shareKeyToTrack;
 
 /**
  Configures the UI with an FRSGallery or FRSStory object.

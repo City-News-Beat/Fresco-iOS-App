@@ -9,6 +9,7 @@
 #import "FRSScrollingViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSComment.h"
+#import "FRSActionBar.h"
 
 @class FRSGallery;
 
@@ -22,5 +23,7 @@
 
 - (instancetype)initWithGallery:(FRSGallery *)gallery;
 - (void)presentFlagCommentSheet:(FRSComment *)comment;
+
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
 @end

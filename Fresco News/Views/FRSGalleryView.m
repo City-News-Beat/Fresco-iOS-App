@@ -1181,6 +1181,7 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
+
 #pragma mark - Action Bar
 
 - (void)configureActionBar {
@@ -1190,7 +1191,6 @@
         self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
         [self.actionBar configureWithObject:self.gallery];
         self.actionBar.navigationController = self.delegate.navigationController;
-        
         [self addSubview:self.actionBar];
     }
 }
@@ -1210,6 +1210,10 @@
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     vc.didTapRepostLabel = YES;
     [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)setTrackedScreen:(FRSTrackedScreen)trackedScreen {
+    self.actionBar.trackedScreen = trackedScreen;
 }
 
 @end

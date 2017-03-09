@@ -329,4 +329,8 @@
     // To be implemented in the future, pending API support.
 }
 
+-(void)setTrackedScreen:(FRSTrackedScreen)trackedScreen {
+    self.actionBar.trackedScreen = trackedScreen;
+}
+
 @end

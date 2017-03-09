@@ -87,15 +87,11 @@
 
 }
 
-- (IBAction)actionButtonTapped:(id)sender {
-    if (self.delegate) {
-        
-        if (self.actionKeyToTrack) {
-            [FRSTracker track:self.actionKeyToTrack];
-        }
-        
-        [self.delegate handleActionButtonTapped:sender];
-    }
+-(void)updateTitle {
+    [UIView setAnimationsEnabled:NO];
+    [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+    [self.actionButton layoutIfNeeded]; // This disables the default fade animation when setting a system button title.
+    [UIView setAnimationsEnabled:YES];
 }
 
 
@@ -216,17 +212,6 @@
     socialLabel.text = [NSString stringWithFormat:@"%ld", count];
 }
 
-
-#pragma mark - Public
-
--(void)updateTitle {
-    [UIView setAnimationsEnabled:NO];
-    [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
-    [self.actionButton layoutIfNeeded]; // This disables the default fade animation when setting a system button title.
-    [UIView setAnimationsEnabled:YES];
-}
-
-
 - (void)setCurrentUser:(BOOL)isAuth {
     if (isAuth) {
         self.repostButton.userInteractionEnabled = NO;
@@ -235,10 +220,22 @@
     }
 }
 
+
+#pragma mark - Actions
+
+- (IBAction)actionButtonTapped:(id)sender {
+    if (self.delegate) {
+        [self.delegate handleActionButtonTapped:sender];
+    }
+}
+
 - (IBAction)likeTapped:(id)sender {
     [self handleLikeButtonTapped];
-
+    
     if (self.gallery) {
+        
+        NSLog(@"LIKED_FROM: %@", [self stringToTrack]);
+
         if ([[self.gallery valueForKey:@"liked"] boolValue]) {
             self.gallery.likes = @([self.gallery.likes intValue] - 1);
             [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
@@ -284,6 +281,9 @@
     [self handleRepostButtonTapped];
     
     if (self.gallery) {
+        
+        NSLog(@"REPOSTED_FROM: %@", [self stringToTrack]);
+        
         if ([[self.gallery valueForKey:@"reposts"] boolValue]) {
             self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
             [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
@@ -336,11 +336,7 @@
 
 - (IBAction)shareTapped:(id)sender {
     
-    if (self.shareKeyToTrack) {
-        [FRSTracker track:self.shareKeyToTrack];
-    }
-    
-    NSLog(@"NAVIGATION CONTROLLER: %@", self.navigationController);
+    NSLog(@"SHARED_FROM: %@", [self stringToTrack]); // Check app for other places where we might be tracking share (shareBlock implementations in view controllers)
 
     // DEBUG: Gallery objects data field is returning <fault>
     //    NSLog(@"gallery.uid: %@", self.gallery.uid);
@@ -355,6 +351,56 @@
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[shareString] applicationActivities:nil];
     [[self.navigationController.viewControllers firstObject] presentViewController:activityViewController animated:YES completion:nil];
+}
+
+#pragma mark - Analytics
+
+
+/**
+ This method sets the string that should be tracked. (`opened_from_*`, `liked_from_*`, etc.)
+
+ @return NSString screen that should be tracked.
+ */
+- (NSString *)stringToTrack {
+    
+    switch (self.trackedScreen) {
+            
+        case FRSTrackedScreenUnknown: // Enum defaults to 0 if not defined, avoid setting default to highlights.
+            return @"unknown";
+            break;
+            
+        case FRSTrackedScreenHighlights:
+            return @"highlights";
+            break;
+            
+        case FRSTrackedScreenStories:
+            return @"stories";
+            break;
+            
+        case FRSTrackedScreenProfile:
+            return @"profile";
+            break;
+            
+        case FRSTrackedScreenSearch:
+            return @"search";
+            break;
+            
+        case FRSTrackedScreenFollowing:
+            return @"following";
+            break;
+            
+        case FRSTrackedScreenPush:
+            return @"push";
+            break;
+            
+        case FRSTrackedScreenDetail:
+            return @"detail";
+            break;
+            
+        default:
+            return @"unknown";
+            break;
+    }
 }
 
 @end

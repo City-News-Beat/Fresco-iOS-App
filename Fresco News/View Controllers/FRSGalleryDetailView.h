@@ -32,6 +32,8 @@
 @property (strong, nonatomic) IBOutlet UITableView *articlesTableView;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
+
 -(void)configureUI;
 -(void)fetchCommentsWithID:(NSString*)galleryID;
 -(void)sendComment;

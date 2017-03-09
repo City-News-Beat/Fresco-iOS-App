@@ -311,7 +311,8 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-
+        FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
+        galleryCell.trackedScreen = FRSTrackedScreenFollowing;
     } else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         storyCell.storyView.navigationController = self.navigationController;

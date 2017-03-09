@@ -683,10 +683,11 @@
     if (!cell) {
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.navigationController = self.navigationController;
     }
 
     cell.gallery = self.dataSource[indexPath.row];
+    cell.navigationController = self.navigationController;
+    cell.trackedScreen = FRSTrackedScreenHighlights;
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [cell clearCell];

@@ -1274,6 +1274,7 @@
 
         if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+            galCell.trackedScreen = FRSTrackedScreenProfile;
             galCell.galleryView.delegate.navigationController = self.navigationController;
             [galCell clearCell];
 

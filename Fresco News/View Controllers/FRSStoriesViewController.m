@@ -433,7 +433,8 @@
     }
     
     cell.navigationController = self.navigationController;
-
+    cell.trackedScreen = FRSTrackedScreenStories;
+    
     if (indexPath.row == self.stories.count - 5 || (indexPath.row == self.stories.count && self.stories.count < 4)) {
         [self fetchMoreStories];
     }
@@ -472,8 +473,6 @@
 
     }
 }
-
-
 
 
 #pragma mark - Action Bar Delegate

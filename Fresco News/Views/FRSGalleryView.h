@@ -12,7 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "FRSPlayer.h"
 #import "FRSGalleryFooterView.h"
-//#import "FRSActionBar.h"
+#import "FRSActionBar.h"
 
 @class FRSGallery;
 
@@ -51,6 +51,8 @@
 @property (nonatomic) NSInteger currentPage;
 @property (nonatomic, retain) NSMutableArray *players;
 @property (strong, nonatomic) FRSGalleryFooterView *galleryFooterView;
+
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
 - (void)playerTap:(UITapGestureRecognizer *)tap;
 - (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate;

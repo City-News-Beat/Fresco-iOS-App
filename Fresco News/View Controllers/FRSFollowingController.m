@@ -131,12 +131,14 @@
         [galCell clearCell];
 
         galCell.gallery = self.feed[indexPath.row];
-
+        
+        
         galCell.readMoreBlock = ^(NSArray *array) {
           [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
         };
 
         [galCell configureCell];
+
         [[galCell galleryView] adjustHeight];
     } else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
