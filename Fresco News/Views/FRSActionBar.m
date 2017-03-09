@@ -357,7 +357,7 @@
 
     if (self.gallery) {
         shareString = [NSString stringWithFormat:@"Check out this gallery from Fresco News!!\nhttps://fresconews.com/gallery/%@", self.gallery.uid];
-        [FRSTracker track:galleryShared parameters:@{@"gallery_id" : self.gallery.uid, @"shared_from" : [self stringToTrack]}];
+        [FRSTracker track:galleryShared parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"shared_from" : [self stringToTrack]}];
         
     } else if (self.story) {
         shareString = [NSString stringWithFormat:@"Check out this story from Fresco News!!\nhttps://fresconews.com/story/%@", self.story.uid];
