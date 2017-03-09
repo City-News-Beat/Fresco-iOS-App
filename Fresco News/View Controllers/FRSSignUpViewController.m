@@ -19,6 +19,7 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSPermissionAlertView.h"
+#import "FRSSignUpAlertView.h"
 #import "NSString+Validation.h"
 #import <UXCam/UXCam.h>
 
@@ -145,7 +146,7 @@
         [self.usernameTF resignFirstResponder];
         [self.promoTF resignFirstResponder];
 
-        self.alert = [[FRSAlertView alloc] initSignUpAlert];
+        self.alert = [[FRSSignUpAlertView alloc] initSignUpAlert];
 
         [self.alert show];
     } else {

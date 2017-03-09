@@ -187,6 +187,7 @@
 		CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */; };
 		CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECB2CA61E47A7190035FDCE /* FRSPasswordChangeViewController.xib */; };
 		CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */; };
+		CEE036121E711627002ADA35 /* FRSSignUpAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE036111E711627002ADA35 /* FRSSignUpAlertView.m */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
@@ -649,6 +650,8 @@
 		CECB2CA01E46CE4C0035FDCE /* FRSAddBankAccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAddBankAccountView.m; path = "Fresco News/Views/FRSAddBankAccountView.m"; sourceTree = "<group>"; };
 		CECB2CA61E47A7190035FDCE /* FRSPasswordChangeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPasswordChangeViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPasswordChangeViewController.xib"; sourceTree = "<group>"; };
 		CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSIdentityViewController.xib; path = "Fresco News/View Controllers/Onboard/FRSIdentityViewController.xib"; sourceTree = SOURCE_ROOT; };
+		CEE036101E711627002ADA35 /* FRSSignUpAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSignUpAlertView.h; sourceTree = "<group>"; };
+		CEE036111E711627002ADA35 /* FRSSignUpAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSignUpAlertView.m; sourceTree = "<group>"; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
 		D400FA551D6DF57E008842E1 /* FRSCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentCell.h; sourceTree = "<group>"; };
@@ -1957,6 +1960,8 @@
 				CE25D7CB1E63E8510086461E /* FRSPermissionAlertView.m */,
 				CEC468F21E691C88008FBC5A /* FRSModerationAlertView.h */,
 				CEC468F31E691C88008FBC5A /* FRSModerationAlertView.m */,
+				CEE036101E711627002ADA35 /* FRSSignUpAlertView.h */,
+				CEE036111E711627002ADA35 /* FRSSignUpAlertView.m */,
 			);
 			name = "Alert View";
 			sourceTree = "<group>";
@@ -2712,6 +2717,7 @@
 				CE0A6FD31E3EA95800E67766 /* FRSPaymentManager.m in Sources */,
 				CE0AABAB1E3DF55700DD6A8A /* FRSFeedManager.m in Sources */,
 				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
+				CEE036121E711627002ADA35 /* FRSSignUpAlertView.m in Sources */,
 				D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */,
 				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
 				D433E5621DF1D574007440EC /* FRSNotificationHandler.m in Sources */,
