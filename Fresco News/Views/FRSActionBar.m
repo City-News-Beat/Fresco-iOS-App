@@ -339,8 +339,10 @@
     if (self.shareKeyToTrack) {
         [FRSTracker track:self.shareKeyToTrack];
     }
+    
+    NSLog(@"NAVIGATION CONTROLLER: %@", self.navigationController);
 
-    // DEBUG: Gallery objects are returning <fault>
+    // DEBUG: Gallery objects data field is returning <fault>
     //    NSLog(@"gallery.uid: %@", self.gallery.uid);
     //    NSLog(@"gallery.uid: %@", [self.gallery valueForKey:@"uid"]);
     NSString *shareString;

@@ -431,6 +431,8 @@
         cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
+    cell.navigationController = self.navigationController;
 
     if (indexPath.row == self.stories.count - 5 || (indexPath.row == self.stories.count && self.stories.count < 4)) {
         [self fetchMoreStories];
@@ -466,6 +468,8 @@
         };
 
         [cell configureCell];
+        cell.navigationController = self.navigationController;
+
     }
 }
 

@@ -31,7 +31,7 @@
     //    self.backgroundColor = [UIColor redColor];
 
     self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story delegate:self];
-    self.storyView.delegate.navigationController = self.navigationController;
+    self.storyView.navigationController = self.navigationController;
     
     if (self.story.caption.length == 0) {
         self.storyView.backgroundColor = [UIColor greenColor];

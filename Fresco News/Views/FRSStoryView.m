@@ -49,7 +49,7 @@
     if (self) {
         self.delegate = delegate;
         self.story = story;
-        //self.delegate.navigationController = self.navigationController;
+        self.navigationController = self.delegate.navigationController;
 
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
@@ -253,7 +253,7 @@
 
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar configureWithObject:self.story];
-    self.actionBar.navigationController = self.delegate.navigationController;
+    self.actionBar.navigationController = self.navigationController;
 
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height - 12)];
