@@ -63,10 +63,4 @@
 - (void)offScreen;
 - (void)adjustHeight;
 
-
-/**
- Updates the social UI
- */
-- (void)updateSocial;
-
 @end

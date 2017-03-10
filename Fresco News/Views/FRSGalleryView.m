@@ -50,12 +50,7 @@
 
 - (void)loadGallery:(FRSGallery *)gallery {
 
-    if ([self.gallery.uid isEqualToString:gallery.uid]) { // Gallery has been configured, update things that need to be updated and return.
-        self.gallery = gallery;
-//        [self updateSocial]; // Called when the gallery exists
-//        [self checkGalleryOwnerForActionBar];
-        return;
-    }
+    self.gallery = gallery;
 
     _hasTapped = FALSE;
 
@@ -140,7 +135,6 @@
 
 
     [self updateScrollView];
-    [self updateSocial]; // Called when configuring a new gallery
     [self adjustHeight];
 
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
@@ -148,13 +142,7 @@
     }
 
 
-    
-//    [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
-//    [self.borderLine.superview bringSubviewToFront:self.borderLine];
-//    [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
-//    [self.actionBar.actionButton.titleLabel sizeToFit];
-//    [self.actionBar updateTitle];
-//    [self checkGalleryOwnerForActionBar];
+    [self configureActionBar];
 }
 
 - (void)updateUser {
@@ -169,29 +157,6 @@
         [self.profileIV setImage:Nil];
         [self.nameLabel setOriginWithPoint:CGPointMake(0, self.nameLabel.frame.origin.y)];
     }
-}
-
-- (void)updateSocial {
-    
-//    if (self.actionBar != nil) {
-//        NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
-//        self.didLike = [self.gallery valueForKey:@"liked"];
-//        
-//        NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-//        self.didRepost = [self.gallery valueForKey:@"reposted"];
-//
-//        [self.actionBar handleRepostAmount:[numReposts intValue]];
-//        [self.actionBar handleRepostState:self.didRepost];
-//        [self.actionBar handleHeartAmount:[numLikes intValue]];
-//        [self.actionBar handleHeartState:self.didLike];
-//
-//        [self.gallery setValue:@(self.didLike) forKey:@"liked"];
-//        [self.gallery setValue:@(self.didRepost) forKey:@"reposted"];
-//
-//        if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-//            [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
-//        }
-//    }
 }
 
 - (void)updateScrollView {
@@ -227,7 +192,6 @@
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
         [self configureUI];
-        [self updateSocial]; // Called in a tableview cell
     }
     return self;
 }
@@ -250,7 +214,7 @@
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
     [self configureUI];
-//    [self updateSocial]; // Called in the expanded VC
+    [self.actionBar updateLabels]; // Called in the expanded VC
 }
 
 - (void)contentTap:(UITapGestureRecognizer *)sender {
@@ -1124,6 +1088,7 @@
 }
 
 - (void)offScreen {
+        
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player.currentItem cancelPendingSeeks];

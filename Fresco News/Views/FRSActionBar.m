@@ -25,8 +25,8 @@
 @property (weak, nonatomic) IBOutlet UILabel  *repostLabel;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 
-@property (strong, nonatomic) FRSGallery *gallery;
-@property (strong, nonatomic) FRSStory *story;
+@property (weak, nonatomic) FRSGallery *gallery;
+@property (weak, nonatomic) FRSStory *story;
 
 @end
 
@@ -52,15 +52,17 @@
     
     if ([object isKindOfClass:[FRSGallery class]]) {
         self.gallery = (FRSGallery *)object;
+//        NSLog(@"%@", self.gallery.uid);
     } else if ([object isKindOfClass:[FRSStory class]]) {
         self.story = (FRSStory *)object;
+//        NSLog(@"%@", self.story.uid);
     } else {
         NSLog(@"Unable to identify object for action bar: %@", object);
     }
     
     [self configureActionButton];
     [self configureSocialButtons];
-    [self configureLabels];
+    [self updateLabels];
 }
 
 #pragma mark - Action Button
@@ -97,27 +99,27 @@
 
 #pragma mark - Likes / Reposts
 
--(void)configureLabels {
+-(void)updateLabels {
     
     self.likeLabel.userInteractionEnabled = YES;
     self.repostLabel.userInteractionEnabled = YES;
 
-    NSNumber *likes = 0;
-    NSNumber *reposts = 0;
+    NSInteger likes = 0;
+    NSInteger reposts = 0;
     
     BOOL liked = NO;
     BOOL reposted = NO;
     
     if (self.gallery) {
-        likes = [self.gallery valueForKey:@"likes"];
+        likes = [[self.gallery valueForKey:@"likes"] integerValue];
         liked = [[self.gallery valueForKey:@"liked"] boolValue];
-        reposts = [self.gallery valueForKey:@"reposts"];
+        reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
         reposted = [[self.gallery valueForKey:@"reposted"] boolValue];
 
     } else if (self.story) {
-        likes = [self.story valueForKey:@"likes"];
+        likes = [[self.story valueForKey:@"likes"] integerValue];
         liked = [[self.story valueForKey:@"liked"] boolValue];
-        reposts = [self.story valueForKey:@"reposts"];
+        reposts = [[self.story valueForKey:@"reposts"] integerValue];
         reposted = [[self.story valueForKey:@"reposted"] boolValue];
     }
     
@@ -126,10 +128,10 @@
     [self updateUIForLabel:self.repostLabel button:self.repostButton imageName:@"repost-icon-gray" selectedImageName:@"repost-icon-green" count:reposts enabled:reposted color:[UIColor frescoGreenColor]];
 }
 
--(void)updateUIForLabel:(UILabel *)label button:(UIButton *)button imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName count:(NSNumber *)count enabled:(BOOL)enabled color:(UIColor *)color {
+-(void)updateUIForLabel:(UILabel *)label button:(UIButton *)button imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName count:(NSInteger)count enabled:(BOOL)enabled color:(UIColor *)color {
     
     if (count >= 0) {
-        label.text = [NSString stringWithFormat:@"%@", count];
+        label.text = [NSString stringWithFormat:@"%ld", count];
     } else {
         label.text = @"0";
     }
@@ -160,14 +162,6 @@
     button.imageView.contentMode = UIViewContentModeScaleAspectFit;
     button.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:button];
-}
-
-- (void)handleLikeButtonTapped {
-    [self handleSocialStateForButton:self.likeButton];
-}
-
--(void)handleRepostButtonTapped {
-    [self handleSocialStateForButton:self.repostButton];
 }
 
 -(void)handleSocialStateForButton:(UIButton *)button {
@@ -229,112 +223,253 @@
     }
 }
 
-- (IBAction)likeTapped:(id)sender {
-    [self handleLikeButtonTapped];
+
+// TODO: Abstract all the social logic into a FRSSocialController and add all social actions (like/repost/follow etc.)
+
+-(void)saveLike:(BOOL)didLike value:(NSInteger)value {
     
     if (self.gallery) {
-        
-        NSLog(@"LIKED_FROM: %@", [self stringToTrack]);
-    
-        if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-            
-            [FRSTracker track:galleryUnliked parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"unliked_from" : [self stringToTrack]}];
-
-            self.gallery.likes = @([self.gallery.likes intValue] - 1);
-            [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                if (error) {
-                    self.gallery.likes = @([self.gallery.likes intValue] + 1);
-                }
-            }];
+        if (didLike) {
+            [self.gallery setValue:[NSNumber numberWithInteger:value] forKey:@"likes"];
+            [self.gallery setValue:@1 forKey:@"liked"];
         } else {
-            
-            [FRSTracker track:galleryLiked parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"liked_from" : [self stringToTrack]}];
-            
-            self.gallery.likes = @([self.gallery.likes intValue] + 1);
-            [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                if (error) {
-                    self.gallery.likes = @([self.gallery.likes intValue] - 1);
-                }
-            }];
+            [self.gallery setValue:[NSNumber numberWithInteger:value] forKey:@"likes"];
+            [self.gallery setValue:@0 forKey:@"liked"];
         }
     } else if (self.story) {
-        
-        __block NSInteger storyLikes = (long)[self.story valueForKey:@"likes"];
-        
-        if ([[self.story valueForKey:@"liked"] boolValue]) {
-            storyLikes--;
-            [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
-                if (error) {
-                    storyLikes++;
-                    [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
-                }
-            }];
+        if (didLike) {
+            [self.story setValue:[NSNumber numberWithInteger:value] forKey:@"likes"];
+            [self.story setValue:@1 forKey:@"liked"];
         } else {
-            storyLikes++;
-            [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
-                if (error) {
-                    storyLikes--;
-                    [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
-                }
-            }];
+            [self.story setValue:[NSNumber numberWithInteger:value] forKey:@"likes"];
+            [self.story setValue:@0 forKey:@"liked"];
         }
-        
-        [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
+    } else {
+        NSLog(@"Unable to save likes");
     }
 }
 
-- (IBAction)repostTapped:(id)sender {
-    [self handleRepostButtonTapped];
+-(void)saveRepost:(BOOL)didRepost value:(NSInteger)value {
+    if (self.gallery) {
+        if (didRepost) {
+            [self.gallery setValue:[NSNumber numberWithInteger:value] forKey:@"reposts"];
+            [self.gallery setValue:@0 forKey:@"reposted"];
+        } else {
+            [self.gallery setValue:[NSNumber numberWithInteger:value] forKey:@"reposts"];
+            [self.gallery setValue:@1 forKey:@"reposted"];
+        }
+    } else if (self.story) {
+        if (didRepost) {
+            [self.story setValue:[NSNumber numberWithInteger:value] forKey:@"reposts"];
+            [self.story setValue:@0 forKey:@"reposted"];
+        } else {
+            [self.story setValue:[NSNumber numberWithInteger:value] forKey:@"reposts"];
+            [self.story setValue:@1 forKey:@"reposted"];
+        }
+    } else {
+        NSLog(@"Unable to save reposts");
+    }
+}
+
+
+// TODO: These methods can be refined
+- (IBAction)likeTapped:(id)sender {
+    
+    // Update like button and label UI
+    [self handleSocialStateForButton:self.likeButton];
     
     if (self.gallery) {
         
-        NSLog(@"REPOSTED_FROM: %@", [self stringToTrack]);
+        // Using __block to access storyLikes in the completion block
+        __block NSInteger galleryLikes = [[self.gallery valueForKey:@"likes"] integerValue];
         
-        if ([[self.gallery valueForKey:@"reposts"] boolValue]) {
+        // Check to see if user has already likes
+        if ([[self.gallery valueForKey:@"liked"] boolValue]) {
             
-            [FRSTracker track:galleryUnreposted parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"un_reposted" : [self stringToTrack]}];
+            // Track unlike action
+            [FRSTracker track:galleryUnliked parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"unliked_from" : [self stringToTrack]}];
+
+            // Subtract 1 like on the gallery
+            galleryLikes--;
+            [self saveLike:NO value:galleryLikes];
             
-            self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
-            [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            // Update on the API and revert on failure
+            [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+
                 if (error) {
-                    self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
+                    galleryLikes++;
+                    [self saveLike:YES value:galleryLikes];
                 }
             }];
         } else {
             
-            [FRSTracker track:galleryReposted parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"reposted" : [self stringToTrack]}];
+            // Track like action
+            [FRSTracker track:galleryLiked parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"liked_from" : [self stringToTrack]}];
             
-            self.gallery.reposts = @([self.gallery.reposts intValue] + 1);
-            [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            // Add 1 like on the gallery
+            galleryLikes++;
+            [self saveLike:YES value:galleryLikes];
+            
+            // Update on the API and revert on failure
+            [[FRSGalleryManager sharedInstance] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+
                 if (error) {
-                    self.gallery.reposts = @([self.gallery.reposts intValue] - 1);
+                    galleryLikes--;
+                    [self saveLike:NO value:galleryLikes];
                 }
             }];
         }
+        
+        
     } else if (self.story) {
         
-        __block NSInteger storyReposts = (long)[self.story valueForKey:@"reposts"];
+        // Using __block to access storyLikes in the completion block
+        __block NSInteger storyLikes = [[self.story valueForKey:@"likes"] integerValue];
         
-        if ([[self.story valueForKey:@"reposts"] boolValue]) {
-            storyReposts--;
-            [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
+        // Check to see if user has already liked
+        if ([[self.story valueForKey:@"liked"] boolValue]) {
+            
+            // Subtract 1 like from the story
+            storyLikes--;
+            [self saveLike:NO value:storyLikes];
+            
+            // Update on the API and revert on failure
+            [[FRSStoryManager sharedInstance] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+
                 if (error) {
-                    storyReposts++;
-                    [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
+                    storyLikes++;
+                    [self saveLike:YES value:storyLikes];
                 }
             }];
         } else {
-            storyReposts++;
-            [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
+            
+            // Add 1 like to the story
+            storyLikes++;
+            [self saveLike:YES value:storyLikes];
+            
+            // Update on the API and revert on failure
+            [[FRSStoryManager sharedInstance] likeStory:self.story completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+
                 if (error) {
-                    storyReposts--;
-                    [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
+                    storyLikes--;
+                    [self saveLike:NO value:storyLikes];
                 }
             }];
         }
         
+        // Update story object for Core Data
+        [self.story setValue:[NSNumber numberWithInteger:storyLikes] forKey:@"likes"];
+    }
+    
+    [self save];
+}
+
+- (IBAction)repostTapped:(id)sender {
+    
+    // Update repost button and label UI
+    [self handleSocialStateForButton:self.repostButton];
+    
+    if (self.gallery) {
+        
+        // Using __block to access storyReposts in the response block
+        __block NSInteger galleryReposts = [[self.gallery valueForKey:@"reposts"] integerValue];
+        
+        // Check to see if user has already reposted
+        if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
+            
+            // Track unrepost action
+            [FRSTracker track:galleryUnreposted parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"un_reposted" : [self stringToTrack]}];
+            
+            // Subtract 1 repost the gallery
+            galleryReposts--;
+            [self saveRepost:NO value:galleryReposts];
+            
+            // Update on the API and revert on failure
+            [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+
+                if (error) {
+                    galleryReposts++;
+                    [self saveRepost:YES value:galleryReposts];
+                }
+            }];
+        } else {
+            
+            // Track repost action
+            [FRSTracker track:galleryReposted parameters:@{@"gallery_id" : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"reposted" : [self stringToTrack]}];
+            
+            // Add 1 repost to the gallery
+            galleryReposts++;
+            [self saveRepost:YES value:galleryReposts];
+            
+            // Update on the API and revert on failure
+            [[FRSGalleryManager sharedInstance] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+
+                if (error) {
+                    galleryReposts--;
+                    [self saveRepost:NO value:galleryReposts];
+                }
+            }];
+        }
+        
+        // Update story object in Core Data
+        [self.story setValue:[NSNumber numberWithInteger:galleryReposts] forKey:@"reposts"];
+        
+    } else if (self.story) {
+        
+        // Using __block to access storyReposts in the response block
+        __block NSInteger storyReposts = [[self.story valueForKey:@"reposts"] integerValue];
+        
+        // Check to see if user has already reposted
+        if ([[self.story valueForKey:@"reposted"] boolValue]) {
+            
+            // Subtract 1 repost from the story
+            storyReposts--;
+            [self saveRepost:NO value:storyReposts];
+
+            // Update on the API and revert on failure
+            [[FRSStoryManager sharedInstance] unrepostStory:self.story completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+                
+                if (error) {
+                    storyReposts++;
+                    [self saveRepost:YES value:storyReposts];
+                }
+            }];
+        } else {
+            
+            // Add 1 repost to the story
+            storyReposts++;
+            
+            // Update on the API and revert on failure
+            [[FRSStoryManager sharedInstance] repostStory:self.story completion:^(id responseObject, NSError *error) {
+                
+                [self logError:error andResponse:responseObject]; // Debug
+                
+                if (error) {
+                    storyReposts--;
+                    [self saveRepost:NO value:storyReposts];
+                }
+            }];
+        }
+        
+        // Update story object in Core Data
         [self.story setValue:[NSNumber numberWithInteger:storyReposts] forKey:@"reposts"];
     }
+    
+    [self save];
 }
 
 
@@ -366,6 +501,28 @@
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[shareString] applicationActivities:nil];
     [[self.navigationController.viewControllers firstObject] presentViewController:activityViewController animated:YES completion:nil];
 }
+
+-(void)save {
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    
+    [delegate.coreDataController.managedObjectContext performBlock:^{
+        NSError *saveError;
+
+        if (![[delegate managedObjectContext] save:&saveError]) {
+            NSLog(@"ERROR: %@", saveError);
+        } else {
+            NSLog(@"SAVED");
+        }
+    }];  
+}
+
+// DEBUG
+-(void)logError:(NSError *)error andResponse:(id)response {
+    NSLog(@"ERROR: %@, RESPONSE: %@", error, response);
+}
+
 
 #pragma mark - Analytics
 

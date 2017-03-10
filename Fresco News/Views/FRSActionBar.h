@@ -33,6 +33,16 @@ typedef NS_ENUM(NSUInteger, FRSTrackedScreen) {
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 
+@property NSInteger likes;
+@property NSInteger reposts;
+@property BOOL liked;
+@property BOOL reposted;
+
+/**
+ Updates the UI on the like and repost labels.
+ */
+-(void)updateLabels;
+
 /**
  Configures the UI with an FRSGallery or FRSStory object.
 
