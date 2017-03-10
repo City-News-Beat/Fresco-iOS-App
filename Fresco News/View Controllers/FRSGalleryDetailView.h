@@ -10,6 +10,8 @@
 #import "FRSGalleryView.h"
 #import "FRSGalleryExpandedViewController.h"
 
+@class DGElasticPullToRefreshLoadingViewCircle;
+
 @protocol FRSGalleryDetailViewDelegate <NSObject>
 @end
 

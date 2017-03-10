@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSGallery.h"
-#import "FRSGalleryCell.h"
-#import "FRSScrollingViewController.h"
+#import "FRSGalleryTableViewCell.h"
 #import "FRSStoryView.h"
 
 @protocol FRSFollowingTableDelegate
@@ -28,7 +27,7 @@
     BOOL isScrollingFast;
 }
 
-@property (retain, nonatomic) NSArray *galleries;
+@property (retain, nonatomic) NSArray *feed;
 @property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 

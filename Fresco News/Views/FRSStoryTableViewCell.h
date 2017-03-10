@@ -12,7 +12,9 @@
 
 @class FRSStory;
 
-@interface FRSStoryCell : UITableViewCell <FRSStoryViewDelegate>
+static NSString *const storyCellIdentifier = @"story-cell";
+
+@interface FRSStoryTableViewCell : UITableViewCell <FRSStoryViewDelegate>
 
 @property (strong, nonatomic) FRSStoryView *storyView;
 @property (strong, nonatomic) FRSStory *story;
@@ -27,7 +29,5 @@
 
 - (void)clearCell;
 - (void)configureCell;
-- (void)play;
-- (void)pause;
 
 @end

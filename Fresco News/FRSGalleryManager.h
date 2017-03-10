@@ -14,7 +14,26 @@
 
 + (instancetype)sharedInstance;
 
+
+/**
+ Creates a new gallery with provided dictionary
+
+ @param galleryDict Parameters of gallery of being created
+ @param completion Completion handler
+ */
 - (void)createGallery:(NSDictionary *)galleryDict completion:(FRSAPIDefaultCompletionBlock)completion;
+
+
+/**
+ Creates a new gallery that is being submitted. Ensures order of the assets passed is in the same
+ order when sent up in the body of the request
+
+ @param params Parameters of the gallery being created
+ @param assets Assets to create with
+ @param completion Completion handler
+ */
+- (void)createGalleryWithParams:(NSDictionary*)params andAssets:(NSArray *)assets completion:(FRSAPIDefaultCompletionBlock)completion;
+
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion;

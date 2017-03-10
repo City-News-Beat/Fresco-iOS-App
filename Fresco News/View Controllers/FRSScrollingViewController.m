@@ -53,7 +53,6 @@
 }
 
 - (void)configureTableView {
-
     NSInteger height = self.view.frame.size.height - 64;
     if (self.hiddenTabBar)
         height += 49;
@@ -78,6 +77,11 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if (self.disableCollapse) {
+        return;
+    }
+    
     NSInteger currentContentOffY = scrollView.contentOffset.y;
     NSInteger currentContentOffX = scrollView.contentOffset.x;
     NSInteger difference = currentContentOffY - self.prevContentOffY;
@@ -90,8 +94,6 @@
     } else if (difference == 0 && self.scrollDirection == UIScrollViewScrollDirectionDown) {
         difference = 1;
     }
-
-    NSInteger scrollDifference = currentContentOffY - self.prevDirectOffSetY;
 
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
@@ -136,7 +138,6 @@
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    //NSLog(@"Y OFFSET: %f",scrollView.contentOffset.y);
     if (self.scrollDirection == UIScrollViewScrollDirectionDown && scrollView.contentOffset.y > self.navBarHeight * 2) {
         [UIView animateWithDuration:0.2
                               delay:0.0
@@ -173,7 +174,6 @@
         [item setTintColor:[item.tintColor colorWithAlphaComponent:1]];
     }
     self.navigationItem.titleView.alpha = 1.0;
-    //[self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, self.navBarHeight-4, self.navigationItem.titleView.bounds.size.width,5)];
 }
 
 - (void)collapseNavBar:(NSArray *)barButtonItems {
@@ -182,7 +182,6 @@
         [item setTintColor:[item.tintColor colorWithAlphaComponent:0.0]];
     }
     self.navigationItem.titleView.alpha = 0.0;
-    //[self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, (self.navBarHeight/2)-4, self.navigationItem.titleView.bounds.size.width,5)];
 }
 
 - (void)expandNavBarBy:(float)value BarButtonItems:(NSArray *)barButtonItems {
@@ -193,7 +192,6 @@
     }
     //Change titleview's alpha & y origin
     self.navigationItem.titleView.alpha = (value / (self.navBarHeight));
-    //[self.navigationItem.titleView setFrame:CGRectMake(self.navigationItem.titleView.frame.origin.x, value+(self.navBarHeight/2)-4, self.navigationItem.titleView.frame.size.width,self.navigationItem.titleView.frame.size.height)];
 }
 
 - (void)condenseNavBarBy:(float)value BarButtonItems:(NSArray *)barButtonItems {
@@ -202,7 +200,6 @@
         [item setTintColor:[item.tintColor colorWithAlphaComponent:(value / (self.navBarHeight))]];
     }
     self.navigationItem.titleView.alpha = (value / (self.navBarHeight));
-    //[self.navigationItem.titleView setFrame:CGRectMake(self.navigationItem.titleView.frame.origin.x, value+(self.navBarHeight/2)-4, self.navigationItem.titleView.frame.size.width,self.navigationItem.titleView.frame.size.height)];
 }
 
 
@@ -229,7 +226,6 @@
 
         self.scrollDirection = UIScrollViewScrollDirectionUp;
     } else if (difference > 0) {
-
         if (self.scrollDirection == UIScrollViewScrollDirectionUp || !self.scrollDirection) {
             self.scrollDirectionChanged = YES;
             self.prevDirectOffSetY = difference;

@@ -7,7 +7,6 @@
 //
 
 #import "FRSEmailViewController.h"
-#import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSUserManager.h"
 #import "NSString+Validation.h"

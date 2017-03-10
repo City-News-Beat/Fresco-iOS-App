@@ -833,11 +833,11 @@
 - (void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
 
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
 }
 
 - (void)dismiss {
@@ -1411,7 +1411,7 @@
     //  [digestion setObject:password forKey:@"verify_password"];
     //}
 
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
         [digestion setObject:password forKey:@"password"];
@@ -1428,8 +1428,7 @@
 
     [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
                                                         completion:^(id responseObject, NSError *error) {
-                                                          [[FRSUserManager sharedInstance] saveUserFields:responseObject];
-
+                                                          [[FRSUserManager sharedInstance] saveUserFields:responseObject andSynchronously:NO];
                                                           if (responseObject && !error) {
                                                               [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
                                                               [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];

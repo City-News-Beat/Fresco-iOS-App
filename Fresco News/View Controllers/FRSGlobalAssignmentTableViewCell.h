@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GlobalAssignmentsTableViewCell : UITableViewCell
+static NSString *const globalAssignmentCellIdentifer = @"global-assignment-cell";
+
+@interface FRSGlobalAssignmentTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) NSDictionary *assignment;
 @property (strong, nonatomic) NSArray *outlets;

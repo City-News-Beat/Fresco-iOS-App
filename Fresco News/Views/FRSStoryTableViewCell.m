@@ -6,21 +6,12 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSStoryCell.h"
-
+#import "FRSStoryTableViewCell.h"
 #import "FRSStory.h"
-
-#import "UIView+Helpers.h" //UIView+Helpers.h vs BaseView.h
+#import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
-@implementation FRSStoryCell
-
-- (void)clickedImageAtIndex:(NSInteger)imageIndex {
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib]; // lord have mercy
-}
+@implementation FRSStoryTableViewCell
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
@@ -28,7 +19,6 @@
 
 - (void)configureCell {
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
-    //    self.backgroundColor = [UIColor redColor];
 
     self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story delegate:self];
     self.storyView.navigationController = self.navigationController;
@@ -36,7 +26,6 @@
     
     if (self.story.caption.length == 0) {
         self.storyView.backgroundColor = [UIColor greenColor];
-        //        self.storyView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     }
 
     self.storyView.actionBlock = self.actionBlock;
@@ -54,10 +43,7 @@
       }
     };
 }
-- (void)play {
-}
-- (void)pause {
-}
+
 - (void)clearCell {
     [self.storyView removeFromSuperview];
 }

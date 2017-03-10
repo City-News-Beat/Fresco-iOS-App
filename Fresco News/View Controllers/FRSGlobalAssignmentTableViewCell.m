@@ -6,12 +6,12 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "GlobalAssignmentsTableViewCell.h"
+#import "FRSGlobalAssignmentTableViewCell.h"
 #import <Haneke/Haneke.h>
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "NSString+Fresco.h"
 
-@implementation GlobalAssignmentsTableViewCell {
+@implementation FRSGlobalAssignmentTableViewCell {
     __strong IBOutlet NSLayoutConstraint *outletWidthConstraint;
     __weak IBOutlet NSLayoutConstraint *titleLabelHeightConstraint;
     __weak IBOutlet UILabel *titleLabel;

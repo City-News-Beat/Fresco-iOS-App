@@ -7,14 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Fabric/Fabric.h>
-#import <TwitterKit/TwitterKit.h>
-#import <Crashlytics/Crashlytics.h>
-#import <Smooch/Smooch.h>
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotifications/UserNotifications.h>
-#import "Adjust.h"
 #import "FRSCoreDataController.h"
+#import "FRSAlertView.h"
 
 // quick actions -- app delegate
 static NSString *const assignmentsAction = @"FRSAssignmentsAction";
@@ -27,15 +23,14 @@ static NSString *const takePhotoAction = @"FRSPhotoAction";
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) FRSCoreDataController *coreDataController;
+@property (nonatomic, strong) FRSAlertView *errorAlertView;
 @property (nonatomic, retain) id tabBarController;
 @property BOOL didPresentPermissionsRequest;
+@property BOOL isPresentingError;
 
 - (void)saveContext;
 - (UITabBarController *)tabBar;
-- (BOOL)isFirstRun;
 - (void)updateTabBarToUser;
-- (void)clearKeychain;
-- (void)restartUpload;
 - (void)startNotificationTimer;
 - (void)stopNotificationTimer;
 - (void)registerForPushNotifications;
@@ -46,5 +41,13 @@ static NSString *const takePhotoAction = @"FRSPhotoAction";
  @return NSManagedObjectContext from FRSCoreDataController
  */
 - (NSManagedObjectContext *)managedObjectContext;
+
+/**
+ Presents error on window
+
+ @param error Error to display
+ @param title Title of alert view
+ */
+- (void)presentError:(NSError *)error withTitle:(NSString *)title;
 
 @end

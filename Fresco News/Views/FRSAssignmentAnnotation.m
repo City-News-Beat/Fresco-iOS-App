@@ -28,7 +28,7 @@
         if ([assignment.title isKindOfClass:[NSString class]]) {
             self.name = assignment.title;
         } else {
-            self.name = @"Unknown Assignment";
+            self.name = @"Assignment";
         }
 
         if ([assignment.caption isKindOfClass:[NSString class]]) {
@@ -44,6 +44,8 @@
         self.coordinate = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
 
         self.isAcceptable = [assignment.acceptable boolValue];
+        
+        self.assignment = assignment;
     }
     return self;
 }
@@ -55,5 +57,6 @@
 - (NSString *)title {
     return self.name;
 }
+
 @end
 

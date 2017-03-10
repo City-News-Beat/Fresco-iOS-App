@@ -10,8 +10,10 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSComment.h"
 #import "FRSActionBar.h"
+#import "FRSBaseViewController.h"
 
 @class FRSGallery;
+@class FRSComment;
 
 @interface FRSGalleryExpandedViewController : FRSBaseViewController <UITextViewDelegate> {
     NSDate *dateEntered;

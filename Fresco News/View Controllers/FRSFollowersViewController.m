@@ -69,18 +69,12 @@
     }
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-
-    //    [self reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
     [self showTabBarAnimated:YES];
-
-    if (!self.hasLoadedOnce) {
-        //[self reloadData];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -374,9 +368,9 @@
     CGRect newFrame = self.view.frame;
     newFrame.origin.y = self.view.frame.origin.y + 64;
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height + 20);
-    //self.tableView = [[UITableView alloc] initWithFrame:newFrame style:UITableViewStylePlain];
+
     [self.tableView setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -400,16 +394,6 @@
 }
 
 - (void)reloadData {
-    /*if(!self.followerSpinner || !self.followingSpinner){
-        [self configureSpinner];
-    }else{
-     
-        [self.followerSpinner startAnimating];
-        self.followerSpinner.hidden = false;
-        [self.followingSpinner startAnimating];
-        self.followingSpinner.hidden = false;
-    }*/
-
     [self reloadFollowing];
     [self reloadFollowers];
 }
@@ -458,7 +442,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     if (self.tableView == tableView) {
         return self.followerArray.count;
     }

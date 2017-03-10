@@ -7,7 +7,7 @@
 //
 
 #import "FRSStoryDetailViewController.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "MagicalRecord.h"
 #import "FRSStory+CoreDataProperties.h"
 #import "DGElasticPullToRefresh.h"
@@ -25,7 +25,6 @@
 
 @implementation FRSStoryDetailViewController
 @synthesize stories = _stories, story = _story, navigationController;
-static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,7 +47,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureWithGalleries:(NSArray *)galleries {
-
     self.stories = [[NSMutableArray alloc] init];
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -61,7 +59,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
         //Loop is finished
         if (galleriesArray.count == self.stories.count) {
-
             dispatch_async(dispatch_get_main_queue(), ^{
               [self.galleriesTable reloadData];
               [self.loadingView stopLoading];
@@ -159,20 +156,16 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)setupTableView {
-    // [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:@"gallery-cell"];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
-    //self.galleriesTable.scrollEnabled = NO;
+    [self.galleriesTable registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
 }
 
 - (void)configureNavigationBar {
-
     [self configureBackButtonAnimated:YES];
 
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-
-    //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
@@ -189,7 +182,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)dismissDetail {
-
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -206,22 +198,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-
-    if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.navigationController = self.navigationController;
-    }
-
+    FRSGalleryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
+    cell.navigationController = self.navigationController;
     cell.delegate = self;
 
     return cell;
 }
 
 - (void)readMore:(NSIndexPath *)indexPath {
-
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
 
     [vc configureBackButtonAnimated:YES];
@@ -234,7 +218,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)playerWillPlay:(AVPlayer *)play {
     for (UITableView *tableView in @[ self.galleriesTable ]) {
-        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
             for (FRSPlayer *player in cell.galleryView.players) {
                 if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
                     [player pause];
@@ -251,7 +235,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
           BOOL taken = FALSE;
 
-          for (FRSGalleryCell *cell in visibleCells) {
+          for (FRSGalleryTableViewCell *cell in visibleCells) {
 
               if (cell.frame.origin.y - self.galleriesTable.contentOffset.y < 300 && cell.frame.origin.y - self.galleriesTable.contentOffset.y > 100) {
 
@@ -277,9 +261,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
     }
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // sloppy not to have a check here
-    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+    if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
         return;
     }
 
@@ -290,7 +274,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     cell.gallery = self.stories[indexPath.row];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-      [cell clearCell];
       [cell configureCell];
     });
 
@@ -320,11 +303,17 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)fetchGalleries {
-
     self.stories = [[NSMutableArray alloc] init];
 
     [[FRSStoryManager sharedInstance] fetchGalleriesInStory:self.story.uid
                                                  completion:^(NSArray *galleries, NSError *error) {
+                                                   [self.loadingView stopLoading];
+                                                   [self.loadingView removeFromSuperview];
+                                                   self.loadingView.alpha = 0;
+
+                                                   if (error) {
+                                                       return;
+                                                   }
 
                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                    NSArray *galleriesArray = galleries;
@@ -333,30 +322,23 @@ static NSString *galleryCell = @"GalleryCellReuse";
                                                        FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
                                                        [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
                                                        [self.stories addObject:galleryObject];
-
-                                                       //self.galleriesTable.scrollEnabled = YES;
                                                    }
 
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                      [self.galleriesTable reloadData];
-                                                     [self.loadingView stopLoading];
-                                                     [self.loadingView removeFromSuperview];
-                                                     self.loadingView.alpha = 0;
                                                    });
                                                  }];
 }
 
 - (void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
-
     NSArray *filteredArray = [self.stories filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
 
-    if (!filteredArray.count)
+    if (!filteredArray.count) {
         return;
-    // push gallery detail view
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (indexPath.row >= self.stories.count) {
         return 0;
     }
@@ -372,7 +354,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureSpinner {
-
     if (self.loadingView) {
         return;
     }
@@ -406,7 +387,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)pausePlayers {
     for (UITableView *tableView in @[ self.galleriesTable ]) {
-        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
             for (FRSPlayer *player in cell.galleryView.players) {
                 if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
                     [player pause];

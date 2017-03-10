@@ -17,5 +17,5 @@
 @property (strong, nonatomic) UIView *titleView;
 
 - (void)configureFRSNavigationBarWithTitle:(NSString *)title;
-- (void)updateUserIcon;
+
 @end

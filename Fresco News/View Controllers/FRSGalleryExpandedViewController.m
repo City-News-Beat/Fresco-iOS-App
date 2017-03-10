@@ -9,6 +9,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSGallery.h"
 #import "FRSArticle.h"
+#import "FRSComment.h"
 #import "PeekPopArticleViewController.h"
 #import "Haneke.h"
 #import "FRSAlertView.h"
@@ -78,6 +79,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 
 }
@@ -138,8 +140,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView.trackedScreen = self.trackedScreen;
 
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
-
-    //NSLog(@"Gallery Object: \n%@", self.gallery.jsonObject);
 }
 
 - (void)configureNavigationBar {

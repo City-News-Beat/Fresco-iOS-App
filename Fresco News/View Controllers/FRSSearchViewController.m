@@ -7,9 +7,8 @@
 //
 
 #import "FRSSearchViewController.h"
-#import "FRSTableViewCell.h"
 #import "FRSGallery.h"
-#import "FRSGalleryCell.h"
+#import "FRSGalleryTableViewCell.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
@@ -482,7 +481,7 @@ static NSInteger const previewCount = 3;
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSNearbyUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:nearbyUserCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSSeeAllLabelTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:seeAllCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSStorySearchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storySearchCellIdentifier];
-    [self.tableView registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCellIdentifier];
+    [self.tableView registerClass:[FRSGalleryTableViewCell class] forCellReuseIdentifier:galleryCellIdentifier];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -502,9 +501,7 @@ static NSInteger const previewCount = 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     if (section == userIndex) {
-
         if (self.usersDicts.count == 0) {
             return 0;
         }
@@ -526,7 +523,6 @@ static NSInteger const previewCount = 3;
         return self.usersDicts.count + 2;
     }
     if (section == storyIndex) {
-
         if (_stories.count == 0) {
             return 0;
         }
@@ -619,7 +615,6 @@ static NSInteger const previewCount = 3;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-
     if (section == galleryIndex) {
         return [UIView new];
     }
@@ -651,7 +646,7 @@ static NSInteger const previewCount = 3;
     return view;
 }
 
-- (UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const emptyCellIdentifier = @"empty-cell";
 
     if (indexPath.section == userIndex) {
@@ -726,9 +721,9 @@ static NSInteger const previewCount = 3;
         return cell;
     }
     else if (indexPath.section == galleryIndex) {
-        FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
+        FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
         if (!cell) {
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];
+            cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];
         }
         cell.navigationController = self.navigationController;
         cell.trackedScreen = FRSTrackedScreenSearch;
@@ -747,7 +742,6 @@ static NSInteger const previewCount = 3;
         };
 
         dispatch_async(dispatch_get_main_queue(), ^{
-          [cell clearCell];
           [cell configureCell];
         });
         UITableViewCell *cellToReturn = (UITableViewCell *)cell;
@@ -774,9 +768,6 @@ static NSInteger const previewCount = 3;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

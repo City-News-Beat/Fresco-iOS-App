@@ -52,7 +52,6 @@
 }
 
 - (void)play {
-
     [[AVAudioSession sharedInstance]
         setCategory:AVAudioSessionCategoryPlayback
               error:nil];
@@ -62,7 +61,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
 
     if (!_hasNotifs) {
-        _hasNotifs = FALSE;
+        _hasNotifs = NO;
         self.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -71,7 +70,7 @@
                                                    object:[self currentItem]];
     }
     if (self.playBlock) {
-        self.playBlock(TRUE, self);
+        self.playBlock(YES, self);
     }
 }
 
@@ -86,7 +85,7 @@
     [super pause];
 
     if (self.playBlock) {
-        self.playBlock(FALSE, self);
+        self.playBlock(NO, self);
     }
 }
 

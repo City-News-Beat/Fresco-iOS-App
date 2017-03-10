@@ -41,7 +41,7 @@ static NSString *const nearbyUsersEndpoint = @"user/suggestions";
                               @"stories" : @(TRUE),
                               @"galleries" : @(TRUE),
                               @"users" : @(TRUE),
-                              @"limit" : @999 };
+                              @"limit" : @100 };
 
     [[FRSAPIClient sharedClient] get:searchEndpoint
                       withParameters:params

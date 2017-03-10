@@ -9,6 +9,7 @@
 #import "FRSGalleryStatusView.h"
 #import "FRSGalleryStatusTableViewCell.h"
 #import "FRSGalleryDetailView.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "Haneke.h"
 #import "FRSModerationManager.h"
 
@@ -61,6 +62,7 @@ enum {
     Highlighted = 3,
     Deleted = 4
 };
+
 typedef int GalleryStatusRating;
 
 - (void)configureWithArray:(NSArray *)postPurchases rating:(int)rating {

@@ -22,6 +22,8 @@
 #import "FRSGalleryManager.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSActionBar.h"
+#import "FRSSnapKit.h"
+#import "DGElasticPullToRefresh.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
@@ -96,6 +98,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
                 action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.galleryView addGestureRecognizer:tap];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
@@ -104,6 +107,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.scrollView.showsVerticalScrollIndicator = NO;
     
     [self.actionBar updateLabels];
+
+    // This sizes the scrollview to the height of the gallery view and the articles tableview
+    // only if there are no comments, or the comments tableview has not yet loaded.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.comments.count == 0) {
+            self.scrollView.contentSize = CGSizeMake(self.frame.size.width, self.galleryView.frame.size.height + self.articlesTableView.frame.size.height + TOP_NAV_BAR_HEIGHT);
+        }
+    });
 }
 
 
@@ -141,16 +152,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         [self getGalleryPurchases];
         
-        if (self.gallery.verificationRating == 0) { // Not Rated
+        if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:0]]) { // Not Rated
             verificationLabel.text = @"PENDING VERIFICATION";
             verificationContainerView.backgroundColor = [UIColor frescoOrangeColor];
-        } else if (self.gallery.verificationRating == 1) { // Skipped
+        } else if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:1]]) { // Skipped
             verificationLabel.text = @"NOT VERIFIED";
             verificationContainerView.backgroundColor = [UIColor frescoLightTextColor];
-        } else if (self.gallery.verificationRating == 2 || self.gallery.verificationRating == 3) { // Verified or Highlighted
+        } else if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:2]]|| [self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:3]]) { // Verified or Highlighted
             verificationLabel.text = @"VERIFIED";
             verificationContainerView.backgroundColor = [UIColor frescoGreenColor];
-        } else if (self.gallery.verificationRating == 4) { // Deleted
+        } else if ([self.gallery.rating isEqualToNumber:[NSNumber numberWithInteger:4]]) { // Deleted
             verificationLabel.text = @"DELETED";
             verificationContainerView.backgroundColor = [UIColor frescoRedColor];
         }
@@ -221,7 +232,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (IBAction)showGalleryStatus:(id)sender {
     galleryStatusPopup = (FRSGalleryStatusView *)[[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryStatusView" owner:self options:nil] objectAtIndex:0];
-    [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)self.gallery.verificationRating];
+    [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)[self.gallery.rating integerValue]];
     [[UIApplication sharedApplication].keyWindow addSubview:galleryStatusPopup];
     galleryStatusPopup.parentVC = self.parentVC;
     galleryStatusPopup.parentView = self;
@@ -298,6 +309,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
 //    [self.actionBar updateTitle];
     [commentsTableView reloadData];
+    
+    commentsTableView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)configureCommentsSpinner {
@@ -536,7 +549,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [showCommentsButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
             showCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             showCommentsButton.contentEdgeInsets = UIEdgeInsetsMake(0, DEFAULT_PADDING, 0, 0);
-
+            showCommentsButton.backgroundColor = [UIColor whiteColor];
             [showCommentsButton addTarget:self action:@selector(loadMoreComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:showCommentsButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -557,11 +570,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         } else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
             cell.delegate = self;
+            cell.cellDelegate = self;
             if (indexPath.row < self.comments.count + showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row - showsMoreButton];
                 [cell configureCell:comment delegate:self];
-                cell.backgroundColor = [UIColor clearColor];
-                cell.contentView.backgroundColor = [UIColor clearColor];
+                cell.backgroundColor = [UIColor whiteColor];
+                cell.contentView.backgroundColor = [UIColor whiteColor];
                 return cell;
             }
         }
@@ -707,7 +721,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self.actionBar updateTitle];
+    if (scrollView.contentOffset.y >= 0) {
+        [self.actionBar updateTitle];
+    }
 }
 
 #pragma mark - Default
