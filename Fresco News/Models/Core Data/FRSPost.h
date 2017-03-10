@@ -26,6 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, retain) NSString *contentType;
 - (NSDictionary *)jsonObject;
+
+/**
+ Handles all fallback on the byline on a post`
+
+ @param post FRSPost object
+ @return NSString formatted with expected byline fall back
+ */
++ (NSString *)bylineForPost:(FRSPost *)post;
+
 @end
 
 NS_ASSUME_NONNULL_END

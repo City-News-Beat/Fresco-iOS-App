@@ -14,6 +14,7 @@
 #import "FRSAwkwardView.h"
 #import "UIColor+Fresco.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSFeedManager.h"
 
 @implementation FRSFollowingController
 @synthesize tableView = _tableView, feed = _feed;
@@ -39,46 +40,25 @@
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
 
     FRSGallery *gallery = self.feed[notification.row];
-    
+
     [FRSTracker track:galleryOpenedFromHighlights
            parameters:@{ @"gallery_id" : (gallery.uid != nil) ? gallery.uid : @"",
                          @"opened_from" : @"following" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
-    /*
-    
-    [self showNavBarForScrollView:self.tableView animated:NO];
-    
-    self.navigationItem.title = @"";
-    
-    [self.navigationController pushViewController:vc animated:YES];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    [self hideTabBarAnimated:YES];*/
+    [vc configureBackButtonAnimated:YES];
+
 }
 
 - (void)commonInit {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-
-      if (galleries.count == 0) {
-          FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 175 / 2, self.tableView.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
-          [self.tableView addSubview:awkwardView];
-          self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-      }
-
-      [loadingView removeFromSuperview];
-
-      self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
-      [self.tableView reloadData];
-    }];
+    [self reloadData];
 }
 
 - (void)reloadData {
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+    [[FRSFeedManager sharedInstance] fetchFollowing:^(NSArray *galleries, NSError *error) {
 
       if (galleries.count == 0) {
           FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 175 / 2, self.tableView.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
@@ -92,6 +72,9 @@
       [self.tableView reloadData];
     }];
 }
+
+
+#pragma mark - UIScrollView
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollDelegate) {
@@ -99,24 +82,8 @@
     }
 }
 
-- (void)setTableView:(UITableView *)tableView {
-    _tableView = tableView;
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    loadingView.frame = CGRectMake((_tableView.frame.size.width - loadingView.frame.size.width) / 2, _tableView.frame.size.height / 2, loadingView.frame.size.width, loadingView.frame.size.height);
 
-    [loadingView startAnimating];
-    [_tableView addSubview:loadingView];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.tableView reloadData];
-    });
-}
-
-- (UITableView *)tableView {
-    return _tableView;
-}
+#pragma mark - UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -145,6 +112,7 @@
 
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self) weakSelf = self;
 
@@ -159,6 +127,7 @@
         };
 
         [galCell configureCell];
+        [[galCell galleryView] adjustHeight];
     } else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         [storyCell clearCell];

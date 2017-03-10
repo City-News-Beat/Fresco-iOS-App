@@ -9,9 +9,11 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "EndpointManager.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSDisableAccountViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -151,6 +153,7 @@
         cell.textField.tag = 3;
         [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
         cell.textField.delegate = self;
+        [self hideSensitiveViews:cell.textField];
 
         [self addErrorViewAtYPos:196 withTextField:cell.textField];
 
@@ -177,7 +180,7 @@
     self.passwordIsConfirmed = NO;
 
     //These checks should return when the API responds in the block below
-    if (![[[FRSAPIClient sharedClient].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
+    if (![[[FRSUserManager sharedInstance].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
 
         self.usernameErrorImageView.alpha = 1;
         self.usernameIsConfirmed = NO;
@@ -188,7 +191,7 @@
         self.usernameIsConfirmed = YES;
     }
 
-    if (![[[FRSAPIClient sharedClient].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
+    if (![[[FRSUserManager sharedInstance].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
         self.emailIsConfirmed = NO;
 
         self.emailErrorImageView.alpha = 1;
@@ -199,9 +202,9 @@
         self.emailIsConfirmed = YES;
     }
 
-    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{ @"password" : self.password,
-                                                                @"email" : self.email,
-                                                                @"username" : self.username }
+    [[FRSUserManager sharedInstance] disableAccountWithDigestion:@{ @"password" : self.password,
+                                                                    @"email" : self.email,
+                                                                    @"username" : self.username }
         completion:^(id responseObject, NSError *error) {
 
           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
@@ -231,24 +234,8 @@
 }
 
 - (void)logout {
-
-    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
-    [SAMKeychain deletePasswordForService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
-
-    [NSUserDefaults resetStandardUserDefaults];
-
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
-
+    [[FRSAuthManager sharedInstance] logout];
     [self popViewController];
-
     [self.tabBarController setSelectedIndex:0];
 }
 
@@ -302,7 +289,6 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-
     if (textField.tag == 1) {
         self.username = textField.text;
 
@@ -441,6 +427,12 @@
     } else {
         return YES;
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews:(UIView *)view {
+    [UXCam occludeSensitiveView:view];
 }
 
 @end

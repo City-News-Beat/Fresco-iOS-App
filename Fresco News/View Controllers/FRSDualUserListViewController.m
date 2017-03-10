@@ -11,6 +11,7 @@
 #import "FRSProfileViewController.h"
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -294,43 +295,43 @@ int const FETCH_LIMIT = 20;
         lastUserID = [(FRSUser *)[self.likedUsersArray lastObject] uid];
     }
 
-    [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID
-                                                limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                               lastID:lastUserID
-                                           completion:^(id responseObject, NSError *error) {
-                                             [self removeSpinnerInTableView:self.likesTableView];
+    [[FRSGalleryManager sharedInstance] fetchLikesForGallery:self.galleryID
+                                                       limit:[NSNumber numberWithInteger:FETCH_LIMIT]
+                                                      lastID:lastUserID
+                                                  completion:^(id responseObject, NSError *error) {
+                                                    [self removeSpinnerInTableView:self.likesTableView];
 
-                                             if (responseObject) {
+                                                    if (responseObject) {
 
-                                                 NSMutableArray *likers = [[NSMutableArray alloc] init];
-                                                 NSArray *users = (NSArray *)responseObject;
+                                                        NSMutableArray *likers = [[NSMutableArray alloc] init];
+                                                        NSArray *users = (NSArray *)responseObject;
 
-                                                 for (NSDictionary *user in users) {
-                                                     FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                     [likers addObject:newUser];
-                                                 }
+                                                        for (NSDictionary *user in users) {
+                                                            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                                                            [likers addObject:newUser];
+                                                        }
 
-                                                 self.likedUsersArray = likers;
+                                                        self.likedUsersArray = likers;
 
-                                                 [self reloadData];
+                                                        [self reloadData];
 
-                                                 if ([self.likedUsersArray count] == 0) {
-                                                     [self configureFrogInTableView:self.likesTableView];
-                                                 }
-                                             }
+                                                        if ([self.likedUsersArray count] == 0) {
+                                                            [self configureFrogInTableView:self.likesTableView];
+                                                        }
+                                                    }
 
-                                             if (error && !responseObject) {
-                                                 if (error.code == -1009) {
-                                                     [self configureNoConnectionBannerAlert];
-                                                 } else {
-                                                     if (!self.didPresentError) {
-                                                         [self presentGenericError];
-                                                         self.didPresentError = YES;
-                                                     }
-                                                 }
-                                             }
-                                             self.isLoadingLikers = NO;
-                                           }];
+                                                    if (error && !responseObject) {
+                                                        if (error.code == -1009) {
+                                                            [self configureNoConnectionBannerAlert];
+                                                        } else {
+                                                            if (!self.didPresentError) {
+                                                                [self presentGenericError];
+                                                                self.didPresentError = YES;
+                                                            }
+                                                        }
+                                                    }
+                                                    self.isLoadingLikers = NO;
+                                                  }];
 }
 
 - (void)fetchReposters {
@@ -349,43 +350,43 @@ int const FETCH_LIMIT = 20;
         lastUserID = [(FRSUser *)[self.repostedUsersArray lastObject] uid];
     }
 
-    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID
-                                                  limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                 lastID:lastUserID
-                                             completion:^(id responseObject, NSError *error) {
-                                               [self removeSpinnerInTableView:self.repostsTableView];
+    [[FRSGalleryManager sharedInstance] fetchRepostsForGallery:self.galleryID
+                                                         limit:[NSNumber numberWithInteger:FETCH_LIMIT]
+                                                        lastID:lastUserID
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      [self removeSpinnerInTableView:self.repostsTableView];
 
-                                               if (responseObject) {
+                                                      if (responseObject) {
 
-                                                   NSMutableArray *reposters = [[NSMutableArray alloc] init];
-                                                   NSArray *users = (NSArray *)responseObject;
+                                                          NSMutableArray *reposters = [[NSMutableArray alloc] init];
+                                                          NSArray *users = (NSArray *)responseObject;
 
-                                                   for (NSDictionary *user in users) {
-                                                       FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                       [reposters addObject:newUser];
-                                                   }
+                                                          for (NSDictionary *user in users) {
+                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                                                              [reposters addObject:newUser];
+                                                          }
 
-                                                   self.repostedUsersArray = reposters;
+                                                          self.repostedUsersArray = reposters;
 
-                                                   [self reloadData];
+                                                          [self reloadData];
 
-                                                   if ([self.repostedUsersArray count] == 0) {
-                                                       [self configureFrogInTableView:self.repostsTableView];
-                                                   }
-                                               }
+                                                          if ([self.repostedUsersArray count] == 0) {
+                                                              [self configureFrogInTableView:self.repostsTableView];
+                                                          }
+                                                      }
 
-                                               if (error && !responseObject) {
-                                                   if (error.code == -1009) {
-                                                       [self configureNoConnectionBannerAlert];
-                                                   } else {
-                                                       if (!self.didPresentError) {
-                                                           [self presentGenericError];
-                                                           self.didPresentError = YES;
-                                                       }
-                                                   }
-                                               }
-                                               self.isLoadingReposters = NO;
-                                             }];
+                                                      if (error && !responseObject) {
+                                                          if (error.code == -1009) {
+                                                              [self configureNoConnectionBannerAlert];
+                                                          } else {
+                                                              if (!self.didPresentError) {
+                                                                  [self presentGenericError];
+                                                                  self.didPresentError = YES;
+                                                              }
+                                                          }
+                                                      }
+                                                      self.isLoadingReposters = NO;
+                                                    }];
 }
 
 - (void)loadMoreLikers {
@@ -399,33 +400,33 @@ int const FETCH_LIMIT = 20;
         lastUserID = [(FRSUser *)[self.likedUsersArray lastObject] uid];
     }
 
-    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID
-                                                  limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                 lastID:lastUserID
-                                             completion:^(id responseObject, NSError *error) {
+    [[FRSGalleryManager sharedInstance] fetchRepostsForGallery:self.galleryID
+                                                         limit:[NSNumber numberWithInteger:FETCH_LIMIT]
+                                                        lastID:lastUserID
+                                                    completion:^(id responseObject, NSError *error) {
 
-                                               if (responseObject) {
+                                                      if (responseObject) {
 
-                                                   NSArray *users = (NSArray *)responseObject;
+                                                          NSArray *users = (NSArray *)responseObject;
 
-                                                   for (NSDictionary *user in users) {
-                                                       FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                       [self.likedUsersArray addObject:newUser];
-                                                   }
+                                                          for (NSDictionary *user in users) {
+                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                                                              [self.likedUsersArray addObject:newUser];
+                                                          }
 
-                                                   if ([users count] == 0) {
-                                                       self.hasReachedEndOfLikers = YES;
-                                                   }
+                                                          if ([users count] == 0) {
+                                                              self.hasReachedEndOfLikers = YES;
+                                                          }
 
-                                                   [self reloadData];
-                                               }
+                                                          [self reloadData];
+                                                      }
 
-                                               if (error) {
-                                                   // soft fail
-                                               }
+                                                      if (error) {
+                                                          // soft fail
+                                                      }
 
-                                               self.isLoadingLikers = NO;
-                                             }];
+                                                      self.isLoadingLikers = NO;
+                                                    }];
 }
 
 - (void)loadMoreReposters {
@@ -439,32 +440,32 @@ int const FETCH_LIMIT = 20;
         lastUserID = [(FRSUser *)[self.repostedUsersArray lastObject] uid];
     }
 
-    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID
-                                                  limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                 lastID:lastUserID
-                                             completion:^(id responseObject, NSError *error) {
-                                               if (responseObject) {
+    [[FRSGalleryManager sharedInstance] fetchRepostsForGallery:self.galleryID
+                                                         limit:[NSNumber numberWithInteger:FETCH_LIMIT]
+                                                        lastID:lastUserID
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      if (responseObject) {
 
-                                                   NSArray *users = (NSArray *)responseObject;
+                                                          NSArray *users = (NSArray *)responseObject;
 
-                                                   for (NSDictionary *user in users) {
-                                                       FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                                       [self.repostedUsersArray addObject:newUser];
-                                                   }
+                                                          for (NSDictionary *user in users) {
+                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                                                              [self.repostedUsersArray addObject:newUser];
+                                                          }
 
-                                                   if ([users count] == 0) {
-                                                       self.hasReachedEndOfReposters = YES;
-                                                   }
+                                                          if ([users count] == 0) {
+                                                              self.hasReachedEndOfReposters = YES;
+                                                          }
 
-                                                   [self reloadData];
-                                               }
+                                                          [self reloadData];
+                                                      }
 
-                                               if (error) {
-                                                   // soft fail
-                                               }
+                                                      if (error) {
+                                                          // soft fail
+                                                      }
 
-                                               self.isLoadingReposters = NO;
-                                             }];
+                                                      self.isLoadingReposters = NO;
+                                                    }];
 }
 
 #pragma mark - Frog

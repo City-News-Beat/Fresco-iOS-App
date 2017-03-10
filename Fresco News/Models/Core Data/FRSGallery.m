@@ -12,8 +12,10 @@
 #import "FRSStory.h"
 #import "FRSUser.h"
 #import "FRSCoreData.h"
-
 #import "FRSDateFormatter.h"
+#import "FRSUserManager.h"
+#import "NSString+Fresco.h"
+
 @import UIKit;
 
 @implementation FRSGallery
@@ -24,6 +26,7 @@
 @dynamic comments;
 @dynamic createdDate;
 @dynamic editedDate;
+@dynamic highlightedDate;
 @dynamic relatedStories;
 @dynamic tags;
 @dynamic uid;
@@ -39,6 +42,7 @@
 @dynamic externalID;
 @dynamic externalSource;
 @dynamic externalURL;
+@dynamic rating;
 
 - (NSArray *)sorted {
     NSArray *sorted;
@@ -53,18 +57,34 @@
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    self.createdDate = [NSString dateFromString:dict[@"time_created"]];
 
-    if (dict[@"action_at"] && ![dict[@"action_at"] isEqual:[NSNull null]]) {
-        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"action_at"]];
+    if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
+        self.editedDate = [NSString dateFromString:dict[@"updated_at"]];
     }
 
-    self.caption = dict[@"caption"];
-    if ([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]) {
-        self.byline = dict[@"owner"][@"full_name"];
-        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
-        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
-        self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
+    if (dict[@"captured_at"] && ![dict[@"captured_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [NSString dateFromString:dict[@"captured_at"]];
+    } else if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [NSString dateFromString:dict[@"created_at"]];
+    }
+    
+    
+    if (dict[@"highlighted_at"] && ![dict[@"highlighted_at"] isEqual:[NSNull null]]) {
+        self.highlightedDate = [NSString dateFromString:dict[@"highlighted_at"]];
+    }
+
+
+    if (dict[@"rating"] && ![dict[@"rating"] isEqual:[NSNull null]]) {
+        self.rating = dict[@"rating"];
+    }
+
+    if (dict[@"byline"] && ![dict[@"byline"] isEqual:[NSNull null]]) {
+        self.byline = dict[@"byline"];
+    }
+
+    if (dict[@"caption"] && ![dict[@"caption"] isEqual:[NSNull null]]) {
+        self.caption = dict[@"caption"];
     }
 
     NSArray *sources = (NSArray *)dict[@"sources"];
@@ -76,31 +96,14 @@
         NSDictionary *source = (NSDictionary *)[results firstObject];
         NSString *userID = source[@"user_id"];
 
-        [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                         completion:^(id responseObject, NSError *error) {
-                                           FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                           self.sourceUser = user;
-                                         }];
-    }
-
-    if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
-        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
-
-        @try {
-            self.creator = newUser;
-            self.creator.uid = dict[@"owner"][@"id"];
-        } @catch (NSException *exception) {
-        } @finally {
+        if(userID != nil) {
+            [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                                 completion:^(id responseObject, NSError *error) {
+                                                     FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
+                                                     self.sourceUser = user;
+                                                 }];
         }
     }
-
-    //    if ([dict valueForKey:@"curator"] != [NSNull null]) {
-    //        self.creator = [FRSUser MR_createEntity];
-    //        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
-    //        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
-    //        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
-    //        //blocked
-    //    }ff
 
     if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
         self.externalAccountID = [dict objectForKey:@"external_account_id"];
@@ -153,23 +156,39 @@
 + (instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:context];
     gallery.currentContext = context;
-    //    [gallery configureWithDictionary:properties context:context];
-
     return gallery;
 }
 
 - (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     _currentContext = context;
     save = TRUE;
+    
+    // Configure the gallery
     [self configureWithDictionary:dict];
+    
+    // User configuration needs to happen once the gallery has completed configuring
+    // to avoid a nil entity name 'FRSUser'
+    [self configureCreatorWithDictionary:dict];
+}
 
-    self.creator = [FRSUser MR_createEntityInContext:context];
+- (void)configureCreatorWithDictionary:(NSDictionary *)dict {
 
-    if ([dict valueForKey:@"owner"] != [NSNull null]) {
-        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
-        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
-        self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
-        //blocked
+    NSString *dictKey = @"";
+
+    // Default to the the gallerys owner, fall back on the curator if the owner is not found
+    if (dict[@"owner"] != [NSNull null] && dict[@"owner"] != nil) {
+        dictKey = @"owner";
+    } else if (dict[@"curator"] != [NSNull null] && dict[@"curator"] != nil) {
+        dictKey = @"curator";
+    } else {
+        NSLog(@"Unable to find owner or curator on gallery");
+        return;
+    }
+
+    // Create and save new user on gallery only if creator has changed
+    if (!self.creator) {
+        self.creator = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
+        [self.creator configureWithDictionary:dict[dictKey]];
     }
 }
 
@@ -219,8 +238,6 @@
     for (FRSPost *post in self.posts) {
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
-
-        //        NSLog(@"\nHEIGHT: %ld, WIDTH : %ld\n", rawHeight, rawWidth);
 
         if (rawHeight == 0 || rawWidth == 0) {
             totalHeight += [UIScreen mainScreen].bounds.size.width;

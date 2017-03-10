@@ -15,10 +15,10 @@
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
-//#import <MagicalRecord/MagicalRecord.h>
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSAlertView.h"
+#import "FRSSearchManager.h"
 
 @interface FRSSearchViewController () <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate>
 
@@ -268,51 +268,51 @@
 
     self.currentQuery = date;
 
-    [[FRSAPIClient sharedClient] searchWithQuery:query
-                                      completion:^(id responseObject, NSError *error) {
+    [[FRSSearchManager sharedInstance] searchWithQuery:query
+                                            completion:^(id responseObject, NSError *error) {
 
-                                        if (date != self.currentQuery) {
-                                            return;
-                                        }
+                                              if (date != self.currentQuery) {
+                                                  return;
+                                              }
 
-                                        [self removeSpinner];
-                                        if (error || !responseObject) {
-                                            [self searchError:error];
-                                            return;
-                                        }
+                                              [self removeSpinner];
+                                              if (error || !responseObject) {
+                                                  [self searchError:error];
+                                                  return;
+                                              }
 
-                                        self.userSectionTitleString = @"USERS";
+                                              self.userSectionTitleString = @"USERS";
 
-                                        //NSString *filePath = @"";
-                                        //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
+                                              //NSString *filePath = @"";
+                                              //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
 
-                                        NSDictionary *storyObject = responseObject[@"stories"];
-                                        NSDictionary *galleryObject = responseObject[@"galleries"];
-                                        NSDictionary *userObject = responseObject[@"users"];
-                                        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
-                                        self.users = userObject[@"results"];
-                                        self.stories = storyObject[@"results"];
+                                              NSDictionary *storyObject = responseObject[@"stories"];
+                                              NSDictionary *galleryObject = responseObject[@"galleries"];
+                                              NSDictionary *userObject = responseObject[@"users"];
+                                              self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
+                                              self.users = userObject[@"results"];
+                                              self.stories = storyObject[@"results"];
 
-                                        [self rearrangeIndexes];
+                                              [self rearrangeIndexes];
 
-                                        [self reloadData];
+                                              [self reloadData];
 
-                                        if (self.users.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
-                                            [self configureNoResults];
-                                        } else {
-                                            self.awkwardView.alpha = 0;
-                                            [self.awkwardView removeFromSuperview];
-                                        }
+                                              if (self.users.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
+                                                  [self configureNoResults];
+                                              } else {
+                                                  self.awkwardView.alpha = 0;
+                                                  [self.awkwardView removeFromSuperview];
+                                              }
 
-                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                          self.nearbyHeaderContainer.alpha = 0;
-                                        });
-                                      }];
+                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                self.nearbyHeaderContainer.alpha = 0;
+                                              });
+                                            }];
 }
 
 - (void)configureNearbyUsers {
 
-    [[FRSAPIClient sharedClient] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
+    [[FRSSearchManager sharedInstance] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
 
       if (error) {
           self.configuredNearby = NO;
@@ -326,7 +326,7 @@
       self.configuredNearby = YES;
 
       if (!self.nearbyHeaderContainer) {
-            self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+          self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
       }
       [self.tableView addSubview:self.nearbyHeaderContainer];
 
@@ -603,7 +603,7 @@
 }
 
 - (void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
-    NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext];
+    NSManagedObjectContext *context = [[FRSSearchManager sharedInstance] managedObjectContext];
     FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
 
     story.uid = storyID;
@@ -815,10 +815,10 @@
 
 - (void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
-    vc.shouldHaveBackButton = YES;
-    
+    [vc configureBackButtonAnimated:YES];
+
     [FRSTracker track:galleryOpenedFromSearch parameters:@{ @"opened_from" : @"search" }];
-    
+
     self.navigationItem.title = @"";
 
     [self.navigationController pushViewController:vc animated:YES];
@@ -846,11 +846,9 @@
         }
 
         NSDictionary *user = self.users[indexPath.row];
-        FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSSearchManager sharedInstance] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
         [self.navigationController pushViewController:controller animated:TRUE];
-
-        //        self.shouldUpdateOnReturn = YES;
     }
 
     if (indexPath.section == storyIndex) {

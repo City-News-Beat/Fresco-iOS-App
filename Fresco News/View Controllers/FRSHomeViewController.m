@@ -9,26 +9,26 @@
 #import "FRSHomeViewController.h"
 #import "Fresco.h"
 
-/* View Controllers */
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSSearchViewController.h"
 #import "FRSLoginViewController.h"
-
-/* UI */
 #import "DGElasticPullToRefresh.h"
 #import "FRSGalleryCell.h"
 #import "FRSTrimTool.h"
 #import "FRSAwkwardView.h"
 #import "FRSAlertView.h"
-
-/* Core Data */
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
 #import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 #import "FRSLocationManager.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 #import "FRSNotificationHandler.h"
+#import "FRSModerationManager.h"
+#import "FRSGalleryManager.h"
+#import "NSString+Fresco.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -89,17 +89,18 @@
 
     [self displayPreviousTab];
 
-    [self checkSuspended];
+    [[FRSModerationManager sharedInstance] checkSuspended];
 
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         //Present permissions alert on launch after two days from downloading the app only if the they have not seen the alert yet.
         if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
                 NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
-                NSDate *startDate = [[FRSAPIClient sharedClient] dateFromString:startDateString];
+                if(startDateString == nil) return;
+                NSDate *startDate = [NSString dateFromString:startDateString];
                 NSDate *today = [NSDate date];
 
                 NSInteger days = [FRSHomeViewController daysBetweenDate:startDate andDate:today];
@@ -109,11 +110,6 @@
             }
         }
     }
-    
-//    [FRSNotificationHandler segueToTodayInNews:@[@"LJE0QZvXo1G5"] title:@"hello"];
-    
-//    [FRSNotificationHandler handleNotification:@{@"type" : @"user-news-today-in-news"}];
-    
 }
 
 + (NSInteger)daysBetweenDate:(NSDate *)fromDateTime andDate:(NSDate *)toDateTime {
@@ -173,8 +169,6 @@
     [self.followingTable scrollRectToVisible:CGRectMake(0, 0, self.followingTable.frame.size.width, self.followingTable.frame.size.height) animated:YES];
 }
 
-- (void)loadData {
-}
 
 - (void)configureFollowing {
     CGRect scrollFrame = self.tableView.frame;
@@ -202,7 +196,6 @@
     [super viewWillAppear:animated];
 
     [self addStatusBarNotification];
-    [self showNavBarForScrollView:self.scrollView animated:NO];
 
     [FRSTracker screen:@"Home"];
 
@@ -210,7 +203,7 @@
     [self.tabBarController.tabBar setHidden:FALSE];
 
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
-    [self.appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
     [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
@@ -229,7 +222,7 @@
 }
 
 - (void)logoutAlertAction {
-    if ([[FRSAPIClient sharedClient] authenticatedUser].username) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser].username) {
         return;
     }
     [self logoutWithPop:YES];
@@ -272,8 +265,8 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentMigrationAlert) name:@"user-did-login" object:nil];
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+        if (![[FRSUserManager sharedInstance] authenticatedUser].username) {
 
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
         }
@@ -292,7 +285,7 @@
         return;
     }
 
-    if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
+    if ([[FRSAuthManager sharedInstance] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
@@ -302,53 +295,56 @@
 
 - (void)reloadData {
     [self.followingTable reloadFollowing];
-
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count
-                                         offsetGalleryID:Nil
-                                              completion:^(NSArray *galleries, NSError *error) {
-                                                [self.appDelegate.managedObjectContext performBlock:^{
-                                                  NSInteger index = 0;
-
-                                                  NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
-                                                  for (NSDictionary *gallery in galleries) {
-                                                      NSString *galleryID = gallery[@"id"];
-                                                      NSInteger galleryIndex = [self galleryExists:galleryID];
-
-                                                      /*
-                 Gallery does not exist -- create it in persistence layer & volotile memory
-                 */
-                                                      if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-                                                          FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
-                                                          [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                                                          [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                          [newGalleries addObject:galleryToSave];
-                                                          index++;
-                                                          continue;
-                                                      }
-
-                                                      /*
-                 Gallery already exists, update its index & meta information (things change)
-                 */
-
-                                                      FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                                                      [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                      [newGalleries addObject:galleryToSave];
-                                                      index++;
-                                                  }
-
-                                                  /*
-             Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
-             */
-                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                    self.dataSource = newGalleries;
-                                                    [self.tableView reloadData];
-                                                    isLoading = FALSE;
-                                                    [self.tableView dg_stopLoading];
-                                                    [self.followingTable dg_stopLoading];
-                                                  });
-                                                }];
-                                              }];
+    
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
+                                                offsetGalleryID:Nil
+                                                     completion:^(NSArray *galleries, NSError *error) {
+                                                         [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
+                                                             NSInteger index = 0;
+                                                             
+                                                             NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
+                                                             for (NSDictionary *gallery in galleries) {
+                                                                 NSString *galleryID = gallery[@"id"];
+                                                                 NSInteger galleryIndex = [self galleryExists:galleryID];
+                                                                 
+                                                                 /*
+                                                                  Gallery does not exist -- create it in persistence layer & volotile memory
+                                                                  */
+                                                                 if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                                                                     FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
+                                                                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+                                                                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                                                                     [newGalleries addObject:galleryToSave];
+                                                                     index++;
+                                                                     continue;
+                                                                 }
+                                                                 
+                                                                 /*
+                                                                  Gallery already exists, update its index & meta information (things change)
+                                                                  */
+                                                                 
+                                                                 FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                                                                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+                                                                 [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                                                                 [newGalleries addObject:galleryToSave];
+                                                                 index++;
+                                                             }
+                                                             
+                                                             /*
+                                                              Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
+                                                              */
+                                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                                 if([newGalleries count] > 0) {
+                                                                     self.dataSource = newGalleries;
+                                                                     [self.tableView reloadData];
+                                                                 }
+                                                                 
+                                                                 isLoading = FALSE;
+                                                                 [self.tableView dg_stopLoading];
+                                                                 [self.followingTable dg_stopLoading];
+                                                             });
+                                                         }];
+                                                     }];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -526,20 +522,18 @@
 }
 
 - (void)configureDataSource {
-
-    // make core data fetch
-    [self fetchLocalData];
-
     // network call
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
-                                                if ([galleries count] == 0) {
-
-                                                } else {
-                                                    [self cacheLocalData:galleries];
-                                                }
-
+                                                  
+                                                  if(error || [galleries count] == 0 ) {
+                                                      // make core data fetch
+                                                      [self fetchLocalData];
+                                                  } else {
+                                                      [self cacheLocalData:galleries];
+                                                  }
+                                                  
                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                   [self.loadingView stopLoading];
                                                   [self.loadingView removeFromSuperview];
@@ -548,8 +542,34 @@
                                               }];
 }
 
+
+/**
+ Fetches galleries from local store
+ */
 - (void)fetchLocalData {
-    [self flushCache:Nil];
+    NSManagedObjectContext *moc = [self.appDelegate.coreDataController managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
+    
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    
+    pulledFromCache = stored;
+    
+    self.dataSource = [NSMutableArray arrayWithArray:stored];
+    self.highlights = self.dataSource;
+    
+    if ([_dataSource count] > 0) {
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
+    } else {
+        if ([self.dataSource count] == 0) {
+            [self configureSpinner];
+        }
+    }
+    
+    self.cachedData = [NSMutableArray arrayWithArray:stored];
+    [self.tableView reloadData];
 }
 
 - (NSInteger)galleryExists:(NSString *)galleryID {
@@ -568,38 +588,43 @@
 }
 
 - (void)cacheLocalData:(NSArray *)localData {
+    if (!self.appDelegate.coreDataController.managedObjectContext) return;
     
-    if (self.appDelegate.managedObjectContext) {
-        [self.appDelegate.managedObjectContext performBlock:^{
-            self.dataSource = [[NSMutableArray alloc] init];
-            self.highlights = [[NSMutableArray alloc] init];
+    [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
+        self.dataSource = [[NSMutableArray alloc] init];
+        self.highlights = [[NSMutableArray alloc] init];
+        
+        NSInteger localIndex = 0;
+        for (NSDictionary *gallery in localData) {
+            FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
             
-            NSInteger localIndex = 0;
-            for (NSDictionary *gallery in localData) {
-                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-                
-                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-                [self.dataSource addObject:galleryToSave];
-                [self.highlights addObject:galleryToSave];
-                localIndex++;
+            [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+            [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+            [self.dataSource addObject:galleryToSave];
+            [self.highlights addObject:galleryToSave];
+            localIndex++;
+        }
+        
+        if ([self.appDelegate.coreDataController.managedObjectContext hasChanges]) {
+            @try {
+                [self.appDelegate.coreDataController.managedObjectContext save:Nil];
             }
-            
-            if ([self.appDelegate.managedObjectContext hasChanges]) {
-                [self.appDelegate.managedObjectContext save:Nil];
+            @catch (NSException *exception) {
+                NSLog(@"Exception:%@", exception);
             }
-            
-            [self.appDelegate saveContext];
-            
-            [self.tableView reloadData];
-            
-            for (FRSGallery *gallery in self.cachedData) {
-                [self.appDelegate.managedObjectContext deleteObject:gallery];
-            }
-            
-            [self.appDelegate saveContext];
-        }];
-    }
+        }
+        
+        [self.appDelegate saveContext];
+        
+        [self.tableView reloadData];
+        
+        for (FRSGallery *gallery in self.cachedData) {
+            [self.appDelegate.coreDataController.managedObjectContext deleteObject:gallery];
+        }
+        
+        [self.appDelegate saveContext];
+    }];
+    
 }
 
 - (void)reloadFromLocal {
@@ -611,32 +636,6 @@
           [self.tableView reloadData];
       }
     });
-}
-
-- (void)flushCache:(NSArray *)received {
-    NSManagedObjectContext *moc = [self.appDelegate managedObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
-    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
-
-    NSError *error = nil;
-    NSArray *stored = [moc executeFetchRequest:request error:&error];
-
-    pulledFromCache = stored;
-
-    self.dataSource = [NSMutableArray arrayWithArray:stored];
-    self.highlights = self.dataSource;
-
-    if ([_dataSource count] > 0) {
-        [self.loadingView stopLoading];
-        [self.loadingView removeFromSuperview];
-    } else {
-        if ([self.dataSource count] == 0) {
-            [self configureSpinner];
-        }
-    }
-
-    self.cachedData = [NSMutableArray arrayWithArray:stored];
-    [self.tableView reloadData];
 }
 
 #pragma mark - UITableView DataSource
@@ -737,9 +736,7 @@
 
     lastOffset = self.dataSource.count;
 
-    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:12
                                          offsetGalleryID:offsetID
                                               completion:^(NSArray *galleries, NSError *error) {
 
@@ -749,25 +746,23 @@
                                                     return;
                                                 }
 
-                                                [[self.appDelegate managedObjectContext] performBlock:^{
+                                                [[[self.appDelegate coreDataController] managedObjectContext] performBlock:^{
                                                   NSInteger index = self.highlights.count;
                                                   for (NSDictionary *gallery in galleries) {
-                                                      FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                                                      FRSGallery *galleryToSave = [NSEntityDescription
+                                                                                   insertNewObjectForEntityForName:@"FRSGallery"
+                                                                                   inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
 
-                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                                                      [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                                                       [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                                                       [self.dataSource addObject:galleryToSave];
                                                       [self.highlights addObject:galleryToSave];
-                                                      [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count - 1 inSection:0]];
                                                       index++;
                                                   }
 
                                                   [self.appDelegate saveContext];
 
                                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                                    //                [self.tableView beginUpdates];
-                                                    //                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                    //                [self.tableView endUpdates];
                                                     [self.tableView reloadData];
                                                     needsUpdate = TRUE;
                                                     isLoading = FALSE;
@@ -776,21 +771,6 @@
                                               }];
 }
 
-- (void)playerWillPlay:(AVPlayer *)play {
-    //    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
-    //        NSArray *visibleCells = [tableView visibleCells];
-    //        for (FRSGalleryCell *cell in visibleCells) {
-    //            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
-    //                continue;
-    //            }
-    //            for (FRSPlayer *player in cell.galleryView.players) {
-    //                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
-    //                    [player pause];
-    //                }
-    //            }
-    //        }
-    //    }
-}
 
 - (NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index {
 
@@ -848,10 +828,8 @@
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.gallery = gallery;
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
     vc.openedFrom = @"following";
-
-    [super showNavBarForScrollView:self.tableView animated:NO];
 
     self.navigationItem.title = @"";
 
@@ -869,11 +847,9 @@
                          @"opened_from" : @"highlights" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
     vc.gallery = gallery;
     vc.openedFrom = @"highlights";
-
-    [super showNavBarForScrollView:self.tableView animated:NO];
 
     self.navigationItem.title = @"";
 
@@ -940,8 +916,6 @@
             self.followingTabButton.alpha = 1;
             self.highlightTabButton.alpha = 0.7;
 
-            //[self showNavBarForScrollView:self.scrollView animated:NO];
-            //self.navigationItem.titleView.alpha = 1;
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
 

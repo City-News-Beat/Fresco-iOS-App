@@ -2,7 +2,7 @@
 //  NSDate+ISO.h
 //  FrescoNews
 //
-//  Created by Joshua Lerner on 4/25/15.
+//  Created by Maurice Wu on 4/25/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -12,5 +12,6 @@
 
 - (NSString *)ISODate;
 - (NSString *)ISOTime;
+- (NSString *)ISODateWithTimeZone;
 
 @end

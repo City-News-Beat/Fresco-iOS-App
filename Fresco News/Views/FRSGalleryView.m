@@ -12,21 +12,26 @@
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
+#import "NSURL+Fresco.h"
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
 #import <Haneke/Haneke.h>
 #import "OEParallax.h"
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
-//#import "FRSUserProfileViewController.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
+#import "FRSUserManager.h"
+#import "FRSGalleryDetailView.h"
+#import "FRSGalleryManager.h"
 
 #define TEXTVIEW_TOP_PAD 12
+#define LABEL_HEIGHT 20
+#define LABEL_PADDING 8
+#define CAPTION_PADDING 24
 
-@interface FRSGalleryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
+@interface FRSGalleryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate, FRSGalleryFooterViewDelegate>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
@@ -150,20 +155,9 @@
 }
 
 - (void)checkOwner {
-    /*NSString *ownerID = self.gallery.creator.uid;
-    NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
-    
-    if (userID && ownerID && [ownerID isEqualToString:userID]) {
-        // owner == self
-        [self.actionBar setCurrentUser:TRUE];
-    }
-    else {
-        [self.actionBar setCurrentUser:FALSE];
-    }*/
 
     dispatch_async(dispatch_get_main_queue(), ^{
-
-      if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+      if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
           [self.actionBar setCurrentUser:YES];
       } else {
           [self.actionBar setCurrentUser:NO];
@@ -175,7 +169,6 @@
     FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
 
     if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
-        //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
         NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
@@ -192,9 +185,7 @@
 
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
     BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
-    
-   // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
-    
+
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     [self.actionBar handleHeartState:isLiked];
@@ -206,7 +197,6 @@
     self.repostImageView = Nil;
 
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
@@ -226,20 +216,18 @@
     });
 }
 
--(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     vc.didTapRepostLabel = YES;
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleActionButtonTapped {
-
-    // idk why dan made this method life is a mystery
+- (void)handleActionButtonTapped {
 
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
@@ -252,80 +240,74 @@
 }
 
 - (void)handleLike:(FRSContentActionsBar *)actionBar {
-    /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
-        return;
-    }*/
 
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery
-                                        completion:^(id responseObject, NSError *error) {
-                                          if (error) {
-                                              [actionBar handleHeartState:TRUE];
-                                              [actionBar handleHeartAmount:likes];
-                                              if (error.code != 101) {
-                                                  self.gallery.likes = @([self.gallery.likes intValue] - 1);
+        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
+                                               completion:^(id responseObject, NSError *error) {
+                                                 if (error) {
+                                                     [actionBar handleHeartState:TRUE];
+                                                     [actionBar handleHeartAmount:likes];
+                                                     if (error.code != 101) {
+                                                         self.gallery.likes = @([self.gallery.likes intValue] - 1);
 
-                                                  @try {
-                                                      self.gallery.numberOfLikes--;
-                                                  }
-                                                  @catch (NSException *e) {
-                                                  }
-                                              }
-                                          }
-                                        }];
+                                                         @try {
+                                                             self.gallery.numberOfLikes--;
+                                                         }
+                                                         @catch (NSException *e) {
+                                                         }
+                                                     }
+                                                 }
+                                               }];
 
     } else {
-        [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            if (error) {
-                [actionBar handleHeartState:FALSE];
-                [actionBar handleHeartAmount:likes];
-                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                NSInteger responseCode = response.statusCode;
-                
-                // 400 status code means the user has already liked the gallery, should soft fail.
-                if (error.code != 101 && responseCode != 400) {
-                    self.gallery.numberOfLikes ++;
-                }
-            }
-        }];
+        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
+                                             completion:^(id responseObject, NSError *error) {
+                                               if (error) {
+                                                   [actionBar handleHeartState:FALSE];
+                                                   [actionBar handleHeartAmount:likes];
+                                                   NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                   NSInteger responseCode = response.statusCode;
+
+                                                   // 400 status code means the user has already liked the gallery, should soft fail.
+                                                   if (error.code != 101 && responseCode != 400) {
+                                                       self.gallery.numberOfLikes++;
+                                                   }
+                                               }
+                                             }];
     }
 }
 
-
--(void)handleRepost:(FRSContentActionsBar *)actionBar {
-
-    /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
-        return;
-    }*/
+- (void)handleRepost:(FRSContentActionsBar *)actionBar {
 
     NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
-        [[FRSAPIClient sharedClient] unrepostGallery:self.gallery
-                                          completion:^(id responseObject, NSError *error) {
-                                            if (error) {
-                                                [actionBar handleRepostState:TRUE];
-                                                [actionBar handleRepostAmount:reposts];
-                                                if (error.code != 101) {
-                                                    self.gallery.numberOfReposts--;
-                                                }
-                                            }
-                                          }];
+        [[FRSGalleryManager sharedInstance] unrepostGallery:self.gallery
+                                                 completion:^(id responseObject, NSError *error) {
+                                                   if (error) {
+                                                       [actionBar handleRepostState:TRUE];
+                                                       [actionBar handleRepostAmount:reposts];
+                                                       if (error.code != 101) {
+                                                           self.gallery.numberOfReposts--;
+                                                       }
+                                                   }
+                                                 }];
     } else {
-        [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            if (error) {
-                [actionBar handleRepostState:FALSE];
-                [actionBar handleRepostAmount:reposts];
-                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                NSInteger responseCode = response.statusCode;
-                
-                // 400 status code means the user has already reposted the gallery, should soft fail.
-                if (error.code != 101 && responseCode != 400) {
-                    self.gallery.numberOfReposts++;
-                }
-            }
-        }];
+        [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
+                                               completion:^(id responseObject, NSError *error) {
+                                                 if (error) {
+                                                     [actionBar handleRepostState:FALSE];
+                                                     [actionBar handleRepostAmount:reposts];
+                                                     NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                     NSInteger responseCode = response.statusCode;
+
+                                                     // 400 status code means the user has already reposted the gallery, should soft fail.
+                                                     if (error.code != 101 && responseCode != 400) {
+                                                         self.gallery.numberOfReposts++;
+                                                     }
+                                                 }
+                                               }];
     }
 }
 
@@ -352,7 +334,29 @@
     return self;
 }
 
+- (void)configureWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate {
+    [self setFrame:frame];
+
+    self.delegate = delegate;
+    self.gallery = gallery;
+    NSMutableArray *posts = [[NSMutableArray alloc] init];
+
+    for (FRSPost *post in self.gallery.posts) {
+        [posts addObject:post];
+    }
+
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
+    [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+
+    self.orderedPosts = posts;
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
+
+    [self configureUI];
+    [self updateSocial];
+}
+
 - (void)contentTap:(UITapGestureRecognizer *)sender {
+    //NSLog(@"TAP");
 }
 
 - (void)configureUI {
@@ -370,6 +374,14 @@
     [self configureCaptionLabel]; // this will stay similar
 
     [self configureActionsBar]; // this will stay similar
+
+    
+    // check if highlighted_at is <= now and if it's not null
+    if ([self.gallery.highlightedDate compare:[NSDate date]] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
+        if (![self.gallery.creator.uid isEqualToString:@""] && [self.gallery.creator.uid length] > 0) {
+            [self configureBaseMetaData];
+        }
+    }
 
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
 }
@@ -434,14 +446,6 @@
 
         imageView.userInteractionEnabled = YES;
     }
-
-    //    dispatch_async(dispatch_get_main_queue(), ^{
-    //        if (self.imageViews.count > 1) {
-    //            UIImageView *nextImage = self.imageViews[1];
-    //            FRSPost *nextPost = self.orderedPosts[1];
-    //            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
-    //        }
-    //    });
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
@@ -741,13 +745,8 @@
 
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
 
-    if (post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) {
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.username] fontSize:17];
-        ;
-    } else {
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.firstName] fontSize:17];
-        ;
-    }
+    self.nameLabel = [self galleryInfoLabelWithText:[FRSPost bylineForPost:post] fontSize:17];
+
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -766,8 +765,6 @@
           //Set user image
           NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
           [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
-
-          //NSLog(@"wwAvatar: %@",post.creator.profileImage);
 
           UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
           [photoTap setNumberOfTapsRequired:1];
@@ -788,32 +785,15 @@
         return;
 
     FRSPost *post = self.orderedPosts[self.adjustedPage];
-
-    FRSGallery *parent = post.gallery;
-
-    if ((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]] && post.creator.username != nil && ![post.creator.username isEqualToString:@""]) {
-        self.nameLabel.text = [NSString stringWithFormat:@"@%@", post.creator.username];
-    } else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]) {
-        self.nameLabel.text = [NSString stringWithFormat:@"%@", post.creator.firstName];
-    } else {
-        self.nameLabel.text = @"";
-    }
-
-    if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
-
-        if ([parent.externalSource isEqualToString:@"twitter"]) {
-            NSString *toSet = [NSString stringWithFormat:@"@%@", parent.externalAccountName];
-
-            if ([toSet length] != 1) {
-                self.nameLabel.text = toSet;
-            }
-
-        } else {
-            self.nameLabel.text = parent.externalAccountName;
-        }
-    }
+    
+    self.nameLabel.text = [FRSPost bylineForPost:post];
 
     self.locationLabel.text = post.address;
+    
+    if ([self.locationLabel.text length] == 0) {
+        self.locationLabel.text = @"No Location";
+    }
+    
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
 
     self.nameLabel.numberOfLines = 1;
@@ -821,7 +801,6 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
 
-    //[self.locationLabel sizeToFit];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     [self.timeLabel sizeToFit];
@@ -844,7 +823,6 @@
 
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-        //[self.nameLabel setUserInteractionEnabled:NO];
     }
 
     UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
@@ -889,13 +867,11 @@
     label.text = text;
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
-    //[label addFixedShadow];
     label.layer.shouldRasterize = TRUE;
     label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     label.adjustsFontSizeToFitWidth = YES;
     label.numberOfLines = 1;
 
-    // [label sizeToFit];
     CGRect labelFrame = label.frame;
     labelFrame.size.height = 20;
     labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
@@ -937,6 +913,10 @@
 
 - (void)adjustHeight {
     NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
+
+    if (self.galleryFooterView) {
+        height += self.galleryFooterView.frame.size.height + CAPTION_PADDING;
+    }
 
     if ([self.delegate shouldHaveActionBar]) {
         height -= TEXTVIEW_TOP_PAD;
@@ -991,7 +971,7 @@
 #pragma mark ScrollView Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    //We add half a screen's width so that the image loading occurs half way through the scroll.
+    // We add half a screen's width so that the image loading occurs half way through the scroll.
     [self pause];
 
     if (!self.players) {
@@ -1103,12 +1083,8 @@
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
-        //self.profileIV.alpha = 1;
-        //NSLog(@"mmAvatar: %@",post.creator.profileImage);
-
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-        // self.profileIV.alpha = 0;
     }
 
     if (adjustedPost.videoUrl == nil) {
@@ -1117,19 +1093,12 @@
 }
 
 - (void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
-    NSString *adjustedURL = url;
-
-    /*
-     Adjust sizing from URL string
-     */
-
-    if ([adjustedURL containsString:@"cdn.fresconews"]) {
-        NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
-        adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
-        adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
-    }
-
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
+    [imageView
+        hnk_setImageFromURL:[NSURL
+                             URLResizedFromURLString:url
+                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                             ]
+     ];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -1229,56 +1198,10 @@
 
               if ([currentPost.creator uid] != nil) {
                   [self.delegate.navigationController pushViewController:userViewController animated:YES];
-
-                  //                    userViewController.hidesBottomBarWhenPushed = NO;
-
-                  //                    [userViewController setHiddenTabBar:NO];
-
-                  //                    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                  //                    [[appDelegate.tabBarController tabBar] setHidden:NO];
-
-                  //                    [self.delegate.navigationController.tabBarController.tabBar setHidden:NO];
               }
             });
         }
     }
-}
-
-- (void)presentParallax {
-
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                       self.container.alpha = 1;
-                       self.parallaxImage.alpha = 1;
-                     }
-                     completion:nil];
-
-    [UIView beginAnimations:@"statusBar" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    [UIView commitAnimations];
-}
-
-- (void)dismissParallax {
-    self.parallaxImage.alpha = 0;
-
-    [UIView animateWithDuration:0.3
-        delay:0.0
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-          self.container.alpha = 0;
-        }
-        completion:^(BOOL finished) {
-          [self.parallaxImage removeFromSuperview];
-          self.userInteractionEnabled = YES;
-        }];
-
-    [UIView beginAnimations:@"statusBar" context:nil];
-    [UIView setAnimationDuration:0];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [UIView commitAnimations];
 }
 
 - (void)play {
@@ -1358,8 +1281,26 @@
             [player pause];
         }
     }
+}
 
-    //    self.muteImageView.alpha = 1;
+#pragma mark - Base Meta Data Configuration
+
+- (void)configureBaseMetaData {
+
+    // Configure the view
+    self.galleryFooterView = [[FRSGalleryFooterView alloc] initWithFrame:CGRectMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height + CAPTION_PADDING, self.frame.size.width, self.galleryFooterView.calculatedHeight) gallery:self.gallery delegate:self];
+    self.galleryFooterView.delegate = self;
+
+    // Set the height of the galleryFooterView after all the labels have been configured and add it to the subview
+    [self.galleryFooterView setSizeWithSize:CGSizeMake(self.galleryFooterView.frame.size.width, self.galleryFooterView.calculatedHeight)];
+
+    [self addSubview:self.galleryFooterView];
+}
+
+- (void)userAvatarTapped {
+    FRSProfileViewController *profile = [[FRSProfileViewController alloc] initWithUser:self.gallery.creator];
+    [self.delegate.navigationController pushViewController:profile animated:YES];
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
 @end

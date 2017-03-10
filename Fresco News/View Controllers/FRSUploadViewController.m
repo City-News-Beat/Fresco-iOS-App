@@ -15,11 +15,13 @@
 #import "FRSImageViewCell.h"
 #import "FRSFileLoader.h"
 #import "FRSPlayer.h"
-#import "FRSAPIClient.h"
 #import <Photos/Photos.h>
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
 #import "FRSUploadManager.h"
+#import "FRSAuthManager.h"
+#import "FRSAssignmentManager.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -126,6 +128,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    self.isFetching = NO;
     [self dismissKeyboard];
     [self resetOtherCells];
     [self resetOtherOutlets];
@@ -156,7 +159,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    [button setTintColor:[UIColor clearColor]];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
@@ -165,7 +168,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [button setTintColor:[UIColor frescoBlueColor]];
     [spinner removeFromSuperview];
     [spinner startAnimating];
 
@@ -391,7 +394,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     _sendButton.frame = CGRectMake(self.view.frame.size.width - 64, 0, 64, 44);
     [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     _sendButton.userInteractionEnabled = NO;
-    [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    [_sendButton addTarget:self action:@selector(sendClicked) forControlEvents:UIControlEventTouchUpInside];
     _sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:_sendButton];
 }
@@ -950,131 +953,130 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     self.isFetching = YES;
 
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii
-                                                 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
-                                             withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:radii
+                                                           ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
+                                                       withCompletion:^(id responseObject, NSError *error) {
 
-                                               NSArray *assignments = (NSArray *)responseObject[@"nearby"];
-                                               NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+                                                         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+                                                         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
 
-                                               FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                               // self.assignmentsArray = [[NSMutableArray alloc] init];
-                                               //  self.assignmentsArray  = [assignments mutableCopy];
-                                               self.globalAssignments = [globalAssignments copy];
-                                               self.assignments = [assignments copy];
+                                                         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                         // self.assignmentsArray = [[NSMutableArray alloc] init];
+                                                         //  self.assignmentsArray  = [assignments mutableCopy];
+                                                         self.globalAssignments = [globalAssignments copy];
+                                                         self.assignments = [assignments copy];
 
-                                               self.isFetching = NO;
+                                                         self.isFetching = NO;
 
-                                               if (!notFirstFetch) {
-                                                   notFirstFetch = TRUE;
-                                                   [self cacheAssignments];
-                                               }
+                                                         if (!notFirstFetch) {
+                                                             notFirstFetch = TRUE;
+                                                             [self cacheAssignments];
+                                                         }
 
-                                               [delegate.managedObjectContext save:Nil];
-                                               [delegate saveContext];
-                                               NSMutableArray *nearBy = responseObject[@"nearby"];
-                                               NSArray *global = responseObject[@"global"];
-                                               self.assignmentsArray = [[NSMutableArray alloc] init];
-                                               for (NSDictionary *assignment in nearBy) {
-                                                   NSArray *coords = assignment[@"location"][@"coordinates"];
-                                                   CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
-                                                   float radius = [assignment[@"radius"] floatValue];
+                                                         [delegate.managedObjectContext save:Nil];
+                                                         [delegate saveContext];
+                                                         NSMutableArray *nearBy = responseObject[@"nearby"];
+                                                         NSArray *global = responseObject[@"global"];
+                                                         self.assignmentsArray = [[NSMutableArray alloc] init];
+                                                         for (NSDictionary *assignment in nearBy) {
+                                                             NSArray *coords = assignment[@"location"][@"coordinates"];
+                                                             CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
+                                                             float radius = [assignment[@"radius"] floatValue];
 
-                                                   BOOL shouldAdd = FALSE;
+                                                             BOOL shouldAdd = FALSE;
 
-                                                   for (PHAsset *asset in self.content) {
-                                                       CLLocation *location = asset.location;
-                                                       CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
-                                                       float miles = distanceFromAssignment / 1609.34;
-                                                       if (miles < radius) {
-                                                           shouldAdd = TRUE;
-                                                       }
-                                                       //1609.34
-                                                   }
+                                                             for (PHAsset *asset in self.content) {
+                                                                 CLLocation *location = asset.location;
+                                                                 CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
+                                                                 float miles = distanceFromAssignment / metersInAMile;
+                                                                 if (miles < radius) {
+                                                                     shouldAdd = TRUE;
+                                                                 }
+                                                             }
 
-                                                   if (shouldAdd) {
-                                                       [self.assignmentsArray addObject:assignment];
-                                                   }
+                                                             if (shouldAdd) {
+                                                                 [self.assignmentsArray addObject:assignment];
+                                                             }
 
-                                                   // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
-                                               }
+                                                             // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+                                                         }
 
-                                               //  self.assignmentsArray = nearBy;
-                                               self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
+                                                         //  self.assignmentsArray = nearBy;
+                                                         self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
 
-                                               self.globalAssignments = global;
-                                               self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
+                                                         self.globalAssignments = global;
+                                                         self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
 
-                                               [self.spinner stopLoading];
-                                               [self.spinner removeFromSuperview];
+                                                         [self.spinner stopLoading];
+                                                         [self.spinner removeFromSuperview];
 
-                                               /*
+                                                         /*
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
         NSLog(@"Global Assignments: %@", global);
         NSLog(@"Error: %@", error);
         */
-                                               //Get the closest assignment to the user
-                                               CLLocationDistance closestDistance = 9999999999999999999.0;
-                                               int closestIndex = 0;
-                                               for (int i = 0; i < self.assignmentsArray.count; i++) {
-                                                   NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
-                                                   NSArray *coords = assignmentDic[@"location"][@"coordinates"];
-                                                   //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
-                                                   CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
-                                                   CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
-                                                   //NSLog(@"Distance: %f",distanceFromAssignment);
-                                                   if (closestDistance > distanceFromAssignment) {
-                                                       closestDistance = distanceFromAssignment;
-                                                       //NSLog(@"Closest Distance: %f",closestDistance);
-                                                       closestIndex = i;
-                                                   }
-                                               }
+                                                         //Get the closest assignment to the user
+                                                         CLLocationDistance closestDistance = 9999999999999999999.0;
+                                                         int closestIndex = 0;
+                                                         for (int i = 0; i < self.assignmentsArray.count; i++) {
+                                                             NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
+                                                             NSArray *coords = assignmentDic[@"location"][@"coordinates"];
+                                                             //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
+                                                             CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
+                                                             CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+                                                             //NSLog(@"Distance: %f",distanceFromAssignment);
+                                                             if (closestDistance > distanceFromAssignment) {
+                                                                 closestDistance = distanceFromAssignment;
+                                                                 //NSLog(@"Closest Distance: %f",closestDistance);
+                                                                 closestIndex = i;
+                                                             }
+                                                         }
 
-                                               [self configureAssignmentsTableView];
+                                                         [self configureAssignmentsTableView];
 
-                                               self.closestAssignmentIndex = closestIndex;
+                                                         self.closestAssignmentIndex = closestIndex;
 
-                                               //If there is a preselectedGlobalAssignment then change the index
-                                               if (self.preselectedGlobalAssignment) {
+                                                         //If there is a preselectedGlobalAssignment then change the index
+                                                         if (self.preselectedGlobalAssignment) {
 
-                                                   for (int i = 0; i < self.globalAssignments.count; i++) {
-                                                       if ([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]) {
-                                                           self.closestAssignmentIndex = i;
-                                                       }
-                                                   }
-                                               }
+                                                             for (int i = 0; i < self.globalAssignments.count; i++) {
+                                                                 if ([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]) {
+                                                                     self.closestAssignmentIndex = i;
+                                                                 }
+                                                             }
+                                                         }
 
-                                               if (self.preselectedAssignment) {
+                                                         if (self.preselectedAssignment) {
 
-                                                   for (int i = 0; i < self.assignments.count; i++) {
-                                                       if ([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]) {
-                                                           self.closestAssignmentIndex = i;
-                                                           NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
-                                                           [self selectAssignmentWithTitle:assignmentTitle];
-                                                       }
-                                                   }
-                                               }
+                                                             for (int i = 0; i < self.assignments.count; i++) {
+                                                                 if ([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]) {
+                                                                     self.closestAssignmentIndex = i;
+                                                                     NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
+                                                                     [self selectAssignmentWithTitle:assignmentTitle];
+                                                                 }
+                                                             }
+                                                         }
 
-                                               [self configureGlobalAssignmentsDrawer];
-                                               if (self.preselectedGlobalAssignment) {
-                                                   [self toggleGlobalAssignmentsDrawer];
-                                               }
-                                               [self configureTextView];
-                                               [self adjustScrollViewContentSize];
+                                                         [self configureGlobalAssignmentsDrawer];
+                                                         if (self.preselectedGlobalAssignment) {
+                                                             [self toggleGlobalAssignmentsDrawer];
+                                                         }
+                                                         [self configureTextView];
+                                                         [self adjustScrollViewContentSize];
 
-                                               [self.assignmentsTableView reloadData];
-                                               [self.globalAssignmentsTableView reloadData];
-                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                 [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-                                                 if (self.preselectedGlobalAssignment) {
-                                                     [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-                                                 }
-                                                 if (self.preselectedAssignment) {
-                                                     [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-                                                 }
-                                               });
-                                             }];
+                                                         [self.assignmentsTableView reloadData];
+                                                         [self.globalAssignmentsTableView reloadData];
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                           [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                           if (self.preselectedGlobalAssignment) {
+                                                               [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                           }
+                                                           if (self.preselectedAssignment) {
+                                                               [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                           }
+                                                         });
+                                                       }];
 }
 
 - (void)selectAssignmentWithTitle:(NSString *)title {
@@ -1128,14 +1130,27 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [self.carouselCell removeFromSuperview];
     [self.galleryCollectionView reloadData];
 }
-//Next button action
-- (void)send {
+
+
+/**
+ Send button action
+ */
+- (void)sendClicked {
 
     /* if authenticated */
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         [self.navigationController pushViewController:onboardVC animated:NO];
         return;
+    } else if([[FRSUploadManager sharedInstance] isUploading]) {
+        FRSAlertView *alert = [[FRSAlertView alloc]
+                               initWithTitle:@"UPLOAD ERROR"
+                               message:@"There is currently an upload in progress! Please wait till your current upload is finished and then try again."
+                               actionTitle:@"OK"
+                               cancelTitle:@""
+                               cancelTitleColor:nil
+                               delegate:nil];
+        return [alert show];
     }
 
     if (!self.loadingView) {
@@ -1148,94 +1163,46 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     [self dismissKeyboard];
 
-    NSInteger videosCounted = 0;
-    NSInteger photosCounted = 0;
-
-    for (PHAsset *asset in self.content) {
-        if (asset.mediaType == PHAssetMediaTypeVideo) {
-            videosCounted++;
-        } else {
-            photosCounted++;
-        }
+    //Assemble params for gallery
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    if (self.selectedAssignment) {
+        params[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
+    } else if (selectedRow < self.assignmentsArray.count) {
+        params[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
+    }
+    
+    params[@"caption"] = self.captionTextView.text;
+    
+    if (_showingOutlets && selectedOutlet) {
+        params[@"outlet_id"] = selectedOutlet;
     }
 
-    [FRSTracker track:submissionsEvent
-           parameters:@{ @"videos_submitted" : @(videosCounted),
-                         @"photos_submitted" : @(photosCounted) }];
-
-    [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
+    [[FRSGalleryManager sharedInstance] createGalleryWithParams:params
+                                                      andAssets:self.content
+                                                     completion:^(id responseObject, NSError *error) {
+                                                         //Make sure we're good and we have posts
+                                                         if (!error && responseObject[@"posts_new"] != nil) {
+                                                             [self moveToUpload:responseObject];
+                                                         } else {
+                                                             [self creationError:error];
+                                                             [self stopSpinner:self.loadingView onButton:self.sendButton];
+                                                             self.sendButton.userInteractionEnabled = YES;
+                                                         }
+                                                     }];
+    
 }
 
-- (void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
-    if (posts.count > 0) {
-        PHAsset *firstAsset = posts[0];
-        [[FRSAPIClient sharedClient] digestForAsset:firstAsset
-                                           callback:^(id responseObject, NSError *error) {
-                                             NSNumber *fileSize = responseObject[@"fileSize"];
-                                             contentSize += [fileSize longLongValue];
 
-                                             [posts removeObject:firstAsset];
-                                             [current addObject:responseObject];
+/**
+ Starts the process of creating and sending the files to upload
 
-                                             if (error) {
-                                                 [self creationError:error];
-                                                 [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                                 self.sendButton.userInteractionEnabled = YES;
-                                                 return;
-                                             }
-
-                                             [self getPostData:posts current:current];
-                                           }];
-    } else {
-        // upload
-        NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
-
-        if (self.selectedAssignment) {
-            gallery[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
-        } else if (selectedRow < self.assignmentsArray.count) {
-            gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
-        }
-
-        gallery[@"posts_new"] = current;
-        gallery[@"caption"] = self.captionTextView.text;
-
-        if (_showingOutlets && selectedOutlet) {
-            gallery[@"outlet_id"] = selectedOutlet;
-        }
-
-        [[FRSAPIClient sharedClient] post:createGalleryEndpoint
-                           withParameters:gallery
-                               completion:^(id responseObject, NSError *error) {
-                                 if (!error) {
-                                     [self moveToUpload:responseObject];
-                                 } else {
-                                     [self creationError:error];
-                                     [self stopSpinner:self.loadingView onButton:self.sendButton];
-                                     self.sendButton.userInteractionEnabled = YES;
-                                     return;
-                                 }
-                               }];
-    }
-}
-
-- (void)creationError:(NSError *)error {
-    if (error.code == -1009) {
-        [self connectionError:error];
-        return;
-    }
-
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY ERROR" message:@"We encountered an issue creating your gallery. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-    [alert show];
-}
-
-- (void)connectionError:(NSError *)error {
-    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
-    [alert show];
-}
-
-- (void)moveToUpload:(NSDictionary *)postData {
+ @param galleryResponse Response object from creating the gallery being submitted
+ */
+- (void)moveToUpload:(NSDictionary *)galleryResponse {
     /* upload started */
-    NSString *galleryID = postData[@"id"];
+    NSString *galleryID = galleryResponse[@"id"];
+    NSMutableArray *postsWithAssets = [NSMutableArray new];
 
     if (galleryID && ![galleryID isEqual:[NSNull null]]) {
 
@@ -1249,21 +1216,39 @@ static NSString *const cellIdentifier = @"assignment-cell";
             [self facebook:shareString];
         }
     }
-    // instantiate upload process
-    // start upload process
-    NSArray *posts = postData[@"posts_new"];
-
-    int i = 0;
-    [[FRSUploadManager sharedUploader] setUploadsToComplete:(int)self.content.count];
-    for (PHAsset *asset in self.content) {
-        NSDictionary *post = posts[i];
-        NSString *key = post[@"key"];
-        [[FRSUploadManager sharedUploader] addAsset:asset withToken:key withPostID:post[@"post_id"]];
-        i++;
+    
+    //Add assets to posts from response, posts from response will be in the same order as the assets we create them with
+    for (NSInteger i = 0; i < [galleryResponse[@"posts_new"] count]; i++) {
+        NSMutableDictionary *post = [galleryResponse[@"posts_new"][i] mutableCopy];
+        post[@"asset"] = [self.content objectAtIndex:i];
+        [postsWithAssets addObject:post];
     }
-
+    
+    
+    [[FRSUploadManager sharedInstance] startNewUploadWithPosts:postsWithAssets];
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)creationError:(NSError *)error {
+    if (error.code == -1009) {
+        [self connectionError:error];
+        return;
+    }
+    
+    FRSAlertView *alert = [[FRSAlertView alloc]
+                           initWithTitle:@"GALLERY ERROR"
+                           message:@"We encountered an issue creating your gallery. Please try again later."
+                           actionTitle:@"OK"
+                           cancelTitle:@""
+                           cancelTitleColor:nil
+                           delegate:nil];
+    [alert show];
+}
+
+- (void)connectionError:(NSError *)error {
+    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+    [alert show];
 }
 
 - (void)tweet:(NSString *)string {

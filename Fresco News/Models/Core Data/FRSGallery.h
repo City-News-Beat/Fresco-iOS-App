@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *comments;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
 @property (nullable, nonatomic, retain) NSDate *editedDate;
+@property (nullable, nonatomic, retain) NSDate *highlightedDate;
 @property (nullable, nonatomic, retain) id relatedStories;
 @property (nullable, nonatomic, retain) NSString *uid;
 @property (nullable, nonatomic, retain) NSString *visibility;
@@ -51,6 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isLiked;
 @property (nonatomic, assign) NSInteger numberOfLikes;
 @property (nonatomic, assign) NSInteger numberOfReposts;
+@property (nonatomic, assign) NSNumber *rating;
 @property (nonatomic) NSInteger generatedHeight;
 - (NSInteger)heightForGallery;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;

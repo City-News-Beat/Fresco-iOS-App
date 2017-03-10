@@ -6,23 +6,17 @@
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
-//View Controllers
 #import "FRSLoginViewController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSUploadViewController.h"
-
-//API
-#import "FRSAPIClient.h"
-
-//Cocoapods
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
-
-//Alert View
 #import "FRSAlertView.h"
-
 #import "FRSLocationManager.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
@@ -121,6 +115,8 @@
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    
+    [self hideSensitiveViews];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -130,6 +126,8 @@
     if (!self.didAnimate) {
         [self animateIn];
     }
+    
+    self.twitterButton.tintColor = [UIColor twitterBlueColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -216,64 +214,59 @@
         username = _userField.text;
     }
 
-    [[FRSAPIClient sharedClient] signIn:username
-                               password:password
-                             completion:^(id responseObject, NSError *error) {
+    [[FRSAuthManager sharedInstance] signIn:username
+                                   password:password
+                                 completion:^(id responseObject, NSError *error) {
 
-                               if (error) {
-                                   [FRSTracker track:loginError
-                                          parameters:@{ @"method" : @"email",
-                                                        @"error" : error.localizedDescription }];
-                               }
-
-                               [self stopSpinner:self.loadingView onButton:self.loginButton];
-
-                               if (error.code == 0) {
-
-                                   FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                   [delegate saveUserFields:responseObject[@"user"]];
-                                   [self setMigrateState:responseObject];
-
-                                   [self popToOrigin];
-
-                                   [self stopSpinner:self.loadingView onButton:self.loginButton];
-                                   if (self.passwordField.text != nil && ![self.passwordField.text isEqualToString:@""]) {
-                                       [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
+                                   if (error) {
+                                       [FRSTracker track:loginError
+                                              parameters:@{ @"method" : @"email",
+                                                            @"error" : error.localizedDescription }];
                                    }
 
                                    [self stopSpinner:self.loadingView onButton:self.loginButton];
-                                   [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
 
-                                   if ([self validEmail:username]) {
-                                       [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
+                                   if (error.code == 0) {
+                                       [self setMigrateState:responseObject];
+
+                                       [self popToOrigin];
+
+                                       [self stopSpinner:self.loadingView onButton:self.loginButton];
+                                       if (self.passwordField.text != nil && ![self.passwordField.text isEqualToString:@""]) {
+                                           [[FRSAuthManager sharedInstance] setPasswordUsed:self.passwordField.text];
+                                       }
+
+                                       [self stopSpinner:self.loadingView onButton:self.loginButton];
+                                       [[FRSAuthManager sharedInstance] setPasswordUsed:self.passwordField.text];
+
+                                       if ([self validEmail:username]) {
+                                           [[FRSAuthManager sharedInstance] setEmailUsed:self.userField.text];
+                                       }
+
+                                       [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+                                       
+                                       return;
                                    }
 
-                                   [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+                                   if (error.code == -1009) {
+                                       self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                                       [self.alert show];
+                                       return;
+                                   }
 
-        
-                                   return;
-                               }
+                                   NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                   NSInteger responseCode = response.statusCode;
 
-                               if (error.code == -1009) {
-                                   self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                                   [self.alert show];
-                                   return;
-                               }
+                                   if (responseCode == 401) {
+                                       [self presentInvalidInfo];
+                                       return;
+                                   }
 
-                               NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                               NSInteger responseCode = response.statusCode;
-
-                               if (responseCode == 401) {
-                                   [self presentInvalidInfo];
-                                   return;
-                               }
-
-                               if (error) {
-                                   [self presentGenericError];
-                               }
-                             }];
+                                   if (error) {
+                                       [self presentGenericError];
+                                   }
+                                 }];
 }
-
 - (void)presentInvalidInfo {
 
     [UIView animateWithDuration:0.15
@@ -281,8 +274,8 @@
         options:UIViewAnimationOptionCurveEaseInOut
         animations:^{
 
-          self.passwordHighlightLine.backgroundColor = [UIColor frescoRedHeartColor];
-          self.usernameHighlightLine.backgroundColor = [UIColor frescoRedHeartColor];
+          self.passwordHighlightLine.backgroundColor = [UIColor frescoRedColor];
+          self.usernameHighlightLine.backgroundColor = [UIColor frescoRedColor];
 
         }
         completion:^(BOOL finished) {
@@ -332,17 +325,24 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
-//This response object comes back from login
+
+/**
+ This response object comes back from login
+ */
 - (void)setMigrateState:(NSDictionary *)responseObject {
     BOOL shouldSync = false;
 
-    if (responseObject != nil && ![[responseObject valueForKey:@"valid_password"] boolValue]) {
+    if (
+        responseObject != nil
+        && [responseObject valueForKey:@"valid_password"] != nil
+        && ![[responseObject valueForKey:@"valid_password"] boolValue]
+    ) {
         shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"needs-password"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
         [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
 
-    } else if (![[[FRSAPIClient sharedClient] authenticatedUser] username] || ![[[FRSAPIClient sharedClient] authenticatedUser] email]) {
+    } else if (![[[FRSUserManager sharedInstance] authenticatedUser] username] || ![[[FRSUserManager sharedInstance] authenticatedUser] email]) {
         shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
         [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
@@ -355,7 +355,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
-
 - (IBAction)twitter:(id)sender {
 
     self.twitterButton.hidden = true;
@@ -366,7 +365,7 @@
     [self.twitterButton.superview addSubview:spinner];
     [spinner setFrame:CGRectMake(self.twitterButton.frame.origin.x, self.twitterButton.frame.origin.y, self.twitterButton.frame.size.width, self.twitterButton.frame.size.width)];
 
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, id responseObject) {
 
       if (error) {
           [FRSTracker track:loginError
@@ -375,19 +374,17 @@
       }
 
       if (authenticated) {
+          NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
 
-          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-          [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
-          [[NSUserDefaults standardUserDefaults] synchronize];
-
-          FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-          [delegate saveUserFields:responseObject[@"user"]];
+          if (socialLinksDict[@"facebook"] != nil) {
+              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+          }
+          
           [self setMigrateState:responseObject];
 
           self.didAuthenticateSocial = YES;
 
           [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-
           [self popToOrigin];
 
           return;
@@ -416,9 +413,6 @@
 }
 
 - (void)popToOrigin {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
-
     NSArray *viewControllers = [self.navigationController viewControllers];
 
     if ([viewControllers count] == 3) {
@@ -429,8 +423,6 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
         [self dismissViewControllerAnimated:YES completion:Nil];
     }
-
-    //[self postLoginNotification];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
@@ -450,73 +442,58 @@
     [spinner startAnimating];
     [self.facebookButton.superview addSubview:spinner];
     [spinner setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
-
+    
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
-
-      if (error) {
-          [FRSTracker track:loginError
-                 parameters:@{ @"method" : @"facebook",
-                               @"error" : error.localizedDescription }];
-      }
-
-      if (authenticated) {
-
-          NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-
-          /*  */
-          // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
-          /*  */
-
-          FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-          [delegate saveUserFields:responseObject[@"user"]];
-          [self setMigrateState:responseObject];
-
-          [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-
-                                                      [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                                        if (!error) {
-                                                            [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
-                                                        }
-                                                      }];
-                                                    }];
-
-          //            if (<#condition#>) {
-          //                [self displayMigrationAlert];
-          //            }
-
-          self.didAuthenticateSocial = YES;
-          [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-          [self popToOrigin];
-
-          [spinner stopLoading];
-          [spinner removeFromSuperview];
-          self.facebookButton.hidden = false;
-          return;
-      } else {
-      }
-
-      if (error) {
-
-          if (error.code == -1009) {
-              self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
-              [self.alert show];
-              [spinner stopLoading];
-              [spinner removeFromSuperview];
-              self.facebookButton.hidden = false;
-              return;
-          } else if (error.code == 301) {
-              //User dismisses view controller (done/cancel top left)
-          }
-
-          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-          [alert show];
-      }
-
-      [spinner stopLoading];
-      [spinner removeFromSuperview];
-      self.facebookButton.hidden = false;
+        
+        if (error) {
+            [FRSTracker track:loginError
+                   parameters:@{ @"method" : @"facebook",
+                                 @"error" : error.localizedDescription }];
+            
+            if (error.code == -1009) {
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                [self.alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.facebookButton.hidden = false;
+                return;
+            } else if (error.code == 301) {
+                //User dismisses view controller (done/cancel top left)
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [alert show];
+        }
+        
+        if (authenticated) {
+            
+            NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+            
+            [self setMigrateState:responseObject];
+            
+            [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
+                                                          completion:^(id responseObject, NSError *error) {
+                                                              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+                                                              
+                                                              [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                                                  if (!error) {
+                                                                      [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
+                                                                  }
+                                                              }];
+                                                          }];
+            self.didAuthenticateSocial = YES;
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+            [self popToOrigin];
+            
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            self.facebookButton.hidden = false;
+            return;
+        }
+        
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.facebookButton.hidden = false;
     }
                           parent:self
                          manager:self.fbLoginManager];
@@ -1272,6 +1249,12 @@
                        self.socialLabel.alpha = 0;
                      }
                      completion:nil];
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordField];
 }
 
 @end

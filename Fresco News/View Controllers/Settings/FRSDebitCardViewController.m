@@ -12,11 +12,13 @@
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
 #import "FRSStripe.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "EndpointManager.h"
+#import "FRSUserManager.h"
+#import "FRSPaymentManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSDebitCardViewController ()
 
@@ -54,6 +56,8 @@
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
     [self configureDismissKeyboardGestureRecognizer];
+    
+    [self hideSensitiveViews];
 }
 
 - (void)configureView {
@@ -271,8 +275,6 @@
 }
 
 - (void)saveBankInfo {
-    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
     if (!self.loadingView) {
         [self configureSpinner];
     }
@@ -307,25 +309,24 @@
 
                                                        return;
                                                    }
-                                                   [[FRSAPIClient sharedClient] createPaymentWithToken:token.tokenId
-                                                                                            completion:^(id responseObject, NSError *error) {
+                                                   [[FRSPaymentManager sharedInstance] createPaymentWithToken:token.tokenId
+                                                                                                   completion:^(id responseObject, NSError *error) {
+                                                                                                       if (error) {
+                                                                                                         // failed
+                                                                                                         self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                                         [self.alertView show];
+                                                                                                     } else {
+                                                                                                         // succeeded
+                                                                                                         NSString *brand = [responseObject objectForKey:@"brand"];
+                                                                                                         NSString *last4 = [responseObject objectForKey:@"last4"];
+                                                                                                         NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
 
-                                                                                              if (error) {
-                                                                                                  // failed
-                                                                                                  self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                                                                                  [self.alertView show];
-                                                                                              } else {
-                                                                                                  // succeeded
-                                                                                                  NSString *brand = [responseObject objectForKey:@"brand"];
-                                                                                                  NSString *last4 = [responseObject objectForKey:@"last4"];
-                                                                                                  NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
-
-                                                                                                  [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
-                                                                                                  [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
-                                                                                                  [self.navigationController popViewControllerAnimated:YES];
-                                                                                              }
-                                                                                              [self stopSpinner:self.loadingView onButton:self.saveBankButton];
-                                                                                            }];
+                                                                                                         [[[FRSUserManager sharedInstance] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
+                                                                                                         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+                                                                                                         [self.navigationController popViewControllerAnimated:YES];
+                                                                                                     }
+                                                                                                     [self stopSpinner:self.loadingView onButton:self.saveBankButton];
+                                                                                                   }];
                                                  }];
 }
 
@@ -481,8 +482,6 @@
 
     [self startSpinner:self.loadingView onButton:self.rightAlignedButton];
 
-    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;
 
@@ -514,29 +513,27 @@
                               return;
                           }
 
-                          [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId
-                                                                   completion:^(id responseObject, NSError *error) {
+                          [[FRSPaymentManager sharedInstance] createPaymentWithToken:stripeToken.tokenId
+                                                                          completion:^(id responseObject, NSError *error) {
+                                                                            if (error) {
+                                                                                self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                [self.alertView show];
+                                                                            } else if (responseObject) {
+                                                                                NSString *brand = [responseObject objectForKey:@"brand"];
+                                                                                NSString *last4 = [responseObject objectForKey:@"last4"];
 
-                                                                     if (error) {
-                                                                         self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                                                         [self.alertView show];
-                                                                         [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
-                                                                     } else if (responseObject) {
-                                                                         NSString *brand = [responseObject objectForKey:@"brand"];
-                                                                         NSString *last4 = [responseObject objectForKey:@"last4"];
+                                                                                if ([[responseObject valueForKey:@"valid"] boolValue]) {
+                                                                                    NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
+                                                                                    [[[FRSUserManager sharedInstance] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
+                                                                                    [self.navigationController popViewControllerAnimated:YES];
+                                                                                } else {
+                                                                                    self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                    [self.alertView show];
+                                                                                }
 
-                                                                         if ([[responseObject valueForKey:@"valid"] boolValue]) {
-                                                                             NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
-                                                                             [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
-                                                                             [self.navigationController popViewControllerAnimated:YES];
-                                                                         } else {
-                                                                             self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                                                             [self.alertView show];
-                                                                         }
-
-                                                                         [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
-                                                                     }
-                                                                   }];
+                                                                                [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
+                                                                            }
+                                                                          }];
                         }];
 }
 
@@ -574,6 +571,14 @@
 - (void)dismissKeyboard {
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:cardNumberTextField];
+    [UXCam occludeSensitiveView:self.routingNumberField];
+    [UXCam occludeSensitiveView:self.accountNumberField];
 }
 
 @end

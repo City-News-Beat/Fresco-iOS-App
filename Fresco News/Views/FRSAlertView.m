@@ -15,6 +15,8 @@
 #import <MapKit/MapKit.h>
 #import "FRSAppDelegate.h"
 #import <Contacts/Contacts.h>
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
@@ -814,7 +816,7 @@
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
         [self.cancelButton addTarget:self action:@selector(returnToPreviousViewController) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitleColor:[UIColor frescoRedColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"DELETE" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
@@ -832,11 +834,11 @@
 - (void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
 
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
 }
 
 - (void)dismiss {
@@ -856,7 +858,7 @@
 
     if (self) {
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
-        self.backgroundColor = [UIColor frescoRedHeartColor];
+        self.backgroundColor = [UIColor frescoRedColor];
 
         NSString *title = @"";
 
@@ -899,7 +901,7 @@
 
     if (self) {
 
-        if (![FRSAPIClient sharedClient].authenticatedUser) {
+        if (![FRSUserManager sharedInstance].authenticatedUser) {
             return nil;
         }
 
@@ -919,8 +921,7 @@
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
 
-        [[FRSAPIClient sharedClient] getTermsWithCompletion:^(id responseObject, NSError *error) {
-
+        [[FRSUserManager sharedInstance] getTermsWithCompletion:^(id responseObject, NSError *error) {
           if (error || !responseObject) {
               return;
           }
@@ -934,15 +935,9 @@
           [self animateIn];
         }];
 
-        //        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:TOS];
-        //        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        //        [paragraphStyle setLineSpacing:2];
-        //        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [TOS length])];
-
         self.TOSTextView = [[UITextView alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 320)];
         self.TOSTextView.textColor = [UIColor frescoMediumTextColor];
         self.TOSTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        //        self.TOSTextView.attributedText = attributedString;
         self.TOSTextView.textAlignment = NSTextAlignmentLeft;
         self.TOSTextView.backgroundColor = [UIColor clearColor];
         self.TOSTextView.editable = NO;
@@ -970,7 +965,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(14, self.TOSTextView.frame.origin.y + self.TOSTextView.frame.size.height, 54, 44);
-        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:[UIColor frescoRedColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -1022,8 +1017,7 @@
 }
 
 - (void)acceptTapped {
-    [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
-
+    [[FRSUserManager sharedInstance] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
       if (!error) {
           [self dismiss];
       } else {
@@ -1059,13 +1053,13 @@
         BOOL userHasUsername;
         BOOL userHasPassword = !password;
 
-        if ([[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
+        if ([[[[FRSUserManager sharedInstance] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSUserManager sharedInstance] authenticatedUser] username] isEqualToString:@""] || ![[[FRSUserManager sharedInstance] authenticatedUser] username]) {
             userHasUsername = NO;
         } else {
             userHasUsername = YES;
         }
 
-        if ([[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] email]) {
+        if ([[[[FRSUserManager sharedInstance] authenticatedUser] email] isEqual:[NSNull null]] || [[[[FRSUserManager sharedInstance] authenticatedUser] email] isEqualToString:@""] || ![[[FRSUserManager sharedInstance] authenticatedUser] email]) {
             userHasEmail = NO;
         } else {
             userHasEmail = YES;
@@ -1117,7 +1111,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, 337, 54, 44);
-        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:[UIColor frescoRedColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -1164,7 +1158,7 @@
         self.usernameTakenLabel = [[UILabel alloc] initWithFrame:CGRectMake(-44 - 6, 5, 44, 17)];
         self.usernameTakenLabel.text = @"TAKEN";
         self.usernameTakenLabel.alpha = 0;
-        self.usernameTakenLabel.textColor = [UIColor frescoRedHeartColor];
+        self.usernameTakenLabel.textColor = [UIColor frescoRedColor];
         self.usernameTakenLabel.font = [UIFont notaBoldWithSize:15];
         [self.usernameCheckIV addSubview:self.usernameTakenLabel];
 
@@ -1212,7 +1206,7 @@
             self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16 + 16), 20)];
             [self.passwordTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             self.passwordTextField.tag = 3;
-            if ([[FRSAPIClient sharedClient] socialUsed]) {
+            if ([[FRSAuthManager sharedInstance] socialUsed]) {
                 self.passwordTextField.placeholder = @"Set a New Password";
             } else {
                 self.passwordTextField.placeholder = @"Confirm Password";
@@ -1422,7 +1416,7 @@
     //  [digestion setObject:password forKey:@"verify_password"];
     //}
 
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
         [digestion setObject:password forKey:@"password"];
@@ -1437,72 +1431,70 @@
     [spinner startAnimating];
     [self addSubview:spinner];
 
-    [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                      [appDelegate saveUserFields:responseObject];
+    [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
+                                                        completion:^(id responseObject, NSError *error) {
+                                                          [[FRSUserManager sharedInstance] saveUserFields:responseObject andSynchronously:NO];
 
-                                                      if (responseObject && !error) {
-                                                          [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
-                                                          [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
-                                                          [[NSUserDefaults standardUserDefaults] synchronize];
-                                                      }
+                                                          if (responseObject && !error) {
+                                                              [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
+                                                              [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
+                                                              [[NSUserDefaults standardUserDefaults] synchronize];
+                                                          }
 
-                                                      spinner.alpha = 0;
-                                                      [spinner stopLoading];
-                                                      [spinner removeFromSuperview];
-                                                      self.cancelButton.alpha = 1;
-
-                                                      if (error) {
-                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                            [spinner stopLoading];
-                                                            [spinner removeFromSuperview];
-                                                            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-                                                          });
+                                                          spinner.alpha = 0;
+                                                          [spinner stopLoading];
+                                                          [spinner removeFromSuperview];
+                                                          self.cancelButton.alpha = 1;
 
                                                           if (error) {
-                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                                                              [alert show];
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                [spinner stopLoading];
+                                                                [spinner removeFromSuperview];
+                                                                [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                                                              });
 
-                                                              return;
-                                                          }
+                                                              if (error) {
+                                                                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                                  [alert show];
 
-                                                          if (responseObject) {
-
-                                                              if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
-                                                                  [[FRSAPIClient sharedClient] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
+                                                                  return;
                                                               }
 
-                                                              if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
-                                                                  [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+                                                              if (responseObject) {
+
+                                                                  if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
+                                                                      [[FRSUserManager sharedInstance] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
+                                                                  }
+
+                                                                  if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
+                                                                      [[FRSUserManager sharedInstance] authenticatedUser].email = self.emailTextField.text;
+                                                                  }
                                                               }
                                                           }
-                                                      }
 
-                                                      [self dismiss];
-                                                    }];
+                                                          [self dismiss];
+                                                        }];
 }
 
 - (void)checkEmail {
-
     //Prepopulated from login
     if (!self.emailTextField.userInteractionEnabled) {
         return;
     }
 
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text
-                                 completion:^(id responseObject, NSError *error) {
+    [[FRSUserManager sharedInstance] checkEmail:self.emailTextField.text
+                                     completion:^(id responseObject, NSError *error) {
 
-                                   if (!error) {
-                                       self.emailTaken = YES;
-                                       [self shouldShowEmailError:YES];
-                                   } else {
-                                       self.emailTaken = NO;
-                                       [self shouldShowEmailError:NO];
-                                   }
+                                       if (!error) {
+                                           self.emailTaken = YES;
+                                           [self shouldShowEmailError:YES];
+                                       } else {
+                                           self.emailTaken = NO;
+                                           [self shouldShowEmailError:NO];
+                                       }
 
-                                   [self checkCreateAccountButtonState];
-                                 }];
+                                       [self checkCreateAccountButtonState];
+                                     }];
 }
 
 - (void)shouldShowEmailError:(BOOL)error {
@@ -1545,31 +1537,31 @@
 
         if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1]
-                                            completion:^(id responseObject, NSError *error) {
+            [[FRSUserManager sharedInstance] checkUsername:[self.usernameTextField.text substringFromIndex:1]
+                                                completion:^(id responseObject, NSError *error) {
 
-                                              //Return if no internet
-                                              if (error.code == -1009) {
+                                                  //Return if no internet
+                                                  if (error.code == -1009) {
 
-                                                  return;
-                                              }
+                                                      return;
+                                                  }
 
-                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                              NSInteger responseCode = response.statusCode;
+                                                  NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                  NSInteger responseCode = response.statusCode;
 
-                                              if (responseCode == 404) { //
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  self.usernameTaken = NO;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                                  return;
-                                              } else {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  self.usernameTaken = YES;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                              }
-                                            }];
+                                                  if (responseCode == 404) { //
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                      self.usernameTaken = NO;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                      return;
+                                                  } else {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      self.usernameTaken = YES;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                  }
+                                                }];
         }
     }
 }

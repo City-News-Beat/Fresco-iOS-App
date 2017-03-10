@@ -14,16 +14,16 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSCameraViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSBaseViewController ()
 
 @property BOOL isSegueingToGallery;
 @property BOOL isSegueingToStory;
-@property (strong, nonatomic) FRSAlertView *suspendedAlert;
 
 @end
 
@@ -154,54 +154,23 @@
 #pragma mark - Logout
 
 - (void)logoutWithPop:(BOOL)pop {
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[delegate managedObjectContext] save:nil];
 
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-enabled"];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
-
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
-        [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+        //fixes a crash when logging out from migration alert and signed in with email and password
+        [[[FRSUserManager sharedInstance] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
     }
-
-    [[FRSAPIClient sharedClient] logout];
-    [FRSTracker reset];
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
     });
-    [[FRSAPIClient sharedClient] logout];
+    
+    [[FRSAuthManager sharedInstance] logout];
 
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
 
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate clearKeychain];
     [delegate stopNotificationTimer];
-
-    //[SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
-
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userHasFinishedMigrating];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [NSUserDefaults resetStandardUserDefaults];
-
-    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-    for (NSString *key in [defaultsDictionary allKeys]) {
-        if (![key isEqualToString:@"deviceToken"]) {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-        }
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [[FRSAPIClient sharedClient] setPasswordUsed:nil];
-    [[FRSAPIClient sharedClient] setEmailUsed:nil];
 
     FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
     [tabBarController updateUserIcon];
@@ -209,56 +178,9 @@
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
     [tab updateUserIcon];
-    [FRSTracker track:logoutEvent];
+
+    
     [self popViewController];
-}
-
-#pragma mark - Smooch
-- (void)presentSmooch {
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
-
-    if (currentUser.firstName) {
-        [SKTUser currentUser].firstName = currentUser.firstName;
-    }
-
-    if (currentUser.email) {
-        [SKTUser currentUser].email = currentUser.email;
-    }
-
-    if (currentUser.uid) {
-        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
-    }
-
-    [Smooch show];
-}
-
-#pragma mark - Moderation
-- (void)checkSuspended {
-
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
-
-    if ([[FRSAPIClient sharedClient] authenticatedUser].suspended) {
-        self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        [self.suspendedAlert show];
-    }
-}
-
-- (void)didPressButtonAtIndex:(NSInteger)index {
-
-    if (self.suspendedAlert) {
-        switch (index) {
-        case 0:
-            [self presentSmooch];
-            break;
-
-        case 1:
-
-            break;
-        default:
-            break;
-        }
-    }
 }
 
 @end

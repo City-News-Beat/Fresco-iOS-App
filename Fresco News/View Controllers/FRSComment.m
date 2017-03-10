@@ -8,6 +8,8 @@
 
 #import "FRSComment.h"
 #import "FRSAppDelegate.h"
+#import "FRSUserManager.h"
+#import "NSString+Fresco.h"
 
 @implementation FRSComment
 
@@ -28,7 +30,7 @@
 
     self.userDictionary = dictionary[@"user"];
 
-    if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         _isDeletable = TRUE;
     } else {
         _isDeletable = FALSE;
@@ -40,11 +42,11 @@
     _uid = dictionary[@"id"];
 
     if (![dictionary[@"created_at"] isEqual:[NSNull null]]) {
-        _createdAt = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"created_at"]];
+        _createdAt = [NSString dateFromString:dictionary[@"created_at"]];
     }
 
     if (![dictionary[@"updated_at"] isEqual:[NSNull null]]) {
-        _updatedAt = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"updated_at"]];
+        _updatedAt = [NSString dateFromString:dictionary[@"updated_at"]];
     }
 
     [self createAttributedText];
@@ -67,12 +69,14 @@
             NSInteger endIndex = [attribute[@"end_index"] integerValue];
 
             [_attributedString addAttribute:NSLinkAttributeName value:[@"name://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex - startIndex + 1)];
+            [_attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor frescoBlueColor] range:NSMakeRange(startIndex, endIndex - startIndex + 1)];
         } else if ([attribute[@"entity_type"] isEqualToString:@"tag"]) {
             NSString *name = attribute[@"text"];
             NSInteger startIndex = [attribute[@"start_index"] integerValue];
             NSInteger endIndex = [attribute[@"end_index"] integerValue];
 
             [_attributedString addAttribute:NSLinkAttributeName value:[@"tag://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex - startIndex + 1)];
+            [_attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor frescoBlueColor] range:NSMakeRange(startIndex, endIndex - startIndex + 1)];
         }
     }
 

@@ -7,11 +7,7 @@
 //
 
 #import "FRSLocator.h"
-#import "FRSAPIClient.h"
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
-#import <CoreTelephony/CTCarrier.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import "FRSUserManager.h"
 
 @implementation FRSLocator
 
@@ -39,10 +35,11 @@
     return self;
 }
 
-/*
+
+
+/**
  Sets up CLLocationManager, and sets us up to receive UIApplicationState change notifications
  */
-
 - (void)checkForCachedLocation {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-longitude"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"]) {
         NSNumber *latitude = [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"];
@@ -83,7 +80,7 @@
         NSDictionary *userLocation = @{ @"lat" : @(currentLocation.coordinate.latitude),
                                         @"lng" : @(currentLocation.coordinate.longitude) };
 
-        [[FRSAPIClient sharedClient] pingLocation:userLocation
+        [[FRSUserManager sharedInstance] updateUserLocation:userLocation
                                        completion:^(id responseObject, NSError *error) {
                                          if (error) {
                                              NSLog(@"Location Error");
@@ -340,5 +337,7 @@
 + (NSArray *)allAssignments {
     return @[];
 }
+
+
 
 @end

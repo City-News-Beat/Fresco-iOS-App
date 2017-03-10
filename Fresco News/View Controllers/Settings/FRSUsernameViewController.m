@@ -7,11 +7,12 @@
 //
 
 #import "FRSUsernameViewController.h"
-#import "FRSAPIClient.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSAlertView.h"
+#import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSUsernameViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSAlertViewDelegate>
 
@@ -36,6 +37,8 @@
 
     [self configureTableView];
     [self configureBackButtonAnimated:NO];
+    
+    [self hideSensitiveViews];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -231,40 +234,39 @@
     NSDictionary *digestion = @{ @"username" : self.username,
                                  @"verify_password" : self.password };
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion
-                                              completion:^(id responseObject, NSError *error) {
-                                                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                [delegate reloadUser];
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:digestion
+                                                  completion:^(id responseObject, NSError *error) {
+                                                    [[FRSUserManager sharedInstance] reloadUser];
 
-                                                if (!error) {
-                                                    [self popViewController];
-                                                    return;
-                                                }
-
-                                                if (error.code == -1009) {
-                                                    if (!self.alert) {
-                                                        self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                        [self.alert show];
-                                                    }
-                                                    return;
-                                                }
-
-                                                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                NSInteger responseCode = response.statusCode;
-
-                                                if (responseCode == 403 || responseCode == 401) { //incorrect
-                                                    if (!self.errorImageView) {
-                                                        [self addErrorToView];
+                                                    if (!error) {
+                                                        [self popViewController];
                                                         return;
                                                     }
-                                                } else {
-                                                    [self presentGenericError];
-                                                }
-                                              }];
 
-    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+                                                    if (error.code == -1009) {
+                                                        if (!self.alert) {
+                                                            self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                            [self.alert show];
+                                                        }
+                                                        return;
+                                                    }
+
+                                                    NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                    NSInteger responseCode = response.statusCode;
+
+                                                    if (responseCode == 403 || responseCode == 401) { //incorrect
+                                                        if (!self.errorImageView) {
+                                                            [self addErrorToView];
+                                                            return;
+                                                        }
+                                                    } else {
+                                                        [self presentGenericError];
+                                                    }
+                                                  }];
+
+    FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.username = self.username;
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
 }
 
 - (void)checkUsername {
@@ -352,26 +354,26 @@
 
         if ((![self.cell.textField.text isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:self.username
-                                            completion:^(id responseObject, NSError *error) {
+            [[FRSUserManager sharedInstance] checkUsername:self.username
+                                                completion:^(id responseObject, NSError *error) {
 
-                                              if (!error && responseObject) {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  self.usernameTaken = NO;
-                                                  [self stopUsernameTimer];
-                                                  [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                                                  self.cell.rightAlignedButton.userInteractionEnabled = NO;
-                                              } else if (error.code == -1009) {
-                                                  if (!self.alert) {
-                                                      self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                      [self.alert show];
+                                                  if (!error && responseObject) {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                      self.usernameTaken = NO;
+                                                      [self stopUsernameTimer];
+                                                      [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                                                      self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                                                  } else if (error.code == -1009) {
+                                                      if (!self.alert) {
+                                                          self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                          [self.alert show];
+                                                      }
+                                                  } else {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      self.usernameTaken = YES;
+                                                      [self stopUsernameTimer];
                                                   }
-                                              } else {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  self.usernameTaken = YES;
-                                                  [self stopUsernameTimer];
-                                              }
-                                            }];
+                                                }];
         }
     }
 }
@@ -462,6 +464,12 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordTextField];
 }
 
 @end

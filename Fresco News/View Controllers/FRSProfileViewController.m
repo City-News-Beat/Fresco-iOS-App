@@ -1,40 +1,32 @@
 #import "FRSProfileViewController.h"
-
-//View Controllers
 #import "FRSSettingsViewController.h"
 #import "FRSFollowersViewController.h"
 #import "FRSNavigationController.h"
-
 #import "FRSGalleryCell.h"
-
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
-
 #import "Fresco.h"
-
 #import "FRSTrimTool.h"
 #import "FRSAppDelegate.h"
-
 #import "FRSUser.h"
-
 #import "FRSAlertView.h"
-
 #import "FRSAppDelegate.h"
-#import "FRSAPIClient.h"
 #import "FRSStoryCell.h"
 #import "FRSSetupProfileViewController.h"
-
-#import "FRSAPIClient.h"
 #import "FRSAwkwardView.h"
 #import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>
 #import "FRSStoryDetailViewController.h"
 #import "FRSUserNotificationViewController.h"
-
 #import "FRSTabBarController.h"
-
 #import "FRSSearchViewController.h"
 #import "UITextView+Resize.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
+#import "FRSFollowManager.h"
+#import "FRSModerationManager.h"
+#import "FRSFeedManager.h"
+#import "FRSNotificationManager.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
@@ -96,7 +88,7 @@
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
 - (void)loadAuthenticatedUser {
-    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    _representedUser = [[FRSUserManager sharedInstance] authenticatedUser];
     self.authenticatedProfile = TRUE;
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
@@ -132,20 +124,20 @@
     }
 
     if (FALSE) {
-        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        _representedUser = [[FRSUserManager sharedInstance] authenticatedUser];
         self.authenticatedProfile = TRUE;
         [self configureWithUser:_representedUser];
     } else {
-        [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid
-                                         completion:^(id responseObject, NSError *error) {
-                                           if (error || !responseObject) {
-                                               return;
-                                           }
+        [[FRSUserManager sharedInstance] getUserWithUID:_representedUser.uid
+                                             completion:^(id responseObject, NSError *error) {
+                                               if (error || !responseObject) {
+                                                   return;
+                                               }
 
-                                           _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                           [self configureWithUser:_representedUser];
+                                               _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
+                                               [self configureWithUser:_representedUser];
 
-                                         }];
+                                             }];
     }
 
     [self setupUI];
@@ -311,11 +303,10 @@
     }
 
     [self addStatusBarNotification];
-    [self showNavBarForScrollView:self.tableView animated:NO];
 
     FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
 
-    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+    [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
 
       if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
           [tabBarController updateUserIcon];
@@ -323,26 +314,6 @@
           [tabBarController updateBellIcon:NO];
       }
     }];
-
-    //
-    //    if(!self.editedProfile){
-    //        if (!_representedUser) {
-    //            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    //            self.authenticatedProfile = TRUE;
-    //            [self configureWithUser:_representedUser];
-    //        }else{
-    //            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
-    //                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-    //                [self configureWithUser:_representedUser];
-    //
-    //                NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
-    //                self.bioLabel.frame = CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16);
-    //                [self.bioLabel sizeToFit];
-    //            }];
-    //        }
-    //    }else{
-    //        self.editedProfile = false;
-    //    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -376,19 +347,10 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    //This logic should be happen once the notif view is dismissed.
-    //We should see the tab bar in the notification view with the notification icon.
-    //    UITabBarItem *item4 = [self.tabBarController.tabBar.items objectAtIndex:4];
-    //    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    //    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    //    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    //    frsTabBar.dot.alpha = 0;
 }
 
 - (instancetype)initWithUser:(FRSUser *)user {
-
     if (self) {
-
         _representedUser = user; // obviously save for future
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
 
@@ -408,26 +370,25 @@
         [self setupUI];
         [self configureUI];
 
-        [[FRSAPIClient sharedClient] getUserWithUID:userName
-                                         completion:^(id responseObject, NSError *error) {
-                                           [self addStatusBarNotification];
-                                           [self showNavBarForScrollView:self.tableView animated:NO];
-                                           FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [[FRSUserManager sharedInstance] getUserWithUID:userName
+                                             completion:^(id responseObject, NSError *error) {
+                                               [self addStatusBarNotification];
+                                               FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-                                           FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
-                                           _representedUser = user;
+                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+                                               _representedUser = user;
 
-                                           [self configureWithUser:user];
-                                           [self fetchGalleries];
-                                           [super removeNavigationBarLine];
+                                               [self configureWithUser:user];
+                                               [self fetchGalleries];
+                                               [super removeNavigationBarLine];
 
-                                           if (self.shouldShowNotificationsOnLoad) {
-                                               [self showNotificationsNotAnimated];
-                                           }
+                                               if (self.shouldShowNotificationsOnLoad) {
+                                                   [self showNotificationsNotAnimated];
+                                               }
 
-                                           [self showTabBarAnimated:YES];
-                                           self.tableView.bounces = false;
-                                         }];
+                                               [self showTabBarAnimated:YES];
+                                               self.tableView.bounces = false;
+                                             }];
     }
 
     return self;
@@ -642,45 +603,44 @@
         reload = TRUE;
     }
 
-    [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser
-                                            completion:^(id responseObject, NSError *error) {
+    [[FRSFeedManager sharedInstance] fetchGalleriesForUser:self.representedUser
+                                                completion:^(id responseObject, NSError *error) {
+                                                  [self.loadingView stopLoading];
+                                                  [self.loadingView removeFromSuperview];
+                                                  // FIXME: These moderation features have nothing to do with this response and should be moved elsewhere.
+                                                  if (self.userIsBlocked) {
+                                                      [self configureBlockedUserWithButton:NO];
+                                                      self.likesButton.userInteractionEnabled = NO;
+                                                      return;
+                                                  }
 
-                                              [self.loadingView stopLoading];
-                                              [self.loadingView removeFromSuperview];
+                                                  if (self.userIsBlocking || _representedUser.blocking) {
+                                                      [self configureBlockedUserWithButton:YES];
+                                                      return;
+                                                  } else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
+                                                      [self configureSuspendedUser];
+                                                      return;
+                                                  } else if (self.userIsDisabled || _representedUser.disabled) {
+                                                      [self configureDisabledUser];
+                                                      return;
+                                                  }
 
-                                              if (self.userIsBlocked) {
-                                                  [self configureBlockedUserWithButton:NO];
-                                                  self.likesButton.userInteractionEnabled = NO;
-                                                  return;
-                                              }
+                                                  self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
 
-                                              if (self.userIsBlocking || _representedUser.blocking) {
-                                                  [self configureBlockedUserWithButton:YES];
-                                                  return;
-                                              } else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
-                                                  [self configureSuspendedUser];
-                                                  return;
-                                              } else if (self.userIsDisabled || _representedUser.disabled) {
-                                                  [self configureDisabledUser];
-                                                  return;
-                                              }
-
-                                              self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
-
-                                              [self.tableView reloadData];
-
-                                              if (reload) {
-                                                  self.currentFeed = self.galleries;
                                                   [self.tableView reloadData];
 
-                                                  if (self.galleries.count <= 0) {
-                                                      [self configureFrogForFeed:self.tableView];
-                                                      self.feedAwkwardView.alpha = 1;
-                                                  } else {
-                                                      self.feedAwkwardView.alpha = 0;
+                                                  if (reload) {
+                                                      self.currentFeed = self.galleries;
+                                                      [self.tableView reloadData];
+
+                                                      if (self.galleries.count <= 0) {
+                                                          [self configureFrogForFeed:self.tableView];
+                                                          self.feedAwkwardView.alpha = 1;
+                                                      } else {
+                                                          self.feedAwkwardView.alpha = 0;
+                                                      }
                                                   }
-                                              }
-                                            }];
+                                                }];
 
     [self fetchLikes];
 }
@@ -693,22 +653,22 @@
         reload = TRUE;
     }
 
-    [[FRSAPIClient sharedClient] fetchLikesFeedForUser:self.representedUser
-                                            completion:^(id responseObject, NSError *error) {
-                                              self.likes = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
+    [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:self.representedUser
+                                                completion:^(id responseObject, NSError *error) {
+                                                  self.likes = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
 
-                                              if (reload) {
-                                                  self.currentFeed = self.likes;
-                                                  [self.tableView reloadData];
+                                                  if (reload) {
+                                                      self.currentFeed = self.likes;
+                                                      [self.tableView reloadData];
 
-                                                  if (self.likes.count <= 0) {
-                                                      [self configureFrogForFeed:self.tableView];
-                                                      self.feedAwkwardView.alpha = 1;
-                                                  } else {
-                                                      self.feedAwkwardView.alpha = 0;
+                                                      if (self.likes.count <= 0) {
+                                                          [self configureFrogForFeed:self.tableView];
+                                                          self.feedAwkwardView.alpha = 1;
+                                                      } else {
+                                                          self.feedAwkwardView.alpha = 0;
+                                                      }
                                                   }
-                                              }
-                                            }];
+                                                }];
 }
 
 #pragma mark - UI Elements
@@ -780,7 +740,6 @@
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
 
-    
     if (self.representedUser.isLoggedIn && [self.navigationController.childViewControllers objectAtIndex:0] == self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotificationsAnimated)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
@@ -796,7 +755,7 @@
 
     } else {
 
-        if (![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        if (![self.representedUser.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
 
             self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
             self.followBarButtonItem.tintColor = [UIColor whiteColor];
@@ -811,7 +770,7 @@
 
               if (!self.userIsDisabled || !self.userIsSuspended) {
 
-                  if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                  if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                       UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
                       dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
 
@@ -1182,10 +1141,8 @@
     }
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
     vc.openedFrom = @"profile";
-
-    [super showNavBarForScrollView:self.tableView animated:NO];
 
     self.navigationItem.title = @"";
 
@@ -1337,7 +1294,7 @@
             return;
         }
 
-        isReloading = TRUE;
+        isReloading = YES;
         FRSGallery *gallery = [self.likes lastObject];
 
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -1345,36 +1302,31 @@
         NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
 
         FRSUser *authUser = self.representedUser;
-        NSString *userID = authUser.uid;
 
-        NSString *endpoint = [NSString stringWithFormat:likeFeed, userID];
+        [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
+                                                          last:timeStamp
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      isReloading = NO;
 
-        endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
+                                                      NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
 
-        [[FRSAPIClient sharedClient] get:endpoint
-                          withParameters:nil
-                              completion:^(id responseObject, NSError *error) {
-                                isReloading = FALSE;
+                                                      if (response.count == 0) {
+                                                          isFinishedLikes = YES;
+                                                      }
 
-                                NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+                                                      NSMutableArray *newGalleries = [self.likes mutableCopy];
+                                                      [newGalleries addObjectsFromArray:response];
+                                                      self.likes = newGalleries;
+                                                      [self.tableView reloadData];
 
-                                if (response.count == 0) {
-                                    isFinishedLikes = TRUE;
-                                }
-
-                                NSMutableArray *newGalleries = [self.likes mutableCopy];
-                                [newGalleries addObjectsFromArray:response];
-                                self.likes = newGalleries;
-                                [self.tableView reloadData];
-                              }];
-
+                                                    }];
     } else if (self.currentFeed == self.galleries) {
 
         if (isReloading || isFinishedUser) {
             return;
         }
 
-        isReloading = TRUE;
+        isReloading = YES;
         FRSGallery *gallery = [self.galleries lastObject];
 
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -1382,28 +1334,23 @@
         NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
 
         FRSUser *authUser = self.representedUser;
-        NSString *userID = authUser.uid;
 
-        NSString *endpoint = [NSString stringWithFormat:userFeed, userID];
+        [[FRSFeedManager sharedInstance] fetchGalleriesForUser:authUser
+                                                          last:timeStamp
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      isReloading = NO;
 
-        endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
+                                                      NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
 
-        [[FRSAPIClient sharedClient] get:endpoint
-                          withParameters:nil
-                              completion:^(id responseObject, NSError *error) {
-                                isReloading = FALSE;
+                                                      if (response.count == 0) {
+                                                          isFinishedUser = YES;
+                                                      }
 
-                                NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-
-                                if (response.count == 0) {
-                                    isFinishedUser = TRUE;
-                                }
-
-                                NSMutableArray *newGalleries = [self.galleries mutableCopy];
-                                [newGalleries addObjectsFromArray:response];
-                                self.galleries = newGalleries;
-                                [self.tableView reloadData];
-                              }];
+                                                      NSMutableArray *newGalleries = [self.galleries mutableCopy];
+                                                      [newGalleries addObjectsFromArray:response];
+                                                      self.galleries = newGalleries;
+                                                      [self.tableView reloadData];
+                                                    }];
     }
 }
 
@@ -1428,6 +1375,8 @@
 
             galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
+            [[galCell galleryView] adjustHeight];
+
         } else if (self.currentFeed.count == 0) {
 
         } else {
@@ -1581,36 +1530,36 @@
     self.didFollow = YES;
     [self shouldRefresh:YES];
 
-    [[FRSAPIClient sharedClient] followUser:self.representedUser
-                                 completion:^(id responseObject, NSError *error) {
-                                   if (error) {
-                                       return;
-                                   }
+    [[FRSFollowManager sharedInstance] followUser:self.representedUser
+                                       completion:^(id responseObject, NSError *error) {
+                                         if (error) {
+                                             return;
+                                         }
 
-                                   if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-                                       [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+                                         if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                                             [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
 
-                                   } else {
-                                       [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-                                       [self unfollowUser];
-                                   }
-                                 }];
+                                         } else {
+                                             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+                                             [self unfollowUser];
+                                         }
+                                       }];
 }
 
 - (void)unfollowUser {
-    [[FRSAPIClient sharedClient] unfollowUser:self.representedUser
-                                   completion:^(id responseObject, NSError *error) {
-                                     if (error) {
-                                         return;
-                                     }
+    [[FRSFollowManager sharedInstance] unfollowUser:self.representedUser
+                                         completion:^(id responseObject, NSError *error) {
+                                           if (error) {
+                                               return;
+                                           }
 
-                                     if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-                                         [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-                                     } else {
-                                         [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-                                     }
+                                           if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                                               [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+                                           } else {
+                                               [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+                                           }
 
-                                   }];
+                                         }];
 }
 
 - (void)shouldRefresh:(BOOL)refresh {
@@ -1644,8 +1593,7 @@
 }
 
 - (void)segueToSetup {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
 
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     setupProfileVC.nameStr = self.nameLabel.text;
@@ -1665,22 +1613,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Social Overlay Actions
-
-- (void)twitterTapped {
-    /*[FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
-     
-     }];*/
-}
-
-- (void)facebookTapped {
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, id responseObject) {
-
-    }
-                          parent:self
-                         manager:self.fbLoginManager]; // presenting view controller
 }
 
 #pragma mark - User
@@ -1769,77 +1701,77 @@
 }
 
 - (void)blockUser:(FRSUser *)user {
-    [[FRSAPIClient sharedClient] blockUser:user.uid
-                            withCompletion:^(id responseObject, NSError *error) {
+    [[FRSModerationManager sharedInstance] blockUser:user.uid
+                                      withCompletion:^(id responseObject, NSError *error) {
 
-                              if (responseObject) {
+                                        if (responseObject) {
 
-                                  NSString *username;
+                                            NSString *username;
 
-                                  if ([_representedUser.username class] != [NSNull null] && (![_representedUser.username isEqualToString:@""])) {
-                                      username = [NSString stringWithFormat:@"@%@", _representedUser.username];
-                                  } else if ([_representedUser.firstName class] != [NSNull null] && (![_representedUser.firstName isEqualToString:@""])) {
-                                      username = _representedUser.firstName;
-                                  } else {
-                                      username = @"them";
-                                  }
+                                            if ([_representedUser.username class] != [NSNull null] && (![_representedUser.username isEqualToString:@""])) {
+                                                username = [NSString stringWithFormat:@"@%@", _representedUser.username];
+                                            } else if ([_representedUser.firstName class] != [NSNull null] && (![_representedUser.firstName isEqualToString:@""])) {
+                                                username = _representedUser.firstName;
+                                            } else {
+                                                username = @"them";
+                                            }
 
-                                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                                  self.didDisplayBlock = YES;
-                                  [alert show];
+                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                            self.didDisplayBlock = YES;
+                                            [alert show];
 
-                                  //////
-                                  [self configureBlockedUserWithButton:YES];
-                                  self.blockedContainer.alpha = 1;
-                                  self.likes = nil;
-                                  self.galleries = nil;
-                                  [self.tableView reloadData];
-                                  if (!self.profileIV.image) {
-                                      self.placeholderUserIcon.alpha = 1;
-                                  }
-                                  self.userIsBlocking = YES;
-                                  self.tableView.scrollEnabled = NO;
-                                  UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
-                                  dotIcon.tintColor = [UIColor whiteColor];
-                                  self.navigationItem.rightBarButtonItems = @[ dotIcon ];
-                                  /////
+                                            //////
+                                            [self configureBlockedUserWithButton:YES];
+                                            self.blockedContainer.alpha = 1;
+                                            self.likes = nil;
+                                            self.galleries = nil;
+                                            [self.tableView reloadData];
+                                            if (!self.profileIV.image) {
+                                                self.placeholderUserIcon.alpha = 1;
+                                            }
+                                            self.userIsBlocking = YES;
+                                            self.tableView.scrollEnabled = NO;
+                                            UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+                                            dotIcon.tintColor = [UIColor whiteColor];
+                                            self.navigationItem.rightBarButtonItems = @[ dotIcon ];
+                                            /////
 
-                              } else {
-                                  [self presentGenericError];
-                              }
+                                        } else {
+                                            [self presentGenericError];
+                                        }
 
-                            }];
+                                      }];
 }
 
 - (void)unblockUser:(FRSUser *)user {
 
     [self configureSpinner];
 
-    [[FRSAPIClient sharedClient] unblockUser:user.uid
-                              withCompletion:^(id responseObject, NSError *error) {
-                                if (responseObject) {
+    [[FRSModerationManager sharedInstance] unblockUser:user.uid
+                                        withCompletion:^(id responseObject, NSError *error) {
+                                          if (responseObject) {
 
-                                    /////
-                                    self.userIsBlocking = NO;
-                                    self.tableView.scrollEnabled = YES;
-                                    [self configureWithUser:_representedUser];
-                                    [self fetchGalleries];
-                                    self.tableView.alpha = 1;
-                                    if (self.profileImageURL) {
-                                        self.placeholderUserIcon.alpha = 0;
-                                    }
-                                    self.blockedContainer.alpha = 0;
-                                    UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
-                                    dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-                                    dotIcon.tintColor = [UIColor whiteColor];
-                                    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-                                    self.navigationItem.rightBarButtonItems = @[ self.followBarButtonItem, dotIcon ];
-                                    ////
+                                              /////
+                                              self.userIsBlocking = NO;
+                                              self.tableView.scrollEnabled = YES;
+                                              [self configureWithUser:_representedUser];
+                                              [self fetchGalleries];
+                                              self.tableView.alpha = 1;
+                                              if (self.profileImageURL) {
+                                                  self.placeholderUserIcon.alpha = 0;
+                                              }
+                                              self.blockedContainer.alpha = 0;
+                                              UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+                                              dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+                                              dotIcon.tintColor = [UIColor whiteColor];
+                                              self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+                                              self.navigationItem.rightBarButtonItems = @[ self.followBarButtonItem, dotIcon ];
+                                              ////
 
-                                } else {
-                                    [self presentGenericError];
-                                }
-                              }];
+                                          } else {
+                                              [self presentGenericError];
+                                          }
+                                        }];
 }
 
 - (void)blockuserAction {
@@ -1852,7 +1784,7 @@
 
 - (void)reportUser:(NSString *)userID {
 
-    [[FRSAPIClient sharedClient] reportUser:userID
+    [[FRSModerationManager sharedInstance] reportUser:userID
         params:@{ @"reason" : self.reportUserReasonString,
                   @"message" : self.reportUserAlertView.textView.text }
         completion:^(id responseObject, NSError *error) {

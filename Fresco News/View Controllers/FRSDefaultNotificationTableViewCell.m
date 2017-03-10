@@ -9,8 +9,10 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSProfileViewController.h"
-#import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
+#import "FRSUserManager.h"
+#import "FRSStoryManager.h"
+#import "FRSGalleryManager.h"
 
 @interface FRSDefaultNotificationTableViewCell ()
 
@@ -31,17 +33,17 @@
 }
 
 - (void)setUserImage:(NSString *)userID {
-    [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                     completion:^(id responseObject, NSError *error) {
-                                       self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+    [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                         completion:^(id responseObject, NSError *error) {
+                                           self.titleLabel.text = [responseObject objectForKey:@"full_name"];
 
-                                       if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
-                                           NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-                                           [self.image hnk_setImageFromURL:avatarURL];
-                                       }
+                                           if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
+                                               NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+                                               [self.image hnk_setImageFromURL:avatarURL];
+                                           }
 
-                                       [self updateLabelsForCount];
-                                     }];
+                                           [self updateLabelsForCount];
+                                         }];
 }
 
 - (void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
@@ -107,20 +109,20 @@
 
     self.titleLabel.text = @"Your photo was purchased!";
 
-    [[FRSAPIClient sharedClient] getOutletWithID:outletID
-                                      completion:^(id responseObject, NSError *error){
+    [[FRSGalleryManager sharedInstance] getOutletWithID:outletID
+                                             completion:^(id responseObject, NSError *error){
 
-                                      }];
+                                             }];
 
-    [[FRSAPIClient sharedClient] getPostWithID:postID
-                                    completion:^(id responseObject, NSError *error) {
+    [[FRSGalleryManager sharedInstance] getPostWithID:postID
+                                           completion:^(id responseObject, NSError *error) {
 
-                                      if ([responseObject objectForKey:@"image"] != [NSNull null]) {
+                                             if ([responseObject objectForKey:@"image"] != [NSNull null]) {
 
-                                          NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
-                                          [self.image hnk_setImageFromURL:avatarURL];
-                                      }
-                                    }];
+                                                 NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+                                                 [self.image hnk_setImageFromURL:avatarURL];
+                                             }
+                                           }];
 
     //if user has payment method
     self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletID, price, paymentMethod];
@@ -135,20 +137,18 @@
     self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.titleLabel.numberOfLines = 0;
 
-    [[FRSAPIClient sharedClient] getOutletWithID:outletID
-                                      completion:^(id responseObject, NSError *error){
+    [[FRSGalleryManager sharedInstance] getOutletWithID:outletID
+                                             completion:^(id responseObject, NSError *error){
+                                             }];
 
-                                      }];
+    [[FRSGalleryManager sharedInstance] getPostWithID:postID
+                                           completion:^(id responseObject, NSError *error) {
+                                             if ([responseObject objectForKey:@"image"] != [NSNull null]) {
 
-    [[FRSAPIClient sharedClient] getPostWithID:postID
-                                    completion:^(id responseObject, NSError *error) {
-
-                                      if ([responseObject objectForKey:@"image"] != [NSNull null]) {
-
-                                          NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
-                                          [self.image hnk_setImageFromURL:avatarURL];
-                                      }
-                                    }];
+                                                 NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+                                                 [self.image hnk_setImageFromURL:avatarURL];
+                                             }
+                                           }];
 
     //if user has payment method
     self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your video! We've sent %@ to your %@.", outletID, price, paymentMethod];
@@ -167,27 +167,26 @@
     self.followButton.alpha = 0;
     self.followButton.tintColor = [UIColor blackColor];
 
-    [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                     completion:^(id responseObject, NSError *error) {
+    [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                         completion:^(id responseObject, NSError *error) {
+                                           self.titleLabel.text = [responseObject objectForKey:@"full_name"];
 
-                                       self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+                                           if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
+                                               NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+                                               [self.image hnk_setImageFromURL:avatarURL];
+                                           }
 
-                                       if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
-                                           NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-                                           [self.image hnk_setImageFromURL:avatarURL];
-                                       }
+                                           if ([[responseObject objectForKey:@"following"] boolValue]) {
+                                               [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+                                               self.followButton.tintColor = [UIColor frescoOrangeColor];
+                                           } else {
+                                               [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+                                               self.followButton.tintColor = [UIColor blackColor];
+                                           }
 
-                                       if ([[responseObject objectForKey:@"following"] boolValue]) {
-                                           [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
-                                           self.followButton.tintColor = [UIColor frescoOrangeColor];
-                                       } else {
-                                           [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-                                           self.followButton.tintColor = [UIColor blackColor];
-                                       }
+                                           [self updateLabelsForCount];
 
-                                       [self updateLabelsForCount];
-
-                                     }];
+                                         }];
 }
 
 - (void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
@@ -195,20 +194,20 @@
     [self configureDefaultCell];
     self.annotationView.alpha = 0;
 
-    [[FRSAPIClient sharedClient] getStoryWithUID:storyID
-                                      completion:^(id responseObject, NSError *error) {
+    [[FRSStoryManager sharedInstance] getStoryWithUID:storyID
+                                           completion:^(id responseObject, NSError *error) {
 
-                                        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
-                                        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-                                        self.bodyLabel.numberOfLines = 0;
-                                        self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
-                                        self.titleLabel.numberOfLines = 2;
+                                             self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
+                                             self.bodyLabel.text = [responseObject objectForKey:@"caption"];
+                                             self.bodyLabel.numberOfLines = 0;
+                                             self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                                             self.titleLabel.numberOfLines = 2;
 
-                                        if ([responseObject objectForKey:@"thumbnails"] != [NSNull null]) {
-                                            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
-                                            [self.image hnk_setImageFromURL:avatarURL];
-                                        }
-                                      }];
+                                             if ([responseObject objectForKey:@"thumbnails"] != [NSNull null]) {
+                                                 NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
+                                                 [self.image hnk_setImageFromURL:avatarURL];
+                                             }
+                                           }];
 }
 
 #pragma mark - Helpers

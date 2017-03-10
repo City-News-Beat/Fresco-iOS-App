@@ -8,9 +8,9 @@
 
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSCameraViewController.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSGlobalAssignmentsTableViewController.h"
+#import "FRSAssignmentManager.h"
 
 @interface FRSAssignmentNotificationTableViewCell ()
 
@@ -42,51 +42,16 @@
 }
 
 - (IBAction)secondaryAction:(id)sender {
-
-    [[FRSAPIClient sharedClient] get:[NSString stringWithFormat:@"assignment/%@", self.assignmentID]
-                      withParameters:Nil
-                          completion:^(id responseObject, NSError *error) {
-                            if (!error) {
-                                NSArray *coordinates = responseObject[@"location"][@"coordinates"];
-                                [self.delegate navigateToAssignmentWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates firstObject] floatValue]];
-                            } else {
-                            }
-                          }];
+    [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:self.assignmentID
+                                                     completion:^(id responseObject, NSError *error) {
+                                                       if (!error) {
+                                                           NSArray *coordinates = responseObject[@"location"][@"coordinates"];
+                                                           [self.delegate navigateToAssignmentWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates firstObject] floatValue]];
+                                                       }
+                                                     }];
 }
 
-//-(void)configureAssignmentCellWithID:(NSString *)assignmentID {
-//
-//    self.titleLabel.numberOfLines = 0;
-//    self.bodyLabel.numberOfLines  = 3;
-//    self.actionButton.tintColor = [UIColor blackColor];
-//    [self.actionButton setImage:[UIImage imageNamed:@"navigate-24"] forState:UIControlStateNormal];
-//
-//    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-//
-//        self.titleLabel.text = [responseObject objectForKey:@"title"];
-//        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-//        self.assignmentLat = [[[[responseObject valueForKey:@"location"] valueForKey:@"coordinates"] objectAtIndex:0] intValue];
-//        self.assignmentLong = [[[[responseObject valueForKey:@"location"] valueForKey:@"coordinates"] objectAtIndex:1] intValue];
-//
-//    }];
-//}
-
-//-(void)configureCameraCellWithAssignmentID:(NSString *)assignmentID {
-//
-//    self.titleLabel.numberOfLines = 0;
-//    self.bodyLabel.numberOfLines  = 3;
-//    self.actionButton.tintColor = [UIColor blackColor];
-//
-//    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-//
-//        self.titleLabel.text = [responseObject objectForKey:@"title"];
-//        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-//
-//    }];
-//}
-
 - (NSInteger)heightForCell {
-
     if (_generatedHeight) {
         return _generatedHeight;
     }

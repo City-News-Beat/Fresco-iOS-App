@@ -956,7 +956,7 @@
             }];
 
     } else {
-        [self animateShutterExpansionWithColor:[UIColor frescoRedHeartColor]];
+        [self animateShutterExpansionWithColor:[UIColor frescoRedColor]];
 
         [UIView transitionWithView:self.view
             duration:0.3
@@ -2185,7 +2185,7 @@
 
     if (!self.alertContainer) {
         self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(35, self.view.frame.size.height / 2 - 20, self.view.frame.size.height, 40)];
-        self.alertContainer.backgroundColor = [UIColor frescoRedHeartColor];
+        self.alertContainer.backgroundColor = [UIColor frescoRedColor];
         self.alertContainer.alpha = 0;
         [self.view addSubview:self.alertContainer];
 

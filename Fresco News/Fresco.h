@@ -5,10 +5,7 @@
 //  Created by Philip Bernstein on 3/5/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
-
-#import "FRSAPIClient.h" // Network
 #import "FRSGallery+CoreDataProperties.h"
-#import "FRSAPIClient.h" // imports all extension classes needed (location, persistence, social, upload)
 #import "FRSStripe.h"
 #import "AFNetworking.h"
 #import "FRSTracker.h"
@@ -25,86 +22,20 @@ static NSString *const largeImageSize = @""; // actual image
 static int const chunkSize = 5;
 static int const megabyteDefinition = 1048576;
 
+// file loading
+
+static int const maxFileAge = 86400; //1 day, in seconds
+
 // notifications
 static NSString *const kStatusBarTappedNotification = @"statusBarTappedNotification";
 
 static NSString *const serviceName = @"frescoNewsService3";
 static NSString *const FRSUploadNotification = @"FRSUploadUpdateNotification";
+static NSString *const FRSRetryUpload = @"FRSRetryUpload";
+static NSString *const FRSDismissUpload = @"FRSDismissUpload";
 
-// user settings (notifications)
-static NSString *const settingsEndpoint = @"user/settings";
-static NSString *const updateSettingsEndpoint = @"user/settings/update";
-
-// search endpoint
-static NSString *const searchEndpoint = @"search";
-static NSString *const nearbyUsersEndpoint = @"user/suggestions";
-
-// notification endpoint
-static NSString *const notificationEndpoint = @"user/notifications";
-
-// content endpoints
-static NSString *const storiesEndpoint = @"story/recent";
-static NSString *const highlightsEndpoint = @"gallery/highlights";
-static NSString *const assignmentsEndpoint = @"assignment/find";
-static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
-
-static NSString *const settingsUpdateEndpoint = @"user/settings/update";
-
-// location endpoints
-static NSString *const locationEndpoint = @"user/locate"; // send location
-static NSString *const dualLocationEndpoint = @"user/locationcall"; // send location & get nearby assignments
-static NSString *const acceptAssignmentEndpoint = @"assignment/%@/accept";
-static NSString *const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
-
-// sign in / sign up (authorization) methods
-static NSString *const loginEndpoint = @"auth/signin";
-static NSString *const signUpEndpoint = @"auth/register";
-static NSString *const socialLoginEndpoint = @"auth/signin/social";
 static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
 static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
-
-// comments
-static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
-static NSString *const getCommentEndpoint = @"gallery/%@/comment/%@";
-
-// user endpoints
-static NSString *const userEndpoint = @"user/";
-static NSString *const setAvatarEndpoint = @"user/avatar";
-static NSString *const updateUserEndpoint = @"user/update";
-static NSString *const authenticatedUserEndpoint = @"user/me";
-static NSString *const addSocialEndpoint = @"user/social/connect/";
-static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
-
-static NSString *const disableAccountEndpoint = @"user/disable/";
-
-// gallery creation
-static NSString *const createGalleryEndpoint = @"gallery/submit";
-static NSString *const completePostEndpoint = @"post/complete";
-
-// formatted endpoints
-static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
-static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
-static NSString *const likeStoryEndpoint = @"story/%@/like";
-static NSString *const repostStoryEndpoint = @"story/%@/repost";
-static NSString *const unrepostGalleryEndpoint = @"gallery/%@/unrepost";
-static NSString *const unrepostStoryEndpoint = @"story/%@/unrepost";
-static NSString *const followUserEndpoint = @"user/%@/follow";
-static NSString *const unfollowUserEndpoint = @"user/%@/unfollow";
-static NSString *const followersEndpoint = @"user/%@/followers";
-static NSString *const followingEndpoint = @"user/%@/following";
-static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
-static NSString *const commentEndpoint = @"gallery/%@/comment/";
-static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
-static NSString *const storyUnlikeEndpoint = @"story/%@/unlike";
-static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
-static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
-static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
-
-
-// feeds
-static NSString *const likeFeed = @"feeds/%@/likes";
-static NSString *const followingFeed = @"feeds/%@/following";
-static NSString *const userFeed = @"feeds/%@/user";
 
 // quick actions -- app delegate
 static NSString *const assignmentsAction = @"FRSAssignmentsAction";
@@ -116,18 +47,6 @@ static NSString *const postObjectType = @"post";
 static NSString *const galleryObjectType = @"gallery";
 static NSString *const storyObjectType = @"story";
 
-// payments
-
-static NSString *const createPayment = @"user/payment/create";
-static NSString *const getPaymentsEndpoint = @"user/payment";
-static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
-static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
-
-// moderation
-static NSString *const blockUserEndpoint = @"user/%@/block";
-static NSString *const unblockUserEndpoint = @"user/%@/unblock";
-static NSString *const reportUserEndpoint = @"user/%@/report";
-
 // user defaults
 static NSString *const previouslySelectedTabKey = @"previouslySelectedTab";
 static NSString *const settingsUserNotificationRadius = @"notification-radius";
@@ -135,14 +54,19 @@ static NSString *const settingsPaymentLastFour = @"payment-last-four";
 static NSString *const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString *const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString *const startDate = @"startDate";
-static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
+static NSString *const isFirstRun = @"isFirstRun";
+static NSString *const facebookConnected = @"facebook-connected";
+static NSString *const facebookName = @"facebook-name";
+static NSString *const twitterConnected = @"twitter-connected";
+static NSString *const twitterHandle = @"twitter-handle";
+static NSString *const kClientToken = @"kClientToken";
+static NSString *const kUserToken = @"kUserToken";
 
 // nsnotification
 static NSString *const enableAssignmentAccept = @"enableAssignmentAccept";
 static NSString *const disableAssignmentAccept = @"disableAssignmentAccept";
 
 // mixpanel
-
 static NSString *const activityDuration = @"activity_duration";
 
 // user - data
@@ -174,6 +98,7 @@ static NSInteger const maxCommentChar = 200;
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 static int const maxVideoAge = 86400; // seconds in a day
 static int const maxAssetCount = 8;
+static NSString *const localDirectory = @"frs";
 
 // UI
 static NSString *const loadingCellIdentifier = @"LoadingMoreCell";
@@ -183,8 +108,6 @@ static NSString *const settingsCellIdentifier = @"SettingsCell";
 static NSString *const galleryCellIdentifier = @"gallery-cell";
 
 // TOS
-static NSString *const getTermsEndpoint = @"terms";
-static NSString *const acceptTermsEndpoint = @"terms/accept";
 
 #define USER_NAME @"username"
 #define PASS_WORD @"password"
@@ -201,6 +124,9 @@ typedef void (^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void (^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void (^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
+// errors
+static NSString *const errorDomain = @"com.fresconews.Fresco";
+
 // fields needed
 static NSString *const lineOneField = @"legal_entity.address.line1";
 static NSString *const cityField = @"legal_entity.address.city";
@@ -213,9 +139,7 @@ static NSString *const ssnField = @"legal_entity.ssn_last_4";
 static NSString *const firstNameField = @"legal_entity.first_name";
 static NSString *const lastNameField = @"legal_entity.last_name";
 
-/*FRS
-    Notification types
- */
+//FRS Notification types
 
 typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 
@@ -237,8 +161,6 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 };
 
 static NSString *const settingsKey = @"notification-type";
-// Upload - local
-static NSString *const restartUploadNotification = @"user-local-upload";
 
 // News
 static NSString *const photoOfDayNotification = @"user-news-photos-of-day";
@@ -252,8 +174,8 @@ static NSString *const followedNotification = @"user-social-followed";
 static NSString *const likedNotification = @"user-social-gallery-liked";
 static NSString *const repostedNotification = @"user-social-reposted";
 static NSString *const commentedNotification = @"user-social-commented";
-static NSString *const mentionCommentNotification = @"user-social-mentioned-comment"; //cc: api
-static NSString *const mentionGalleryNotification = @"user-social-mentioned-gallery"; //cc: api
+static NSString *const mentionCommentNotification = @"user-social-mentioned-comment";
+static NSString *const mentionGalleryNotification = @"user-social-mentioned-gallery";
 
 // Payment
 static NSString *const purchasedContentNotification = @"user-dispatch-purchased";
@@ -267,6 +189,11 @@ static NSString *const taxInfoDeclinedNotification = @"user-payment-tax-info-dec
 // Assignments
 static NSString *const newAssignmentNotification = @"user-dispatch-new-assignment";
 static NSString *const galleryApprovedNotification = @"user-dispatch-content-verified";
+
+// Smooch Whisper
+static NSString *const smoochSupportNotification = @"user-support-request";
+static NSString *const smoochSupportTempNotification = @"Fresco Support Request"; // This will be removed when support is added on the web platform
+static NSString *const smoochNotificationEventName = @"smooch-invite";
 
 // Event Tracking [FRSTracker]
 static NSString *const gallerySession = @"Gallery session";
@@ -292,7 +219,8 @@ static NSString *const galleryShared = @"Gallery shared";
 static NSString *const signupsWithTwitter = @"Signups with Twitter";
 static NSString *const signupsWithFacebook = @"Signups with Facebook";
 static NSString *const signupsWithEmail = @"Signups with email";
-static NSString *const loginEvent = @"Logins";
+static NSString *const signupEvent = @"Signup";
+static NSString *const loginEvent = @"Login";
 static NSString *const addressError = @"Address Error";
 static NSString *const notificationsEnabled = @"Permissions notification enables";
 static NSString *const notificationsDisabled = @"Permissions notification disables";
@@ -323,6 +251,46 @@ static NSString *const registrationError = @"Registration Error";
 static NSString *const signupRadiusChange = @"Signup radius changes";
 static NSString *const submissionsEvent = @"Submissions";
 static NSString *const itemsInGallery = @"Submission item in gallery";
+static NSString *const notificationOpened = @"Notification opened";
+static NSString *const notificationReceived = @"Notification received";
+static NSString *const assignmentAccepted = @"Assignment accepted";
+static NSString *const assignmentUnaccepted = @"Assignment un_accepted";
+static NSString *const assignmentClicked = @"Assignment clicked";
+static NSString *const assignmentDismissed = @"Assignment dismissed";
+
+#define OBJECT @"object"
+#define OBJECT_ID @"object_id"
+#define DISTANCE_AWAY @"distance_away"
+
+
+// API dictionary response keys
+    // todo: add other keys and create new class for all response keys
+// Notification
+#define TYPE @"type"
+#define TITLE @"title"
+#define META @"meta"
+#define PUSH_KEY @"push_key"
+
+// Assignment
+#define ASSIGNMENT @"assignment"
+#define ASSIGNMENT_ID @"assignment_id"
+#define IS_GLOBAL @"is_global"
+#define GLOBAL @"global"
+
+// Gallery
+#define GALLERY @"gallery"
+#define GALLERY_IDS @"gallery_ids"
+#define GALLERY_ID @"gallery_id"
+
+// User
+#define USER @"user"
+#define USER_IDS @"user_ids"
+#define HAS_PAYMENT @"has_payment"
+
+// Story
+#define STORY @"story"
+#define STORY_ID @"story_id"
+
 
 // scrolling, video playback
 static float const maxScrollVelocity = 2.1;

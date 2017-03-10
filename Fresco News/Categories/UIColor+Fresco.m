@@ -34,7 +34,7 @@
     return [UIColor colorWithWhite:0.0 alpha:0.87];
 }
 
-+ (UIColor *)frescoRedHeartColor {
++ (UIColor *)frescoRedColor {
     return [UIColor colorWithRed:208 / 255.0 green:2 / 255.0 blue:27 / 255.0 alpha:1.0];
 }
 

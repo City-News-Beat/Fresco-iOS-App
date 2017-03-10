@@ -7,22 +7,22 @@
 //
 
 #import "FRSSignUpViewController.h"
-
-//View Controllers
 #import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
 #import "FRSLoginViewController.h"
-
-//Helpers
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-
-//UI
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-#import <QuartzCore/QuartzCore.h>
 #import "FRSAppDelegate.h"
 #import "FRSNavigationController.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
+#import "FRSSnapKit.h"
+
+#import <QuartzCore/QuartzCore.h>
+#import <UXCam/UXCam.h>
+#import <Crashlytics/Crashlytics.h>
 
 @import MapKit;
 
@@ -65,7 +65,6 @@
 @property CGFloat longitude;
 @property (strong, nonatomic) NSMutableArray *formViews;
 
-
 @end
 
 @implementation FRSSignUpViewController
@@ -82,9 +81,9 @@
 
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
     }
 
     self.setupProfileVC = [[FRSSetupProfileViewController alloc] init];
@@ -93,16 +92,11 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-    } else {
-        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    }
     [self addNotifications];
 }
 
 - (NSDictionary *)currentSocialDigest {
-    return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
+    return [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -128,14 +122,6 @@
     [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
-
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-    } else {
-        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    }
-
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUserLocationOnMap) userInfo:nil repeats:YES];
 }
 
 - (void)back {
@@ -176,20 +162,20 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
 
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
 
-    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.notificationRadius = @(self.miles);
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
 }
 
 - (void)updateUserLocationOnMap {
@@ -233,7 +219,7 @@
 
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-    
+
     self.formViews = [[NSMutableArray alloc] init];
 
     [self configureScrollView];
@@ -300,7 +286,6 @@
     self.usernameHighlightLine = [[UIView alloc] initWithFrame:CGRectMake(48, 92 - 64 + 44, self.usernameTF.frame.size.width, 0.5)];
     self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
     [self.scrollView addSubview:self.usernameHighlightLine];
-
 
     self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-green"]];
     self.usernameCheckIV.frame = CGRectMake(self.usernameTF.frame.size.width - 24, 10, 24, 24);
@@ -510,7 +495,7 @@
     imageView.layer.cornerRadius = 9;
     [mapCircleView addSubview:imageView];
 
-    if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+    if ([FRSUserManager sharedInstance].authenticatedUser.profileImage) {
 
     } else {
         imageView.backgroundColor = [UIColor frescoBlueColor];
@@ -629,58 +614,7 @@
 
     [self addSocialButtonsToBottomBar];
 
-    [self constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
-}
-
-- (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
-
-    subView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeTrailing
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeTrailing
-                multiplier:1
-                  constant:0];
-
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeLeading
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeLeading
-                multiplier:1
-                  constant:0];
-
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeBottom
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:parentView
-                 attribute:NSLayoutAttributeBottom
-                multiplier:1
-                  constant:0];
-
-    //Height
-    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
-        constraintWithItem:subView
-                 attribute:NSLayoutAttributeHeight
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:nil
-                 attribute:0
-                multiplier:0
-                  constant:height];
-
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:leading];
-
-    [subView addConstraint:constantHeight];
+    [FRSSnapKit constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
 
 - (void)toggleCreateAccountButtonTitleColorToState:(UIControlState)controlState {
@@ -708,11 +642,6 @@
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-    } else {
-        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    }
 
     [self.bottomBar addSubview:_facebookButton];
 }
@@ -800,6 +729,7 @@
 }
 
 #pragma mark - TextField Delegate
+
 - (void)textFieldDidChange {
 
     if ((self.emailTF.isEditing) && ([self isValidEmail:self.emailTF.text])) {
@@ -944,44 +874,44 @@
 
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1]
-                                            completion:^(id responseObject, NSError *error) {
+            [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
+                                                completion:^(id responseObject, NSError *error) {
 
-                                              //Return if no internet
-                                              if (error.code == -1009) {
+                                                  //Return if no internet
+                                                  if (error.code == -1009) {
 
-                                                  return;
-                                              }
+                                                      return;
+                                                  }
 
-                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                              NSInteger responseCode = response.statusCode;
-                                              NSLog(@"Check Username Error: %ld", (long)responseCode);
+                                                  NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                  NSInteger responseCode = response.statusCode;
+                                                  NSLog(@"Check Username Error: %ld", (long)responseCode);
 
-                                              if (responseCode == 404) { //
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                                  self.usernameTaken = NO;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                                  return;
-                                              } else {
-                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                                  self.usernameTaken = YES;
-                                                  [self stopUsernameTimer];
-                                                  [self checkCreateAccountButtonState];
-                                              }
+                                                  if (responseCode == 404) { //
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                      self.usernameTaken = NO;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                      return;
+                                                  } else {
+                                                      [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      self.usernameTaken = YES;
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
+                                                  }
 
-                                              //                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
-                                              //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                                              //                    self.usernameTaken = NO;
-                                              //                    [self stopUsernameTimer];
-                                              //                    [self checkCreateAccountButtonState];
-                                              //                } else {
-                                              //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                                              //                    self.usernameTaken = YES;
-                                              //                    [self stopUsernameTimer];
-                                              //                    [self checkCreateAccountButtonState];
-                                              //                }
-                                            }];
+                                                  //                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                                                  //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                  //                    self.usernameTaken = NO;
+                                                  //                    [self stopUsernameTimer];
+                                                  //                    [self checkCreateAccountButtonState];
+                                                  //                } else {
+                                                  //                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                  //                    self.usernameTaken = YES;
+                                                  //                    [self stopUsernameTimer];
+                                                  //                    [self checkCreateAccountButtonState];
+                                                  //                }
+                                                }];
         }
     }
 }
@@ -1227,13 +1157,13 @@
     [self configureSpinner];
     [self startSpinner:self.loadingView onButton:self.createAccountButton];
 
-    NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
+    NSDictionary *currentInstallation = [[FRSAuthManager sharedInstance] currentInstallation];
 
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
 
     if (currentInstallation && [currentInstallation objectForKey:@"device_token"]) {
-        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+        [registrationDigest setObject:[[FRSAuthManager sharedInstance] currentInstallation] forKey:@"installation"];
     }
 
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
@@ -1241,92 +1171,64 @@
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
     [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
-    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest
-                                                completion:^(id responseObject, NSError *error) {
-                                                  BOOL facebookSignup = FALSE;
-                                                  BOOL twitterSignup = FALSE;
-
-                                                  if ([self.currentSocialDigest objectForKey:@"twitter"]) {
-                                                      twitterSignup = true;
-                                                  }
-                                                  if ([self.currentSocialDigest objectForKey:@"facebook"]) {
-                                                      facebookSignup = true;
-                                                  }
-
-                                                  NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
-
-                                                  if (error) {
-                                                      [registrationDigest setObject:error.localizedDescription forKey:@"error"];
-                                                      [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
-                                                  }
-
-                                                  if (error.code == -1009) {
-
-                                                      FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                      [alert show];
-                                                      [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                                                      return;
-                                                  }
-
-                                                  if (error) {
-                                                      [Answers logSignUpWithMethod:@"Email"
-                                                                           success:@NO
-                                                                  customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
-                                                                                      @"facebook" : @((self.facebookToken != Nil)) }];
-
-                                                      NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                      NSInteger responseCode = response.statusCode;
-
-                                                      if (responseCode == 412) {
-                                                          [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-                                                          [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-
-                                                          NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
-                                                          NSError *jsonError;
-
-                                                          NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
-                                                          NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
-
-                                                          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                                                          [alert show];
-                                                          [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                          return;
+    [[FRSAuthManager sharedInstance] registerWithUserDigestion:registrationDigest
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      if (error) {
+                                                          [registrationDigest setObject:error.localizedDescription forKey:@"error"];
+                                                          [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
+                                                          
+                                                          [Answers logSignUpWithMethod:@"Email"
+                                                                               success:@NO
+                                                                      customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
+                                                                                          @"facebook" : @((self.facebookToken != Nil)) }];
+                                                          
+                                                          NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                          NSInteger responseCode = response.statusCode;
+                                                          
+                                                          if (responseCode == 412) {
+                                                              NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                                                              NSError *jsonError;
+                                                              
+                                                              NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                                                              NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                                                              
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                              [alert show];
+                   
+                                                          } else if (error.code == -1009) {
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                              [alert show];
+                                                          } else {
+                                                              [self presentGenericError];
+                                                          }
+                                                      } else {
+                                                          [Answers logSignUpWithMethod:@"Email"
+                                                                               success:@YES
+                                                                      customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
+                                                                                          @"facebook" : @((self.facebookToken != Nil)) }];
+                                                          
+                                                          _isAlreadyRegistered = TRUE;
+                                                          [self segueToSetup];
                                                       }
 
-                                                      [self presentGenericError];
                                                       [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                  }
-
-                                                  if (error.code == 0) {
-                                                      [Answers logSignUpWithMethod:@"Email"
-                                                                           success:@YES
-                                                                  customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
-                                                                                      @"facebook" : @((self.facebookToken != Nil)) }];
-
-                                                      _isAlreadyRegistered = TRUE;
-                                                      [self segueToSetup];
-                                                  }
-                                                  _pastRegistration = registrationDigest;
-
-                                                  [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                }];
+                                                    }];
 }
 
 - (void)checkEmail {
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text
-                                 completion:^(id responseObject, NSError *error) {
-                                   if (!error) {
-                                       self.emailTaken = YES;
-                                       [self shouldShowEmailDialogue:YES];
-                                       [self presentInvalidEmail];
-                                   } else {
-                                       self.emailTaken = NO;
-                                       [self shouldShowEmailDialogue:NO];
-                                   }
+    [[FRSUserManager sharedInstance] checkEmail:self.emailTF.text
+                                     completion:^(id responseObject, NSError *error) {
+                                       if (!error) {
+                                           self.emailTaken = YES;
+                                           [self shouldShowEmailDialogue:YES];
+                                           [self presentInvalidEmail];
+                                       } else {
+                                           self.emailTaken = NO;
+                                           [self shouldShowEmailDialogue:NO];
+                                       }
 
-                                   [self checkCreateAccountButtonState];
-                                 }];
+                                       [self checkCreateAccountButtonState];
+                                     }];
 }
 
 - (BOOL)checkFields {
@@ -1350,179 +1252,155 @@
 }
 
 - (void)twitterTapped {
-
-    //Create Spinner
-    self.twitterButton.hidden = true;
-    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    spinner.tintColor = [UIColor frescoOrangeColor];
-    [spinner setPullProgress:90];
-    [spinner startAnimating];
-    [self.twitterButton.superview addSubview:spinner];
-    [spinner setFrame:CGRectMake(16, self.twitterButton.imageView.frame.origin.y, self.twitterButton.imageView.frame.size.width, self.twitterButton.imageView.frame.size.height)];
-
+    
     if (_twitterSession) {
         _twitterSession = Nil;
-        [spinner stopLoading];
-        [spinner removeFromSuperview];
-        self.twitterButton.hidden = false;
-        [UIView animateWithDuration:.2
-                         animations:^{
-                           [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-                         }];
-
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+        [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
         return;
     }
 
-    _twitterButton.enabled = FALSE; // prevent double tapping
-
+    //Create Spinner for async. operation
+    [self setSpinnerStateOnView:self.twitterButton shouldShow:YES];
+    
     [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
-      _twitterButton.enabled = TRUE;
-
-      [spinner stopLoading];
-      [spinner removeFromSuperview];
-      self.twitterButton.hidden = false;
-
-      if (session) {
-          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-          [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
-          //self.setupProfileVC.nameStr = session
-          TWTRAPIClient *apiClient = [[TWTRAPIClient alloc] initWithUserID:[session userID]];
-
-          [apiClient loadUserWithID:[session userID]
-                         completion:^(TWTRUser *_Nullable user, NSError *_Nullable error) {
-                           if (user.name) {
-                               self.setupProfileVC.nameStr = user.name;
-                           }
-                         }];
-      }
-
-      if (error) {
-
-          if (error.code == -1009) {
-              FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-              [alert show];
-              [spinner stopLoading];
-              [spinner removeFromSuperview];
-              self.twitterButton.hidden = false;
-              return;
-          }
-
-          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-          [alert show];
-
-          [spinner stopLoading];
-          [spinner removeFromSuperview];
-          self.twitterButton.hidden = false;
-          [UIView animateWithDuration:.2
-                           animations:^{
-                             [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-
+        [self setSpinnerStateOnView:self.twitterButton shouldShow:NO];
+        
+        if (session && !error) {
+            [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateNormal];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
+            [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:twitterHandle];
+            //self.setupProfileVC.nameStr = session
+            TWTRAPIClient *apiClient = [[TWTRAPIClient alloc] initWithUserID:[session userID]];
+            _twitterSession = session;
+            
+            [apiClient loadUserWithID:[session userID]
+                           completion:^(TWTRUser *_Nullable user, NSError *_Nullable error) {
+                               if (user.name) {
+                                   self.setupProfileVC.nameStr = user.name;
+                               }
                            }];
-          return;
-      } else {
-          [UIView animateWithDuration:.2
-                           animations:^{
-                             [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateNormal];
-                           }];
-      }
-      _twitterSession = session;
+        } else {
+            [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+            
+            if (error.code == -1009) {
+                [self setSpinnerStateOnView:self.twitterButton shouldShow:NO];
+                return;
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc]
+                                   initWithTitle:@"COULDN’T LOG IN"
+                                   message:@"We couldn’t verify your Twitter account. Please try signing in with your email and password."
+                                   actionTitle:@"OK"
+                                   cancelTitle:@""
+                                   cancelTitleColor:nil
+                                   delegate:nil];
+            [alert show];
+        }
     }];
 }
 
 - (void)facebookTapped {
 
-    //Create Spinner
-    self.facebookButton.hidden = true;
-    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    spinner.tintColor = [UIColor frescoOrangeColor];
-    [spinner setPullProgress:90];
-    [spinner startAnimating];
-    [spinner setFrame:CGRectMake(56, self.facebookButton.imageView.frame.origin.y, self.facebookButton.imageView.frame.size.width, self.facebookButton.imageView.frame.size.height)];
-    [self.facebookButton.superview addSubview:spinner];
-
+    //If we have the token already, clear it and reset the image
     if (_facebookToken) {
         _facebookToken = Nil;
-        [spinner stopLoading];
-        spinner.alpha = 0;
-        [spinner removeFromSuperview];
-        [UIView animateWithDuration:.2
-                         animations:^{
-                           [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-                         }];
+        
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
 
-        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:facebookName];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
 
         return;
     }
-
-    _facebookButton.enabled = FALSE; // prevent double tapping
+    
+    //Create Spinner for async. operation
+    [self setSpinnerStateOnView:self.facebookButton shouldShow:YES];
 
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-
+    
     [login logInWithReadPermissions:@[ @"public_profile", @"email", @"user_friends" ]
                  fromViewController:self.inputViewController
                             handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-
-                              _facebookButton.enabled = TRUE;
-
-                              [spinner stopLoading];
-                              [spinner removeFromSuperview];
-
-                              if (error) {
-
-                                  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-                              }
-
-                              if (result && !error) {
-                                  [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-
-                                  //Save token to controller state
-                                  _facebookToken = result.token;
-
-                                  //Make request for facebook user's profile meta
-                                  [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"picture.width(300).height(300), name, email" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                    if (!error) {
-                                        [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
-                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-
-                                        if (result[@"email"]) {
-                                            self.emailTF.text = result[@"email"];
-                                            [self checkEmail];
+                                if (!error && result && result.token) {
+                                    //Save token to controller state
+                                    _facebookToken = result.token;
+                                    
+                                    //Make request for facebook user's profile meta
+                                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"picture.width(300).height(300), name, email" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                        if (!error) {
+                                            [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
+                                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+                                            
+                                            if (result[@"email"]) {
+                                                self.emailTF.text = result[@"email"];
+                                                [self checkEmail];
+                                            }
+                                            
+                                            if (result[@"name"]) {
+                                                self.setupProfileVC.nameStr = result[@"name"];
+                                            }
+                                            
+                                            //TODO set avatar URL
+                                            if (result[@"picture"][@"data"][@"url"]) {
+                                                // self.setupProfileVC.fbPhotoURL = result[@"picture"][@"data"][@"url"];
+                                            }
                                         }
-
-                                        if (result[@"name"]) {
-                                            self.setupProfileVC.nameStr = result[@"name"];
+                                        
+                                        if (error.code == -1009) {
+                                            FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                            [alert show];
+                                            return;
                                         }
-
-                                        if (result[@"picture"][@"data"][@"url"]) {
-                                            // self.setupProfileVC.fbPhotoURL = result[@"picture"][@"data"][@"url"];
-                                        }
-                                    }
-
-                                    if (error.code == -1009) {
-                                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                        [alert show];
-                                        [spinner stopLoading];
-                                        [spinner removeFromSuperview];
-                                        return;
-                                    }
-                                  }];
-                              }
-
-                              [UIView animateWithDuration:.2
-                                               animations:^{
-                                                 [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-                                               }];
-                              [spinner stopLoading];
-                              [spinner removeFromSuperview];
-                              self.facebookButton.hidden = false;
+                                        
+                                        [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+                                        [self setSpinnerStateOnView:self.facebookButton shouldShow:NO];
+                                    }];
+                                } else {
+                                    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
+                                    [self setSpinnerStateOnView:self.facebookButton shouldShow:NO];
+                                }
                             }];
 }
 
-- (void)handleSocialChallenge:(NSError *)error {
+
+/**
+ Creates or removes a spinner on the passed button
+
+ @param button button to act on
+ @param show whether to show or hide
+ */
+- (void)setSpinnerStateOnView:(UIButton *)button shouldShow:(BOOL)show {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(show) {
+            //Create Spinner
+            button.hidden = true;
+            button.enabled = false;
+            DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+            spinner.tintColor = [UIColor frescoOrangeColor];
+            [spinner setPullProgress:90];
+            [spinner startAnimating];
+            [spinner setFrame:CGRectMake(
+                                         button.imageView.frame.origin.x,
+                                         button.imageView.frame.origin.y,
+                                         button.imageView.frame.size.width,
+                                         button.imageView.frame.size.height
+                                         )
+             ];
+            [button.superview addSubview:spinner];
+        } else {
+            for (UIView *i in button.superview.subviews){
+                if([i isKindOfClass:[DGElasticPullToRefreshLoadingViewCircle class]]){
+                    [(DGElasticPullToRefreshLoadingView *)i stopLoading];
+                    [(DGElasticPullToRefreshLoadingView *)i removeFromSuperview];
+                }
+            }
+            button.enabled = true;
+            button.hidden = false;
+        }
+    });
 }
 
 #pragma mark - Spinner
@@ -1766,13 +1644,13 @@
         UILabel *invalidLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 192, 20)];
         invalidLabel.text = @"Email is taken.";
         invalidLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        invalidLabel.textColor = [UIColor frescoRedHeartColor];
+        invalidLabel.textColor = [UIColor frescoRedColor];
         [self.errorContainer addSubview:invalidLabel];
 
         UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [loginButton addTarget:self action:@selector(segueToLogin) forControlEvents:UIControlEventTouchUpInside];
         loginButton.frame = CGRectMake(90, 0, 100, 20);
-        loginButton.tintColor = [UIColor frescoRedHeartColor];
+        loginButton.tintColor = [UIColor frescoRedColor];
         [loginButton setTitle:@"Tap to log in" forState:UIControlStateNormal];
         [loginButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
         [self.errorContainer addSubview:loginButton];
@@ -1782,20 +1660,19 @@
 }
 
 - (void)shouldShowEmailDialogue:(BOOL)yes {
-
     if (yes) {
         self.emailError = YES;
 
         self.errorContainer.alpha = 1;
-        
+
         NSArray *views = [self.scrollView subviews];
-        
+
         NSLog(@"%lu", (unsigned long)[views count]);
 
         if (self.notificationsEnabled) {
-            
-//            for(UIView *subview in vi)
-            
+
+            //            for(UIView *subview in vi)
+
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1803,8 +1680,8 @@
             //self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
             NSLog(@"TOSContainer View Y %f", self.TOSContainerView.frame.origin.y);
             self.TOSContainerView.frame = CGRectMake(self.TOSContainerView.frame.origin.x, 658, self.TOSContainerView.frame.size.width, self.TOSContainerView.frame.size.height);
-            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height+44);
-            
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + 44);
+
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1814,9 +1691,9 @@
 
     } else {
         self.emailError = NO;
-        
+
         self.errorContainer.alpha = 0;
-        
+
         self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
         self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
         self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
@@ -1830,8 +1707,7 @@
 }
 
 - (void)segueToSetup {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
+    [[FRSUserManager sharedInstance] reloadUser];
 
     [self.navigationController pushViewController:self.setupProfileVC animated:YES];
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
@@ -1890,6 +1766,12 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordTF];
 }
 
 

@@ -3,16 +3,12 @@ use_frameworks!
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-def shared_pods
-    pod 'AFNetworking'
-end
-
 target 'Fresco' do
-    shared_pods
-    pod 'AFNetworking'
+    pod 'AFNetworking', '~> 3.0’
     pod 'Analytics'
+    pod 'Segment-Flurry'
+    pod 'Segment-Localytics'
     pod 'STKWebKitViewController'
-    pod 'AFNetworkActivityLogger'
     pod 'BTBadgeView'
     pod 'Mantle', '~>1.5.1'
     pod 'Functional.m'
@@ -36,5 +32,6 @@ target 'Fresco' do
     pod 'MGSwipeTableCell'
     pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
     pod 'AttributedMarkdown', :git => 'https://github.com/dreamwieber/AttributedMarkdown.git'
+    pod 'UXCam'
 
 end

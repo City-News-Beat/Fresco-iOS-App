@@ -9,7 +9,10 @@
 #import "FRSPaymentViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSPaymentCell.h"
+#import "FRSAddPaymentCell.h"
 #import "FRSAppDelegate.h"
+#import "FRSUserManager.h"
+#import "FRSPaymentManager.h"
 
 @interface FRSPaymentViewController ()
 @end
@@ -21,32 +24,21 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    //self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+
     [self.navigationItem setTitle:@"PAYMENT METHOD"];
 
-    [self setupTableView];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentCell];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAddPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:addPaymentCell];
 
     [self configureBackButtonAnimated:NO];
-    // [self configureDismissKeyboardGestureRecognizer];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [FRSTracker screen:@"Payment Method"];
 
     [self reloadPayments];
-}
-
-- (void)setupTableView {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -35, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentCell];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAddPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:addPaymentCell];
-    [self.view addSubview:self.tableView];
-    self.tableView.showsVerticalScrollIndicator = FALSE;
-    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [FRSTracker screen:@"Payment Method"];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -68,15 +60,15 @@ static NSString *addPaymentCell = @"addPaymentCell";
         cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         cell.payment = self.payments[indexPath.row];
         if ([payment[@"active"] boolValue]) {
-            [cell setActive:TRUE];
+            [cell setActive:YES];
         } else {
-            [cell setActive:FALSE];
+            [cell setActive:NO];
         }
         cell.delegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     } else if (indexPath.section == 1) {
-        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:addPaymentCell];
+        FRSAddPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:addPaymentCell];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     }
@@ -87,10 +79,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
 - (void)deletePayment:(NSIndexPath *)path {
     NSDictionary *pay = self.payments[path.row];
 
-    [[FRSAPIClient sharedClient] deletePayment:pay[@"id"]
-                                    completion:^(id responseObject, NSError *error) {
-                                      [self reloadPayments];
-                                    }];
+    [[FRSPaymentManager sharedInstance] deletePayment:pay[@"id"]
+                                           completion:^(id responseObject, NSError *error) {
+                                             [self reloadPayments];
+                                           }];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -107,35 +99,32 @@ static NSString *addPaymentCell = @"addPaymentCell";
         NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
         NSString *paymentID = payment[@"id"];
         NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
-        [[[FRSAPIClient sharedClient] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
+        [[[FRSUserManager sharedInstance] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
 
         [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
 
-        [[FRSAPIClient sharedClient] makePaymentActive:paymentID
-                                            completion:^(id responseObject, NSError *error) {
-                                              if (!error) {
-                                                  [self resetOtherPayments:paymentID];
-                                              }
-                                            }];
+        [[FRSPaymentManager sharedInstance] makePaymentActive:paymentID
+                                                   completion:^(id responseObject, NSError *error) {
+                                                     if (!error) {
+                                                         [self resetOtherPayments:paymentID];
+                                                     }
+                                                   }];
     }
 }
 
 - (void)resetOtherPayments:(NSString *)activePayment {
-
     NSInteger i = 0;
     for (FRSPaymentCell *cell in self.tableView.visibleCells) {
-
         if (i >= self.payments.count) {
             return;
         }
 
         NSDictionary *payment = self.payments[i];
-
         if ([payment[@"id"] isEqualToString:activePayment]) {
-            [cell setActive:TRUE];
+            [cell setActive:YES];
         } else {
-            [cell setActive:FALSE];
+            [cell setActive:NO];
         }
 
         i++;
@@ -143,9 +132,8 @@ static NSString *addPaymentCell = @"addPaymentCell";
 }
 
 - (void)reloadPayments {
-    [[FRSAPIClient sharedClient] fetchPayments:^(id responseObject, NSError *error) {
+    [[FRSPaymentManager sharedInstance] fetchPayments:^(id responseObject, NSError *error) {
       if (error || !responseObject) {
-          [self fetchError:error];
           return;
       }
 
@@ -162,37 +150,19 @@ static NSString *addPaymentCell = @"addPaymentCell";
     }];
 }
 
-- (void)fetchError:(NSError *)error {
-}
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)deleteButtonClicked:(NSDictionary *)payment {
 
     if (!payment) {
         return;
     }
 
-    [[FRSAPIClient sharedClient] deletePayment:payment[@"id"]
-                                    completion:^(id responseObject, NSError *error) {
-                                      if (!error) {
-                                          [self reloadPayments];
-                                      }
-                                    }];
+    [[FRSPaymentManager sharedInstance] deletePayment:payment[@"id"]
+                                           completion:^(id responseObject, NSError *error) {
+                                             NSLog(@"%@", responseObject);
+                                             if (!error) {
+                                                 [self reloadPayments];
+                                             }
+                                           }];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
- 
- brand last4
-}
-*/
 
 @end

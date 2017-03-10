@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.creditsArray = @[ @"Philip Bernstein", @"Omar Elfanek", @"Arthur De Araujo", @"Imogen Olsen", @"Elmir Kõuliev", @"Daniel Sun" ];
+    self.creditsArray = @[ @"Philip Bernstein", @"Omar Elfanek", @"Arthur De Araujo", @"Imogen Olsen", @"Elmir Kõuliev", @"Daniel Sun", @"Maurice Wu" ];
 
     [self configureUI];
 }

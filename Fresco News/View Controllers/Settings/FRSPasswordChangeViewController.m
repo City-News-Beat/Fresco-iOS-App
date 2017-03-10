@@ -1,4 +1,4 @@
- 
+
 //
 //  FRSPasswordChangeViewController.m
 //  Fresco
@@ -10,9 +10,10 @@
 #import "FRSPasswordChangeViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
-#import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
+#import "FRSUserManager.h"
+#import <UXCam/UXCam.h>
 
 @interface FRSPasswordChangeViewController ()
 
@@ -225,45 +226,44 @@
     NSDictionary *digestion = @{ @"verify_password" : self.currentPassword,
                                  @"password" : self.updatedPassword };
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion
-                                              completion:^(id responseObject, NSError *error) {
-                                                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                [delegate reloadUser];
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:digestion
+                                                  completion:^(id responseObject, NSError *error) {
+                                                    [[FRSUserManager sharedInstance] reloadUser];
 
-                                                if (!error) {
-                                                    [self popViewController];
-                                                    return;
-                                                }
-
-                                                if (error) {
-                                                    if (error.code == -1009) {
-                                                        self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                                                        [self.alert show];
+                                                    if (!error) {
+                                                        [self popViewController];
                                                         return;
                                                     }
 
-                                                    NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                    NSInteger responseCode = response.statusCode;
-
-                                                    if (responseCode == 403 || responseCode == 401) {
-                                                        if (!self.errorImageView) {
-                                                            [self addErrorToView];
+                                                    if (error) {
+                                                        if (error.code == -1009) {
+                                                            self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                                                            [self.alert show];
                                                             return;
                                                         }
-                                                    } else if (responseCode >= 300 && responseCode < 600) {
-                                                        // 500 level, server
-                                                        if (!self.alert) {
-                                                            [self presentGenericError];
+
+                                                        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                        NSInteger responseCode = response.statusCode;
+
+                                                        if (responseCode == 403 || responseCode == 401) {
+                                                            if (!self.errorImageView) {
+                                                                [self addErrorToView];
+                                                                return;
+                                                            }
+                                                        } else if (responseCode >= 300 && responseCode < 600) {
+                                                            // 500 level, server
+                                                            if (!self.alert) {
+                                                                [self presentGenericError];
+                                                            }
+
+                                                            return;
                                                         }
-
-                                                        return;
                                                     }
-                                                }
-                                              }];
+                                                  }];
 
-    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.password = self.updatedPassword;
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    [[[FRSUserManager sharedInstance] managedObjectContext] save:nil];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -296,6 +296,13 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
     self.alert = nil;
+}
+
+#pragma mark - UXCam
+
+-(void)hideSensitiveViews {
+    [UXCam occludeSensitiveView:self.passwordVerifyTextField];
+    [UXCam occludeSensitiveView:self.passwordTwoTextField];
 }
 
 @end

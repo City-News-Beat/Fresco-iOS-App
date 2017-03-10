@@ -7,22 +7,18 @@
 //
 
 #import "Fresco.h"
-
 #import "FRSStoriesViewController.h"
 #import "FRSSearchViewController.h"
-
 #import "FRSStoryCell.h"
-
 #import "FRSStory.h"
-
 #import "MagicalRecord.h"
-
 #import "DGElasticPullToRefresh.h"
 #import "FRSLoadingTableViewCell.h"
 #import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
+#import "FRSStoryManager.h"
 
-@interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSContentActionBarDelegate>
+@interface FRSStoriesViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSContentActionBarDelegate>
 
 @property (strong, nonatomic) NSMutableArray *stories;
 
@@ -136,8 +132,9 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:storiesSession parameters:@{ activityDuration : @(sessionLength),
-                                                       @"stories_scrolled_past" : @(numberRead) }];
+        [FRSTracker track:storiesSession
+               parameters:@{ activityDuration : @(sessionLength),
+                             @"stories_scrolled_past" : @(numberRead) }];
     }
 
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -192,37 +189,37 @@
 }
 
 - (void)reloadData {
-    [[FRSAPIClient new] fetchStoriesWithLimit:self.stories.count
-                                  lastStoryID:Nil
-                                   completion:^(NSArray *stories, NSError *error) {
+    [[FRSStoryManager sharedInstance] fetchStoriesWithLimit:12
+                                                lastStoryID:Nil
+                                                 completion:^(NSArray *stories, NSError *error) {
 
-                                     if ([stories count] == 0 || error) {
-                                         _loadNoMore = TRUE;
-                                         [self.tableView reloadData];
-                                         return;
-                                     }
-                                     self.stories = [[NSMutableArray alloc] init];
+                                                   if ([stories count] == 0 || error) {
+                                                       _loadNoMore = TRUE;
+                                                       [self.tableView reloadData];
+                                                       return;
+                                                   }
+                                                   self.stories = [[NSMutableArray alloc] init];
 
-                                     [self cacheLocalData:stories];
+                                                   [self cacheLocalData:stories];
 
-                                     NSInteger index = 0;
+                                                   NSInteger index = 0;
 
-                                     for (NSDictionary *storyDict in stories) {
-                                         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+                                                   for (NSDictionary *storyDict in stories) {
+                                                       FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
 
-                                         [story configureWithDictionary:storyDict];
-                                         [story setValue:@(index) forKey:@"index"];
-                                         [self.stories addObject:story];
-                                         index++;
-                                     }
+                                                       [story configureWithDictionary:storyDict];
+                                                       [story setValue:@(index) forKey:@"index"];
+                                                       [self.stories addObject:story];
+                                                       index++;
+                                                   }
 
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.tableView dg_stopLoading];
-                                       [self.tableView reloadData];
-                                       [self.appDelegate.managedObjectContext save:Nil];
-                                       [self.appDelegate saveContext];
-                                     });
-                                   }];
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                     [self.tableView dg_stopLoading];
+                                                     [self.tableView reloadData];
+                                                     [self.appDelegate.managedObjectContext save:Nil];
+                                                     [self.appDelegate saveContext];
+                                                   });
+                                                 }];
 }
 
 - (void)configureTableView {
@@ -251,40 +248,40 @@
     [self.tableView reloadData];
     __block int const numToFetch = 12;
 
-    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch
-                                  lastStoryID:Nil
-                                   completion:^(NSArray *stories, NSError *error) {
-                                     self.stories = [[NSMutableArray alloc] init];
+    [[FRSStoryManager sharedInstance] fetchStoriesWithLimit:numToFetch
+                                                lastStoryID:Nil
+                                                 completion:^(NSArray *stories, NSError *error) {
+                                                   self.stories = [[NSMutableArray alloc] init];
 
-                                     if ([stories count] == 0) {
-                                         _loadNoMore = TRUE;
-                                         [self.tableView reloadData];
-                                         return;
-                                     }
+                                                   if ([stories count] == 0) {
+                                                       _loadNoMore = TRUE;
+                                                       [self.tableView reloadData];
+                                                       return;
+                                                   }
 
-                                     [self cacheLocalData:stories];
+                                                   [self cacheLocalData:stories];
 
-                                     NSInteger index = 0;
+                                                   NSInteger index = 0;
 
-                                     for (NSDictionary *storyDict in stories) {
+                                                   for (NSDictionary *storyDict in stories) {
 
-                                         [self.loadingView stopLoading];
-                                         [self.loadingView removeFromSuperview];
+                                                       [self.loadingView stopLoading];
+                                                       [self.loadingView removeFromSuperview];
 
-                                         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+                                                       FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
 
-                                         [story configureWithDictionary:storyDict];
-                                         [story setValue:@(index) forKey:@"index"];
-                                         [self.stories addObject:story];
-                                         index++;
-                                     }
+                                                       [story configureWithDictionary:storyDict];
+                                                       [story setValue:@(index) forKey:@"index"];
+                                                       [self.stories addObject:story];
+                                                       index++;
+                                                   }
 
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.tableView reloadData];
-                                       [self.appDelegate.managedObjectContext save:Nil];
-                                       [self.appDelegate saveContext];
-                                     });
-                                   }];
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                     [self.tableView reloadData];
+                                                     [self.appDelegate.managedObjectContext save:Nil];
+                                                     [self.appDelegate saveContext];
+                                                   });
+                                                 }];
 }
 
 - (void)fetchMoreStories {
@@ -304,45 +301,45 @@
         offsetID = lastStory.uid;
     }
 
-    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch
-                                  lastStoryID:offsetID
-                                   completion:^(NSArray *stories, NSError *error) {
+    [[FRSStoryManager sharedInstance] fetchStoriesWithLimit:numToFetch
+                                                lastStoryID:offsetID
+                                                 completion:^(NSArray *stories, NSError *error) {
 
-                                     if (!stories.count) {
-                                         if (error) {
-                                             NSLog(@"Fetch Stories Error: %@", error.localizedDescription);
-                                         } else {
-                                             _loadNoMore = TRUE;
-                                             NSLog(@"No error fetching stories but the request returned zero results");
-                                         }
-                                     }
+                                                   if (!stories.count) {
+                                                       if (error) {
+                                                           NSLog(@"Fetch Stories Error: %@", error.localizedDescription);
+                                                       } else {
+                                                           _loadNoMore = TRUE;
+                                                           NSLog(@"No error fetching stories but the request returned zero results");
+                                                       }
+                                                   }
 
-                                     if (stories.count < numToFetch || stories.count == 0) {
-                                         _loadNoMore = TRUE;
-                                     }
+                                                   if (stories.count < numToFetch || stories.count == 0) {
+                                                       _loadNoMore = TRUE;
+                                                   }
 
-                                     if (stories.count == 0) {
-                                         [self.tableView reloadData];
-                                         return;
-                                     }
+                                                   if (stories.count == 0) {
+                                                       [self.tableView reloadData];
+                                                       return;
+                                                   }
 
-                                     NSInteger index = self.stories.count;
-                                     NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
-                                     for (NSDictionary *storyDict in stories) {
-                                         NSEntityDescription *entity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
-                                         FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
-                                         [story configureWithDictionary:storyDict];
-                                         [story setValue:@(self.stories.count) forKey:@"index"];
-                                         [self.stories addObject:story];
-                                         [storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
-                                         index++;
-                                     }
+                                                   NSInteger index = self.stories.count;
+                                                   NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
+                                                   for (NSDictionary *storyDict in stories) {
+                                                       NSEntityDescription *entity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+                                                       FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+                                                       [story configureWithDictionary:storyDict];
+                                                       [story setValue:@(self.stories.count) forKey:@"index"];
+                                                       [self.stories addObject:story];
+                                                       [storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+                                                       index++;
+                                                   }
 
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.tableView reloadData];
-                                     });
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                     [self.tableView reloadData];
+                                                   });
 
-                                   }];
+                                                 }];
 }
 
 - (void)fetchLocalData {
@@ -515,14 +512,14 @@
 }
 
 - (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
-//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-//    [self.navigationController pushViewController:vc animated:YES];
+    //    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    //    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
-//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-//    vc.didTapRepostLabel = YES;
-//    [self.navigationController pushViewController:vc animated:YES];
+    //    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    //    vc.didTapRepostLabel = YES;
+    //    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

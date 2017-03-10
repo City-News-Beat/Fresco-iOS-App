@@ -15,17 +15,12 @@
 #import "FRSAwkwardView.h"
 #import "FRSStoryCell.h"
 #import "FRSStoryDetailViewController.h"
+#import "FRSUserManager.h"
+#import "FRSFeedManager.h"
 
 @implementation FRSFollowingTable
-@synthesize navigationController = _navigationController, galleries = _galleries;
+@synthesize navigationController = _navigationController;
 
-- (void)setGalleries:(NSArray *)galleries {
-    _galleries = galleries;
-}
-
-- (NSArray *)galleries {
-    return _galleries;
-}
 - (instancetype)init {
     self = [super init];
 
@@ -65,27 +60,11 @@
     self.delegate = self;
     self.dataSource = self;
 
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-
-      if (galleries.count == 0) {
-          if (!awkwardView) {
-              awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width / 2 - 175 / 2, self.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
-          }
-          [self addSubview:awkwardView];
-      } else {
-          [awkwardView removeFromSuperview];
-      }
-
-      dispatch_async(dispatch_get_main_queue(), ^{
-        _galleries = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
-        numberOfPosts = [_galleries count];
-        [self reloadData];
-      });
-    }];
+    [self reloadFollowing];
 }
 
 - (void)reloadFollowing {
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+    [[FRSFeedManager sharedInstance] fetchFollowing:^(NSArray *galleries, NSError *error) {
 
       if (galleries.count == 0) {
           if (!awkwardView) {
@@ -134,8 +113,9 @@
 
     NSString *url = content[0];
     url = [[url componentsSeparatedByString:@"/"] lastObject];
-    [FRSTracker track:galleryShared parameters:@{ @"gallery_id" : url,
-                                                  @"shared_from" : @"following" }];
+    [FRSTracker track:galleryShared
+           parameters:@{ @"gallery_id" : url,
+                         @"shared_from" : @"following" }];
 }
 
 - (void)reloadData {
@@ -147,7 +127,7 @@
 
 - (void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
-    vc.shouldHaveBackButton = YES;
+    [vc configureBackButtonAnimated:YES];
 
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
 
@@ -265,6 +245,12 @@
         if (!cell) {
             cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         }
+    } else {
+        
+        NSLog(@"ERROR: Object at index %ld (%@) is neither a gallery or a story and will not be rendered in the Following Feed.", indexPath.row, [[_galleries objectAtIndex:indexPath.row] class]);
+
+        UITableViewCell *defaultCell = [[UITableViewCell alloc] init];
+        return defaultCell;
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -372,29 +358,23 @@
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
 
-    FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *authUser = [[FRSUserManager sharedInstance] authenticatedUser];
     NSString *userID = authUser.uid;
 
-    NSString *endpoint = [NSString stringWithFormat:followingFeed, userID];
+    NSString *endpoint = [NSString stringWithFormat:@"feeds/%@/following", userID];
 
     endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
 
-    [[FRSAPIClient sharedClient] get:endpoint
-                      withParameters:nil
-                          completion:^(id responseObject, NSError *error) {
-                            isReloading = FALSE;
-
-                            NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-
-                            if (response.count == 0) {
-                                isFinished = TRUE;
-                            }
-
-                            NSMutableArray *newGalleries = [self.galleries mutableCopy];
-                            [newGalleries addObjectsFromArray:response];
-                            self.galleries = newGalleries;
-                            [self reloadData];
-                          }];
+    [[FRSFeedManager sharedInstance] fetchFollowing:timeStamp completion:^(NSArray *galleries, NSError *error) {
+        if (galleries.count == 0) {
+            isFinished = TRUE;
+        }
+        
+        NSMutableArray *newGalleries = [self.galleries mutableCopy];
+        [newGalleries addObjectsFromArray:[NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]]];
+        self.galleries = newGalleries;
+        [self reloadData];
+    }];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -404,7 +384,7 @@
     if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         FRSGallery *gallery = _galleries[indexPath.row];
         height = [gallery heightForGallery];
-    } else {
+    } else if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
         FRSStory *story = _galleries[indexPath.row];
         height = [story heightForStory];
     }
