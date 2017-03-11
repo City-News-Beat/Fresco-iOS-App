@@ -12,6 +12,7 @@
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
+#import "FRSConnectivityAlertView.h"
 
 @interface FRSPasswordChangeViewController ()
 
@@ -20,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
-@property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) FRSConnectivityAlertView *alert;
 
 @property (strong, nonatomic) UIImageView *errorImageView;
 
@@ -109,7 +110,7 @@
 
                                                     if (error) {
                                                         if (error.code == -1009) {
-                                                            self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                                                            self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
                                                             [self.alert show];
                                                             return;
                                                         }

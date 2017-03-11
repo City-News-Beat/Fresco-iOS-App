@@ -35,7 +35,6 @@
 
 - (instancetype)initPermissionsAlert:(id)delegate;
 - (instancetype)initFindFriendsAlert;
-- (instancetype)initNoConnectionAlert;
 - (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
 - (instancetype)initTOS;
 - (instancetype)initNewStuffWithPasswordField:(BOOL)password;

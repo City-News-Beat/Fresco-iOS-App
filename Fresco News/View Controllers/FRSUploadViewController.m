@@ -18,6 +18,7 @@
 #import "FRSAuthManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSConnectivityAlertView.h"
 
 @class FRSAssignment;
 
@@ -1141,7 +1142,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)connectionError:(NSError *)error {
-    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+    FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
     [alert show];
 }
 

@@ -16,6 +16,7 @@
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
 #import "NSString+Validation.h"
+#import "FRSConnectivityAlertView.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
@@ -39,7 +40,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
-@property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) FRSConnectivityAlertView *alert;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 
@@ -326,7 +327,7 @@
                                    }
 
                                    if (error.code == -1009) {
-                                       self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                                       self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
                                        [self.alert show];
                                        return;
                                    }
@@ -388,7 +389,7 @@
 
       if (error) {
           if (error.code == -1009) {
-              self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+              self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
               [self.alert show];
               [spinner stopLoading];
               [spinner removeFromSuperview];
@@ -466,7 +467,7 @@
 
       if (error) {
           if (error.code == -1009) {
-              self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
+              self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
               [self.alert show];
               [spinner stopLoading];
               [spinner removeFromSuperview];
