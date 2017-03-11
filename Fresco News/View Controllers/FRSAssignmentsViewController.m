@@ -171,16 +171,16 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+
     self.hasDefault = NO;
     self.defaultID = nil;
-    
+
     if (self.closeButton) {
         self.closeButton.alpha = 0;
     }
-    
+
     if (self.seguedToGlobalAssignment) {
         self.seguedToGlobalAssignment = false;
     }
@@ -1129,9 +1129,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 - (void)navigateToAssignment {
-    FRSAlertView *alert = [[FRSAlertView alloc] init];
-    alert.delegate = self;
-    [alert navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
+    [[FRSAssignmentManager sharedInstance] navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong navigationController:self.navigationController];
 }
 
 #pragma mark - Assignment Card

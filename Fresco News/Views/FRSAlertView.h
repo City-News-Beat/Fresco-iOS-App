@@ -40,8 +40,6 @@
 - (instancetype)initTOS;
 - (instancetype)initNewStuffWithPasswordField:(BOOL)password;
 
-- (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
-
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) UIButton *actionButton;

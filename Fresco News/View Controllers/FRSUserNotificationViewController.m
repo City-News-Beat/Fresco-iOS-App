@@ -14,7 +14,6 @@
 #import "FRSCameraViewController.h"
 #import "FRSProfileViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSAssignmentsViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAwkwardView.h"
@@ -25,6 +24,7 @@
 #import "FRSUserManager.h"
 #import "FRSFollowManager.h"
 #import "FRSNotificationManager.h"
+#import "FRSAssignmentManager.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
 
@@ -764,8 +764,8 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
                                                  completion:^(id responseObject, NSError *error) {
                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                    FRSUser *currentUser = [FRSUser
-                                                                           nonSavedUserWithProperties:responseObject
-                                                                           context:[delegate.coreDataController managedObjectContext]];
+                                                       nonSavedUserWithProperties:responseObject
+                                                                          context:[delegate.coreDataController managedObjectContext]];
                                                    if ([[responseObject valueForKey:@"following"] boolValue]) {
                                                        [self unfollowUser:currentUser];
                                                    } else {
@@ -800,9 +800,7 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 // Gets called when the user taps on the right aligned button on assignment notification cells
 - (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
-    FRSAlertView *alert = [[FRSAlertView alloc] init];
-    alert.delegate = self;
-    [alert navigateToAssignmentWithLatitude:latitude longitude:longitude];
+    [[FRSAssignmentManager sharedInstance] navigateToAssignmentWithLatitude:latitude longitude:longitude navigationController:self.navigationController];
 }
 
 @end
