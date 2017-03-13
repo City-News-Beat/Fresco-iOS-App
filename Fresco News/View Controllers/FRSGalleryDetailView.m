@@ -793,12 +793,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
     vc.didTapRepostLabel = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
