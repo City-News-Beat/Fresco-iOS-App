@@ -130,7 +130,7 @@
                        withParameters:nil
                            completion:^(id responseObject, NSError *error) {
                                if(!error && [responseObject isKindOfClass:[NSDictionary class]] && responseObject != nil) {
-                                   NSDictionary *clientVersion = responseObject[@"api_version"];
+                                   NSDictionary *clientVersion = responseObject[@"api_version"] != nil ? responseObject[@"api_version"] : @"";
                                    
                                    if(bearerVersion != nil && ![bearerVersion  isEqual: @""]) {
                                        checkClientAgainstBearer([self versionFromDictionary:clientVersion] != nil ? [self versionFromDictionary:clientVersion] : @"");
@@ -140,7 +140,7 @@
                                                           withParameters:nil
                                                               completion:^(id responseObject, NSError *error) {
                                                                   if(!error) {
-                                                                      bearerVersion = [self versionFromDictionary:responseObject[@"client"][@"api_version"]];
+                                                                      bearerVersion = [self versionFromDictionary:responseObject[@"client"][@"api_version"] != nil ? responseObject[@"client"][@"api_version"] : @""];
                                                                       checkClientAgainstBearer([self versionFromDictionary:clientVersion] != nil ? [self versionFromDictionary:clientVersion] : @"");
                                                                   }
                                                               }];
@@ -157,7 +157,7 @@
  @return The API version as a string e.g. 2.0, 2.5
  */
 - (NSString *)versionFromDictionary:(NSDictionary *)dictionary {
-    return [NSString stringWithFormat:@"%@.%@", dictionary[@"version_major"], dictionary[@"version_minor"]];
+    return [NSString stringWithFormat:@"%@.%@", dictionary[@"version_major"] != nil ? dictionary[@"version_major"] : @"", dictionary[@"version_minor"] != nil ? dictionary[@"version_minor"] : @""];
 }
 
 #pragma mark - Token Accessors
@@ -222,7 +222,7 @@
 }
 
 - (void)saveUserToken:(NSDictionary *)userToken {
-    NSString *bearer = [userToken objectForKey:@"token"];
+    NSString *bearer = [userToken objectForKey:@"token"] != nil ? [userToken objectForKey:@"token"] : @"";
     
     if(!bearer || [bearer  isEqual: @""]) return;
     
@@ -233,8 +233,8 @@
      account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
     
     [[NSUserDefaults standardUserDefaults] setObject:@{
-                                                       @"refresh_token": userToken[@"refresh_token"],
-                                                       @"api_version": [self versionFromDictionary:userToken[@"client"][@"api_version"]]
+                                                       @"refresh_token": userToken[@"refresh_token"] != nil ? userToken[@"refresh_token"] : @"",
+                                                       @"api_version": [self versionFromDictionary:userToken[@"client"][@"api_version"] != nil ? userToken[@"client"][@"api_version"] : @""]
                                                        } forKey:kUserToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
