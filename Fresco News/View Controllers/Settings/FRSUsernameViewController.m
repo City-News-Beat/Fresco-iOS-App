@@ -11,6 +11,7 @@
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
 #import "NSString+Validation.h"
+#import "FRSConnectivityAlertView.h"
 #import <UXCam/UXCam.h>
 
 @interface FRSUsernameViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
@@ -20,7 +21,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *errorImageView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
-@property (strong, nonatomic) FRSAlertView *alert;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 @property (nonatomic) BOOL usernameTaken;
 
@@ -103,10 +103,8 @@
                                                     }
 
                                                     if (error.code == -1009) {
-                                                        if (!self.alert) {
-                                                            self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                            [self.alert show];
-                                                        }
+                                                        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                        [alert show];
                                                         return;
                                                     }
 
@@ -178,10 +176,8 @@
                                               //Return if no internet
                                               if (error) {
                                                   if (error.code == -1009) {
-                                                      if (!self.alert) {
-                                                          self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                          [self.alert show];
-                                                      }
+                                                      FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                      [alert show];
                                                       return;
                                                   }
                                                   [self showUsernameError];

@@ -18,6 +18,7 @@
 #import "FRSAuthManager.h"
 #import "FRSModerationManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSModerationAlertView.h"
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
@@ -25,8 +26,8 @@
 
 @property (strong, nonatomic) UILabel *titleLabel;
 
-@property (strong, nonatomic) FRSAlertView *galleryReportAlertView;
-@property (strong, nonatomic) FRSAlertView *reportUserAlertView;
+@property (strong, nonatomic) FRSModerationAlertView *galleryReportAlertView;
+@property (strong, nonatomic) FRSModerationAlertView *reportUserAlertView;
 @property (strong, nonatomic) FRSAlertView *errorAlertView;
 
 @property (strong, nonatomic) NSString *reportReasonString;
@@ -74,14 +75,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [self.view updateConstraints];
     [self.view layoutSubviews];
-    
-    
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
     tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
-
 }
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
@@ -206,7 +205,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction *action) {
 
-                                                            self.galleryReportAlertView = [[FRSAlertView alloc] initGalleryReportDelegate:self];
+                                                            self.galleryReportAlertView = [[FRSModerationAlertView alloc] initGalleryReportDelegate:self];
                                                             self.galleryReportAlertView.delegate = self;
                                                             [self.galleryReportAlertView show];
 
@@ -217,7 +216,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction *action) {
 
-                                                     self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+                                                     self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
                                                      self.reportUserAlertView.delegate = self;
                                                      self.didDisplayReport = YES;
                                                      [self.reportUserAlertView show];
@@ -313,7 +312,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                    handler:^(UIAlertAction *action) {
 
                                                      self.isReportingComment = YES;
-                                                     self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+                                                     self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
                                                      self.reportUserAlertView.delegate = self;
                                                      self.didDisplayReport = YES;
                                                      [self.reportUserAlertView show];
@@ -390,7 +389,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         params:@{ @"reason" : self.reportReasonString,
                   @"message" : self.galleryReportAlertView.textView.text }
         completion:^(id responseObject, NSError *error) {
-
           if (error) {
               [self presentGenericError];
               return;
@@ -404,7 +402,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)reportUserAlertAction {
-
     NSString *username = @"";
 
     if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
@@ -423,7 +420,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)didPressRadioButtonAtIndex:(NSInteger)index {
-
     if (self.reportUserAlertView || self.galleryReportAlertView) {
         switch (index) {
         case 0:
@@ -449,9 +445,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.didDisplayReport = NO;
         self.reportUserAlertView = nil;
         if (index == 1) {
-
             NSString *username = @"";
-
             if (self.isReportingComment) {
                 if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
                     username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
@@ -476,9 +470,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     } else if (self.didDisplayBlock) {
         self.didDisplayBlock = NO;
-
         if (index == 0) {
-
             if (self.isBlockingFromComment) {
                 [self unblockUser:self.currentCommentUserDictionary[@"id"]];
             } else {
@@ -498,7 +490,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Moderation
 
 - (void)blockUser:(FRSUser *)user {
-
     [[FRSModerationManager sharedInstance] blockUser:user.uid
                                       withCompletion:^(id responseObject, NSError *error) {
 
@@ -508,7 +499,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                             [alert show];
                                             self.didBlockUser = YES;
                                             self.isBlockingFromComment = NO;
-
                                         } else {
                                             [self presentGenericError];
                                         }

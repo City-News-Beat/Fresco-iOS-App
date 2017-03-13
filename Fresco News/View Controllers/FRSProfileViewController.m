@@ -24,6 +24,7 @@
 #import "FRSFeedManager.h"
 #import "FRSNotificationManager.h"
 #import "FRSStory.h"
+#import "FRSModerationAlertView.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
@@ -62,7 +63,7 @@
 @property BOOL didFollow;
 
 @property (strong, nonatomic) UIImageView *placeholderUserIcon;
-@property (strong, nonatomic) FRSAlertView *reportUserAlertView;
+@property (strong, nonatomic) FRSModerationAlertView *reportUserAlertView;
 
 @property BOOL didDisplayReport;
 @property BOOL didDisplayBlock;
@@ -192,11 +193,11 @@
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction *action) {
                                                      if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
-                                                         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"@%@", _representedUser.username] delegate:self];
+                                                         self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"@%@", _representedUser.username] delegate:self];
                                                      } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
-                                                         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", _representedUser.firstName] delegate:self];
+                                                         self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", _representedUser.firstName] delegate:self];
                                                      } else {
-                                                         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:@"" delegate:self];
+                                                         self.reportUserAlertView = [[FRSModerationAlertView alloc] initUserReportWithUsername:@"" delegate:self];
                                                      }
 
                                                      self.didDisplayReport = YES;

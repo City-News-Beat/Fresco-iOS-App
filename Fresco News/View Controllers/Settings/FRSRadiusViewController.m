@@ -16,6 +16,7 @@
 #import "FRSUser.h"
 #import "FRSAlertView.h"
 #import "Haneke.h"
+#import "FRSConnectivityAlertView.h"
 #import "FRSUserManager.h"
 
 @import MapKit;
@@ -25,7 +26,7 @@
 @property (strong, nonatomic) UISlider *radiusSlider;
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) FRSConnectivityAlertView *alert;
 
 @property CGFloat miles;
 @property BOOL sliderDidSlide;
@@ -143,7 +144,7 @@
               }
 
               if (!self.alert) {
-                  self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                  self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                   [self.alert show];
               }
 

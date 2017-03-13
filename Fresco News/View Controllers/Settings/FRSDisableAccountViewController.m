@@ -11,6 +11,7 @@
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "FRSConnectivityAlertView.h"
 #import <UXCam/UXCam.h>
 #import "NSString+Validation.h"
 
@@ -58,7 +59,7 @@
           NSLog(@"Disable Account Error: %ld", (long)responseCode);
 
           if (error.code == -1009) {
-              FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
               [alert show];
               return;
           }
