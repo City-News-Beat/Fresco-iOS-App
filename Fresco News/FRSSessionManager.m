@@ -115,7 +115,7 @@
             //Upgrade the bearer if neccessary, this will return a new token for us
             [[FRSAPIClient sharedClient] post:migrateEndpoint
                                withParameters:@{
-                                                @"token": [self authenticationToken]
+                                                @"token": [self authenticationToken] != nil ? [self authenticationToken] : @""
                                                 }
                                    completion:^(id responseObject, NSError *error) {
                                        if (!error && responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
@@ -133,7 +133,7 @@
                                    NSDictionary *clientVersion = responseObject[@"api_version"];
                                    
                                    if(bearerVersion != nil && ![bearerVersion  isEqual: @""]) {
-                                       checkClientAgainstBearer([self versionFromDictionary:clientVersion]);
+                                       checkClientAgainstBearer([self versionFromDictionary:clientVersion] != nil ? [self versionFromDictionary:clientVersion] : @"");
                                    } else {
                                        //Only request the bearer if we don't have the version locally
                                        [[FRSAPIClient sharedClient] get:tokenSelfEndpoint
