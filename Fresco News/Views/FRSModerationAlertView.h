@@ -12,10 +12,7 @@
 
 @interface FRSModerationAlertView : FRSAlertView
 
-@property (strong, nonatomic) UITextView *textView;
-
 - (instancetype)initUserReportWithUsername:(NSString *)username delegate:(id)delegate;
 - (instancetype)initGalleryReportDelegate:(id)delegate;
-- (void)show;
 
 @end

@@ -20,6 +20,7 @@
 #import "FRSUserManager.h"
 #import "FRSIndicatorDot.h"
 #import "FRSPermissionAlertView.h"
+#import "FRSConnectivityAlertView.h"
 
 @interface FRSBaseViewController ()
 
@@ -124,7 +125,7 @@
 }
 
 - (void)presentNoConnectionError {
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"It seems like you're not connected to the internet! Please make sure your phone is not in airplane mode and try again when you have a better connection." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+    FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
     [alert show];
 }
 

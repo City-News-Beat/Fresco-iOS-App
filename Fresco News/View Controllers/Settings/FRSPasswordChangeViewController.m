@@ -21,8 +21,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
-@property (strong, nonatomic) FRSConnectivityAlertView *alert;
-
 @property (strong, nonatomic) UIImageView *errorImageView;
 
 @property BOOL currentPasswordIsValid;
@@ -91,8 +89,8 @@
     [self.view endEditing:YES];
 
     if ((![self.updatedPasswordTextField.text isEqualToString:self.confirmPasswordTextField.text])) {
-        self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-        [self.alert show];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+        [alert show];
         return;
     }
 
@@ -110,8 +108,7 @@
 
                                                     if (error) {
                                                         if (error.code == -1009) {
-                                                            self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
-                                                            [self.alert show];
+                                                            [self presentNoConnectionError];
                                                             return;
                                                         }
 

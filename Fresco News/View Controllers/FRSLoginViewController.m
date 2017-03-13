@@ -40,7 +40,6 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
-@property (strong, nonatomic) FRSConnectivityAlertView *alert;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 
@@ -327,8 +326,8 @@
                                    }
 
                                    if (error.code == -1009) {
-                                       self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
-                                       [self.alert show];
+                                       FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
+                                       [alert show];
                                        return;
                                    }
 
@@ -389,8 +388,8 @@
 
       if (error) {
           if (error.code == -1009) {
-              self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
-              [self.alert show];
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
+              [alert show];
               [spinner stopLoading];
               [spinner removeFromSuperview];
               self.twitterButton.hidden = false;
@@ -467,8 +466,8 @@
 
       if (error) {
           if (error.code == -1009) {
-              self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
-              [self.alert show];
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
+              [alert show];
               [spinner stopLoading];
               [spinner removeFromSuperview];
               self.facebookButton.hidden = false;

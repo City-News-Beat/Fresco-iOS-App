@@ -20,21 +20,7 @@
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
 
-@interface FRSAlertView () <UITextViewDelegate>
-
-/* Reusable Alert Properties */
-@property (strong, nonatomic) UIView *overlayView;
-@property (strong, nonatomic) UIView *buttonShadow;
-
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *messageLabel;
-
-@property (strong, nonatomic) UIButton *cancelButton;
-
-@property (strong, nonatomic) UIView *actionLine;
-@property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
-@property CGFloat height;
-
+@interface FRSAlertView ()
 @end
 
 @implementation FRSAlertView
@@ -133,8 +119,6 @@
 - (void)adjustFrame {
     self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
 
-    //UIViewController* vc = (UIViewController *)self.delegate;
-
     NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
     NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
 
@@ -169,12 +153,6 @@
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     delegate.didPresentPermissionsRequest = NO;
-}
-
-- (void)settingsTapped {
-    [self animateOut];
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
 - (void)animateIn {
@@ -233,14 +211,6 @@
 
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self removeFromSuperview];
-}
-
-
-- (void)logoutTapped {
-    [self.delegate logoutAlertAction];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"logout_notification" object:nil];
-    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
-    [self dismiss];
 }
 
 @end

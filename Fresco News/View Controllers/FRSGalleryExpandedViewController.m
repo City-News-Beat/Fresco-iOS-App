@@ -76,13 +76,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [self.view updateConstraints];
     [self.view layoutSubviews];
-    
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard:)];
-    [self.view addGestureRecognizer:tap];
 
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+        initWithTarget:self
+                action:@selector(dismissKeyboard:)];
+    [self.view addGestureRecognizer:tap];
 }
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
@@ -447,7 +445,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         params:@{ @"reason" : self.reportReasonString,
                   @"message" : self.galleryReportAlertView.textView.text }
         completion:^(id responseObject, NSError *error) {
-
           if (error) {
               [self presentGenericError];
               return;
@@ -461,7 +458,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)reportUserAlertAction {
-
     NSString *username = @"";
 
     if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
@@ -480,7 +476,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)didPressRadioButtonAtIndex:(NSInteger)index {
-
     if (self.reportUserAlertView || self.galleryReportAlertView) {
         switch (index) {
         case 0:
@@ -506,9 +501,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.didDisplayReport = NO;
         self.reportUserAlertView = nil;
         if (index == 1) {
-
             NSString *username = @"";
-
             if (self.isReportingComment) {
                 if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
                     username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
@@ -533,9 +526,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     } else if (self.didDisplayBlock) {
         self.didDisplayBlock = NO;
-
         if (index == 0) {
-
             if (self.isBlockingFromComment) {
                 [self unblockUser:self.currentCommentUserDictionary[@"id"]];
             } else {

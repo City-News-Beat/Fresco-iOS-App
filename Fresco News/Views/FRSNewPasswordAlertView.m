@@ -9,30 +9,18 @@
 #import "FRSNewPasswordAlertView.h"
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
+#import "FRSConnectivityAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "UIFont+Fresco.h"
 #import "NSString+Validation.h"
 
-#define ALERT_WIDTH 270
-#define MESSAGE_WIDTH 238
-
 @interface FRSNewPasswordAlertView () <UITextFieldDelegate>
 
-@property (strong, nonatomic) UIView *overlayView;
-@property (strong, nonatomic) UIView *buttonShadow;
-
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *messageLabel;
-
-@property (strong, nonatomic) UIButton *cancelButton;
-@property (strong, nonatomic) UIButton *actionButton;
 @property (strong, nonatomic) UIView *actionLine;
 
 @property (strong, nonatomic) UIButton *expandTOSButton;
 @property (strong, nonatomic) UITextView *TOSTextView;
 @property (strong, nonatomic) UIView *topLine;
-
-@property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
 
 @property (strong, nonatomic) UITextField *usernameTextField;
 @property (strong, nonatomic) UITextField *emailTextField;
@@ -47,8 +35,6 @@
 @property (nonatomic) BOOL usernameTaken;
 @property (nonatomic) BOOL emailTaken;
 @property (strong, nonatomic) NSTimer *usernameTimer;
-
-@property CGFloat height;
 
 @end
 
@@ -301,63 +287,6 @@
     return self;
 }
 
-- (void)configureDarkOverlay {
-    /* Dark Overlay */
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-    self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
-    self.overlayView.backgroundColor = [UIColor blackColor];
-    self.overlayView.alpha = 0;
-    [self addSubview:(self.overlayView)];
-}
-
-- (void)show {
-    /* keyWindow places the view above all. Add overlay view first, and then alertView*/
-    [[UIApplication sharedApplication].keyWindow addSubview:self.overlayView];
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
-    [self.inputViewController.view endEditing:YES];
-}
-
-- (void)animateIn {
-    /* Set default state before animating in */
-    self.transform = CGAffineTransformMakeScale(1.175, 1.175);
-    self.alpha = 0;
-    
-    [UIView animateWithDuration:0.25
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.alpha = 1;
-                         self.actionButton.alpha = 1;
-                         self.overlayView.alpha = 0.26;
-                         self.transform = CGAffineTransformMakeScale(1, 1);
-                     }
-                     completion:nil];
-}
-
-- (void)animateOut {
-    [UIView animateWithDuration:0.25
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.alpha = 0;
-                         self.actionButton.alpha = 0;
-                         self.overlayView.alpha = 0;
-                         self.transform = CGAffineTransformMakeScale(0.9, 0.9);
-                     }
-                     completion:^(BOOL finished) {
-                         [self removeFromSuperview];
-                     }];
-}
-
-- (void)addShadowAndClip {
-    self.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.layer.shadowOffset = CGSizeMake(0, 4);
-    self.layer.shadowRadius = 2;
-    self.layer.shadowOpacity = 0.1;
-    self.layer.cornerRadius = 2;
-}
-
 - (void)logoutTapped {
     [self.delegate logoutAlertAction];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logout_notification" object:nil];
@@ -485,7 +414,6 @@
 }
 
 - (void)usernameTimerFired {
-    
     if ([self.usernameTextField.text isEqualToString:@""]) {
         self.usernameCheckIV.alpha = 0;
         self.usernameTakenLabel.alpha = 0;
@@ -505,6 +433,8 @@
                                                 completion:^(id responseObject, NSError *error) {
                                                     //Return if no internet
                                                     if (error.code == -1009) {
+                                                        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
+                                                        [alert show];
                                                         return;
                                                     }
                                                     NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
