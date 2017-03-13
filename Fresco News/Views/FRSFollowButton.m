@@ -9,6 +9,7 @@
 #import "FRSFollowButton.h"
 #import "FRSUserManager.h"
 #import "FRSFollowManager.h"
+#import "FRSConnectivityAlertView.h"
 
 @interface FRSFollowButton ()
 
@@ -36,22 +37,26 @@
     if ([self.user.following boolValue]) {
         [[FRSFollowManager sharedInstance] unfollowUser:self.user
                                              completion:^(id responseObject, NSError *error) {
-                                               if (!error && responseObject) {
-                                                   [self updateIconForFollowing:[self.user.following boolValue]];
-                                               }
+                                               [self handleResponse:responseObject error:error];
                                              }];
     } else {
         [[FRSFollowManager sharedInstance] followUser:self.user
                                            completion:^(id responseObject, NSError *error) {
-                                             if (!error && responseObject) {
-                                                 [self updateIconForFollowing:[self.user.following boolValue]];
-                                             }
+                                               [self handleResponse:responseObject error:error];
                                            }];
     }
 }
 
-- (void)updateIconForFollowing:(BOOL)following {
+-(void)handleResponse:(id)responseObject error:(NSError *)error {
+    if (!error && responseObject) {
+        [self updateIconForFollowing:[self.user.following boolValue]];
+    } else if (error) {
+        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
+        [alert show];
+    }
+}
 
+- (void)updateIconForFollowing:(BOOL)following {
     // This check avoids displaying the button if the user in question is the authenticated user
     if ([self.user.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         return;

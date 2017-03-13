@@ -15,19 +15,11 @@
     NSString *endpoint = [URLString stringByReplacingOccurrencesOfString:[EndpointManager sharedInstance].currentEndpoint.baseUrl withString:@""];
 
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:Nil];
-    if (![endpoint containsString:@"auth"] && ![endpoint containsString:@"user"]) {
-        NSString *authorization = [request valueForHTTPHeaderField:@"Authorization"];
-        if ([authorization containsString:@"Basic"]) {
-            [request setValue:Nil forHTTPHeaderField:@"Authorization"];
-        }
-    }
 
     if ([endpoint containsString:@"gallery/submit"]) {
         [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:Nil]];
-    }
-
-    if ([endpoint containsString:@"user/avatar"]) {
+    } else if ([endpoint containsString:@"user/avatar"]) {
         [request setValue:@"multipart/form-data" forHTTPHeaderField:@"content-type"];
     }
 

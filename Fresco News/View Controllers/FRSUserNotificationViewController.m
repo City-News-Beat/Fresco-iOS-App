@@ -39,10 +39,6 @@
 
 @implementation FRSUserNotificationViewController
 
-NSString *const TEXT_ID = @"textNotificationCell";
-NSString *const DEFAULT_ID = @"notificationCell";
-NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self getNotifications];
@@ -74,7 +70,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
       self.feed = [responseObject objectForKey:@"feed"];
 
-      NSLog(@"GET NOTIFICATIONS: %@", responseObject);
       [self configureTableView];
       [self registerNibs];
       [self.spinner stopLoading];
@@ -491,17 +486,18 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     NSDictionary *push = [self.feed objectAtIndex:indexPath.row];
-    [FRSNotificationHandler handleNotification:push];
+    [FRSNotificationHandler handleNotification:push track:NO];
 }
 
+// TODO: Reuse these errors
 - (void)error:(NSError *)error {
     if (!error) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
         [self presentNoConnectionError];
     } else {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     }
 }

@@ -304,4 +304,76 @@ static NSInteger const maxAssets = 8;
     });
 }
 
+
+#pragma mark - Bottom Bar Buttons
+
+-(void)twitterTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"twitter-tapped-filevc" object:self];
+    
+    [self updateStateForButton:sender];
+    
+}
+
+-(void)facebookTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"facebook-tapped-filevc" object:self];
+    
+    [self updateStateForButton:sender];
+
+}
+
+-(void)anonTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"anon-tapped-filevc" object:self];
+
+    [self updateStateForButton:sender];
+}
+
+
+-(void)updateStateForButton:(UIButton *)button {
+    
+    if (button.selected) {
+        button.selected = NO;
+    } else {
+        button.selected = YES;
+    }
+}
+
+
+#pragma mark - NSNotification Center
+
+-(void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+-(void)addObservers {
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-uploadvc"     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-uploadvc"  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"facebook-tapped-uploadvc" object:nil];
+}
+
+
+-(void)receiveNotifications:(NSNotification *)notification {
+    
+    NSString *notif = [notification name];
+    
+    if ([notif isEqualToString:@"twitter-tapped-uploadvc"]) {
+        
+        [self updateStateForButton:self.twitterButton];
+        
+    } else if ([notif isEqualToString:@"facebook-tapped-uploadvc"]) {
+        
+        [self updateStateForButton:self.facebookButton];
+        
+    } else if ([notif isEqualToString:@"anon-tapped-uploadvc"]) {
+        
+        [self updateStateForButton:self.anonButton];
+    }
+}
+
+
 @end

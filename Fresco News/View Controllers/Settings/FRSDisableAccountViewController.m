@@ -9,6 +9,7 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSAlertView.h"
 #import "EndpointManager.h"
+#import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSConnectivityAlertView.h"
 #import <UXCam/UXCam.h>
@@ -72,23 +73,8 @@
 }
 
 - (void)logout {
-    [[[FRSUserManager sharedInstance] managedObjectContext] deleteObject:[FRSUserManager sharedInstance].authenticatedUser];
-    [[[FRSUserManager sharedInstance] managedObjectContext] save:nil];
-    [SAMKeychain deletePasswordForService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
-
-    [NSUserDefaults resetStandardUserDefaults];
-
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
-
+    [[FRSAuthManager sharedInstance] logout];
     [self popViewController];
-
     [self.tabBarController setSelectedIndex:0];
 }
 

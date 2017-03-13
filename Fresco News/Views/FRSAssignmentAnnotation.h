@@ -12,13 +12,17 @@
 
 @interface FRSAssignmentAnnotation : NSObject <MKAnnotation>
 
-@property (nonatomic) NSInteger assignmentIndex;
-@property (nonatomic) NSString *assignmentId;
-@property (nonatomic) NSArray *outlets;
 - (instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index;
+@property (strong, nonatomic) FRSAssignment *assignment;
+
+// TODO: Remove all these properties and use annotation.assignment.property when implementing
 - (NSString *)title;
 - (NSString *)subtitle;
 - (NSDate *)assignmentExpirationDate;
 - (NSDate *)assignmentPostedDate;
+@property (nonatomic) NSInteger assignmentIndex;
+@property (nonatomic) NSString *assignmentId;
+@property (nonatomic) NSArray *outlets;
 @property (nonatomic) BOOL isAcceptable; // add isAcceptable to model
+
 @end

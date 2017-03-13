@@ -99,6 +99,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.disableCollapse = YES;
 
     self.editedProfile = false;
 
@@ -131,6 +133,7 @@
     }
 
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
+    
 }
 
 - (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
@@ -370,6 +373,8 @@
 
     [super removeNavigationBarLine];
     [self configureSectionView];
+    
+    [self configureTitleLabelFromUser:_representedUser];
 }
 
 - (void)configureBlockedUserWithButton:(BOOL)button {
@@ -687,17 +692,19 @@
     [self.tableView dg_removePullToRefresh];
 }
 
-- (void)configureNavigationBar {
-    [super removeNavigationBarLine];
-
+- (void)configureTitleLabelFromUser:(FRSUser *)user {
+    
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
-    titleLabel.text = @"";
+    titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
-    // titleLabel.text = [NSString stringWithFormat:@"@%@", self.representedUser.username];
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
+}
+
+- (void)configureNavigationBar {
+    [super removeNavigationBarLine];
 
     if (self.representedUser.isLoggedIn && [self.navigationController.childViewControllers objectAtIndex:0] == self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotificationsAnimated)];
@@ -1008,6 +1015,8 @@
 
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
+    
+    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
 }
 
 - (void)handleLikesButtonTapped {
@@ -1028,6 +1037,8 @@
         self.currentFeed = self.likes;
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
+    
+    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
 }
 
 - (void)showShareSheetWithContent:(NSArray *)content {
@@ -1307,6 +1318,17 @@
     }
 
     [self.sectionView setFrame:newFrame];
+    
+    // This check pins the sectionView under the navigation bar.
+    // Uncomment the debug colors for a visual demo.
+    if (basePoint.y >= self.profileContainer.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height) {
+        CGRect sectionViewFrame = self.sectionView.frame;
+        sectionViewFrame.origin.y = 0;
+        [self.sectionView setFrame:sectionViewFrame];
+        // self.sectionView.backgroundColor = [UIColor redColor]; // Debug
+    } else {
+        // self.sectionView.backgroundColor = [UIColor greenColor]; // Debug
+    }
 
     NSArray *visibleCells = [self.tableView visibleCells];
 
@@ -1518,17 +1540,8 @@
       [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
       self.locationLabel.text = [user valueForKey:@"location"];
       self.usernameLabel.text = user.username;
-      titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
 
-      if ([user.username isEqualToString:@""] || !user.username || [user.username isEqual:[NSNull null]]) {
-          if (![user.firstName isEqualToString:@""]) {
-              titleLabel.adjustsFontSizeToFitWidth = YES;
-              titleLabel.text = user.firstName;
-          } else {
-              titleLabel.text = @"";
-          }
-      }
-
+      [self configureTitleLabelFromUser:user];
       [self configureNavigationBar];
     });
 }

@@ -26,6 +26,7 @@
 @dynamic comments;
 @dynamic createdDate;
 @dynamic editedDate;
+@dynamic highlightedDate;
 @dynamic relatedStories;
 @dynamic tags;
 @dynamic uid;
@@ -34,7 +35,6 @@
 @dynamic stories;
 @dynamic articles;
 @dynamic isLiked;
-@dynamic verificationRating;
 @dynamic numberOfLikes;
 @dynamic numberOfReposts;
 @dynamic externalAccountID;
@@ -68,6 +68,12 @@
     } else if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
         self.createdDate = [NSString dateFromString:dict[@"created_at"]];
     }
+    
+    
+    if (dict[@"highlighted_at"] && ![dict[@"highlighted_at"] isEqual:[NSNull null]]) {
+        self.highlightedDate = [NSString dateFromString:dict[@"highlighted_at"]];
+    }
+
 
     if (dict[@"rating"] && ![dict[@"rating"] isEqual:[NSNull null]]) {
         self.rating = dict[@"rating"];
@@ -90,11 +96,13 @@
         NSDictionary *source = (NSDictionary *)[results firstObject];
         NSString *userID = source[@"user_id"];
 
-        [[FRSUserManager sharedInstance] getUserWithUID:userID
-                                             completion:^(id responseObject, NSError *error) {
-                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
-                                               self.sourceUser = user;
-                                             }];
+        if(userID != nil) {
+            [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                                 completion:^(id responseObject, NSError *error) {
+                                                     FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSUserManager sharedInstance] managedObjectContext]];
+                                                     self.sourceUser = user;
+                                                 }];
+        }
     }
 
     if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
@@ -115,10 +123,6 @@
 
     if ([dict valueForKey:@"external_url"] != [NSNull null]) {
         self.externalURL = [dict objectForKey:@"external_url"];
-    }
-
-    if ([dict valueForKey:@"rating"] != [NSNull null]) {
-        self.verificationRating = [[dict objectForKey:@"rating"] integerValue];
     }
 
     if (!self.posts || self.posts.count == 0) {
@@ -158,7 +162,12 @@
 - (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     _currentContext = context;
     save = TRUE;
+    
+    // Configure the gallery
     [self configureWithDictionary:dict];
+    
+    // User configuration needs to happen once the gallery has completed configuring
+    // to avoid a nil entity name 'FRSUser'
     [self configureCreatorWithDictionary:dict];
 }
 
@@ -167,9 +176,9 @@
     NSString *dictKey = @"";
 
     // Default to the the gallerys owner, fall back on the curator if the owner is not found
-    if (dict[@"owner"] != [NSNull null]) {
+    if (dict[@"owner"] != [NSNull null] && dict[@"owner"] != nil) {
         dictKey = @"owner";
-    } else if (dict[@"curator"] != [NSNull null]) {
+    } else if (dict[@"curator"] != [NSNull null] && dict[@"curator"] != nil) {
         dictKey = @"curator";
     } else {
         NSLog(@"Unable to find owner or curator on gallery");

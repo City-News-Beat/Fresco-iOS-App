@@ -20,7 +20,7 @@
 #import "FRSGalleryManager.h"
 #import "FRSModerationAlertView.h"
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
 @property (nonatomic) BOOL touchEnabled;
 
@@ -61,7 +61,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             self.galleryID = gallery.uid;
         }
         self.hiddenTabBar = YES;
-        self.actionBarVisible = YES;
         self.touchEnabled = NO;
         [galleryDetailView fetchCommentsWithID:gallery.uid];
     }
@@ -78,8 +77,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.view layoutSubviews];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-        initWithTarget:self
-                action:@selector(dismissKeyboard:)];
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 }
 
@@ -138,8 +138,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView.parentVC = self;
 
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
-
-    //NSLog(@"Gallery Object: \n%@", self.gallery.jsonObject);
 }
 
 - (void)configureNavigationBar {
@@ -342,60 +340,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self presentViewController:view animated:YES completion:nil];
 }
 
-#pragma mark - Action Bar Button Actions
-
-- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
-
-    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
-
-    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
-    [self.navigationController presentViewController:activityController animated:YES completion:nil];
-
-    [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
-}
-
-- (void)handleLike:(FRSContentActionsBar *)actionBar {
-    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
-
-    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
-                                               completion:^(id responseObject, NSError *error) {
-                                                 NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                                 if (error) {
-                                                     [actionBar handleHeartState:TRUE];
-                                                     [actionBar handleHeartAmount:likes];
-                                                 }
-                                               }];
-
-    } else {
-        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
-                                             completion:^(id responseObject, NSError *error) {
-                                               NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                               if (error) {
-                                                   [actionBar handleHeartState:FALSE];
-                                                   [actionBar handleHeartAmount:likes];
-                                               }
-                                             }];
-    }
-}
-
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
-    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
-    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
-
-    [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
-                                           completion:^(id responseObject, NSError *error) {
-                                             NSLog(@"REPOSTED %@", error);
-
-                                             if (error) {
-                                                 [actionBar handleRepostState:!state];
-                                                 [actionBar handleRepostAmount:repostCount];
-                                             }
-                                           }];
-}
-
 #pragma mark - 3D Touch
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -546,7 +490,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Moderation
 
 - (void)blockUser:(FRSUser *)user {
-
     [[FRSModerationManager sharedInstance] blockUser:user.uid
                                       withCompletion:^(id responseObject, NSError *error) {
 
@@ -556,7 +499,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                             [alert show];
                                             self.didBlockUser = YES;
                                             self.isBlockingFromComment = NO;
-
                                         } else {
                                             [self presentGenericError];
                                         }

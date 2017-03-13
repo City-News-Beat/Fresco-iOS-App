@@ -7,6 +7,7 @@
 //
 
 #import "FRSCoreDataController.h"
+#import "FRSUploadManager.h"
 
 @implementation FRSCoreDataController
 
@@ -43,6 +44,7 @@
         NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
         NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
         NSAssert(store != nil, @"Error initializing PSC: %@\n%@", [error localizedDescription], [error userInfo]);
+        [[FRSUploadManager sharedInstance] checkCachedUploads];
     });
 }
 
@@ -72,6 +74,13 @@
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         }
     }
+}
+
+
+- (void)saveContextSynchornously{
+    [self.managedObjectContext performBlockAndWait:^{
+        [self saveContext];
+    }];
 }
 
 @end

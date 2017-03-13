@@ -313,7 +313,7 @@
         [digestion setObject:username forKey:@"username"];
     }
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
         [digestion setObject:password forKey:@"password"];
@@ -330,7 +330,7 @@
     
     [[FRSUserManager sharedInstance] updateLegacyUserWithDigestion:digestion
                                                         completion:^(id responseObject, NSError *error) {
-                                                            [[FRSUserManager sharedInstance] saveUserFields:responseObject];
+                                                            [[FRSUserManager sharedInstance] saveUserFields:responseObject andSynchronously:NO];
                                                             
                                                             if (responseObject && !error) {
                                                                 [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];

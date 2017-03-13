@@ -14,6 +14,7 @@
 
 @end
 
+//FRS Notification types
 typedef NS_ENUM(NSUInteger, FRSNotificationType) {
     
     /* Social */

@@ -374,10 +374,11 @@
 
     [self configureActionsBar]; // this will stay similar
 
-    if ([self.gallery.rating isEqual:@3] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
+    
+    // check if highlighted_at is <= now and if it's not null
+    if ([self.gallery.highlightedDate compare:[NSDate date]] && [[self.delegate class] isEqual:[FRSGalleryDetailView class]]) {
         if (![self.gallery.creator.uid isEqualToString:@""] && [self.gallery.creator.uid length] > 0) {
             [self configureBaseMetaData];
-
         }
     }
 
@@ -743,13 +744,8 @@
 
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
 
-    if (post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) {
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.username] fontSize:17];
-        ;
-    } else {
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.firstName] fontSize:17];
-        ;
-    }
+    self.nameLabel = [self galleryInfoLabelWithText:[FRSPost bylineForPost:post] fontSize:17];
+
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -788,32 +784,15 @@
         return;
 
     FRSPost *post = self.orderedPosts[self.adjustedPage];
-
-    FRSGallery *parent = post.gallery;
-
-    if ((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]] && post.creator.username != nil && ![post.creator.username isEqualToString:@""]) {
-        self.nameLabel.text = [NSString stringWithFormat:@"@%@", post.creator.username];
-    } else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]) {
-        self.nameLabel.text = [NSString stringWithFormat:@"%@", post.creator.firstName];
-    } else {
-        self.nameLabel.text = @"";
-    }
-
-    if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
-
-        if ([parent.externalSource isEqualToString:@"twitter"]) {
-            NSString *toSet = [NSString stringWithFormat:@"@%@", parent.externalAccountName];
-
-            if ([toSet length] != 1) {
-                self.nameLabel.text = toSet;
-            }
-
-        } else {
-            self.nameLabel.text = parent.externalAccountName;
-        }
-    }
+    
+    self.nameLabel.text = [FRSPost bylineForPost:post];
 
     self.locationLabel.text = post.address;
+    
+    if ([self.locationLabel.text length] == 0) {
+        self.locationLabel.text = @"No Location";
+    }
+    
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
 
     self.nameLabel.numberOfLines = 1;

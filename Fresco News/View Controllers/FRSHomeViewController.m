@@ -98,6 +98,7 @@ static NSInteger const galleriesPerPage = 12;
         if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
                 NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
+                if(startDateString == nil) return;
                 NSDate *startDate = [NSString dateFromString:startDateString];
                 NSDate *today = [NSDate date];
 
@@ -280,6 +281,7 @@ static NSInteger const galleriesPerPage = 12;
                                                              // Gallery does not exist -- create it in persistence layer & volotile memory
                                                              if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
                                                                  FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
+
                                                                  [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                                                                  [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                                                                  [newGalleries addObject:galleryToSave];
@@ -443,8 +445,34 @@ static NSInteger const galleriesPerPage = 12;
                                                      }];
 }
 
+
+/**
+ Fetches galleries from local store
+ */
 - (void)fetchLocalData {
-    [self flushCache:Nil];
+    NSManagedObjectContext *moc = [self.appDelegate.coreDataController managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
+    
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    
+    pulledFromCache = stored;
+    
+    self.dataSource = [NSMutableArray arrayWithArray:stored];
+    self.highlights = self.dataSource;
+    
+    if ([_dataSource count] > 0) {
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
+    } else {
+        if ([self.dataSource count] == 0) {
+            [self configureSpinner];
+        }
+    }
+    
+    self.cachedData = [NSMutableArray arrayWithArray:stored];
+    [self.tableView reloadData];
 }
 
 - (NSInteger)galleryExists:(NSString *)galleryID {
@@ -480,7 +508,12 @@ static NSInteger const galleriesPerPage = 12;
           }
 
           if ([self.appDelegate.coreDataController.managedObjectContext hasChanges]) {
-              [self.appDelegate.coreDataController.managedObjectContext save:Nil];
+              @try {
+                  [self.appDelegate.coreDataController.managedObjectContext save:Nil];
+              }
+              @catch (NSException *exception) {
+                  NSLog(@"Exception:%@", exception);
+              }
           }
 
           [self.appDelegate saveContext];
@@ -494,6 +527,7 @@ static NSInteger const galleriesPerPage = 12;
           [self.appDelegate saveContext];
         }];
     }
+
 }
 
 - (void)reloadFromLocal {
@@ -504,32 +538,6 @@ static NSInteger const galleriesPerPage = 12;
           [self.tableView reloadData];
       }
     });
-}
-
-- (void)flushCache:(NSArray *)received {
-    NSManagedObjectContext *moc = [self.appDelegate.coreDataController managedObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
-    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
-
-    NSError *error = nil;
-    NSArray *stored = [moc executeFetchRequest:request error:&error];
-
-    pulledFromCache = stored;
-
-    self.dataSource = [NSMutableArray arrayWithArray:stored];
-    self.highlights = self.dataSource;
-
-    if ([_dataSource count] > 0) {
-        [self.loadingView stopLoading];
-        [self.loadingView removeFromSuperview];
-    } else {
-        if ([self.dataSource count] == 0) {
-            [self configureSpinner];
-        }
-    }
-
-    self.cachedData = [NSMutableArray arrayWithArray:stored];
-    [self.tableView reloadData];
 }
 
 #pragma mark - UITableView DataSource

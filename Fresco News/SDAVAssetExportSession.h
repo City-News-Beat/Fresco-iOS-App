@@ -15,6 +15,7 @@
 
 @protocol SDAVAssetExportSessionDelegate;
 
+
 /**
  * An `SDAVAssetExportSession` object transcodes the contents of an AVAsset source object to create an output
  * of the form described by specified video and audio settings. It implements most of the API of Apple provided
@@ -22,7 +23,7 @@
  * limited set of Apple provided presets.
  *
  * After you have initialized an export session with the asset that contains the source media, video and audio
- * settings, and the output file type (outputFileType), you can start the export running by invoking 
+ * settings, and the output file type (outputFileType), you can start the export running by invoking
  * `exportAsynchronouslyWithCompletionHandler:`. Because the export is performed asynchronously, this method
  * returns immediately — you can observe progress to check on the progress.
  *
@@ -143,6 +144,7 @@
  */
 @property (nonatomic, assign, readonly) AVAssetExportSessionStatus status;
 
+
 @property (nonatomic, strong) NSString *postID;
 
 /**
@@ -185,9 +187,12 @@
  */
 - (void)cancelExport;
 
+
 @end
 
+
 @protocol SDAVAssetExportSessionDelegate <NSObject>
+
 @optional
 - (void)exportSession:(SDAVAssetExportSession *)exportSession renderFrame:(CVPixelBufferRef)pixelBuffer withPresentationTime:(CMTime)presentationTime toBuffer:(CVPixelBufferRef)renderBuffer;
 
