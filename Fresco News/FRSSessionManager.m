@@ -129,7 +129,7 @@
     [[FRSAPIClient sharedClient] get:clientEndpoint
                        withParameters:nil
                            completion:^(id responseObject, NSError *error) {
-                               if(!error) {
+                               if(!error && [responseObject isKindOfClass:[NSDictionary class]] && responseObject != nil) {
                                    NSDictionary *clientVersion = responseObject[@"api_version"];
                                    
                                    if(bearerVersion != nil && ![bearerVersion  isEqual: @""]) {
@@ -141,7 +141,7 @@
                                                               completion:^(id responseObject, NSError *error) {
                                                                   if(!error) {
                                                                       bearerVersion = [self versionFromDictionary:responseObject[@"client"][@"api_version"]];
-                                                                      checkClientAgainstBearer([self versionFromDictionary:clientVersion]);
+                                                                      checkClientAgainstBearer([self versionFromDictionary:clientVersion] != nil ? [self versionFromDictionary:clientVersion] : @"");
                                                                   }
                                                               }];
                                    }
