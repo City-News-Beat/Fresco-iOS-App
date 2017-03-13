@@ -457,16 +457,13 @@
     CLLocation *location = [[FRSLocator sharedLocator] currentLocation];
     
     [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:20 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] withCompletion:^(id responseObject, NSError *error) {
+        
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         
-        NSInteger savedCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"assignment-count"];
-        NSInteger currentCount = assignments.count;
-        
-        if (savedCount < currentCount) {
+        if (assignments.count >= 1) {
             [FRSIndicatorDot addDotToTabBar:self.tabBar atIndex:3 animated:YES];
         }
         
-        [[NSUserDefaults standardUserDefaults] setInteger:assignments.count forKey:@"assignment-count"];
     }];
 }
 

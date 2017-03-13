@@ -26,17 +26,21 @@
     dot.frame = CGRectMake(xOffset + halfImageWidth, dot.frame.origin.y, dot.frame.size.width, dot.frame.size.height);
     
     if (animated) {
-        [self animateView:dot];
+        [self animateView:dot index:index];
     }
 }
 
 + (void)addDotToTabBar:(UITabBar *)tabBar atPosition:(CGFloat)position atIndex:(NSInteger)index animated:(BOOL)animated {
     
+    if ([self dotExistsInView:tabBar atIndex:index]) {
+        return;
+    }
+    
     UIView *dot = [self indicatorDotInTabBar:tabBar atIndex:index];
     dot.frame = CGRectMake(position, dot.frame.origin.y, dot.frame.size.width, dot.frame.size.height);
     
     if (animated) {
-        [self animateView:dot];
+        [self animateView:dot index:index];
     }
 }
 
@@ -47,6 +51,25 @@
             break;
         }
     }
+}
+
+
+/**
+ Checks if the dot exists in the given view and returns a BOOL.
+
+ @param view UIView where the dot may or may not have been created.
+ @param index NSInteger index for the UIView you want to check.
+ @return BOOL
+ */
++ (BOOL)dotExistsInView:(UIView *)view atIndex:(NSInteger)index {
+    for (UIView *dot in view.subviews) {
+        if (dot.tag == index) {
+            return YES;
+        } else if (dot.tag > index) {
+            return NO;
+        }
+    }
+    return NO;
 }
 
 
@@ -86,9 +109,16 @@
 
  @param view The view that will be animated.
  */
-+ (void)animateView:(UIView *)view {
+
+/**
+ Animates the indicator dot into the view.
+
+ @param view UIView The view that will be animated.
+ @param index NSInteger This is used to delay the animation. Doing so offsets the multiple dots and prevents them from animating at exactly the same time.
+ */
++ (void)animateView:(UIView *)view index:(NSInteger)index {
     view.transform = CGAffineTransformMakeScale(0.001, 0.001);
-    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0.2/index options:UIViewAnimationOptionCurveEaseInOut animations:^{
         view.transform = CGAffineTransformMakeScale(1.1, 1.1);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{

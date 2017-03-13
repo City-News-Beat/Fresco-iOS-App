@@ -360,6 +360,7 @@
 // TODO: Move out of App Delegate and into FRSTabBarController
 - (void)startNotificationTimer {
     if (!notificationTimer) {
+        [self checkNotifications]; // Check notifications here to avoid 15 second delay on first call.
         notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
     }
 }
@@ -375,20 +376,21 @@
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         return;
     }
-
+    
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-      if (error) {
-          //soft fail
-          return;
-      }
-      if (responseObject) {
-          FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
-          if ([tbc isKindOfClass:[FRSTabBarController class]]) {
-              if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                  [(FRSTabBarController *)self.tabBar showBell:YES];
-              }
-          }
-      }
+        if (error) {
+            // Return without error. The user should not be aware of this failure.
+            return;
+        }
+        if (responseObject) {
+            FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
+            if ([tbc isKindOfClass:[FRSTabBarController class]]) {
+                NSNumber *unseenCount = [responseObject objectForKey:@"unseen_count"];
+                if (![unseenCount isEqual:@0]) {
+                    [(FRSTabBarController *)self.tabBar showBell:YES];
+                }
+            }
+        }
     }];
 }
 
