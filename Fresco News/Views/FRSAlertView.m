@@ -28,7 +28,6 @@
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
     self = [super init];
     if (self) {
-
         self.delegate = delegate;
 
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
@@ -136,7 +135,7 @@
 - (void)cancelTapped {
     [self animateOut];
 
-    if (self.delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didPressButton:atIndex:)]) {
         [self.delegate didPressButton:self atIndex:1];
     }
 
@@ -147,7 +146,7 @@
 - (void)actionTapped {
     [self animateOut];
 
-    if (self.delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didPressButton:atIndex:)]) {
         [self.delegate didPressButton:self atIndex:0];
     }
 
@@ -156,7 +155,6 @@
 }
 
 - (void)animateIn {
-
     /* Set default state before animating in */
     self.transform = CGAffineTransformMakeScale(1.175, 1.175);
     self.alpha = 0;

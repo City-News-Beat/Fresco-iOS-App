@@ -70,8 +70,6 @@
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
-
-
 - (void)loadGalleryDetailViewWithGallery:(FRSGallery *)gallery parentVC:(FRSGalleryExpandedViewController *)parentVC {
     self.gallery = gallery;
     self.parentVC = parentVC;
@@ -98,11 +96,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
-    
+
     self.scrollView.showsVerticalScrollIndicator = NO;
 }
-
-
 
 #pragma mark - Gallery View
 
@@ -119,9 +115,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)getGalleryPurchases {
     [[FRSGalleryManager sharedInstance] fetchPurchasesForGalleryID:self.gallery.uid
                                                         completion:^(id responseObject, NSError *error) {
-                                                            galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
-                                                            [self animateVerificationTabIn];
-                                                            [self configureVerificationTabBarTitle];
+                                                          galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
+                                                          [self animateVerificationTabIn];
+                                                          [self configureVerificationTabBarTitle];
                                                         }];
 }
 
@@ -130,13 +126,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     verificationViewHeightConstraint.constant = 0;
     verificationContainerView.hidden = true;
     [self updateConstraints];
-    
+
     if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         verificationViewLeftContraint.constant = DEFAULT_PADDING;
         verificationEyeImageView.hidden = true;
-        
+
         [self getGalleryPurchases];
-        
+
         if (self.gallery.verificationRating == 0) { // Not Rated
             verificationLabel.text = @"PENDING VERIFICATION";
             verificationContainerView.backgroundColor = [UIColor frescoOrangeColor];
@@ -160,8 +156,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     verificationContainerView.hidden = false;
     [UIView animateWithDuration:0.1
                      animations:^{
-                         verificationViewHeightConstraint.constant = 44;
-                         [self layoutIfNeeded];
+                       verificationViewHeightConstraint.constant = 44;
+                       [self layoutIfNeeded];
                      }];
 }
 
@@ -170,9 +166,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         verificationContainerView.backgroundColor = [UIColor frescoGreenColor];
         if (galleryPurchases.count == 1) {
             NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
-            
+
             NSString *title = [purchase valueForKeyPath:@"outlet.title"];
-            
+
             verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [title uppercaseString]];
             if ([title isEqualToString:@"Fresco News"]) {
                 verificationViewLeftContraint.constant = 56; // Zeplin distance from left
@@ -181,9 +177,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         } else {
             //Check all of the outlet names to see if they are different, if all the purchases are made by 1 outlet, show that it was bought by the 1 outlet
             BOOL boughtByOneOutlet = true;
-            
+
             NSMutableArray *outletNames = [[NSMutableArray alloc] init];
-            
+
             //Loop through the purchases dict
             for (int i = 0; i < galleryPurchases.count; i++) {
                 NSDictionary *galleryDict = [galleryPurchases objectAtIndex:i];
@@ -201,7 +197,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                     [outletNames addObject:outletName];
                 }
             }
-            
+
             if (boughtByOneOutlet) {
                 if ([outletNames[0] isEqualToString:@"Fresco News"]) {
                     verificationViewLeftContraint.constant = 56; // Zeplin distance from left
@@ -235,8 +231,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
-
-
 #pragma mark - FRSGalleryView Delegate
 
 - (BOOL)shouldHaveActionBar {
@@ -250,22 +244,18 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)playerWillPlay:(FRSPlayer *)player {
 }
 
-
-
 #pragma mark - Articles
 
 - (void)configureArticles {
     articlesHeightConstraint.constant = CELL_HEIGHT * [self.gallery.articles allObjects].count;
-    
+
     self.articlesTableView.delegate = self;
     self.articlesTableView.dataSource = self;
-    
+
     self.articlesTableView.hidden = [self.gallery.articles allObjects].count == 0;
     articlesTVTopLine.hidden = [self.gallery.articles allObjects].count == 0;
     articlesLabel.hidden = [self.gallery.articles allObjects].count == 0;
 }
-
-
 
 #pragma mark - Comments
 
@@ -277,21 +267,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     } else {
         commentsLabelTopConstraint.constant = -zeplinTVLabelTopPadding;
     }
-    
+
     [commentsTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
-    
+
     commentsTableView.delegate = self;
     commentsTableView.dataSource = self;
     commentsTableView.estimatedRowHeight = 100;
     commentsTableView.rowHeight = UITableViewAutomaticDimension;
-    
+
     commentsTableView.hidden = self.comments.count == 0;
     commentsTVTopLine.hidden = self.comments.count == 0;
-    
+
     if (self.loadingView.alpha == 0) {
         commentsLabel.hidden = self.comments.count == 0;
     }
-    
+
     [self.actionBar actionButtonTitleNeedsUpdate];
     [commentsTableView reloadData];
 }
@@ -358,32 +348,32 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)loadMoreComments {
     FRSComment *comment = self.comments[0];
     NSString *lastID = comment.uid;
-    
+
     [self configureCommentsSpinner];
-    
+
     [[FRSGalleryManager sharedInstance] fetchMoreComments:self.gallery
                                                      last:lastID
                                                completion:^(id responseObject, NSError *error) {
-                                                   if (!responseObject || error) {
-                                                       return;
-                                                   }
-                                                   
-                                                   int count = 0;
-                                                   
-                                                   for (NSDictionary *comment in responseObject) {
-                                                       FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
-                                                       [_comments insertObject:commentObject atIndex:0];
-                                                       count++;
-                                                   }
-                                                   
-                                                   if (count < 10 || ([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
-                                                       showsMoreButton = FALSE;
-                                                   } else {
-                                                       showsMoreButton = TRUE;
-                                                   }
-                                                   
-                                                   [self stopCommentsSpinner];
-                                                   [commentsTableView reloadData];
+                                                 if (!responseObject || error) {
+                                                     return;
+                                                 }
+
+                                                 int count = 0;
+
+                                                 for (NSDictionary *comment in responseObject) {
+                                                     FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+                                                     [_comments insertObject:commentObject atIndex:0];
+                                                     count++;
+                                                 }
+
+                                                 if (count < 10 || ([commentsTableView visibleCells].count - 1) == [self.gallery.comments integerValue] - 10) {
+                                                     showsMoreButton = FALSE;
+                                                 } else {
+                                                     showsMoreButton = TRUE;
+                                                 }
+
+                                                 [self stopCommentsSpinner];
+                                                 [commentsTableView reloadData];
                                                }];
 }
 
@@ -447,8 +437,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                        }];
 }
 
-
-
 #pragma mark - FRSCommentCellDelegate
 
 - (void)didPressProfilePictureWithUserId:(NSString *)userId {
@@ -456,8 +444,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUserID:userId];
     [self.navigationController pushViewController:controller animated:TRUE];
 }
-
-
 
 #pragma mark - UITextFieldDelegate
 
@@ -468,8 +454,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     return YES;
 }
-
-
 
 #pragma mark - Table View
 
@@ -567,7 +551,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    
+
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
@@ -578,7 +562,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [controller search:search];
         [self.navigationController pushViewController:controller animated:YES];
     }
-    
+
     return NO;
 }
 
@@ -594,7 +578,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
+
     if (tableView == self.articlesTableView) {
         if ([self.gallery.articles allObjects].count > indexPath.row) {
             FRSArticle *article = [self.gallery.articles allObjects][indexPath.row];
@@ -619,31 +603,29 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
-
-
 #pragma mark - Action Bar
 
 - (void)configureActionBar {
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - TOP_NAV_BAR_HEIGHT - 44) delegate:self];
     self.actionBar.delegate = self;
-    
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.actionBar addSubview:line];
-    
+
     NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-    
+
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
     BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
-    
+
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
-    
+
     [self addSubview:self.actionBar];
-    
+
     if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         [self.actionBar setCurrentUser:YES];
     } else {
@@ -651,17 +633,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
-
-
 #pragma mark - Action Bar Delegate
 
 - (NSString *)titleForActionButton {
     CGRect visibleRect;
     visibleRect.origin = self.scrollView.contentOffset;
     visibleRect.size = self.scrollView.bounds.size;
-    
+
     NSInteger offset = visibleRect.origin.y + visibleRect.size.height + TOP_NAV_BAR_HEIGHT - DEFAULT_PADDING - self.actionBar.frame.size.height;
-    
+
     if (commentsLabel.frame.origin.y > offset) {
         if (self.gallery && self.totalCommentCount > 0) {
             return [NSString stringWithFormat:@"%lu COMMENTS", (unsigned long)self.totalCommentCount];
@@ -677,12 +657,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
     NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
-    
+
     sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
-    
+
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
     [self.parentVC.navigationController presentViewController:activityController animated:YES completion:nil];
-    
+
     [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
 }
 
@@ -700,20 +680,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
         [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
                                                completion:^(id responseObject, NSError *error) {
-                                                   NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                                   if (error) {
-                                                       [actionBar handleHeartState:TRUE];
-                                                       [actionBar handleHeartAmount:likes];
-                                                   }
+                                                 NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
+                                                 if (error) {
+                                                     [actionBar handleHeartState:TRUE];
+                                                     [actionBar handleHeartAmount:likes];
+                                                 }
                                                }];
     } else {
         [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
                                              completion:^(id responseObject, NSError *error) {
-                                                 NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                                 if (error) {
-                                                     [actionBar handleHeartState:FALSE];
-                                                     [actionBar handleHeartAmount:likes];
-                                                 }
+                                               NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+                                               if (error) {
+                                                   [actionBar handleHeartState:FALSE];
+                                                   [actionBar handleHeartAmount:likes];
+                                               }
                                              }];
     }
 }
@@ -721,19 +701,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)handleRepost:(FRSContentActionsBar *)actionBar {
     BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
     NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
-    
+
     [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
                                            completion:^(id responseObject, NSError *error) {
-                                               NSLog(@"REPOSTED %@", error);
-                                               
-                                               if (error) {
-                                                   [actionBar handleRepostState:!state];
-                                                   [actionBar handleRepostAmount:repostCount];
-                                               }
+                                             NSLog(@"REPOSTED %@", error);
+
+                                             if (error) {
+                                                 [actionBar handleRepostState:!state];
+                                                 [actionBar handleRepostAmount:repostCount];
+                                             }
                                            }];
 }
-
-
 
 #pragma mark - Keyboard Handling
 
@@ -742,37 +720,37 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.commentTextField resignFirstResponder];
 }
 
-
 - (void)keyboardWillShow:(NSNotification *)notification {
     NSDictionary *info = [notification userInfo];
-    
+
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
+
     if ([self.commentTextField isFirstResponder]) {
         addCommentBotConstraint.constant = keyboardSize.height;
         [self updateConstraintsIfNeeded];
         [self layoutIfNeeded];
-        
+
         CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
         [self.scrollView setContentOffset:bottomOffset animated:YES];
     }
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    
     self.actionBar.hidden = false;
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        addCommentBotConstraint.constant = 0;
-    } completion:nil];
-    
+
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                       addCommentBotConstraint.constant = 0;
+                     }
+                     completion:nil];
+
     if ([commentsTableView numberOfRowsInSection:0] > 5) {
         CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
         [self.scrollView setContentOffset:bottomOffset animated:YES];
     }
 }
-
-
 
 #pragma mark - MGSwipeTableCellDelegate
 
@@ -816,14 +794,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                            }];
 }
 
-
-
 #pragma mark - Default
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-
 
 @end

@@ -458,7 +458,6 @@
 }
 
 - (void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
-    
     if (success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@""];
         self.usernameTakenLabel.alpha = 0;
@@ -575,7 +574,6 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -603,9 +601,7 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    
     if (textField == self.usernameTextField) {
-        
         if ([textField.text isEqualToString:@"@"]) {
             textField.text = @"";
         }
@@ -639,7 +635,6 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
     if (self.usernameTextField.isEditing) {
         [self startUsernameTimer];
         

@@ -147,12 +147,13 @@
 }
 
 - (void)logoutTapped {
-    [self.delegate logoutAlertAction];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(logoutAlertAction)]) {
+        [self.delegate logoutAlertAction];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logout_notification" object:nil];
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self dismiss];
 }
-
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.TOSTextView) {

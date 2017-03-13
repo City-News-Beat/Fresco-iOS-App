@@ -194,7 +194,6 @@
 }
 
 - (void)createSelectableButtonWithTitle:(NSString *)title imageView:(UIImageView *)imageView yPos:(CGFloat)yPos action:(SEL)action {
-
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(0, yPos, self.frame.size.width, 44);
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
@@ -215,7 +214,6 @@
 }
 
 - (void)addTextView {
-
     int textViewHeight = 93;
     int padding = 44;
 
@@ -288,12 +286,16 @@
 
 - (void)reportGallery {
     [self dismiss];
-    [self.delegate reportGalleryAlertAction];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(reportGalleryAlertAction)]) {
+        [self.delegate reportGalleryAlertAction];
+    }
 }
 
 - (void)reportUser {
     [self dismiss];
-    [self.delegate reportUserAlertAction];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(reportUserAlertAction)]) {
+        [self.delegate reportUserAlertAction];
+    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {

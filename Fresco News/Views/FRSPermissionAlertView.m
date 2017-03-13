@@ -223,7 +223,6 @@
 }
 
 - (void)requestLocation {
-    
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LocationRequested"]) {
         self.locationManager = [[CLLocationManager alloc] init];
         [self.locationManager requestWhenInUseAuthorization];
@@ -247,7 +246,6 @@
 }
 
 - (void)appWillBecomeActive:(NSNotification *)notification {
-    
     [self checkLocationStatus];
     [self checkNotificationStatus];
     
@@ -272,7 +270,6 @@
 }
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification {
-    
     [self checkLocationStatus];
     [self checkNotificationStatus];
     
