@@ -24,7 +24,7 @@
 
 @end
 
-@interface FRSAlertView : UIView <UIScrollViewDelegate, UITextFieldDelegate>
+@interface FRSAlertView : UIView <UITextFieldDelegate>
 
 @property (weak, nonatomic) NSObject<FRSAlertViewDelegate> *delegate;
 
@@ -32,12 +32,6 @@
 
 - (void)show;
 - (void)dismiss;
-
-- (instancetype)initPermissionsAlert:(id)delegate;
-- (instancetype)initFindFriendsAlert;
-- (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
-- (instancetype)initTOS;
-- (instancetype)initNewStuffWithPasswordField:(BOOL)password;
 
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) CLLocationManager *locationManager;

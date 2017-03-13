@@ -1,18 +1,18 @@
 //
-//  FRSConnectivityAlertView.m
+//  FRSFindFriendsAlertView.m
 //  Fresco
 //
-//  Created by Maurice Wu on 3/11/17.
+//  Created by Maurice Wu on 3/12/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 
-#import "FRSConnectivityAlertView.h"
+#import "FRSFindFriendsAlertView.h"
 #import "UIFont+Fresco.h"
 
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
 
-@interface FRSConnectivityAlertView()
+@interface FRSFindFriendsAlertView()
 
 @property (strong, nonatomic) UIView *overlayView;
 @property (strong, nonatomic) UIView *buttonShadow;
@@ -27,14 +27,12 @@
 
 @end
 
-@implementation FRSConnectivityAlertView
+@implementation FRSFindFriendsAlertView
 
-- (instancetype)initNoConnectionAlert {
+- (instancetype)initFindFriendsAlert {
     self = [super init];
     
     if (self) {
-        
-        NSString *message = @"Please check your internet connection.";
         
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         
@@ -47,7 +45,7 @@
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.text = @"NO CONNECTION";
+        self.titleLabel.text = @"NOT SURE WHO TO FOLLOW?";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
         
@@ -58,10 +56,10 @@
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
         
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"Connect your address book to find your friends on Fresco."];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"Connect your address book to find your friends on Fresco." length])];
         
         self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -76,74 +74,34 @@
         
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.actionButton addTarget:self action:@selector(settingsTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 85, 44);
+        [self.actionButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(14, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 85, 44);
         [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-        [self.actionButton setTitle:@"SETTINGS" forState:UIControlStateNormal];
+        [self.actionButton setTitle:@"NO THANKS" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
         
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
+        [self.cancelButton addTarget:self action:@selector(requestContacts) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        [self.cancelButton setTitle:@"OK" forState:UIControlStateNormal];
+        [self.cancelButton setTitle:@"FIND FRIENDS" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
         
-        [self adjustFrame];
-        [self addShadowAndClip];
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 70, ALERT_WIDTH, 140);
         
+        [self addShadowAndClip];
         [self animateIn];
     }
-    
     return self;
 }
 
-- (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton {
-    self = [super init];
-    
-    if (self) {
-        self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
-        self.backgroundColor = [UIColor frescoRedColor];
-        
-        NSString *title = @"";
-        
-        if (IS_IPHONE_5) {
-            title = @"UNABLE TO CONNECT";
-        } else if (IS_IPHONE_6) {
-            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-        } else if (IS_IPHONE_6_PLUS) {
-            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-        }
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 33, [UIScreen mainScreen].bounds.size.width - 80, 19)];
-        label.font = [UIFont notaBoldWithSize:17];
-        label.textColor = [UIColor whiteColor];
-        label.text = title;
-        label.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:label];
-        
-        if (backButton) {
-            UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            [backButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
-            backButton.frame = CGRectMake(12, 30, 24, 24);
-            backButton.tintColor = [UIColor whiteColor];
-            [self addSubview:backButton];
-        }
-        
-        [UIView animateWithDuration:0.3
-                              delay:2.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             self.alpha = 0;
-                         }
-                         completion:nil];
-    }
-    return self;
+- (void)requestContacts {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
 - (void)configureDarkOverlay {
@@ -212,21 +170,6 @@
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     delegate.didPresentPermissionsRequest = NO;
-}
-
-- (void)settingsTapped {
-    [self animateOut];
-    
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-}
-
-- (void)adjustFrame {
-    self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
-    
-    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
-    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
-    
-    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
 }
 
 @end

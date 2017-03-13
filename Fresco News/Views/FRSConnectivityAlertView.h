@@ -11,5 +11,6 @@
 @interface FRSConnectivityAlertView : FRSAlertView
 
 - (instancetype)initNoConnectionAlert;
+- (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
 
 @end

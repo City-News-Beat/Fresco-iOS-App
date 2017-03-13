@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class FRSModerationAlertView;
+@class FRSAlertView;
 
 @interface FRSModerationAlertView : FRSAlertView
 

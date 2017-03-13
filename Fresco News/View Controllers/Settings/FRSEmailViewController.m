@@ -10,6 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSUserManager.h"
 #import "NSString+Validation.h"
+#import "FRSConnectivityAlertView.h"
 #import <UXCam/UXCam.h>
 
 @interface FRSEmailViewController ()
@@ -18,8 +19,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIImageView *errorImageView;
-
-@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -58,12 +57,8 @@
           }
 
           if (error.code == -1009) {
-              if (!self.alert) {
-                  if (!self.alert) {
-                      self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                      [self.alert show];
-                  }
-              }
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+              [alert show];
               return;
           }
 
@@ -75,11 +70,11 @@
               self.errorImageView.hidden = NO;
               self.saveButton.enabled = NO;
           } else if (responseCode == 400) {
-              self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this email. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-              [self.alert show];
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this email. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+              [alert show];
           } else {
-              self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-              [self.alert show];
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+              [alert show];
           }
         }];
 }

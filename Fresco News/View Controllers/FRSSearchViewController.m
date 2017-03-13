@@ -19,6 +19,7 @@
 #import "FRSSearchManager.h"
 #import "FRSStory.h"
 #import "FRSUserManager.h"
+#import "FRSConnectivityAlertView.h"
 #import "FRSUserTableViewCell.h"
 #import "FRSNearbyUserTableViewCell.h"
 #import "FRSSeeAllLabelTableViewCell.h"
@@ -42,7 +43,7 @@ static NSInteger const previewCount = 3;
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
 @property (nonatomic, retain) NSDate *currentQuery;
-@property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) FRSConnectivityAlertView *alert;
 @property (strong, nonatomic) NSString *userSectionTitleString;
 @property (strong, nonatomic) UIView *nearbyHeaderContainer;
 
@@ -422,10 +423,10 @@ static NSInteger const previewCount = 3;
       [self.tableView reloadData];
     });
 }
-- (void)searchError:(NSError *)error {
 
+- (void)searchError:(NSError *)error {
     if (error.code == -1009) {
-        self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+        self.alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
         [self.alert show];
         return;
     } else {
@@ -443,10 +444,10 @@ static NSInteger const previewCount = 3;
 - (void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
     NSManagedObjectContext *context = [[FRSSearchManager sharedInstance] managedObjectContext];
     FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
-    
+
     story.uid = storyID;
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
-    
+
     if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
         detailView.title = self.stories[row][@"title"];
     }
@@ -598,7 +599,7 @@ static NSInteger const previewCount = 3;
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
         return [gallery heightForGallery] - 19 + 12; //-19px is the default bottom space height, should be 12px
     }
-    
+
     return 0;
 }
 
@@ -719,8 +720,7 @@ static NSInteger const previewCount = 3;
         FRSStorySearchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:storySearchCellIdentifier];
         [cell loadDataWithTitle:title andImageURL:photo];
         return cell;
-    }
-    else if (indexPath.section == galleryIndex) {
+    } else if (indexPath.section == galleryIndex) {
         FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
         if (!cell) {
             cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];

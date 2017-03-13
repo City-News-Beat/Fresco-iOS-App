@@ -21,6 +21,7 @@
 #import "FRSPermissionAlertView.h"
 #import "FRSSignUpAlertView.h"
 #import "NSString+Validation.h"
+#import "FRSConnectivityAlertView.h"
 #import <UXCam/UXCam.h>
 
 @import MapKit;
@@ -1219,7 +1220,7 @@
 
                                                       if (error.code == -1009) {
 
-                                                          FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                          FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                           [alert show];
                                                           [self stopSpinner:self.loadingView onButton:self.createAccountButton];
 
@@ -1370,7 +1371,7 @@
       if (error) {
 
           if (error.code == -1009) {
-              FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
               [alert show];
               [spinner stopLoading];
               [spinner removeFromSuperview];
@@ -1472,7 +1473,7 @@
                                     }
 
                                     if (error.code == -1009) {
-                                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                         [alert show];
                                         [spinner stopLoading];
                                         [spinner removeFromSuperview];

@@ -171,6 +171,9 @@
 		CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */; };
 		CE5A6FE41E6276F90001255F /* FRSStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */; };
 		CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */; };
+		CE8DB7A51E762C5800000F30 /* FRSTOSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DB7A41E762C5800000F30 /* FRSTOSAlertView.m */; };
+		CE8DB7A81E762E6300000F30 /* FRSNewPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */; };
+		CE8DB7AB1E76336E00000F30 /* FRSFindFriendsAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */; };
 		CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */; };
 		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
 		CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */; };
@@ -628,6 +631,12 @@
 		CE3799B91E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSAssignmentNotificationsSwitchTableViewCell.xib; path = "Fresco News/View Controllers/Settings/FRSAssignmentNotificationsSwitchTableViewCell.xib"; sourceTree = "<group>"; };
 		CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryTableViewCell.xib; sourceTree = "<group>"; };
 		CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAssignmentsViewController.xib; sourceTree = "<group>"; };
+		CE8DB7A31E762C5800000F30 /* FRSTOSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTOSAlertView.h; sourceTree = "<group>"; };
+		CE8DB7A41E762C5800000F30 /* FRSTOSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTOSAlertView.m; sourceTree = "<group>"; };
+		CE8DB7A61E762E6300000F30 /* FRSNewPasswordAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNewPasswordAlertView.h; sourceTree = "<group>"; };
+		CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNewPasswordAlertView.m; sourceTree = "<group>"; };
+		CE8DB7A91E76336E00000F30 /* FRSFindFriendsAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFindFriendsAlertView.h; sourceTree = "<group>"; };
+		CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFindFriendsAlertView.m; sourceTree = "<group>"; };
 		CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryTableViewCell.xib; sourceTree = "<group>"; };
 		CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsViewController.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.xib"; sourceTree = "<group>"; };
 		CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPaymentViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPaymentViewController.xib"; sourceTree = "<group>"; };
@@ -1967,6 +1976,12 @@
 				CEE036111E711627002ADA35 /* FRSSignUpAlertView.m */,
 				CECD8D751E73C617004548D1 /* FRSConnectivityAlertView.h */,
 				CECD8D761E73C617004548D1 /* FRSConnectivityAlertView.m */,
+				CE8DB7A31E762C5800000F30 /* FRSTOSAlertView.h */,
+				CE8DB7A41E762C5800000F30 /* FRSTOSAlertView.m */,
+				CE8DB7A61E762E6300000F30 /* FRSNewPasswordAlertView.h */,
+				CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */,
+				CE8DB7A91E76336E00000F30 /* FRSFindFriendsAlertView.h */,
+				CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */,
 			);
 			name = "Alert View";
 			sourceTree = "<group>";
@@ -2695,6 +2710,7 @@
 				CE0A6FD01E3E9E5800E67766 /* FRSNotificationManager.m in Sources */,
 				CE3799B01E58239200B6743A /* FRSSocialToggleTableViewCell.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
+				CE8DB7A51E762C5800000F30 /* FRSTOSAlertView.m in Sources */,
 				CE1322451E5031F400A46D4D /* FRSNearbyUserTableViewCell.m in Sources */,
 				CEC5700A1E55641C000CCD95 /* FRSSettingsTextTableViewCell.m in Sources */,
 				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
@@ -2808,6 +2824,7 @@
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
+				CE8DB7A81E762E6300000F30 /* FRSNewPasswordAlertView.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
@@ -2817,6 +2834,7 @@
 				CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
+				CE8DB7AB1E76336E00000F30 /* FRSFindFriendsAlertView.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,

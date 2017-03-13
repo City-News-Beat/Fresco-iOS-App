@@ -16,6 +16,7 @@
 #import <Haneke/Haneke.h>
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
+#import "FRSConnectivityAlertView.h"
 
 @interface FRSSetupProfileViewController () <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate>
 
@@ -120,7 +121,7 @@
     [[FRSUserManager sharedInstance] updateUserWithDigestion:[self updateDigest]
                                                   completion:^(id responseObject, NSError *error) {
                                                     if (error.code == -1009) {
-                                                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                         [alert show];
                                                         return;
                                                     }
