@@ -161,7 +161,6 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
-    self.alert = nil;
 }
 
 #pragma mark - UXCam
