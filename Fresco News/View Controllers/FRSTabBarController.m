@@ -29,6 +29,7 @@
 #import "FRSAssignmentManager.h"
 
 /* UI */
+#import "FRSPermissionAlertView.h"
 #import "FRSNavigationBar.h"
 #import "FRSIndicatorDot.h"
 #import "UIColor+Fresco.h"
@@ -212,7 +213,7 @@
 
 - (void)checkLocationAndPresentPermissionsAlert {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+        FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self.locationManager];
         [alert show];
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         delegate.didPresentPermissionsRequest = YES;
@@ -255,7 +256,7 @@
 
     if ([self.tabBar.items indexOfObject:item] == 2) {
         if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self.locationManager];
             [alert show];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             delegate.didPresentPermissionsRequest = YES;

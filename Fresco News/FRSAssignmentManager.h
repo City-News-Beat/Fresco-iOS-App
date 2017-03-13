@@ -17,6 +17,7 @@
 - (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion;;
+- (void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude navigationController:(UINavigationController *)navigationController;
 
 @end

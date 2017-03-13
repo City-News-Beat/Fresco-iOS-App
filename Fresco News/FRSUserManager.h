@@ -19,7 +19,6 @@
 - (void)updateLocalUser:(FRSAPIDefaultCompletionBlock)completion;
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
 
-
 - (void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -31,7 +30,6 @@
 - (void)reloadUser;
 - (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
 
-
 /**
  Updates the user's location
  
@@ -40,8 +38,6 @@
  */
 - (void)updateUserLocation:(NSDictionary *)inputParams completion:(FRSAPIDefaultCompletionBlock)completion;
 
-
-
 /**
  Saves new fields on user object from passed object
 
@@ -49,7 +45,6 @@
  @param synchronously whether to run the operation synchronously or not
  */
 - (void)saveUserFields:(NSDictionary *)responseObject andSynchronously:(BOOL)synchronously;
-
 
 /**
  Updates the user defaults based on the passed user response object

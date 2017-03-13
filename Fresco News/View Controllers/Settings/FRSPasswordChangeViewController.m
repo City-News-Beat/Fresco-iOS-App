@@ -12,6 +12,7 @@
 #import "FRSAlertView.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
+#import "FRSConnectivityAlertView.h"
 
 @interface FRSPasswordChangeViewController ()
 
@@ -19,8 +20,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *updatedPasswordTextField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-
-@property (strong, nonatomic) FRSAlertView *alert;
 
 @property (strong, nonatomic) UIImageView *errorImageView;
 
@@ -90,8 +89,8 @@
     [self.view endEditing:YES];
 
     if ((![self.updatedPasswordTextField.text isEqualToString:self.confirmPasswordTextField.text])) {
-        self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-        [self.alert show];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+        [alert show];
         return;
     }
 
@@ -109,8 +108,7 @@
 
                                                     if (error) {
                                                         if (error.code == -1009) {
-                                                            self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                                                            [self.alert show];
+                                                            [self presentNoConnectionError];
                                                             return;
                                                         }
 
@@ -163,7 +161,6 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
-    self.alert = nil;
 }
 
 #pragma mark - UXCam
