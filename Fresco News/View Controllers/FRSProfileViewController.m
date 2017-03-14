@@ -271,6 +271,8 @@
           [tabBarController showBell:YES];
       }
     }];
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

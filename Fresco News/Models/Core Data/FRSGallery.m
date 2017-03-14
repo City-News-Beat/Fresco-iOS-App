@@ -148,9 +148,6 @@
     int comments = [dict[@"comments"] intValue];
     [self setValue:@(comments) forKey:@"comments"];
     self.comments = dict[@"comments"];
-
-    [self setValue:@([dict[@"reposts"] intValue]) forKey:@"reposts"];
-    [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
 }
 
 + (instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {

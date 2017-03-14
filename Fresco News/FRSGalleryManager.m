@@ -167,8 +167,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-                             [gallery setValue:@(TRUE) forKey:@"liked"];
-                             [[self managedObjectContext] save:Nil];
                            }];
 }
 
@@ -179,7 +177,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-                             [gallery setValue:@(TRUE) forKey:@"liked"];
                            }];
 }
 
@@ -189,21 +186,12 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
         return;
     }
 
-    if ([[gallery valueForKey:@"reposted"] boolValue]) {
-        [self unrepostGallery:gallery completion:completion];
-        return;
-    }
-
-
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
 
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                                completion(responseObject, error);
-                               
-                               [gallery setValue:@(TRUE) forKey:@"reposted"];
-                               [[self managedObjectContext] save:nil];
                            }];
 }
 
@@ -214,10 +202,6 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-
-                             [gallery setValue:@(FALSE) forKey:@"reposted"];
-
-                             [[self managedObjectContext] save:Nil];
                            }];
 }
 

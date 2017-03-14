@@ -1133,6 +1133,7 @@
         
         self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
         [self.actionBar configureWithObject:self.gallery];
+        [self.actionBar setCurrentUser:[[FRSUserManager sharedInstance].authenticatedUser.uid isEqualToString:self.gallery.creator.uid] ? YES : NO];
         self.actionBar.navigationController = self.delegate.navigationController;
         [self addSubview:self.actionBar];
     }
