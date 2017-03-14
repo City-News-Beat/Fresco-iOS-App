@@ -119,12 +119,11 @@
     if (didLike) {
         [gallery setValue:[NSNumber numberWithInteger:count] forKey:LIKES];
         [gallery setValue:@1 forKey:LIKED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     } else {
         [gallery setValue:[NSNumber numberWithInteger:count] forKey:LIKES];
         [gallery setValue:@0 forKey:LIKED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     }
+    [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
 }
 
 /**
@@ -138,12 +137,11 @@
     if (didLike) {
         [story setValue:[NSNumber numberWithInteger:count] forKey:LIKES];
         [story setValue:@1 forKey:LIKED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     } else {
         [story setValue:[NSNumber numberWithInteger:count] forKey:LIKES];
         [story setValue:@0 forKey:LIKED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     }
+    [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
 }
 
 
@@ -158,12 +156,11 @@
     if (didRepost) {
         [gallery setValue:[NSNumber numberWithInteger:count] forKey:REPOSTS];
         [gallery setValue:@1 forKey:REPOSTED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     } else {
         [gallery setValue:[NSNumber numberWithInteger:count] forKey:REPOSTS];
         [gallery setValue:@0 forKey:REPOSTED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     }
+    [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
 }
 
 /**
@@ -177,12 +174,11 @@
     if (didRepost) {
         [story setValue:[NSNumber numberWithInteger:count] forKey:REPOSTS];
         [story setValue:@1 forKey:REPOSTED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     } else {
         [story setValue:[NSNumber numberWithInteger:count] forKey:REPOSTS];
         [story setValue:@0 forKey:REPOSTED];
-        [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
     }
+    [[[FRSAuthManager sharedInstance] managedObjectContext] save:nil];
 }
 
 @end

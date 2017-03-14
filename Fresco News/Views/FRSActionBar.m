@@ -238,14 +238,18 @@
             [FRSTracker track:galleryUnliked parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"unliked_from" : [self stringToTrack]}];
             [FRSSocialHandler unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler likeGallery:self.gallery completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         } else {
             [FRSTracker track:galleryLiked parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"liked_from" : [self stringToTrack]}];
             [FRSSocialHandler likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler unlikeGallery:self.gallery completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         }
@@ -254,13 +258,17 @@
         if ([[self.story valueForKey:LIKED] boolValue]) {
             [FRSSocialHandler unlikeStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler likeStory:self.story completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler likeStory:self.story completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         } else {
             [FRSSocialHandler likeStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler unlikeStory:self.story completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler unlikeStory:self.story completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         }
@@ -276,14 +284,18 @@
             [FRSTracker track:galleryUnreposted parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"un_reposted_from" : [self stringToTrack]}];
             [FRSSocialHandler unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler repostGallery:self.gallery completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         } else {
             [FRSTracker track:galleryReposted parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"reposted_from" : [self stringToTrack]}];
             [FRSSocialHandler repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler unrepostGallery:self.gallery completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         }
@@ -291,13 +303,17 @@
         if ([[self.story valueForKey:REPOSTED] boolValue]) {
             [FRSSocialHandler unrepostStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler repostStory:self.story completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler repostStory:self.story completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         } else {
             [FRSSocialHandler repostStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [FRSSocialHandler unrepostStory:self.story completion:nil];
+                    [self updateLabels];
+                    [FRSSocialHandler unrepostStory:self.story completion:^(id responseObject, NSError *error) {
+                    }];
                 }
             }];
         }
