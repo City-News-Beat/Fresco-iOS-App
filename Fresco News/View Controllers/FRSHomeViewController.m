@@ -25,6 +25,8 @@
 #import "FRSNotificationHandler.h"
 #import "FRSModerationManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSNewPasswordAlertView.h"
+#import "FRSTOSAlertView.h"
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 
@@ -55,8 +57,8 @@ static NSInteger const galleriesPerPage = 12;
 @property (nonatomic) bool isInFollowers;
 
 @property (strong, nonatomic) UIView *sudoNavBar;
-@property (strong, nonatomic) FRSAlertView *TOSAlert;
-@property (strong, nonatomic) FRSAlertView *migrationAlert;
+@property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
+@property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
 
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 
@@ -163,7 +165,7 @@ static NSInteger const galleriesPerPage = 12;
         return;
     }
 
-    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
+    self.migrationAlert = [[FRSNewPasswordAlertView alloc] initNewStuffWithPasswordField:password];
     self.migrationAlert.delegate = self;
     [self.migrationAlert show];
 }
@@ -173,7 +175,7 @@ static NSInteger const galleriesPerPage = 12;
         return;
     }
 
-    self.TOSAlert = [[FRSAlertView alloc] initTOS];
+    self.TOSAlert = [[FRSTOSAlertView alloc] initTOS];
     self.TOSAlert.delegate = self;
     [self.TOSAlert show];
 }
@@ -249,7 +251,7 @@ static NSInteger const galleriesPerPage = 12;
     }
 
     if ([[FRSAuthManager sharedInstance] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
+        FRSNewPasswordAlertView *alert = [[FRSNewPasswordAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
         [FRSTracker track:migrationShown];

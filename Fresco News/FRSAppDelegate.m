@@ -29,6 +29,7 @@
 #import "Adjust.h"
 #import <Stripe/Stripe.h>
 #import "FRSIndicatorDot.h"
+#import "FRSConnectivityAlertView.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -359,6 +360,7 @@
 // TODO: Move out of App Delegate and into FRSTabBarController
 - (void)startNotificationTimer {
     if (!notificationTimer) {
+        [self checkNotifications]; // Check notifications here to avoid 15 second delay on first call.
         notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
     }
 }
@@ -374,20 +376,21 @@
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         return;
     }
-
+    
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-      if (error) {
-          //soft fail
-          return;
-      }
-      if (responseObject) {
-          FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
-          if ([tbc isKindOfClass:[FRSTabBarController class]]) {
-              if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                  [(FRSTabBarController *)self.tabBar showBell:YES];
-              }
-          }
-      }
+        if (error) {
+            // Return without error. The user should not be aware of this failure.
+            return;
+        }
+        if (responseObject) {
+            FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
+            if ([tbc isKindOfClass:[FRSTabBarController class]]) {
+                NSNumber *unseenCount = [responseObject objectForKey:@"unseen_count"];
+                if (![unseenCount isEqual:@0]) {
+                    [(FRSTabBarController *)self.tabBar showBell:YES];
+                }
+            }
+        }
     }];
 }
 
@@ -462,7 +465,7 @@
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
         [alert show];
     } else {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];

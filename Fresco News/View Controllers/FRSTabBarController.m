@@ -29,6 +29,7 @@
 #import "FRSAssignmentManager.h"
 
 /* UI */
+#import "FRSPermissionAlertView.h"
 #import "FRSNavigationBar.h"
 #import "FRSIndicatorDot.h"
 #import "UIColor+Fresco.h"
@@ -212,7 +213,7 @@
 
 - (void)checkLocationAndPresentPermissionsAlert {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+        FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self.locationManager];
         [alert show];
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         delegate.didPresentPermissionsRequest = YES;
@@ -255,7 +256,7 @@
 
     if ([self.tabBar.items indexOfObject:item] == 2) {
         if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self.locationManager];
             [alert show];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             delegate.didPresentPermissionsRequest = YES;
@@ -456,16 +457,13 @@
     CLLocation *location = [[FRSLocator sharedLocator] currentLocation];
     
     [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:20 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ] withCompletion:^(id responseObject, NSError *error) {
+        
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         
-        NSInteger savedCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"assignment-count"];
-        NSInteger currentCount = assignments.count;
-        
-        if (savedCount < currentCount) {
+        if (assignments.count >= 1) {
             [FRSIndicatorDot addDotToTabBar:self.tabBar atIndex:3 animated:YES];
         }
         
-        [[NSUserDefaults standardUserDefaults] setInteger:assignments.count forKey:@"assignment-count"];
     }];
 }
 

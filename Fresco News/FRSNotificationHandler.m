@@ -17,6 +17,7 @@
 #import "FRSStoryManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSConnectivityAlertView.h"
 #import "FRSLocationManager.h"
 #import <Smooch/Smooch.h>
 
@@ -391,7 +392,7 @@ BOOL isSegueingToAssignment;
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
         [alert show];
     } else {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];

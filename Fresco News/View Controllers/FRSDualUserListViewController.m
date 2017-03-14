@@ -11,6 +11,7 @@
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSGalleryManager.h"
+#import "FRSConnectivityAlertView.h"
 #import "FRSUserTableViewCell.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -26,8 +27,6 @@
 
 @property (strong, nonatomic) UIButton *likesButton;
 @property (strong, nonatomic) UIButton *repostsButton;
-
-@property (strong, nonatomic) FRSAlertView *alert;
 
 @property BOOL didPresentError;
 @property BOOL isLoadingLikers;
@@ -457,8 +456,8 @@ int const FETCH_LIMIT = 20;
 #pragma mark - FRSAlertView
 
 - (void)configureNoConnectionBannerAlert {
-    self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-    [self.alert show];
+    FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+    [alert show];
 }
 
 @end

@@ -14,7 +14,6 @@
 #import "FRSCameraViewController.h"
 #import "FRSProfileViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSAssignmentsViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAwkwardView.h"
@@ -25,6 +24,7 @@
 #import "FRSUserManager.h"
 #import "FRSFollowManager.h"
 #import "FRSNotificationManager.h"
+#import "FRSAssignmentManager.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
 
@@ -495,8 +495,7 @@
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-        [alert show];
+        [self presentNoConnectionError];
     } else {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
         [alert show];
@@ -746,6 +745,7 @@
 - (void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
+    [(FRSTabBarController *)self.tabBarController.tabBar showBell:NO];
 }
 
 #pragma mark - FRSDelegates
@@ -760,8 +760,8 @@
                                                  completion:^(id responseObject, NSError *error) {
                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                    FRSUser *currentUser = [FRSUser
-                                                                           nonSavedUserWithProperties:responseObject
-                                                                           context:[delegate.coreDataController managedObjectContext]];
+                                                       nonSavedUserWithProperties:responseObject
+                                                                          context:[delegate.coreDataController managedObjectContext]];
                                                    if ([[responseObject valueForKey:@"following"] boolValue]) {
                                                        [self unfollowUser:currentUser];
                                                    } else {
@@ -796,9 +796,7 @@
 
 // Gets called when the user taps on the right aligned button on assignment notification cells
 - (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
-    FRSAlertView *alert = [[FRSAlertView alloc] init];
-    alert.delegate = self;
-    [alert navigateToAssignmentWithLatitude:latitude longitude:longitude];
+    [[FRSAssignmentManager sharedInstance] navigateToAssignmentWithLatitude:latitude longitude:longitude navigationController:self.navigationController];
 }
 
 @end
