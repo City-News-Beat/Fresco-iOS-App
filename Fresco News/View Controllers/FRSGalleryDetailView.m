@@ -741,6 +741,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - 44) delegate:self];
     [self.actionBar configureWithObject:self.gallery];
+    [self.actionBar setCurrentUser:[[FRSUserManager sharedInstance].authenticatedUser.uid isEqualToString:self.gallery.creator.uid] ? YES : NO];
     if (self.trackedScreen) {
         self.actionBar.trackedScreen = FRSTrackedScreenPush;
     } else {

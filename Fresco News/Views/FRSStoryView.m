@@ -22,6 +22,7 @@
 #import "FRSStoryManager.h"
 #import "FRSActionBar.h"
 #import "FRSGalleryManager.h"
+#import "FRSUserManager.h"
 
 
 #define TEXTVIEW_TOP_PADDING 12

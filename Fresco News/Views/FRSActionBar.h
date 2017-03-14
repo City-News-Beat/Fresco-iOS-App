@@ -25,13 +25,11 @@ typedef NS_ENUM(NSUInteger, FRSTrackedScreen) {
     FRSTrackedScreenDetail
 };
 
-@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
-
-@property (weak, nonatomic) NSObject <FRSActionBarDelegate> *delegate;
-
 - (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSActionBarDelegate>)delegate;
 
 @property (strong, nonatomic) UINavigationController *navigationController;
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
+@property (weak, nonatomic) NSObject <FRSActionBarDelegate> *delegate;
 
 @property NSInteger likes;
 @property NSInteger reposts;
