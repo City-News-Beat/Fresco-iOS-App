@@ -348,7 +348,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                   int comments = [[self.gallery valueForKey:@"comments"] intValue];
                                                   comments++;
                                                   [self.gallery setValue:[NSNumber numberWithInt:comments] forKey:@"comments"];
-//                                                  [self.actionBar updateTitle];
 
                                                   self.totalCommentCount++;
 
@@ -613,7 +612,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             self.didPrepareForReply = NO;
         } else {
             self.didPrepareForReply = YES;
-//            [self handleActionButtonTapped:self.actionBar];
             FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
             self.commentTextField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
         }
