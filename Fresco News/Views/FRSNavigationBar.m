@@ -128,7 +128,6 @@
     if ([notificationInfo[@"type"] isEqualToString:@"progress"]) {
         NSNumber *uploadPercentage = notificationInfo[@"percentage"];
         float percentage = [uploadPercentage floatValue];
-        NSLog(@"percentage = %f", percentage);
         
         if (percentage < .1) { // Start at 10% by default
             percentage = .1;
