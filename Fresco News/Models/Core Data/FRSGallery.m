@@ -228,7 +228,6 @@
 }
 
 - (NSInteger)heightForGallery {
-
     if (self.generatedHeight) {
         return self.generatedHeight;
     }

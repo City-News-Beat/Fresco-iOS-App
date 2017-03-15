@@ -1,5 +1,5 @@
- 
-    
+
+
 //
 //  FRSStoriesViewController.m
 //  Fresco
@@ -244,6 +244,8 @@ static NSInteger const storiesPerPage = 12;
                                                 lastStoryID:nil
                                                  completion:^(NSArray *stories, NSError *error) {
                                                    self.stories = [[NSMutableArray alloc] init];
+                                                   [self.loadingView stopLoading];
+                                                   [self.loadingView removeFromSuperview];
 
                                                    if ([stories count] == 0) {
                                                        self.loadNoMore = YES;
@@ -255,10 +257,6 @@ static NSInteger const storiesPerPage = 12;
 
                                                    NSInteger index = 0;
                                                    for (NSDictionary *storyDict in stories) {
-
-                                                       [self.loadingView stopLoading];
-                                                       [self.loadingView removeFromSuperview];
-
                                                        FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
 
                                                        [story configureWithDictionary:storyDict];
