@@ -64,6 +64,7 @@
         self.story = (FRSStory *)object;
     } else {
         NSLog(@"Unable to identify object for action bar: %@", object);
+        return; // We don't want to configure the action bar if it's not associated with a gallery or a story.
     }
     
     [self configureActionButton];
@@ -129,9 +130,10 @@
         reposted = [[self.story valueForKey:REPOSTED] boolValue];
     }
     
-    [self updateUIForLabel:self.likeLabel button:self.likeButton imageName:HEART selectedImageName:HEART_FILL count:likes enabled:liked color:[UIColor frescoRedColor]];
-    
-    [self updateUIForLabel:self.repostLabel button:self.repostButton imageName:REPOST selectedImageName:REPOST_FILL count:reposts enabled:reposted color:[UIColor frescoGreenColor]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateUIForLabel:self.likeLabel button:self.likeButton imageName:HEART selectedImageName:HEART_FILL count:likes enabled:liked color:[UIColor frescoRedColor]];
+        [self updateUIForLabel:self.repostLabel button:self.repostButton imageName:REPOST selectedImageName:REPOST_FILL count:reposts enabled:reposted color:[UIColor frescoGreenColor]];
+    });
 }
 
 -(void)updateUIForLabel:(UILabel *)label button:(UIButton *)button imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName count:(NSInteger)count enabled:(BOOL)enabled color:(UIColor *)color {
@@ -238,8 +240,8 @@
             [FRSTracker track:galleryUnliked parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"unliked_from" : [self stringToTrack]}];
             [FRSSocialHandler unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
@@ -247,8 +249,8 @@
             [FRSTracker track:galleryLiked parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"liked_from" : [self stringToTrack]}];
             [FRSSocialHandler likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
@@ -258,16 +260,16 @@
         if ([[self.story valueForKey:LIKED] boolValue]) {
             [FRSSocialHandler unlikeStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler likeStory:self.story completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
         } else {
             [FRSSocialHandler likeStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler unlikeStory:self.story completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
@@ -284,8 +286,8 @@
             [FRSTracker track:galleryUnreposted parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"un_reposted_from" : [self stringToTrack]}];
             [FRSSocialHandler unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
@@ -293,8 +295,8 @@
             [FRSTracker track:galleryReposted parameters:@{GALLERY_ID : (self.gallery.uid != nil) ? self.gallery.uid : @"", @"reposted_from" : [self stringToTrack]}];
             [FRSSocialHandler repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
@@ -303,16 +305,16 @@
         if ([[self.story valueForKey:REPOSTED] boolValue]) {
             [FRSSocialHandler unrepostStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler repostStory:self.story completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
         } else {
             [FRSSocialHandler repostStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    [self updateLabels];
                     [FRSSocialHandler unrepostStory:self.story completion:^(id responseObject, NSError *error) {
+                        [self updateLabels];
                     }];
                 }
             }];
