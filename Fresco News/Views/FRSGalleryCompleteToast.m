@@ -32,14 +32,47 @@
         [self.actionButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.layer.borderColor = [UIColor frescoShadowColor].CGColor;
         
+        // Add shadow
+        self.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.layer.shadowOffset = CGSizeMake(0, 4);
+        self.layer.shadowRadius = 2;
+        self.layer.shadowOpacity = 0.1;
     }
     
     return self;
 }
 
-
 - (void)show {
+    
+    self.frame = CGRectMake(self.frame.origin.x, -HEIGHT, self.frame.size.width, self.frame.size.height);
+    self.alpha = 0;
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.frame = CGRectMake(self.frame.origin.x, YPOS +15, self.frame.size.width, self.frame.size.height);
+        self.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.frame = CGRectMake(self.frame.origin.x, YPOS, self.frame.size.width, self.frame.size.height);
+        } completion:nil];
+    }];
+    
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
+    
+    [self performSelector:@selector(hide) withObject:self afterDelay:3];
 }
+
+- (void)hide {
+    
+    [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.frame = CGRectMake(self.frame.origin.x, YPOS +10, self.frame.size.width, self.frame.size.height);
+        self.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.frame = CGRectMake(self.frame.origin.x, -HEIGHT, self.frame.size.width, self.frame.size.height);
+            self.alpha = 0;
+        } completion:nil];
+    }];
+}
+
 
 @end

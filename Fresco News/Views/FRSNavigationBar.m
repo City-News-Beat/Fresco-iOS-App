@@ -10,6 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSAppDelegate.h"
+#import "FRSGalleryCompleteToast.h"
 
 @interface FRSNavigationBar ()
 
@@ -160,6 +161,9 @@
                                  _progressView.frame = navFrame;
                                  _progressView.alpha = 1;
                              }];
+            
+            FRSGalleryCompleteToast *toast = [[FRSGalleryCompleteToast alloc] initWithAction:@selector(elephant)];
+            [toast show];
         });
     } else if ([notificationInfo[@"type"] isEqualToString:@"failure"]) {
         NSLog(@"handleUploadNotificaiton");
