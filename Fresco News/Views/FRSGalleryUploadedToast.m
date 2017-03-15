@@ -1,25 +1,25 @@
 //
-//  FRSGalleryCompleteToast.m
+//  FRSGalleryUploadedToast.m
 //  Fresco
 //
 //  Created by Omar Elfanek on 3/15/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 
-#import "FRSGalleryCompleteToast.h"
+#import "FRSGalleryUploadedToast.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 
 #define HEIGHT 40
 #define YPOS 72
 
-@interface FRSGalleryCompleteToast ()
+@interface FRSGalleryUploadedToast ()
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @end
 
-@implementation FRSGalleryCompleteToast
+@implementation FRSGalleryUploadedToast
 
-- (instancetype)initWithAction:(SEL)action {
+- (instancetype)initWithTarget:(id)target action:(SEL)action {
     self = [super init];
     
     if (self) {
@@ -29,7 +29,7 @@
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - self.frame.size.width/2, YPOS, self.frame.size.width, self.frame.size.height);
         
         // Button configuration
-        [self.actionButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+        [self.actionButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.layer.borderColor = [UIColor frescoShadowColor].CGColor;
         
         // Add shadow
@@ -40,6 +40,9 @@
     }
     
     return self;
+}
+- (IBAction)actionButtonTapped:(id)sender {
+    [self hide];
 }
 
 - (void)show {
@@ -58,7 +61,7 @@
     
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
     
-    [self performSelector:@selector(hide) withObject:self afterDelay:3];
+    [self performSelector:@selector(hide) withObject:self afterDelay:10];
 }
 
 - (void)hide {

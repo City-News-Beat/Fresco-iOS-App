@@ -10,13 +10,14 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSAppDelegate.h"
-#import "FRSGalleryCompleteToast.h"
+#import "FRSGalleryUploadedToast.h"
 
 @interface FRSNavigationBar ()
 
 @property (nonatomic, retain) UIView *progressView;
 @property (nonatomic, retain) UIView *failureView;
 @property (nonatomic, retain) NSDate *lastAnimated;
+@property (strong, nonatomic) FRSGalleryUploadedToast *uploadCompleteToast;
 
 @end
 
@@ -63,7 +64,7 @@
     navFrame.size.height += 20;
     navFrame.size.width = 0;
     _progressView = [[UIView alloc] initWithFrame:navFrame];
-    _progressView.backgroundColor = [UIColor colorWithRed:1.00 green:0.71 blue:0.00 alpha:1.0];
+    _progressView.backgroundColor = [UIColor colorWithRed:1.00 green:0.66 blue:0.00 alpha:1.0];
 
     [self addSubview:_progressView];
     [self sendSubviewToBack:_progressView];
@@ -127,6 +128,11 @@
     if ([notificationInfo[@"type"] isEqualToString:@"progress"]) {
         NSNumber *uploadPercentage = notificationInfo[@"percentage"];
         float percentage = [uploadPercentage floatValue];
+        NSLog(@"percentage = %f", percentage);
+        
+        if (percentage < .1) { // Start at 10% by default
+            percentage = .1;
+        }
         
         if (CGRectIsNull(self.frame) || isnan(percentage)) return;
         
@@ -162,8 +168,10 @@
                                  _progressView.alpha = 1;
                              }];
             
-            FRSGalleryCompleteToast *toast = [[FRSGalleryCompleteToast alloc] initWithAction:@selector(elephant)];
-            [toast show];
+            if (!self.uploadCompleteToast) {
+                self.uploadCompleteToast = [[FRSGalleryUploadedToast alloc] initWithTarget:self action:@selector(deepLinkToGallery)];
+                [self.uploadCompleteToast show];
+            }
         });
     } else if ([notificationInfo[@"type"] isEqualToString:@"failure"]) {
         NSLog(@"handleUploadNotificaiton");
@@ -185,6 +193,11 @@
             }
         });
     }
+}
+
+-(void)deepLinkToGallery {
+    
+    
 }
 
 

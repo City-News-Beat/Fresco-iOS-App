@@ -1,5 +1,5 @@
 //
-//  FRSGalleryCompleteToast.h
+//  FRSGalleryUploadedToast.h
 //  Fresco
 //
 //  Created by Omar Elfanek on 3/15/17.
@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSGalleryCompleteToast : UIView
+@interface FRSGalleryUploadedToast : UIView
 
-- (instancetype)initWithAction:(SEL)action;
+- (instancetype)initWithTarget:(id)target action:(SEL)action;
 - (void)show;
 
 @end

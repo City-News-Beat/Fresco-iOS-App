@@ -787,7 +787,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     [self cancelUploadWithForce:NO];
     
     if(!error || !error.localizedDescription){
-        error = [NSError errorWithMessage:@"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."];
+        error = [NSError errorWithMessage:@"Please contact support@fresconews.com for assistance, or use our in-app chat to get in contact with us."];
     }
     
     [FRSTracker track:uploadError parameters:uploadErrorSummary];

@@ -30,8 +30,6 @@
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 
-//DEBUG
-#import "FRSGalleryCompleteToast.h"
 
 static NSInteger const galleriesPerPage = 12;
 
@@ -112,12 +110,6 @@ static NSInteger const galleriesPerPage = 12;
             }
         }
     }
-    
-    FRSGalleryCompleteToast *toast = [[FRSGalleryCompleteToast alloc] initWithAction:@selector(wiggle)];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [toast show];
-    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {

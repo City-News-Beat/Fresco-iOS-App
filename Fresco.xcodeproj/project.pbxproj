@@ -37,8 +37,8 @@
 		078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */; };
 		078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */; };
 		078A536D1E084B100018F112 /* FRSDualUserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078A536C1E084B100018F112 /* FRSDualUserListViewController.m */; };
-		079392811E79B25A004CC2AD /* FRSGalleryCompleteToast.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0793927E1E79B25A004CC2AD /* FRSGalleryCompleteToast.xib */; };
-		079392821E79B25A004CC2AD /* FRSGalleryCompleteToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 0793927F1E79B25A004CC2AD /* FRSGalleryCompleteToast.m */; };
+		079392811E79B25A004CC2AD /* FRSGalleryUploadedToast.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0793927E1E79B25A004CC2AD /* FRSGalleryUploadedToast.xib */; };
+		079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 0793927F1E79B25A004CC2AD /* FRSGalleryUploadedToast.m */; };
 		0796FF761E54DA0C00ABF9DA /* FRSAssignmentTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0796FF751E54DA0C00ABF9DA /* FRSAssignmentTracker.m */; };
 		0796FF791E54DF9E00ABF9DA /* FRSPostTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0796FF781E54DF9E00ABF9DA /* FRSPostTracker.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
@@ -397,9 +397,9 @@
 		078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextNotificationTableViewCell.m; sourceTree = "<group>"; };
 		078A536B1E084B100018F112 /* FRSDualUserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDualUserListViewController.h; sourceTree = "<group>"; };
 		078A536C1E084B100018F112 /* FRSDualUserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDualUserListViewController.m; sourceTree = "<group>"; };
-		0793927E1E79B25A004CC2AD /* FRSGalleryCompleteToast.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryCompleteToast.xib; sourceTree = "<group>"; };
-		0793927F1E79B25A004CC2AD /* FRSGalleryCompleteToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryCompleteToast.m; sourceTree = "<group>"; };
-		079392801E79B25A004CC2AD /* FRSGalleryCompleteToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryCompleteToast.h; sourceTree = "<group>"; };
+		0793927E1E79B25A004CC2AD /* FRSGalleryUploadedToast.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryUploadedToast.xib; sourceTree = "<group>"; };
+		0793927F1E79B25A004CC2AD /* FRSGalleryUploadedToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryUploadedToast.m; sourceTree = "<group>"; };
+		079392801E79B25A004CC2AD /* FRSGalleryUploadedToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryUploadedToast.h; sourceTree = "<group>"; };
 		0796FF741E54DA0C00ABF9DA /* FRSAssignmentTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentTracker.h; sourceTree = "<group>"; };
 		0796FF751E54DA0C00ABF9DA /* FRSAssignmentTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentTracker.m; sourceTree = "<group>"; };
 		0796FF771E54DF9E00ABF9DA /* FRSPostTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPostTracker.h; sourceTree = "<group>"; };
@@ -1057,9 +1057,9 @@
 		0793927D1E79B233004CC2AD /* Toasts */ = {
 			isa = PBXGroup;
 			children = (
-				0793927E1E79B25A004CC2AD /* FRSGalleryCompleteToast.xib */,
-				0793927F1E79B25A004CC2AD /* FRSGalleryCompleteToast.m */,
-				079392801E79B25A004CC2AD /* FRSGalleryCompleteToast.h */,
+				0793927E1E79B25A004CC2AD /* FRSGalleryUploadedToast.xib */,
+				079392801E79B25A004CC2AD /* FRSGalleryUploadedToast.h */,
+				0793927F1E79B25A004CC2AD /* FRSGalleryUploadedToast.m */,
 			);
 			name = Toasts;
 			sourceTree = "<group>";
@@ -2605,7 +2605,7 @@
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				CA1637451E27F05500779A92 /* FRSGalleryStatusTableViewCell.xib in Resources */,
 				CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */,
-				079392811E79B25A004CC2AD /* FRSGalleryCompleteToast.xib in Resources */,
+				079392811E79B25A004CC2AD /* FRSGalleryUploadedToast.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
@@ -2831,7 +2831,7 @@
 				CE3799BA1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
-				079392821E79B25A004CC2AD /* FRSGalleryCompleteToast.m in Sources */,
+				079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryTableViewCell.m in Sources */,
 				CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */,
