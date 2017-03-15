@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12117" systemVersion="16E175b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12084"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Nota-Bold.otf">
+            <string>Nota-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="0XQ-In-GVE" customClass="FRSGalleryCompleteToast">
+            <rect key="frame" x="0.0" y="0.0" width="241" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkboxMarkedCircleOutline24G" translatesAutoresizingMaskIntoConstraints="NO" id="fVo-ZK-dvW" userLabel="green-check">
+                    <rect key="frame" x="10" y="10" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="f86-wH-izK"/>
+                        <constraint firstAttribute="width" constant="20" id="gmL-pm-y7h"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gallery uploaded" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0a-iK-hfm">
+                    <rect key="frame" x="40" y="10" width="119" height="20"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="db7-oj-0IA">
+                    <rect key="frame" x="175" y="2" width="64" height="36"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="9ft-be-bag"/>
+                        <constraint firstAttribute="height" constant="36" id="Fi0-ME-ijH"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
+                    <state key="normal" title="VIEW">
+                        <color key="titleColor" red="0.0" green="0.27843137254901962" blue="0.73333333333333328" alpha="0.87" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="18"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                            <real key="value" value="0.5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="fVo-ZK-dvW" firstAttribute="leading" secondItem="0XQ-In-GVE" secondAttribute="leading" constant="10" id="6lj-RR-oJi"/>
+                <constraint firstItem="v0a-iK-hfm" firstAttribute="top" secondItem="0XQ-In-GVE" secondAttribute="top" constant="10" id="G7z-MX-OT7"/>
+                <constraint firstAttribute="trailing" secondItem="db7-oj-0IA" secondAttribute="trailing" constant="2" id="LuJ-3G-ewx"/>
+                <constraint firstAttribute="bottom" secondItem="v0a-iK-hfm" secondAttribute="bottom" constant="10" id="dB1-DV-xKf"/>
+                <constraint firstItem="db7-oj-0IA" firstAttribute="top" secondItem="0XQ-In-GVE" secondAttribute="top" constant="2" id="mY6-eW-ovV"/>
+                <constraint firstItem="v0a-iK-hfm" firstAttribute="leading" secondItem="fVo-ZK-dvW" secondAttribute="trailing" constant="10" id="nDI-2v-z1O"/>
+                <constraint firstItem="db7-oj-0IA" firstAttribute="leading" secondItem="v0a-iK-hfm" secondAttribute="trailing" constant="16" id="tbf-Uc-rBV"/>
+                <constraint firstItem="fVo-ZK-dvW" firstAttribute="centerY" secondItem="0XQ-In-GVE" secondAttribute="centerY" id="wZs-il-qsB"/>
+                <constraint firstAttribute="bottom" secondItem="db7-oj-0IA" secondAttribute="bottom" constant="2" id="ylV-Od-mb5"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="20"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="actionButton" destination="db7-oj-0IA" id="rhY-20-pAC"/>
+            </connections>
+            <point key="canvasLocation" x="-295.5" y="-258"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="checkboxMarkedCircleOutline24G" width="24" height="24"/>
+    </resources>
+</document>
