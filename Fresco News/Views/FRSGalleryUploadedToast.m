@@ -7,8 +7,10 @@
 //
 
 #import "FRSGalleryUploadedToast.h"
+#import "FRSNotificationHandler.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
+#import "UIView+Helpers.h"
 
 #define HEIGHT 40
 #define YPOS 72
@@ -19,34 +21,39 @@
 
 @implementation FRSGalleryUploadedToast
 
-- (instancetype)initWithTarget:(id)target action:(SEL)action {
+- (instancetype)init {
     self = [super init];
     
     if (self) {
-        
-        // Frame configuration
+        // Configure nib
         self = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([self class]) owner:self options:nil] objectAtIndex:0];
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - self.frame.size.width/2, YPOS, self.frame.size.width, self.frame.size.height);
-        
-        // Button configuration
-        [self.actionButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-        self.actionButton.layer.borderColor = [UIColor frescoShadowColor].CGColor;
-        
-        // Add shadow
-        self.layer.shadowColor = [UIColor blackColor].CGColor;
-        self.layer.shadowOffset = CGSizeMake(0, 4);
-        self.layer.shadowRadius = 2;
-        self.layer.shadowOpacity = 0.1;
+        [self configureUI];
     }
     
     return self;
 }
+
+- (void)configureUI {
+    // Frame configuration
+    self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - self.frame.size.width/2, YPOS, self.frame.size.width, self.frame.size.height);
+    
+    // Button configuration
+    self.actionButton.layer.borderColor = [UIColor frescoShadowColor].CGColor;
+    
+    // Add shadow to view
+    [self addShadowWithColor:[UIColor colorWithWhite:0 alpha:0.1] radius:2 offset:CGSizeMake(0, 4)];
+}
+
 - (IBAction)actionButtonTapped:(id)sender {
+    
+    if (self.galleryID) {
+        [FRSNotificationHandler segueToGallery:self.galleryID];
+    }
+
     [self hide];
 }
 
 - (void)show {
-    
     self.frame = CGRectMake(self.frame.origin.x, -HEIGHT, self.frame.size.width, self.frame.size.height);
     self.alpha = 0;
     
@@ -65,7 +72,6 @@
 }
 
 - (void)hide {
-    
     [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.frame = CGRectMake(self.frame.origin.x, YPOS +10, self.frame.size.width, self.frame.size.height);
         self.alpha = 1;
@@ -73,7 +79,9 @@
         [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.frame = CGRectMake(self.frame.origin.x, -HEIGHT, self.frame.size.width, self.frame.size.height);
             self.alpha = 0;
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
     }];
 }
 

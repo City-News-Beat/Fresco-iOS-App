@@ -10,7 +10,9 @@
 
 @interface FRSGalleryUploadedToast : UIView
 
-- (instancetype)initWithTarget:(id)target action:(SEL)action;
+- (instancetype)init;
 - (void)show;
+
+@property (strong, nonatomic) NSString *galleryID;
 
 @end

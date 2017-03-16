@@ -493,7 +493,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 
 #pragma mark - Upload Events
 
-- (void)startNewUploadWithPosts:(NSArray *)posts {
+- (void)startNewUploadWithPosts:(NSArray *)posts galleryID:(NSString *)galleryID {
     __weak typeof(self) weakSelf = self;
     __block NSInteger currentIndex = 0;
 
@@ -519,7 +519,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     
     __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
 
-    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us and the transcode will fail
+    //This is done recursively because we can't have too many videos transcoding at a time, otherwise iOS will scream at us and the transcode will fail
     FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
         toComplete++;
         
@@ -551,16 +551,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
                             } else if (completed == numberOfAssets) {
-                                //Upload has fully completed
-                                numberOfAssets = 0;
-                                [[NSNotificationCenter defaultCenter]
-                                 postNotificationName:FRSUploadNotification
-                                 object:nil
-                                 userInfo:@{ @"type" : @"completion" }];
-                                [weakSelf trackDebugWithMessage:@"Upload Completed"];
-                                // Create and present upload compelte toast
-                                FRSGalleryUploadedToast *toast = [[FRSGalleryUploadedToast alloc] initWithTarget:weakSelf action:@selector(deepLinkToGallery)];
-                                [toast show];
+                                [weakSelf uploadComplete:galleryID];
                             }
                         }];
             
@@ -590,6 +581,25 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 }
 
 /**
+ This method should be called when an upload successfully uploads.
+
+ @param galleryID NSString that will be used to segue to the newly created gallery when tapping [view] on the gallery complete UIView
+ */
+- (void)uploadComplete:(NSString *)galleryID {
+    __weak typeof(self) weakSelf = self;
+    numberOfAssets = 0;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:FRSUploadNotification
+     object:nil
+     userInfo:@{ @"type" : @"completion" }];
+    [weakSelf trackDebugWithMessage:@"Upload Completed"];
+    //Create and present upload compelte toast
+    FRSGalleryUploadedToast *toast = [[FRSGalleryUploadedToast alloc] init];
+    toast.galleryID = galleryID;
+    [toast show];
+}
+
+/**
  Retries an upload with the current uploads in state. Before attempting to retry, the required
  assets will be fetched, then a new upload will be started
  */
@@ -616,7 +626,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     
     if(posts.count > 0){
         //Start new uploads once we've retrieved posts and assets
-        [self startNewUploadWithPosts:posts];
+        [self startNewUploadWithPosts:posts galleryID:nil];
     }
 }
 
