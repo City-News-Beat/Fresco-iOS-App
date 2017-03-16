@@ -18,6 +18,7 @@
 #import "PHAsset+Fresco.h"
 #import "CLLocation+Fresco.h"
 #import "NSURL+Fresco.h"
+#import "FRSGalleryUploadedToast.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 #define AWS_REGION AWSRegionUSEast1
@@ -557,6 +558,9 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                  object:nil
                                  userInfo:@{ @"type" : @"completion" }];
                                 [weakSelf trackDebugWithMessage:@"Upload Completed"];
+                                // Create and present upload compelte toast
+                                FRSGalleryUploadedToast *toast = [[FRSGalleryUploadedToast alloc] initWithTarget:weakSelf action:@selector(deepLinkToGallery)];
+                                [toast show];
                             }
                         }];
             

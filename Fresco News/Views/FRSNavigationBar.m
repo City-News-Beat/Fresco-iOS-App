@@ -10,14 +10,12 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSAppDelegate.h"
-#import "FRSGalleryUploadedToast.h"
 
 @interface FRSNavigationBar ()
 
 @property (nonatomic, retain) UIView *progressView;
 @property (nonatomic, retain) UIView *failureView;
 @property (nonatomic, retain) NSDate *lastAnimated;
-@property (strong, nonatomic) FRSGalleryUploadedToast *uploadCompleteToast;
 
 @end
 
@@ -166,11 +164,6 @@
                                  _progressView.frame = navFrame;
                                  _progressView.alpha = 1;
                              }];
-            
-            if (!self.uploadCompleteToast) {
-                self.uploadCompleteToast = [[FRSGalleryUploadedToast alloc] initWithTarget:self action:@selector(deepLinkToGallery)];
-                [self.uploadCompleteToast show];
-            }
         });
     } else if ([notificationInfo[@"type"] isEqualToString:@"failure"]) {
         NSLog(@"handleUploadNotificaiton");
