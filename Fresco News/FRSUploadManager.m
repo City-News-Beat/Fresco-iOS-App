@@ -507,7 +507,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 
         //Check if the upload is already in memory as this can be populated before hand if the upload
         if([self.managedObjects objectForKey:post[postID]] == nil) {
-            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[postID]];
+            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[postID] galleryID:galleryID];
         }
         
         //Count the number of videos for the transcoding progress
@@ -605,6 +605,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  */
 - (void)retryUpload {
     NSMutableArray *posts = [NSMutableArray new];
+    NSString *galleryID = nil;
 
     //Generate posts from managed objects in coredata
     for (NSString *uploadPost in [self.managedObjects allKeys]) {
@@ -621,12 +622,16 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                @"key": upload.key,
                                @"asset": [assetArray firstObject]
                                }];
+            
+            galleryID = upload.galleryID;
         }
     }
     
-    if(posts.count > 0){
+    if (posts.count > 0 && galleryID != nil) {
         //Start new uploads once we've retrieved posts and assets
-        [self startNewUploadWithPosts:posts galleryID:nil];
+        [self startNewUploadWithPosts:posts galleryID:galleryID];
+    } else {
+        [self cancelUploadWithForce:YES];
     }
 }
 
@@ -753,8 +758,9 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  @param asset PHAsset assocaited with upload
  @param key AWS File key assocaited with upload
  @param post Post ID associated with upload
+ @param galleryID NSString that will be used to segue to the newly created gallery when tapping [view] on the gallery complete UIView
  */
-- (void)createUploadWithAsset:(PHAsset *)asset key:(NSString *)key post:(NSString *)post {
+- (void)createUploadWithAsset:(PHAsset *)asset key:(NSString *)key post:(NSString *)post galleryID:(NSString *)galleryID {
     if (!self.managedObjects) {
         self.managedObjects = [[NSMutableDictionary alloc] init];
     }
@@ -765,6 +771,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     upload.uploadID = post;
     upload.completed = @(FALSE);
     upload.creationDate = [NSDate date];
+    upload.galleryID = galleryID;
     
     [self.context performBlock:^{
         [self.context save:Nil];
