@@ -294,8 +294,8 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  */
 - (void)updateProgress {
     //Total progress
-    float progress = 0;
-    __block float uploadingProgress = 0;
+    float progress = 0.1;
+    __block float uploadingProgress = 0.1;
     
     if(toComplete > 0) {
         [self.uploadProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *uploadProgress, BOOL *stop) {

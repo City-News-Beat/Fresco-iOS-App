@@ -127,10 +127,6 @@
         NSNumber *uploadPercentage = notificationInfo[@"percentage"];
         float percentage = [uploadPercentage floatValue];
         
-        if (percentage < .1) { // Start at 10% by default
-            percentage = .1;
-        }
-        
         if (CGRectIsNull(self.frame) || isnan(percentage)) return;
         
         dispatch_async(dispatch_get_main_queue(), ^{
