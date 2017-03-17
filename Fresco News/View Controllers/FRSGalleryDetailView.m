@@ -725,7 +725,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - 44) delegate:self];
     [self.actionBar configureWithObject:self.gallery];
-    [self.actionBar setCurrentUser:[[FRSUserManager sharedInstance].authenticatedUser.uid isEqualToString:self.gallery.creator.uid] ? YES : NO];
     if (self.trackedScreen) {
         self.actionBar.trackedScreen = FRSTrackedScreenPush;
     } else {
@@ -738,12 +737,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.actionBar addSubview:line];
     
     [self addSubview:self.actionBar];
-    
-    if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
-        [self.actionBar setCurrentUser:YES];
-    } else {
-        [self.actionBar setCurrentUser:NO];
-    }
 }
 
 
@@ -775,17 +768,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.commentTextField.delegate = self;
         [self.commentTextField becomeFirstResponder];
     }
-}
-
-- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
-    vc.didTapRepostLabel = YES;
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

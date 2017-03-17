@@ -54,13 +54,6 @@ typedef NS_ENUM(NSUInteger, FRSTrackedScreen) {
 - (void)updateTitle;
 
 /**
- This checks if the authenticated user owns the content being liked/reposted and disables the repost button accordingly.
-
- @param isAuth BOOL Set YES to disable the repost button on the given content.
- */
-- (void)setCurrentUser:(BOOL)isAuth;
-
-/**
  UIButton left aligned button. (Read more, # comments)
  */
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
@@ -76,20 +69,6 @@ typedef NS_ENUM(NSUInteger, FRSTrackedScreen) {
  @return NSString title for action button.
  */
 - (NSString *)titleForActionButton;
-
-/**
- Segues to the like/repost view controller focused on the likes tab.
- 
- @param actionBar FRSActionBar
- */
--(void)handleLikeLabelTapped:(FRSActionBar *)actionBar;
-
-/**
- Segues to the like/repost view controller focused on the reposts tab.
- 
- @param actionBar FRSActionBar
- */
--(void)handleRepostLabelTapped:(FRSActionBar *)actionBar;
 
 /**
  Segues to the gallery expanded view when the user taps [READ MORE]

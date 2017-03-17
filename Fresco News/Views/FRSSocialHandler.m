@@ -69,9 +69,7 @@
     galleryReposts++;
     [self didRepost:YES gallery:gallery count:galleryReposts];
     
-    [[FRSGalleryManager sharedInstance] repostGallery:gallery completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+    [[FRSGalleryManager sharedInstance] repostGallery:gallery completion:completion];
 }
 
 + (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -80,9 +78,7 @@
     galleryReposts--;
     [self didRepost:NO gallery:gallery count:galleryReposts];
     
-    [[FRSGalleryManager sharedInstance] unrepostGallery:gallery completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+    [[FRSGalleryManager sharedInstance] unrepostGallery:gallery completion:completion];
 }
 
 + (void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -91,9 +87,7 @@
     storyReposts++;
     [self didRepost:YES story:story count:storyReposts];
     
-    [[FRSStoryManager sharedInstance] repostStory:story completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+    [[FRSStoryManager sharedInstance] repostStory:story completion:completion];
 }
 
 + (void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -102,9 +96,7 @@
     storyReposts--;
     [self didRepost:NO story:story count:storyReposts];
     
-    [[FRSStoryManager sharedInstance] unrepostStory:story completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+    [[FRSStoryManager sharedInstance] unrepostStory:story completion:completion];
 }
 
 #pragma mark - Private

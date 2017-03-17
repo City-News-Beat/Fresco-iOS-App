@@ -322,14 +322,6 @@
     }
 }
 
-- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-    // To be implemented in the future, pending API support.
-}
-
-- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-    // To be implemented in the future, pending API support.
-}
-
 -(void)setTrackedScreen:(FRSTrackedScreen)trackedScreen {
     self.actionBar.trackedScreen = trackedScreen;
 }

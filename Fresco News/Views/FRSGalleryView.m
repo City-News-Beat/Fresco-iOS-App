@@ -1090,20 +1090,6 @@
     }
 }
 
-/**
- Checks if the gallery owner is the authenticated user and disables user interaction on the repost button accordingly.
- */
-- (void)checkGalleryOwnerForActionBar {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
-            [self.actionBar setCurrentUser:YES];
-        } else {
-            [self.actionBar setCurrentUser:NO];
-        }
-    });
-}
-
-
 
 #pragma mark - Base Meta Data Configuration
 
@@ -1133,7 +1119,6 @@
         
         self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
         [self.actionBar configureWithObject:self.gallery];
-        [self.actionBar setCurrentUser:[[FRSUserManager sharedInstance].authenticatedUser.uid isEqualToString:self.gallery.creator.uid] ? YES : NO];
         self.actionBar.navigationController = self.delegate.navigationController;
         [self addSubview:self.actionBar];
     }
@@ -1143,17 +1128,6 @@
     if (self.readMoreBlock) {
         self.readMoreBlock(nil);
     }
-}
-
-- (void)handleLikeLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    [self.delegate.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)handleRepostLabelTapped:(FRSActionBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    vc.didTapRepostLabel = YES;
-    [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)setTrackedScreen:(FRSTrackedScreen)trackedScreen {

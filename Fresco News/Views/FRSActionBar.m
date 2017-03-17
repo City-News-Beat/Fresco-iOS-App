@@ -16,6 +16,8 @@
 #import "FRSGalleryManager.h"
 #import "FRSStoryManager.h"
 #import "FRSSocialHandler.h"
+#import "FRSUserManager.h"
+#import "FRSDualUserListViewController.h"
 
 
 @interface FRSActionBar ()
@@ -70,7 +72,22 @@
     [self configureActionButton];
     [self configureSocialButtons];
     [self updateLabels];
+    [self checkGalleryOwnerForActionBar];
 }
+
+/**
+ Checks if the gallery owner is the authenticated user and disables user interaction on the repost button accordingly.
+ */
+- (void)checkGalleryOwnerForActionBar {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
+            [self setCurrentUser:YES];
+        } else {
+            [self setCurrentUser:NO];
+        }
+    });
+}
+
 
 #pragma mark - Action Button
 
@@ -92,8 +109,12 @@
         actionButtonTitle = @"READ MORE";
     }
 
-    [self.actionButton setTitle:actionButtonTitle forState:UIControlStateNormal];
-
+    // Default title to delegate title, else fall back on default action bar strings
+    if ([self.delegate respondsToSelector:@selector(titleForActionButton)]) {
+        [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+    } else {
+        [self.actionButton setTitle:actionButtonTitle forState:UIControlStateNormal];
+    }
 }
 
 -(void)updateTitle {
@@ -324,14 +345,21 @@
 
 
 - (IBAction)likeLabelTapped:(id)sender {
-    if (self.delegate) {
-        [self.delegate handleLikeLabelTapped:self];
+    if (self.gallery) {
+        FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if (self.story) {
+        // Pending API support
     }
 }
 
 - (IBAction)repostLabelTapped:(id)sender {
-    if (self.delegate) {
-        [self.delegate handleRepostLabelTapped:self];
+    if (self.gallery) {
+        FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
+        vc.didTapRepostLabel = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if (self.story) {
+        // Pending API support
     }
 }
 
