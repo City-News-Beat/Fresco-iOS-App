@@ -104,7 +104,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     self.scrollView.showsVerticalScrollIndicator = NO;
     
-    [self.actionBar updateLabels];
+    [self.actionBar updateSocialButtonsFromButton:nil];
 
     // This sizes the scrollview to the height of the gallery view and the articles tableview
     // only if there are no comments, or the comments tableview has not yet loaded.

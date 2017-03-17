@@ -71,7 +71,7 @@
     
     [self configureActionButton];
     [self configureSocialUI];
-    [self updateLabels];
+    [self updateSocialButtonsFromButton:nil];
     [self checkGalleryOwnerForActionBar];
 }
 
@@ -123,34 +123,73 @@
 
 #pragma mark - Likes / Reposts
 
--(void)updateLabels {
+-(void)updateSocialButtonsFromButton:(UIButton *)button {
 
-    NSInteger likes = 0;
-    NSInteger reposts = 0;
-    
-    BOOL liked = NO;
-    BOOL reposted = NO;
-    
-    if (self.gallery) {
-        likes = [[self.gallery valueForKey:LIKES] integerValue];
-        liked = [[self.gallery valueForKey:LIKED] boolValue];
-        reposts = [[self.gallery valueForKey:REPOSTS] integerValue];
-        reposted = [[self.gallery valueForKey:REPOSTED] boolValue];
-
-    } else if (self.story) {
-        likes = [[self.story valueForKey:LIKES] integerValue];
-        liked = [[self.story valueForKey:LIKED] boolValue];
-        reposts = [[self.story valueForKey:REPOSTS] integerValue];
-        reposted = [[self.story valueForKey:REPOSTED] boolValue];
+    if (button) {
+        BOOL isLikeButton = [button isEqual:self.likeButton] ? YES : NO;
+        
+        NSInteger count;
+        UILabel  *socialLabel;
+        NSString *defaultImageName;
+        NSString *selectedImageName;
+        UIColor  *color;
+        
+        if (isLikeButton) {
+            count = [self.likeLabel.text integerValue];
+            socialLabel  = self.likeLabel;
+            defaultImageName  = HEART;
+            selectedImageName = HEART_FILL;
+            color = [UIColor frescoRedColor];
+        } else {
+            count = [self.repostLabel.text integerValue];
+            socialLabel  = self.repostLabel;
+            defaultImageName  = REPOST;
+            selectedImageName = REPOST_FILL;
+            color = [UIColor frescoGreenColor];
+        }
+        
+        if ([[button imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:defaultImageName]]) {
+            [button setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
+            socialLabel.textColor = color;
+            count++;
+            
+        } else {
+            [button setImage:[UIImage imageNamed:defaultImageName] forState:UIControlStateNormal];
+            socialLabel.textColor = [UIColor frescoMediumTextColor];
+            count--;
+        }
+        
+        socialLabel.text = [NSString stringWithFormat:@"%ld", count];
+        
+    } else {
+        
+        NSInteger likes = 0;
+        NSInteger reposts = 0;
+        
+        BOOL liked = NO;
+        BOOL reposted = NO;
+        
+        if (self.gallery) {
+            likes = [[self.gallery valueForKey:LIKES] integerValue];
+            liked = [[self.gallery valueForKey:LIKED] boolValue];
+            reposts = [[self.gallery valueForKey:REPOSTS] integerValue];
+            reposted = [[self.gallery valueForKey:REPOSTED] boolValue];
+            
+        } else if (self.story) {
+            likes = [[self.story valueForKey:LIKES] integerValue];
+            liked = [[self.story valueForKey:LIKED] boolValue];
+            reposts = [[self.story valueForKey:REPOSTS] integerValue];
+            reposted = [[self.story valueForKey:REPOSTED] boolValue];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateUIForLabel:self.likeLabel button:self.likeButton imageName:HEART selectedImageName:HEART_FILL count:likes enabled:liked];
+            [self updateUIForLabel:self.repostLabel button:self.repostButton imageName:REPOST selectedImageName:REPOST_FILL count:reposts enabled:reposted];
+        });
     }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUIForLabel:self.likeLabel button:self.likeButton imageName:HEART selectedImageName:HEART_FILL count:likes enabled:liked color:[UIColor frescoRedColor]];
-        [self updateUIForLabel:self.repostLabel button:self.repostButton imageName:REPOST selectedImageName:REPOST_FILL count:reposts enabled:reposted color:[UIColor frescoGreenColor]];
-    });
 }
 
--(void)updateUIForLabel:(UILabel *)label button:(UIButton *)button imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName count:(NSInteger)count enabled:(BOOL)enabled color:(UIColor *)color {
+-(void)updateUIForLabel:(UILabel *)label button:(UIButton *)button imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName count:(NSInteger)count enabled:(BOOL)enabled {
     
     if (count >= 0) {
         label.text = [NSString stringWithFormat:@"%ld", count];
@@ -160,7 +199,7 @@
     
     if (enabled && ![label.text isEqualToString:@"0"]) {
         [button setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
-        label.textColor = color;
+        label.textColor = [label isEqual:self.likeLabel] ? [UIColor frescoRedColor] : [UIColor frescoGreenColor];
         
     } else {
         [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
@@ -185,48 +224,6 @@
     [self addSubview:button];
 }
 
--(void)handleSocialStateForButton:(UIButton *)button {
-    
-    BOOL isLikeButton = [button isEqual:self.likeButton] ? YES : NO;
-
-    NSInteger count;
-    UIButton *socialButton;
-    UILabel  *socialLabel;
-    NSString *defaultImageName;
-    NSString *selectedImageName;
-    UIColor  *color;
-    
-    if (isLikeButton) {
-        count = [self.likeLabel.text integerValue];
-        socialButton = self.likeButton;
-        socialLabel  = self.likeLabel;
-        defaultImageName  = HEART;
-        selectedImageName = HEART_FILL;
-        color = [UIColor frescoRedColor];
-        
-    } else {
-        count = [self.repostLabel.text integerValue];
-        socialButton = self.repostButton;
-        socialLabel  = self.repostLabel;
-        defaultImageName  = REPOST;
-        selectedImageName = REPOST_FILL;
-        color = [UIColor frescoGreenColor];
-    }
-    
-    if ([[socialButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:defaultImageName]]) {
-        [socialButton setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
-        socialLabel.textColor = color;
-        count++;
-        
-    } else {
-        [socialButton setImage:[UIImage imageNamed:defaultImageName] forState:UIControlStateNormal];
-        socialLabel.textColor = [UIColor frescoMediumTextColor];
-        count--;
-    }
-    
-    socialLabel.text = [NSString stringWithFormat:@"%ld", count];
-}
-
 - (void)setCurrentUser:(BOOL)isAuth {
     self.repostButton.userInteractionEnabled = !isAuth;
 }
@@ -242,7 +239,7 @@
 
 - (IBAction)likeTapped:(id)sender {
     
-    [self handleSocialStateForButton:self.likeButton];
+    [self updateSocialButtonsFromButton:self.likeButton];
     
     if (self.gallery) {
         if ([[self.gallery valueForKey:LIKED] boolValue]) {
@@ -250,7 +247,7 @@
             [FRSSocialHandler unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -259,7 +256,7 @@
             [FRSSocialHandler likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -270,7 +267,7 @@
             [FRSSocialHandler unlikeStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler likeStory:self.story completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -278,7 +275,7 @@
             [FRSSocialHandler likeStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler unlikeStory:self.story completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -288,7 +285,7 @@
 
 - (IBAction)repostTapped:(id)sender {
     
-    [self handleSocialStateForButton:self.repostButton];
+    [self updateSocialButtonsFromButton:self.repostButton];
     
     if (self.gallery) {
         if ([[self.gallery valueForKey:REPOSTED] boolValue]) {
@@ -296,7 +293,7 @@
             [FRSSocialHandler unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -305,7 +302,7 @@
             [FRSSocialHandler repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -315,7 +312,7 @@
             [FRSSocialHandler unrepostStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler repostStory:self.story completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];
@@ -323,7 +320,7 @@
             [FRSSocialHandler repostStory:self.story completion:^(id responseObject, NSError *error) {
                 if (error) {
                     [FRSSocialHandler unrepostStory:self.story completion:^(id responseObject, NSError *error) {
-                        [self updateLabels];
+                        [self updateSocialButtonsFromButton:nil];
                     }];
                 }
             }];

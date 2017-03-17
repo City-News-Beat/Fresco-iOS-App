@@ -86,7 +86,7 @@
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     self.scrollView.clipsToBounds = YES;
-    [self updateLabels];
+    [self.actionBar updateSocialButtonsFromButton:nil];
 
     self.pageControl.numberOfPages = self.gallery.posts.count;
     [self.pageControl setCurrentPage:0];
@@ -214,7 +214,7 @@
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
     [self configureUI];
-    [self.actionBar updateLabels]; // Called in the expanded VC
+    [self.actionBar updateSocialButtonsFromButton:nil]; // Called in the expanded VC
 }
 
 - (void)contentTap:(UITapGestureRecognizer *)sender {
@@ -526,7 +526,6 @@
 }
 
 - (void)configureGalleryInfo {
-    //    [self updateLabels];
     [self configureTimeLine];
     [self configureLocationLine];
     [self configureUserLine];

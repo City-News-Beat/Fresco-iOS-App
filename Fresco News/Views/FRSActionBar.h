@@ -36,10 +36,13 @@ typedef NS_ENUM(NSUInteger, FRSTrackedScreen) {
 @property BOOL liked;
 @property BOOL reposted;
 
+
 /**
- Updates the UI on the like and repost labels.
+ This method updates the social buttons. The button paramter is optional and updates with the current values of the button. Otherwise updated values will be derived from the Core Data object.
+
+ @param button UIButton optional value used to update state and increment number.
  */
--(void)updateLabels;
+-(void)updateSocialButtonsFromButton:(UIButton *)button;
 
 /**
  Configures the UI with an FRSGallery or FRSStory object.
