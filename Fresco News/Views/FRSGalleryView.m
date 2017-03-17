@@ -1163,7 +1163,7 @@
 
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4 / 3);
 
-    return averageHeight;
+    return averageHeight > 0 ? averageHeight : 280;
 }
 
 - (void)segueToSourceUser {

@@ -265,7 +265,7 @@
 
     self.generatedHeight = averageHeight;
 
-    return averageHeight;
+    return averageHeight > 0 ? averageHeight : 280;
 }
 
 - (NSDictionary *)jsonObject {
