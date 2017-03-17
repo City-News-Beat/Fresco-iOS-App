@@ -70,7 +70,7 @@
     }
     
     [self configureActionButton];
-    [self configureSocialButtons];
+    [self configureSocialUI];
     [self updateLabels];
     [self checkGalleryOwnerForActionBar];
 }
@@ -80,11 +80,7 @@
  */
 - (void)checkGalleryOwnerForActionBar {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
-            [self setCurrentUser:YES];
-        } else {
-            [self setCurrentUser:NO];
-        }
+        [self setCurrentUser:[self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid] ? YES : NO];
     });
 }
 
@@ -128,9 +124,6 @@
 #pragma mark - Likes / Reposts
 
 -(void)updateLabels {
-    
-    self.likeLabel.userInteractionEnabled = YES;
-    self.repostLabel.userInteractionEnabled = YES;
 
     NSInteger likes = 0;
     NSInteger reposts = 0;
@@ -173,13 +166,12 @@
         [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         label.textColor = [UIColor frescoMediumTextColor];
     }
-    
 }
 
--(void)configureSocialButtons {
-    
+-(void)configureSocialUI {
+    self.likeLabel.userInteractionEnabled = YES;
+    self.repostLabel.userInteractionEnabled = YES;
     [self configureSocialButton:self.likeButton withImageName:HEART selectedImageName:HEART_FILL];
-    
     [self configureSocialButton:self.repostButton withImageName:REPOST selectedImageName:REPOST_FILL];
 }
 
@@ -236,11 +228,7 @@
 }
 
 - (void)setCurrentUser:(BOOL)isAuth {
-    if (isAuth) {
-        self.repostButton.userInteractionEnabled = NO;
-    } else {
-        self.repostButton.userInteractionEnabled = YES;
-    }
+    self.repostButton.userInteractionEnabled = !isAuth;
 }
 
 
