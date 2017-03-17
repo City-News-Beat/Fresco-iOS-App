@@ -131,7 +131,7 @@ BOOL isSegueingToAssignment;
     
     if ([type isEqualToString:purchasedContentNotification]) {
         
-        if ([[push valueForKey:HAS_PAYMENT] boolValue]) {
+        if ([[push[@"meta"] valueForKey:HAS_PAYMENT] boolValue]) {
             [self segueToGallery:[self galleryIDFromPush:push]];
         } else {
             [FRSNotificationHandler segueToPayment];
