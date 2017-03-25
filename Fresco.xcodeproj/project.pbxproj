@@ -27,6 +27,7 @@
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
 		0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */; };
 		0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0767A5601D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib */; };
+		0769BFEB1E7843F000D06C2A /* FRSSocialHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 0769BFEA1E7843F000D06C2A /* FRSSocialHandler.m */; };
 		076EF3F61E410E53003996BB /* FRSCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 076EF3F51E410E53003996BB /* FRSCoreDataController.m */; };
 		076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 076F4D9D1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m */; };
 		076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */; };
@@ -55,6 +56,8 @@
 		07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */; };
 		07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */; };
 		07A30C131C50499A00C536EB /* FRSStoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C121C50499A00C536EB /* FRSStoryTableViewCell.m */; };
+		07A915C51E5F65060081D219 /* FRSActionBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A915C41E5F65060081D219 /* FRSActionBar.xib */; };
+		07A915CB1E5F65510081D219 /* FRSActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A915CA1E5F65510081D219 /* FRSActionBar.m */; };
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
 		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
@@ -129,7 +132,6 @@
 		65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B61C24AACF002182DE /* UIColor+Fresco.m */; };
 		65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */; };
 		65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C11C24C28D002182DE /* FRSOnboardOneView.m */; };
-		65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C61C24D263002182DE /* FRSContentActionsBar.m */; };
 		65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C91C24D464002182DE /* UIFont+Fresco.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
@@ -377,6 +379,8 @@
 		0767A55D1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentNotificationTableViewCell.h; sourceTree = "<group>"; };
 		0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentNotificationTableViewCell.m; sourceTree = "<group>"; };
 		0767A5601D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAssignmentNotificationTableViewCell.xib; sourceTree = "<group>"; };
+		0769BFE91E7843F000D06C2A /* FRSSocialHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSocialHandler.h; sourceTree = "<group>"; };
+		0769BFEA1E7843F000D06C2A /* FRSSocialHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocialHandler.m; sourceTree = "<group>"; };
 		076EF3F41E410E53003996BB /* FRSCoreDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCoreDataController.h; sourceTree = "<group>"; };
 		076EF3F51E410E53003996BB /* FRSCoreDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCoreDataController.m; sourceTree = "<group>"; };
 		076F4D9C1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDefaultNotificationTableViewCell.h; sourceTree = "<group>"; };
@@ -431,6 +435,9 @@
 		07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchViewController.m; sourceTree = "<group>"; };
 		07A30C111C50499A00C536EB /* FRSStoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryTableViewCell.h; sourceTree = "<group>"; };
 		07A30C121C50499A00C536EB /* FRSStoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryTableViewCell.m; sourceTree = "<group>"; };
+		07A915C41E5F65060081D219 /* FRSActionBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSActionBar.xib; sourceTree = "<group>"; };
+		07A915C91E5F65510081D219 /* FRSActionBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSActionBar.h; sourceTree = "<group>"; };
+		07A915CA1E5F65510081D219 /* FRSActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSActionBar.m; sourceTree = "<group>"; };
 		07B61ECB1CAF1C4900D3454F /* PeekPopArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeekPopArticleViewController.h; sourceTree = "<group>"; };
 		07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeekPopArticleViewController.m; sourceTree = "<group>"; };
 		07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentsTableViewController.h; sourceTree = "<group>"; };
@@ -565,8 +572,6 @@
 		65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardingViewController.m; sourceTree = "<group>"; };
 		65F237C01C24C28D002182DE /* FRSOnboardOneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardOneView.h; sourceTree = "<group>"; };
 		65F237C11C24C28D002182DE /* FRSOnboardOneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardOneView.m; sourceTree = "<group>"; };
-		65F237C51C24D263002182DE /* FRSContentActionsBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSContentActionsBar.h; sourceTree = "<group>"; };
-		65F237C61C24D263002182DE /* FRSContentActionsBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSContentActionsBar.m; sourceTree = "<group>"; };
 		65F237C81C24D464002182DE /* UIFont+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+Fresco.h"; path = "Categories/UIFont+Fresco.h"; sourceTree = "<group>"; };
 		65F237C91C24D464002182DE /* UIFont+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+Fresco.m"; path = "Categories/UIFont+Fresco.m"; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
@@ -2006,8 +2011,11 @@
 		D43C80001C9074BB00A7A7A7 /* Content Action Bar */ = {
 			isa = PBXGroup;
 			children = (
-				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
-				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
+				07A915C41E5F65060081D219 /* FRSActionBar.xib */,
+				07A915C91E5F65510081D219 /* FRSActionBar.h */,
+				07A915CA1E5F65510081D219 /* FRSActionBar.m */,
+				0769BFE91E7843F000D06C2A /* FRSSocialHandler.h */,
+				0769BFEA1E7843F000D06C2A /* FRSSocialHandler.m */,
 			);
 			name = "Content Action Bar";
 			sourceTree = "<group>";
@@ -2583,6 +2591,7 @@
 				D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */,
 				D43C80051C90751500A7A7A7 /* FRSLoadingTableViewCell.xib in Resources */,
 				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
+				07A915C51E5F65060081D219 /* FRSActionBar.xib in Resources */,
 				CE3799B61E5825C600B6743A /* FRSLogOutTableViewCell.xib in Resources */,
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
@@ -2786,7 +2795,6 @@
 				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */,
-				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
 				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
 				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
@@ -2802,6 +2810,7 @@
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
 				E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */,
 				CE0A6FD31E3EA95800E67766 /* FRSPaymentManager.m in Sources */,
+				07A915CB1E5F65510081D219 /* FRSActionBar.m in Sources */,
 				CE0AABAB1E3DF55700DD6A8A /* FRSFeedManager.m in Sources */,
 				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
 				CEE036121E711627002ADA35 /* FRSSignUpAlertView.m in Sources */,
@@ -2920,6 +2929,7 @@
 				076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */,
 				CEC468F41E691C88008FBC5A /* FRSModerationAlertView.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
+				0769BFEB1E7843F000D06C2A /* FRSSocialHandler.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
 				0796FF791E54DF9E00ABF9DA /* FRSPostTracker.m in Sources */,

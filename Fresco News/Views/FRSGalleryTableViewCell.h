@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSGalleryView.h"
+#import "FRSActionBar.h"
 
 @class FRSGallery;
 
@@ -27,6 +28,9 @@ static NSString *const galleryCellIdentifier = @"gallery-cell";
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property BOOL hasVideoAsFirstPost;
 
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
+
+- (void)clearCell;
 - (void)configureCell;
 - (void)offScreen;
 - (void)play;

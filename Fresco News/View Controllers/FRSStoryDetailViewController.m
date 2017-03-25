@@ -20,6 +20,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UIView *headerContainer;
 @property BOOL didConfigureHeader;
+@property BOOL didLoadOnce;
 
 @end
 
@@ -91,8 +92,20 @@
 
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
     self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
+    
+    [self.galleriesTable reloadData];
+    
+    
+    if (self.didLoadOnce) {
+        [self reloadData];
+    }
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.didLoadOnce = YES;
+}
 - (void)configureCaptionHeader {
     self.didConfigureHeader = YES;
 
@@ -300,10 +313,18 @@
 }
 
 - (void)fetchGalleries {
-    self.stories = [[NSMutableArray alloc] init];
+    
+    if (!self.stories) { // This property is misnamed. Should be galleries.
+        self.stories = [[NSMutableArray alloc] init];
+    }
 
     [[FRSStoryManager sharedInstance] fetchGalleriesInStory:self.story.uid
                                                  completion:^(NSArray *galleries, NSError *error) {
+
+                                                   if (self.didLoadOnce) {
+                                                       self.stories = [[NSMutableArray alloc] init]; // Clear array before adding new objects if view has already loaded. (ex) Read more on gallery and return to view.
+                                                   }
+                                                     
                                                    [self.loadingView stopLoading];
                                                    [self.loadingView removeFromSuperview];
                                                    self.loadingView.alpha = 0;

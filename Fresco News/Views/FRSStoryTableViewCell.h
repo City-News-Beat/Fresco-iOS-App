@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSStoryView.h"
+#import "FRSActionBar.h"
 
 @class FRSStory;
 
@@ -23,6 +24,8 @@ static NSString *const storyCellIdentifier = @"story-cell";
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property (weak, nonatomic) id<FRSStoryViewDelegate> delegate;
+
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
 - (void)clearCell;
 - (void)configureCell;

@@ -345,7 +345,8 @@ BOOL isSegueingToAssignment;
     FRSGalleryExpandedViewController *detailVC = [[FRSGalleryExpandedViewController alloc] init];
     [detailVC configureBackButtonAnimated:YES];
     detailVC.openedFrom = @"push";
-    
+    detailVC.trackedScreen = FRSTrackedScreenPush;
+
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {

@@ -726,6 +726,7 @@ static NSInteger const previewCount = 3;
             cell = [[FRSGalleryTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryCellIdentifier];
         }
         cell.navigationController = self.navigationController;
+        cell.trackedScreen = FRSTrackedScreenSearch;
 
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.gallery = self.galleries[indexPath.row];

@@ -29,9 +29,11 @@
 @property (nonatomic, retain) NSMutableArray *comments;
 @property (strong, nonatomic) FRSGalleryExpandedViewController *parentVC;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) FRSContentActionsBar *actionBar;
 @property (strong, nonatomic) IBOutlet UITextField *commentTextField;
 @property (strong, nonatomic) IBOutlet UITableView *articlesTableView;
+@property (strong, nonatomic) ShareSheetBlock shareBlock;
+
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
 -(void)configureUI;
 -(void)fetchCommentsWithID:(NSString*)galleryID;

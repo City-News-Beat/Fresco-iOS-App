@@ -16,19 +16,22 @@
 #import "UIFont+Fresco.h"
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
-#import "FRSContentActionsBar.h"
 #import <Haneke/Haneke.h>
 #import "FRSProfileViewController.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSStoryManager.h"
+#import "FRSActionBar.h"
+#import "FRSGalleryManager.h"
+#import "FRSUserManager.h"
+
 
 #define TEXTVIEW_TOP_PADDING 12
 #define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height / 2)
 
-@interface FRSStoryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
+@interface FRSStoryView () <UIScrollViewDelegate, FRSActionBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) FRSContentActionsBar *actionBar;
+@property (strong, nonatomic) FRSActionBar *actionBar;
 @property (strong, nonatomic) UIView *topContainer;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *caption;
@@ -41,22 +44,14 @@
 
 @implementation FRSStoryView
 
-- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-    self.shareBlock(@[ [@"https://fresconews.com/story/" stringByAppendingString:self.story.uid] ]);
-}
-
-- (void)handleActionButtonTapped {
-    //?
-}
-
 - (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate {
     self = [super initWithFrame:frame];
 
     if (self) {
         self.delegate = delegate;
         self.story = story;
-        //self.delegate.navigationController = self.navigationController;
-        
+        self.navigationController = self.delegate.navigationController;
+
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
             [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
@@ -72,7 +67,7 @@
     [self configureTopContainer];
     [self configureTitle];
     [self configureCaption];
-    [self configureActionsBar];
+    [self configureActionBar];
 
     UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height, self.frame.size.width, 0.5)];
     bottomLine.backgroundColor = [UIColor frescoShadowColor];
@@ -255,67 +250,17 @@
     [self addSubview:self.caption];
 }
 
-- (void)configureActionsBar {
+- (void)configureActionBar {
 
-    NSNumber *numLikes = [self.story valueForKey:@"likes"];
-    BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
-
-    NSNumber *numReposts = [self.story valueForKey:@"reposts"];
-    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
-
-    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
-
-    [self.actionBar handleRepostState:!isReposted];
-    [self.actionBar handleRepostAmount:[numReposts intValue]];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
+    self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
+    [self.actionBar configureWithObject:self.story];
+    self.actionBar.navigationController = self.navigationController;
 
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height - 12)];
     }
 
     [self addSubview:self.actionBar];
-}
-
-- (void)handleLike:(FRSContentActionsBar *)actionBar {
-
-    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
-
-    if ([[self.story valueForKey:@"liked"] boolValue]) {
-        [[FRSStoryManager sharedInstance] unlikeStory:self.story
-                                           completion:^(id responseObject, NSError *error) {
-                                             if (error) {
-                                                 [actionBar handleHeartState:TRUE];
-                                                 [actionBar handleHeartAmount:likes];
-                                             }
-                                           }];
-    } else {
-        [[FRSStoryManager sharedInstance] likeStory:self.story
-                                         completion:^(id responseObject, NSError *error) {
-                                           if (error) {
-                                               [actionBar handleHeartState:FALSE];
-                                               [actionBar handleHeartAmount:likes];
-                                           }
-                                         }];
-    }
-}
-
-- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
-    [self.delegate.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
-    vc.didTapRepostLabel = YES;
-    [self.delegate.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
-    [[FRSStoryManager sharedInstance] repostStory:self.story
-                                       completion:^(id responseObject, NSError *error) {
-                                         NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
-                                       }];
 }
 
 - (void)configureRepostWithName:(NSString *)name {
@@ -365,29 +310,20 @@
     label.attributedText = attString;
 }
 
-#pragma mark - Action Bar Deletate
 
-- (NSString *)titleForActionButton {
-    return @"READ MORE";
-}
+#pragma mark - Action Bar
 
-- (UIColor *)colorForActionButton {
-    return [UIColor frescoBlueColor];
-}
-
-- (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
+- (void)handleActionButtonTapped:(FRSActionBar *)actionBar {
     if (self.readMoreBlock) {
-        self.readMoreBlock(Nil);
+        self.readMoreBlock(nil);
     }
     if (self.actionBlock) {
         self.actionBlock();
     }
 }
 
-- (void)clickedImageAtIndex:(NSInteger)imageIndex {
-    if (self.delegate) {
-        [self.delegate clickedImageAtIndex:imageIndex];
-    }
+-(void)setTrackedScreen:(FRSTrackedScreen)trackedScreen {
+    self.actionBar.trackedScreen = trackedScreen;
 }
 
 @end

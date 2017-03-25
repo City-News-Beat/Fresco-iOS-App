@@ -20,6 +20,8 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSGalleryManager.h"
+#import "FRSDualUserListViewController.h"
+#import "FRSActionBar.h"
 #import "FRSSnapKit.h"
 #import "DGElasticPullToRefresh.h"
 
@@ -27,9 +29,10 @@
 #define TOP_NAV_BAR_HEIGHT 64
 #define DEFAULT_PADDING 16
 
-@interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSContentActionBarDelegate, FRSCommentCellDelegate, MGSwipeTableCellDelegate, UITextViewDelegate, FRSAlertViewDelegate>
+@interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSCommentCellDelegate, MGSwipeTableCellDelegate, UITextViewDelegate, FRSAlertViewDelegate, FRSActionBarDelegate, UIScrollViewDelegate>
 
 @property BOOL didPrepareForReply;
+@property (strong, nonatomic) FRSActionBar *actionBar;
 
 @end
 
@@ -101,6 +104,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     self.scrollView.showsVerticalScrollIndicator = NO;
     
+    [self.actionBar updateSocialButtonsFromButton:nil];
+
     // This sizes the scrollview to the height of the gallery view and the articles tableview
     // only if there are no comments, or the comments tableview has not yet loaded.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -116,7 +121,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.galleryView configureWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 500) gallery:self.gallery delegate:self];
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
     self.galleryView.delegate.navigationController = self.navigationController;
-
+    
     [self.galleryView play];
     [self focusOnPost];
     [self layoutSubviews];
@@ -292,7 +297,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         commentsLabel.hidden = self.comments.count == 0;
     }
 
-    [self.actionBar actionButtonTitleNeedsUpdate];
     [commentsTableView reloadData];
     
     commentsTableView.backgroundColor = [UIColor clearColor];
@@ -344,7 +348,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                   int comments = [[self.gallery valueForKey:@"comments"] intValue];
                                                   comments++;
                                                   [self.gallery setValue:[NSNumber numberWithInt:comments] forKey:@"comments"];
-                                                  [self.actionBar actionButtonTitleNeedsUpdate];
 
                                                   self.totalCommentCount++;
 
@@ -609,124 +612,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             self.didPrepareForReply = NO;
         } else {
             self.didPrepareForReply = YES;
-            [self contentActionBarDidSelectActionButton:self.actionBar];
             FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
             self.commentTextField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
         }
     }
 }
 
-#pragma mark - Action Bar
-
-- (void)configureActionBar {
-    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - TOP_NAV_BAR_HEIGHT - 44) delegate:self];
-    self.actionBar.delegate = self;
-
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor frescoShadowColor];
-    [self.actionBar addSubview:line];
-
-    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
-    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-
-    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
-
-    [self.actionBar handleRepostState:isReposted];
-    [self.actionBar handleRepostAmount:[numReposts intValue]];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
-
-    [self addSubview:self.actionBar];
-
-    if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
-        [self.actionBar setCurrentUser:YES];
-    } else {
-        [self.actionBar setCurrentUser:NO];
-    }
-    
-    [FRSSnapKit constrainSubview:self.actionBar ToBottomOfParentView:_parentVC.view WithHeight:44];
-}
-
-#pragma mark - Action Bar Delegate
-
-- (NSString *)titleForActionButton {
-    CGRect visibleRect;
-    visibleRect.origin = self.scrollView.contentOffset;
-    visibleRect.size = self.scrollView.bounds.size;
-
-    NSInteger offset = visibleRect.origin.y + visibleRect.size.height + TOP_NAV_BAR_HEIGHT - DEFAULT_PADDING - self.actionBar.frame.size.height;
-
-    if (commentsLabel.frame.origin.y > offset) {
-        if (self.gallery && self.totalCommentCount > 0) {
-            return [NSString stringWithFormat:@"%lu COMMENTS", (unsigned long)self.totalCommentCount];
-        }
-    }
-    return @"ADD A COMMENT";
-}
-
-- (UIColor *)colorForActionButton {
-    return [UIColor frescoBlueColor];
-}
-
-- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
-
-    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
-
-    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
-    [self.parentVC.navigationController presentViewController:activityController animated:YES completion:nil];
-
-    [FRSTracker track:sharedFromHighlights parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
-}
-
-- (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
-    // comment text field comes up
-    if (![[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
-        [self.commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
-        self.commentTextField.delegate = self;
-        [self.commentTextField becomeFirstResponder];
-    }
-}
-
-- (void)handleLike:(FRSContentActionsBar *)actionBar {
-    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
-    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSGalleryManager sharedInstance] unlikeGallery:self.gallery
-                                               completion:^(id responseObject, NSError *error) {
-                                                 NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                                 if (error) {
-                                                     [actionBar handleHeartState:TRUE];
-                                                     [actionBar handleHeartAmount:likes];
-                                                 }
-                                               }];
-    } else {
-        [[FRSGalleryManager sharedInstance] likeGallery:self.gallery
-                                             completion:^(id responseObject, NSError *error) {
-                                               NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-                                               if (error) {
-                                                   [actionBar handleHeartState:FALSE];
-                                                   [actionBar handleHeartAmount:likes];
-                                               }
-                                             }];
-    }
-}
-
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
-    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
-    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
-
-    [[FRSGalleryManager sharedInstance] repostGallery:self.gallery
-                                           completion:^(id responseObject, NSError *error) {
-                                             NSLog(@"REPOSTED %@", error);
-
-                                             if (error) {
-                                                 [actionBar handleRepostState:!state];
-                                                 [actionBar handleRepostAmount:repostCount];
-                                             }
-                                           }];
-}
 
 #pragma mark - Keyboard Handling
 
@@ -751,6 +642,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
+
     self.actionBar.hidden = false;
 
     [UIView animateWithDuration:0.3
@@ -809,12 +701,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                            }];
 }
 
+
 #pragma mark - UIScrollView Delegate
 
+
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    // Only update the text if user is scrolling down. Updating when the user is scrolling up looks ugly.
     if (scrollView.contentOffset.y >= 0) {
-        [self.actionBar actionButtonTitleNeedsUpdate];
+        [self.actionBar updateTitle];
     }
 }
 
@@ -822,6 +715,59 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+
+#pragma mark - Action Bar
+
+- (void)configureActionBar {
+    
+    self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, self.frame.size.height - 44) delegate:self];
+    [self.actionBar configureWithObject:self.gallery];
+    if (self.trackedScreen) {
+        self.actionBar.trackedScreen = FRSTrackedScreenPush;
+    } else {
+        self.actionBar.trackedScreen = FRSTrackedScreenDetail;
+    }
+    self.actionBar.delegate = self;
+
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.actionBar addSubview:line];
+    
+    [self addSubview:self.actionBar];
+}
+
+
+#pragma mark - Action Bar
+
+/**
+ Set the title for the gallerys action button.
+
+ @return NSString title for action button.
+ */
+- (NSString *)titleForActionButton {
+    CGRect visibleRect;
+    visibleRect.origin = self.scrollView.contentOffset;
+    visibleRect.size = self.scrollView.bounds.size;
+
+    NSInteger offset = visibleRect.origin.y + visibleRect.size.height + TOP_NAV_BAR_HEIGHT - DEFAULT_PADDING - self.actionBar.frame.size.height;
+
+    if (commentsLabel.frame.origin.y > offset) {
+        if (self.gallery && self.totalCommentCount > 0) {
+            return [NSString stringWithFormat:@"%lu COMMENTS", (unsigned long)self.totalCommentCount];
+        }
+    }
+    return @"ADD A COMMENT";
+}
+
+-(void)handleActionButtonTapped:(FRSActionBar *)actionBar {
+    if (![[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
+        [self.commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
+        self.commentTextField.delegate = self;
+        [self.commentTextField becomeFirstResponder];
+    }
 }
 
 @end

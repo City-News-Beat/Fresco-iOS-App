@@ -20,7 +20,8 @@
 
 static NSInteger const storiesPerPage = 12;
 
-@interface FRSStoriesViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSContentActionBarDelegate>
+@interface FRSStoriesViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+
 
 @property (strong, nonatomic) NSMutableArray *stories;
 
@@ -396,7 +397,11 @@ static NSInteger const storiesPerPage = 12;
         numberRead = indexPath.row;
     }
 
+
     FRSStoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
+
+    cell.navigationController = self.navigationController;
+    cell.trackedScreen = FRSTrackedScreenStories;
 
     if (indexPath.row == self.stories.count - 5 || (indexPath.row == self.stories.count && self.stories.count < 4)) {
         [self fetchMoreStories];
@@ -427,27 +432,19 @@ static NSInteger const storiesPerPage = 12;
           [weakSelf showShareSheetWithContent:sharedContent];
         };
 
-        cell.imageBlock = ^(NSInteger imageIndex) {
-          [weakSelf handleImagePress:indexPath imageIndex:imageIndex];
-        };
-
         [cell configureCell];
+        cell.navigationController = self.navigationController;
+
     }
 }
+
+
+#pragma mark - Action Bar Delegate
+
 
 - (void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-}
-
-- (void)handleImagePress:(NSIndexPath *)cellIndex imageIndex:(NSInteger)imageIndex {
-
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-
-    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:cellIndex.row]];
-    detailView.navigationController = self.navigationController;
-    [detailView scrollToGalleryIndex:imageIndex];
-    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -456,22 +453,12 @@ static NSInteger const storiesPerPage = 12;
 }
 
 - (void)readMore:(NSInteger)index {
-
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
     [self expandNavBar:nil];
 }
 
-- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
-    //    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    //    [self.navigationController pushViewController:vc animated:YES];
-}
 
-- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
-    //    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
-    //    vc.didTapRepostLabel = YES;
-    //    [self.navigationController pushViewController:vc animated:YES];
-}
 
 @end

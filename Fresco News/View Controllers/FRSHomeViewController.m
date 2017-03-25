@@ -597,6 +597,8 @@ static NSInteger const galleriesPerPage = 12;
     FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
     cell.navigationController = self.navigationController;
     cell.gallery = self.dataSource[indexPath.row];
+    cell.navigationController = self.navigationController;
+    cell.trackedScreen = FRSTrackedScreenHighlights;
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [cell configureCell];

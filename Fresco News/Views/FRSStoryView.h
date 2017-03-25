@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSActionBar.h"
+
 
 @class FRSStory;
 
@@ -30,6 +32,8 @@
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) FRSStory *story;
 @property (weak, nonatomic) UINavigationController *navigationController;
+
+@property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
 - (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate;
 

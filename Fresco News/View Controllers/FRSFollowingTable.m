@@ -284,8 +284,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
 
+    if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+        FRSGalleryTableViewCell *galleryCell = (FRSGalleryTableViewCell *)cell;
+        galleryCell.trackedScreen = FRSTrackedScreenFollowing;
     } else if ([[cell class] isSubclassOfClass:[FRSStoryTableViewCell class]]) {
         FRSStoryTableViewCell *storyCell = (FRSStoryTableViewCell *)cell;
         storyCell.storyView.navigationController = self.navigationController;

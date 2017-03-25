@@ -58,8 +58,6 @@ static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-                             [story setValue:@(TRUE) forKey:@"liked"];
-                             [[self managedObjectContext] save:Nil];
                            }];
 }
 
@@ -69,7 +67,6 @@ static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-                             [story setValue:@(FALSE) forKey:@"liked"];
                            }];
 }
 
@@ -79,19 +76,11 @@ static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
         return;
     }
 
-    if ([[story valueForKey:@"reposted"] boolValue]) {
-        [self unrepostStory:story completion:completion];
-        return;
-    }
-
     NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-
-                             [story setValue:@(TRUE) forKey:@"reposted"];
-                             [[[FRSAuthManager sharedInstance] managedObjectContext] save:Nil];
                            }];
 }
 
@@ -102,10 +91,6 @@ static NSString *const storyGalleriesEndpoint = @"story/%@/galleries";
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-
-                             [story setValue:@(FALSE) forKey:@"reposted"];
-
-                             [[[FRSAuthManager sharedInstance] managedObjectContext] save:Nil];
                            }];
 }
 

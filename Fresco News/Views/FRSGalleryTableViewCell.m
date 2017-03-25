@@ -34,7 +34,7 @@
         hasPlayed = NO;
 
         [self.galleryView loadGallery:self.gallery];
-        [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
+        self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
     hasPlayed = NO;
@@ -47,7 +47,10 @@
     [self addSubview:self.galleryView];
     self.players = self.galleryView.players;
     __weak typeof(self) weakSelf = self;
+    
+    self.galleryView.trackedScreen = self.trackedScreen;
 
+    
     self.galleryView.shareBlock = ^void(NSArray *sharedContent) {
       weakSelf.shareBlock(sharedContent);
     };

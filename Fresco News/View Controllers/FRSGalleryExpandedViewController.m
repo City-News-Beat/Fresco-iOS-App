@@ -20,7 +20,7 @@
 #import "FRSGalleryManager.h"
 #import "FRSModerationAlertView.h"
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate, FRSGalleryDetailViewDelegate>
 
 @property (nonatomic) BOOL touchEnabled;
 
@@ -136,6 +136,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     galleryDetailView.frame = self.view.frame;
     galleryDetailView.parentVC = self;
+    galleryDetailView.trackedScreen = self.trackedScreen;
 
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
 }
@@ -587,5 +588,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [FRSTracker track:gallerySession parameters:session];
 }
+
 
 @end

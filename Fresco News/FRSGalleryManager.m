@@ -162,27 +162,21 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
         return;
     }
 
-    [FRSTracker track:galleryLiked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-                             [gallery setValue:@(TRUE) forKey:@"liked"];
-                             [[self managedObjectContext] save:Nil];
                            }];
 }
 
 - (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    [FRSTracker track:galleryUnliked parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-                             [gallery setValue:@(TRUE) forKey:@"liked"];
                            }];
 }
 
@@ -192,38 +186,22 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
         return;
     }
 
-    if ([[gallery valueForKey:@"reposted"] boolValue]) {
-        [self unrepostGallery:gallery completion:completion];
-        return;
-    }
-
-    [FRSTracker track:galleryReposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
 
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-
-                             [gallery setValue:@(TRUE) forKey:@"reposted"];
-                             [[self managedObjectContext] save:Nil];
+                               completion(responseObject, error);
                            }];
 }
 
 - (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
 
-    [FRSTracker track:galleryUnreposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
-
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
                            completion:^(id responseObject, NSError *error) {
                              completion(responseObject, error);
-
-                             [gallery setValue:@(FALSE) forKey:@"reposted"];
-
-                             [[self managedObjectContext] save:Nil];
                            }];
 }
 
