@@ -271,7 +271,7 @@
 
 #pragma mark - Custom Alerts
 
-- (instancetype)initPermissionsAlert:(id)delegate {
+- (instancetype)initPermissionsAlert {
     self = [super init];
 
     if (self) {
@@ -333,7 +333,7 @@
         [self addShadowAndClip];
         [self animateIn];
 
-        self.locationManager.delegate = delegate;
+
     }
     return self;
 }
@@ -534,7 +534,7 @@
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LocationRequested"]) {
         self.locationManager = [[CLLocationManager alloc] init];
-        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
     } else {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }

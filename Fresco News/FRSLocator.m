@@ -2,7 +2,7 @@
 //  FRSLocator.m
 //  Fresco
 //
-//  Created by Philip Bernstein on 3/13/16.
+//  Created by Elmir Kouliev on 3/13/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
@@ -22,9 +22,6 @@
     return sharedLocator;
 }
 
-/*
- Just in case we want custom initializations in the future. -init calls default setup, which calls abstracted setup methods. Will be possible in future to have different setups for different situations.
- */
 - (instancetype)init {
     self = [super init];
 
@@ -35,309 +32,224 @@
     return self;
 }
 
-
-
-/**
- Sets up CLLocationManager, and sets us up to receive UIApplicationState change notifications
- */
-- (void)checkForCachedLocation {
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-longitude"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"]) {
-        NSNumber *latitude = [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"];
-        NSNumber *longitude = [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-longitude"];
-
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:[latitude floatValue] longitude:[longitude floatValue]];
-        self.currentLocation = location;
-
-        NSDictionary *userInfo = @{ @"lat" : @(_currentLocation.coordinate.latitude),
-                                    @"lng" : @(_currentLocation.coordinate.longitude) };
-
-        // propogate last location through notification center
-        dispatch_async(dispatch_get_main_queue(), ^{
-          [[NSNotificationCenter defaultCenter] postNotificationName:FRSLocationUpdateNotification object:Nil userInfo:userInfo];
-        });
-    }
+- (BOOL)awake {
+    return self == nil;
 }
+
+#pragma mark - Configuration
 
 - (void)defaultSetup {
-    [self setupNotifications];
+//    [self checkForCachedLocation];
     [self setupLocationManager];
-    [self checkForCachedLocation];
-
-    self.backgroundBlock = ^(NSArray *locations) {
-      UIApplication *app = [UIApplication sharedApplication];
-
-      __block UIBackgroundTaskIdentifier locationUpdateTaskID = [app beginBackgroundTaskWithExpirationHandler:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-          if (locationUpdateTaskID != UIBackgroundTaskInvalid) {
-              [app endBackgroundTask:locationUpdateTaskID];
-              locationUpdateTaskID = UIBackgroundTaskInvalid;
-          }
-        });
-      }];
-
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        CLLocation *currentLocation = [locations firstObject];
-        NSDictionary *userLocation = @{ @"lat" : @(currentLocation.coordinate.latitude),
-                                        @"lng" : @(currentLocation.coordinate.longitude) };
-
-        [[FRSUserManager sharedInstance] updateUserLocation:userLocation
-                                       completion:^(id responseObject, NSError *error) {
-                                         if (error) {
-                                             NSLog(@"Location Error");
-                                         } else {
-                                             NSLog(@"Background Location Updated");
-                                         }
-
-                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                           if (locationUpdateTaskID != UIBackgroundTaskInvalid) {
-                                               [app endBackgroundTask:locationUpdateTaskID];
-                                               locationUpdateTaskID = UIBackgroundTaskInvalid;
-                                           }
-                                         });
-
-                                       }];
-      });
-
-    };
-}
-
-- (void)setupNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationStateChange:)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationStateChange:)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationStateChange:)
-                                                 name:UIApplicationWillTerminateNotification
-                                               object:nil];
 }
 
 /*
- Initializes location manager if first call, otherwise does default setup
+ Sets up CLLocationManager to be used in class.
  */
 - (void)setupLocationManager {
-
-    BOOL firstSetup = FALSE;
-
-    if (!_locationManager) {
-        _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.delegate = self;
-        firstSetup = TRUE;
-    }
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.activityType = CLActivityTypeFitness;
 
     // background notifications
-    if ([_locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]) {
-        _locationManager.allowsBackgroundLocationUpdates = TRUE;
+    if ([self.locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]) {
+        self.locationManager.allowsBackgroundLocationUpdates = TRUE;
     }
-
-    if (firstSetup) {
-        [self trackAsActive]; // first initialization, we have foreground (unless the construct of spacetime has changed)
-
-        if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-location-fail"]) {
-            [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location-fail"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-
-            if ([CLLocationManager locationServicesEnabled]) {
-
-                if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-                    [FRSTracker track:locationDisabled];
-                }
-            }
-        }
-    }
+    
+    [self updateLocationManagerForState:[[UIApplication sharedApplication] applicationState]];
 }
 
-/*
- Handles the various application state changes, and makes the matching method call
+/**
+ Checks for a cached location and sends that to the app to start
  */
-- (void)applicationStateChange:(NSNotification *)notification {
-
-    NSString *stateType = notification.name;
-
-    if (stateType == UIApplicationWillEnterForegroundNotification) {
-        [self trackAsActive];
-    } else if (stateType == UIApplicationDidEnterBackgroundNotification) {
-        [self trackAsPassive];
-    } else if (stateType == UIApplicationWillTerminateNotification) {
-        [self trackAsPassive];
-    } else { // who knows
-        [self trackAsPassive];
+- (void)checkForCachedLocation {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:cachedLocation]){
+        NSDictionary *loc = (NSDictionary *)[[NSUserDefaults standardUserDefaults] dictionaryForKey:cachedLocation];
+        self.currentLocation = [[CLLocation alloc]
+                                initWithLatitude:(CLLocationDegrees)[loc[@"latitude"] floatValue]
+                                longitude:(CLLocationDegrees)[loc[@"latitude"] floatValue]];
+        [self handlePassiveChange:self.currentLocation];
     }
-}
-
-/*
- We have the current visual foreground (phone is on, screen is lit, and they're using our app. It's generally okay to track the user quite granularly in this scenario.
- */
-- (void)trackAsActive {
-
-    _currentState = UIApplicationStateActive;
-
-    //[_locationManager requestWhenInUseAuthorization];
-
-    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [_locationManager startUpdatingLocation];
-}
-
-/*
- App is in background, we don't really need constant updates, so we register for significant location changes, not consistent updates every xx seconds or meters
- */
-- (void)trackAsPassive { // let device decide when to tell us when we need an update
-
-    _currentState = UIApplicationStateBackground;
-
-    [_locationManager stopUpdatingLocation];
-    [_locationManager startMonitoringSignificantLocationChanges];
-}
-
-/*
- This will track every xx seconds or meters, using defferment or a timer (whichever works best for battery)
- */
-- (void)trackAsModerate { // in between active and passive, a low-accuracy, high-break track
-
-    // don't think I'm actually going to implement this until I can figure out a use case.
-    if (![self stateDidChange:UIApplicationStateActive]) {
-        return;
-    }
-}
-
-/*
- Simple method to check whether or not we're receiving redundant notifications
- */
-- (BOOL)stateDidChange:(UIApplicationState)oldState {
-    return (oldState != _currentState);
-}
-
-/*
- Handle a location update from the location manager
- */
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-location"]) {
-        [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-
-        [FRSTracker track:locationEnabled];
-    }
-
-    if ([locations count] == 0) {
-        return;
-    }
-
-    switch (_currentState) {
-    case UIApplicationStateActive:
-        [self handleActiveChange:locations];
-        break;
-    case UIApplicationStateBackground:
-        [self handlePassiveChange:locations];
-        break;
-    default:
-        break;
-    }
-
-    [self sendNotificationForUpdate:locations];
-
-    _lastLocationUpdate = (unsigned long)time(NULL); // epoch timestamp
-}
-
-/*
- Handle location update as if user has application open
- */
-- (void)handleActiveChange:(NSArray *)locations {
-    if (stopTimer == Nil) {
-        [_locationManager stopUpdatingLocation];
-        stopTimer = [NSTimer timerWithTimeInterval:10
-                                            target:self
-                                          selector:@selector(restartActiveUpdates)
-                                          userInfo:Nil
-                                           repeats:FALSE];
-
-        [[NSRunLoop mainRunLoop] addTimer:stopTimer forMode:NSRunLoopCommonModes];
-        [self cacheLocation:[locations firstObject]];
-    }
-}
-
-- (void)cacheLocation:(CLLocation *)location {
-    float longitude = location.coordinate.longitude;
-    float latitude = location.coordinate.latitude;
-
-    [[NSUserDefaults standardUserDefaults] setObject:@(longitude) forKey:@"fresco-last-longitude"];
-    [[NSUserDefaults standardUserDefaults] setObject:@(latitude) forKey:@"fresco-last-latitude"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)restartActiveUpdates {
-    //NSLog(@"RESTART ACTIVE UPDATES");
-
-    if (stopTimer) {
-        [stopTimer invalidate];
-        stopTimer = Nil;
-    }
-
-    if (_currentState == UIApplicationStateActive) {
-        [_locationManager startUpdatingLocation];
-    }
-}
-
-/*
- Handle location update as if user has application in background
- */
-- (void)handlePassiveChange:(NSArray *)locations {
-    if (_backgroundBlock) {
-        _backgroundBlock(locations);
-    } else {
-        [self handleActiveChange:locations];
-    }
-
-    [self cacheLocation:[locations firstObject]];
 }
 
 /*
  Sends NSNotification out through the default notification center, for any observers to use the new location
  */
-- (void)sendNotificationForUpdate:(NSArray *)locations {
-    _currentLocation = (CLLocation *)[locations lastObject];
-
-    // sends out as NSNotification, sends array of locations as well as preformed params for API update
-    NSDictionary *userInfo = @{ @"lat" : @(_currentLocation.coordinate.latitude),
-                                @"lng" : @(_currentLocation.coordinate.longitude) };
-
-    // make sure we're on the main thread so the updates actually get receieved
+- (void)sendNotificationForUpdate {
     dispatch_async(dispatch_get_main_queue(), ^{
-      [[NSNotificationCenter defaultCenter] postNotificationName:FRSLocationUpdateNotification object:Nil userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:FRSLocationUpdateNotification
+         object:nil
+         userInfo:@{ @"location" : self.currentLocation }];
     });
+}
+
+#pragma mark - CLLocationManager Delegate
+
+/**
+ Updates locaiton manager depending on state passed
+ 
+ @param state UIApplicationState we want to confiugre the app for
+ */
+- (void)updateLocationManagerForState:(UIApplicationState)state {
+    self.currentState = state;
+    if(state == UIApplicationStateActive) {
+        [self trackAsActive];
+    } else if(state == UIApplicationStateBackground || state == UIApplicationStateInactive) {
+        [self trackAsPassive];
+        //Update immediatelly as the location manager will have one ready immediatlely if the app is launched
+        //from the background.
+        [self handlePassiveChange:self.locationManager.location];
+    }
+}
+
+
+/**
+ Starts background task to update location
+
+ @param location Current location of the user
+ */
+- (void)startBackgroundLocationTask:(CLLocation *)location {
+    //Don't create multiple background tasks until the current one is finished
+    if(self.backgroundTask != UIBackgroundTaskInvalid) return;
+    
+    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [self endBackgroundTask];
+    }];
+    
+    //Check if task is valid before trying to run the update
+    if (self.backgroundTask == UIBackgroundTaskInvalid) {
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+    } else {
+        [[FRSUserManager sharedInstance] updateUserLocation:[[CLLocation alloc] initWithLatitude:2.0 longitude:2.0]
+                                                 completion:^(id responseObject, NSError *error) {
+                                                     if (error) {
+                                                         NSLog(@"Location Error");
+                                                     } else {
+                                                         NSLog(@"Background Location Updated");
+                                                     }
+                                                 }];
+    }
+}
+
+- (void)endBackgroundTask {
+    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+    self.backgroundTask = UIBackgroundTaskInvalid;
+}
+
+/*
+ Changes location manager configuration into active state. This simply means we track the location to a higher accuracy.
+ */
+- (void)trackAsActive {
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    [self.locationManager startUpdatingLocation];
+}
+
+/*
+ Typically called when the app enters a background state and we only want to
+ track signifcant changes to the location which a lower accuracy
+ */
+- (void)trackAsPassive {
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    [self.locationManager startMonitoringSignificantLocationChanges];
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    if ([locations count] == 0) {
+        return;
+    }
+    
+    CLLocation *currentLocation = [locations firstObject];
+
+    switch (self.currentState) {
+        case UIApplicationStateActive:
+            [self handleActiveChange:currentLocation];
+            break;
+        case UIApplicationStateBackground:
+            [self handlePassiveChange:currentLocation];
+            break;
+        default:
+            [self handlePassiveChange:currentLocation];
+            break;
+    }
 }
 
 /*
  Manually request a new location from our location manager
  */
 - (void)manualUpdate {
-    if (_locationManager) {
-        [_locationManager requestLocation];
+    if (self.locationManager) {
+        [self.locationManager requestLocation];
     }
 }
 
-/* 
-    Fetch cached assignments, should be used in conjunction with API client
+/**
+ Handle location update as if user has application open. We use a timer here
+ to make sure we only save locations every 10 seconds. After 10 seconds the location manager is 
+ restarted and the tiemr is cleared. In this method it'll be re-created once the location manager handles an active change
+ 
+ When the locaiton is handled it will update state in the class so the rest
+ of the app has an update to date idea of what's going on with the 
+ location i.e. last update, current location.
+ 
+ A notificaiton will also be broadcasted here to the rest of the app with the location.
+
+ @param location Location to handle change with
  */
+- (void)handleActiveChange:(CLLocation *)location {
+    if (self.stopTimer == nil) {
+        [self.locationManager stopUpdatingLocation];
+        self.currentLocation = location;
+        self.lastLocationUpdate = [NSDate date];
+        [self cacheLocation:location];
+        [self sendNotificationForUpdate];
+        
+        self.stopTimer = [NSTimer timerWithTimeInterval:10
+                                            target:self
+                                          selector:@selector(restartLocationUpdate)
+                                          userInfo:Nil
+                                           repeats:FALSE];
 
-+ (NSArray *)localAssignments {
-    return @[];
+        [[NSRunLoop mainRunLoop] addTimer:self.stopTimer forMode:NSRunLoopCommonModes];
+    }
 }
 
-+ (NSArray *)globalAssignments {
-    return @[];
+/**
+ Handle location update if user has application in background.
+
+ @param location Location to handle change with
+ */
+- (void)handlePassiveChange:(CLLocation *)location {
+    [self startBackgroundLocationTask:location];
 }
 
-+ (NSArray *)allAssignments {
-    return @[];
+/**
+ Restarts location updates and nullifies the timer
+ */
+- (void)restartLocationUpdate {
+    if (self.stopTimer) {
+        [self.stopTimer invalidate];
+        self.stopTimer = Nil;
+    }
+    
+    [self.locationManager startUpdatingLocation];
 }
 
+/**
+ Caches location into NSUserDefaults for us
+
+ @param location CLLocation we want to save
+ */
+- (void)cacheLocation:(CLLocation *)location {
+    [[NSUserDefaults standardUserDefaults]
+     setObject:@{
+                 @"latitude": [NSNumber numberWithDouble:(float)location.coordinate.latitude],
+                 @"longitude": [NSNumber numberWithDouble:(float)location.coordinate.longitude]
+                 }
+     forKey:cachedLocation];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 
 @end

@@ -30,7 +30,7 @@
 - (void)show;
 - (void)dismiss;
 
-- (instancetype)initPermissionsAlert:(id)delegate;
+- (instancetype)initPermissionsAlert;
 - (instancetype)initFindFriendsAlert;
 - (instancetype)initSignUpAlert;
 - (instancetype)initNoConnectionAlert;

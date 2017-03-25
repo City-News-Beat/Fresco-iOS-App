@@ -11,13 +11,14 @@
 #import "FRSFileViewController.h"
 #import "UIImage+Pixels.h"
 #import "FRSWobbleView.h"
+#import "FRSLocator.h"
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,
     FRSCaptureModeVideo
 };
 
-@interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate> {
+@interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate, FRSLocatorDelegate> {
     float beginGestureScale;
     float effectiveScale;
     NSTimer *thumb;

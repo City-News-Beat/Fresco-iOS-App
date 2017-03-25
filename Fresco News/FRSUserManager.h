@@ -36,10 +36,10 @@
 /**
  Updates the user's location
  
- @param inputParams location to update the user with
+ @param location CLLocation of the current user
  @param completion complection block for response
  */
-- (void)updateUserLocation:(NSDictionary *)inputParams completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)updateUserLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 
 
 

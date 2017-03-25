@@ -33,6 +33,7 @@
 
 - (instancetype)init {
     self = [super init];
+    
     if (self) {
         self.delegate = self;
 
@@ -50,6 +51,7 @@
 
         self.notificationCenter = [NSNotificationCenter defaultCenter];
     }
+    
     return self;
 }
 
@@ -71,21 +73,19 @@
 }
 
 - (void)startLocationMonitoringForeground {
-    if (self.monitoringState == FRSLocationMonitoringStateForeground)
+    //Check if we're already monitoring
+    if (self.monitoringState == FRSLocationMonitoringStateForeground){
         return;
-    else if (self.monitoringState == FRSLocationMonitoringStateBackground) {
+    } else if (self.monitoringState == FRSLocationMonitoringStateBackground) {
         [self stopMonitoringSignificantLocationChanges];
     }
 
-    //This should be moved out of here. THis is just temporary.
-    [self requestAlwaysAuthorization];
 
     self.desiredAccuracy = kCLLocationAccuracyBest;
 
     self.monitoringState = FRSLocationMonitoringStateForeground;
 
-    //    [self startUpdatingLocation];
-    //    self.timer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
+    [self startUpdatingLocation];
 }
 
 - (void)pauseLocationMonitoring {
@@ -113,36 +113,30 @@
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusAuthorizedAlways) {
-
+        
     } else {
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (!locations.count) {
-        NSLog(@"FRSLocationManager did not return any locations");
-        return;
+        return NSLog(@"FRSLocationManager did not return any locations");
     }
 
-    if (![self significantLocationChangeForLocation:[locations lastObject]])
+    if (![self significantLocationChangeForLocation:[locations lastObject]]) {
         return;
 
+    }
+    
     self.lastAcquiredLocation = [locations lastObject];
-
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
-
-    if (self.monitoringState == FRSLocationMonitoringStateForeground) {
-        [self stopUpdatingLocation];
-    } else {
-    }
 }
 
 - (BOOL)significantLocationChangeForLocation:(CLLocation *)location {
-    if (!self.lastAcquiredLocation)
+    if (!self.lastAcquiredLocation) {
         return YES;
-
-    if ([self.lastAcquiredLocation distanceFromLocation:location] > 5.0)
+    } else if ([self.lastAcquiredLocation distanceFromLocation:location] > 5.0) {
         return YES;
+    }
 
     return NO;
 }
@@ -152,32 +146,12 @@
 }
 
 
-+ (void)calculatedDistanceFromAssignmentWithID:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-        if (responseObject != nil && !error) {
-            FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            completion([NSNumber numberWithFloat:[self calculatedDistanceFromAssignment:assignment]], error);
-        } else {
-            NSLog(@"Could not fetch distance from assignment (%@): %@", assignmentID, error.description);
-            completion(responseObject, error);
-        }
-    }];
-}
-
-
 + (float)calculatedDistanceFromAssignment:(FRSAssignment *)assignment {
     CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
     CLLocationManager *userLocation = [[CLLocationManager alloc] init];
     float distance = (float)[assignmentLocation distanceFromLocation:[userLocation location]];
     return (distance / metersInAMile);
 }
-
-
-
-
-
 
 
 @end

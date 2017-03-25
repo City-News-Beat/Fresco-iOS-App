@@ -17,8 +17,8 @@
 @import CoreMotion;
 
 //Managers
-#import "FRSLocationManager.h"
 #import "FRSAVSessionManager.h"
+#import "FRSLocator.h"
 
 //Categories
 //#import "UIColor+Additions.h"
@@ -43,10 +43,9 @@
 
 #import "FRSTrimTool.h"
 
-@interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
+@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
-@property (strong, nonatomic) FRSLocationManager *locationManager;
 @property (strong, nonatomic) CMMotionManager *motionManager;
 
 @property (strong, nonatomic) UIView *preview;
@@ -122,7 +121,6 @@
 
     if (self) {
         self.sessionManager = [FRSAVSessionManager defaultManager];
-        self.locationManager = [FRSLocationManager sharedManager];
         self.captureMode = captureMode;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
@@ -137,7 +135,6 @@
 
     if (self) {
         self.sessionManager = [FRSAVSessionManager defaultManager];
-        self.locationManager = [FRSLocationManager sharedManager];
         self.captureMode = captureMode;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
@@ -295,7 +292,6 @@
         NSInteger secondsInCamera = [exit timeIntervalSinceDate:entry];
         [FRSTracker track:cameraSession parameters:@{ activityDuration : @(secondsInCamera) }];
     }
-    [self.locationManager stopMonitoringSignificantLocationChanges];
 
     [self.sessionManager clearCaptureSession];
 
@@ -1434,7 +1430,7 @@
                                                                                     NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
 
                                                                                     if (!GPSDictionary)
-                                                                                        GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
+                                                                                        GPSDictionary = [[[FRSLocator sharedLocator].currentLocation EXIFMetadata] mutableCopy];
 
                                                                                     //Add the modified Data back into the image’s metadata
                                                                                     if (GPSDictionary) {
@@ -1620,7 +1616,10 @@
               AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
               item.keySpace = AVMetadataKeySpaceCommon;
               item.key = AVMetadataCommonKeyLocation;
-              item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", [FRSLocationManager sharedManager].location.coordinate.latitude, [FRSLocationManager sharedManager].location.coordinate.longitude];
+              item.value = [NSString
+                            stringWithFormat:@"%+08.4lf%+09.4lf/",
+                            [FRSLocator sharedLocator].currentLocation.coordinate.latitude,
+                            [FRSLocator sharedLocator].currentLocation.coordinate.longitude];
               self.sessionManager.movieFileOutput.metadata = @[ item ];
 
               if ([UIDevice currentDevice].isMultitaskingSupported) {
@@ -1727,36 +1726,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-
-    //    if (self.locationManager.managerState == LocationManagerStateForeground)
-    //        [self.locationManager stopUpdatingLocation];
-    //
-    //    if (self.locationManager.location) {
-    //
-    //        NSLog(@"%@", [FRSLocationManager sharedManager].currentLocation);
-    //
-    //        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-    //
-    //            if([responseObject firstObject] != nil){
-    //
-    //                FRSAssignment *assignment = [responseObject firstObject];
-    //
-    //                CGFloat distanceInMiles = [[FRSLocationManager sharedManager].location distanceFromLocation:assignment.locationObject] / kMetersInAMile;
-    //
-    //                //Check if in range
-    //                if(distanceInMiles < [assignment.radius floatValue]){
-    //
-    //                    [self updateLocationLabelWithAssignment:assignment];
-    //
-    //                }
-    //            }
-    //        }];
-    //    }
-    //
-    //    [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
-}
-
 - (void)updateLocationLabelWithAssignment:(FRSAssignment *)assignment {
     dispatch_async(dispatch_get_main_queue(), ^{
       if (!assignment.title)
@@ -1861,6 +1830,29 @@
           }];
     });
 }
+
+#pragma mark - FRSLocater Delegate
+
+- (void)locationChanged:(CLLocation *)newLocation {
+//    [[FRSAPICLient sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:newLocation.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+//
+//        if([responseObject firstObject] != nil){
+//
+//            FRSAssignment *assignment = [responseObject firstObject];
+//
+//            CGFloat distanceInMiles = [[FRSLocationManager sharedManager].location distanceFromLocation:assignment.locationObject] / kMetersInAMile;
+//
+//            //Check if in range
+//            if(distanceInMiles < [assignment.radius floatValue]){
+//
+//                [self updateLocationLabelWithAssignment:assignment];
+//
+//            }
+//        }
+//    }];
+}
+
+
 
 #pragma mark - Navigation
 

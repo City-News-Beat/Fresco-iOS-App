@@ -13,7 +13,6 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
 #import "FRSAlertView.h"
-#import "FRSLocationManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
@@ -41,7 +40,6 @@
 @property (nonatomic) BOOL didAuthenticateSocial;
 @property (strong, nonatomic) FRSAlertView *alert;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
-@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @end
 
@@ -62,8 +60,6 @@
     [super viewDidLoad];
 
     [self configureSpinner];
-
-    self.locationManager = [[FRSLocationManager alloc] init];
 
     self.didAnimate = NO;
     self.didTransform = NO;
@@ -243,7 +239,7 @@
                                            [[FRSAuthManager sharedInstance] setEmailUsed:self.userField.text];
                                        }
 
-                                       [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+                                       [self checkStatusAndPresentPermissionsAlert];
                                        
                                        return;
                                    }
@@ -384,7 +380,7 @@
 
           self.didAuthenticateSocial = YES;
 
-          [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+          [self checkStatusAndPresentPermissionsAlert];
           [self popToOrigin];
 
           return;
@@ -482,7 +478,7 @@
                                                               }];
                                                           }];
             self.didAuthenticateSocial = YES;
-            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+            [self checkStatusAndPresentPermissionsAlert];
             [self popToOrigin];
             
             [spinner stopLoading];

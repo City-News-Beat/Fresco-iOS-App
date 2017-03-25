@@ -19,7 +19,7 @@
 #import "FRSStoryManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
-#import "FRSLocationManager.h"
+#import "CLLocation+Fresco.h"
 #import <Smooch/Smooch.h>
 
 static BOOL isDeeplinking;
@@ -99,7 +99,7 @@ BOOL isSegueingToAssignment;
             if ([[push objectForKey:IS_GLOBAL] boolValue]) { // Check if global
                 [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
             } else { // Set DISTANCE_AWAY if not global
-                [paramsToTrack setObject:@([FRSLocationManager calculatedDistanceFromAssignment:assignment]) forKey:DISTANCE_AWAY];
+                [paramsToTrack setObject:@([CLLocation calculatedDistanceFromAssignment:assignment]) forKey:DISTANCE_AWAY];
             }
             
             // Track notificationOpened event only if BOOL shouldTrack is enabled

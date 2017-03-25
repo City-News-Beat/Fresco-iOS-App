@@ -946,7 +946,7 @@
     if (toggle.on) {
 
         if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
             alert.locationManager.delegate = self;
             [alert show];
         }

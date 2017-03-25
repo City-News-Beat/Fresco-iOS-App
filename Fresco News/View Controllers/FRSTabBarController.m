@@ -2,7 +2,7 @@
 //  FRSTabBarController.m
 //  Fresco
 //
-//  Created by Danny Boy Sun on 12/18/15.
+//  Created by Daniel Sun on 12/18/15.
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
@@ -18,7 +18,6 @@
 #import "FRSNavigationBar.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserNotificationViewController.h"
-#import "FRSLocationManager.h"
 #import "FRSBaseViewController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
@@ -28,7 +27,6 @@
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 @property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
-@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @end
 
@@ -241,7 +239,7 @@
 
 - (void)checkLocationAndPresentPermissionsAlert {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
         [alert show];
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         delegate.didPresentPermissionsRequest = YES;
@@ -284,7 +282,7 @@
 
     if ([self.tabBar.items indexOfObject:item] == 2) {
         if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
             [alert show];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             delegate.didPresentPermissionsRequest = YES;
