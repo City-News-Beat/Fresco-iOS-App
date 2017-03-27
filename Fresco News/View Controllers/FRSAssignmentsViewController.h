@@ -11,11 +11,10 @@
 #import "MagicalRecord.h"
 #import "FRSAssignment.h"
 #import "Fresco.h"
-#import "FRSLocator.h"
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate, FRSLocatorDelegate> {
+@interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate> {
     __weak UIScrollView *currentScroller; // weak b/c we only want to hold reference when in view
     BOOL isScrolling;
 

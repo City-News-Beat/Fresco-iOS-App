@@ -44,9 +44,6 @@ static NSString *const FRSLocationUpdateNotification = @"FRSLocationUpdateNotifi
  */
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
-
-@property (nonatomic, strong) void (^completionHandler)(UIBackgroundFetchResult);
-
 /**
  Singleton accessor
 

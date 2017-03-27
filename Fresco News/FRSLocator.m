@@ -28,7 +28,7 @@
     self = [super init];
 
     if (self) {
-        [self defaultSetup];
+        [self setupLocationManager];
     }
 
     return self;
@@ -40,11 +40,6 @@
 
 #pragma mark - Configuration
 
-- (void)defaultSetup {
-//    [self checkForCachedLocation];
-    [self setupLocationManager];
-}
-
 /*
  Sets up CLLocationManager to be used in class.
  */
@@ -52,12 +47,15 @@
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     self.locationManager.activityType = CLActivityTypeFitness;
-    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.distanceFilter = 10;
+    self.locationManager.pausesLocationUpdatesAutomatically = YES;
 
     // background notifications
     if ([self.locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]) {
         self.locationManager.allowsBackgroundLocationUpdates = TRUE;
     }
+    
+    self.currentLocation = [self cachedLocation];
     
     [self updateLocationManagerForState:[[UIApplication sharedApplication] applicationState]];
 }
@@ -78,7 +76,6 @@
     
     self.currentState = state;
 }
-
 
 /*
  Changes location manager configuration into active state. This simply means we track the location to a higher accuracy.
@@ -134,8 +131,6 @@
     //If timer is still valid, return
     if(self.stopTimer != nil) return;
     
-    CLLocation *currentLocation = [locations firstObject];
-
     switch (self.currentState) {
         case UIApplicationStateActive:
             [self handleActiveChange];
@@ -185,8 +180,9 @@
 - (void)handlePassiveChange {
     [self startBackgroundLocationTask];
     [self cacheLocation:self.currentLocation];
+    [self sendLocationToServerWithCompletionHandler:nil];
     
-    //Restart in 60 seconds
+    //Restart in 20 seconds
     self.stopTimer = [NSTimer timerWithTimeInterval:20
                                              target:self
                                            selector:@selector(restartLocationUpdate)
@@ -260,8 +256,17 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSDictionary *)cachedLocation {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:cachedLocation];
+- (CLLocation *)cachedLocation {
+    NSDictionary *location = [[NSUserDefaults standardUserDefaults] objectForKey:cachedLocation];
+    
+    if(!location || location[@"longitude"] == nil || location[@"latitude"] == nil) {
+        return nil;
+    }
+
+    
+    return [[CLLocation alloc]
+            initWithLatitude:(CLLocationDegrees)[location[@"latitude"] floatValue]
+            longitude:(CLLocationDegrees)[location[@"longitude"] floatValue]];
 }
 
 
@@ -274,22 +279,20 @@
  @param completion The completion handler sent to us through the delegate method. Must be called when finished.
  */
 - (void)sendLocationToServerWithCompletionHandler:(id)completion{
-    self.completionHandler = completion;
+    void (^completionHandler)(UIBackgroundFetchResult) = completion;
     
-    NSDictionary *location = [self cachedLocation];
+    CLLocation *location = [self cachedLocation];
     
-    if(!location || location[@"longitude"] == nil || location[@"latitude"] == nil) {
-        return self.completionHandler(UIBackgroundFetchResultNoData);
+    if(!location) {
+        if(completionHandler) completionHandler(UIBackgroundFetchResultNoData);
+        return;
     }
-    
-    
-    CLLocation *loc = [[CLLocation alloc] initWithLatitude:(CLLocationDegrees)[location[@"latitude"] floatValue] longitude:(CLLocationDegrees)[location[@"longitude"] floatValue]];
-    
-    [[FRSUserManager sharedInstance] updateUserLocation:loc completion:^(id responseObject, NSError *error) {
+
+    [[FRSUserManager sharedInstance] updateUserLocation:location completion:^(id responseObject, NSError *error) {
         if(error){
-            self.completionHandler(UIBackgroundFetchResultFailed);
+            if(completionHandler) completionHandler(UIBackgroundFetchResultFailed);
         } else {
-            self.completionHandler(UIBackgroundFetchResultNewData);
+           if(completionHandler) completionHandler(UIBackgroundFetchResultNewData);
         }
     }];
 }
