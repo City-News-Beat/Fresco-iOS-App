@@ -183,12 +183,6 @@
     }
 }
 
--(void)deepLinkToGallery {
-    
-    
-}
-
-
 
 /**
  Presents failure view in navigation bar
