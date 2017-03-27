@@ -354,6 +354,7 @@
 		070D66D11C2B395D00AB3D9D /* OEParallax.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OEParallax.m; path = "View Controllers/Onboard/OEParallax.m"; sourceTree = "<group>"; };
 		0713D12C1CE5121900F79F49 /* FRSAwkwardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAwkwardView.h; sourceTree = "<group>"; };
 		0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAwkwardView.m; sourceTree = "<group>"; };
+		072492291E8967D10019D1F7 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		072654E21E3951DF00A49DEC /* FRSUserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserView.m; sourceTree = "<group>"; };
 		072654E31E3951DF00A49DEC /* FRSUserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserView.h; sourceTree = "<group>"; };
 		072654E41E3951DF00A49DEC /* FRSGalleryFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryFooterView.m; sourceTree = "<group>"; };
@@ -3378,11 +3379,12 @@
 		D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				072492291E8967D10019D1F7 /* Model 4.xcdatamodel */,
 				070333451E52811400F57562 /* Model 3.xcdatamodel */,
 				D433E5651DF1D6A5007440EC /* Model 2.xcdatamodel */,
 				D433E5661DF1D6A5007440EC /* Model.xcdatamodel */,
 			);
-			currentVersion = 070333451E52811400F57562 /* Model 3.xcdatamodel */;
+			currentVersion = 072492291E8967D10019D1F7 /* Model 4.xcdatamodel */;
 			path = Model2.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
