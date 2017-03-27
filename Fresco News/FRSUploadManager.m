@@ -293,7 +293,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  to represent one signal percentage
  */
 - (void)updateProgress {
-    //Total progress
+    // Default progress to 10% to draw the users attention to the bar when uploading.
     float progress = 0.1;
     __block float uploadingProgress = 0.1;
     
