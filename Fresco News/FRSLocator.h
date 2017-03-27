@@ -12,13 +12,6 @@
 static NSString *const FRSLocationUpdateNotification = @"FRSLocationUpdateNotification";
 
 /**
- Allows us to add ability for background task (in case app is killed in background)
-
- @param location Location to handle
- */
-typedef void (^BackgroundBlock)(CLLocation *location);
-
-/**
  General purpose location manager used across the app. Handles location monitoring in foreground and background. This class
  reacts to Application state changes i.e. foreground, background.
  */
@@ -29,7 +22,7 @@ typedef void (^BackgroundBlock)(CLLocation *location);
  */
 @property (nonatomic, assign) UIApplicationState currentState;
 
-@property (nonatomic, assign) NSInteger backgroundTask;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTask;
 
 /**
  Timer used to start and stop the location manager
@@ -51,10 +44,8 @@ typedef void (^BackgroundBlock)(CLLocation *location);
  */
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
-/**
- Block to execute if app is in background state
- */
-@property (nonatomic, assign) BackgroundBlock backgroundBlock;
+
+@property (nonatomic, strong) void (^completionHandler)(UIBackgroundFetchResult);
 
 /**
  Singleton accessor
@@ -78,6 +69,8 @@ typedef void (^BackgroundBlock)(CLLocation *location);
  @param state UIApplicationState we want to confiugre the app for
  */
 - (void)updateLocationManagerForState:(UIApplicationState)state;
+
+- (void)sendLocationToServerWithCompletionHandler:(id)completion;
 
 @end
 

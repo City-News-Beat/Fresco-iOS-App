@@ -30,6 +30,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
     [FRSTracker configureFabric];
     [FRSTracker launchAdjust];
@@ -225,12 +227,12 @@
     [[FRSLocator sharedLocator] updateLocationManagerForState:UIApplicationStateActive];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationDidEnterBackground:(UIApplication *)application {
     [[FRSLocator sharedLocator] updateLocationManagerForState:UIApplicationStateBackground];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[FRSLocator sharedLocator] updateLocationManagerForState:UIApplicationStateBackground];
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    [[FRSLocator sharedLocator] sendLocationToServerWithCompletionHandler:completionHandler];
 }
 
 #pragma mark - Local/Push Notifications
