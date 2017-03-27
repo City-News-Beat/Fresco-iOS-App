@@ -98,7 +98,6 @@
 
     _contentScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height - 100);
-    _contentScroller.bounces = YES;
     _contentScroller.pagingEnabled = YES;
     _contentScroller.delegate = self;
 
