@@ -39,14 +39,16 @@
 
 - (void)setup {
     
-    // This should be refactored..
+    // TODO: Refactor this
+    // Currently, we are using white space to make room for the [settings] button, which changes depending on the device
+    // and hard coding constants on the constraints.
     
     if (!self.isSetup) {
         self.isSetup = TRUE;
         self.textView.delegate = (id<UITextViewDelegate>)self;
     }
     self.textView.allowsEditingTextAttributes = false;
-    NSString *attribText = [NSString stringWithFormat:@"We can only verify photos and videos from the past 24 hours, taken with location data. If nothing is showing up, make sure Location is enabled in                 for next time."];
+    NSString *attribText = [NSString stringWithFormat:@"We can only verify photos and videos from the past 7 days, taken with location data. If nothing is showing up, make sure Location is enabled in\n                 for next time."];
     NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
     paragraphStyle.minimumLineHeight = 20;
     paragraphStyle.maximumLineHeight = 20;
@@ -60,11 +62,13 @@
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:attribText attributes:attribs];
     
     self.missingSomethingMainText.attributedText = attributedText;
+    self.settingsRightConstraint.constant = -45;
+
     if (IS_IPHONE_6_PLUS) {
         self.settingsRightConstraint.constant = -9;
         self.settingsTopConstraint.constant = 53.5;
         
-        NSString *attribText = [NSString stringWithFormat:@"We can only verify photos and videos from the\n past 24 hours, taken with location data. If\n nothing is showing up, make sure Location is\n enabled in                 for next time."];
+        NSString *attribText = [NSString stringWithFormat:@"We can only verify photos and videos from the\n past 7 days, taken with location data. If\n nothing is showing up, make sure Location is\n enabled in                 for next time."];
         NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
         paragraphStyle.lineSpacing = 1.2;
         paragraphStyle.alignment = NSTextAlignmentCenter;
@@ -81,7 +85,7 @@
         self.chatWithTopConstraint.constant = -3;
         self.missingSomeMainTextTopCon.constant = 75;
     } else if (IS_IPHONE_5) {
-        NSString *attribText = [NSString stringWithFormat:@"We can only verify photos and videos from the past 24 hours, taken with location data. If nothing is showing up, make sure Location is enabled in\n                  for next time."];
+        NSString *attribText = [NSString stringWithFormat:@"We can only verify photos and videos from the past 7 days, taken with location data. If nothing is showing up, make sure Location is enabled in\n                  for next time."];
         NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
         paragraphStyle.minimumLineHeight = 20;
         paragraphStyle.maximumLineHeight = 20;
