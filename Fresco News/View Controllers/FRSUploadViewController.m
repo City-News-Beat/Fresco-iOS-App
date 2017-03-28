@@ -916,7 +916,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                          NSArray *global = responseObject[@"global"];
                                                          self.assignmentsArray = [[NSMutableArray alloc] init];
                                                          for (NSDictionary *assignment in nearBy) {
-                                                             NSArray *coords = assignment[@"location"][@"coordinates"];
+                                                             /*NSArray *coords = assignment[@"location"][@"coordinates"];
                                                              CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
                                                              float radius = [assignment[@"radius"] floatValue];
 
@@ -933,7 +933,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
                                                              if (shouldAdd) {
                                                                  [self.assignmentsArray addObject:assignment];
-                                                             }
+                                                             }*/
+                                                             [self.assignmentsArray addObject:assignment];
                                                          }
 
                                                          self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;

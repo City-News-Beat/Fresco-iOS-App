@@ -85,8 +85,8 @@
     #else
         //Device
         // only load assets w/ creation date within the defined maximum age
-        NSDate *yesterday = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
-        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", yesterday];
+        NSDate *date = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
+        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", date];
         options.predicate = dayPredicate;
     #endif
 
