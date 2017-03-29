@@ -24,7 +24,7 @@
     self.currentAsset = asset;
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
-                       targetSize:CGSizeMake(100.0, 100.0)
+                       targetSize:CGSizeMake(150.0, 150.0)
                       contentMode:PHImageContentModeAspectFill
                           options:nil
                     resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
