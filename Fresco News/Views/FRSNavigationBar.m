@@ -176,8 +176,8 @@
             
             //Present error to user if needed
             if([notificationInfo[@"error"] isKindOfClass:[NSError class]]){
-                NSError *uploadError = (NSError *) notificationInfo[@"error"];
-                [((FRSAppDelegate *)[[UIApplication sharedApplication] delegate]) presentError:uploadError withTitle:@"Upload error"];
+                NSError *error = (NSError *) notificationInfo[@"error"];
+                [((FRSAppDelegate *)[[UIApplication sharedApplication] delegate]) presentError:error withTitle:uploadError];
             }
         });
     }
