@@ -134,6 +134,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self resetView];
 }
 
 - (void)configureUI {
