@@ -41,6 +41,11 @@ static NSString *const twitterConnected = @"twitter-connected";
 static NSString *const twitterHandle = @"twitter-handle";
 static NSString *const kClientToken = @"kClientToken";
 static NSString *const kUserToken = @"kUserToken";
+static NSString *const cachedLocation = @"cachedLocation";
+static NSString *const initialLocationRequested = @"initialLocationRequested";
+
+
+
 
 // nsnotification
 static NSString *const enableAssignmentAccept = @"enableAssignmentAccept";

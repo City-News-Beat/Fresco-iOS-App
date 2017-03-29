@@ -41,6 +41,10 @@
             identityDictionary[@"email"] = user.email;
         }
         
+        if(user.username && ![user.username isEqual:[NSNull null]]) {
+            identityDictionary[@"username"] = user.username;
+        }
+        
         if(userID != nil) {
             [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
             [self tagUXCamUser:userID];

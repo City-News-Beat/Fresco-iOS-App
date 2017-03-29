@@ -53,5 +53,6 @@
 - (void)cancelTapped;
 - (void)actionTapped;
 
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end

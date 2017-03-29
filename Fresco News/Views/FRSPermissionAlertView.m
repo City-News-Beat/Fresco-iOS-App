@@ -26,7 +26,7 @@
 
 @implementation FRSPermissionAlertView
 
-- (instancetype)initWithLocationManagerDelegate:(id)delegate {
+- (instancetype)initPermissionsAlert {
     self = [super init];
     
     if (self) {
@@ -87,7 +87,6 @@
         [self addShadowAndClip];
         [self animateIn];
         
-        self.locationManager.delegate = delegate;
     }
     return self;
 }

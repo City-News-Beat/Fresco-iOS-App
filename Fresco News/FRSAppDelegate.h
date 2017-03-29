@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
-#import <UserNotifications/UserNotifications.h>
 #import "FRSCoreDataController.h"
 #import "FRSAlertView.h"
 

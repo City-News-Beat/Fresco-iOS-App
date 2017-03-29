@@ -11,7 +11,6 @@
 #import "FRSTabBarController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAlertView.h"
-#import "FRSLocationManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import <UXCam/UXCam.h>
@@ -41,7 +40,6 @@
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
-@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @end
 
@@ -62,8 +60,6 @@
     [super viewDidLoad];
 
     [self configureSpinner];
-
-    self.locationManager = [[FRSLocationManager alloc] init];
 
     self.didAnimate = NO;
     self.didTransform = NO;
@@ -308,8 +304,9 @@
                                            [[FRSAuthManager sharedInstance] setEmailUsed:self.userField.text];
                                        }
 
-                                       [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
 
+                                       [self checkStatusAndPresentPermissionsAlert];
+                                       
                                        return;
                                    }
 
@@ -361,7 +358,7 @@
 
           self.didAuthenticateSocial = YES;
 
-          [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+          [self checkStatusAndPresentPermissionsAlert];
           [self popToOrigin];
 
           return;
@@ -435,19 +432,19 @@
                                                             }
                                                           }];
                                                         }];
-          self.didAuthenticateSocial = YES;
-          [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-          [self popToOrigin];
-
-          [spinner stopLoading];
-          [spinner removeFromSuperview];
-          self.facebookButton.hidden = false;
-          return;
-      }
-
-      [spinner stopLoading];
-      [spinner removeFromSuperview];
-      self.facebookButton.hidden = false;
+            self.didAuthenticateSocial = YES;
+            [self checkStatusAndPresentPermissionsAlert];
+            [self popToOrigin];
+            
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            self.facebookButton.hidden = false;
+            return;
+        }
+        
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.facebookButton.hidden = false;
     }
                           parent:self
                          manager:self.fbLoginManager];

@@ -11,6 +11,6 @@
 
 @interface FRSPermissionAlertView : FRSAlertView
 
-- (instancetype)initWithLocationManagerDelegate:(id)delegate;
+- (instancetype)initPermissionsAlert;
 
 @end

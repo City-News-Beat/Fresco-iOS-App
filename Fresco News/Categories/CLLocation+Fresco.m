@@ -39,4 +39,11 @@
 }
 
 
++ (float)calculatedDistanceFromAssignment:(FRSAssignment *)assignment {
+    CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
+    CLLocationManager *userLocation = [[CLLocationManager alloc] init];
+    float distance = (float)[assignmentLocation distanceFromLocation:[userLocation location]];
+    return (distance / metersInAMile);
+}
+
 @end

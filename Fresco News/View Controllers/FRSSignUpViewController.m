@@ -914,7 +914,9 @@
     if (toggle.on) {
 
         if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self];
+
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initPermissionsAlert];
+            alert.locationManager.delegate = self;
             [alert show];
         }
 

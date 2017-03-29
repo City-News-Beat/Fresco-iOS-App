@@ -9,7 +9,6 @@
 #import "FRSUserManager.h"
 #import "FRSAuthManager.h"
 #import "FRSHomeViewController.h"
-#import "FRSLocationManager.h"
 #import "FRSAppDelegate.h"
 #import "NSError+Fresco.h"
 
@@ -119,27 +118,13 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
     [[FRSUserManager sharedInstance] updateUserWithDigestion:mutableDigestion completion:completion];
 }
 
-- (void)updateUserLocation:(NSDictionary *)inputParams completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        return completion(nil, [NSError unAuthenticatedError]);
-    }
-
-    [[FRSAPIClient sharedClient] post:locationEndpoint
-                       withParameters:inputParams
-                           completion:^(id responseObject, NSError *error) {
-                               if(completion) completion(responseObject, error);
-                           }];
-}
-
 - (void)postAvatarWithParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint
                              withParameters:parameters
                                    withData:parameters[@"avatar"]
                                    withName:@"avatar"
                                withFileName:@"photo.jpg"
-                                 completion:^(id responseObject, NSError *error) {
-                                   completion(responseObject, error);
-                                 }];
+                                 completion:completion];
 }
 
 - (FRSUser *)authenticatedUser {
@@ -184,14 +169,7 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
         [self.managedObjectContext performBlock:^{
             [self saveUserFields:responseObject andSynchronously:NO];
         }];
-        
-        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if ([[FRSAuthManager sharedInstance] isAuthenticated] && !appDelegate.didPresentPermissionsRequest) {
-            if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
-                [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-            }
-        }
-        
+
         [self refreshSettings];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -363,16 +341,26 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 
 #pragma mark - Location
 
-- (void)handleLocationUpdate:(NSNotification *)userInfo {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self updateUserLocation:userInfo.userInfo
-                    completion:^(NSDictionary *response, NSError *error) {
-                      if (error) {
-                          NSLog(@"Location Error: %@ %@", response, error);
-                      }
-                    }];
-    });
+- (void)handleLocationUpdate:(NSNotification *)notification {
+    if([notification.userInfo[@"location"] isKindOfClass:[CLLocation class]]) {
+        [self updateUserLocation:(CLLocation *)notification.userInfo[@"location"] completion:nil];
+    }
 }
+
+- (void)updateUserLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
+        if(completion) return completion(nil, [NSError unAuthenticatedError]);
+    } else {
+        NSLog(@"UPDATED USER LOCATION");
+        [[FRSAPIClient sharedClient] post:locationEndpoint
+                           withParameters:@{
+                                            @"lat": [NSNumber numberWithDouble:(float)location.coordinate.latitude],
+                                            @"lng": [NSNumber numberWithDouble:(float)location.coordinate.longitude]
+                                            }
+                               completion:completion];
+    }
+}
+
 
 #pragma mark - Settings
 

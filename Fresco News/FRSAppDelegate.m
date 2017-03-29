@@ -10,22 +10,26 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSNavigationController.h"
-#import "FRSLocationManager.h"
 #import "MagicalRecord.h"
 #import <CoreLocation/CoreLocation.h>
 #import "SAMKeychain.h"
 #import "FRSUser.h"
 #import "FRSNavigationBar.h"
 #import "FRSStoryDetailViewController.h"
+#import "EndpointManager.h"
+#import "MagicalRecord.h"
+#import "Fresco.h"
+#import "FRSNavigationBar.h"
 #import "FRSNavigationController.h"
 #import "FRSUploadManager.h"
 #import "FRSNotificationHandler.h"
-#import <UserNotifications/UserNotifications.h>
-#import "EndpointManager.h"
+#import "FRSTabBarController.h"
+#import "FRSOnboardingViewController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSSessionManager.h"
 #import "FRSNotificationManager.h"
+#import "FRSOnboardingViewController.h"
 #import "Adjust.h"
 #import <Stripe/Stripe.h>
 #import "FRSIndicatorDot.h"
@@ -35,11 +39,11 @@
 
 @implementation FRSAppDelegate
 
-#pragma mark - Startup and Application States
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
     [FRSTracker configureFabric];
     [FRSTracker launchAdjust];
@@ -47,6 +51,7 @@
     [FRSTracker startSegmentAnalytics];
     [FRSTracker trackUser];
     
+    //Check if we 
     if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[FRSAuthManager sharedInstance] logout];
     } else {
@@ -92,19 +97,21 @@
 
         return YES; // no other stuff going on (no quick action handling, etc)
     }
-
+    
+    //Track location in the background
+    if(launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+        [[FRSLocator sharedLocator] updateLocationManagerForState:UIApplicationStateBackground];
+    }
     
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
         [FRSNotificationHandler handleNotification:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo] track:YES];
-    }
-    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+    }else if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         // If we don't check for <iOS 10, multiple calls to handleRemotePush will be made.
         // Once here, and once in userNotificationCenter:didReceiveNotificationResponse.
         if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
             [FRSNotificationHandler handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] track:YES];
         }
-    }
-    if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
+    } else if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
 
@@ -112,12 +119,6 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
     return YES;
-}
-
-- (void)configureStartDate {
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
-        [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:startDate];
-    }
 }
 
 
@@ -138,28 +139,6 @@
 }
 
 
-- (BOOL)isValue:(id)value {
-    if (value != Nil && ![value isEqual:[NSNull null]]) {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-
-/**
- Tells us if the user is running the app the first time and also sets it to true from there on out
-
- @return True if the first run, No if not he first run
- */
-- (BOOL)isFirstRun {
-    BOOL firstRun = [[NSUserDefaults standardUserDefaults] boolForKey:isFirstRun];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isFirstRun];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    return !firstRun;
-}
-
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
     sourceApplication:(NSString *)sourceApplication
            annotation:(id)annotation {
@@ -172,31 +151,35 @@
     return handled;
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-    didReceiveNotificationResponse:(UNNotificationResponse *)response
-             withCompletionHandler:(void (^)())completionHandler {
-
-    NSLog(@"Handle push from background or closed");
-    // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
-    NSLog(@"%@", response.notification.request.content.userInfo);
-    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo track:YES];
-}
-
-
-- (NSURL *)applicationDocumentsDirectory {
-    // The directory the application uses to store the Core Data store file. This code uses a directory named "com.opentoggle.c" in the application's documents directory.
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
-
 #pragma mark - Core Data Saving support
 
 - (void)saveContext {
     [[self coreDataController] saveContext];
 }
 
+
+#pragma mark - App Configuration
+
+- (void)configureStartDate {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
+        [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:startDate];
+    }
+}
+
 - (UITabBarController *)tabBar {
     return self.tabBarController;
+}
+
+/**
+ Tells us if the user is running the app the first time and also sets it to true from there on out
+ 
+ @return True if the first run, No if not he first run
+ */
+- (BOOL)isFirstRun {
+    BOOL firstRun = [[NSUserDefaults standardUserDefaults] boolForKey:isFirstRun];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isFirstRun];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    return !firstRun;
 }
 
 - (void)startAuthentication {
@@ -244,37 +227,70 @@
     }
 }
 
+
+#pragma mark - App Lifecycle
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [FRSTracker stopUXCam];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [FRSTracker startUXCam];
+    [[FRSLocator sharedLocator] updateLocationManagerForState:UIApplicationStateActive];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    [[FRSLocator sharedLocator] updateLocationManagerForState:UIApplicationStateBackground];
+}
+
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    [[FRSLocator sharedLocator] sendLocationToServerWithCompletionHandler:completionHandler];
+}
+
+#pragma mark - Local/Push Notifications
+
 - (void)registerForPushNotifications {
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0") == FALSE) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
-
+        
     } else {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
         center.delegate = self;
         [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge)
                               completionHandler:^(BOOL granted, NSError *_Nullable error) {
-                                if (!error) {
-                                    [[UIApplication sharedApplication] registerForRemoteNotifications]; // required to get the app to do anything at all about push notifications
-                                    NSLog(@"Push registration success.");
-                                } else {
-                                    NSLog(@"Push registration FAILED");
-                                    NSLog(@"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription);
-                                    NSLog(@"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion);
-                                }
+                                  if (!error) {
+                                      [[UIApplication sharedApplication] registerForRemoteNotifications]; // required to get the app to do anything at all about push notifications
+                                      NSLog(@"Push registration success.");
+                                  } else {
+                                      NSLog(@"Push registration FAILED");
+                                      NSLog(@"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription);
+                                      NSLog(@"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion);
+                                  }
                               }];
     }
 }
 
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)())completionHandler {
+    
+    NSLog(@"Handle push from background or closed");
+    // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
+    NSLog(@"%@", response.notification.request.content.userInfo);
+    [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo track:YES];
+}
+
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // iOS 10 will handle notifications through other methods
     // custom code to handle notification content
-
+    
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
         [FRSNotificationHandler handleNotification:userInfo track:YES];
     }
-
+    
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
@@ -287,40 +303,40 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [self application:application
-        didReceiveRemoteNotification:userInfo
-              fetchCompletionHandler:^(UIBackgroundFetchResult result) {
-                // nothing
-                  [FRSNotificationHandler handleNotification:userInfo track:YES];
-              }];
+didReceiveRemoteNotification:userInfo
+fetchCompletionHandler:^(UIBackgroundFetchResult result) {
+    // nothing
+    [FRSNotificationHandler handleNotification:userInfo track:YES];
+}];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     const unsigned *tokenData = [deviceToken bytes];
     NSString *newDeviceToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-                                                          ntohl(tokenData[0]), ntohl(tokenData[1]), ntohl(tokenData[2]),
-                                                          ntohl(tokenData[3]), ntohl(tokenData[4]), ntohl(tokenData[5]),
-                                                          ntohl(tokenData[6]), ntohl(tokenData[7])];
-
+                                ntohl(tokenData[0]), ntohl(tokenData[1]), ntohl(tokenData[2]),
+                                ntohl(tokenData[3]), ntohl(tokenData[4]), ntohl(tokenData[5]),
+                                ntohl(tokenData[6]), ntohl(tokenData[7])];
+    
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] == Nil) {
         [FRSTracker track:notificationsEnabled];
     }
-
+    
     NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
-
+    
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-
+    
     NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAuthManager sharedInstance] currentInstallation];
-
+    
     if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && ![oldDeviceToken isEqualToString:newDeviceToken]) {
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
-
+    
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
-            completion:^(id responseObject, NSError *error) {
-              NSLog(@"Updated user installation");
-            }];
+                                                      completion:^(id responseObject, NSError *error) {
+                                                          NSLog(@"Updated user installation");
+                                                      }];
     }
 }
 
@@ -329,30 +345,6 @@
     [FRSNotificationHandler handleNotification:notification.userInfo track:NO];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    [FRSTracker stopUXCam];
-    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
-    if ([[FRSAuthManager sharedInstance] isAuthenticated] && !self.didPresentPermissionsRequest) {
-        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
-            [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-        }
-    }
-    
-    [FRSTracker startUXCam];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{ @"type" : @"reset" }];
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-}
-
-#pragma mark - Push Notifications
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     [FRSTracker track:notificationsDisabled];
@@ -451,11 +443,6 @@
                                                         object:nil];
 }
 
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
-    // pass responsibility onto FRSFileUploadManager (will trigger completion handler when done with work needed)
-    // [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
-}
-
 #pragma mark - Errors
 
 
@@ -493,15 +480,6 @@
     }
 }
 
-- (FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
-    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
-    detailView.story = story;
-    [detailView reloadData];
-    return detailView;
-}
-
-- (void)popViewController {
-}
 
 - (void)segueHome {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
