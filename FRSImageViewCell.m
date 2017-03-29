@@ -22,6 +22,7 @@
 
 - (void)loadAsset:(PHAsset *)asset {
     self.currentAsset = asset;
+    self.imageView.backgroundColor = [UIColor frescoShadowColor];
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
                        targetSize:CGSizeMake(150.0, 150.0)
