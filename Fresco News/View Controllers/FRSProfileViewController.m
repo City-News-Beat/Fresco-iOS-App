@@ -597,8 +597,6 @@
 
                                                   self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
 
-                                                  [self.tableView reloadData];
-
                                                   if (reload) {
                                                       self.currentFeed = self.galleries;
                                                       [self.tableView reloadData];
@@ -1014,8 +1012,7 @@
 
     if (self.currentFeed != self.galleries) {
         self.currentFeed = self.galleries;
-        [self fetchGalleries];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
     [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
@@ -1037,7 +1034,7 @@
 
     if (self.currentFeed != self.likes) {
         self.currentFeed = self.likes;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
     [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
@@ -1182,7 +1179,7 @@
 }
 
 - (void)loadMoreInCurrentFeed {
-    if (isReloading || isFinishedLikes) {
+    if (isReloading || isFinishedLikes || isFinishedUser) {
         return;
     }
 
