@@ -1184,17 +1184,14 @@
     }
 
     isReloading = YES;
-    FRSGallery *gallery = [self.likes lastObject];
-
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-
     FRSUser *authUser = self.representedUser;
 
     if (self.currentFeed == self.likes) {
+        
+        FRSGallery *gallery = [self.likes lastObject];
+        
         [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
-                                                          last:timeStamp
+                                                          last:gallery.uid
                                                     completion:^(id responseObject, NSError *error) {
                                                       isReloading = NO;
 
@@ -1211,8 +1208,10 @@
 
                                                     }];
     } else if (self.currentFeed == self.galleries) {
+        FRSGallery *gallery = [self.galleries lastObject];
+        
         [[FRSFeedManager sharedInstance] fetchGalleriesForUser:authUser
-                                                          last:timeStamp
+                                                          last:gallery.uid
                                                     completion:^(id responseObject, NSError *error) {
                                                       isReloading = NO;
 
