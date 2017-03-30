@@ -8,6 +8,8 @@
 #import "FRSCarouselCell.h"
 #import "FRSSnapKit.h"
 
+#define ASSET_SIZE 500
+
 @implementation FRSCarouselCell
 
 - (void)awakeFromNib {
@@ -24,11 +26,10 @@
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self addSubview:imageView];
-
         dispatch_async(dispatch_get_main_queue(), ^{
           [[PHImageManager defaultManager]
               requestImageForAsset:asset
-                        targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height)
+                        targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)
                        contentMode:PHImageContentModeAspectFill
                            options:nil
                      resultHandler:^(UIImage *result, NSDictionary *info) {
