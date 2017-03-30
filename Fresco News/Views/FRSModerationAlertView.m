@@ -29,11 +29,6 @@
 
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 356 / 2, ALERT_WIDTH, 356);
 
-        [self configureDarkOverlay];
-
-        /* Alert Box */
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -101,8 +96,6 @@
 
         [self addTextView];
 
-        [self addShadowAndClip];
-        [self animateIn];
     }
     return self;
 }
@@ -112,11 +105,6 @@
 
     if (self) {
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 356 / 2, ALERT_WIDTH, 400);
-
-        [self configureDarkOverlay];
-
-        /* Alert Box */
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
 
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
@@ -187,8 +175,6 @@
 
         [self addTextView];
 
-        [self addShadowAndClip];
-        [self animateIn];
     }
     return self;
 }

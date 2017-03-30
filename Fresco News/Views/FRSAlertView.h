@@ -43,12 +43,9 @@
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate;
 
-- (void)configureDarkOverlay;
 - (void)show;
 - (void)dismiss;
 - (void)animateOut;
-- (void)animateIn;
-- (void)addShadowAndClip;
 - (void)adjustFrame;
 - (void)cancelTapped;
 - (void)actionTapped;

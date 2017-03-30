@@ -19,14 +19,7 @@
     self = [super init];
     
     if (self) {
-        
-        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        
-        [self configureDarkOverlay];
-        
-        /* Alert Box */
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+                
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -80,8 +73,6 @@
         
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 70, ALERT_WIDTH, 140);
         
-        [self addShadowAndClip];
-        [self animateIn];
     }
     return self;
 }

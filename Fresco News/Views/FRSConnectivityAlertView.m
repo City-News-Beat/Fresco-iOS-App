@@ -20,14 +20,7 @@
     
     if (self) {
         NSString *message = @"Please check your internet connection.";
-        
-        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        
-        [self configureDarkOverlay];
-        
-        /* Alert Box */
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+                
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -80,9 +73,6 @@
         [self addSubview:self.cancelButton];
         
         [self adjustFrame];
-        [self addShadowAndClip];
-        
-        [self animateIn];
     }
     
     return self;

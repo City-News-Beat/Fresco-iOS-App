@@ -35,15 +35,11 @@
         NSInteger yOrigin = (([UIScreen mainScreen].bounds.size.height - 334) / 2);
         self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, 334);
         
-        [self configureDarkOverlay];
-        
         [self checkNotificationStatus];
         [self checkLocationStatus];
         
         [self configureRequestButtonsForPermissions];
-        
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+                
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 44)];
         title.font = [UIFont notaBoldWithSize:17];
         title.text = @"HOLD UP";
@@ -81,10 +77,7 @@
         [self addSubview:line];
         
         [self configureActionButtonsForPermissions];
-        
-        [self addShadowAndClip];
-        [self animateIn];
-        
+                
     }
     return self;
 }

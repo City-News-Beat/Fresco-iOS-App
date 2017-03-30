@@ -25,17 +25,34 @@
 
 @implementation FRSAlertView
 
+-(instancetype)init {
+    self = [super init];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+-(void)commonInit {
+    self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
+    
+    [self configureDarkOverlay];
+    
+    /* Alert Box */
+    self.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    [self addShadowAndClip];
+
+    [self animateIn];
+
+}
+
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
     self = [super init];
     if (self) {
+        [self commonInit];
+        
         self.delegate = delegate;
-
-        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-
-        [self configureDarkOverlay];
-
-        /* Alert Box */
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
 
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
@@ -100,9 +117,7 @@
             [self addSubview:self.cancelButton];
         }
         [self adjustFrame];
-        [self addShadowAndClip];
 
-        [self animateIn];
     }
     self.delegate = delegate;
     return self;

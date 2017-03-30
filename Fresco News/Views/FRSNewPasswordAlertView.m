@@ -61,11 +61,7 @@
         }
         
         self.height = 0;
-        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        [self configureDarkOverlay];
-        
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+                
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -231,10 +227,6 @@
         self.actionButton.frame = CGRectMake(self.actionButton.frame.origin.x, self.height - 44, self.actionButton.frame.size.width, self.actionButton.frame.size.height);
         line.frame = CGRectMake(line.frame.origin.x, self.height - 44, line.frame.size.width, line.frame.size.height);
         self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
-        
-        [self addShadowAndClip];
-        
-        [self animateIn];
         
         //Only updating username
         if (userHasPassword && userHasEmail && !userHasUsername) {
