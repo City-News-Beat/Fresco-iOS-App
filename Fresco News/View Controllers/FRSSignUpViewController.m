@@ -848,13 +848,13 @@
 }
 
 - (void)usernameTimerFired {
-    // Check for emoji and error
-    if ([[self.usernameTF.text substringFromIndex:1] stringContainsEmoji]) {
+    // Check for valid username
+    if (![[self.usernameTF.text substringFromIndex:1] isValidUsername]) {
         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
         return;
     }
 
-    if (self.usernameTF.isEditing && (![[self.usernameTF.text substringFromIndex:1] stringContainsEmoji])) {
+    if (self.usernameTF.isEditing) {
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
                                                 completion:^(id responseObject, NSError *error) {
@@ -872,14 +872,12 @@
                                                       if (available) {
                                                           [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                                                           self.usernameTaken = NO;
-                                                          [self stopUsernameTimer];
-                                                          [self checkCreateAccountButtonState];
                                                       } else {
                                                           [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                                                           self.usernameTaken = YES;
-                                                          [self stopUsernameTimer];
-                                                          [self checkCreateAccountButtonState];
                                                       }
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
                                                   }
                                                 }];
         }
