@@ -125,8 +125,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
-        //TODO Replace
-//        [self checkStatusAndPresentPermissionsAlert:_locationManager.delegate];
+        [self checkStatusAndPresentPermissionsAlert];
     }
 
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {

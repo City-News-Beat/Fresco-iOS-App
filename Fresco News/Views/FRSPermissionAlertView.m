@@ -9,8 +9,6 @@
 #import "FRSPermissionAlertView.h"
 #import "UIFont+Fresco.h"
 
-
-
 @interface FRSPermissionAlertView()
 
 @property (nonatomic) BOOL notificationsEnabled;
@@ -21,7 +19,7 @@
 @property (strong, nonatomic) UIButton *notificationButtonDisabled;
 @property (strong, nonatomic) UIButton *permissionsDoneButton;
 @property (strong, nonatomic) UIButton *permissionsLaterButton;
-@property (strong, nonatomic) CLLocationManager *locationManager;
+
 @end
 
 @implementation FRSPermissionAlertView
