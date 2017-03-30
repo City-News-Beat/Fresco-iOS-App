@@ -38,11 +38,11 @@
 }
 
 - (void)setupTwitterCell {
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
-        self.socialLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"twitter-handle"];
-        [self.connectedSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]];
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:twitterHandle]) {
+        self.socialLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:twitterHandle];
+        [self.connectedSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:twitterConnected]];
     } else {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:twitterConnected]) {
             self.socialLabel.text = @"Twitter Connected";
             [self.connectedSwitch setOn:YES];
         } else {
@@ -53,11 +53,11 @@
 }
 
 - (void)setupFacebookCell {
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
-        self.socialLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"];
-        [self.connectedSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:facebookName]) {
+        self.socialLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:facebookName];
+        [self.connectedSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:facebookConnected]];
     } else {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:facebookConnected]) {
             self.socialLabel.text = @"Facebook Connected";
             [self.connectedSwitch setOn:YES];
         } else {

@@ -96,6 +96,7 @@
 }
 
 #pragma mark - Status Bar
+
 - (void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated {
 
     UIWindow *statusBarApplicationWindow = (UIWindow *)[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"];

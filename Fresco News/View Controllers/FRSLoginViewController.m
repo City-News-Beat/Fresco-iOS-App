@@ -206,12 +206,11 @@
 - (void)setMigrateState:(NSDictionary *)responseObject {
     BOOL shouldSync = false;
 
-    if (responseObject != nil && ![[responseObject valueForKey:@"valid_password"] boolValue]) {
+    if (responseObject != nil && (responseObject[@"valid_password"] != nil && ![[responseObject valueForKey:@"valid_password"] boolValue])) {
         shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"needs-password"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
         [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
-
     } else if (![[[FRSUserManager sharedInstance] authenticatedUser] username] || ![[[FRSUserManager sharedInstance] authenticatedUser] email]) {
         shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];

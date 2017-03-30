@@ -157,7 +157,9 @@
  @return The API version as a string e.g. 2.0, 2.5
  */
 - (NSString *)versionFromDictionary:(NSDictionary *)dictionary {
-    return [NSString stringWithFormat:@"%@.%@", dictionary[@"version_major"] != nil ? dictionary[@"version_major"] : @"", dictionary[@"version_minor"] != nil ? dictionary[@"version_minor"] : @""];
+    if(dictionary == nil || [dictionary isEqual:@""]) return @"";
+    return [NSString
+            stringWithFormat:@"%@.%@", dictionary[@"version_major"] != nil ? dictionary[@"version_major"] : @"", dictionary[@"version_minor"] != nil ? dictionary[@"version_minor"] : @""];
 }
 
 #pragma mark - Token Accessors
