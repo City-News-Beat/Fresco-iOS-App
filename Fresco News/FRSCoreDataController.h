@@ -12,18 +12,15 @@
 
 @property (strong) NSManagedObjectContext *managedObjectContext;
 
-
 /**
  Initializes coredata for us
  */
 - (void)initializeCoreData;
 
-
 /**
  Save context in the managed context model
  */
 - (void)saveContext;
-
 
 /**
  Saves context witha  completion handler
