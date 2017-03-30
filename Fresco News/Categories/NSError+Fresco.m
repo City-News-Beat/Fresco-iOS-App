@@ -39,4 +39,10 @@
     return [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
 }
 
+- (NSDictionary *)errorDictionaryFromAPIError {
+    return [NSJSONSerialization JSONObjectWithData:[self.userInfo objectForKey:AFNetworkingOperationFailingURLResponseDataErrorKey]
+                                           options:kNilOptions
+                                             error:nil];
+}
+
 @end
