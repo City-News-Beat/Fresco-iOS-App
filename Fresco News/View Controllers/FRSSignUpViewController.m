@@ -145,6 +145,7 @@
 
         [self.alert show];
     } else {
+        //FIXME: keyboard should still be dismissed if its currently present. User can tap the field , not type anything and can press back button. In this case, the keyboard comes again after the view is popped.
         shouldGoBack = YES;
     }
 
@@ -180,6 +181,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
 
+    //TODO: NSUserDefaults needs to be synchronized. Need to check for potential bugs since its not done here.
     FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.notificationRadius = @(self.miles);
     [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
@@ -736,6 +738,7 @@
         [self checkEmail];
     }
 
+    //TODO: consider checking validUsername also.
     if (self.usernameTF.isEditing) {
         [self startUsernameTimer];
 
@@ -864,6 +867,7 @@
                                                           return;
                                                       }
                                                       [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      //TODO: self.usernameTaken=YES does not make sense in case of any random error, take another variable instead.
                                                       self.usernameTaken = YES;
                                                       [self stopUsernameTimer];
                                                       [self checkCreateAccountButtonState];
@@ -1189,6 +1193,7 @@
                                            if (error.code == -1009) {
                                                return;
                                            }
+                                           //TODO: emailTaken=NO does not make sense in case of any random error, take another variable instead.
                                            self.emailTaken = NO;
                                            [self shouldShowEmailDialogue:NO];
 
