@@ -54,68 +54,14 @@
         
         self.delegate = delegate;
 
-        /* Title Label */
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
-        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-        self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.text = title;
-        self.titleLabel.alpha = .87;
-        [self addSubview:self.titleLabel];
+        [self configureWithTitle:title];
 
-        /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
-        self.messageLabel.alpha = .54;
-        self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.messageLabel.numberOfLines = 0;
+        [self configureWithMessage:message];
 
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineSpacing:2];
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+        [self configureWithLineViewBelow:self.messageLabel];
+        
+        [self configureWithLeftActionTitle:actionTitle withColor:nil andRightCancelTitle:cancelTitle withColor:cancelTitleColor];
 
-        self.messageLabel.attributedText = attributedString;
-        self.messageLabel.textAlignment = NSTextAlignmentCenter;
-        [self.messageLabel sizeToFit];
-        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
-        [self addSubview:self.messageLabel];
-
-        /* Action Shadow */
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
-        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:line];
-
-        if ([cancelTitle isEqual:@""]) {
-            /* Single Action Button */
-            self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-            self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
-            [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-            [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
-            [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-            [self addSubview:self.actionButton];
-        } else {
-            /* Left Action */
-            self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-            self.actionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
-            self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-            [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-            [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
-            [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-            [self addSubview:self.actionButton];
-
-            /* Right Action */
-            self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-            [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
-            [self.cancelButton setTitleColor:cancelTitleColor forState:UIControlStateNormal];
-            [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
-            [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-            [self.cancelButton sizeToFit];
-            [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
-            [self addSubview:self.cancelButton];
-        }
         [self adjustFrame];
 
     }
@@ -147,7 +93,7 @@
     self.layer.cornerRadius = 2;
 }
 
-- (void)cancelTapped {
+- (void)rightCancelTapped {
     [self animateOut];
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(didPressButton:atIndex:)]) {
@@ -158,7 +104,7 @@
     delegate.didPresentPermissionsRequest = NO;
 }
 
-- (void)actionTapped {
+- (void)leftActionTapped {
     [self animateOut];
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(didPressButton:atIndex:)]) {
@@ -224,6 +170,79 @@
 
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self removeFromSuperview];
+}
+
+#pragma mark - Configure Additional Views 
+
+-(void)configureWithTitle:(NSString *)title {
+    /* Title Label */
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
+    [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.titleLabel.text = title;
+    self.titleLabel.alpha = .87;
+    [self addSubview:self.titleLabel];
+}
+
+-(void)configureWithMessage:(NSString *)message {
+    /* Body Label */
+    self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
+    self.messageLabel.alpha = .54;
+    self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.messageLabel.numberOfLines = 0;
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:2];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+    
+    self.messageLabel.attributedText = attributedString;
+    self.messageLabel.textAlignment = NSTextAlignmentCenter;
+    [self.messageLabel sizeToFit];
+    self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
+    [self addSubview:self.messageLabel];
+}
+
+-(void)configureWithLineViewBelow:(UIView *)aView {
+    /* Action Shadow */
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, aView.frame.origin.y + aView.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
+    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    [self addSubview:line];
+}
+
+-(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor{
+    if ([cancelTitle isEqual:@""]) {
+        /* Single Action Button */
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.actionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
+        [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:self.actionButton];
+    } else {
+        /* Left Action */
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.actionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+        self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:self.actionButton];
+        
+        /* Right Action */
+        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
+        [self.cancelButton addTarget:self action:@selector(rightCancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton setTitleColor:cancelTitleColor forState:UIControlStateNormal];
+        [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
+        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self.cancelButton sizeToFit];
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
+        [self addSubview:self.cancelButton];
+    }
 }
 
 @end

@@ -43,11 +43,17 @@
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate;
 
+//configure views
+-(void)configureWithTitle:(NSString *)title;
+-(void)configureWithMessage:(NSString *)message;
+-(void)configureWithLineViewBelow:(UIView *)aView;
+-(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor;
+
 - (void)show;
 - (void)dismiss;
 - (void)animateOut;
 - (void)adjustFrame;
-- (void)cancelTapped;
+- (void)rightCancelTapped;
 - (void)actionTapped;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
