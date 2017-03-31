@@ -93,8 +93,6 @@
     self.layer.cornerRadius = 2;
 }
 
-#pragma mark - Overrides
-
 - (void)rightCancelTapped {
     [self animateOut];
 
@@ -225,7 +223,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
-        [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
         [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -235,7 +233,7 @@
         [self.actionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
         self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
         [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
