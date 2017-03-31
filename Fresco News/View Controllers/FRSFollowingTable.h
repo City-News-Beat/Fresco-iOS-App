@@ -17,10 +17,9 @@
 @end
 
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate, FRSStoryViewDelegate> {
-    NSInteger numberOfPosts;
     UIView *awkwardView;
-    BOOL isReloading;
     BOOL isFinished;
+    BOOL isReloading;
 
     CGPoint lastScrollOffset;
     NSTimeInterval lastOffsetCapture;
