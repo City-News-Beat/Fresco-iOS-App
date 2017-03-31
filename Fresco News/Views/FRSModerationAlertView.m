@@ -9,6 +9,11 @@
 #import "FRSModerationAlertView.h"
 #import "UIFont+Fresco.h"
 
+typedef enum: NSInteger {
+    FRSReportTypeUser = 0,
+    FRSReportTypeGallery
+} FRSReportType;
+
 @interface FRSModerationAlertView () <UITextViewDelegate>
 
 @property (strong, nonatomic) UIImageView *moderationIVOne;
@@ -16,6 +21,7 @@
 @property (strong, nonatomic) UIImageView *moderationIVThree;
 @property (strong, nonatomic) UIImageView *moderationIVFour;
 @property (strong, nonatomic) UILabel *textViewPlaceholderLabel;
+@property (assign, nonatomic) FRSReportType reportType;
 
 @end
 
@@ -26,66 +32,28 @@
     delegate = self.delegate;
 
     if (self) {
-
+        self.reportType = FRSReportTypeUser;
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 356 / 2, ALERT_WIDTH, 356);
 
         /* Title Label */
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
-        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-        self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.text = [NSString stringWithFormat:@"REPORT %@", [username uppercaseString]];
-        self.titleLabel.alpha = .87;
-        [self addSubview:self.titleLabel];
-
+        [self configureWithTitle:[NSString stringWithFormat:@"REPORT %@", [username uppercaseString]]];
+        
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
-        self.messageLabel.alpha = .54;
-        self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.messageLabel.numberOfLines = 0;
-
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"What is this user doing?"];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineSpacing:2];
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"What is this user doing?" length])];
-
-        self.messageLabel.attributedText = attributedString;
-        self.messageLabel.textAlignment = NSTextAlignmentCenter;
-        [self.messageLabel sizeToFit];
-        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
-        [self addSubview:self.messageLabel];
+        [self configureWithMessage:@"What is this user doing?"];
 
         /* Shadows */
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
-        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:line];
+        /* Action Shadow */
+        [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
+        /* Action Shadow */
+        [self configureWithLineViewAtYposition:self.frame.size.height - 44];
 
-        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 44, ALERT_WIDTH, 0.5)];
-        actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:actionLine];
+        /* Actions */
+        [self configureWithLeftActionTitle:@"CANCEL" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
 
-        /* Left Action */
-        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
-        self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-        [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
-        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-        [self addSubview:self.actionButton];
-
-        /* Right Action */
-        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton addTarget:self action:@selector(reportUser) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
-        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-        self.cancelButton.userInteractionEnabled = NO;
-        [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
-        [self addSubview:self.cancelButton];
-
+        
         self.moderationIVOne = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVTwo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVThree = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
@@ -104,64 +72,28 @@
     self = [super init];
 
     if (self) {
+        self.reportType = FRSReportTypeGallery;
+
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 356 / 2, ALERT_WIDTH, 400);
 
         /* Title Label */
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
-        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-        self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.text = @"REPORT GALLERY";
-        self.titleLabel.alpha = .87;
-        [self addSubview:self.titleLabel];
-
+        [self configureWithTitle:@"REPORT GALLERY"];
+        
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
-        self.messageLabel.alpha = .54;
-        self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.messageLabel.numberOfLines = 0;
-
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"What’s wrong with this gallery?"];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineSpacing:2];
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"What’s wrong with this gallery?" length])];
-
-        self.messageLabel.attributedText = attributedString;
-        self.messageLabel.textAlignment = NSTextAlignmentCenter;
-        [self.messageLabel sizeToFit];
-        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
-        [self addSubview:self.messageLabel];
+        [self configureWithMessage:@"What’s wrong with this gallery?"];
 
         /* Shadows */
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
-        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:line];
+        /* Action Shadow */
+        [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
+        /* Action Shadow */
+        [self configureWithLineViewAtYposition:self.frame.size.height - 44];
 
-        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 44, ALERT_WIDTH, 0.5)];
-        actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:actionLine];
-
-        /* Left Action */
-        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
+        /* Actions */
+        [self configureWithLeftActionTitle:@"CANCEL" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
+      
         self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
-        self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-        [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
-        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-        [self addSubview:self.actionButton];
-
-        /* Right Action */
-        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton addTarget:self action:@selector(reportGallery) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
-        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-        self.cancelButton.userInteractionEnabled = NO;
-        [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
-        [self addSubview:self.cancelButton];
 
         self.moderationIVOne = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVTwo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
@@ -312,6 +244,23 @@
                        self.transform = CGAffineTransformMakeTranslation(0, 0);
                      }
                      completion:nil];
+}
+
+#pragma mark - Overrides
+
+- (void)rightCancelTapped {
+    [super rightCancelTapped];
+    
+    switch (self.reportType) {
+        case FRSReportTypeUser:
+            [self reportUser];
+            break;
+        case FRSReportTypeGallery:
+            [self reportGallery];
+            break;
+        default:
+            break;
+    }
 }
 
 @end
