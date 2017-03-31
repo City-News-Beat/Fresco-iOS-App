@@ -43,8 +43,6 @@
     
     [self addShadowAndClip];
 
-    [self animateIn];
-
 }
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
@@ -74,6 +72,8 @@
     [[UIApplication sharedApplication].keyWindow addSubview:self.overlayView];
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     [self.inputViewController.view endEditing:YES];
+    
+    [self animateIn];
 }
 
 - (void)adjustFrame {
