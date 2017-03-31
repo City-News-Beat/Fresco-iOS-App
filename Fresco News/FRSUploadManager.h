@@ -52,12 +52,13 @@ typedef void (^FRSUploadPostAssetCompletionBlock)(NSDictionary* postUploadMeta, 
 - (BOOL)isUploading;
 
 /**
- Stars a new upload with the passed posts. Posts must follow the specified format below.
- 
+ Starts a new upload with the passed posts. Posts must follow the specified format below.
+
  @param posts Array of dictionaries to represent the posts, containing - "post_id", "key" and "asset"
+ @param galleryID NSString that will be used to segue to the newly created gallery when tapping [view] on the gallery complete UIView 
  */
-- (void)startNewUploadWithPosts:(NSArray *)posts;
-    
+- (void)startNewUploadWithPosts:(NSArray *)posts galleryID:(NSString *)galleryID;
+
 /**
  Method responsible for checking managed object context for existing uploads and proceeding
  to trigger a new upload cycle if there are hanging uploads. In the case of there being no persistent uploads, the local sandbox

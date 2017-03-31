@@ -1058,7 +1058,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     } else if([[FRSUploadManager sharedInstance] isUploading]) {
         FRSAlertView *alert = [[FRSAlertView alloc]
                                initWithTitle:@"UPLOAD ERROR"
-                               message:@"There is currently an upload in progress! Please wait till your current upload is finished and then try again."
+                               message:@"There is currently an upload in progress! Please wait until your current upload is finished and then try again."
                                actionTitle:@"OK"
                                cancelTitle:@""
                                cancelTitleColor:nil
@@ -1136,7 +1136,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
     
     
-    [[FRSUploadManager sharedInstance] startNewUploadWithPosts:postsWithAssets];
+    [[FRSUploadManager sharedInstance] startNewUploadWithPosts:postsWithAssets galleryID:galleryID];
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

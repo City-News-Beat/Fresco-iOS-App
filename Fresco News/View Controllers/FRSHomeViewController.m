@@ -29,6 +29,7 @@
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 
+
 static NSInteger const galleriesPerPage = 12;
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
