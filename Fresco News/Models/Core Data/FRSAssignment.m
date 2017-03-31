@@ -51,7 +51,7 @@
     }
 
     if (dictionary[@"radius"] && ![dictionary[@"radius"] isEqual:[NSNull null]]) {
-        self.radius = dictionary[@"radius"];
+        self.radius = [NSNumber numberWithFloat:[[dictionary objectForKey:@"radius"] floatValue]];
     }
 
     self.createdDate = [NSString dateFromString:dictionary[@"starts_at"]];

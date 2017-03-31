@@ -166,11 +166,13 @@
     [self sendNotificationForUpdate];
     [self cacheLocation:self.currentLocation];
     
-    self.stopTimer = [NSTimer timerWithTimeInterval:10
-                                             target:self
-                                           selector:@selector(restartLocationUpdate)
-                                           userInfo:Nil
-                                            repeats:FALSE];
+    //Restart in 10 seconds
+    self.stopTimer = [NSTimer
+                      scheduledTimerWithTimeInterval:10
+                      target:self
+                      selector:@selector(restartLocationUpdate)
+                      userInfo:nil
+                      repeats:NO];
 }
 
 /**
@@ -184,11 +186,12 @@
     [self sendLocationToServerWithCompletionHandler:nil];
     
     //Restart in 20 seconds
-    self.stopTimer = [NSTimer timerWithTimeInterval:20
-                                             target:self
-                                           selector:@selector(restartLocationUpdate)
-                                           userInfo:Nil
-                                            repeats:FALSE];
+    self.stopTimer = [NSTimer
+                      scheduledTimerWithTimeInterval:20
+                      target:self
+                      selector:@selector(restartLocationUpdate)
+                      userInfo:nil
+                      repeats:NO];
     
 }
 
