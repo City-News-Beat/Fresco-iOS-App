@@ -213,7 +213,7 @@
 -(void)configureWithLineViewAtYposition:(CGFloat)ypos {
     /* Action Shadow */
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, ypos, ALERT_WIDTH, 0.5)];
-    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    line.backgroundColor = [UIColor frescoShadowColor];
     [self addSubview:line];
 }
 
