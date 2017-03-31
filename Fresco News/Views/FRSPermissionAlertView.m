@@ -39,13 +39,10 @@
         [self checkLocationStatus];
         
         [self configureRequestButtonsForPermissions];
-                
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 44)];
-        title.font = [UIFont notaBoldWithSize:17];
-        title.text = @"HOLD UP";
-        title.textAlignment = NSTextAlignmentCenter;
-        title.textColor = [UIColor frescoDarkTextColor];
-        [self addSubview:title];
+        
+        /* Title Label */
+        [self configureWithTitle:@"HOLD UP"];
+        self.titleLabel.textColor = [UIColor frescoDarkTextColor];
         
         UILabel *subTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, 44, 238, 80)];
         subTitle.text = @"We need your permission for a few things, so we can verify your submissions and notify you about nearby assignments and news.";
@@ -72,9 +69,8 @@
         locationTextView.backgroundColor = [UIColor clearColor];
         [self addSubview:locationTextView];
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 290, self.frame.size.width, 0.5)];
-        line.backgroundColor = [UIColor frescoShadowColor];
-        [self addSubview:line];
+        /* Action Shadow */
+        [self configureWithLineViewAtYposition:290.0];
         
         [self configureActionButtonsForPermissions];
                 
@@ -125,7 +121,7 @@
 
 - (void)configureActionButtonsForPermissions {
     self.permissionsLaterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.permissionsLaterButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.permissionsLaterButton addTarget:self action:@selector(rightCancelTapped) forControlEvents:UIControlEventTouchUpInside];
     self.permissionsLaterButton.frame = CGRectMake(0, 290, 104, 44);
     [self.permissionsLaterButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [self.permissionsLaterButton setTitle:@"ASK LATER" forState:UIControlStateNormal];
@@ -133,7 +129,7 @@
     [self addSubview:self.permissionsLaterButton];
     
     self.permissionsDoneButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.permissionsDoneButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.permissionsDoneButton addTarget:self action:@selector(rightCancelTapped) forControlEvents:UIControlEventTouchUpInside];
     self.permissionsDoneButton.frame = CGRectMake(185, 290, 104, 44);
     [self.permissionsDoneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [self.permissionsDoneButton setTitle:@"DONE" forState:UIControlStateNormal];
