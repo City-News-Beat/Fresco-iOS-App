@@ -27,7 +27,7 @@
         [self configureWithMessage:@"Connect your address book to find your friends on Fresco."];
         
         /* Action Shadow */
-        [self configureWithLineViewBelow:self.messageLabel];
+        [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
         
         /* Actions */
         [self configureWithLeftActionTitle:@"NO THANKS" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"FIND FRIENDS" withColor:[UIColor frescoRedColor]];

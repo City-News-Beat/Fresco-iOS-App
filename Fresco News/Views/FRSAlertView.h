@@ -46,7 +46,8 @@
 //configure views
 -(void)configureWithTitle:(NSString *)title;
 -(void)configureWithMessage:(NSString *)message;
--(void)configureWithLineViewBelow:(UIView *)aView;
+-(void)configureWithAttributedMessage:(NSMutableAttributedString *)attributedMessage;
+-(void)configureWithLineViewAtYposition:(CGFloat)ypos;
 -(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor;
 
 - (void)show;
@@ -54,7 +55,7 @@
 - (void)animateOut;
 - (void)adjustFrame;
 - (void)rightCancelTapped;
-- (void)actionTapped;
+- (void)leftActionTapped;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 

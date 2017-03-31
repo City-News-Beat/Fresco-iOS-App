@@ -27,7 +27,7 @@
         [self configureWithMessage:@"Are you sure you don’t want to sign up for Fresco?"];
         
         /* Action Shadow */
-        [self configureWithLineViewBelow:self.messageLabel];
+        [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
         
         /* Actions */
         [self configureWithLeftActionTitle:@"CANCEL" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"DELETE" withColor:[UIColor frescoRedColor]];

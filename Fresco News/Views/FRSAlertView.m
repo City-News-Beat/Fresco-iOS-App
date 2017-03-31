@@ -58,7 +58,7 @@
 
         [self configureWithMessage:message];
 
-        [self configureWithLineViewBelow:self.messageLabel];
+        [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
         
         [self configureWithLeftActionTitle:actionTitle withColor:nil andRightCancelTitle:cancelTitle withColor:cancelTitleColor];
 
@@ -92,6 +92,8 @@
     self.layer.shadowOpacity = 0.1;
     self.layer.cornerRadius = 2;
 }
+
+#pragma mark - Overrides
 
 - (void)rightCancelTapped {
     [self animateOut];
@@ -172,7 +174,7 @@
     [self removeFromSuperview];
 }
 
-#pragma mark - Configure Additional Views 
+#pragma mark - Configure Views
 
 -(void)configureWithTitle:(NSString *)title {
     /* Title Label */
@@ -186,27 +188,33 @@
 
 -(void)configureWithMessage:(NSString *)message {
     /* Body Label */
+    NSMutableAttributedString *attributedMessage = [[NSMutableAttributedString alloc] initWithString:message];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:2];
+    [attributedMessage addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+    
+    [self configureWithAttributedMessage:attributedMessage];
+}
+
+-(void)configureWithAttributedMessage:(NSMutableAttributedString *)attributedMessage {
+    /* Body Label */
     self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
     self.messageLabel.alpha = .54;
     self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.messageLabel.numberOfLines = 0;
     
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:2];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+    self.messageLabel.attributedText = attributedMessage;
     
-    self.messageLabel.attributedText = attributedString;
     self.messageLabel.textAlignment = NSTextAlignmentCenter;
     [self.messageLabel sizeToFit];
     self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
     [self addSubview:self.messageLabel];
 }
 
--(void)configureWithLineViewBelow:(UIView *)aView {
+-(void)configureWithLineViewAtYposition:(CGFloat)ypos {
     /* Action Shadow */
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, aView.frame.origin.y + aView.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, ypos, ALERT_WIDTH, 0.5)];
     line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
     [self addSubview:line];
 }
