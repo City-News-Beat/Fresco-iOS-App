@@ -88,14 +88,14 @@
     sliderContainer.backgroundColor = [UIColor colorWithWhite:1 alpha:.92];
     [self.view addSubview:sliderContainer];
 
-    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-    top.alpha = 0.2;
-    top.backgroundColor = [UIColor frescoDarkTextColor];
+    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.view.bounds.size.width, 0.5)];
+    top.alpha = 0.12;
+    top.backgroundColor = [UIColor blackColor];
     [sliderContainer addSubview:top];
 
-    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 56, self.view.bounds.size.width, 0.5)];
-    bottom.alpha = 0.2;
-    bottom.backgroundColor = [UIColor frescoDarkTextColor];
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 55.5, self.view.bounds.size.width, 0.5)];
+    bottom.alpha = 0.12;
+    bottom.backgroundColor = [UIColor blackColor];
     [sliderContainer addSubview:bottom];
 
     self.radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.view.frame.size.width - 104, 28)];
