@@ -154,12 +154,12 @@ static NSInteger const galleriesPerPage = 12;
     [self.migrationAlert show];
 }
 
-- (void)presentTOS {
+- (void)presentWithTOS:(NSString *)tos {
     if (self.TOSAlert) {
         return;
     }
 
-    self.TOSAlert = [[FRSTOSAlertView alloc] initTOS];
+    self.TOSAlert = [[FRSTOSAlertView alloc] initWithTOS:tos];
     self.TOSAlert.delegate = self;
     [self.TOSAlert show];
 }

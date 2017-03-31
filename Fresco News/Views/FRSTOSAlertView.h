@@ -9,6 +9,6 @@
 
 @interface FRSTOSAlertView : FRSAlertView
 
-- (instancetype)initTOS;
+- (instancetype)initWithTOS:(NSString *)tos;
 
 @end
