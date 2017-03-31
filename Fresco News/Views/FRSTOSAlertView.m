@@ -65,7 +65,7 @@
         [self addSubview:self.topLine];
 
         /* Actions */
-        [self configureWithLeftActionTitle:@"LOG OUT" withColor:[UIColor frescoRedColor] andRightCancelTitle:@"ACCEPT" withColor:[UIColor frescoBlueColor]];
+        [self configureWithLeftActionTitle:@"LOG OUT" withColor:[UIColor frescoRedColor] andRightCancelTitle:@"ACCEPT" withColor:nil];
         
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 408 / 2, ALERT_WIDTH, 408);
         self.actionLine.frame = CGRectMake(0, self.frame.size.height - 43.5, ALERT_WIDTH, 0.5);
@@ -108,7 +108,7 @@
       if (!error) {
           [self dismiss];
       } else {
-          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:nil delegate:nil];
           [alert show];
       }
     }];

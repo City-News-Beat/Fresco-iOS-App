@@ -30,7 +30,7 @@
         [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
         
         /* Actions */
-        [self configureWithLeftActionTitle:@"SETTINGS" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"OK" withColor:[UIColor frescoBlueColor]];
+        [self configureWithLeftActionTitle:@"SETTINGS" withColor:nil andRightCancelTitle:@"OK" withColor:nil];
 
         [self adjustFrame];
     }

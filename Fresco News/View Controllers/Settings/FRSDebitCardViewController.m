@@ -154,9 +154,9 @@
                                                               id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                                                               NSDictionary *errorDict = json[@"error"];
                                                               NSString *errorMessage = errorDict[@"msg"];
-                                                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
                                                           } else {
-                                                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
                                                           }
                                                           [self.alertView show];
                                                       } else if (responseObject) {
@@ -169,7 +169,7 @@
                                                                   [[[FRSUserManager sharedInstance] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
                                                                   [self.navigationController popViewControllerAnimated:YES];
                                                               } else {
-                                                                  self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                  self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:nil delegate:self];
                                                                   [self.alertView show];
                                                               }
                                                           } else {
@@ -198,7 +198,7 @@
     if (components.count == 2) {
         expiration = @[ @([components[0] intValue]), @([components[1] intValue]) ];
     } else {
-        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
         [self.alertView show];
         [self stopSpinner:self.loadingView onButton:self.addDebitCardView.saveButton];
         return;
@@ -207,7 +207,7 @@
     STPCardParams *params = [FRSStripe creditCardWithNumber:cardNumber expiration:expiration cvc:cvv];
 
     if (!params) {
-        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please check your card information and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please check your card information and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
         [self.alertView show];
         [self stopSpinner:self.loadingView onButton:self.addDebitCardView.saveButton];
         return;
@@ -216,7 +216,7 @@
     [FRSStripe createTokenWithCard:params
                         completion:^(STPToken *stripeToken, NSError *error) {
                           if (error || !stripeToken) {
-                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
                               [self.alertView show];
                               [self stopSpinner:self.loadingView onButton:self.addDebitCardView.saveButton];
                               return;
@@ -240,7 +240,7 @@
     bankParams.country = @"US";
 
     if (!bankParams) {
-        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
         [self.alertView show];
         [self stopSpinner:self.loadingView onButton:self.addDebitCardView.saveButton];
         return;
@@ -251,7 +251,7 @@
                                                    // created token
                                                    if (error || !token) {
                                                        // failed
-                                                       self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                       self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:self];
                                                        [self.alertView show];
                                                        [self stopSpinner:self.loadingView onButton:self.addDebitCardView.saveButton];
 

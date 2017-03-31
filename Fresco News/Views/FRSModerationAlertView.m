@@ -48,7 +48,7 @@ typedef enum: NSInteger {
         [self configureWithLineViewAtYposition:self.frame.size.height - 44];
 
         /* Actions */
-        [self configureWithLeftActionTitle:@"CANCEL" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
+        [self configureWithLeftActionTitle:@"CANCEL" withColor:nil andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
 
         self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
@@ -89,7 +89,7 @@ typedef enum: NSInteger {
         [self configureWithLineViewAtYposition:self.frame.size.height - 44];
 
         /* Actions */
-        [self configureWithLeftActionTitle:@"CANCEL" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
+        [self configureWithLeftActionTitle:@"CANCEL" withColor:nil andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
       
         self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);

@@ -364,7 +364,7 @@
                                                                        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                                                                        NSDictionary *errorDict = json[@"error"];
                                                                        NSString *errorMessage = errorDict[@"msg"];
-                                                                       FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                                       FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:nil delegate:nil];
                                                                        [alert show];
                                                                    } else {
                                                                        [self presentGenericError];
@@ -389,7 +389,7 @@
                                                                          id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                                                                          NSDictionary *errorDict = json[@"error"];
                                                                          NSString *errorMessage = errorDict[@"msg"];
-                                                                         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                                         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:nil delegate:nil];
                                                                          [alert show];
                                                                      } else {
                                                                          [self presentGenericError];

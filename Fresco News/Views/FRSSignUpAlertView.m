@@ -30,7 +30,7 @@
         [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
         
         /* Actions */
-        [self configureWithLeftActionTitle:@"CANCEL" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"DELETE" withColor:[UIColor frescoRedColor]];
+        [self configureWithLeftActionTitle:@"CANCEL" withColor:nil andRightCancelTitle:@"DELETE" withColor:[UIColor frescoRedColor]];
         
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 70, ALERT_WIDTH, 140);
         

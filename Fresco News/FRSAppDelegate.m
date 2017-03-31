@@ -449,13 +449,13 @@ fetchCompletionHandler:^(UIBackgroundFetchResult result) {
 // TODO: Reuse these errors
 - (void)error:(NSError *)error {
     if (!error) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
         FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
         [alert show];
     } else {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:nil];
         [alert show];
     }
 }
@@ -470,7 +470,7 @@ fetchCompletionHandler:^(UIBackgroundFetchResult result) {
                                    message:error.localizedDescription
                                    actionTitle:@"OK"
                                    cancelTitle:@""
-                                   cancelTitleColor:[UIColor frescoBlueColor]
+                                   cancelTitleColor:nil
                                    delegate:nil];
             
             [self.errorAlertView show];

@@ -222,7 +222,7 @@
 
 - (void)presentCameraPermissionsAlert {
     dispatch_async(dispatch_get_main_queue(), ^{
-      FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"HOLD UP" message:@"We need permission to access your camera, microphone, and camera. Head over to Settings and make sure these are all enabled to continue." actionTitle:@"ASK LATER" cancelTitle:@"SETTINGS" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+      FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"HOLD UP" message:@"We need permission to access your camera, microphone, and camera. Head over to Settings and make sure these are all enabled to continue." actionTitle:@"ASK LATER" cancelTitle:@"SETTINGS" cancelTitleColor:nil delegate:self];
       [alert show];
     });
 }

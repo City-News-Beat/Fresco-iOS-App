@@ -223,7 +223,12 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
-        [self.actionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
+        if(actionTitleColor) {
+            [self.actionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
+        }
+        else {
+            [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        }
         [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -233,7 +238,12 @@
         [self.actionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
         self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.actionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
+        if(actionTitleColor) {
+            [self.actionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
+        }
+        else {
+            [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        }
         [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -242,7 +252,12 @@
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
         [self.cancelButton addTarget:self action:@selector(rightCancelTapped) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:cancelTitleColor forState:UIControlStateNormal];
+        if(cancelTitleColor) {
+            [self.cancelButton setTitleColor:cancelTitleColor forState:UIControlStateNormal];
+        }
+        else {
+            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        }
         [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];

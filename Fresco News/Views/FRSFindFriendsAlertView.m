@@ -30,7 +30,7 @@
         [self configureWithLineViewAtYposition:self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5];
         
         /* Actions */
-        [self configureWithLeftActionTitle:@"NO THANKS" withColor:[UIColor frescoDarkTextColor] andRightCancelTitle:@"FIND FRIENDS" withColor:[UIColor frescoRedColor]];
+        [self configureWithLeftActionTitle:@"NO THANKS" withColor:nil andRightCancelTitle:@"FIND FRIENDS" withColor:[UIColor frescoRedColor]];
 
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 70, ALERT_WIDTH, 140);
     }
