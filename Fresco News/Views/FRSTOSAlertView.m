@@ -71,10 +71,10 @@
         self.actionLine.frame = CGRectMake(0, self.frame.size.height - 43.5, ALERT_WIDTH, 0.5);
         
         /* Left Action */
-        self.actionButton.frame = CGRectMake(self.actionButton.frame.origin.x, self.TOSTextView.frame.origin.y + self.TOSTextView.frame.size.height, 54, 44);
+        self.leftActionButton.frame = CGRectMake(self.leftActionButton.frame.origin.x, self.TOSTextView.frame.origin.y + self.TOSTextView.frame.size.height, 54, 44);
         
         /* Right Action */
-        self.cancelButton.frame = CGRectMake(self.frame.size.width - 49 - 16, self.actionButton.frame.origin.y, 49, 44);
+        self.rightCancelButton.frame = CGRectMake(self.frame.size.width - 49 - 16, self.leftActionButton.frame.origin.y, 49, 44);
 
     }
     return self;
@@ -97,8 +97,8 @@
     self.expandTOSButton.frame = CGRectMake(self.frame.size.width - 24 - 12, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 44);
     self.TOSTextView.frame = CGRectMake((self.frame.size.width - (self.frame.size.width - 32)) / 2, 44, (self.frame.size.width - 32), self.frame.size.height - 88);
-    self.actionButton.frame = CGRectMake(14, self.frame.size.height - 44, 54, 44);
-    self.cancelButton.frame = CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 16, self.actionButton.frame.origin.y, self.cancelButton.frame.size.width, 44);
+    self.leftActionButton.frame = CGRectMake(14, self.frame.size.height - 44, 54, 44);
+    self.rightCancelButton.frame = CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 16, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width, 44);
     self.actionLine.frame = CGRectMake(0, self.frame.size.height - 43.5, self.frame.size.width, 0.5);
     self.topLine.frame = CGRectMake(0, 44, self.frame.size.width, 0.5);
 }

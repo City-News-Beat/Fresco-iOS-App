@@ -194,8 +194,8 @@
         /* Actions */
         [self configureWithLeftActionTitle:@"LOG OUT" withColor:[UIColor frescoRedColor] andRightCancelTitle:@"DONE" withColor:[UIColor frescoLightTextColor]];
 
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.height - 44, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
-        self.actionButton.frame = CGRectMake(self.actionButton.frame.origin.x, self.height - 44, self.actionButton.frame.size.width, self.actionButton.frame.size.height);
+        self.rightCancelButton.frame = CGRectMake(self.rightCancelButton.frame.origin.x, self.height - 44, self.rightCancelButton.frame.size.width, self.rightCancelButton.frame.size.height);
+        self.leftActionButton.frame = CGRectMake(self.leftActionButton.frame.origin.x, self.height - 44, self.leftActionButton.frame.size.width, self.leftActionButton.frame.size.height);
         
         self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
 
@@ -284,7 +284,7 @@
     
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     
-    self.cancelButton.alpha = 0;
+    self.rightCancelButton.alpha = 0;
     spinner.frame = CGRectMake(self.frame.size.width - 20 - 10, self.frame.size.height - 20 - 10, 20, 20);
     spinner.tintColor = [UIColor frescoOrangeColor];
     [spinner setPullProgress:90];
@@ -304,13 +304,13 @@
                                                             spinner.alpha = 0;
                                                             [spinner stopLoading];
                                                             [spinner removeFromSuperview];
-                                                            self.cancelButton.alpha = 1;
+                                                            self.rightCancelButton.alpha = 1;
                                                             
                                                             if (error) {
                                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                                     [spinner stopLoading];
                                                                     [spinner removeFromSuperview];
-                                                                    [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                                                                    [self.rightCancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
                                                                 });
                                                                 
                                                                 if (error) {
@@ -522,12 +522,12 @@
 
 - (void)toggleCreateAccountButtonTitleColorToState:(UIControlState)controlState {
     if (controlState == UIControlStateNormal) {
-        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.cancelButton.enabled = NO;
+        [self.rightCancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.rightCancelButton.enabled = NO;
     } else {
-        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        [self.cancelButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
-        self.cancelButton.enabled = YES;
+        [self.rightCancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.rightCancelButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
+        self.rightCancelButton.enabled = YES;
     }
 }
 

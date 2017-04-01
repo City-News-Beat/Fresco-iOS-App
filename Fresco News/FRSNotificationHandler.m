@@ -78,7 +78,6 @@ BOOL isSegueingToAssignment;
                                            cancelTitle:@""
                                            cancelTitleColor:[UIColor frescoBackgroundColorDark]
                                            delegate:nil];
-                [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                 [alertView show];
                 
                 return;
@@ -112,7 +111,6 @@ BOOL isSegueingToAssignment;
                                            cancelTitle:@""
                                            cancelTitleColor:[UIColor frescoBackgroundColorDark]
                                            delegate:nil];
-                [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                 [alertView show];
             } else {
                 

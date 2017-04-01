@@ -50,9 +50,9 @@ typedef enum: NSInteger {
         /* Actions */
         [self configureWithLeftActionTitle:@"CANCEL" withColor:nil andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
 
-        self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
-        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
+        self.leftActionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
+        self.rightCancelButton.frame = CGRectMake(169, self.leftActionButton.frame.origin.y, 101, 44);
+        [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.rightCancelButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
         
         self.moderationIVOne = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVTwo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
@@ -91,9 +91,9 @@ typedef enum: NSInteger {
         /* Actions */
         [self configureWithLeftActionTitle:@"CANCEL" withColor:nil andRightCancelTitle:@"SEND REPORT" withColor:[UIColor frescoLightTextColor]];
       
-        self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
-        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
+        self.leftActionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
+        self.rightCancelButton.frame = CGRectMake(169, self.leftActionButton.frame.origin.y, 101, 44);
+        [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.rightCancelButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
 
         self.moderationIVOne = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVTwo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
@@ -187,11 +187,11 @@ typedef enum: NSInteger {
     }
 
     if ([self.moderationIVOne.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVTwo.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVThree.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVFour.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]]) {
-        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.cancelButton.userInteractionEnabled = YES;
+        [self.rightCancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.rightCancelButton.userInteractionEnabled = YES;
     } else {
-        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.cancelButton.userInteractionEnabled = NO;
+        [self.rightCancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.rightCancelButton.userInteractionEnabled = NO;
     }
 }
 
