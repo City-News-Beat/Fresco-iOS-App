@@ -18,6 +18,7 @@
 #import "PHAsset+Fresco.h"
 #import "CLLocation+Fresco.h"
 #import "NSURL+Fresco.h"
+#import "FRSGalleryUploadedToast.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 #define AWS_REGION AWSRegionUSEast1
@@ -292,9 +293,9 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  to represent one signal percentage
  */
 - (void)updateProgress {
-    //Total progress
-    float progress = 0;
-    __block float uploadingProgress = 0;
+    // Default progress to 10% to draw the users attention to the bar when uploading.
+    float progress = 0.1;
+    __block float uploadingProgress = 0.1;
     
     if(toComplete > 0) {
         [self.uploadProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *uploadProgress, BOOL *stop) {
@@ -492,7 +493,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 
 #pragma mark - Upload Events
 
-- (void)startNewUploadWithPosts:(NSArray *)posts {
+- (void)startNewUploadWithPosts:(NSArray *)posts galleryID:(NSString *)galleryID {
     __weak typeof(self) weakSelf = self;
     __block NSInteger currentIndex = 0;
 
@@ -506,7 +507,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 
         //Check if the upload is already in memory as this can be populated before hand if the upload
         if([self.managedObjects objectForKey:post[postID]] == nil) {
-            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[postID]];
+            [self createUploadWithAsset:post[@"asset"] key:post[@"key"] post:post[postID] galleryID:galleryID];
         }
         
         //Count the number of videos for the transcoding progress
@@ -518,7 +519,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     
     __block __weak FRSUploadPostAssetCompletionBlock weakHandleAssetCreation = nil;
 
-    //This is done recursively because we can't have too many videos trancoding at a time, otherwise iOS will scream at us and the transcode will fail
+    //This is done recursively because we can't have too many videos transcoding at a time, otherwise iOS will scream at us and the transcode will fail
     FRSUploadPostAssetCompletionBlock handleAssetCreation = ^void(NSDictionary *postUploadMeta, BOOL isVideo, NSInteger fileSize, NSError *error) {
         toComplete++;
         
@@ -550,13 +551,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                             if(error) {
                                 [weakSelf uploadDidErrorWithError:error];
                             } else if (completed == numberOfAssets) {
-                                //Upload has fully completed
-                                numberOfAssets = 0;
-                                [[NSNotificationCenter defaultCenter]
-                                 postNotificationName:FRSUploadNotification
-                                 object:nil
-                                 userInfo:@{ @"type" : @"completion" }];
-                                [weakSelf trackDebugWithMessage:@"Upload Completed"];
+                                [weakSelf uploadComplete:galleryID];
                             }
                         }];
             
@@ -586,11 +581,31 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 }
 
 /**
+ This method should be called when an upload successfully uploads.
+
+ @param galleryID NSString that will be used to segue to the newly created gallery when tapping [view] on the gallery complete UIView
+ */
+- (void)uploadComplete:(NSString *)galleryID {
+    __weak typeof(self) weakSelf = self;
+    numberOfAssets = 0;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:FRSUploadNotification
+     object:nil
+     userInfo:@{ @"type" : @"completion" }];
+    [weakSelf trackDebugWithMessage:@"Upload Completed"];
+    //Create and present upload compelte toast
+    FRSGalleryUploadedToast *toast = [[FRSGalleryUploadedToast alloc] init];
+    toast.galleryID = galleryID;
+    [toast show];
+}
+
+/**
  Retries an upload with the current uploads in state. Before attempting to retry, the required
  assets will be fetched, then a new upload will be started
  */
 - (void)retryUpload {
     NSMutableArray *posts = [NSMutableArray new];
+    NSString *galleryID = nil;
 
     //Generate posts from managed objects in coredata
     for (NSString *uploadPost in [self.managedObjects allKeys]) {
@@ -607,12 +622,16 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
                                @"key": upload.key,
                                @"asset": [assetArray firstObject]
                                }];
+            
+            galleryID = upload.galleryID;
         }
     }
     
-    if(posts.count > 0){
+    if (posts.count > 0 && galleryID != nil) {
         //Start new uploads once we've retrieved posts and assets
-        [self startNewUploadWithPosts:posts];
+        [self startNewUploadWithPosts:posts galleryID:galleryID];
+    } else {
+        [self cancelUploadWithForce:YES];
     }
 }
 
@@ -739,8 +758,9 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
  @param asset PHAsset assocaited with upload
  @param key AWS File key assocaited with upload
  @param post Post ID associated with upload
+ @param galleryID NSString that will be used to segue to the newly created gallery when tapping [view] on the gallery complete UIView
  */
-- (void)createUploadWithAsset:(PHAsset *)asset key:(NSString *)key post:(NSString *)post {
+- (void)createUploadWithAsset:(PHAsset *)asset key:(NSString *)key post:(NSString *)post galleryID:(NSString *)galleryID {
     if (!self.managedObjects) {
         self.managedObjects = [[NSMutableDictionary alloc] init];
     }
@@ -751,6 +771,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     upload.uploadID = post;
     upload.completed = @(FALSE);
     upload.creationDate = [NSDate date];
+    upload.galleryID = galleryID;
     
     [self.context performBlock:^{
         [self.context save:Nil];
@@ -787,7 +808,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     [self cancelUploadWithForce:NO];
     
     if(!error || !error.localizedDescription){
-        error = [NSError errorWithMessage:@"Please contact support@fresconews for assistance or use our in-app chat to get in contact with us."];
+        error = [NSError errorWithMessage:@"Please contact support@fresconews.com for assistance, or use our in-app chat to get in contact with us."];
     }
     
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
