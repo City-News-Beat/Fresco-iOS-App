@@ -99,6 +99,7 @@
     _contentScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height - 100);
     _contentScroller.pagingEnabled = YES;
+    _contentScroller.bounces = NO;
     _contentScroller.delegate = self;
 
     [self.view addSubview:_contentScroller];
@@ -145,6 +146,7 @@
 - (void)createPaymentWithToken:(NSString *)stripeToken isDebitCard:(BOOL)debitCard {
     [[FRSPaymentManager sharedInstance] createPaymentWithToken:stripeToken
                                                     completion:^(id responseObject, NSError *error) {
+                                                      [self stopSpinner:self.loadingView onButton:self.addDebitCardView.saveButton];
                                                       if (error) {
                                                           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                           if (response && response.statusCode == 500) {
@@ -274,7 +276,7 @@
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [spinner removeFromSuperview];
     [spinner startAnimating];
 }
