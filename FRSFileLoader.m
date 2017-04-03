@@ -66,7 +66,7 @@
     return [allAssets count];
 }
 
-// load a list of all photos / videos from the last 24 hours
+// load a list of all photos / videos from the last 7 days
 - (void)getAssets {
     if (!currentCollection) {
         [self getAlbumCollection];
