@@ -47,8 +47,8 @@
  @param title NSString The title of the alert.
  @param message NSString The message of the alert.
  @param actionTitle NSString The left action button title of the alert.
- @param cancelTitle NSString The right cancel button title of the alert.
- @param cancelTitleColor UIColor The right cancel button title color of the alert. Pass @"" to use the default cancel color.
+ @param cancelTitle NSString The right cancel button title of the alert. Pass @""(empty string) to omit this button and to have only one action button on the alert.
+ @param cancelTitleColor UIColor The right cancel button title color of the alert. Pass nil to use the default color for right cancel title. N/A if cancelTitle is @""(empty string)
  @param delegate id The delegate object which can confirm to the FRSAlertViewDelegate protocol.
  */
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate;
@@ -86,9 +86,9 @@
  This method is used to configure both the action button titles of the alert.
  
  @param actionTitle NSString The left action button title of the alert.
- @param actionTitleColor UIColor The left action button title color of the alert.
+ @param actionTitleColor UIColor The left action button title color of the alert. Pass nil to use the default color for left action title.
  @param cancelTitle NSString The right cancel button title of the alert.
- @param cancelTitleColor UIColor The right cancel button title color of the alert.
+ @param cancelTitleColor UIColor The right cancel button title color of the alert. Pass nil to use the default color for right cancel title.
  */
 -(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor;
 
