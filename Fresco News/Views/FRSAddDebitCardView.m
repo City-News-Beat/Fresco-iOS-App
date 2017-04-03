@@ -81,7 +81,7 @@
         if (range.location > 4) {
             return NO;
         }
-        if (textField.text != Nil && ![textField.text isEqualToString:@""] && string) {
+        if (textField.text != Nil && ![textField.text isEqualToString:@""] && string && (range.location != NSNotFound)) {
             NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
             if (proposedNewString != Nil && proposedNewString.length == 2 && textField.text.length <= 2) {
                 proposedNewString = [proposedNewString stringByAppendingString:@"/"];
