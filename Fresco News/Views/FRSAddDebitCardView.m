@@ -19,11 +19,12 @@
 
 - (void)setupCardIO {
     [CardIOUtilities preload];
-    CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.width * 1.34)];
-
-    cardIOView.delegate = self;
-    [self.cardViewport addSubview:cardIOView];
-    cardIOView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 4);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.width * 1.34)];
+        cardIOView.delegate = self;
+        [self.cardViewport addSubview:cardIOView];
+        cardIOView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 4);
+    });
 }
 
 - (void)dismissKeyboard {
@@ -52,10 +53,7 @@
         }
 
         [cardIOView removeFromSuperview];
-        CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, 0, self.cardViewport.frame.size.width, self.cardViewport.frame.size.height)];
-        cardIOView.delegate = self;
-
-        [self.cardViewport addSubview:cardIOView];
+        [self setupCardIO];
     }
 }
 
