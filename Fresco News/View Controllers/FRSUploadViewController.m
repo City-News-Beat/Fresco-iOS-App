@@ -122,18 +122,19 @@ static NSString *const cellIdentifier = @"assignment-cell";
         [self.spinner startAnimating];
         [self.view addSubview:self.spinner];
     }
+    
+    [self dismissKeyboard];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.isFetching = NO;
-    [self dismissKeyboard];
-    [self resetOtherCells];
-    [self resetOtherOutlets];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    self.isFetching = NO;
+    [self resetOtherCells];
+    [self resetOtherOutlets];
     [self resetView];
 }
 
@@ -865,8 +866,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)dismissKeyboard {
-    [self.view resignFirstResponder];
-    [self.view endEditing:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view endEditing:YES];
+    });
 }
 
 #pragma mark - Keyboard
