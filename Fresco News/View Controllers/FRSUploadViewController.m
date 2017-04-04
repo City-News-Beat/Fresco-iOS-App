@@ -122,8 +122,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
         [self.spinner startAnimating];
         [self.view addSubview:self.spinner];
     }
-    
-    self.pageControl.numberOfPages = self.content.count;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -282,7 +280,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)configurePageController {
     self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.numberOfPages = self.content.count;
+    self.pageControl.numberOfPages = [self.galleryCollectionView numberOfItemsInSection:0];
     self.pageControl.currentPage = 0;
     self.pageControl.userInteractionEnabled = NO;
 
@@ -1049,6 +1047,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
         [self.carouselCell removeFromSuperview];
         [self resetOtherCells];
         [self resetOtherOutlets];
+        [self.pageControl removeFromSuperview];
     });
 }
 
