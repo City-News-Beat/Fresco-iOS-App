@@ -123,19 +123,16 @@ static NSString *const cellIdentifier = @"assignment-cell";
         [self.view addSubview:self.spinner];
     }
     
-    [self dismissKeyboard];
+    self.pageControl.numberOfPages = self.content.count;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self dismissKeyboard];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    self.isFetching = NO;
-    [self resetOtherCells];
-    [self resetOtherOutlets];
-    [self resetView];
 }
 
 - (void)configureUI {
@@ -444,6 +441,12 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (scrollView.contentOffset.y <= -75) {
+        [self dismissKeyboard];
+    }
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     //Update pageControl in galleryCollectionView
     CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
@@ -520,14 +523,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
         self.globalAssignmentsEnabled = YES;
         [self configureAndShowGlobalAssignments];
         self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(0);
-    }
-}
-
-- (void)toggleGestureRecognizer {
-    if (self.dismissKeyboardGestureRecognizer.enabled) {
-        self.dismissKeyboardGestureRecognizer.enabled = NO;
-    } else {
-        self.dismissKeyboardGestureRecognizer.enabled = YES;
     }
 }
 
@@ -827,6 +822,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
 #pragma mark - Text View
 
 - (void)configureTextView {
+    
+    if (self.captionTextView) return;
+
     NSInteger textViewHeight = 200;
 
     self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + 14, self.view.frame.size.width, 200 + 16)];
@@ -866,23 +864,25 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)dismissKeyboard {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view endEditing:YES];
-    });
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
 #pragma mark - Keyboard
 
 - (void)handleKeyboardWillShow:(NSNotification *)sender {
-    [self toggleGestureRecognizer];
+    [self toggleGestureRecognizerEnabled:YES];
 
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 - (void)handleKeyboardWillHide:(NSNotification *)sender {
-    [self toggleGestureRecognizer];
+    [self toggleGestureRecognizerEnabled:NO];
     self.view.transform = CGAffineTransformMakeTranslation(0, 0);
+}
+
+- (void)toggleGestureRecognizerEnabled:(BOOL)enabled {
+    self.dismissKeyboardGestureRecognizer.enabled = enabled;
 }
 
 #pragma mark - Assignments
@@ -1041,12 +1041,15 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)resetView {
-    [self.pageControl removeFromSuperview];
-    self.content = nil;
-    self.players = nil;
-    [self.carouselCell removePlayers];
-    [self.carouselCell removeFromSuperview];
-    [self.galleryCollectionView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.content = nil;
+        self.players = nil;
+        self.isFetching = NO;
+        [self.carouselCell removePlayers];
+        [self.carouselCell removeFromSuperview];
+        [self resetOtherCells];
+        [self resetOtherOutlets];
+    });
 }
 
 /**
