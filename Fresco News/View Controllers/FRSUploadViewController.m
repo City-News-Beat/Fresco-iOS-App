@@ -151,8 +151,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [self.loadingView setPullProgress:90];
 }
 
+// TODO: Consolidate all show/hide spinners on buttons into one class
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTintColor:[UIColor clearColor]];
+    [button setTitle:@"" forState:UIControlStateNormal];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
@@ -161,6 +162,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitle:@"SEND" forState:UIControlStateNormal];
     [button setTintColor:[UIColor frescoBlueColor]];
     [spinner removeFromSuperview];
     [spinner startAnimating];
