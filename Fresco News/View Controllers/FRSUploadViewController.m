@@ -124,13 +124,22 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self dismissKeyboard];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self dismissKeyboard];
+    [self handleKeyboardWillHide:nil];
+    [self.captionTextView resignFirstResponder];
+    [self.view endEditing:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    
+    [self dismissKeyboard];
 }
 
 - (void)configureUI {
@@ -1080,8 +1089,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     [self startSpinner:self.loadingView onButton:self.sendButton];
     self.sendButton.enabled = NO;
-
-    [self dismissKeyboard];
 
     //Assemble params for gallery
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];

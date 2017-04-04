@@ -36,6 +36,9 @@
                        dispatch_async(dispatch_get_main_queue(), ^{
                          imageView.image = result;
                          imageView.contentMode = UIViewContentModeScaleAspectFill;
+                         imageView.clipsToBounds = YES;
+                         // We should re implement the stretchy header in the carousel cell at some point.
+                         // Good resource to follow https://nrj.io/stretchy-uicollectionview-headers/
                          [FRSSnapKit constrainSubview:imageView ToBottomOfParentView:self WithHeight:imageView.frame.size.height];
                        });
                      }];
