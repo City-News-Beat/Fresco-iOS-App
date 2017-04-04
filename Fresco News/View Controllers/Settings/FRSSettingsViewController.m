@@ -27,6 +27,8 @@
 #import "FRSSocialToggleTableViewCell.h"
 #import "FRSLogOutTableViewCell.h"
 #import "FRSAssignmentNotificationsSwitchTableViewCell.h"
+#import <ZendeskSDK/ZendeskSDK.h>
+#import <ZendeskProviderSDK/ZendeskProviderSDK.h>
 
 static NSInteger const fbAlertTag = 33;
 static NSInteger const twAlertTag = 34;
@@ -65,6 +67,7 @@ typedef NS_ENUM(NSInteger, SectionSocialRowIndex) {
 
 typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     LogOut,
+    FAQ,
     Support,
     DisableAccount
 };
@@ -158,7 +161,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         return 1;
         break;
     case Misc:
-        return 3;
+        return 4;
         break;
     case Divider1:
     case Divider2:
@@ -208,6 +211,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
                 case LogOut:
                     return logOutCellHeight;
                 case Support:
+                case FAQ:
                 case DisableAccount:
                     return settingsTextCellHeight;
             }
@@ -327,6 +331,11 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
             FRSLogOutTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:logOutCellIdentifier];
             return cell;
         }
+        case FAQ: {
+            FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
+            [cell loadText:@"FAQ"];
+            return cell;
+        }
         case Support: {
             FRSSettingsTextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:settingsTextCellIdentifier];
             [cell loadText:@"Ask us anything"];
@@ -406,6 +415,9 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
             [alert show];
             break;
         }
+        case FAQ:
+            [self presentHelpcenter];
+            break;
         case Support:
             [[FRSModerationManager sharedInstance] presentSmooch];
             break;
@@ -421,6 +433,19 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         break;
     }
 }
+
+#pragma mark - Zendesk
+
+- (void)presentHelpcenter {
+    // Create a Content Model to pass in
+    ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
+    // Disable requests
+    [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
+    // Show Help Center
+    [ZDKHelpCenter pushHelpCenterOverview:self.navigationController withContentModel:helpCenterContentModel];
+}
+
+#pragma mark - Easter Egg
 
 - (void)configureKenny {
     UILabel *kenny = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 + 5, self.tableView.frame.size.height * 1.6 + 8, 24, 24)];

@@ -19,6 +19,7 @@
 #import <Segment_Flurry/SEGFlurryIntegrationFactory.h>
 #import <Segment_Localytics/SEGLocalyticsIntegrationFactory.h>
 #import <UXCam/UXCam.h>
+#import <ZendeskSDK/ZendeskSDK.h>
 
 @implementation FRSTracker
 
@@ -133,6 +134,11 @@
 #pragma mark - Fabric
 
 + (void)configureFabric {
+    [[ZDKConfig instance]
+     initializeWithAppId:@"ca506e6c52eb2eca41150684af0269b6642facef5d23a84e"
+     zendeskUrl:@"https://fresco.zendesk.com"
+     clientId:@"mobile_sdk_client_6e930a7bb6123d229c39"];
+    
     [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
     [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
 }

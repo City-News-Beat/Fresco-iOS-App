@@ -109,12 +109,27 @@
 				<key>KitName</key>
 				<string>Appsee</string>
 			</dict>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>client_identifier</key>
+					<string>mobile_sdk_client_6e930a7bb6123d229c39</string>
+					<key>identifier</key>
+					<string>ca506e6c52eb2eca41150684af0269b6642facef5d23a84e</string>
+					<key>url</key>
+					<string>https://fresco.zendesk.com</string>
+				</dict>
+				<key>KitName</key>
+				<string>Zendesk</string>
+			</dict>
 		</array>
 	</dict>
 	<key>FacebookAppID</key>
 	<string>267157383448416</string>
 	<key>FacebookDisplayName</key>
 	<string>Fresco</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -236,8 +251,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
 </plist>
