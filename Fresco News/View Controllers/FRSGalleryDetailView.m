@@ -338,7 +338,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                               self.commentTextField.enablesReturnKeyAutomatically = true;
                                               [self stopCommentsSpinner];
                                               if (error) {
-                                                  errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                  errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:nil delegate:self];
                                                   [errorAlertView show];
                                               } else {
                                                   if ([commentsTableView numberOfRowsInSection:0] > 5) {

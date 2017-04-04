@@ -217,11 +217,11 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
     if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
         [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
     }
-    if (responseObject[@"terms"] && ![responseObject[@"terms"] isEqual:[NSNull null]] && [responseObject[@"terms"][@"valid"] boolValue] == FALSE) {
+    if (responseObject[@"terms"] && ![responseObject[@"terms"] isEqual:[NSNull null]] && [responseObject[@"terms"][@"valid"] boolValue] == FALSE && ![responseObject[@"terms"][@"terms"] isEqual:[NSNull null]]) {
         UITabBarController *tabBar = (UITabBarController *)appDelegate.tabBarController;
         UINavigationController *nav = [tabBar.viewControllers firstObject];
         FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
-        [homeViewController presentTOS];
+        [homeViewController presentWithTOS:responseObject[@"terms"][@"terms"]];
     }
 
     if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {

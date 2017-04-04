@@ -870,7 +870,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 - (void)assignmentExpired {
     self.assignmentDidExpire = YES;
     if (!self.expiredAssignmentAlert) {
-        self.expiredAssignmentAlert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"This assignment has expired!" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        self.expiredAssignmentAlert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"This assignment has expired!" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
         [self.expiredAssignmentAlert show];
     }
 
