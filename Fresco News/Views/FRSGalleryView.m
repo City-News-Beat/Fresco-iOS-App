@@ -16,6 +16,7 @@
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
 #import <Haneke/Haneke.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "OEParallax.h"
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
@@ -898,12 +899,17 @@
 }
 
 - (void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
-    [imageView
-        hnk_setImageFromURL:[NSURL
-                             URLResizedFromURLString:url
-                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                             ]
-     ];
+//    [imageView
+//        hnk_setImageFromURL:[NSURL
+//                             URLResizedFromURLString:url
+//                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+//                             ]
+//     ];
+    
+    [imageView setImageWithURL:[NSURL
+                                URLResizedFromURLString:url
+                                width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                                ]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -1115,11 +1121,17 @@
 - (void)configureActionBar {
     if ([self.delegate shouldHaveActionBar]) {
         CGFloat yPos = self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height;
-        
-        self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
-        [self.actionBar configureWithObject:self.gallery];
-        self.actionBar.navigationController = self.delegate.navigationController;
-        [self addSubview:self.actionBar];
+        if(!self.actionBar) {
+            self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
+            [self.actionBar configureWithObject:self.gallery];
+            self.actionBar.navigationController = self.delegate.navigationController;
+            [self addSubview:self.actionBar];
+
+        }else {
+            self.actionBar.frame = CGRectMake(self.actionBar.frame.origin.x, yPos, self.actionBar.frame.size.width, self.actionBar.frame.size.height);
+            [self.actionBar configureWithObject:self.gallery];
+            self.actionBar.navigationController = self.delegate.navigationController;
+        }
     }
 }
 
