@@ -616,7 +616,7 @@
 - (void)fetchLikes {
     BOOL reload = FALSE;
 
-    if (self.currentFeed == self.likes && self.likes != Nil) {
+    if (self.currentFeed == self.likes) {
         reload = TRUE;
     }
 
@@ -1015,7 +1015,7 @@
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
+    [self animateTableView];
 }
 
 - (void)handleLikesButtonTapped {
@@ -1025,19 +1025,36 @@
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
 
-    if (self.likes.count == 0 || (!self.likes)) {
-        [self configureFrogForFeed:self.tableView];
-        self.feedAwkwardView.alpha = 1;
-    } else {
-        self.feedAwkwardView.alpha = 0;
-    }
-
     if (self.currentFeed != self.likes) {
         self.currentFeed = self.likes;
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
+    if (!self.likes || self.likes.count == 0) {
+        [self configureFrogForFeed:self.tableView];
+        self.feedAwkwardView.alpha = 1;
+        [self.tableView reloadData];
+    } else {
+        self.feedAwkwardView.alpha = 0;
+    }
+    
+    [self animateTableView];
+}
+
+
+/**
+ Animates the current tableview and pins the FEED / LIKES buttons to the top of the view.
+ */
+-(void)animateTableView {
+    if (self.tableView.contentOffset.y != self.profileContainer.frame.size.height) {
+        if (self.currentFeed.count > 0 && self.tableView.contentOffset.y != 0) { // Checking if the feed is not empty, and if the tableview is not scrolled to the top.
+            [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
+        } else {
+            // This is a temporary fix for the case when the user has not liked anything and swaps between FEED and LIKES.
+            // It makes the transition a little less ugly.
+            [self.tableView setContentOffset:CGPointMake(0, 1) animated:YES];
+        }
+    }
 }
 
 - (void)showShareSheetWithContent:(NSArray *)content {
@@ -1103,16 +1120,7 @@
     if (section == 0) {
         return 1;
     } else {
-        if (!self.currentFeed) {
-            self.currentFeed = self.galleries;
-        }
-        if (self.currentFeed.count == 0) {
-            return 1;
-        } else {
-            return self.currentFeed.count;
-        }
-
-        return 0;
+        return self.currentFeed.count;
     }
 }
 
@@ -1179,27 +1187,30 @@
 }
 
 - (void)loadMoreInCurrentFeed {
-    if (isReloading || isFinishedLikes || isFinishedUser) {
+    if (isReloading) {
         return;
     }
 
     isReloading = YES;
-    FRSGallery *gallery = [self.likes lastObject];
-
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
 
     FRSUser *authUser = self.representedUser;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeed == self.likes && !isFinishedLikes) {
+        
+        FRSGallery *gallery = [self.likes lastObject];
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        NSString *timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+        
         [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
                                                           last:timeStamp
                                                     completion:^(id responseObject, NSError *error) {
                                                       isReloading = NO;
 
                                                       NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-
                                                       if (response.count == 0) {
                                                           isFinishedLikes = YES;
                                                       }
@@ -1210,22 +1221,39 @@
                                                       [self.tableView reloadData];
 
                                                     }];
-    } else if (self.currentFeed == self.galleries) {
+    } else if (self.currentFeed == self.galleries && !isFinishedUser) {
+        
+        NSString *timeStamp = @"";
+        
+        if ([[self.galleries lastObject] class] == [FRSGallery class]) {
+            FRSGallery *gallery = [self.galleries lastObject];
+            timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+        } else {
+            FRSStory *story= [self.galleries lastObject];
+            timeStamp = [dateFormat stringFromDate:story.createdDate];
+        }
+        
         [[FRSFeedManager sharedInstance] fetchGalleriesForUser:authUser
                                                           last:timeStamp
                                                     completion:^(id responseObject, NSError *error) {
-                                                      isReloading = NO;
-
-                                                      NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-
-                                                      if (response.count == 0) {
-                                                          isFinishedUser = YES;
-                                                      }
-
-                                                      NSMutableArray *newGalleries = [self.galleries mutableCopy];
-                                                      [newGalleries addObjectsFromArray:response];
-                                                      self.galleries = newGalleries;
-                                                      [self.tableView reloadData];
+                                                        isReloading = NO;
+                                                        
+                                                        NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+                                                        
+                                                        if (response.count == 0) {
+                                                            isFinishedUser = YES;
+                                                            
+                                                        }
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            // Mutable array from current following feed to be set as the main feed later
+                                                            NSMutableArray *paginatedFeed = [self.galleries mutableCopy];
+                                                            // Add parsed feed to paginated feed
+                                                            [paginatedFeed addObjectsFromArray:response];
+                                                            // Set main feed to paginated feed
+                                                            self.galleries = paginatedFeed;
+                                                            // Reload tableview
+                                                            [self.tableView reloadData];
+                                                        });
                                                     }];
     }
 }
