@@ -70,11 +70,15 @@
         imageView.image = Nil;
     }
 
+    [self.players removeAllObjects];
     self.players = Nil;
+    
     self.videoPlayer = Nil;
+    
+    [self.playerLayers removeAllObjects];
     self.playerLayers = Nil;
 
-    self.gallery = gallery;
+    self.gallery = nil;
 
     self.players = [[NSMutableArray alloc] init];
     self.playerLayers = [[NSMutableArray alloc] init];
@@ -268,7 +272,13 @@
 }
 
 - (void)configureImageViews {
+    [self.players removeAllObjects];
+    self.players = nil;
+    
     self.players = [[NSMutableArray alloc] init];
+    
+    [self.imageViews removeAllObjects];
+    self.imageViews = nil;
     self.imageViews = [NSMutableArray new];
 
     [self.nameLabel sizeToFit];
@@ -1064,7 +1074,9 @@
 
                 if (self.players.count > page) {
                     [(AVPlayer *)self.players[page] play];
-                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
+//                    TODO: App Crashes here: self.players.count was 0 and page was 0
+//                    TODO: Not sure why this has a redundant play call with delay.
+//                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
                 }
             }
         }

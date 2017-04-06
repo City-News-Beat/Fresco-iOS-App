@@ -599,8 +599,8 @@ static NSInteger const galleriesPerPage = 12;
     };
 
     cell.delegate = self;
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
+//    [cell setNeedsUpdateConstraints];
+//    [cell updateConstraintsIfNeeded];
 
     return cell;
 }
