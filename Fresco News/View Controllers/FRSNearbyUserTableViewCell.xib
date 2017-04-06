@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E175b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="201"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="200.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user-24" translatesAutoresizingMaskIntoConstraints="NO" id="kQV-hH-gNq">
@@ -47,8 +47,8 @@
                             <constraint firstAttribute="height" constant="1" id="rX0-4L-AAF"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ASS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJ8-iX-pBp">
-                        <rect key="frame" x="64" y="17" width="29.5" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJ8-iX-pBp">
+                        <rect key="frame" x="64" y="17" width="0.0" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="hbB-ny-eTG"/>
                         </constraints>
@@ -56,18 +56,18 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pF3-uz-B8X">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pF3-uz-B8X" customClass="FRSFollowButton">
                         <rect key="frame" x="264" y="4" width="48" height="48"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="48" id="6Mt-Fs-vXM"/>
                             <constraint firstAttribute="height" constant="48" id="quF-uN-NuC"/>
                         </constraints>
                         <connections>
-                            <action selector="didToggleFollow:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="e7W-9j-Fw8"/>
+                            <action selector="didToggleFollow:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Cz3-E2-UhT"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1" verticalHuggingPriority="251" text="DDDD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKV-yZ-rKO">
-                        <rect key="frame" x="101.5" y="17" width="162.5" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKV-yZ-rKO">
+                        <rect key="frame" x="72" y="17" width="192" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Mav-9p-DnO"/>
                         </constraints>
@@ -75,7 +75,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSi-B6-1XW">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSi-B6-1XW">
                         <rect key="frame" x="64" y="42" width="200" height="150"/>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
@@ -105,7 +105,7 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="bioLabel" destination="eSi-B6-1XW" id="uD2-U7-qAl"/>
-                <outlet property="followButton" destination="pF3-uz-B8X" id="pbb-Jt-QTb"/>
+                <outlet property="followButton" destination="pF3-uz-B8X" id="h7I-dd-tIy"/>
                 <outlet property="nameLabel" destination="CJ8-iX-pBp" id="IIk-yR-oBf"/>
                 <outlet property="profileImageView" destination="kQV-hH-gNq" id="BOu-KL-Kra"/>
                 <outlet property="usernameLabel" destination="wKV-yZ-rKO" id="FfG-dz-CH2"/>

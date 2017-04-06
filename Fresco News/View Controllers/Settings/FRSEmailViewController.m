@@ -53,7 +53,6 @@
             [alert show];
             return;
         }
-        
         NSDictionary *errorResponse = [error errorDictionaryFromAPIError];
         NSString *errorString = errorResponse[@"error"][@"msg"];
         

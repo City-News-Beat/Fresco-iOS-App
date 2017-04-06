@@ -68,7 +68,7 @@
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
 
-        if ([cancelTitle isEqual:@""]) {
+        if ([cancelTitle isEqual:@""] || cancelTitle == nil) {
             /* Single Action Button */
             self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
