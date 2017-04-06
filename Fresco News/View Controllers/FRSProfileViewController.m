@@ -75,6 +75,8 @@
 @property (strong, nonatomic) NSString *reportUserReasonString;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 
+@property BOOL currentFeedIsLikes;
+
 @end
 
 @implementation FRSProfileViewController
@@ -134,6 +136,7 @@
 
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
     
+    self.currentFeedIsLikes = NO;
 }
 
 - (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
@@ -565,7 +568,7 @@
 - (void)fetchGalleries {
     BOOL reload = FALSE;
 
-    if (self.currentFeed == self.galleries) {
+    if (!self.currentFeedIsLikes) {
         reload = TRUE;
     }
 
@@ -616,7 +619,7 @@
 - (void)fetchLikes {
     BOOL reload = FALSE;
 
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeedIsLikes) {
         reload = TRUE;
     }
 
@@ -999,7 +1002,9 @@
 - (void)handleFeedButtonTapped {
     if (self.feedButton.alpha > 0.7)
         return; //The button is already selected
-
+    
+    self.currentFeedIsLikes = NO;
+    
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
 
@@ -1009,11 +1014,9 @@
     } else {
         self.feedAwkwardView.alpha = 0;
     }
-
-    if (self.currentFeed != self.galleries) {
-        self.currentFeed = self.galleries;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+    
+    self.currentFeed = self.galleries;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [self animateTableView];
 }
@@ -1024,11 +1027,11 @@
 
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
+    
+    self.currentFeedIsLikes = YES;
 
-    if (self.currentFeed != self.likes) {
-        self.currentFeed = self.likes;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+    self.currentFeed = self.likes;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     if (!self.likes || self.likes.count == 0) {
         [self configureFrogForFeed:self.tableView];
@@ -1151,7 +1154,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeedIsLikes) {
         if (indexPath.row > currentLikesCount) {
             currentLikesCount = indexPath.row;
         }
@@ -1200,7 +1203,7 @@
     // There is reused code in these two methods and in other paginated feeds.
     // TODO: Consolidate pagination into one method
     
-    if (self.currentFeed == self.likes && !isFinishedLikes) {
+    if (self.currentFeedIsLikes && !isFinishedLikes) {
         
         NSString *timeStamp = @"";
         
@@ -1218,7 +1221,7 @@
                                                       isReloading = NO;
 
                                                       NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-                                                      if (response.count == 0 || self.likes.lastObject == self.currentFeed.lastObject) {
+                                                      if (response.count == 0) {
                                                           isFinishedLikes = YES;
                                                           return;
                                                       }
@@ -1236,7 +1239,7 @@
                                                         });
 
                                                     }];
-    } else if (self.currentFeed == self.galleries && !isFinishedUser) {
+    } else if (!self.currentFeedIsLikes && !isFinishedUser) {
         
         NSString *timeStamp = @"";
         
@@ -1255,7 +1258,7 @@
                                                         
                                                         NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
                                                         
-                                                        if (response.count == 0 || self.galleries.lastObject == self.currentFeed.lastObject) {
+                                                        if (response.count == 0) {
                                                             isFinishedUser = YES;
                                                             return;
                                                         }
