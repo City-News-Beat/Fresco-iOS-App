@@ -1197,13 +1197,20 @@
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
+    // There is reused code in these two methods and in other paginated feeds.
+    // TODO: Consolidate pagination into one method
+    
     if (self.currentFeed == self.likes && !isFinishedLikes) {
         
-        FRSGallery *gallery = [self.likes lastObject];
+        NSString *timeStamp = @"";
         
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        NSString *timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+        if ([[self.likes lastObject] class] == [FRSGallery class]) {
+            FRSGallery *gallery = [self.likes lastObject];
+            timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+        } else {
+            FRSStory *story = [self.likes lastObject];
+            timeStamp = [dateFormat stringFromDate:story.createdDate];
+        }
         
         [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
                                                           last:timeStamp
@@ -1211,14 +1218,22 @@
                                                       isReloading = NO;
 
                                                       NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-                                                      if (response.count == 0) {
+                                                      if (response.count == 0 || self.likes.lastObject == self.currentFeed.lastObject) {
                                                           isFinishedLikes = YES;
+                                                          return;
                                                       }
 
-                                                      NSMutableArray *newGalleries = [self.likes mutableCopy];
-                                                      [newGalleries addObjectsFromArray:response];
-                                                      self.likes = newGalleries;
-                                                      [self.tableView reloadData];
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            // Mutable array from current following feed to be set as the main feed later
+                                                            NSMutableArray *paginatedFeed = [self.likes mutableCopy];
+                                                            // Add parsed feed to paginated feed
+                                                            [paginatedFeed addObjectsFromArray:response];
+                                                            // Set main feed to paginated feed
+                                                            self.likes = paginatedFeed;
+                                                            // Reload tableview
+                                                            self.currentFeed = self.likes;
+                                                            [self.tableView reloadData];
+                                                        });
 
                                                     }];
     } else if (self.currentFeed == self.galleries && !isFinishedUser) {
@@ -1229,7 +1244,7 @@
             FRSGallery *gallery = [self.galleries lastObject];
             timeStamp = [dateFormat stringFromDate:gallery.createdDate];
         } else {
-            FRSStory *story= [self.galleries lastObject];
+            FRSStory *story = [self.galleries lastObject];
             timeStamp = [dateFormat stringFromDate:story.createdDate];
         }
         
@@ -1240,10 +1255,11 @@
                                                         
                                                         NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
                                                         
-                                                        if (response.count == 0) {
+                                                        if (response.count == 0 || self.galleries.lastObject == self.currentFeed.lastObject) {
                                                             isFinishedUser = YES;
-                                                            
+                                                            return;
                                                         }
+                                                        
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                             // Mutable array from current following feed to be set as the main feed later
                                                             NSMutableArray *paginatedFeed = [self.galleries mutableCopy];
@@ -1252,6 +1268,7 @@
                                                             // Set main feed to paginated feed
                                                             self.galleries = paginatedFeed;
                                                             // Reload tableview
+                                                            self.currentFeed = self.galleries;
                                                             [self.tableView reloadData];
                                                         });
                                                     }];
