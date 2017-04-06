@@ -65,10 +65,8 @@
     for (AVPlayerLayer *layer in self.playerLayers) {
         [layer removeFromSuperlayer];
     }
-
-    for (UIImageView *imageView in self.imageViews) {
-        imageView.image = Nil;
-    }
+    
+    [self.imageViews removeAllObjects];
 
     [self.players removeAllObjects];
     self.players = Nil;
@@ -170,10 +168,6 @@
         [self scrollViewDidScroll:self.scrollView];
     }
 
-    for (UIImageView *imageView in self.imageViews) {
-        [imageView setImage:Nil];
-    }
-
     dispatch_async(dispatch_get_main_queue(), ^{
       [self configureImageViews];
     });
@@ -184,6 +178,9 @@
     if (self) {
         self.delegate = delegate;
         self.gallery = gallery;
+        
+        self.imageViews = [[NSMutableArray alloc] initWithCapacity:0];
+        
         NSMutableArray *posts = [[NSMutableArray alloc] init];
 
         for (FRSPost *post in self.gallery.posts) {
@@ -278,8 +275,6 @@
     self.players = [[NSMutableArray alloc] init];
     
     [self.imageViews removeAllObjects];
-    self.imageViews = nil;
-    self.imageViews = [NSMutableArray new];
 
     [self.nameLabel sizeToFit];
 
@@ -344,10 +339,8 @@
         [layer removeFromSuperlayer];
     }
 
-    for (UIImageView *imageView in self.imageViews) {
-        imageView.image = Nil;
-    }
-
+    [self.imageViews removeAllObjects];
+    
     self.players = Nil;
     self.videoPlayer = Nil;
     self.playerLayers = Nil;
@@ -607,6 +600,7 @@
 }
 
 - (void)configureUserLine {
+    NSLog(@"creating profile image views.");
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
