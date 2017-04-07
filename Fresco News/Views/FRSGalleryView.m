@@ -98,7 +98,8 @@
     self.pageControl.frame = CGRectMake(self.frame.size.width - ((self.gallery.posts.count) * 16) - 16, self.scrollView.frame.size.height - 15 - 8, (self.gallery.posts.count) * 16, 8);
 
     [self updateUser];
-
+    [self updateLabels];
+    
     self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
     self.bottomLine.frame = CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5);
     self.clockIV.center = self.pageControl.center;
