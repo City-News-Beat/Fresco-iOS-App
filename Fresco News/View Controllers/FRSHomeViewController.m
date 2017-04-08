@@ -386,8 +386,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.dataSource.count > indexPath.row) {
-        FRSGallery *gallery = [self.dataSource objectAtIndex:indexPath.row];
-        return [gallery heightForGallery];
+        return 280.0;
     }
 
     return 10;
@@ -600,8 +599,8 @@ static NSInteger const galleriesPerPage = 12;
     };
 
     cell.delegate = self;
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
+//    [cell setNeedsUpdateConstraints];
+//    [cell updateConstraintsIfNeeded];
 
     return cell;
 }

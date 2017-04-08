@@ -106,6 +106,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentIDs = [[NSMutableArray alloc] init];
 
     self.assignmentCardIsOpen = NO;
+    self.mapShouldFollowUser = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -47,10 +47,9 @@ static NSString *const userFeed = @"feeds/%@/user";
     }
     
     NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
     
     [[FRSAPIClient sharedClient] get:endpoint
-                      withParameters:Nil
+                      withParameters:@{ @"sortBy" : @"created_at", @"last" : timeStamp != nil ? timeStamp : @"" }
                           completion:^(id responseObject, NSError *error) {
                               completion(responseObject, error);
                           }];
@@ -75,10 +74,9 @@ static NSString *const userFeed = @"feeds/%@/user";
     }
     
     NSString *endpoint = [NSString stringWithFormat:likeFeed, user.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
-    
+
     [[FRSAPIClient sharedClient] get:endpoint
-                      withParameters:Nil
+                      withParameters:@{ @"sortBy" : @"created_at", @"last" : timeStamp != nil ? timeStamp : @"" }
                           completion:^(id responseObject, NSError *error) {
                               completion(responseObject, error);
                           }];
@@ -100,10 +98,9 @@ static NSString *const userFeed = @"feeds/%@/user";
 
 - (void)fetchGalleriesForUser:(FRSUser *)user last:(NSString *)timeStamp completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
-    
+
     [[FRSAPIClient sharedClient] get:endpoint
-                      withParameters:Nil
+                      withParameters:@{ @"sortBy" : @"created_at", @"last" : timeStamp != nil ? timeStamp : @"" }
                           completion:^(id responseObject, NSError *error) {
                               completion(responseObject, error);
                           }];
