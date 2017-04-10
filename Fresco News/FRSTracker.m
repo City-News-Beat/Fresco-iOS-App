@@ -9,7 +9,6 @@
 #import "FRSTracker.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
-#import "FRSAuthManager.h"
 #import "FRSAssignment.h"
 #import "Adjust.h"
 #import <Fabric/Fabric.h>
@@ -43,13 +42,14 @@
             identityDictionary[@"email"] = user.email;
         }
         
-        if(user.username && ![user.username isEqual:[NSNull null]]) {
+        if (user.username && ![user.username isEqual:[NSNull null]]) {
             identityDictionary[@"username"] = user.username;
         }
         
-        if(userID != nil) {
+        if (userID != nil) {
             [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
             [self tagUXCamUser:userID];
+            [self configureZendesk]; // We don't want to configure Zendesk unless the user is logged in.
         }
     }
 }
@@ -132,21 +132,23 @@
     [Adjust appDidLaunch:adjustConfig];
 }
 
+#pragma mark - Zendesk
+
++ (void)configureZendesk {
+    [[ZDKConfig instance]
+     initializeWithAppId:@"ca506e6c52eb2eca41150684af0269b6642facef5d23a84e"
+     zendeskUrl:@"https://fresco.zendesk.com"
+     clientId:@"mobile_sdk_client_6e930a7bb6123d229c39"];
+    
+    ZDKAnonymousIdentity *identity = [ZDKAnonymousIdentity new];
+    identity.name = [[[FRSUserManager sharedInstance] authenticatedUser] firstName];
+    identity.email = [[[FRSUserManager sharedInstance] authenticatedUser] email];
+    [ZDKConfig instance].userIdentity = identity;
+}
+
 #pragma mark - Fabric
 
 + (void)configureFabric {
-    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
-        [[ZDKConfig instance]
-         initializeWithAppId:@"ca506e6c52eb2eca41150684af0269b6642facef5d23a84e"
-         zendeskUrl:@"https://fresco.zendesk.com"
-         clientId:@"mobile_sdk_client_6e930a7bb6123d229c39"];
-        
-        ZDKAnonymousIdentity *identity = [ZDKAnonymousIdentity new];
-        identity.name = [[[FRSUserManager sharedInstance] authenticatedUser] firstName];
-        identity.email = [[[FRSUserManager sharedInstance] authenticatedUser] email];
-        [ZDKConfig instance].userIdentity = identity;
-    }
-    
     [[Twitter sharedInstance] startWithConsumerKey:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerKey consumerSecret:[EndpointManager sharedInstance].currentEndpoint.twitterConsumerSecret];
     [Fabric with:@[ [Twitter class], [Crashlytics class] ]];
 }
