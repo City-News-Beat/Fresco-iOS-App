@@ -53,7 +53,6 @@
             [alert show];
             return;
         }
-        
         NSDictionary *errorResponse = [error errorDictionaryFromAPIError];
         NSString *errorString = errorResponse[@"error"][@"msg"];
         
@@ -61,7 +60,7 @@
             errorString = @"The password you've entered is incorrect! Please try again.";
         }
         
-        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:errorString actionTitle:@"" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:errorString actionTitle:@"" cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
         [alert show];
     };
     

@@ -16,6 +16,7 @@
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
 #import <Haneke/Haneke.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "OEParallax.h"
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
@@ -69,11 +70,15 @@
         imageView.image = Nil;
     }
 
+    [self.players removeAllObjects];
     self.players = Nil;
+    
     self.videoPlayer = Nil;
+    
+    [self.playerLayers removeAllObjects];
     self.playerLayers = Nil;
 
-    self.gallery = gallery;
+    self.gallery = nil;
 
     self.players = [[NSMutableArray alloc] init];
     self.playerLayers = [[NSMutableArray alloc] init];
@@ -267,7 +272,13 @@
 }
 
 - (void)configureImageViews {
+    [self.players removeAllObjects];
+    self.players = nil;
+    
     self.players = [[NSMutableArray alloc] init];
+    
+    [self.imageViews removeAllObjects];
+    self.imageViews = nil;
     self.imageViews = [NSMutableArray new];
 
     [self.nameLabel sizeToFit];
@@ -898,12 +909,17 @@
 }
 
 - (void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
-    [imageView
-        hnk_setImageFromURL:[NSURL
-                             URLResizedFromURLString:url
-                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                             ]
-     ];
+//    [imageView
+//        hnk_setImageFromURL:[NSURL
+//                             URLResizedFromURLString:url
+//                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+//                             ]
+//     ];
+    
+    [imageView setImageWithURL:[NSURL
+                                URLResizedFromURLString:url
+                                width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                                ]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -1058,7 +1074,9 @@
 
                 if (self.players.count > page) {
                     [(AVPlayer *)self.players[page] play];
-                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
+//                    TODO: App Crashes here: self.players.count was 0 and page was 0
+//                    TODO: Not sure why this has a redundant play call with delay.
+//                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
                 }
             }
         }
@@ -1115,11 +1133,17 @@
 - (void)configureActionBar {
     if ([self.delegate shouldHaveActionBar]) {
         CGFloat yPos = self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height;
-        
-        self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
-        [self.actionBar configureWithObject:self.gallery];
-        self.actionBar.navigationController = self.delegate.navigationController;
-        [self addSubview:self.actionBar];
+        if(!self.actionBar) {
+            self.actionBar = [[FRSActionBar alloc] initWithOrigin:CGPointMake(0, yPos) delegate:self];
+            [self.actionBar configureWithObject:self.gallery];
+            self.actionBar.navigationController = self.delegate.navigationController;
+            [self addSubview:self.actionBar];
+
+        }else {
+            self.actionBar.frame = CGRectMake(self.actionBar.frame.origin.x, yPos, self.actionBar.frame.size.width, self.actionBar.frame.size.height);
+            [self.actionBar configureWithObject:self.gallery];
+            self.actionBar.navigationController = self.delegate.navigationController;
+        }
     }
 }
 

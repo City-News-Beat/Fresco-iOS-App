@@ -114,7 +114,7 @@
     [self.container addSubview:self.cloudIV];
 
     self.arrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.container.frame.size.width / 2 - 28 / 2, 143, 28, 26)];
-    self.arrowIV.image = [UIImage imageNamed:@"upload"];
+    self.arrowIV.image = [UIImage imageNamed:@"upload-dark"];
     [self.container addSubview:self.arrowIV];
 
     self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.container.frame.size.width / 2 - camWidth / 2, 194, camWidth, camHeight)];

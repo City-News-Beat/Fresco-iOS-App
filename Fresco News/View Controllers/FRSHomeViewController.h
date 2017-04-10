@@ -35,6 +35,6 @@
 
 @property BOOL loadNoMore;
 
-- (void)presentTOS;
+- (void)presentWithTOS:(NSString *)tos;
 
 @end

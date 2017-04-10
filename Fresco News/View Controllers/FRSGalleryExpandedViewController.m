@@ -278,7 +278,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                                                                       withCompletion:^(id responseObject, NSError *error) {
 
                                                                                         if (responseObject) {
-                                                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:nil delegate:self];
                                                                                             self.didDisplayBlock = YES;
                                                                                             [alert show];
                                                                                             self.isBlockingFromComment = YES;
@@ -465,7 +465,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 }
             }
 
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:nil delegate:self];
             self.isReportingComment = NO;
             [alert show];
         }
@@ -495,7 +495,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                       withCompletion:^(id responseObject, NSError *error) {
 
                                         if (responseObject) {
-                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:nil delegate:self];
                                             self.didDisplayBlock = YES;
                                             [alert show];
                                             self.didBlockUser = YES;
@@ -555,7 +555,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                   }
               }
 
-              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message:[NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message:[NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:nil delegate:self];
               [alert show];
           }
         }];

@@ -411,7 +411,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     case Misc:
         switch (indexPath.row) {
         case LogOut: {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:nil delegate:self];
             [alert show];
             break;
         }

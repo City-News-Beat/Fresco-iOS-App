@@ -260,6 +260,7 @@
 
     averageHeight += [label sizeThatFits:CGSizeMake([UIScreen mainScreen].bounds.size.width - 32, INT_MAX)].height + 12 + 44 + 20;
 
+    label = nil;
     self.generatedHeight = averageHeight;
 
     return averageHeight > 0 ? averageHeight : 280;

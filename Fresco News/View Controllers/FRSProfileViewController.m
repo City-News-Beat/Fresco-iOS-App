@@ -75,6 +75,8 @@
 @property (strong, nonatomic) NSString *reportUserReasonString;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 
+@property BOOL currentFeedIsLikes;
+
 @end
 
 @implementation FRSProfileViewController
@@ -134,6 +136,7 @@
 
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
     
+    self.currentFeedIsLikes = NO;
 }
 
 - (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
@@ -565,7 +568,7 @@
 - (void)fetchGalleries {
     BOOL reload = FALSE;
 
-    if (self.currentFeed == self.galleries) {
+    if (!self.currentFeedIsLikes) {
         reload = TRUE;
     }
 
@@ -616,7 +619,7 @@
 - (void)fetchLikes {
     BOOL reload = FALSE;
 
-    if (self.currentFeed == self.likes && self.likes != Nil) {
+    if (self.currentFeedIsLikes) {
         reload = TRUE;
     }
 
@@ -999,7 +1002,9 @@
 - (void)handleFeedButtonTapped {
     if (self.feedButton.alpha > 0.7)
         return; //The button is already selected
-
+    
+    self.currentFeedIsLikes = NO;
+    
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
 
@@ -1009,13 +1014,11 @@
     } else {
         self.feedAwkwardView.alpha = 0;
     }
-
-    if (self.currentFeed != self.galleries) {
-        self.currentFeed = self.galleries;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
     
-    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
+    self.currentFeed = self.galleries;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    [self animateTableView];
 }
 
 - (void)handleLikesButtonTapped {
@@ -1024,20 +1027,37 @@
 
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
+    
+    self.currentFeedIsLikes = YES;
 
-    if (self.likes.count == 0 || (!self.likes)) {
+    self.currentFeed = self.likes;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    if (!self.likes || self.likes.count == 0) {
         [self configureFrogForFeed:self.tableView];
         self.feedAwkwardView.alpha = 1;
+        [self.tableView reloadData];
     } else {
         self.feedAwkwardView.alpha = 0;
     }
-
-    if (self.currentFeed != self.likes) {
-        self.currentFeed = self.likes;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
     
-    [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
+    [self animateTableView];
+}
+
+
+/**
+ Animates the current tableview and pins the FEED / LIKES buttons to the top of the view.
+ */
+-(void)animateTableView {
+    if (self.tableView.contentOffset.y != self.profileContainer.frame.size.height) {
+        if (self.currentFeed.count > 0 && self.tableView.contentOffset.y != 0) { // Checking if the feed is not empty, and if the tableview is not scrolled to the top.
+            [self.tableView setContentOffset:CGPointMake(0, self.profileContainer.frame.size.height) animated:YES];
+        } else {
+            // This is a temporary fix for the case when the user has not liked anything and swaps between FEED and LIKES.
+            // It makes the transition a little less ugly.
+            [self.tableView setContentOffset:CGPointMake(0, 1) animated:YES];
+        }
+    }
 }
 
 - (void)showShareSheetWithContent:(NSArray *)content {
@@ -1103,16 +1123,7 @@
     if (section == 0) {
         return 1;
     } else {
-        if (!self.currentFeed) {
-            self.currentFeed = self.galleries;
-        }
-        if (self.currentFeed.count == 0) {
-            return 1;
-        } else {
-            return self.currentFeed.count;
-        }
-
-        return 0;
+        return self.currentFeed.count;
     }
 }
 
@@ -1143,7 +1154,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeedIsLikes) {
         if (indexPath.row > currentLikesCount) {
             currentLikesCount = indexPath.row;
         }
@@ -1179,52 +1190,90 @@
 }
 
 - (void)loadMoreInCurrentFeed {
-    if (isReloading || isFinishedLikes || isFinishedUser) {
+    if (isReloading) {
         return;
     }
-
+    
     isReloading = YES;
+    
     FRSUser *authUser = self.representedUser;
-
-    if (self.currentFeed == self.likes) {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    
+    // There is reused code in these two methods and in other paginated feeds.
+    // TODO: Consolidate pagination into one method
+    
+    if (self.currentFeedIsLikes && !isFinishedLikes) {
         
-        FRSGallery *gallery = [self.likes lastObject];
+        NSString *timeStamp = @"";
+        
+        if ([[self.likes lastObject] class] == [FRSGallery class]) {
+            FRSGallery *gallery = [self.likes lastObject];
+            timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+        } else {
+            FRSStory *story = [self.likes lastObject];
+            timeStamp = [dateFormat stringFromDate:story.createdDate];
+        }
         
         [[FRSFeedManager sharedInstance] fetchLikesFeedForUser:authUser
-                                                          last:gallery.uid
+                                                          last:timeStamp
                                                     completion:^(id responseObject, NSError *error) {
-                                                      isReloading = NO;
-
-                                                      NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-
-                                                      if (response.count == 0) {
-                                                          isFinishedLikes = YES;
-                                                      }
-
-                                                      NSMutableArray *newGalleries = [self.likes mutableCopy];
-                                                      [newGalleries addObjectsFromArray:response];
-                                                      self.likes = newGalleries;
-                                                      [self.tableView reloadData];
-
+                                                        isReloading = NO;
+                                                        
+                                                        NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+                                                        if (response.count == 0) {
+                                                            isFinishedLikes = YES;
+                                                            return;
+                                                        }
+                                                        
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            // Mutable array from current following feed to be set as the main feed later
+                                                            NSMutableArray *paginatedFeed = [self.likes mutableCopy];
+                                                            // Add parsed feed to paginated feed
+                                                            [paginatedFeed addObjectsFromArray:response];
+                                                            // Set main feed to paginated feed
+                                                            self.likes = paginatedFeed;
+                                                            // Reload tableview
+                                                            self.currentFeed = self.likes;
+                                                            [self.tableView reloadData];
+                                                        });
+                                                        
                                                     }];
-    } else if (self.currentFeed == self.galleries) {
-        FRSGallery *gallery = [self.galleries lastObject];
+    } else if (!self.currentFeedIsLikes && !isFinishedUser) {
+        
+        NSString *timeStamp = @"";
+        
+        if ([[self.galleries lastObject] class] == [FRSGallery class]) {
+            FRSGallery *gallery = [self.galleries lastObject];
+            timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+        } else {
+            FRSStory *story = [self.galleries lastObject];
+            timeStamp = [dateFormat stringFromDate:story.createdDate];
+        }
         
         [[FRSFeedManager sharedInstance] fetchGalleriesForUser:authUser
-                                                          last:gallery.uid
+                                                          last:timeStamp
                                                     completion:^(id responseObject, NSError *error) {
-                                                      isReloading = NO;
-
-                                                      NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-
-                                                      if (response.count == 0) {
-                                                          isFinishedUser = YES;
-                                                      }
-
-                                                      NSMutableArray *newGalleries = [self.galleries mutableCopy];
-                                                      [newGalleries addObjectsFromArray:response];
-                                                      self.galleries = newGalleries;
-                                                      [self.tableView reloadData];
+                                                        isReloading = NO;
+                                                        
+                                                        NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+                                                        
+                                                        if (response.count == 0) {
+                                                            isFinishedUser = YES;
+                                                            return;
+                                                        }
+                                                        
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            // Mutable array from current following feed to be set as the main feed later
+                                                            NSMutableArray *paginatedFeed = [self.galleries mutableCopy];
+                                                            // Add parsed feed to paginated feed
+                                                            [paginatedFeed addObjectsFromArray:response];
+                                                            // Set main feed to paginated feed
+                                                            self.galleries = paginatedFeed;
+                                                            // Reload tableview
+                                                            self.currentFeed = self.galleries;
+                                                            [self.tableView reloadData];
+                                                        });
                                                     }];
     }
 }
@@ -1582,7 +1631,7 @@
                                                 username = @"them";
                                             }
 
-                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message:[NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:nil delegate:self];
                                             self.didDisplayBlock = YES;
                                             [alert show];
 
@@ -1669,7 +1718,7 @@
               } else {
                   username = @"them";
               }
-              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message:[NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message:[NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:nil delegate:self];
               [alert show];
           }
         }];

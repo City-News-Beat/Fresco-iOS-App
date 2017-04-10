@@ -78,7 +78,6 @@ BOOL isSegueingToAssignment;
                                            cancelTitle:@""
                                            cancelTitleColor:[UIColor frescoBackgroundColorDark]
                                            delegate:nil];
-                [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                 [alertView show];
                 
                 return;
@@ -112,7 +111,6 @@ BOOL isSegueingToAssignment;
                                            cancelTitle:@""
                                            cancelTitleColor:[UIColor frescoBackgroundColorDark]
                                            delegate:nil];
-                [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                 [alertView show];
             } else {
                 
@@ -389,13 +387,13 @@ BOOL isSegueingToAssignment;
 // TODO: Reuse these errors
 + (void)error:(NSError *)error {
     if (!error) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
         FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
         [alert show];
     } else {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:nil];
         [alert show];
     }
 }

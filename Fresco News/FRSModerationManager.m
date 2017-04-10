@@ -73,7 +73,7 @@ static NSString *const reportGalleryEndpoint = @"gallery/%@/report";
     [[FRSUserManager sharedInstance] reloadUser:nil];
 
     if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
-        self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:nil delegate:self];
         [self.suspendedAlert show];
     }
 }
