@@ -16,7 +16,6 @@
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
 #import <Haneke/Haneke.h>
-#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "OEParallax.h"
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
@@ -904,17 +903,12 @@
 }
 
 - (void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
-//    [imageView
-//        hnk_setImageFromURL:[NSURL
-//                             URLResizedFromURLString:url
-//                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-//                             ]
-//     ];
-    
-    [imageView setImageWithURL:[NSURL
-                                URLResizedFromURLString:url
-                                width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                                ]];
+    [imageView
+        hnk_setImageFromURL:[NSURL
+                             URLResizedFromURLString:url
+                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                             ]
+     ];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
