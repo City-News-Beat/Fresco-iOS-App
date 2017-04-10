@@ -96,6 +96,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSSocialToggleTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:socialToggleCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLogOutTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:logOutCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationsSwitchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:assignmentNotficationsSwitchCellIdentifier];
+    
+    self.hidesBottomBarWhenPushed = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -112,10 +114,6 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
-
-    [[FRSUserManager sharedInstance] reloadUser:^(id responseObject, NSError *error) {
-      [self.tableView reloadData];
-    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
