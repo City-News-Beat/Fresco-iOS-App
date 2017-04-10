@@ -25,6 +25,7 @@
 #import "FRSGalleryDetailView.h"
 #import "FRSGalleryManager.h"
 #import "FRSActionBar.h"
+#import "FRSGalleryMediaView.h"
 
 #define TEXTVIEW_TOP_PAD 12
 #define LABEL_HEIGHT 20
@@ -39,6 +40,7 @@
 @property (strong, nonatomic) UIImageView *repostImageView;
 @property (strong, nonatomic) UILabel *repostLabel;
 @property (strong, nonatomic) NSMutableArray *playerLayers;
+@property (strong, nonatomic) FRSGalleryMediaView *mediaView;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
 
@@ -146,6 +148,8 @@
 
 
     [self configureActionBar];
+    
+    [self configureGalleryMediaViewOnRefresh];
 }
 
 - (void)updateUser {
@@ -194,6 +198,9 @@
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
         [self configureUI];
+        
+        [self configureGalleryMediaViewOnLoad];
+        
     }
     return self;
 }
@@ -250,6 +257,16 @@
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
 }
 
+-(void)configureGalleryMediaViewOnRefresh {
+    [self.mediaView setFrame:CGRectMake(0, 0, self.mediaView.bounds.size.width, [self imageViewHeight])];
+    [self.mediaView loadGallery:self.gallery];
+}
+-(void)configureGalleryMediaViewOnLoad {
+    
+    self.mediaView = [[FRSGalleryMediaView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, [self imageViewHeight]) andGallery:self.gallery];
+    [self addSubview:self.mediaView];
+
+}
 - (void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight])];
     self.scrollView.showsVerticalScrollIndicator = NO;
