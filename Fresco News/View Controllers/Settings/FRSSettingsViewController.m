@@ -96,8 +96,6 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSSocialToggleTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:socialToggleCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLogOutTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:logOutCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationsSwitchTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:assignmentNotficationsSwitchCellIdentifier];
-    
-    self.hidesBottomBarWhenPushed = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -120,10 +118,15 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [super viewDidAppear:animated];
 
     [self.tableView reloadData];
+    self.hidesBottomBarWhenPushed = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self.navigationItem setTitle:@"Settings"];
+    
+    // Setting the alpha of the tabBar to 0 makes the transition into the Zendesk SDK detail views more appealing.
+    self.tabBarController.tabBar.alpha = 0;
 }
 
 - (void)popViewController {
@@ -437,19 +440,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 - (void)presentHelpcenter {
     // Create a Content Model to pass in
     ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
-    
     // Disable requests
     [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
-    
-    // Setup navbar
-    NSDictionary *navbarAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [UIColor whiteColor], NSForegroundColorAttributeName,
-                                      nil];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor frescoOrangeColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:navbarAttributes];
-    [[[UINavigationBar appearance] backItem] setTitle:@""];
-
     // Show Help Center
     [ZDKHelpCenter pushHelpCenterOverview:self.navigationController withContentModel:helpCenterContentModel];
 }
