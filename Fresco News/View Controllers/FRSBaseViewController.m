@@ -176,6 +176,7 @@
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     [(FRSTabBarController *)self.tabBarController showBell:NO];
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
+    self.tabBarController.tabBar.alpha = 1;
     
     [self popViewController];
 }
