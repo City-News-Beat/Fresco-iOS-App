@@ -439,8 +439,19 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 - (void)presentHelpcenter {
     // Create a Content Model to pass in
     ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
+    
     // Disable requests
     [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
+    
+    // Setup navbar
+    NSDictionary *navbarAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [UIColor whiteColor], NSForegroundColorAttributeName,
+                                      nil];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor frescoOrangeColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:navbarAttributes];
+    [[[UINavigationBar appearance] backItem] setTitle:@""];
+
     // Show Help Center
     [ZDKHelpCenter pushHelpCenterOverview:self.navigationController withContentModel:helpCenterContentModel];
 }
