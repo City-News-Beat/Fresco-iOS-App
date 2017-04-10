@@ -277,6 +277,11 @@
     }];
     
     [self.tableView reloadData];
+    
+    // We're setting the tab bars alpha to 0 in the viewWillDisappear of the SettingsVC
+    // to avoid any ugly transitions into the Zendesk SDK detail views.
+    // Setting the alpha to 1 here restores the visibility of the tab bar.
+    self.tabBarController.tabBar.alpha = 1;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
