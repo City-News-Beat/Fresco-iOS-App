@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12117" systemVersion="16E175b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12084"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -36,7 +36,7 @@
                                 <constraint firstAttribute="height" constant="44" id="teu-IA-vxF"/>
                             </constraints>
                             <color key="textColor" white="0.0" alpha="0.85999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="ySq-10-6af"/>
@@ -62,12 +62,12 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yzd-t5-Fdw">
-                    <rect key="frame" x="0.0" y="45" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tza-pk-Nn1">
                             <rect key="frame" x="16" y="0.0" width="343" height="44"/>
                             <color key="textColor" white="0.0" alpha="0.85999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="tOF-e9-ccu"/>
@@ -84,7 +84,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkY-bA-GCb">
-                    <rect key="frame" x="266" y="90" width="109" height="44"/>
+                    <rect key="frame" x="266" y="89" width="109" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Sif-Bt-esw"/>
                         <constraint firstAttribute="width" constant="109" id="dGX-1n-3Wr"/>
@@ -100,17 +100,37 @@
                         <action selector="saveEmail:" destination="-1" eventType="touchUpInside" id="ZUQ-ja-Uyo"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIZ-TT-Mqp">
+                    <rect key="frame" x="0.0" y="44" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="8lV-9P-7eq"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJl-ad-OJ3">
+                    <rect key="frame" x="0.0" y="88" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="IlO-yk-6Dh"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="yzd-t5-Fdw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8Of-dT-Mqh"/>
                 <constraint firstAttribute="trailing" secondItem="MCC-ew-T4L" secondAttribute="trailing" id="8Pv-Fr-dDE"/>
                 <constraint firstItem="MCC-ew-T4L" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8ey-WK-3ID"/>
+                <constraint firstItem="PJl-ad-OJ3" firstAttribute="trailing" secondItem="mIZ-TT-Mqp" secondAttribute="trailing" id="8ns-7s-lan"/>
                 <constraint firstItem="pkY-bA-GCb" firstAttribute="top" secondItem="yzd-t5-Fdw" secondAttribute="bottom" constant="1" id="B3E-Kp-dOa"/>
+                <constraint firstItem="PJl-ad-OJ3" firstAttribute="leading" secondItem="yzd-t5-Fdw" secondAttribute="leading" id="CT8-6U-d3g"/>
+                <constraint firstItem="PJl-ad-OJ3" firstAttribute="leading" secondItem="mIZ-TT-Mqp" secondAttribute="leading" id="HIB-rR-Zab"/>
+                <constraint firstItem="PJl-ad-OJ3" firstAttribute="trailing" secondItem="yzd-t5-Fdw" secondAttribute="trailing" id="Hbc-wR-jIg"/>
                 <constraint firstAttribute="trailing" secondItem="yzd-t5-Fdw" secondAttribute="trailing" id="JRJ-qA-x3J"/>
                 <constraint firstAttribute="trailing" secondItem="pkY-bA-GCb" secondAttribute="trailing" id="KGs-8O-tSF"/>
                 <constraint firstAttribute="trailing" secondItem="pkY-bA-GCb" secondAttribute="trailing" id="b32-XF-Gvj"/>
-                <constraint firstItem="yzd-t5-Fdw" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="bottom" constant="1" id="dZ9-uF-GqR"/>
+                <constraint firstItem="yzd-t5-Fdw" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="bottom" id="dZ9-uF-GqR"/>
+                <constraint firstItem="PJl-ad-OJ3" firstAttribute="top" secondItem="yzd-t5-Fdw" secondAttribute="bottom" id="iO6-KK-s7w"/>
+                <constraint firstItem="mIZ-TT-Mqp" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="bottom" id="oC7-LC-jG0"/>
                 <constraint firstItem="MCC-ew-T4L" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="v7P-pM-UMI"/>
             </constraints>
             <point key="canvasLocation" x="14" y="44"/>

@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [self checkNotificationStatus];
 
     [self.navigationController.navigationBar setTitleTextAttributes:
-                                                 @{ NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17] }];
+     @{ NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17] }];
 
     [self configureBackButtonAnimated:NO];
 
@@ -402,7 +402,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     case Misc:
         switch (indexPath.row) {
         case LogOut: {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:nil delegate:self];
             [alert show];
             break;
         }
@@ -555,14 +555,14 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 }
 
 - (void)didToggleTwitter:(id)sender withLabel:(UILabel *)label {
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:twitterHandle]) {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedColor] delegate:self];
         alert.tag = twAlertTag;
         alert.delegate = self;
         [alert show];
 
         [[FRSAuthManager sharedInstance] unlinkTwitter:^(id responseObject, NSError *error) {
-          NSLog(@"Disconnect Twitter Error: %@", error);
+            NSLog(@"Disconnect Twitter Error: %@", error);
         }];
 
     } else {
@@ -575,16 +575,16 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
                                                 completion:^(id responseObject, NSError *error) {
                                                   if (responseObject && !error) {
                                                       [sender setOn:YES animated:YES];
-                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
                                                       label.text = session.userName;
-                                                      [[NSUserDefaults standardUserDefaults] setValue:label.text forKey:@"twitter-handle"];
+                                                      [[NSUserDefaults standardUserDefaults] setValue:label.text forKey:twitterHandle];
                                                   } else {
                                                       NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                       NSInteger responseCode = response.statusCode;
                                                       NSString *errorMessage;
                                                       if (responseCode == 412) {
                                                           [sender setOn:NO animated:YES];
-                                                          [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+                                                          [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
 
                                                           NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
                                                           NSError *jsonError;
@@ -608,25 +608,26 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 }
 
 - (void)didToggleFacebook:(id)sender withLabel:(UILabel *)label {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:facebookConnected]) {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedColor] delegate:self];
         alert.tag = fbAlertTag;
         alert.delegate = self;
         [alert show];
-
+        
         [sender setOn:NO];
         self.facebookCell.connectedSwitch.enabled = NO;
         [[FRSAuthManager sharedInstance] unlinkFacebook:^(id responseObject, NSError *error) {
-          NSLog(@"Disconnect Facebook Error: %@", error);
-          self.facebookCell.connectedSwitch.enabled = YES;
-          if (error) {
-              [sender setOn:YES];
-          } else {
-              [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-              [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
-              [sender setOn:YES];
-          }
-          [self.tableView reloadData];
+            
+            self.facebookCell.connectedSwitch.enabled = YES;
+            if (error) {
+                NSLog(@"Disconnect Facebook Error: %@", error);
+                [sender setOn:YES];
+            } else {
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];
+                [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
+                [sender setOn:YES];
+            }
+            [self.tableView reloadData];
         }];
 
     } else {
@@ -644,7 +645,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
                                   if (result && !error) {
                                       [[FRSAuthManager sharedInstance] linkFacebook:[FBSDKAccessToken currentAccessToken].tokenString
                                                                          completion:^(id responseObject, NSError *error) {
-                                                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                                                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
                                                                            [sender setOn:NO animated:YES];
                                                                            self.facebookCell.connectedSwitch.enabled = YES;
                                                                            if (responseObject && !error) {
@@ -663,7 +664,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
                                                                                NSString *errorMessage;
                                                                                if (responseCode == 412) {
                                                                                    [sender setOn:NO animated:YES];
-                                                                                   [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-connected"];
+                                                                                   [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:facebookConnected];
 
                                                                                    NSString *errorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
                                                                                    NSError *jsonError;
@@ -695,12 +696,12 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     if (alertView.tag == twAlertTag) {
         if (index == 0) {
             [self.twitterCell.connectedSwitch setOn:YES animated:YES];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:twitterConnected];
         } else {
             [self.twitterCell.connectedSwitch setOn:NO animated:YES];
-            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:twitterHandle];
             self.twitterCell.socialLabel.text = @"Connect Twitter";
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:twitterConnected];
         }
     } else if (alertView.tag == fbAlertTag) {
         if (index == 0) {

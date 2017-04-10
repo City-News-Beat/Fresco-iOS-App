@@ -86,7 +86,6 @@
 
       dispatch_async(dispatch_get_main_queue(), ^{
         self.feed = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:NO]];
-        numberOfPosts = [self.feed count];
         [self reloadData];
       });
     }];
@@ -317,31 +316,35 @@
     if (isReloading || isFinished) {
         return;
     }
-
+    
     isReloading = YES;
     FRSGallery *gallery = [self.feed lastObject];
-
+    
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-
-    FRSUser *authUser = [[FRSUserManager sharedInstance] authenticatedUser];
-    NSString *userID = authUser.uid;
-
-    NSString *endpoint = [NSString stringWithFormat:@"feeds/%@/following", userID];
-
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
-
+    NSString *timeStamp = [dateFormat stringFromDate:gallery.createdDate];
+    
     [[FRSFeedManager sharedInstance] fetchFollowing:timeStamp
                                          completion:^(NSArray *galleries, NSError *error) {
-                                           if (galleries.count == 0) {
-                                               isFinished = YES;
-                                           }
-
-                                           NSMutableArray *newGalleries = [self.feed mutableCopy];
-                                           [newGalleries addObjectsFromArray:galleries];
-                                           self.feed = newGalleries;
-                                           [self reloadData];
+                                             
+                                             if (galleries.count == 0 && !error) {
+                                                 isFinished = YES;
+                                             }
+                                             
+                                             isReloading = NO;
+                                             
+                                             // Mutable array from current following feed to be set as the main feed later
+                                             NSMutableArray *paginatedFeed = [self.feed mutableCopy];
+                                             // Array from the response object to be parsed
+                                             NSArray *responseFeed = [galleries copy];
+                                             // Parse response feed
+                                             responseFeed = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:NO]];
+                                             // Add parsed feed to paginated feed
+                                             [paginatedFeed addObjectsFromArray:responseFeed];
+                                             // Set main feed to paginated feed
+                                             self.feed = paginatedFeed;
+                                             // Reload tableview
+                                             [self reloadData];
                                          }];
 }
 

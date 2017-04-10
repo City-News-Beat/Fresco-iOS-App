@@ -11,6 +11,7 @@
 #import "FRSUserManager.h"
 #import "NSString+Validation.h"
 #import "FRSConnectivityAlertView.h"
+#import "NSError+Fresco.h"
 #import <UXCam/UXCam.h>
 
 @interface FRSEmailViewController ()
@@ -42,41 +43,31 @@
 
     [self.view endEditing:YES];
 
+    void (^handleResponse)(id, NSError*) = ^void(id responseObject, NSError *error) {
+        if (!error && responseObject) {
+            [[FRSUserManager sharedInstance] reloadUser];
+            [self popViewController];
+            return;
+        } else if (error.code == -1009) {
+            FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+            [alert show];
+            return;
+        }
+        NSDictionary *errorResponse = [error errorDictionaryFromAPIError];
+        NSString *errorString = errorResponse[@"error"][@"msg"];
+        
+        if([errorString containsString:@"Invalid password"]) {
+            errorString = @"The password you've entered is incorrect! Please try again.";
+        }
+        
+        FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:errorString actionTitle:@"" cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
+        [alert show];
+    };
+    
     [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"email" : self.emailTextField.text,
                                                                 @"verify_password" : self.passwordTextField.text }
-        completion:^(id responseObject, NSError *error) {
-          [[FRSUserManager sharedInstance] reloadUser];
-
-          if (!error && responseObject) {
-              FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
-              userToUpdate.email = self.emailTextField.text;
-              [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
-
-              [self popViewController];
-              return;
-          }
-
-          if (error.code == -1009) {
-              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-              [alert show];
-              return;
-          }
-
-          NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-          NSInteger responseCode = response.statusCode;
-          NSLog(@"Update User Error: %ld", (long)responseCode);
-
-          if (responseCode == 403 || responseCode == 401) {
-              self.errorImageView.hidden = NO;
-              self.saveButton.enabled = NO;
-          } else if (responseCode == 400) {
-              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this email. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-              [alert show];
-          } else {
-              FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-              [alert show];
-          }
-        }];
+                                                  completion:handleResponse];
+    
 }
 
 #pragma mark - TextField Delegate
@@ -107,14 +98,6 @@
     }
 
     return YES;
-}
-
-#pragma mark - FRSAlertView Delegate
-
-- (void)didPressButton:(FRSAlertView *)alertView atIndex:(NSInteger)index {
-    if (index == 0) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }
 }
 
 #pragma mark - UXCam

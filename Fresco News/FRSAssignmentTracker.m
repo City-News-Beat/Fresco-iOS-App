@@ -7,7 +7,7 @@
 //
 
 #import "FRSAssignmentTracker.h"
-#import "FRSLocationManager.h"
+#import "CLLocation+Fresco.h"
 
 @implementation FRSAssignmentTracker
 
@@ -29,7 +29,7 @@
  @return NSDictionary formatted with the assignment id and the distance away from the current user.
  */
 + (NSDictionary *)trackedParamsFromAssignment:(FRSAssignment *)assignment {
-    NSDictionary *trackedParams = @{ASSIGNMENT_ID : assignment.uid ? assignment.uid : @"", DISTANCE_AWAY: @([FRSLocationManager calculatedDistanceFromAssignment:assignment])};
+    NSDictionary *trackedParams = @{ASSIGNMENT_ID : assignment.uid ? assignment.uid : @"", DISTANCE_AWAY: @([CLLocation calculatedDistanceFromAssignment:assignment])};
     return trackedParams;
 }
 

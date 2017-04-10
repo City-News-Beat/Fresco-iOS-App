@@ -129,15 +129,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
     }
 }
 
-- (void)deletePayment:(NSIndexPath *)path {
-    NSDictionary *pay = self.payments[path.row];
-
-    [[FRSPaymentManager sharedInstance] deletePayment:pay[@"id"]
-                                           completion:^(id responseObject, NSError *error) {
-                                             [self reloadPayments];
-                                           }];
-}
-
 - (void)resetOtherPayments:(NSString *)activePayment {
     NSInteger i = 0;
     for (FRSPaymentCell *cell in self.tableView.visibleCells) {
@@ -188,6 +179,8 @@ static NSString *addPaymentCell = @"addPaymentCell";
                                              NSLog(@"%@", responseObject);
                                              if (!error) {
                                                  [self reloadPayments];
+                                             } else {
+                                                 [self presentGenericError];
                                              }
                                            }];
 }

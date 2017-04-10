@@ -145,6 +145,7 @@
 
         [self.alert show];
     } else {
+        //FIXME: keyboard should still be dismissed if its currently present. User can tap the field , not type anything and can press back button. In this case, the keyboard comes again after the view is popped.
         shouldGoBack = YES;
     }
 
@@ -180,6 +181,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
 
+    //TODO: NSUserDefaults needs to be synchronized. Need to check for potential bugs since its not done here.
     FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.notificationRadius = @(self.miles);
     [[[FRSUserManager sharedInstance] managedObjectContext] save:Nil];
@@ -736,6 +738,7 @@
         [self checkEmail];
     }
 
+    //TODO: consider checking validUsername also.
     if (self.usernameTF.isEditing) {
         [self startUsernameTimer];
 
@@ -848,13 +851,13 @@
 }
 
 - (void)usernameTimerFired {
-    // Check for emoji and error
-    if ([[self.usernameTF.text substringFromIndex:1] stringContainsEmoji]) {
+    // Check for valid username
+    if (![[self.usernameTF.text substringFromIndex:1] isValidUsername]) {
         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
         return;
     }
 
-    if (self.usernameTF.isEditing && (![[self.usernameTF.text substringFromIndex:1] stringContainsEmoji])) {
+    if (self.usernameTF.isEditing) {
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
             [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
                                                 completion:^(id responseObject, NSError *error) {
@@ -864,6 +867,7 @@
                                                           return;
                                                       }
                                                       [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                      //TODO: self.usernameTaken=YES does not make sense in case of any random error, take another variable instead.
                                                       self.usernameTaken = YES;
                                                       [self stopUsernameTimer];
                                                       [self checkCreateAccountButtonState];
@@ -872,14 +876,12 @@
                                                       if (available) {
                                                           [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                                                           self.usernameTaken = NO;
-                                                          [self stopUsernameTimer];
-                                                          [self checkCreateAccountButtonState];
                                                       } else {
                                                           [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                                                           self.usernameTaken = YES;
-                                                          [self stopUsernameTimer];
-                                                          [self checkCreateAccountButtonState];
                                                       }
+                                                      [self stopUsernameTimer];
+                                                      [self checkCreateAccountButtonState];
                                                   }
                                                 }];
         }
@@ -914,7 +916,9 @@
     if (toggle.on) {
 
         if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self];
+
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initPermissionsAlert];
+            alert.locationManager.delegate = self;
             [alert show];
         }
 
@@ -1189,6 +1193,7 @@
                                            if (error.code == -1009) {
                                                return;
                                            }
+                                           //TODO: emailTaken=NO does not make sense in case of any random error, take another variable instead.
                                            self.emailTaken = NO;
                                            [self shouldShowEmailDialogue:NO];
 

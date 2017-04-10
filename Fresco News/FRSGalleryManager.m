@@ -9,7 +9,7 @@
 #import "FRSGalleryManager.h"
 #import "FRSUploadManager.h"
 #import "FRSAuthManager.h"
-#import <Photos/Photos.h>
+#import "NSError+Fresco.h"
 
 static NSString *const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString *const repostGalleryEndpoint = @"gallery/%@/repost";
@@ -126,22 +126,18 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
     NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
 
     [[FRSAPIClient sharedClient] get:endpoint
-        withParameters:@{ @"limit" : limit,
-                          @"last" : lastID }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
+                      withParameters:@{ @"limit" : limit,
+                                        @"last" : lastID }
+                          completion:completion];
 }
 
 - (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
 
     [[FRSAPIClient sharedClient] get:endpoint
-        withParameters:@{ @"limit" : limit,
-                          @"last" : lastID }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
+                      withParameters:@{ @"limit" : limit,
+                                        @"last" : lastID }
+                          completion:completion];
 }
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -149,9 +145,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:nil
-                          completion:^(id responseObject, NSError *error) {
-                            completion(responseObject, error);
-                          }];
+                          completion:completion];
 }
 
 #pragma mark - Likes/Reposts
@@ -165,9 +159,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
+                           completion:completion];
 }
 
 - (void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -175,9 +167,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
+                           completion:completion];
 }
 
 - (void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -190,9 +180,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
-                           completion:^(id responseObject, NSError *error) {
-                               completion(responseObject, error);
-                           }];
+                           completion:completion];
 }
 
 - (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -200,9 +188,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 
     [[FRSAPIClient sharedClient] post:endpoint
                        withParameters:Nil
-                           completion:^(id responseObject, NSError *error) {
-                             completion(responseObject, error);
-                           }];
+                           completion:completion];
 }
 
 #pragma mark - Comments
@@ -215,9 +201,7 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
     NSString *endpoint = [NSString stringWithFormat:commentsEndpoint, galleryID];
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
-                          completion:^(id responseObject, NSError *error) {
-                            completion(responseObject, error);
-                          }];
+                          completion:completion];
 }
 
 - (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -225,15 +209,12 @@ static NSString *const getOutletEndpoint = @"outlet/%@";
 
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
-                          completion:^(id responseObject, NSError *error) {
-                            completion(responseObject, error);
-                          }];
+                          completion:completion];
 }
 
 - (void)addComment:(NSString *)comment toGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([[FRSAuthManager sharedInstance] checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-        return;
+        completion(Nil, [NSError unAuthenticatedError]);
     }
 
     NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];

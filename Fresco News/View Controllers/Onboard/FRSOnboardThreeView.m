@@ -99,13 +99,13 @@
     [self addSubview:self.container];
 
     self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(104, 143, 28, 26)];
-    self.leftArrowIV.image = [UIImage imageNamed:@"upload"];
+    self.leftArrowIV.image = [UIImage imageNamed:@"upload-dark"];
     self.leftArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 + 2);
     self.leftArrowIV.layer.shouldRasterize = YES;
     [self.container addSubview:self.leftArrowIV];
 
     self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(192, 143, 28, 26)];
-    self.rightArrowIV.image = [UIImage imageNamed:@"upload"];
+    self.rightArrowIV.image = [UIImage imageNamed:@"upload-dark"];
     self.rightArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
     self.rightArrowIV.layer.shouldRasterize = YES;
     [self.container addSubview:self.rightArrowIV];

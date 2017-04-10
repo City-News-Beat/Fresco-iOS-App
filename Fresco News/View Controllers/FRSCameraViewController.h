@@ -10,6 +10,7 @@
 #import "FRSFileLoader.h"
 #import "FRSFileViewController.h"
 #import "FRSWobbleView.h"
+#import "FRSLocator.h"
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,

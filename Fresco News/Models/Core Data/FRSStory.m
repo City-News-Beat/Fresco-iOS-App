@@ -33,7 +33,10 @@
 - (void)configureWithDictionary:(NSDictionary *)dict {
 
     self.caption = dict[@"caption"];
-    self.createdDate = [NSString dateFromString:dict[@"time_created"]];
+    
+    if ([dict valueForKey:@"created_at"] != nil && ![[dict valueForKey:@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [NSString dateFromString:dict[@"created_at"]];
+    }
 
     if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
         self.editedDate = [NSString dateFromString:dict[@"updated_at"]];

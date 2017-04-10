@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *resourceURL;
 @property (nullable, nonatomic, retain) NSString *uploadID;
 @property (nullable, nonatomic, retain) NSString *key;
+@property (nullable, nonatomic, retain) NSString *galleryID;
 
 @property (nullable, nonatomic, retain) NSArray *etags;
 @property (nullable, nonatomic, retain) NSArray *destinationURLS;

@@ -96,6 +96,7 @@
 }
 
 #pragma mark - Status Bar
+
 - (void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated {
 
     UIWindow *statusBarApplicationWindow = (UIWindow *)[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"];
@@ -120,7 +121,7 @@
 #pragma mark - FRSAlertView
 
 - (void)presentGenericError {
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:nil delegate:nil];
     [alert show];
 }
 
@@ -129,12 +130,13 @@
     [alert show];
 }
 
-- (void)checkStatusAndPresentPermissionsAlert:(id)delegate {
+- (void)checkStatusAndPresentPermissionsAlert {
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
         UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted) || grantedSettings.types == UIUserNotificationTypeNone) {
+
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:userHasSeenPermissionsAlert]; //Used for super edge case, see viewDidLoad in HomeVC for more details.
-            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:delegate];
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initPermissionsAlert];
             [alert show];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             delegate.didPresentPermissionsRequest = YES;

@@ -19,7 +19,6 @@
 #import "FRSCoreData.h"
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
-#import "FRSLocationManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSNotificationHandler.h"
@@ -29,6 +28,7 @@
 #import "FRSTOSAlertView.h"
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
+
 
 static NSInteger const galleriesPerPage = 12;
 
@@ -59,8 +59,6 @@ static NSInteger const galleriesPerPage = 12;
 @property (strong, nonatomic) UIView *sudoNavBar;
 @property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
-
-@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @end
 
@@ -93,21 +91,8 @@ static NSInteger const galleriesPerPage = 12;
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
 
-    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
-        //Present permissions alert on launch after two days from downloading the app only if the they have not seen the alert yet.
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
-            if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
-                NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
-                if(startDateString == nil) return;
-                NSDate *startDate = [NSString dateFromString:startDateString];
-                NSDate *today = [NSDate date];
-
-                NSInteger days = [NSDate daysBetweenDate:startDate andDate:today];
-                if (days >= 2) {
-                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-                }
-            }
-        }
+    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
+        [self checkStatusAndPresentPermissionsAlert];
     }
 }
 
@@ -170,12 +155,12 @@ static NSInteger const galleriesPerPage = 12;
     [self.migrationAlert show];
 }
 
-- (void)presentTOS {
+- (void)presentWithTOS:(NSString *)tos {
     if (self.TOSAlert) {
         return;
     }
 
-    self.TOSAlert = [[FRSTOSAlertView alloc] initTOS];
+    self.TOSAlert = [[FRSTOSAlertView alloc] initWithTOS:tos];
     self.TOSAlert.delegate = self;
     [self.TOSAlert show];
 }
@@ -401,8 +386,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.dataSource.count > indexPath.row) {
-        FRSGallery *gallery = [self.dataSource objectAtIndex:indexPath.row];
-        return [gallery heightForGallery];
+        return 280.0;
     }
 
     return 10;
@@ -615,8 +599,8 @@ static NSInteger const galleriesPerPage = 12;
     };
 
     cell.delegate = self;
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
+//    [cell setNeedsUpdateConstraints];
+//    [cell updateConstraintsIfNeeded];
 
     return cell;
 }

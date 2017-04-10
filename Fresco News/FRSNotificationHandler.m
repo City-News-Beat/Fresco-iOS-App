@@ -18,7 +18,7 @@
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
 #import "FRSConnectivityAlertView.h"
-#import "FRSLocationManager.h"
+#import "CLLocation+Fresco.h"
 #import <Smooch/Smooch.h>
 
 static BOOL isDeeplinking;
@@ -78,7 +78,6 @@ BOOL isSegueingToAssignment;
                                            cancelTitle:@""
                                            cancelTitleColor:[UIColor frescoBackgroundColorDark]
                                            delegate:nil];
-                [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                 [alertView show];
                 
                 return;
@@ -97,7 +96,7 @@ BOOL isSegueingToAssignment;
             if ([[push objectForKey:IS_GLOBAL] boolValue]) { // Check if global
                 [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
             } else { // Set DISTANCE_AWAY if not global
-                [paramsToTrack setObject:@([FRSLocationManager calculatedDistanceFromAssignment:assignment]) forKey:DISTANCE_AWAY];
+                [paramsToTrack setObject:@([CLLocation calculatedDistanceFromAssignment:assignment]) forKey:DISTANCE_AWAY];
             }
             
             // Track notificationOpened event only if BOOL shouldTrack is enabled
@@ -112,7 +111,6 @@ BOOL isSegueingToAssignment;
                                            cancelTitle:@""
                                            cancelTitleColor:[UIColor frescoBackgroundColorDark]
                                            delegate:nil];
-                [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                 [alertView show];
             } else {
                 
@@ -127,7 +125,7 @@ BOOL isSegueingToAssignment;
     /* PAYMENT */
     if ([type isEqualToString:purchasedContentNotification]) {
         
-        if ([[push valueForKey:HAS_PAYMENT] boolValue]) {
+        if ([[push[@"meta"] valueForKey:HAS_PAYMENT] boolValue]) {
             [self segueToGallery:[self galleryIDFromPush:push]];
         } else {
             [FRSNotificationHandler segueToPayment];
@@ -389,13 +387,13 @@ BOOL isSegueingToAssignment;
 // TODO: Reuse these errors
 + (void)error:(NSError *)error {
     if (!error) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:nil];
         [alert show];
     } else if (error.code == -1009) {
         FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionAlert];
         [alert show];
     } else {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:nil delegate:nil];
         [alert show];
     }
 }

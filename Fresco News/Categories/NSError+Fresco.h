@@ -31,4 +31,6 @@
 
 + (NSString *)errorStringFromAPIError:(NSError *)error;
 
+- (NSDictionary *)errorDictionaryFromAPIError;
+
 @end

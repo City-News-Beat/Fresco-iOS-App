@@ -10,6 +10,6 @@
 #import "FRSBaseViewController.h"
 #import "FRSAlertView.h"
 
-@interface FRSEmailViewController : FRSBaseViewController <UITextFieldDelegate, FRSAlertViewDelegate>
+@interface FRSEmailViewController : FRSBaseViewController <UITextFieldDelegate>
 
 @end

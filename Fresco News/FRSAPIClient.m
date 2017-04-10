@@ -160,7 +160,7 @@
     NSInteger responseCode = [[[error userInfo] objectForKey:AFNetworkingOperationFailingURLResponseErrorKey] statusCode];
     //Only refresh when the token has expired via the key in the response, or it's a client request and we're getting un-authenticated
     BOOL responseConstitutesRefresh = ([responseError containsString:@"token-expired"]) || (authUsed == FRSClientAuth && responseCode == 401);
-    //Never refresh on basic requests, cause that's possible
+    //Never refresh on basic requests, cause that's not possible
     return responseConstitutesRefresh && ![authHeader containsString:@"Basic"];
 }
 
@@ -201,7 +201,7 @@
        parameters:parameters
          progress:nil
           success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-              completion(responseObject, nil);
+              if(completion) completion(responseObject, nil);
           }
           failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
               if([self shouldRefresh:error usingHeader:[[manager requestSerializer] valueForHTTPHeaderField:@"Authorization"] usingAuth:requestAuthUsed]) {
@@ -210,12 +210,12 @@
                                                             if (!error) {
                                                                 [self post:endPoint withParameters:parameters completion:completion];
                                                             } else {
-                                                                completion(nil, error);
+                                                                if(completion) completion(nil, error);
                                                             }
                                                         }];
                   
               } else {
-                  completion(Nil, error);
+                  if(completion) completion(Nil, error);
               }
           }];
 }

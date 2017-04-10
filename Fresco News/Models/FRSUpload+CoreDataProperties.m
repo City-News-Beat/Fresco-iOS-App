@@ -23,5 +23,6 @@
 @dynamic destinationURLS;
 @dynamic uploadID;
 @dynamic key;
+@dynamic galleryID;
 
 @end

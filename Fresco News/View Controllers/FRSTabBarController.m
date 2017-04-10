@@ -2,7 +2,7 @@
 //  FRSTabBarController.m
 //  Fresco
 //
-//  Created by Danny Boy Sun on 12/18/15.
+//  Created by Daniel Sun on 12/18/15.
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
@@ -23,7 +23,7 @@
 #import "FRSUserNotificationViewController.h"
 
 /* MANAGERS */
-#import "FRSLocationManager.h"
+#import "FRSBaseViewController.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 #import "FRSAssignmentManager.h"
@@ -39,7 +39,7 @@
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 @property (strong, nonatomic) UIImage *bellImage;
-@property (strong, nonatomic) FRSLocationManager *locationManager;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property CGFloat xOffset;
 
 @end
@@ -213,7 +213,7 @@
 
 - (void)checkLocationAndPresentPermissionsAlert {
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-        FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self.locationManager];
+        FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initPermissionsAlert];
         [alert show];
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         delegate.didPresentPermissionsRequest = YES;
@@ -222,7 +222,7 @@
 
 - (void)presentCameraPermissionsAlert {
     dispatch_async(dispatch_get_main_queue(), ^{
-      FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"HOLD UP" message:@"We need permission to access your camera, microphone, and camera. Head over to Settings and make sure these are all enabled to continue." actionTitle:@"ASK LATER" cancelTitle:@"SETTINGS" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+      FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"HOLD UP" message:@"We need permission to access your camera, microphone, and camera. Head over to Settings and make sure these are all enabled to continue." actionTitle:@"ASK LATER" cancelTitle:@"SETTINGS" cancelTitleColor:nil delegate:self];
       [alert show];
     });
 }
@@ -256,7 +256,7 @@
 
     if ([self.tabBar.items indexOfObject:item] == 2) {
         if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
-            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initWithLocationManagerDelegate:self.locationManager];
+            FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initPermissionsAlert];
             [alert show];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             delegate.didPresentPermissionsRequest = YES;

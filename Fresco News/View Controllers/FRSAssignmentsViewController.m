@@ -9,7 +9,6 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSCameraViewController.h"
-#import "FRSLocationManager.h"
 #import "FRSAssignment.h"
 #import "FRSDateFormatter.h"
 #import "FRSMapCircle.h"
@@ -23,6 +22,7 @@
 #import "FRSUserManager.h"
 #import "FRSAssignmentManager.h"
 #import "FRSAssignmentTracker.h"
+#import "CLLocation+Fresco.h"
 
 @import MapKit;
 
@@ -38,7 +38,6 @@
 @property (nonatomic) BOOL isFetching;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @property (strong, nonatomic) FRSMapCircle *userCircle;
-@property (strong, nonatomic) FRSLocationManager *locationManager;
 @property (nonatomic, retain) NSMutableArray *outletImagesViews;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) NSArray *overlays;
@@ -106,17 +105,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     self.assignmentIDs = [[NSMutableArray alloc] init];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *notification) {
-                                                    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-                                                    if (lastLocation) {
-                                                        [self locationUpdate:lastLocation];
-                                                    }
-                                                  }];
-
     self.assignmentCardIsOpen = NO;
+    self.mapShouldFollowUser = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -127,12 +117,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     self.isPresented = YES;
 
-    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-
-    if (lastLocation) {
-        [self locationUpdate:lastLocation];
-    }
-
     self.navigationItem.title = @"ASSIGNMENTS";
     [self.navigationController.navigationBar setTitleTextAttributes:
                                                  @{ NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17] }];
@@ -142,7 +126,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
-        [self checkStatusAndPresentPermissionsAlert:_locationManager.delegate];
+        [self checkStatusAndPresentPermissionsAlert];
     }
 
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
@@ -156,6 +140,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    if ([FRSLocator sharedLocator].currentLocation) {
+        [self locationUpdate:[FRSLocator sharedLocator].currentLocation];
+    }
 
     //If the VC is presented and a selected assignment is set, present that assignment to the user
     //by either pushing the global assignment controller or presenting it on the map
@@ -194,26 +182,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)didReceiveLocationUpdate:(NSNotification *)notification {
-    NSDictionary *latLong = notification.userInfo;
-
-    NSNumber *lat = latLong[@"lat"];
-    NSNumber *lon = latLong[@"lng"];
-
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
-    [self locationUpdate:location];
-}
-
-- (void)locationUpdate:(CLLocation *)location {
-
-    if (!hasSnapped) {
-        hasSnapped = TRUE;
-        [self adjustMapRegionWithLocation:location];
-        [self fetchAssignmentsNearLocation:location radius:10];
-        [self addAnnotationsForAssignments];
-    }
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
@@ -357,7 +325,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     NSNumber *assignmentRadius = assignment.radius;
     float milesRadius = [assignmentRadius floatValue];
 
-    if ([FRSLocationManager calculatedDistanceFromAssignment:assignment] < milesRadius) {
+    if ([CLLocation calculatedDistanceFromAssignment:assignment] < milesRadius) {
         return TRUE;
     }
 
@@ -903,7 +871,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 - (void)assignmentExpired {
     self.assignmentDidExpire = YES;
     if (!self.expiredAssignmentAlert) {
-        self.expiredAssignmentAlert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"This assignment has expired!" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        self.expiredAssignmentAlert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"This assignment has expired!" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
         [self.expiredAssignmentAlert show];
     }
 
@@ -1339,34 +1307,30 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 - (void)handleAssignmentScroll {
 }
 
-#pragma mark - Location Manager
+#pragma mark - Location handling
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-
-    if (!locations.count) {
-        NSLog(@"FRSLocationManager did not return any locations");
-        return;
+- (void)didReceiveLocationUpdate:(NSNotification *)notification {
+    if([notification.userInfo[@"location"] isKindOfClass:[CLLocation class]]) {
+        [self locationUpdate:(CLLocation *)notification.userInfo[@"location"]];
     }
+}
 
-    if (![self.locationManager significantLocationChangeForLocation:[locations lastObject]])
-        return;
 
-    self.locationManager.lastAcquiredLocation = [locations lastObject];
+/**
+ Handles response to a new user location
 
-    if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground) {
-        [self.locationManager stopUpdatingLocation];
-    }
-
-    //CLLocation *currentLocation = [locations lastObject];
-
+ @param location Current location of the user to respond with
+ */
+- (void)locationUpdate:(CLLocation *)location {
+    //Make sure we have a valid location before updating
+    if(location.coordinate.latitude != 0 && location.coordinate.longitude != 0) return;
+    
     if (!hasSnapped) {
         hasSnapped = TRUE;
-        [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
+        [self adjustMapRegionWithLocation:location];
+        [self fetchAssignmentsNearLocation:location radius:10];
+        [self addAnnotationsForAssignments];
     }
-
-    [self fetchAssignmentsNearLocation:self.locationManager.lastAcquiredLocation radius:10];
-
-    [self addAnnotationsForAssignments];
 }
 
 #pragma mark - UIPanGestureRec
