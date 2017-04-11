@@ -86,9 +86,9 @@
  This method is used to configure both the action button titles of the alert.
  
  @param actionTitle NSString The left action button title of the alert.
- @param actionTitleColor UIColor The left action button title color of the alert. Pass nil to use the default color for left action title.
+ @param actionTitleColor UIColor The left action button title color of the alert. Pass nil to use the default color(frescoDarkTextColor) for left action title.
  @param cancelTitle NSString The right cancel button title of the alert.
- @param cancelTitleColor UIColor The right cancel button title color of the alert. Pass nil to use the default color for right cancel title.
+ @param cancelTitleColor UIColor The right cancel button title color of the alert. Pass nil to use the default color(frescoBlueColor) for right cancel title.
  */
 -(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor;
 
@@ -108,9 +108,11 @@
 - (void)animateOut;
 
 /**
- Calculates and sets the frame of the alert view depending on the heights of title, message and action buttons. 
+ Calculates and sets the frame of the alert view depending on the heights of title, message and action buttons only. Subclasses using only these basic element can call this method at the end, after setting values to the elements.
  
  If -(instancetype)initWithTitle withColor: andRightCancelTitle: withColor: is not used to create the alert, its the responsibility of the caller to calculate and set the height of the alert view by considering all its sub views.
+ 
+
  */
 - (void)adjustFrame;
 
