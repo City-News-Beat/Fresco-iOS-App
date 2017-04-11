@@ -26,12 +26,14 @@
 #import "CLLocation+EXIFGPS.h"
 #import "FRSTabBarController.h"
 #import "FRSBaseViewController.h"
+#import "FRSCaptureModeSlider.h"
 
 #define ICON_WIDTH 24
 #define PREVIEW_WIDTH 56
 #define APERTURE_WIDTH 72
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4 / 3
+#define SLIDER_HEIGHT 40
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
@@ -103,6 +105,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @property (nonatomic, retain) NSMutableArray *positions;
 @property (strong, nonatomic) UIView *alertContainer;
 @property (nonatomic) BOOL didPush;
+
+@property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 
 @end
 
@@ -301,6 +305,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self configurePreview];
     [self configureBottomContainer];
     [self configureTopContainer];
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 - (void)configureTopContainer {
@@ -329,6 +334,13 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
+    
+    [self configureSlider];
+}
+
+- (void)configureSlider {
+    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, -SLIDER_HEIGHT, self.view.frame.size.width, SLIDER_HEIGHT)];
+    [self.bottomClearContainer addSubview:self.captureModeSlider];
 }
 
 - (NSInteger)assignmentLabelWidth {
@@ -451,18 +463,18 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)configureBottomContainer {
 
-    self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
-    self.bottomOpaqueContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+//    self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO + SLIDER_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO) - SLIDER_HEIGHT)];
+//    self.bottomOpaqueContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     // 239 239 233
-    [self.view addSubview:self.bottomOpaqueContainer];
+//    [self.view addSubview:self.bottomOpaqueContainer];
 
-    self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
-    self.bottomClearContainer.backgroundColor = [UIColor clearColor];
+    self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO + SLIDER_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO) - SLIDER_HEIGHT)];
+    self.bottomClearContainer.backgroundColor = [UIColor frescoTransparentDarkColor];
     [self.view addSubview:self.bottomClearContainer];
 
-    self.bottomOpaqueContainer.layer.shadowOffset = CGSizeMake(0, -1);
-    self.bottomOpaqueContainer.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
-    self.bottomOpaqueContainer.layer.shadowOpacity = 1.0;
+//    self.bottomOpaqueContainer.layer.shadowOffset = CGSizeMake(0, -1);
+//    self.bottomOpaqueContainer.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
+//    self.bottomOpaqueContainer.layer.shadowOpacity = 1.0;
 
     [self configureNextSection];
     [self configureApertureButton];
@@ -542,11 +554,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.ivContainer = [[UIView alloc] initWithFrame:self.apertureShadowView.frame];
     //    self.ivContButton = [[UIButton alloc] initWithFrame:self.apertureShadowView.frame];
 
-    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 92.2, 92.2)];
+    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 72, 72)];
     [self.videoRotateIV centerHorizontallyInView:self.ivContainer];
     [self.videoRotateIV centerVerticallyInView:self.ivContainer];
 
-    [self.videoRotateIV setImage:[UIImage imageNamed:@"videoRotateLeft"]];
+    [self.videoRotateIV setImage:[UIImage imageNamed:@"rotate"]];
     self.videoRotateIV.layer.shadowColor = [UIColor blackColor].CGColor;
     self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
     self.videoRotateIV.layer.shadowOpacity = 0.15;
@@ -555,16 +567,16 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.rotationIVOriginalY = self.videoRotateIV.frame.origin.y;
     self.videoRotateIV.userInteractionEnabled = YES;
 
-    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 13, 22)];
-    [self.videoPhoneIV centerHorizontallyInView:self.ivContainer];
-    [self.videoPhoneIV centerVerticallyInView:self.ivContainer];
-
-    self.videoPhoneIV.frame = CGRectOffset(self.videoPhoneIV.frame, 0, 3);
-
-    [self.videoPhoneIV setImage:[UIImage imageNamed:@"cellphone"]];
-    self.videoPhoneIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 0.7 : 0.0;
-    self.videoPhoneIV.contentMode = UIViewContentModeScaleAspectFill;
-    self.videoPhoneIV.userInteractionEnabled = YES;
+//    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 13, 22)];
+//    [self.videoPhoneIV centerHorizontallyInView:self.ivContainer];
+//    [self.videoPhoneIV centerVerticallyInView:self.ivContainer];
+//
+//    self.videoPhoneIV.frame = CGRectOffset(self.videoPhoneIV.frame, 0, 3);
+//
+//    [self.videoPhoneIV setImage:[UIImage imageNamed:@"cellphone"]];
+//    self.videoPhoneIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 0.7 : 0.0;
+//    self.videoPhoneIV.contentMode = UIViewContentModeScaleAspectFill;
+//    self.videoPhoneIV.userInteractionEnabled = YES;
 
     [self.apertureButton addSubview:self.apertureImageView];
 
@@ -589,92 +601,92 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)handleApertureButtonDepressed {
 
-    self.apertureButton.userInteractionEnabled = NO;
-    self.clearButton.userInteractionEnabled = NO;
-    [UIView animateWithDuration:0
-        delay:0.0
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-
-          self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, 1);
-          self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 1);
-
-        }
-        completion:^(BOOL finished) {
-          self.apertureButton.userInteractionEnabled = YES;
-          self.clearButton.userInteractionEnabled = YES;
-        }];
+//    self.apertureButton.userInteractionEnabled = NO;
+//    self.clearButton.userInteractionEnabled = NO;
+//    [UIView animateWithDuration:0
+//        delay:0.0
+//        options:UIViewAnimationOptionCurveEaseInOut
+//        animations:^{
+//
+//          self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, 1);
+//          self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 1);
+//
+//        }
+//        completion:^(BOOL finished) {
+//          self.apertureButton.userInteractionEnabled = YES;
+//          self.clearButton.userInteractionEnabled = YES;
+//        }];
 }
 
 - (void)handleApertureButtonReleased {
 
-    self.apertureButton.userInteractionEnabled = NO;
-    self.clearButton.userInteractionEnabled = NO;
-
-    [UIView animateWithDuration:0
-        delay:0.0
-        options:UIViewAnimationOptionCurveEaseInOut
-        animations:^{
-
-          self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, -1);
-          self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
-
-        }
-        completion:^(BOOL finished) {
-          self.apertureButton.userInteractionEnabled = YES;
-          self.clearButton.userInteractionEnabled = YES;
-        }];
+//    self.apertureButton.userInteractionEnabled = NO;
+//    self.clearButton.userInteractionEnabled = NO;
+//
+//    [UIView animateWithDuration:0
+//        delay:0.0
+//        options:UIViewAnimationOptionCurveEaseInOut
+//        animations:^{
+//
+//          self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, -1);
+//          self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
+//
+//        }
+//        completion:^(BOOL finished) {
+//          self.apertureButton.userInteractionEnabled = YES;
+//          self.clearButton.userInteractionEnabled = YES;
+//        }];
 }
 
 - (void)animatePhoneRotationForVideoOrientation {
 
-    self.apertureButton.userInteractionEnabled = NO;
-    self.clearButton.userInteractionEnabled = NO;
-
-    CGFloat duration = 0.3;
-
-    [UIView animateWithDuration:duration / 4.
-        delay:0
-        options:UIViewAnimationOptionCurveEaseIn
-        animations:^{
-          self.videoPhoneIV.transform = CGAffineTransformMakeRotation((M_PI * 2.) / -3.);
-        }
-        completion:^(BOOL finished) {
-          [UIView animateWithDuration:duration / 4.
-              delay:0
-              options:UIViewAnimationOptionCurveLinear
-              animations:^{
-                self.videoPhoneIV.transform = CGAffineTransformMakeRotation((M_PI * 2.) * 2. / -3.);
-              }
-              completion:^(BOOL finished) {
-                [UIView animateWithDuration:duration / 4.
-                    delay:0
-                    options:UIViewAnimationOptionCurveLinear
-                    animations:^{
-                      self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * -2.0);
-                    }
-                    completion:^(BOOL finished) {
-                      [UIView animateWithDuration:0.06
-                          delay:0
-                          options:UIViewAnimationOptionCurveLinear
-                          animations:^{
-                            self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * -0.1);
-                          }
-                          completion:^(BOOL finished) {
-                            [UIView animateWithDuration:0.06
-                                delay:0
-                                options:UIViewAnimationOptionCurveEaseOut
-                                animations:^{
-                                  self.videoPhoneIV.transform = CGAffineTransformMakeRotation(0);
-                                }
-                                completion:^(BOOL finished) {
-                                  self.apertureButton.userInteractionEnabled = YES;
-                                  self.clearButton.userInteractionEnabled = YES;
-                                }];
-                          }];
-                    }];
-              }];
-        }];
+//    self.apertureButton.userInteractionEnabled = NO;
+//    self.clearButton.userInteractionEnabled = NO;
+//
+//    CGFloat duration = 0.3;
+//
+//    [UIView animateWithDuration:duration / 4.
+//        delay:0
+//        options:UIViewAnimationOptionCurveEaseIn
+//        animations:^{
+//          self.videoPhoneIV.transform = CGAffineTransformMakeRotation((M_PI * 2.) / -3.);
+//        }
+//        completion:^(BOOL finished) {
+//          [UIView animateWithDuration:duration / 4.
+//              delay:0
+//              options:UIViewAnimationOptionCurveLinear
+//              animations:^{
+//                self.videoPhoneIV.transform = CGAffineTransformMakeRotation((M_PI * 2.) * 2. / -3.);
+//              }
+//              completion:^(BOOL finished) {
+//                [UIView animateWithDuration:duration / 4.
+//                    delay:0
+//                    options:UIViewAnimationOptionCurveLinear
+//                    animations:^{
+//                      self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * -2.0);
+//                    }
+//                    completion:^(BOOL finished) {
+//                      [UIView animateWithDuration:0.06
+//                          delay:0
+//                          options:UIViewAnimationOptionCurveLinear
+//                          animations:^{
+//                            self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * -0.1);
+//                          }
+//                          completion:^(BOOL finished) {
+//                            [UIView animateWithDuration:0.06
+//                                delay:0
+//                                options:UIViewAnimationOptionCurveEaseOut
+//                                animations:^{
+//                                  self.videoPhoneIV.transform = CGAffineTransformMakeRotation(0);
+//                                }
+//                                completion:^(BOOL finished) {
+//                                  self.apertureButton.userInteractionEnabled = YES;
+//                                  self.clearButton.userInteractionEnabled = YES;
+//                                }];
+//                          }];
+//                    }];
+//              }];
+//        }];
 }
 
 - (void)animateRotateView:(UIView *)view withDuration:(CGFloat)duration counterClockwise:(BOOL)counterClockwise {
@@ -812,19 +824,12 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)configureFlashButton {
-
-    // We start at the edge of the aperture button and then center the view between the aperture button and the recordModeToggleView
-    NSInteger apertureEdge = self.apertureShadowView.frame.origin.x + self.apertureShadowView.frame.size.width;
-    NSInteger xOrigin = apertureEdge + (self.view.frame.size.width - apertureEdge - SIDE_PAD - (ICON_WIDTH * 2)) / 2;
-
-    NSInteger sidePad = 7;
-
-    self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin - sidePad, -sidePad, ICON_WIDTH + sidePad * 2, ICON_WIDTH + sidePad * 2)];
+    
+    self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - ICON_WIDTH*2, 0, ICON_WIDTH, ICON_WIDTH)];
     [self.flashButton centerVerticallyInView:self.bottomClearContainer];
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
-    //    [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.bottomClearContainer addSubview:self.flashButton];
     [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -986,94 +991,40 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)adjustFramesForCaptureState {
-
+    
     NSInteger topToAperture = (self.bottomClearContainer.frame.size.height - self.apertureBackground.frame.size.height) / 2;
     NSInteger offset = topToAperture - 10;
-
+    
     CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
-
+    
     //Default to video frame, shouldnt have to animate at all
     self.preview.frame = bigPreviewFrame;
     self.captureVideoPreviewLayer.frame = bigPreviewFrame;
-
-    self.bottomOpaqueContainer.layer.shadowOpacity = 0;
-
+    
     if (self.captureMode == FRSCaptureModePhoto) {
-
-        /*UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-        [self.view addSubview:snapshot];*/
-
-        [UIView animateWithDuration:0.3
-            delay:0
-            options:UIViewAnimationOptionCurveEaseInOut
-            animations:^{
-
-              // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
-              dispatch_async(dispatch_get_main_queue(), ^{
-                self.preview.frame = smallPreviewFrame;
-                self.captureVideoPreviewLayer.frame = smallPreviewFrame;
-              });
-
-              self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
-              self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
-
-            }
-            completion:^(BOOL finished) {
-              self.apertureButton.frame = self.originalApertureFrame;
-              self.bottomOpaqueContainer.layer.shadowOpacity = 1; //throw in animation block
-
-            }];
-
-        /*[UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            snapshot.alpha = 0;
-            
-        } completion:^(BOOL finished) {
-            [snapshot removeFromSuperview];
-            
-        }];*/
-
+        
+        self.bottomClearContainer.backgroundColor = [UIColor clearColor];
+        self.captureModeSlider.backgroundColor = [UIColor clearColor]; // this should happen in the subclass
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.preview.frame = smallPreviewFrame;
+            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
+        });
+        
+        self.apertureButton.frame = self.originalApertureFrame;
+        
     } else {
+        self.bottomClearContainer.backgroundColor = [UIColor frescoTransparentDarkColor];
+        self.captureModeSlider.backgroundColor = [UIColor frescoTransparentDarkColor]; // this should happen in the subclass
 
-        /*UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-        [self.view addSubview:snapshot];*/
-        //
-        [UIView animateWithDuration:0.3
-            delay:0
-            options:UIViewAnimationOptionCurveEaseInOut
-            animations:^{
-
-              // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
-              dispatch_async(dispatch_get_main_queue(), ^{
-                self.preview.frame = bigPreviewFrame;
-                self.captureVideoPreviewLayer.frame = bigPreviewFrame;
-              });
-
-              self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
-              self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
-              self.bottomOpaqueContainer.layer.shadowOpacity = 1;
-
-              //snapshot.transform = CGAffineTransformMakeScale(0, self.bottomOpaqueContainer.frame.size.height);
-
-            }
-            completion:^(BOOL finished) {
-              self.apertureButton.frame = self.originalApertureFrame;
-
-              [UIView animateWithDuration:0.15
-                                    delay:0
-                                  options:UIViewAnimationOptionCurveEaseInOut
-                               animations:^{
-
-                                 //snapshot.alpha = 0;
-
-                               }
-                               completion:^(BOOL finished){
-                                   //[snapshot removeFromSuperview];
-
-                               }];
-
-            }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.preview.frame = bigPreviewFrame;
+            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+        });
+        
+        self.apertureButton.frame = self.originalApertureFrame;
+        
     }
 }
 
@@ -2219,5 +2170,28 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                          }];
     }
 }
+
+
+// This will be integrated into the view controller at a later time.
+// Keeping it separated to keep things clean initially.
+#pragma mark - Package Uptate
+- (void)configureFooterForCaptureMode:(FRSCaptureMode)captureMode {
+    
+    if (captureMode == FRSCaptureModePhoto) {
+        
+    } else {
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 @end
