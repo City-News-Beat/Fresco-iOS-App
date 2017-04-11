@@ -8,6 +8,8 @@
 #import "FRSCarouselCell.h"
 #import "FRSSnapKit.h"
 
+#define ASSET_SIZE 500
+
 @implementation FRSCarouselCell
 
 - (void)awakeFromNib {
@@ -24,17 +26,19 @@
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self addSubview:imageView];
-
         dispatch_async(dispatch_get_main_queue(), ^{
           [[PHImageManager defaultManager]
               requestImageForAsset:asset
-                        targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height)
+                        targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)
                        contentMode:PHImageContentModeAspectFill
                            options:nil
                      resultHandler:^(UIImage *result, NSDictionary *info) {
                        dispatch_async(dispatch_get_main_queue(), ^{
                          imageView.image = result;
                          imageView.contentMode = UIViewContentModeScaleAspectFill;
+                         imageView.clipsToBounds = YES;
+                         // We should re implement the stretchy header in the carousel cell at some point.
+                         // Good resource to follow https://nrj.io/stretchy-uicollectionview-headers/
                          [FRSSnapKit constrainSubview:imageView ToBottomOfParentView:self WithHeight:imageView.frame.size.height];
                        });
                      }];

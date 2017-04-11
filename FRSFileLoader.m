@@ -66,7 +66,7 @@
     return [allAssets count];
 }
 
-// load a list of all photos / videos from the last 24 hours
+// load a list of all photos / videos from the last 7 days
 - (void)getAssets {
     if (!currentCollection) {
         [self getAlbumCollection];
@@ -85,8 +85,8 @@
     #else
         //Device
         // only load assets w/ creation date within the defined maximum age
-        NSDate *yesterday = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
-        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", yesterday];
+        NSDate *date = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
+        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", date];
         options.predicate = dayPredicate;
     #endif
 

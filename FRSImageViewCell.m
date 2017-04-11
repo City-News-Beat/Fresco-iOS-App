@@ -8,6 +8,8 @@
 
 #import "FRSImageViewCell.h"
 
+#define ASSET_SIZE 150
+
 @interface FRSImageViewCell()
 
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
@@ -22,9 +24,10 @@
 
 - (void)loadAsset:(PHAsset *)asset {
     self.currentAsset = asset;
+    self.imageView.backgroundColor = [UIColor frescoShadowColor];
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
-                       targetSize:CGSizeMake(100.0, 100.0)
+                       targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)
                       contentMode:PHImageContentModeAspectFill
                           options:nil
                     resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {

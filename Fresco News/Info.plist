@@ -196,7 +196,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>🙉 Check, check one, sibilance, ssssssibilance. 🎙</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>🖼 Fresco checks your camera roll to           find verifiable content from the last                         24 hours.                                                  🎞 To show up, photos and videos need to be taken with location ​ON in Camera.</string>
+	<string>🖼 Fresco checks your camera roll to find verifiable content from the last                7 days.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Nota-Normal.otf</string>

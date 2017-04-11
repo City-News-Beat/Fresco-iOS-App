@@ -23,6 +23,7 @@
 		0731B1B51E4929F90045E6F4 /* FRSSnapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 0731B1B41E4929F90045E6F4 /* FRSSnapKit.m */; };
 		0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */; };
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
+		075962BD1E8C062B0003CC8A /* FRSUploadFailAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 075962BC1E8C062B0003CC8A /* FRSUploadFailAlertView.m */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
 		0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */; };
@@ -374,6 +375,8 @@
 		074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Helpers.h"; path = "Categories/UIImageView+Helpers.h"; sourceTree = "<group>"; };
 		074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+Helpers.m"; path = "Categories/UIImageView+Helpers.m"; sourceTree = "<group>"; };
 		075473561D19B5640020636E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		075962BB1E8C062B0003CC8A /* FRSUploadFailAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadFailAlertView.h; sourceTree = "<group>"; };
+		075962BC1E8C062B0003CC8A /* FRSUploadFailAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadFailAlertView.m; sourceTree = "<group>"; };
 		0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
@@ -2051,6 +2054,8 @@
 				CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */,
 				CE8DB7A91E76336E00000F30 /* FRSFindFriendsAlertView.h */,
 				CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */,
+				075962BB1E8C062B0003CC8A /* FRSUploadFailAlertView.h */,
+				075962BC1E8C062B0003CC8A /* FRSUploadFailAlertView.m */,
 			);
 			name = "Alert View";
 			sourceTree = "<group>";
@@ -2780,6 +2785,7 @@
 				CE25D7CC1E63E8510086461E /* FRSPermissionAlertView.m in Sources */,
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
+				075962BD1E8C062B0003CC8A /* FRSUploadFailAlertView.m in Sources */,
 				D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */,
 				D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */,
 				D4C217D31D64DC010076172D /* FRSPaymentCell.m in Sources */,

@@ -34,6 +34,7 @@
 #import <Stripe/Stripe.h>
 #import "FRSIndicatorDot.h"
 #import "FRSConnectivityAlertView.h"
+#import "FRSUploadFailAlertView.h"
 
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
@@ -466,16 +467,20 @@ fetchCompletionHandler:^(UIBackgroundFetchResult result) {
     if(!self.isPresentingError && self.errorAlertView.window == nil){
         self.isPresentingError = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.errorAlertView = [[FRSAlertView alloc]
-                                   initWithTitle:[title uppercaseString]
-                                   message:error.localizedDescription
-                                   actionTitle:@"OK"
-                                   cancelTitle:@""
-                                   cancelTitleColor:nil
-                                   delegate:nil];
-            
-            [self.errorAlertView show];
-            
+            if ([title isEqualToString:uploadError]) {
+                FRSUploadFailAlertView *alert = [[FRSUploadFailAlertView alloc] initUploadFailAlertViewWithError:error];
+                [alert show];
+            } else {
+                self.errorAlertView = [[FRSAlertView alloc]
+                                       initWithTitle:[title uppercaseString]
+                                       message:error.localizedDescription
+                                       actionTitle:@"OK"
+                                       cancelTitle:@""
+                                       cancelTitleColor:nil
+                                       delegate:nil];
+                
+                [self.errorAlertView show];
+            }
             self.isPresentingError = NO;
         });
     }

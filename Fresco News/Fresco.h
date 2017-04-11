@@ -9,7 +9,7 @@
 
 // file loading
 
-static int const maxFileAge = 86400; //1 day, in seconds
+static int const maxFileAge = 86400 * 7; // 86400 = 1 day in seconds. Multiply by 7 for 1 week.
 
 // notifications
 static NSString *const kStatusBarTappedNotification = @"statusBarTappedNotification";

@@ -46,7 +46,7 @@ static NSInteger const maxAssets = 8;
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
 
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-
+    
     self.uploadViewController = [[FRSUploadViewController alloc] init];
     self.uploadViewController.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
     self.uploadViewController.preselectedAssignment = self.preselectedAssignment;
@@ -79,6 +79,13 @@ static NSInteger const maxAssets = 8;
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+
+    // We only want to reset the view if the user goes back from UploadVC to this VC.
+    // Otherwise, if we call [resetView] from the
+    [self.uploadViewController resetView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

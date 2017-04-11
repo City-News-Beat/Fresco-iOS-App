@@ -124,16 +124,20 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self dismissKeyboard];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.isFetching = NO;
-    [self dismissKeyboard];
-    [self resetOtherCells];
-    [self resetOtherOutlets];
+    [self handleKeyboardWillHide:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    
+    [self dismissKeyboard];
 }
 
 - (void)configureUI {
@@ -154,8 +158,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [self.loadingView setPullProgress:90];
 }
 
+// TODO: Consolidate all show/hide spinners on buttons into one class
 - (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    [button setTintColor:[UIColor clearColor]];
+    [button setTitle:@"" forState:UIControlStateNormal];
     spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
@@ -164,6 +169,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitle:@"SEND" forState:UIControlStateNormal];
     [button setTintColor:[UIColor frescoBlueColor]];
     [spinner removeFromSuperview];
     [spinner startAnimating];
@@ -283,7 +289,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)configurePageController {
     self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.numberOfPages = self.content.count;
+    self.pageControl.numberOfPages = [self.galleryCollectionView numberOfItemsInSection:0];
     self.pageControl.currentPage = 0;
     self.pageControl.userInteractionEnabled = NO;
 
@@ -442,6 +448,13 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    // We want to dismiss the keyboard when the user scrolls down a certain amount and releases their finger.
+    if (scrollView.contentOffset.y <= -75) {
+        [self dismissKeyboard];
+    }
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     //Update pageControl in galleryCollectionView
     CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
@@ -518,14 +531,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
         self.globalAssignmentsEnabled = YES;
         [self configureAndShowGlobalAssignments];
         self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(0);
-    }
-}
-
-- (void)toggleGestureRecognizer {
-    if (self.dismissKeyboardGestureRecognizer.enabled) {
-        self.dismissKeyboardGestureRecognizer.enabled = NO;
-    } else {
-        self.dismissKeyboardGestureRecognizer.enabled = YES;
     }
 }
 
@@ -825,6 +830,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
 #pragma mark - Text View
 
 - (void)configureTextView {
+    
+    if (self.captionTextView) return;
+
     NSInteger textViewHeight = 200;
 
     self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + 14, self.view.frame.size.width, 200 + 16)];
@@ -864,22 +872,27 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)dismissKeyboard {
-    [self.view resignFirstResponder];
-    [self.view endEditing:YES];
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
 #pragma mark - Keyboard
 
 - (void)handleKeyboardWillShow:(NSNotification *)sender {
-    [self toggleGestureRecognizer];
+    [self toggleGestureRecognizerEnabled:YES];
 
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 - (void)handleKeyboardWillHide:(NSNotification *)sender {
-    [self toggleGestureRecognizer];
+    [self toggleGestureRecognizerEnabled:NO];
     self.view.transform = CGAffineTransformMakeTranslation(0, 0);
+    [self.captionTextView resignFirstResponder];
+    [self.view endEditing:YES];
+}
+
+- (void)toggleGestureRecognizerEnabled:(BOOL)enabled {
+    self.dismissKeyboardGestureRecognizer.enabled = enabled;
 }
 
 #pragma mark - Assignments
@@ -916,7 +929,10 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                          NSArray *global = responseObject[@"global"];
                                                          self.assignmentsArray = [[NSMutableArray alloc] init];
                                                          for (NSDictionary *assignment in nearBy) {
-                                                             NSArray *coords = assignment[@"location"][@"coordinates"];
+                                                             
+                                                             // Note: New upload requirement does not need to check location
+                                                             
+                                                             /*NSArray *coords = assignment[@"location"][@"coordinates"];
                                                              CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
                                                              float radius = [assignment[@"radius"] floatValue];
 
@@ -933,7 +949,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
                                                              if (shouldAdd) {
                                                                  [self.assignmentsArray addObject:assignment];
-                                                             }
+                                                             }*/
+                                                             [self.assignmentsArray addObject:assignment];
                                                          }
 
                                                          self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
@@ -1037,12 +1054,16 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)resetView {
-    [self.pageControl removeFromSuperview];
-    self.content = nil;
-    self.players = nil;
-    [self.carouselCell removePlayers];
-    [self.carouselCell removeFromSuperview];
-    [self.galleryCollectionView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.content = nil;
+        self.players = nil;
+        self.isFetching = NO;
+        [self.carouselCell removePlayers];
+        [self.carouselCell removeFromSuperview];
+        [self resetOtherCells];
+        [self resetOtherOutlets];
+        [self.pageControl removeFromSuperview];
+    });
 }
 
 /**
@@ -1072,8 +1093,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
     [self startSpinner:self.loadingView onButton:self.sendButton];
     self.sendButton.enabled = NO;
-
-    [self dismissKeyboard];
 
     //Assemble params for gallery
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];

@@ -24,5 +24,6 @@
 @property (nonatomic, weak) NSArray *content;
 
 - (void)configureAssignmentsTableView;
+- (void)resetView;
 
 @end
