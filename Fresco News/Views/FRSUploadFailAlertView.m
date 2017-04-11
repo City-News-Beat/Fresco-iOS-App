@@ -35,7 +35,6 @@
 }
 
 - (void)getHelp {
-    [self dismiss];
     [[FRSModerationManager sharedInstance] presentSmooch];
 }
 
