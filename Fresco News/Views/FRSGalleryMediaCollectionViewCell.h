@@ -12,4 +12,7 @@
 
 -(void)loadPost:(FRSPost *)post;
 
+-(void)play;
+-(void)pause;
+
 @end

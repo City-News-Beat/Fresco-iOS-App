@@ -41,7 +41,6 @@
 @property (strong, nonatomic) UIImageView *locationIV;
 @property (strong, nonatomic) UIImageView *clockIV;
 @property (strong, nonatomic) UIPageControl *pageControl;
-@property (strong, nonatomic) NSMutableArray *imageViews;
 @property (strong, nonatomic) NSArray *orderedPosts;
 @property (nonatomic) NSInteger adjustedPage;
 @property (strong, nonatomic) UIImageView *parallaxImage;

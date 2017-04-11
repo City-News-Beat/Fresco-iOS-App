@@ -10,9 +10,16 @@
 #import "PSCustomViewFromXib.h"
 @class FRSGallery;
 
+@protocol FRSGalleryMediaViewDelegate <NSObject>
+- (void)mediaScrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)mediaScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
+@end
+
 @interface FRSGalleryMediaView : PSCustomViewFromXib
 
--(instancetype)initWithFrame:(CGRect)frame andGallery:(FRSGallery *)gallery;
+- (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryMediaViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
 
+-(void)play;
+-(void)pause;
 @end
