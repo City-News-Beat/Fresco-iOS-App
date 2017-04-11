@@ -98,32 +98,25 @@
 - (void)show;
 
 /**
- Dismisses the alert from the window.
+ Dismisses the alert from the window with animation.
  */
 - (void)dismiss;
-
-/**
- Animates out the alert from the window.
- */
-- (void)animateOut;
 
 /**
  Calculates and sets the frame of the alert view depending on the heights of title, message and action buttons only. Subclasses using only these basic element can call this method at the end, after setting values to the elements.
  
  If -(instancetype)initWithTitle withColor: andRightCancelTitle: withColor: is not used to create the alert, its the responsibility of the caller to calculate and set the height of the alert view by considering all its sub views.
- 
-
  */
 - (void)adjustFrame;
 
 /**
- The default action method for the left action button. 
+ The default action method for the left action button. Also dismisses the alert.
  Subclasses can override to perform any custom action. Make sure to call [super leftActionTapped].
  */
 - (void)leftActionTapped;
 
 /**
- The default action method for the right cancel button. 
+ The default action method for the right cancel button. Also dismisses the alert.
  Subclasses can override to perform any custom action. Make sure to call [super rightCancelTapped].
  */
 - (void)rightCancelTapped;

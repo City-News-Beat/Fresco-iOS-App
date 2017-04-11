@@ -82,7 +82,7 @@
 }
 
 - (void)settingsTapped {
-    [self animateOut];
+    [self dismiss];
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }

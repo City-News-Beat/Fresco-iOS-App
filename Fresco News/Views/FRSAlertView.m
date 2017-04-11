@@ -94,7 +94,7 @@
 }
 
 - (void)rightCancelTapped {
-    [self animateOut];
+    [self dismiss];
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(didPressButton:atIndex:)]) {
         [self.delegate didPressButton:self atIndex:1];
@@ -105,7 +105,7 @@
 }
 
 - (void)leftActionTapped {
-    [self animateOut];
+    [self dismiss];
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(didPressButton:atIndex:)]) {
         [self.delegate didPressButton:self atIndex:0];
@@ -151,6 +151,7 @@
 
         }
         completion:^(BOOL finished) {
+            [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
           [self removeFromSuperview];
         }];
 }
@@ -167,9 +168,6 @@
 
 - (void)dismiss {
     [self animateOut];
-
-    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
-    [self removeFromSuperview];
 }
 
 #pragma mark - Configure Views
