@@ -475,7 +475,7 @@ fetchCompletionHandler:^(UIBackgroundFetchResult result) {
                                        message:error.localizedDescription
                                        actionTitle:@"OK"
                                        cancelTitle:@""
-                                       cancelTitleColor:[UIColor frescoBlueColor]
+                                       cancelTitleColor:nil
                                        delegate:nil];
                 
                 [self.errorAlertView show];
