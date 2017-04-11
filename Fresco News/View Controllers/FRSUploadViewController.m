@@ -132,8 +132,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self handleKeyboardWillHide:nil];
-    [self.captionTextView resignFirstResponder];
-    [self.view endEditing:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -451,6 +449,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    // We want to dismiss the keyboard when the user scrolls down a certain amount and releases their finger.
     if (scrollView.contentOffset.y <= -75) {
         [self dismissKeyboard];
     }
@@ -888,6 +887,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
 - (void)handleKeyboardWillHide:(NSNotification *)sender {
     [self toggleGestureRecognizerEnabled:NO];
     self.view.transform = CGAffineTransformMakeTranslation(0, 0);
+    [self.captionTextView resignFirstResponder];
+    [self.view endEditing:YES];
 }
 
 - (void)toggleGestureRecognizerEnabled:(BOOL)enabled {
@@ -928,6 +929,9 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                          NSArray *global = responseObject[@"global"];
                                                          self.assignmentsArray = [[NSMutableArray alloc] init];
                                                          for (NSDictionary *assignment in nearBy) {
+                                                             
+                                                             // Note: New upload requirement does not need to check location
+                                                             
                                                              /*NSArray *coords = assignment[@"location"][@"coordinates"];
                                                              CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
                                                              float radius = [assignment[@"radius"] floatValue];
