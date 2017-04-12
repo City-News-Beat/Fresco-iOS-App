@@ -277,12 +277,6 @@ static NSInteger const maxAssets = 8;
     } else {
         nextButton.enabled = NO;
     }
-
-    NSMutableArray *locations = [[NSMutableArray alloc] init];
-
-    for (PHAsset *asset in selectedAssets) {
-        [locations addObject:asset.location];
-    }
 }
 
 - (void)applicationNotAuthorized {

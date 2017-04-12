@@ -930,9 +930,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                          self.assignmentsArray = [[NSMutableArray alloc] init];
                                                          for (NSDictionary *assignment in nearBy) {
                                                              
-                                                             // Note: New upload requirement does not need to check location
-                                                             
-                                                             /*NSArray *coords = assignment[@"location"][@"coordinates"];
+                                                             NSArray *coords = assignment[@"location"][@"coordinates"];
                                                              CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
                                                              float radius = [assignment[@"radius"] floatValue];
 
@@ -943,14 +941,15 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                                  CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
                                                                  float miles = distanceFromAssignment / metersInAMile;
                                                                  if (miles < radius) {
-                                                                     shouldAdd = TRUE;
+                                                                     if (location) {
+                                                                         shouldAdd = TRUE;
+                                                                     }
                                                                  }
                                                              }
 
                                                              if (shouldAdd) {
                                                                  [self.assignmentsArray addObject:assignment];
-                                                             }*/
-                                                             [self.assignmentsArray addObject:assignment];
+                                                             }
                                                          }
 
                                                          self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
@@ -1063,6 +1062,18 @@ static NSString *const cellIdentifier = @"assignment-cell";
         [self resetOtherCells];
         [self resetOtherOutlets];
         [self.pageControl removeFromSuperview];
+        
+        if (self.globalAssignmentsEnabled) {
+            // This is a hotfix. Collapsing the assignments drawer fixes the issue where the caption textfield would be pushed down past the view
+            // when opening the drawer, popping to the previous view controller, and returning to this view controller.
+            [self toggleGlobalAssignmentsDrawer];
+        }
+        
+        // This is a hotfix. Removing the tableviews and the caption textview ensures that multiple tableviews are not created
+        [self.assignmentsTableView removeFromSuperview];
+        [self.globalAssignmentsTableView removeFromSuperview];
+        [self.globalAssignmentsDrawer removeFromSuperview];
+        [self.captionTextView removeFromSuperview];
     });
 }
 

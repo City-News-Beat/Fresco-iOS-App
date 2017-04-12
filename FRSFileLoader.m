@@ -96,9 +96,9 @@
 
         // add each asset to our file list
         for (PHAsset *asset in assets) {
-            if (asset.location) {
+            //if (asset.location) {
                 [allAssets addObject:asset];
-            }
+            //}
         }
     }
 
