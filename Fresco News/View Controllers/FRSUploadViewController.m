@@ -907,6 +907,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
     self.isFetching = YES;
 
+    // TODO: Refactor this
     [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:radii
                                                            ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
                                                        withCompletion:^(id responseObject, NSError *error) {
@@ -938,10 +939,10 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
                                                              for (PHAsset *asset in self.content) {
                                                                  CLLocation *location = asset.location;
-                                                                 CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
-                                                                 float miles = distanceFromAssignment / metersInAMile;
-                                                                 if (miles < radius) {
-                                                                     if (location) {
+                                                                 if (location) {
+                                                                     CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
+                                                                     float miles = distanceFromAssignment / metersInAMile;
+                                                                     if (miles < radius) {
                                                                          shouldAdd = TRUE;
                                                                      }
                                                                  }
