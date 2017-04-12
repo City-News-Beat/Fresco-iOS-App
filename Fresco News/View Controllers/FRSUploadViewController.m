@@ -392,7 +392,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [self.sendButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateDisabled];
     self.sendButton.frame = CGRectMake(self.view.frame.size.width - 64, 0, 64, 44);
     [self.sendButton setTitle:@"SEND" forState:UIControlStateNormal];
-    [self.sendButton addTarget:self action:@selector(sendClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.sendButton addTarget:self action:@selector(sendTapped) forControlEvents:UIControlEventTouchUpInside];
     self.sendButton.enabled = NO;
     [self.bottomContainer addSubview:self.sendButton];
 }
@@ -1080,7 +1080,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
 /**
  Send button action
  */
-- (void)sendClicked {
+- (void)sendTapped {
 
     /* if authenticated */
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {

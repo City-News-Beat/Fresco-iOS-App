@@ -330,31 +330,34 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
 - (void)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
     NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
     
-    [asset.location fetchAddress:^(id responseObject, NSError *error) {
-        digest[@"address"] = responseObject;
-        digest[@"lat"] = @(asset.location.coordinate.latitude);
-        digest[@"lng"] = @(asset.location.coordinate.longitude);
-        digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
-        
+    // Add captured_at regardless if photo/video or location exists
+    digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
+    
+    // Reuseable block to configure photo or video digest
+    void (^createDigest)(void) = ^ {
         if (asset.mediaType == PHAssetMediaTypeImage) {
             digest[@"contentType"] = @"image/jpeg";
-            
-            [asset fetchFileSize:^(NSInteger size, NSError *error) {
-                digest[@"fileSize"] = @(size);
-                digest[@"chunkSize"] = @(size);
-                callback(digest, error);
-            }];
         } else {
             digest[@"contentType"] = @"video/mp4";
-            
-            [asset fetchFileSize:^(NSInteger size, NSError *error) {
-                digest[@"fileSize"] = @(size);
-                digest[@"chunkSize"] = @(size);
-                
-                callback(digest, error);
-            }];
         }
-    }];
+        [asset fetchFileSize:^(NSInteger size, NSError *error) {
+            digest[@"fileSize"] = @(size);
+            digest[@"chunkSize"] = @(size);
+            callback(digest, error);
+        }];
+    };
+    
+    // Avoid adding location related keys to digest if the asset does not have a location
+    if (asset.location) {
+        [asset.location fetchAddress:^(id responseObject, NSError *error) {
+            digest[@"address"] = responseObject;
+            digest[@"lat"] = @(asset.location.coordinate.latitude);
+            digest[@"lng"] = @(asset.location.coordinate.longitude);
+            createDigest();
+        }];
+    } else {
+        createDigest();
+    }
 }
 
 /**
