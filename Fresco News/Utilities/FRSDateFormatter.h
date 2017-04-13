@@ -16,5 +16,6 @@
 + (NSString *)relativeTimeFromDate:(NSDate *)compareDate;
 + (NSString *)dateDifference:(NSDate *)date withAbbreviatedMonth:(BOOL)abbreviated;
 + (NSString *)formattedTimestampFromDate:(NSDate *)date;
++ (NSString *)localTimeZoneFromDate:(NSDate *)date;
 
 @end

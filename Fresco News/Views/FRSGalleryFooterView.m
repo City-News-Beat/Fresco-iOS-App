@@ -49,13 +49,13 @@
 - (void)configureTimestampsFromGallery:(FRSGallery *)gallery {
     self.updatedAtLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.frame.size.width, LABEL_HEIGHT)];
     self.updatedAtLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.updatedAtLabel.text = [NSString stringWithFormat:@"Updated %@ at %@", [FRSDateFormatter dateDifference:gallery.editedDate withAbbreviatedMonth:YES], [FRSDateFormatter formattedTimestampFromDate:gallery.editedDate]];
+    self.updatedAtLabel.text = [NSString stringWithFormat:@"Updated %@ at %@", [FRSDateFormatter dateDifference:gallery.editedDate withAbbreviatedMonth:YES], [FRSDateFormatter localTimeZoneFromDate:gallery.editedDate]];
     self.updatedAtLabel.textColor = [UIColor frescoMediumTextColor];
     [self addSubview:self.updatedAtLabel];
 
     self.postedAtLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.updatedAtLabel.frame.origin.y + LABEL_HEIGHT + LABEL_PADDING, self.frame.size.width, LABEL_HEIGHT)];
     self.postedAtLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.postedAtLabel.text = [NSString stringWithFormat:@"Posted %@ at %@ by:", [FRSDateFormatter dateDifference:gallery.createdDate withAbbreviatedMonth:YES], [FRSDateFormatter formattedTimestampFromDate:gallery.createdDate]];
+    self.postedAtLabel.text = [NSString stringWithFormat:@"Posted %@ at %@ by:", [FRSDateFormatter dateDifference:gallery.createdDate withAbbreviatedMonth:YES], [FRSDateFormatter localTimeZoneFromDate:gallery.createdDate]];
     self.postedAtLabel.textColor = [UIColor frescoMediumTextColor];
     [self addSubview:self.postedAtLabel];
 }

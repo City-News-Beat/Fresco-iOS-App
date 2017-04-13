@@ -192,4 +192,12 @@
     return [[formatter stringFromDate:correctDate] lowercaseString];
 }
 
++ (NSString *)localTimeZoneFromDate:(NSDate *)date {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"h:mm a"];
+    
+    return [formatter stringFromDate:date];
+}
+
 @end
