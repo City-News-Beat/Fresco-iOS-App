@@ -99,6 +99,10 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
         [FRSTracker trackUser];
         [FRSTracker track:loginEvent];
         
+        // Set social toggles in settings
+        [[NSUserDefaults standardUserDefaults] setBool:userResponseObject[@"social_links"][@"twitter"]  != nil ? YES : NO forKey:twitterConnected];
+        [[NSUserDefaults standardUserDefaults] setBool:userResponseObject[@"social_links"][@"facebook"] != nil ? YES : NO forKey:facebookConnected];
+
         NSDictionary *currentInstallation = [self currentInstallation];
         
         if ([currentInstallation objectForKey:@"device_token"]) {
