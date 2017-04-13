@@ -899,7 +899,19 @@ static NSString *const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 - (void)configureAssignments {
-    [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
+    int i = 0; // Counter to let us know when the loop has ended
+    
+    for (PHAsset *asset in self.content) {
+        i++; // Increment counter
+        
+        if (asset.location) { // If location exists fetch assignment near location
+            [self fetchAssignmentsNearLocation:asset.location radius:50];
+            break;
+            
+        } else if (i == self.content.count) { // Else if counter is equal to total count (we've reached the end), configure "No assignment"
+            [self fetchAssignmentsNearLocation:nil radius:0]; // We still need to make data call for global assignments.
+        }
+    }
 }
 
 - (void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
