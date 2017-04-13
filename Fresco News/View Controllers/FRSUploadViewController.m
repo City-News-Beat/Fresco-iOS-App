@@ -19,6 +19,7 @@
 #import "FRSAssignmentManager.h"
 #import "FRSGalleryManager.h"
 #import "FRSConnectivityAlertView.h"
+#import "NSString+Fresco.h"
 
 @class FRSAssignment;
 
@@ -907,7 +908,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     }
     self.isFetching = YES;
 
-    // TODO: Refactor this
+    // TODO: Pull out a lot of this code into separate methods.
     [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:radii
                                                            ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
                                                        withCompletion:^(id responseObject, NSError *error) {
@@ -942,8 +943,25 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                                  if (location) {
                                                                      CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
                                                                      float miles = distanceFromAssignment / metersInAMile;
-                                                                     if (miles < radius) {
-                                                                         shouldAdd = TRUE;
+                                                                     
+                                                                     // TODO: We use this date formatter all across the app and should have a DateFormatter+Fresco where it's initialized.
+                                                                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                                                                     NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+                                                                     dateFormatter.timeZone = timeZone;
+                                                                     dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                                                                     
+                                                                     // Format asset creation date
+                                                                     NSString *assetCreationString = [dateFormatter stringFromDate:asset.creationDate];
+                                                                     NSDate *assetCreationDate = [dateFormatter dateFromString:assetCreationString];
+
+                                                                     // Format assignment start date
+                                                                     NSString *assignmentStartString = [[NSString alloc] initWithFormat:@"%@", [assignment objectForKey:@"starts_at"]];
+                                                                     NSDate *assignmentStartDate = [NSString dateFromString:assignmentStartString];
+                                                                     
+                                                                     if ([assetCreationDate timeIntervalSinceDate:assignmentStartDate] > 0) { // Check if the asset was created after when the assignment started
+                                                                         if (miles < radius) {
+                                                                             shouldAdd = TRUE;
+                                                                         }
                                                                      }
                                                                  }
                                                              }
