@@ -503,6 +503,8 @@ BOOL isSegueingToAssignment;
         
         navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
         [tab setSelectedIndex:3];
+
+        isSegueingToAssignment = NO;
     }
 }
 
