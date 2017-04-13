@@ -47,10 +47,6 @@ static NSInteger const maxAssets = 8;
 
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
-    self.uploadViewController = [[FRSUploadViewController alloc] init];
-    self.uploadViewController.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
-    self.uploadViewController.preselectedAssignment = self.preselectedAssignment;
-    [self.uploadViewController view];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -82,10 +78,12 @@ static NSInteger const maxAssets = 8;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-
-    // We only want to reset the view if the user goes back from UploadVC to this VC.
-    // Otherwise, if we call [resetView] from the
-    [self.uploadViewController resetView];
+    
+    // This is a hotfix. We're recreating the UploadVC to reset the carousel and keyboard.
+    self.uploadViewController = [[FRSUploadViewController alloc] init];
+    self.uploadViewController.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
+    self.uploadViewController.preselectedAssignment = self.preselectedAssignment;
+    [self.uploadViewController view];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
