@@ -57,68 +57,8 @@ BOOL isSegueingToAssignment;
     // New assignment notifications need to be tracked independantly from the others because of the GET request required to fetch the distance away.
     if ([type isEqualToString:newAssignmentNotification]) {
         
-        NSString *assignment = [[push objectForKey:META] objectForKey:ASSIGNMENT_ID];
-        NSString *assignmentID;
+        [self segueToAssignmentFromPushDictionary:push shouldTrack:shouldTrack];
         
-        if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
-            assignmentID = assignment;
-        } else {
-            assignmentID = [push objectForKey:ASSIGNMENT_ID];
-        }
-        
-        // Fetch assignment
-        [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-            
-            // Handle errors
-            if (error) {
-                FRSAlertView *alertView = [[FRSAlertView alloc]
-                                           initWithTitle:@"Unable to Load Assignment!"
-                                           message:@"We're unable to load this assignment right now!"
-                                           actionTitle:@"OK"
-                                           cancelTitle:@""
-                                           cancelTitleColor:[UIColor frescoBackgroundColorDark]
-                                           delegate:nil];
-                [alertView show];
-                
-                return;
-            }
-            
-            // Create FRSAssignment object
-            FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            [assignment configureWithDictionary:responseObject];
-            
-            // Configure tracking parameters
-            [paramsToTrack setObject:type forKey:PUSH_KEY]; // Add notif-type to tracking dictionary
-            [paramsToTrack setObject:ASSIGNMENT forKey:OBJECT]; // Add object type to tracking dictionary
-            [paramsToTrack setObject:assignmentID forKey:OBJECT_ID]; // Add object_id to tracking dictionary
-            
-            if ([[push objectForKey:IS_GLOBAL] boolValue]) { // Check if global
-                [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
-            } else { // Set DISTANCE_AWAY if not global
-                [paramsToTrack setObject:@([CLLocation calculatedDistanceFromAssignment:assignment]) forKey:DISTANCE_AWAY];
-            }
-            
-            // Track notificationOpened event only if BOOL shouldTrack is enabled
-            [self trackNotification:shouldTrack withParams:paramsToTrack];
-            
-            NSTimeInterval dateDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
-            if (dateDiff < 0.0) { // if expired
-                FRSAlertView *alertView = [[FRSAlertView alloc]
-                                           initWithTitle:@"Assignment Expired"
-                                           message:@"This assignment has already expired"
-                                           actionTitle:@"OK"
-                                           cancelTitle:@""
-                                           cancelTitleColor:[UIColor frescoBackgroundColorDark]
-                                           delegate:nil];
-                [alertView show];
-            } else {
-                
-                // Segue to assignment
-                [FRSNotificationHandler segueToAssignment:assignment];
-            }
-        }];
-
         return; // return to avoid double call to [FRSTracker track:]
     }
 
@@ -471,41 +411,105 @@ BOOL isSegueingToAssignment;
     }
 }
 
-- (void)popViewController {
-}
+/**
+ Creats an FRSAssignment object from the given uid and tracks the action if YES is passed into shouldTrack.
 
-+ (void)popViewController {
-}
+ @param push NSDictionary populated with data relating to the current notification.
+ @param shouldTrack BOOL An indicator to determine if the given notification should be tracked.
+ */
++ (void)segueToAssignmentFromPushDictionary:(NSDictionary *)push shouldTrack:(BOOL)shouldTrack {
 
-+ (void)segueToAssignment:(FRSAssignment *)assignment {
-    
     if (isSegueingToAssignment) {
         return;
     }
     
-    isSegueingToAssignment = YES;
+    NSString *assignment = [[push objectForKey:META] objectForKey:ASSIGNMENT_ID];
+    NSString *assignmentID;
     
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
-        
-        assignmentsVC.assignmentCardIsOpen = YES;
-        assignmentsVC.hasDefault = YES;
-        assignmentsVC.defaultID = assignment.uid;
-        
-        [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-        assignmentsVC.selectedAssignment = assignment;
-        
-        navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
-        [tab setSelectedIndex:3];
-
-        isSegueingToAssignment = NO;
+    if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
+        assignmentID = assignment;
+    } else {
+        assignmentID = [push objectForKey:ASSIGNMENT_ID];
     }
+    
+    NSString *type  = push[TYPE]  ? push[TYPE]  : @"";
+    
+    NSMutableDictionary *paramsToTrack = [[NSMutableDictionary alloc] init]; // Create an NSMutableDictionary that will be populated according to the push[TYPE]
+
+    // Fetch assignment
+    [[FRSAssignmentManager sharedInstance] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+        
+        // Handle errors
+        if (error) {
+            FRSAlertView *alertView = [[FRSAlertView alloc]
+                                       initWithTitle:@"Unable to Load Assignment!"
+                                       message:@"We're unable to load this assignment right now!"
+                                       actionTitle:@"OK"
+                                       cancelTitle:@""
+                                       cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                       delegate:nil];
+            [alertView show];
+            
+            return;
+        }
+        
+        // Create FRSAssignment object
+        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
+        [assignment configureWithDictionary:responseObject];
+        
+        // Configure tracking parameters
+        [paramsToTrack setObject:type forKey:PUSH_KEY]; // Add notif-type to tracking dictionary
+        [paramsToTrack setObject:ASSIGNMENT forKey:OBJECT]; // Add object type to tracking dictionary
+        [paramsToTrack setObject:assignmentID forKey:OBJECT_ID]; // Add object_id to tracking dictionary
+        
+        if ([[push objectForKey:IS_GLOBAL] boolValue]) { // Check if global
+            [paramsToTrack setObject:GLOBAL forKey:DISTANCE_AWAY];
+        } else { // Set DISTANCE_AWAY if not global
+            [paramsToTrack setObject:@([CLLocation calculatedDistanceFromAssignment:assignment]) forKey:DISTANCE_AWAY];
+        }
+        
+        // Track notificationOpened event only if BOOL shouldTrack is enabled
+        [self trackNotification:shouldTrack withParams:paramsToTrack];
+        
+        NSTimeInterval dateDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
+        if (dateDiff < 0.0) { // if expired
+            FRSAlertView *alertView = [[FRSAlertView alloc]
+                                       initWithTitle:@"Assignment Expired"
+                                       message:@"This assignment has already expired"
+                                       actionTitle:@"OK"
+                                       cancelTitle:@""
+                                       cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                       delegate:nil];
+            [alertView show];
+        } else {
+            
+            // Segue to assignment
+            isSegueingToAssignment = YES;
+            
+            FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                
+                assignmentsVC.assignmentCardIsOpen = YES;
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignment.uid;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                assignmentsVC.selectedAssignment = assignment;
+                
+                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:3];
+                
+                isSegueingToAssignment = NO;
+            }
+        }
+    }];
 }
 
 + (void)segueToPayment {
