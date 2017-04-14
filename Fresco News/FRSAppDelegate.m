@@ -62,7 +62,10 @@
     
     [self configureStartDate];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
-    
+
+    // Check for cached uploads from core data after core data setup has been completed.
+    [[FRSUploadManager sharedInstance] checkCachedUploads];
+
     EndpointManager *manager = [EndpointManager sharedInstance];
     [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
 
