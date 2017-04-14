@@ -500,7 +500,8 @@ static NSInteger const galleriesPerPage = 12;
               }
           }
 
-          [self.appDelegate saveContext];
+          [self.appDelegate saveContext
+           ];
 
           [self.tableView reloadData];
 
@@ -558,6 +559,8 @@ static NSInteger const galleriesPerPage = 12;
     }
 
     if (tableView == self.tableView) {
+    //TODO: Remove this static height after experiment
+//        return 1500;
         return [self heightForItemAtDataSourceIndex:indexPath.row];
     }
 
@@ -664,22 +667,6 @@ static NSInteger const galleriesPerPage = 12;
                                                          });
                                                        }];
                                                      }];
-}
-
-- (void)playerWillPlay:(AVPlayer *)play {
-    //    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
-    //        NSArray *visibleCells = [tableView visibleCells];
-    //        for (FRSGalleryTableViewCell *cell in visibleCells) {
-    //            if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]] || !cell.galleryView.players) {
-    //                continue;
-    //            }
-    //            for (FRSPlayer *player in cell.galleryView.players) {
-    //                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
-    //                    [player pause];
-    //                }
-    //            }
-    //        }
-    //    }
 }
 
 - (NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index {

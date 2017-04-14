@@ -39,10 +39,7 @@
 @property (strong, nonatomic) UIImageView *muteImageView;
 @property (strong, nonatomic) UIImageView *repostImageView;
 @property (strong, nonatomic) UILabel *repostLabel;
-@property (strong, nonatomic) NSMutableArray *playerLayers;
 @property (strong, nonatomic) FRSGalleryMediaView *mediaView;
-@property BOOL playerHasFocus;
-@property BOOL isVideo;
 
 @property (strong, nonatomic) FRSActionBar *actionBar;
 
@@ -56,29 +53,7 @@
 
     _hasTapped = FALSE;
 
-    for (FRSPlayer *player in self.players) {
-        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-            [player.currentItem cancelPendingSeeks];
-            [player.currentItem.asset cancelLoading];
-        }
-    }
-
-    for (AVPlayerLayer *layer in self.playerLayers) {
-        [layer removeFromSuperlayer];
-    }
-    
-    [self.players removeAllObjects];
-    self.players = Nil;
-    
-    self.videoPlayer = Nil;
-    
-    [self.playerLayers removeAllObjects];
-    self.playerLayers = Nil;
-
     self.gallery = nil;
-
-    self.players = [[NSMutableArray alloc] init];
-    self.playerLayers = [[NSMutableArray alloc] init];
 
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -88,9 +63,6 @@
     self.orderedPosts = [gallery.posts allObjects];
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
 
-    self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
-    self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.mediaView.frame.size.height);
-    self.scrollView.clipsToBounds = YES;
     [self.actionBar updateSocialButtonsFromButton:nil];
 
     self.pageControl.numberOfPages = self.gallery.posts.count;
@@ -167,11 +139,6 @@
 }
 
 - (void)updateScrollView {
-    if (self.scrollView.contentOffset.x >= 0) {
-        [self.scrollView scrollRectToVisible:CGRectMake(0, 0, self.mediaView.frame.size.width, self.mediaView.frame.size.height) animated:NO];
-        [self scrollViewDidScroll:self.scrollView];
-    }
-
     dispatch_async(dispatch_get_main_queue(), ^{
       [self configureImageViews];
     });
@@ -182,7 +149,6 @@
     if (self) {
         self.delegate = delegate;
         self.gallery = gallery;
-        
         
         NSMutableArray *posts = [[NSMutableArray alloc] init];
 
@@ -269,57 +235,15 @@
 
 }
 - (void)configureScrollView {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
-    tapGesture.numberOfTapsRequired = 1;
-    tapGesture.numberOfTouchesRequired = 1;
-    tapGesture.cancelsTouchesInView = FALSE;
-    [self addGestureRecognizer:tapGesture];
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
+//    tapGesture.numberOfTapsRequired = 1;
+//    tapGesture.numberOfTouchesRequired = 1;
+//    tapGesture.cancelsTouchesInView = FALSE;
+//    [self addGestureRecognizer:tapGesture];
 }
 
 - (void)configureImageViews {
-    [self.players removeAllObjects];
-    self.players = nil;
-    
-    self.players = [[NSMutableArray alloc] init];
-    
-
     [self.nameLabel sizeToFit];
-
-    for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
-
-        FRSPost *post = self.orderedPosts[i];
-
-        NSInteger xOrigin = i * self.frame.size.width;
-        FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.backgroundColor = [UIColor whiteColor];
-        imageView.clipsToBounds = YES;
-        imageView.indexInScrollView = i;
-
-//        [self.mediaView addSubview:imageView];
-
-        if (i == 0) {
-            [self loadImage:post.imageUrl forImageView:imageView];
-
-            if (post.videoUrl != Nil) {
-                // videof
-                // set up FRSPlayer
-                // add AVPlayerLayer
-                dispatch_async(dispatch_get_main_queue(), ^{
-                  [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
-
-                  if ([self.players[0] respondsToSelector:@selector(container)]) {
-                      [self.mediaView bringSubviewToFront:[self.players[0] container]];
-                  }
-                });
-                [self configureMuteIcon];
-            } else {
-                [self.players addObject:imageView];
-            }
-        }
-
-        imageView.userInteractionEnabled = YES;
-    }
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mediaView.frame.size.width, 0.5)];
@@ -332,175 +256,31 @@
     }
 }
 
-- (void)removeFromSuperview {
-
-    for (FRSPlayer *player in self.players) {
-        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-            [player.currentItem cancelPendingSeeks];
-            [player.currentItem.asset cancelLoading];
-        }
-    }
-
-    for (AVPlayerLayer *layer in self.playerLayers) {
-        [layer removeFromSuperlayer];
-    }
-
-    
-    self.players = Nil;
-    self.videoPlayer = Nil;
-    self.playerLayers = Nil;
-
-    [super removeFromSuperview];
-}
-
 - (void)dealloc {
-    for (FRSPlayer *player in self.players) {
-        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-            [player.currentItem cancelPendingSeeks];
-            [player.currentItem.asset cancelLoading];
-        }
-    }
-
-    self.players = Nil;
-    self.videoPlayer = Nil;
 }
 
-- (FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
-    if (!_playerLayers) {
-        _playerLayers = [[NSMutableArray alloc] init];
-    }
 
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
-
-    FRSPlayer *videoPlayer;
-
-    if (!play) {
-        videoPlayer = [[FRSPlayer alloc] init];
-    } else {
-        videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-    }
-
-    videoPlayer.hasEstablished = play;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-      AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-      videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-      [[NSNotificationCenter defaultCenter] addObserver:self
-                                               selector:@selector(playerItemDidReachEnd:)
-                                                   name:AVPlayerItemDidPlayToEndTimeNotification
-                                                 object:[videoPlayer currentItem]];
-
-      NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-
-      playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.mediaView.frame.size.height);
-      playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-      playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-      playerLayer.opaque = FALSE;
-
-      UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-      container.backgroundColor = [UIColor clearColor];
-
-      videoPlayer.container = container;
-      playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-      [_playerLayers addObject:playerLayer];
-
-      if (play) {
-          [container.layer insertSublayer:playerLayer atIndex:1000];
-      }
-
-//      [self.mediaView addSubview:container];
-//      [self.mediaView bringSubviewToFront:container];
-
-      [self configureMuteIcon];
-    });
-
-    videoPlayer.muted = TRUE;
-    videoPlayer.wasMuted = FALSE;
-
-    return videoPlayer;
-}
-
-- (void)playerTap:(UITapGestureRecognizer *)tap {
-    CGPoint location = [tap locationInView:self];
-
-    if (location.y > self.mediaView.frame.size.height) {
-        return;
-    }
-
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width / 2) / self.mediaView.frame.size.width;
-    FRSPlayer *player = self.players[page];
-
-//    if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
-//        return;
-//    }
-
-    player.muted = FALSE;
-
-    if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
-        self.muteImageView.alpha = 0;
-        [self.mediaView play];
-        return;
-    }
-
-    if (player.muted) {
-        player.muted = FALSE;
-        [self.mediaView play];
-        return;
-    } else if (self.muteImageView.alpha == 1) {
-        self.muteImageView.alpha = 0;
-        return;
-    }
-
-    if (player.rate == 0.0) {
-        [player play];
-        [self.mediaView play];
-
-    } else {
-        [player pause];
-        [self.mediaView pause];
-
-        _hasTapped = TRUE;
-    }
-}
-
-- (void)handlePhotoTap:(NSInteger)index {
-}
-
-- (void)playerItemDidReachEnd:(NSNotification *)notification {
-    [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-    [self.videoPlayer play];
-}
-
-- (void)configureMuteIcon {
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width / 2) / self.mediaView.frame.size.width;
+- (void)configureMuteIcon:(BOOL)display {
+    NSInteger page = (self.mediaView.collectionView.contentOffset.x + self.frame.size.width / 2) / self.mediaView.frame.size.width;
     if (!self.muteImageView) {
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
         self.muteImageView.alpha = 0;
-        [self.mediaView addSubview:self.muteImageView];
+        self.muteImageView.frame = CGRectMake(self.frame.size.width - 24 - 16, 16, 24, 24);
+
+        [self addSubview:self.muteImageView];
     }
-
-    if ([self currentPageIsVideo]) {
-
-        FRSPlayer *player = self.players[page];
-
-        if (player.muted == FALSE) {
-            return;
-        }
-
+    
+    if (display) {
         self.muteImageView.alpha = 1;
-        self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
-        [self.mediaView bringSubviewToFront:self.muteImageView];
+        [self bringSubviewToFront:self.muteImageView];
     }
+    else {
+        self.muteImageView.alpha = 0;
+        [self sendSubviewToBack:self.muteImageView];
+    }
+
 }
 
-- (BOOL)currentPageIsVideo {
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width / 2) / self.mediaView.frame.size.width;
-    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
-}
-
-- (BOOL)pageIsVideo:(NSInteger)page {
-    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
-}
 - (void)configurePageControl {
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.gallery.posts.count;
@@ -561,7 +341,7 @@
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
 
     self.timeLabel.clipsToBounds = NO;
-    self.timeLabel.layer.masksToBounds = NO;
+//    self.timeLabel.layer.masksToBounds = NO;
 
     [self addShadowToLabel:self.timeLabel];
 
@@ -582,7 +362,7 @@
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     self.locationLabel.clipsToBounds = NO;
-    self.locationLabel.layer.masksToBounds = NO;
+//    self.locationLabel.layer.masksToBounds = NO;
 
     [self addShadowToLabel:self.locationLabel];
     [self addSubview:self.locationLabel];
@@ -594,7 +374,7 @@
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
 
-    self.profileIV.layer.cornerRadius = 12;
+//    self.profileIV.layer.cornerRadius = 12;
     self.profileIV.clipsToBounds = YES;
     [self addSubview:self.profileIV];
 
@@ -612,7 +392,7 @@
 
     [self addShadowToLabel:self.nameLabel];
 
-    self.nameLabel.layer.masksToBounds = NO;
+//    self.nameLabel.layer.masksToBounds = NO;
     [self addSubview:self.nameLabel];
 
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
@@ -691,6 +471,7 @@
 }
 
 - (void)addShadowToLabel:(UILabel *)label {
+    return;
     if (!label.text) {
         return;
     }
@@ -710,20 +491,20 @@
     label.attributedText = attString;
 
     label.clipsToBounds = NO;
-    label.layer.masksToBounds = NO;
+//    label.layer.masksToBounds = NO;
 }
 
 - (UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize {
 
     UILabel *label = [UILabel new];
     label.clipsToBounds = NO;
-    label.layer.masksToBounds = NO;
+//    label.layer.masksToBounds = NO;
 
     label.text = text;
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
-    label.layer.shouldRasterize = TRUE;
-    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+//    label.layer.shouldRasterize = TRUE;
+//    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     label.adjustsFontSizeToFitWidth = YES;
     label.numberOfLines = 1;
 
@@ -770,84 +551,51 @@
 #pragma mark - FRSGalleryMediaViewDelegate
 
 - (void)mediaScrollViewDidScroll:(UIScrollView *)scrollView {
-    self.scrollView = scrollView;
-//    [self scrollViewDidScroll:scrollView];
+    [self scrollViewDidScroll:scrollView];
 }
 
 - (void)mediaScrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    self.scrollView = scrollView;
-    [self scrollViewDidEndDecelerating:scrollView];
+//    [self scrollViewDidEndDecelerating:scrollView];
 }
 
-#pragma mark ScrollView Delegate
+-(void)mediaDidChangeToPage:(NSInteger)page {
+    self.pageControl.currentPage = page;
+}
+
+#pragma mark - Scroll view delegate 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // We add half a screen's width so that the image loading occurs half way through the scroll.
     [self pause];
-
-    if (!self.players) {
-        self.players = [[NSMutableArray alloc] init];
-    }
-
-    NSInteger page = (scrollView.contentOffset.x + self.frame.size.width / 2) / self.mediaView.frame.size.width;
-
+    
+    NSInteger page = (scrollView.contentOffset.x + self.frame.size.width / 2) / scrollView.frame.size.width;
+    
     if (page < 0) {
         return;
     }
-
+    
     UIImageView *imageView;
     FRSPost *post;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
-
-//    [self loadImage:post.imageUrl forImageView:imageView];
     
-    if (self.players.count <= page) {
-        if (post.videoUrl != Nil && page >= self.players.count) {
-            FRSPlayer *player = [self setupPlayerForPost:post play:TRUE];
-            [self.players addObject:player];
-            [self.videoPlayer play];
-        } else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
-            if (self.players && imageView) {
-                [self.players addObject:imageView];
-            }
-        } else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              FRSPlayer *player = (FRSPlayer *)self.players[page];
-              if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
-                  self.videoPlayer = player;
-                  [player play];
-              } else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
-                  [player pause];
-              }
-            });
-        }
-    }
-
-    self.adjustedPage = page;
-
     if (page >= self.gallery.posts.count) {
         return;
     }
-
-    if (page >= self.players.count) {
-        return;
-    }
-
-    if (page != self.pageControl.currentPage) {
-        [self.videoPlayer pause];
-    }
+    
+//    if (page != self.pageControl.currentPage) {
+//        [self.videoPlayer pause];
+//    }
     
     [self updateLabels];
-
-    if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count - 1) * self.mediaView.frame.size.width))
+    
+    if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count - 1) * scrollView.frame.size.width))
         return;
-
-
+    
     NSInteger halfScroll = scrollView.frame.size.width / 4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
-
+    
     CGFloat percentCompleted = ABS(amtScrolled) / halfScroll;
-
+    
     if (percentCompleted > 1.0 && percentCompleted < 3.0) {
         self.nameLabel.alpha = 0;
         self.locationLabel.alpha = 0;
@@ -858,32 +606,33 @@
         self.muteImageView.alpha = 0;
         return;
     }
-
+    
     if (percentCompleted > 3)
         percentCompleted -= 2;
     CGFloat absAlpha = ABS(1 - percentCompleted);
-
+    
     self.nameLabel.alpha = absAlpha;
     self.locationLabel.alpha = absAlpha;
     self.timeLabel.alpha = absAlpha;
     self.profileIV.alpha = absAlpha;
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
-
-    FRSPlayer *player = self.players[page];
-    if ([[player class] isSubclassOfClass:[FRSPlayer class]] && player.muted) {
-        self.muteImageView.alpha = absAlpha;
-    }
-
+    
+    //Mute icon
+//    FRSPlayer *player = self.players[page];
+//    if ([[player class] isSubclassOfClass:[FRSPlayer class]] && player.muted) {
+//        self.muteImageView.alpha = absAlpha;
+//    }
+    
     self.profileIV.image = Nil;
-
+    
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
-
+    
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
@@ -896,45 +645,6 @@
                              width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
                              ]
      ];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
-    if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
-
-        if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-
-        } else if (self.videoPlayer.status == AVPlayerStatusFailed) {
-        }
-    }
-}
-
-- (void)setupPlayer {
-    [self.videoPlayer addObserver:self forKeyPath:@"status" options:0 context:nil];
-}
-
-- (void)breakDownPlayer:(AVPlayerLayer *)layer {
-    if (![[layer class] isSubclassOfClass:[AVPlayerLayer class]]) {
-        return;
-    }
-
-    [layer.player pause];
-    [layer.player replaceCurrentItemWithPlayerItem:Nil];
-    [layer removeFromSuperlayer];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSInteger page = scrollView.contentOffset.x / self.mediaView.frame.size.width;
-    self.pageControl.currentPage = page;
-
-    self.currentPage = page;
-    if (self.players.count > page) {
-        self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
-        [self.videoPlayer play];
-    }
-
-    [self configureMuteIcon];
 }
 
 - (NSInteger)imageViewHeight {
@@ -974,7 +684,7 @@
 
 - (void)segueToUserProfile:(FRSUser *)user {
 
-    NSInteger page = self.scrollView.contentOffset.x / self.mediaView.frame.size.width;
+    NSInteger page = self.mediaView.collectionView.contentOffset.x / self.mediaView.frame.size.width;
 
     if (page >= 0 && page < self.orderedPosts.count) {
         FRSPost *currentPost = self.orderedPosts[page];
@@ -1001,86 +711,16 @@
     }
 }
 
+- (void)pause {
+    [self.mediaView pause];
+}
+
 - (void)play {
-
-    NSInteger page = self.scrollView.contentOffset.x / self.mediaView.frame.size.width;
-
-    if (self.players.count > page) {
-        if ([[self.players[page] class] isSubclassOfClass:[FRSPlayer class]]) {
-
-            FRSPlayer *player = (FRSPlayer *)self.players[page];
-
-            if ([[player class] isSubclassOfClass:[FRSPlayer class]] && !player.currentItem && _currentPage < self.orderedPosts.count) {
-
-                if (page >= self.orderedPosts.count) {
-                    return;
-                }
-
-                FRSPost *post = (FRSPost *)self.orderedPosts[page];
-
-                [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
-
-                if (!player.hasEstablished) {
-
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                      AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-                      player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-                      [[NSNotificationCenter defaultCenter] addObserver:self
-                                                               selector:@selector(playerItemDidReachEnd:)
-                                                                   name:AVPlayerItemDidPlayToEndTimeNotification
-                                                                 object:[player currentItem]];
-
-                      NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-
-                      playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.mediaView.frame.size.height);
-                      playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                      playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-                      playerLayer.opaque = FALSE;
-                      [player.container.layer insertSublayer:playerLayer atIndex:10000];
-
-                      if (self.playerLayers.count > page) {
-                          [(AVPlayerLayer *)self.playerLayers[page] removeFromSuperlayer];
-                      }
-
-                      self.playerLayers[page] = playerLayer;
-                    });
-
-                    player.hasEstablished = TRUE;
-                }
-
-                if (self.players.count > page) {
-                    [(AVPlayer *)self.players[page] play];
-//                    TODO: App Crashes here: self.players.count was 0 and page was 0
-//                    TODO: Not sure why this has a redundant play call with delay.
-//                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
-                }
-            }
-        }
-    }
+    [self.mediaView play];
 }
 
 - (void)offScreen {
-        
-    for (FRSPlayer *player in self.players) {
-        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-            [player.currentItem cancelPendingSeeks];
-            [player.currentItem.asset cancelLoading];
-
-            for (CALayer *layer in player.container.layer.sublayers) {
-                [layer removeFromSuperlayer];
-            }
-
-            player.hasEstablished = FALSE;
-        }
-    }
-}
-
-- (void)pause {
-    for (AVPlayer *player in self.players) {
-        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-            [player pause];
-        }
-    }
+    [self.mediaView offScreen];
 }
 
 

@@ -1,17 +1,17 @@
 //
-//  FRSGalleryMediaCollectionViewCell.m
+//  FRSGalleryMediaVideoCollectionViewCell.m
 //  Fresco
 //
-//  Created by Revanth Kumar Yarlagadda on 4/10/17.
+//  Created by Revanth Kumar Yarlagadda on 4/13/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 
-#import "FRSGalleryMediaCollectionViewCell.h"
+#import "FRSGalleryMediaVideoCollectionViewCell.h"
 #import <Haneke/Haneke.h>
 #import "NSURL+Fresco.h"
 #import "FRSPost.h"
 
-@interface FRSGalleryMediaCollectionViewCell ()
+@interface FRSGalleryMediaVideoCollectionViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
@@ -20,55 +20,60 @@
 
 @end
 
-@implementation FRSGalleryMediaCollectionViewCell
+@implementation FRSGalleryMediaVideoCollectionViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
+    [self addGestureRecognizer:tap];
+
 }
 
--(void)loadPost:(FRSPost *)post isCasualCall:(BOOL)isCausal{
-        if (!isCausal) return;
-    
-        self.imageView.image = nil;
-        self.userInteractionEnabled = YES;
+-(void)loadPost:(FRSPost *)post {
+    dispatch_async(dispatch_get_main_queue(), ^{
         self.post = post;
         
+        self.userInteractionEnabled = YES;
+
         //cleanup so that its ready for the new content.
         [self cleanupForVideo];
         
-        NSLog(@"loadPost for weakSelf..%@", self);
+        NSLog(@"Rev loadPost for weakSelf..%@", self);
         //video. just setting url to the player
         //every loaded cell will have its own player. so just need to play/pause with the correct cell object.
         if (self.post.videoUrl) {
-            NSLog(@"post is video now..%@", post);
             self.imageView.image = nil;
-            if(self.videoPlayer){
-                NSLog(@"replaceCurrentItemWithPlayerItem for player: %@", self.videoPlayer);
-                [self.videoPlayer replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
-            }
-            else {
-                [self setupPlayerForPost:self.post play:TRUE];
-                NSLog(@"setupPlayerForPost for player: %@", self.videoPlayer);
-                
-            }
+            [self setupPlayerForPost:self.post play:TRUE];
+            NSLog(@"Rev \non cell : %@ : \ncreating player:%@ : \npost is video now..%@", self, self.videoPlayer, post.uid);
+            
         }
+    
+    });
+
+    
+//    [self loadImage];
 }
 
 - (void)loadImage {
-    self.imageView.image = nil;
-    if(!self.post.imageUrl) return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.imageView.image = nil;
+        if(!self.post.imageUrl) return;
+        
+        [self.imageView
+         hnk_setImageFromURL:[NSURL
+                              URLResizedFromURLString:self.post.imageUrl
+                              width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                              ]
+         ];
+    });
     
-    [self.imageView
-     hnk_setImageFromURL:[NSURL
-                          URLResizedFromURLString:self.post.imageUrl
-                          width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                          ]
-     ];
 }
 
 - (void)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
         
         FRSPlayer *videoPlayer;
@@ -96,7 +101,7 @@
         
         UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
         //TODO: Scroll - finally change to clear color.
-        container.backgroundColor = [UIColor orangeColor];
+        container.backgroundColor = [UIColor clearColor];
         
         videoPlayer.container = container;
         playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
@@ -117,57 +122,67 @@
         
         self.playerLayer = playerLayer;
         self.videoPlayer = videoPlayer;
-        
+    });
+
+    
 }
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
-    [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-    [self.videoPlayer play];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        [self.videoPlayer play];
+    });
+
 }
 
 -(void)cleanupForVideo {
-    NSLog(@"cleaning up for post: %@", self.post.uid);
-    if ([[self.videoPlayer class] isSubclassOfClass:[FRSPlayer class]]) {
-        [self.videoPlayer pause];
-        //        [self.videoPlayer.currentItem cancelPendingSeeks];
-        //        [self.videoPlayer.currentItem.asset cancelLoading];
-    }
-    //    self.videoPlayer = nil;
-    //
-    //    self.playerLayer.player = nil;
-    //    [self.playerLayer removeFromSuperlayer];
-    //    self.playerLayer = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"Rev cleaning up for post: %@", self.post.uid);
+        if ([[self.videoPlayer class] isSubclassOfClass:[FRSPlayer class]]) {
+            [self.videoPlayer pause];
+            [self.videoPlayer.currentItem cancelPendingSeeks];
+            [self.videoPlayer.currentItem.asset cancelLoading];
+        }
+        self.videoPlayer = nil;
+        
+        self.playerLayer.player = nil;
+        [self.playerLayer removeFromSuperlayer];
+        self.playerLayer = nil;
+    });
+
 }
 
 -(void)play {
-    __weak FRSGalleryMediaCollectionViewCell *weakSelf = self;
+    NSLog(@"Rev video video play play");
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        //video
-        if (weakSelf.post.videoUrl) {
-            [weakSelf.videoPlayer play];
-        }
-        else {
-            
-        }
-        
+        [self.videoPlayer play];
     });
 }
 
 -(void)pause {
-    [self.videoPlayer pause];
+    NSLog(@"Rev video video pause pause");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.videoPlayer pause];
+    });
+
 }
 
 -(void)tap {
-    self.videoPlayer.muted = !self.videoPlayer.muted;
+    NSLog(@"Rev video video mute mute pause pause");
+//    [self.videoPlayer pause];
+
+//    self.videoPlayer.muted = !self.videoPlayer.muted;
     
 }
 
-/*
- - (void)playerItemDidReachEnd:(NSNotification *)notification {
- [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
- [self.videoPlayer play];
- }
- 
- */
+-(void)restart {
+    
+}
+
+-(void)tapped {
+    NSLog(@"Rev new video mute Unmute");
+
+    self.videoPlayer.muted = !self.videoPlayer.muted;
+}
+
 @end

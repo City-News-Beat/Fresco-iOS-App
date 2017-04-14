@@ -92,6 +92,7 @@
 }
 
 - (void)playerWillPlay:(AVPlayer *)player {
+    /*TODO: Scroll - check the necessity of this method for Following table
     for (FRSGalleryTableViewCell *cell in [self visibleCells]) {
         if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]] || !cell.galleryView.players) {
             continue;
@@ -102,6 +103,7 @@
             }
         }
     }
+     */
 }
 
 - (void)viewDidLayoutSubviews {

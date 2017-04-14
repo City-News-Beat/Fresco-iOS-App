@@ -296,6 +296,10 @@
 		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
 		F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */; };
 		F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */; };
+		F23B15D51EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */; };
+		F23B15D61EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */; };
+		F23B15DA1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */; };
+		F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */; };
 		F26187001E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */; };
 		F26187011E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
@@ -887,6 +891,12 @@
 		F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaView.xib; sourceTree = "<group>"; };
 		F21FCB851E9BF4620015B13D /* PSCustomViewFromXib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCustomViewFromXib.h; sourceTree = "<group>"; };
 		F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCustomViewFromXib.m; sourceTree = "<group>"; };
+		F23B15D21EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaImageCollectionViewCell.h; sourceTree = "<group>"; };
+		F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaImageCollectionViewCell.m; sourceTree = "<group>"; };
+		F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaImageCollectionViewCell.xib; sourceTree = "<group>"; };
+		F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaVideoCollectionViewCell.h; sourceTree = "<group>"; };
+		F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaVideoCollectionViewCell.m; sourceTree = "<group>"; };
+		F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaVideoCollectionViewCell.xib; sourceTree = "<group>"; };
 		F26186FD1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaCollectionViewCell.h; sourceTree = "<group>"; };
 		F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaCollectionViewCell.m; sourceTree = "<group>"; };
 		F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -2026,6 +2036,12 @@
 				F26186FD1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.h */,
 				F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */,
 				F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */,
+				F23B15D21EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.h */,
+				F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */,
+				F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */,
+				F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */,
+				F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */,
+				F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */,
 				D487F1CB1CC14231005742F3 /* Player */,
 			);
 			name = "Gallery View";
@@ -2664,7 +2680,9 @@
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
+				F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */,
 				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
+				F23B15D61EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
 				CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
@@ -2828,6 +2846,7 @@
 				0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */,
 				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
+				F23B15D51EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
 				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
@@ -2946,6 +2965,7 @@
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
 				D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */,
 				0796FF761E54DA0C00ABF9DA /* FRSAssignmentTracker.m in Sources */,
+				F23B15DA1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */,
 				CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */,

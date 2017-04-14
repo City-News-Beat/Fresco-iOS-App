@@ -227,15 +227,16 @@
 }
 
 - (void)playerWillPlay:(AVPlayer *)play {
-    for (UITableView *tableView in @[ self.galleriesTable ]) {
-        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
-            for (FRSPlayer *player in cell.galleryView.players) {
-                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
-                    [player pause];
-                }
-            }
-        }
-    }
+    //TODO: Scroll - Recheck. This is never called. We can remove this
+//    for (UITableView *tableView in @[ self.galleriesTable ]) {
+//        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
+//            for (FRSPlayer *player in cell.galleryView.players) {
+//                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
+//                    [player pause];
+//                }
+//            }
+//        }
+//    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -404,15 +405,16 @@
 }
 
 - (void)pausePlayers {
-    for (UITableView *tableView in @[ self.galleriesTable ]) {
-        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
-            for (FRSPlayer *player in cell.galleryView.players) {
-                if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-                    [player pause];
-                }
-            }
-        }
-    }
+    //TODO: Scroll - Recheck usability and provide alternative method for this.
+//    for (UITableView *tableView in @[ self.galleriesTable ]) {
+//        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
+//            for (FRSPlayer *player in cell.galleryView.players) {
+//                if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+//                    [player pause];
+//                }
+//            }
+//        }
+//    }
 }
 
 @end

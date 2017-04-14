@@ -11,15 +11,22 @@
 @class FRSGallery;
 
 @protocol FRSGalleryMediaViewDelegate <NSObject>
-- (void)mediaScrollViewDidScroll:(UIScrollView *)scrollView;
-- (void)mediaScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
+//TODO: Scroll - Need to remove these two scroll delegate methods
+-(void)mediaScrollViewDidScroll:(UIScrollView *)scrollView;
+-(void)mediaScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
+
+-(void)mediaDidChangeToPage:(NSInteger)page;
 @end
 
 @interface FRSGalleryMediaView : PSCustomViewFromXib
 
-- (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryMediaViewDelegate>)delegate;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+-(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryMediaViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
 
 -(void)play;
 -(void)pause;
+-(void)offScreen;
+
 @end

@@ -45,7 +45,8 @@
 
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:self.gallery delegate:self];
     [self addSubview:self.galleryView];
-    self.players = self.galleryView.players;
+    //TODO: SCroll - check if this is needed
+//    self.players = self.galleryView.players;
     __weak typeof(self) weakSelf = self;
     
     self.galleryView.trackedScreen = self.trackedScreen;
