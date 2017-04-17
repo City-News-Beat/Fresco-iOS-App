@@ -8,7 +8,7 @@
 
 #import "FRSGalleryMediaImageCollectionViewCell.h"
 #import "FRSPost.h"
-#import <Haneke/Haneke.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "NSURL+Fresco.h"
 
 @interface FRSGalleryMediaImageCollectionViewCell()
@@ -32,7 +32,7 @@
         self.userInteractionEnabled = YES;
         self.post = post;
         
-        //    [self loadImage];
+            [self loadImage];
     });
 
 }
@@ -41,13 +41,13 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.imageView.image = nil;
         if(!self.post.imageUrl) return;
-        
-        [self.imageView
-         hnk_setImageFromURL:[NSURL
-                              URLResizedFromURLString:self.post.imageUrl
-                              width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                              ]
-         ];
+                
+        [self.imageView sd_setImageWithURL:[NSURL
+                                            URLResizedFromURLString:self.post.imageUrl
+                                            width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                                            ]
+                          placeholderImage:nil];
+
     });
 
 }

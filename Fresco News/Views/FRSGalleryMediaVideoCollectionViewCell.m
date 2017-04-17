@@ -7,7 +7,7 @@
 //
 
 #import "FRSGalleryMediaVideoCollectionViewCell.h"
-#import <Haneke/Haneke.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "NSURL+Fresco.h"
 #import "FRSPost.h"
 
@@ -22,6 +22,11 @@
 
 @implementation FRSGalleryMediaVideoCollectionViewCell
 
+-(void)prepareForReuse {
+    [super prepareForReuse];
+    
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -34,15 +39,21 @@
 -(void)loadPost:(FRSPost *)post {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.post = post;
+
+        if([self.post.videoUrl isEqualToString:[self urlOfCurrentlyPlayingInPlayer:self.videoPlayer]]){
+            NSLog(@"Rev Already current player has the same url. so no cleanup, no setup for the player. just skip");
+            return;
+        }
         
         self.userInteractionEnabled = YES;
-
+        
         //cleanup so that its ready for the new content.
         [self cleanupForVideo];
         
         NSLog(@"Rev loadPost for weakSelf..%@", self);
         //video. just setting url to the player
         //every loaded cell will have its own player. so just need to play/pause with the correct cell object.
+        
         if (self.post.videoUrl) {
             self.imageView.image = nil;
             [self setupPlayerForPost:self.post play:TRUE];
@@ -53,7 +64,7 @@
     });
 
     
-//    [self loadImage];
+    [self loadImage];
 }
 
 - (void)loadImage {
@@ -62,12 +73,12 @@
         self.imageView.image = nil;
         if(!self.post.imageUrl) return;
         
-        [self.imageView
-         hnk_setImageFromURL:[NSURL
-                              URLResizedFromURLString:self.post.imageUrl
-                              width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                              ]
-         ];
+        [self.imageView sd_setImageWithURL:[NSURL
+                                            URLResizedFromURLString:self.post.imageUrl
+                                            width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                                            ]
+                     placeholderImage:nil];
+
     });
     
 }
@@ -154,6 +165,7 @@
 
 -(void)play {
     NSLog(@"Rev video video play play");
+    [self urlOfCurrentlyPlayingInPlayer:self.videoPlayer];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.videoPlayer play];
     });
@@ -161,6 +173,7 @@
 
 -(void)pause {
     NSLog(@"Rev video video pause pause");
+    [self urlOfCurrentlyPlayingInPlayer:self.videoPlayer];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.videoPlayer pause];
     });
@@ -184,5 +197,18 @@
 
     self.videoPlayer.muted = !self.videoPlayer.muted;
 }
+
+-(NSString *)urlOfCurrentlyPlayingInPlayer:(AVPlayer *)player{
+    // get current asset
+    AVAsset *currentPlayerAsset = player.currentItem.asset;
+    // make sure the current asset is an AVURLAsset
+    if (![currentPlayerAsset isKindOfClass:AVURLAsset.class]) return nil;
+    // return the string from NSURL
+    
+    NSString *urlString = [[(AVURLAsset *)currentPlayerAsset URL] absoluteString];
+    NSLog(@"Rev urlString of current video player: %@", urlString);
+    return urlString;
+}
+
 
 @end
