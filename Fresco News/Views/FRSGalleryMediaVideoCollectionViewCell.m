@@ -39,28 +39,11 @@
 -(void)loadPost:(FRSPost *)post {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.post = post;
-
-        if([self.post.videoUrl isEqualToString:[self urlOfCurrentlyPlayingInPlayer:self.videoPlayer]]){
-            NSLog(@"Rev Already current player has the same url. so no cleanup, no setup for the player. just skip");
-            return;
-        }
-        
         self.userInteractionEnabled = YES;
         
         //cleanup so that its ready for the new content.
         [self cleanupForVideo];
-        
-        NSLog(@"Rev loadPost for weakSelf..%@", self);
-        //video. just setting url to the player
-        //every loaded cell will have its own player. so just need to play/pause with the correct cell object.
-        
-        if (self.post.videoUrl) {
-            self.imageView.image = nil;
-            [self setupPlayerForPost:self.post play:TRUE];
-            NSLog(@"Rev \non cell : %@ : \ncreating player:%@ : \npost is video now..%@", self, self.videoPlayer, post.uid);
-            
-        }
-    
+
     });
 
     [self loadImage];
@@ -160,8 +143,36 @@
 }
 
 -(void)play {
+    if([self.post.videoUrl isEqualToString:[self urlOfCurrentlyPlayingInPlayer:self.videoPlayer]]){
+        NSLog(@"Rev Already current player has the same url. so no cleanup, no setup for the player. just skip");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.videoPlayer play];
+        });
+
+        return;
+    }
+
+    //cleanup so that its ready for the new content.
+    [self cleanupForVideo];
+
+    //video layer is removed. so load image in order to avoid the flickering.
+    [self loadImage];
+
+    NSLog(@"Rev loadPost for weakSelf..%@", self);
+    //video. just setting url to the player
+    //every loaded cell will have its own player. so just need to play/pause with the correct cell object.
+    
+    if (self.post.videoUrl) {
+        self.imageView.image = nil;
+        [self setupPlayerForPost:self.post play:TRUE];
+        NSLog(@"Rev \non cell : %@ : \ncreating player:%@ : \npost is video now..%@", self, self.videoPlayer, self.post.uid);
+        
+    }
+
+    
     NSLog(@"Rev video video play play");
     [self urlOfCurrentlyPlayingInPlayer:self.videoPlayer];
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.videoPlayer play];
     });
