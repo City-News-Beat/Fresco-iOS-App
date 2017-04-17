@@ -59,6 +59,7 @@ static NSInteger const galleriesPerPage = 12;
 @property (strong, nonatomic) UIView *sudoNavBar;
 @property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
+@property (assign, nonatomic) BOOL isScrolling;
 
 @end
 
@@ -323,14 +324,14 @@ static NSInteger const galleriesPerPage = 12;
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (needsUpdate) {
-        needsUpdate = NO;
-    }
-
-    if (scrollView == self.pageScroller) {
-    }
-}
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    if (needsUpdate) {
+//        needsUpdate = NO;
+//    }
+//
+//    if (scrollView == self.pageScroller) {
+//    }
+//}
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
@@ -869,6 +870,8 @@ static NSInteger const galleriesPerPage = 12;
 
     if (scrollView == self.tableView) {
 
+        //TODO: Scroll - Need to refactor this.
+        return;
         CGPoint currentOffset = scrollView.contentOffset;
         NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
 
@@ -920,6 +923,87 @@ static NSInteger const galleriesPerPage = 12;
               lastIndexPath = Nil;
           }
         });
+    }
+}
+
+/*
+func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    
+    if(self.isScrolling){
+        if(!decelerate){
+            self.isScrolling = false
+            self.tableView.reloadData()
+        }
+    }
+}
+
+func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    
+    if(self.isScrolling){
+        self.isScrolling = false
+        self.tableView.reloadData()
+    }
+}
+
+func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    self.isScrolling = true
+}
+*/
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if(self.isScrolling){
+        if(!decelerate){
+            self.isScrolling = NO;
+            [self handlePlay];
+        }
+    }
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (needsUpdate) {
+        needsUpdate = NO;
+    }
+
+    if(self.isScrolling){
+        self.isScrolling = NO;
+        [self handlePlay];
+    }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.isScrolling = YES;
+    [self pausePlayers];
+}
+
+-(void)handlePlay {
+    [self pausePlayers];
+    
+//    for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows) {
+//        FRSGallery *gallery = self.dataSource[indexPath.row];
+//        if (gallery.posts.count>0) {
+//            NSArray *orderedPosts = [gallery.posts allObjects];
+//            orderedPosts = [orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
+//            FRSPost *post = orderedPosts[0];
+//            
+//            if(post.videoUrl) {
+//                NSInteger index = [self.tableView.indexPathsForVisibleRows indexOfObject:indexPath];
+//                FRSGalleryTableViewCell *cell = self.tableView.visibleCells[index];
+//                [cell play];
+//                break;
+//            }
+//        }
+//    }
+    
+    
+    for (FRSGalleryTableViewCell *cell in self.tableView.visibleCells) {
+        /*
+         Start playback mid frame -- at least 300 from top & at least 100 from bottom
+         */
+        if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
+            [cell play];
+            break;
+        }
+
     }
 }
 

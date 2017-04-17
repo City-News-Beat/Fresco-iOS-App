@@ -24,7 +24,7 @@
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    
+    NSLog(@"Rev prepare the video player to be reusable here.");
 }
 
 - (void)awakeFromNib {
@@ -63,7 +63,6 @@
     
     });
 
-    
     [self loadImage];
 }
 
@@ -135,7 +134,6 @@
         self.videoPlayer = videoPlayer;
     });
 
-    
 }
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
@@ -143,7 +141,6 @@
         [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         [self.videoPlayer play];
     });
-
 }
 
 -(void)cleanupForVideo {
@@ -160,7 +157,6 @@
         [self.playerLayer removeFromSuperlayer];
         self.playerLayer = nil;
     });
-
 }
 
 -(void)play {
