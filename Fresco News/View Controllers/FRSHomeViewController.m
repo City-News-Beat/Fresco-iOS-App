@@ -24,7 +24,6 @@
 #import "FRSNotificationHandler.h"
 #import "FRSModerationManager.h"
 #import "FRSGalleryManager.h"
-#import "FRSNewPasswordAlertView.h"
 #import "FRSTOSAlertView.h"
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
@@ -58,7 +57,6 @@ static NSInteger const galleriesPerPage = 12;
 
 @property (strong, nonatomic) UIView *sudoNavBar;
 @property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
-@property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
 
 @end
 
@@ -111,8 +109,6 @@ static NSInteger const galleriesPerPage = 12;
     [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
-
-    [self presentMigrationAlert];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -143,16 +139,6 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)logoutNotification {
     [self logoutWithPop:NO];
-}
-
-- (void)presentNewStuffWithPassword:(BOOL)password {
-    if (self.migrationAlert) {
-        return;
-    }
-
-    self.migrationAlert = [[FRSNewPasswordAlertView alloc] initNewStuffWithPasswordField:password];
-    self.migrationAlert.delegate = self;
-    [self.migrationAlert show];
 }
 
 - (void)presentWithTOS:(NSString *)tos {
@@ -196,7 +182,6 @@ static NSInteger const galleriesPerPage = 12;
     }
     [self logoutWithPop:YES];
     self.TOSAlert = nil;
-    self.migrationAlert = nil;
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -215,31 +200,10 @@ static NSInteger const galleriesPerPage = 12;
 - (void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentMigrationAlert) name:@"user-did-login" object:nil];
-
     if ([[FRSUserManager sharedInstance] authenticatedUser]) {
         if (![[FRSUserManager sharedInstance] authenticatedUser].username) {
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
         }
-    }
-}
-
-- (void)presentMigrationAlert {
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil
-        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
-        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] boolValue]
-        && [[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] != nil) {
-
-        [self logoutWithPop:NO];
-
-        return;
-    }
-
-    if ([[FRSAuthManager sharedInstance] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
-        FRSNewPasswordAlertView *alert = [[FRSNewPasswordAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
-        alert.delegate = self;
-        [alert show];
-        [FRSTracker track:migrationShown];
     }
 }
 

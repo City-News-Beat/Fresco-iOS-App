@@ -75,12 +75,6 @@
 
     [self configureWindow];
 
-    //Migration checks
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
-        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userNeedsToMigrate];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-
     if ([[FRSAuthManager sharedInstance] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];

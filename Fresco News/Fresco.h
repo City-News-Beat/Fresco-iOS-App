@@ -19,9 +19,6 @@ static NSString *const FRSUploadNotification = @"FRSUploadUpdateNotification";
 static NSString *const FRSRetryUpload = @"FRSRetryUpload";
 static NSString *const FRSDismissUpload = @"FRSDismissUpload";
 
-static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
-static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
-
 // object types
 static NSString *const postObjectType = @"post";
 static NSString *const galleryObjectType = @"gallery";

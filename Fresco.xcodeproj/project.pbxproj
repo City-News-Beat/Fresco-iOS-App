@@ -179,7 +179,6 @@
 		CE5A6FE41E6276F90001255F /* FRSStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE31E6276F90001255F /* FRSStoryTableViewCell.xib */; };
 		CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */; };
 		CE8DB7A51E762C5800000F30 /* FRSTOSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DB7A41E762C5800000F30 /* FRSTOSAlertView.m */; };
-		CE8DB7A81E762E6300000F30 /* FRSNewPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */; };
 		CE8DB7AB1E76336E00000F30 /* FRSFindFriendsAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */; };
 		CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */; };
 		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
@@ -656,8 +655,6 @@
 		CE5A6FE51E62C3F30001255F /* FRSAssignmentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAssignmentsViewController.xib; sourceTree = "<group>"; };
 		CE8DB7A31E762C5800000F30 /* FRSTOSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTOSAlertView.h; sourceTree = "<group>"; };
 		CE8DB7A41E762C5800000F30 /* FRSTOSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTOSAlertView.m; sourceTree = "<group>"; };
-		CE8DB7A61E762E6300000F30 /* FRSNewPasswordAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNewPasswordAlertView.h; sourceTree = "<group>"; };
-		CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNewPasswordAlertView.m; sourceTree = "<group>"; };
 		CE8DB7A91E76336E00000F30 /* FRSFindFriendsAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFindFriendsAlertView.h; sourceTree = "<group>"; };
 		CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFindFriendsAlertView.m; sourceTree = "<group>"; };
 		CEA7FB621E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryTableViewCell.xib; sourceTree = "<group>"; };
@@ -2050,8 +2047,6 @@
 				CECD8D761E73C617004548D1 /* FRSConnectivityAlertView.m */,
 				CE8DB7A31E762C5800000F30 /* FRSTOSAlertView.h */,
 				CE8DB7A41E762C5800000F30 /* FRSTOSAlertView.m */,
-				CE8DB7A61E762E6300000F30 /* FRSNewPasswordAlertView.h */,
-				CE8DB7A71E762E6300000F30 /* FRSNewPasswordAlertView.m */,
 				CE8DB7A91E76336E00000F30 /* FRSFindFriendsAlertView.h */,
 				CE8DB7AA1E76336E00000F30 /* FRSFindFriendsAlertView.m */,
 				075962BB1E8C062B0003CC8A /* FRSUploadFailAlertView.h */,
@@ -2920,7 +2915,6 @@
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
-				CE8DB7A81E762E6300000F30 /* FRSNewPasswordAlertView.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,

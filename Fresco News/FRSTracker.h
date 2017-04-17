@@ -52,7 +52,6 @@ static NSString *const photosDisabled = @"Permissions photos disables";
 static NSString *const videosInGallery = @"Submission videos in gallery";
 static NSString *const photosInGallery = @"Submission photos in gallery";
 static NSString *const sharedFromHighlights = @"Galleries shared from highlights";
-static NSString *const migrationShown = @"Migration Shown";
 static NSString *const galleryOpenedFromHighlights = @"Gallery opened";
 static NSString *const galleryOpenedFromProfile = @"Gallery opened";
 static NSString *const galleryOpenedFromStories = @"Gallery opened";
