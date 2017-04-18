@@ -996,37 +996,37 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
 
-    UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
-    photoImageView.frame = CGRectMake(16, 10, 24, 24);
-    [self.assignmentBottomBar addSubview:photoImageView];
-
-    self.photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
-    self.photoCashLabel.text = @"$20";
-    self.photoCashLabel.textColor = [UIColor frescoMediumTextColor];
-    self.photoCashLabel.textAlignment = NSTextAlignmentCenter;
-    self.photoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [self.assignmentBottomBar addSubview:self.photoCashLabel];
-
-    if (self.assignmentCard.frame.size.height < self.assignmentTextView.frame.size.height) {
-        CGRect cardFrame = self.assignmentCard.frame;
-        cardFrame.size.height = self.assignmentTextView.frame.size.height * 2;
-        self.assignmentCard.frame = cardFrame;
-    }
+//    UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
+//    photoImageView.frame = CGRectMake(16, 10, 24, 24);
+//    [self.assignmentBottomBar addSubview:photoImageView];
+//
+//    self.photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
+//    self.photoCashLabel.text = @"$20";
+//    self.photoCashLabel.textColor = [UIColor frescoMediumTextColor];
+//    self.photoCashLabel.textAlignment = NSTextAlignmentCenter;
+//    self.photoCashLabel.font = [UIFont notaBoldWithSize:15];
+//    [self.assignmentBottomBar addSubview:self.photoCashLabel];
+//
+//    if (self.assignmentCard.frame.size.height < self.assignmentTextView.frame.size.height) {
+//        CGRect cardFrame = self.assignmentCard.frame;
+//        cardFrame.size.height = self.assignmentTextView.frame.size.height * 2;
+//        self.assignmentCard.frame = cardFrame;
+//    }
 
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
 
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + 1);
 
-    UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
-    videoImageView.frame = CGRectMake(85, 10, 24, 24);
-    [self.assignmentBottomBar addSubview:videoImageView];
-
-    self.videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
-    self.videoCashLabel.text = @"$50";
-    self.videoCashLabel.textColor = [UIColor frescoMediumTextColor];
-    self.videoCashLabel.textAlignment = NSTextAlignmentCenter;
-    self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [self.assignmentBottomBar addSubview:self.videoCashLabel];
+//    UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
+//    videoImageView.frame = CGRectMake(85, 10, 24, 24);
+//    [self.assignmentBottomBar addSubview:videoImageView];
+//
+//    self.videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
+//    self.videoCashLabel.text = @"$50";
+//    self.videoCashLabel.textColor = [UIColor frescoMediumTextColor];
+//    self.videoCashLabel.textAlignment = NSTextAlignmentCenter;
+//    self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
+//    [self.assignmentBottomBar addSubview:self.videoCashLabel];
 
     self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 144)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
