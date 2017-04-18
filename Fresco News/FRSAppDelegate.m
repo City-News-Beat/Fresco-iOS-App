@@ -51,7 +51,6 @@
     [FRSTracker launchAdjust];
     [FRSTracker configureSmooch];
     [FRSTracker startSegmentAnalytics];
-    [FRSTracker trackUser];
     
     //Check if we 
     if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
@@ -62,6 +61,8 @@
     
     [self configureStartDate];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
+
+    [FRSTracker trackUser];
 
     // Check for cached uploads from core data after core data setup has been completed.
     [[FRSUploadManager sharedInstance] checkCachedUploads];
