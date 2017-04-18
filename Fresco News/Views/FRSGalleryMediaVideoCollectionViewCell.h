@@ -8,10 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSPlayer.h"
+#import "AVPlayerDemoPlaybackView.h"
 
 @interface FRSGalleryMediaVideoCollectionViewCell : UICollectionViewCell
+{
+    NSURL* mURL;
+    
+    BOOL seekToZeroBeforePlay;
+    id mTimeObserver;
+    BOOL isSeeking;
 
-@property (strong, nonatomic) FRSPlayer *videoPlayer;
+}
+@property (nonatomic, copy) NSURL* URL;
+@property (readwrite, strong, setter=setPlayer:, getter=player) FRSPlayer* mPlayer;
+@property (strong) AVPlayerItem* mPlayerItem;
+@property (weak, nonatomic) IBOutlet AVPlayerDemoPlaybackView *mPlaybackView;
 
 -(void)loadPost:(FRSPost *)post;
 

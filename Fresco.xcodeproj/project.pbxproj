@@ -293,6 +293,7 @@
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */; };
 		E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */; };
+		F2192B881EA682D500F00E81 /* AVPlayerDemoPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */; };
 		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
 		F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */; };
 		F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */; };
@@ -886,6 +887,8 @@
 		E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+Fresco.m"; path = "Categories/CLLocation+Fresco.m"; sourceTree = "<group>"; };
 		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		F2192B861EA682D500F00E81 /* AVPlayerDemoPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPlayerDemoPlaybackView.h; sourceTree = "<group>"; };
+		F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPlayerDemoPlaybackView.m; sourceTree = "<group>"; };
 		F21FCB7E1E9BC3A50015B13D /* FRSGalleryMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaView.h; sourceTree = "<group>"; };
 		F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaView.m; sourceTree = "<group>"; };
 		F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaView.xib; sourceTree = "<group>"; };
@@ -2042,6 +2045,8 @@
 				F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */,
 				F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */,
 				F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */,
+				F2192B861EA682D500F00E81 /* AVPlayerDemoPlaybackView.h */,
+				F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */,
 				D487F1CB1CC14231005742F3 /* Player */,
 			);
 			name = "Gallery View";
@@ -2974,6 +2979,7 @@
 				CE8DB7AB1E76336E00000F30 /* FRSFindFriendsAlertView.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
+				F2192B881EA682D500F00E81 /* AVPlayerDemoPlaybackView.m in Sources */,
 				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
@@ -3205,7 +3211,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				DEVELOPMENT_TEAM = 44LTF25L2W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
@@ -3345,7 +3351,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				DEVELOPMENT_TEAM = 44LTF25L2W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
