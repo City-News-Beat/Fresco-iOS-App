@@ -1006,12 +1006,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 //    self.photoCashLabel.textAlignment = NSTextAlignmentCenter;
 //    self.photoCashLabel.font = [UIFont notaBoldWithSize:15];
 //    [self.assignmentBottomBar addSubview:self.photoCashLabel];
-//
-//    if (self.assignmentCard.frame.size.height < self.assignmentTextView.frame.size.height) {
-//        CGRect cardFrame = self.assignmentCard.frame;
-//        cardFrame.size.height = self.assignmentTextView.frame.size.height * 2;
-//        self.assignmentCard.frame = cardFrame;
-//    }
+
+    if (self.assignmentCard.frame.size.height < self.assignmentTextView.frame.size.height) {
+        CGRect cardFrame = self.assignmentCard.frame;
+        cardFrame.size.height = self.assignmentTextView.frame.size.height * 2;
+        self.assignmentCard.frame = cardFrame;
+    }
 
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
 
