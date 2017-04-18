@@ -32,7 +32,7 @@
     [self.superview setBackgroundColor:[UIColor whiteColor]];
     [self.superview setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     
-    [self.mainTextView setAttributedText:[self formattedAttributedStringFromString:@"We can only verify photos and videos from the past seven days. If you are trying to submit to an assignment, location data on each photo or video is required. To make sure content is tagged with location data, enable Location in Settings." boldText:@"enable Location in Settings."]];
+    [self.mainTextView setAttributedText:[self formattedAttributedStringFromString:@"Location data is required when submitting to an assignment. To make sure content is tagged with location data, enable Location in Settings." boldText:@"enable Location in Settings."]];
     
     [self.subTextView setAttributedText:[self formattedAttributedStringFromString:@"Have something we can't miss? Chat with us." boldText:@"Chat with us."]];
 

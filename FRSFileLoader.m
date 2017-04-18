@@ -76,10 +76,12 @@
         allAssets = [[NSMutableArray alloc] init];
     }
 
+    
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
     // have most recently created assets at this top of list
     options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO] ];
     
+    /* We don't want to limit file age to seven days anymore.
     #if TARGET_OS_SIMULATOR
         //Simulator
     #else
@@ -89,6 +91,8 @@
         NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", date];
         options.predicate = dayPredicate;
     #endif
+     */
+     
 
     for (PHAssetCollection *collection in currentCollection) {
         // fetch assets based on the sort and date restrictions we set up
