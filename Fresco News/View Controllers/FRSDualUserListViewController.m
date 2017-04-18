@@ -13,130 +13,190 @@
 #import "FRSGalleryManager.h"
 #import "FRSConnectivityAlertView.h"
 #import "FRSUserTableViewCell.h"
+#import "FRSFollowManager.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) NSString *galleryID;
-@property (strong, nonatomic) NSMutableArray *likedUsersArray;
-@property (strong, nonatomic) NSMutableArray *repostedUsersArray;
-
 @property (strong, nonatomic) UIScrollView *horizontalScrollView;
 
-@property (strong, nonatomic) UITableView *likesTableView;
-@property (strong, nonatomic) UITableView *repostsTableView;
+@property BOOL isLoadingLeft;
+@property BOOL isLoadingRight;
+@property BOOL hasReachedEndOfLeft;
+@property BOOL hasReachedEndOfRight;
 
-@property (strong, nonatomic) UIButton *likesButton;
-@property (strong, nonatomic) UIButton *repostsButton;
+@property (strong, nonatomic) NSMutableArray *leftUsersArray;
+@property (strong, nonatomic) NSMutableArray *rightUsersArray;
+
+@property (strong, nonatomic) UITableView *leftTableView;
+@property (strong, nonatomic) UITableView *rightTableView;
+
+@property (strong, nonatomic) UIButton *leftNavigationBarButton;
+@property (strong, nonatomic) UIButton *rightNavigationBarButton;
 
 @property BOOL didPresentError;
-@property BOOL isLoadingLikers;
-@property BOOL isLoadingReposters;
-@property BOOL hasReachedEndOfLikers;
-@property BOOL hasReachedEndOfReposters;
 
 @end
 
-int const FETCH_LIMIT = 20;
-
 @implementation FRSDualUserListViewController
-
-- (instancetype)initWithGallery:(NSString *)galleryID {
-    self = [super init];
-
-    if (self) {
-        self.galleryID = galleryID;
-    }
-
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-
-    [self configureScrollers];
     [self configureNavigationBar];
-
-    [self fetchData];
-
-    // this in conjunction with shouldRecognizeSimultaneouslyWithGestureRecognizer enables the user
-    // to swipe back to the previous view controller. UIScrollView cancels the navigation controllers popGestureRec by default
-    self.navigationController.interactivePopGestureRecognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
+    [self configureScrollers];
+    [self configureDataSource];
+    
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 #pragma mark - UI Configuration
 
 - (void)configureNavigationBar {
-    // default config
     [super configureBackButtonAnimated:YES];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
     [self configureNavigationButtons];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    
+    // this in conjunction with shouldRecognizeSimultaneouslyWithGestureRecognizer enables the user
+    // to swipe back to the previous view controller. UIScrollView cancels the navigation controllers popGestureRec by default
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+- (void)configureNavigationButtons {
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.navigationItem.titleView = titleView;
+
+    self.leftNavigationBarButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 45 - titleView.frame.size.width / 5, 8, 120, 30)];
+    [self.leftNavigationBarButton setTitle:self.leftTitle forState:UIControlStateNormal];
+    [self.leftNavigationBarButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.leftNavigationBarButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.leftNavigationBarButton addTarget:self action:@selector(handleLeftTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.leftNavigationBarButton];
+
+    self.rightNavigationBarButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 45 + titleView.frame.size.width / 8, 8, 120, 30)];
+    self.rightNavigationBarButton.contentMode = UIViewContentModeCenter;
+    [self.rightNavigationBarButton setTitle:self.rightTitle forState:UIControlStateNormal];
+    [self.rightNavigationBarButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.rightNavigationBarButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.rightNavigationBarButton addTarget:self action:@selector(handleRightTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.rightNavigationBarButton];
 }
 
 - (void)configureScrollers {
     int tabBarHeight = 49;
     int navBarHeight = 64;
-
-    // horizontal scrollview config
+    
     self.horizontalScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight))];
     self.horizontalScrollView.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height - (tabBarHeight + navBarHeight));
     self.horizontalScrollView.pagingEnabled = YES;
     self.horizontalScrollView.bounces = NO;
     self.horizontalScrollView.delegate = self;
     [self.view addSubview:self.horizontalScrollView];
-
-    // likes config
-    self.likesTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
-    self.likesTableView.delegate = self;
-    self.likesTableView.dataSource = self;
-    [self.likesTableView setSeparatorColor:[UIColor clearColor]];
-    [self.horizontalScrollView addSubview:self.likesTableView];
-    self.likesTableView.backgroundColor = [UIColor clearColor];
-
-    // repost config
-    self.repostsTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
-    self.repostsTableView.delegate = self;
-    self.repostsTableView.dataSource = self;
-    [self.horizontalScrollView addSubview:self.repostsTableView];
-    [self.repostsTableView setSeparatorColor:[UIColor clearColor]];
-    self.repostsTableView.backgroundColor = [UIColor clearColor];
-
-    [self.likesTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
-    [self.repostsTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
+    
+    self.leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
+    self.leftTableView.delegate = self;
+    self.leftTableView.dataSource = self;
+    [self.leftTableView setSeparatorColor:[UIColor clearColor]];
+    [self.horizontalScrollView addSubview:self.leftTableView];
+    self.leftTableView.backgroundColor = [UIColor clearColor];
+    
+    self.rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
+    self.rightTableView.delegate = self;
+    self.rightTableView.dataSource = self;
+    [self.horizontalScrollView addSubview:self.rightTableView];
+    [self.rightTableView setSeparatorColor:[UIColor clearColor]];
+    self.rightTableView.backgroundColor = [UIColor clearColor];
+    
+    [self.leftTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
+    [self.rightTableView registerNib:[UINib nibWithNibName:@"FRSUserTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userCellIdentifier];
 }
 
-- (void)configureNavigationButtons {
+#pragma mark - Data Source
+- (void)configureDataSource {
+    
+    // TODO: The way we handle the UI updating can be pulled out into one method.
+    
+    [self fetchLeftDataSourceWithCompletion:^(id responseObject, NSError *error) {
 
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    self.navigationItem.titleView = titleView;
-
-    self.likesButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 45 - titleView.frame.size.width / 5, 8, 120, 30)];
-    [self.likesButton setTitle:@"LIKES" forState:UIControlStateNormal];
-    [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
-    [self.likesButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.likesButton addTarget:self action:@selector(handleLikesTapped) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:self.likesButton];
-
-    self.repostsButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 45 + titleView.frame.size.width / 8, 8, 120, 30)];
-    self.repostsButton.contentMode = UIViewContentModeCenter;
-    [self.repostsButton setTitle:@"REPOSTS" forState:UIControlStateNormal];
-    [self.repostsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
-    [self.repostsButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.repostsButton addTarget:self action:@selector(handleRepostsTapped) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:self.repostsButton];
-
-    if (self.didTapRepostLabel) {
-        [self handleRepostsTapped];
-    } else {
-        [self handleLikesTapped];
-    }
+        [self removeSpinnerInTableView:self.leftTableView];
+        
+        if (responseObject) {
+            NSMutableArray *users = [[NSMutableArray alloc] init];
+            for (NSDictionary *user in responseObject) {
+                FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                [users addObject:newUser];
+            }
+            
+            self.leftUsersArray = users;
+            [self.leftTableView reloadData];
+            
+            if ([self.leftUsersArray count] == 0) {
+                [self configureFrogInTableView:self.leftTableView];
+            }
+        } else if (error && !responseObject) {
+            if (error.code == -1009) {
+                [self configureNoConnectionBannerAlert];
+            } else {
+                if (!self.didPresentError) {
+                    [self presentGenericError];
+                    self.didPresentError = YES;
+                }
+            }
+        }
+        
+        self.isLoadingLeft = NO;
+    }];
+    
+    [self fetchRightDataSourceWithCompletion:^(id responseObject, NSError *error) {
+        
+        [self removeSpinnerInTableView:self.rightTableView];
+        
+        if (responseObject) {
+            NSMutableArray *users = [[NSMutableArray alloc] init];
+            for (NSDictionary *user in responseObject) {
+                FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                [users addObject:newUser];
+            }
+            
+            self.rightUsersArray = users;
+            [self.rightTableView reloadData];
+            
+            if ([self.rightUsersArray count] == 0) {
+                [self configureFrogInTableView:self.rightTableView];
+            }
+        } else if (error && !responseObject) {
+            if (error.code == -1009) {
+                [self configureNoConnectionBannerAlert];
+            } else {
+                if (!self.didPresentError) {
+                    [self presentGenericError];
+                    self.didPresentError = YES;
+                }
+            }
+        }
+        
+        self.isLoadingRight = NO;
+    }];
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;
+- (void)fetchLeftDataSourceWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    completion(@[], nil);
+}
+
+- (void)fetchRightDataSourceWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    completion(@[], nil);
+}
+
+- (void)loadMoreLeftUsersFromLast:(NSString *)lastUserID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    completion(@[], nil);
+}
+
+- (void)loadMoreRightUsersFromLast:(NSString *)lastUserID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    completion(@[], nil);
 }
 
 #pragma mark - UIScrollView Delegate
@@ -144,22 +204,76 @@ int const FETCH_LIMIT = 20;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.horizontalScrollView) {
         if (scrollView.contentOffset.x == 0) {
-            [self handleLikesTapped];
+            [self handleLeftTabTapped];
         } else if (scrollView.contentOffset.x == self.view.frame.size.width) {
-            [self handleRepostsTapped];
+            [self handleRightTabTapped];
         }
     }
 
-    if (scrollView == self.likesTableView || scrollView == self.repostsTableView) {
+    if (scrollView == self.leftTableView || scrollView == self.rightTableView) {
         CGFloat height = scrollView.frame.size.height;
         CGFloat contentYoffset = scrollView.contentOffset.y;
         CGFloat distanceFromBottom = scrollView.contentSize.height - contentYoffset;
+        
+        // TODO: The way we handle the UI updating can be pulled out into one method.
 
         if (distanceFromBottom < height) {
-            if (scrollView == self.likesTableView) {
-                [self loadMoreLikers];
-            } else if (scrollView == self.likesTableView) {
-                [self loadMoreReposters];
+            if (scrollView == self.leftTableView) {
+                
+                if (self.isLoadingLeft || [self.leftUsersArray count] == 0 || self.hasReachedEndOfLeft) {
+                    return;
+                }
+                
+                self.isLoadingLeft = YES;
+                
+                NSString *lastUserID = @"";
+                if ([self.leftUsersArray lastObject]) {
+                    lastUserID = [(FRSUser *)[self.leftUsersArray lastObject] uid];
+                }
+                
+                [self loadMoreLeftUsersFromLast:lastUserID withCompletion:^(id responseObject, NSError *error) {
+                    
+                    for (NSDictionary *user in responseObject) {
+                        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                        [self.leftUsersArray addObject:newUser];
+                    }
+                    
+                    if ([responseObject count] == 0) {
+                        self.hasReachedEndOfLeft = YES;
+                    }
+                    
+                    [self.leftTableView reloadData];
+                    
+                    self.isLoadingLeft = NO;
+                }];
+                
+            } else if (scrollView == self.rightTableView) {
+            
+                if (self.isLoadingRight || [self.rightUsersArray count] == 0 || self.hasReachedEndOfRight) {
+                    return;
+                }
+                
+                self.isLoadingRight = YES;
+                
+                NSString *lastUserID = @"";
+                if ([self.rightUsersArray lastObject]) {
+                    lastUserID = [(FRSUser *)[self.rightUsersArray lastObject] uid];
+                }
+                
+                [self loadMoreRightUsersFromLast:lastUserID withCompletion:^(id responseObject, NSError *error) {
+                    for (NSDictionary *user in responseObject) {
+                        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
+                        [self.rightUsersArray addObject:newUser];
+                    }
+                    
+                    if ([responseObject count] == 0) {
+                        self.hasReachedEndOfRight = YES;
+                    }
+                    
+                    [self.rightTableView reloadData];
+                    
+                    self.isLoadingRight = NO;
+                }];
             }
         }
     }
@@ -168,25 +282,25 @@ int const FETCH_LIMIT = 20;
 #pragma mark - UITableView Delegate / Datasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.likesTableView) {
-        return [self.likedUsersArray count];
+    if (tableView == self.leftTableView) {
+        return [self.leftUsersArray count];
     }
 
-    if (tableView == self.repostsTableView) {
-        return [self.repostedUsersArray count];
+    if (tableView == self.rightTableView) {
+        return [self.rightUsersArray count];
     }
 
     return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView == self.likesTableView) {
-        FRSUser *user = [self.likedUsersArray objectAtIndex:indexPath.row];
+    if (tableView == self.leftTableView) {
+        FRSUser *user = [self.leftUsersArray objectAtIndex:indexPath.row];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:user];
         [self.navigationController pushViewController:controller animated:TRUE];
 
-    } else if (tableView == self.repostsTableView) {
-        FRSUser *user = [self.repostedUsersArray objectAtIndex:indexPath.row];
+    } else if (tableView == self.rightTableView) {
+        FRSUser *user = [self.rightUsersArray objectAtIndex:indexPath.row];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:user];
         [self.navigationController pushViewController:controller animated:TRUE];
     }
@@ -195,16 +309,22 @@ int const FETCH_LIMIT = 20;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FRSUserTableViewCell *cell = [self.likesTableView dequeueReusableCellWithIdentifier:userCellIdentifier];
-
-    if (tableView == self.likesTableView && self.likedUsersArray.count > 0) {
-        FRSUser *user = [self.likedUsersArray objectAtIndex:indexPath.row];
-        [cell loadDataWithUser:user];
-    } else if (tableView == self.repostsTableView && self.repostedUsersArray.count > 0) {
-        FRSUser *user = [self.repostedUsersArray objectAtIndex:indexPath.row];
-        [cell loadDataWithUser:user];
+    
+    // We need to create a cell for both the left and right tableviews in order to avoid any UI flasing on reload.
+    if (tableView == self.leftTableView && self.leftUsersArray.count > 0) {
+        FRSUserTableViewCell *leftCell = [self.leftTableView dequeueReusableCellWithIdentifier:userCellIdentifier];
+        FRSUser *user = [self.leftUsersArray objectAtIndex:indexPath.row];
+        [leftCell loadDataWithUser:user];
+        return leftCell;
+    } else if (tableView == self.rightTableView && self.rightUsersArray.count > 0) {
+        FRSUserTableViewCell *rightCell = [self.rightTableView dequeueReusableCellWithIdentifier:userCellIdentifier];
+        FRSUser *user = [self.rightUsersArray objectAtIndex:indexPath.row];
+        [rightCell loadDataWithUser:user];
+        return rightCell;
     }
 
+    // This shouldn't ever get called.
+    FRSUserTableViewCell *cell = [self.rightTableView dequeueReusableCellWithIdentifier:userCellIdentifier];
     return cell;
 }
 
@@ -215,217 +335,18 @@ int const FETCH_LIMIT = 20;
 
 #pragma mark - Navigation Bar Actions
 
-- (void)handleLikesTapped {
-    [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1.0] forState:UIControlStateNormal];
-    [self.repostsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+- (void)handleLeftTabTapped {
+    [self.leftNavigationBarButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1.0] forState:UIControlStateNormal];
+    [self.rightNavigationBarButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [self.horizontalScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
-- (void)handleRepostsTapped {
-    [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
-    [self.repostsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1.0] forState:UIControlStateNormal];
+- (void)handleRightTabTapped {
+    [self.leftNavigationBarButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [self.rightNavigationBarButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1.0] forState:UIControlStateNormal];
     [self.horizontalScrollView setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
 }
 
-#pragma mark - Fetch Data
-
-- (void)fetchData {
-    [self fetchLikers];
-    [self fetchReposters];
-}
-
-- (void)reloadData {
-    [self.likesTableView reloadData];
-    [self.repostsTableView reloadData];
-}
-
-- (void)fetchLikers {
-
-    if (self.isLoadingLikers) {
-        return;
-    }
-
-    self.isLoadingLikers = YES;
-
-    [self configureSpinnerInTableView:self.likesTableView];
-
-    NSString *lastUserID = @"";
-
-    if ([self.likedUsersArray lastObject]) {
-        lastUserID = [(FRSUser *)[self.likedUsersArray lastObject] uid];
-    }
-
-    [[FRSGalleryManager sharedInstance] fetchLikesForGallery:self.galleryID
-                                                       limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                      lastID:lastUserID
-                                                  completion:^(id responseObject, NSError *error) {
-                                                    [self removeSpinnerInTableView:self.likesTableView];
-
-                                                    if (responseObject) {
-
-                                                        NSMutableArray *likers = [[NSMutableArray alloc] init];
-                                                        NSArray *users = (NSArray *)responseObject;
-
-                                                        for (NSDictionary *user in users) {
-                                                            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
-                                                            [likers addObject:newUser];
-                                                        }
-
-                                                        self.likedUsersArray = likers;
-
-                                                        [self reloadData];
-
-                                                        if ([self.likedUsersArray count] == 0) {
-                                                            [self configureFrogInTableView:self.likesTableView];
-                                                        }
-                                                    }
-
-                                                    if (error && !responseObject) {
-                                                        if (error.code == -1009) {
-                                                            [self configureNoConnectionBannerAlert];
-                                                        } else {
-                                                            if (!self.didPresentError) {
-                                                                [self presentGenericError];
-                                                                self.didPresentError = YES;
-                                                            }
-                                                        }
-                                                    }
-                                                    self.isLoadingLikers = NO;
-                                                  }];
-}
-
-- (void)fetchReposters {
-    if (self.isLoadingReposters) {
-        return;
-    }
-
-    self.isLoadingReposters = YES;
-
-    [self configureSpinnerInTableView:self.repostsTableView];
-
-    NSString *lastUserID = @"";
-
-    if ([self.repostedUsersArray lastObject]) {
-        lastUserID = [(FRSUser *)[self.repostedUsersArray lastObject] uid];
-    }
-
-    [[FRSGalleryManager sharedInstance] fetchRepostsForGallery:self.galleryID
-                                                         limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                        lastID:lastUserID
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      [self removeSpinnerInTableView:self.repostsTableView];
-
-                                                      if (responseObject) {
-
-                                                          NSMutableArray *reposters = [[NSMutableArray alloc] init];
-                                                          NSArray *users = (NSArray *)responseObject;
-
-                                                          for (NSDictionary *user in users) {
-                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
-                                                              [reposters addObject:newUser];
-                                                          }
-
-                                                          self.repostedUsersArray = reposters;
-
-                                                          [self reloadData];
-
-                                                          if ([self.repostedUsersArray count] == 0) {
-                                                              [self configureFrogInTableView:self.repostsTableView];
-                                                          }
-                                                      }
-
-                                                      if (error && !responseObject) {
-                                                          if (error.code == -1009) {
-                                                              [self configureNoConnectionBannerAlert];
-                                                          } else {
-                                                              if (!self.didPresentError) {
-                                                                  [self presentGenericError];
-                                                                  self.didPresentError = YES;
-                                                              }
-                                                          }
-                                                      }
-                                                      self.isLoadingReposters = NO;
-                                                    }];
-}
-
-- (void)loadMoreLikers {
-    if (self.isLoadingLikers || [self.likedUsersArray count] == 0 || self.hasReachedEndOfLikers) {
-        return;
-    }
-    self.isLoadingLikers = YES;
-
-    NSString *lastUserID = @"";
-    if ([self.likedUsersArray lastObject]) {
-        lastUserID = [(FRSUser *)[self.likedUsersArray lastObject] uid];
-    }
-
-    [[FRSGalleryManager sharedInstance] fetchRepostsForGallery:self.galleryID
-                                                         limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                        lastID:lastUserID
-                                                    completion:^(id responseObject, NSError *error) {
-
-                                                      if (responseObject) {
-
-                                                          NSArray *users = (NSArray *)responseObject;
-
-                                                          for (NSDictionary *user in users) {
-                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
-                                                              [self.likedUsersArray addObject:newUser];
-                                                          }
-
-                                                          if ([users count] == 0) {
-                                                              self.hasReachedEndOfLikers = YES;
-                                                          }
-
-                                                          [self reloadData];
-                                                      }
-
-                                                      if (error) {
-                                                          // soft fail
-                                                      }
-
-                                                      self.isLoadingLikers = NO;
-                                                    }];
-}
-
-- (void)loadMoreReposters {
-    if (self.isLoadingReposters || [self.repostedUsersArray count] == 0 || self.hasReachedEndOfReposters) {
-        return;
-    }
-    self.isLoadingReposters = YES;
-
-    NSString *lastUserID = @"";
-    if ([self.repostedUsersArray lastObject]) {
-        lastUserID = [(FRSUser *)[self.repostedUsersArray lastObject] uid];
-    }
-
-    [[FRSGalleryManager sharedInstance] fetchRepostsForGallery:self.galleryID
-                                                         limit:[NSNumber numberWithInteger:FETCH_LIMIT]
-                                                        lastID:lastUserID
-                                                    completion:^(id responseObject, NSError *error) {
-                                                      if (responseObject) {
-
-                                                          NSArray *users = (NSArray *)responseObject;
-
-                                                          for (NSDictionary *user in users) {
-                                                              FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSGalleryManager sharedInstance] managedObjectContext]];
-                                                              [self.repostedUsersArray addObject:newUser];
-                                                          }
-
-                                                          if ([users count] == 0) {
-                                                              self.hasReachedEndOfReposters = YES;
-                                                          }
-
-                                                          [self reloadData];
-                                                      }
-
-                                                      if (error) {
-                                                          // soft fail
-                                                      }
-
-                                                      self.isLoadingReposters = NO;
-                                                    }];
-}
 
 #pragma mark - Frog
 
