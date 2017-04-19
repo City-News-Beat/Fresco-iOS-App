@@ -339,7 +339,7 @@
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
 
     self.timeLabel.clipsToBounds = NO;
-//    self.timeLabel.layer.masksToBounds = NO;
+    self.timeLabel.layer.masksToBounds = NO;
 
     [self addShadowToLabel:self.timeLabel];
 
@@ -360,7 +360,7 @@
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     self.locationLabel.clipsToBounds = NO;
-//    self.locationLabel.layer.masksToBounds = NO;
+    self.locationLabel.layer.masksToBounds = NO;
 
     [self addShadowToLabel:self.locationLabel];
     [self addSubview:self.locationLabel];
@@ -372,7 +372,7 @@
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
 
-//    self.profileIV.layer.cornerRadius = 12;
+    self.profileIV.layer.cornerRadius = 12;
     self.profileIV.clipsToBounds = YES;
     [self addSubview:self.profileIV];
 
@@ -390,7 +390,7 @@
 
     [self addShadowToLabel:self.nameLabel];
 
-//    self.nameLabel.layer.masksToBounds = NO;
+    self.nameLabel.layer.masksToBounds = NO;
     [self addSubview:self.nameLabel];
 
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
@@ -469,7 +469,6 @@
 }
 
 - (void)addShadowToLabel:(UILabel *)label {
-    return;
     if (!label.text) {
         return;
     }
@@ -489,20 +488,20 @@
     label.attributedText = attString;
 
     label.clipsToBounds = NO;
-//    label.layer.masksToBounds = NO;
+    label.layer.masksToBounds = NO;
 }
 
 - (UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize {
 
     UILabel *label = [UILabel new];
     label.clipsToBounds = NO;
-//    label.layer.masksToBounds = NO;
+    label.layer.masksToBounds = NO;
 
     label.text = text;
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
-//    label.layer.shouldRasterize = TRUE;
-//    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    label.layer.shouldRasterize = TRUE;
+    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     label.adjustsFontSizeToFitWidth = YES;
     label.numberOfLines = 1;
 

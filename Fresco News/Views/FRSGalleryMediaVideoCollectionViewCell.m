@@ -39,6 +39,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 -(void)prepareForReuse {
     [super prepareForReuse];
     NSLog(@"Rev prepare the video player to be reusable here.");
+    [self.imageView sd_cancelCurrentImageLoad];
+    self.imageView.image = nil;
+    self.post = nil;
+
 }
 
 - (void)awakeFromNib {
@@ -46,34 +50,33 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     // Initialization code
     
     [self setPlayer:nil];
-
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
     [self addGestureRecognizer:tap];
-
+    
 }
 
 -(void)loadPost:(FRSPost *)post {
     NSLog(@"rev rev load video post: %@", post.uid);
     self.post = post;
-
+    
     [self configureMuteIconDisplay:YES];
     [self loadImage];
-
+    
     [self setURL:[NSURL URLWithString:self.post.videoUrl]];
     
 }
 
 - (void)loadImage {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.imageView.image = nil;
         if(!self.post.imageUrl) return;
         
         [self.imageView sd_setImageWithURL:[NSURL
                                             URLResizedFromURLString:self.post.imageUrl
                                             width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
                                             ]
-                     placeholderImage:nil];
-
+                          placeholderImage:nil];
+        
         NSLog(@"rev rev load imageView for video post");
     });
     
@@ -98,7 +101,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 {
     dispatch_async( dispatch_get_main_queue(),
                    ^{
-
+                       
                        NSLog(@"Rev video video play play: %@ \nin Cell: %@", _mPlayer, self);
                        [self sendSubviewToBack:self.imageView];
                        
@@ -116,7 +119,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        NSLog(@"Mute every video that starts playing.");
                        [self mute:YES];
                    });
-
+    
 }
 
 - (void)pause
@@ -125,7 +128,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     [self bringSubviewToFront:self.imageView];
     [self.mPlayer pause];
     
-//    [self showPlayButton];
+    //    [self showPlayButton];
 }
 
 
@@ -134,7 +137,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 ////    [self.mPlayer pause];
 //
 //    self.mPlayer.muted = !self.mPlayer.muted;
-//    
+//
 //}
 //
 #pragma mark - Mute
@@ -148,10 +151,12 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 -(void)tapped {
-    NSLog(@"Rev new video mute Unmute");
-
-    self.mPlayer.muted = !self.mPlayer.muted;
-    [self configureMuteIconDisplay:self.mPlayer.muted];
+    if([self isPlaying]) {
+        NSLog(@"Rev new video mute Unmute");
+        
+        self.mPlayer.muted = !self.mPlayer.muted;
+        [self configureMuteIconDisplay:self.mPlayer.muted];
+    }
 }
 
 -(void)configureMuteIconDisplay:(BOOL)display {
@@ -214,7 +219,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     [_mPlayer.currentItem removeObserver:self forKeyPath:@"status"];
     
     [self.mPlayer pause];
-    
 }
 
 
@@ -285,19 +289,19 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 -(void)assetFailedToPrepareForPlayback:(NSError *)error
 {
     [self removePlayerTimeObserver];
-//    [self syncScrubber];
-//    [self disableScrubber];
-//    [self disablePlayerButtons];
+    //    [self syncScrubber];
+    //    [self disableScrubber];
+    //    [self disablePlayerButtons];
     
     /* Display the error. */
     NSLog(@"error::: %@", [error localizedDescription]);
     
-//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[error localizedDescription]
-//                                                        message:[error localizedFailureReason]
-//                                                       delegate:nil
-//                                              cancelButtonTitle:@"OK"
-//                                              otherButtonTitles:nil];
-//    [alertView show];
+    //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[error localizedDescription]
+    //                                                        message:[error localizedFailureReason]
+    //                                                       delegate:nil
+    //                                              cancelButtonTitle:@"OK"
+    //                                              otherButtonTitles:nil];
+    //    [alertView show];
 }
 
 
@@ -406,10 +410,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
          */
         [self.mPlayer replaceCurrentItemWithPlayerItem:self.mPlayerItem];
         
-//        [self syncPlayPauseButtons];
+        //        [self syncPlayPauseButtons];
     }
     
-//    [self.mScrubber setValue:0.0];
+    //    [self.mScrubber setValue:0.0];
 }
 
 #pragma mark -
@@ -439,7 +443,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     /* AVPlayerItem "status" property value observer. */
     if (context == AVPlayerDemoPlaybackViewControllerStatusObservationContext)
     {
-//        [self syncPlayPauseButtons];
+        //        [self syncPlayPauseButtons];
         
         AVPlayerItemStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
         switch (status)
@@ -449,10 +453,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             case AVPlayerItemStatusUnknown:
             {
                 [self removePlayerTimeObserver];
-//                [self syncScrubber];
+                //                [self syncScrubber];
                 
-//                [self disableScrubber];
-//                [self disablePlayerButtons];
+                //                [self disableScrubber];
+                //                [self disablePlayerButtons];
             }
                 break;
                 
@@ -462,10 +466,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                  [playerItem status] == AVPlayerItemStatusReadyToPlay,
                  its duration can be fetched from the item. */
                 
-//                [self initScrubberTimer];
+                //                [self initScrubberTimer];
                 
-//                [self enableScrubber];
-//                [self enablePlayerButtons];
+                //                [self enableScrubber];
+                //                [self enablePlayerButtons];
             }
                 break;
                 
@@ -480,7 +484,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     /* AVPlayer "rate" property value observer. */
     else if (context == AVPlayerDemoPlaybackViewControllerRateObservationContext)
     {
-//        [self syncPlayPauseButtons];
+        //        [self syncPlayPauseButtons];
     }
     /* AVPlayer "currentItem" property observer.
      Called when the AVPlayer replaceCurrentItemWithPlayerItem:
@@ -492,21 +496,21 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         /* Is the new player item null? */
         if (newPlayerItem == (id)[NSNull null])
         {
-//            [self disablePlayerButtons];
-//            [self disableScrubber];
+            //            [self disablePlayerButtons];
+            //            [self disableScrubber];
         }
         else /* Replacement of player currentItem has occurred */
         {
             /* Set the AVPlayer for which the player layer displays visual output. */
             [self.mPlaybackView setPlayer:_mPlayer];
             
-//            [self setViewDisplayName];
+            //            [self setViewDisplayName];
             
             /* Specifies that the player should preserve the video’s aspect ratio and
              fit the video within the layer’s bounds. */
             [self.mPlaybackView setVideoFillMode:AVLayerVideoGravityResizeAspectFill];
             
-//            [self syncPlayPauseButtons];
+            //            [self syncPlayPauseButtons];
         }
     }
     else

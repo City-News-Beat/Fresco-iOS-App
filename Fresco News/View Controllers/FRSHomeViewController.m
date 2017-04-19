@@ -124,6 +124,7 @@ static NSInteger const galleriesPerPage = 12;
     if (hasLoadedOnce) {
         [self reloadData];
     }
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -288,6 +289,7 @@ static NSInteger const galleriesPerPage = 12;
                                                          dispatch_async(dispatch_get_main_queue(), ^{
                                                            self.dataSource = newGalleries;
                                                            [self.tableView reloadData];
+
                                                          });
                                                        }];
                                                      }];
@@ -426,6 +428,7 @@ static NSInteger const galleriesPerPage = 12;
                                                          [self.loadingView stopLoading];
                                                          [self.loadingView removeFromSuperview];
                                                          hasLoadedOnce = TRUE;
+
                                                        });
                                                      }];
 }
@@ -997,9 +1000,9 @@ func scrollViewWillBeginDragging(scrollView: UIScrollView) {
     
     for (FRSGalleryTableViewCell *cell in self.tableView.visibleCells) {
         /*
-         Start playback mid frame -- at least 300 from top & at least 100 from bottom
+         Start playback mid frame -- at least 60% of the table.
          */
-        if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
+        if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
             [cell play];
             break;
         }

@@ -25,6 +25,14 @@
     // Initialization code
 }
 
+-(void)prepareForReuse {
+    [super prepareForReuse];
+    NSLog(@"Rev prepare the image cell to be reusable here.");
+    [self.imageView sd_cancelCurrentImageLoad];
+    self.imageView.image = nil;
+    self.post = nil;
+}
+
 -(void)loadPost:(FRSPost *)post {
     dispatch_async(dispatch_get_main_queue(), ^{
         //    self.imageView.image = nil;
@@ -37,7 +45,6 @@
 
 - (void)loadImage {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.imageView.image = nil;
         if(!self.post.imageUrl) return;
         
         [self.imageView sd_setImageWithURL:[NSURL
