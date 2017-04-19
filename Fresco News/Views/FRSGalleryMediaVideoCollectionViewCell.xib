@@ -23,7 +23,7 @@
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E02-wc-sgd" customClass="AVPlayerDemoPlaybackView">
                         <rect key="frame" x="0.0" y="0.0" width="150" height="117"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                 </subviews>
             </view>

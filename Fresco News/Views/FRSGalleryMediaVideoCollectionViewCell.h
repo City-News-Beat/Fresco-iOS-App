@@ -10,6 +10,10 @@
 #import "FRSPlayer.h"
 #import "AVPlayerDemoPlaybackView.h"
 
+@protocol FRSGalleryMediaVideoCollectionViewCellDelegate <NSObject>
+-(void)mediaShouldShowMuteIcon:(BOOL)show;
+@end
+
 @interface FRSGalleryMediaVideoCollectionViewCell : UICollectionViewCell
 {
     NSURL* mURL;
@@ -19,6 +23,7 @@
     BOOL isSeeking;
 
 }
+@property (nonatomic, weak) id<FRSGalleryMediaVideoCollectionViewCellDelegate> delegate;
 @property (nonatomic, copy) NSURL* URL;
 @property (readwrite, strong, setter=setPlayer:, getter=player) FRSPlayer* mPlayer;
 @property (strong) AVPlayerItem* mPlayerItem;
@@ -28,6 +33,5 @@
 
 -(void)play;
 -(void)pause;
--(void)tap;
-
+-(void)mute:(BOOL)mute;
 @end

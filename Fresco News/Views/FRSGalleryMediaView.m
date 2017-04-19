@@ -14,9 +14,8 @@
 static NSString *ImageCellIdentifier = @"FRSGalleryMediaImageCellIdentifier";
 static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
-@interface FRSGalleryMediaView () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface FRSGalleryMediaView () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FRSGalleryMediaVideoCollectionViewCellDelegate>
 
-@property (strong, nonatomic) FRSGallery *gallery;
 @property (weak, nonatomic) NSObject<FRSGalleryMediaViewDelegate> *delegate;
 @property (strong, nonatomic) NSArray *orderedPosts;
 //@property (strong, nonatomic) FRSGalleryMediaCollectionViewCell *currentCell;
@@ -41,12 +40,12 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryMediaViewDelegate>)delegate {
+-(instancetype)initWithFrame:(CGRect)frame posts:(NSArray *)posts delegate:(id<FRSGalleryMediaViewDelegate>)delegate {
     self = [super initWithFrame:frame];
     if (self) {
         self.delegate = delegate;
         [self commonInit];
-        [self loadGallery:gallery];
+        [self loadPosts:posts];
     }
     return self;
 }
@@ -63,13 +62,9 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     self.collectionView.delaysContentTouches = FALSE;
 }
 
--(void)loadGallery:(FRSGallery *)gallery {
+-(void)loadPosts:(NSArray *)posts {
     self.userInteractionEnabled = YES;
-    self.gallery = gallery;
-    
-    self.orderedPosts = [gallery.posts allObjects];
-    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
-        
+    self.orderedPosts = posts;
     [self.collectionView reloadData];
 }
 
@@ -95,16 +90,20 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     FRSPost *post = self.orderedPosts[indexPath.row];
     if(post.videoUrl){
         FRSGalleryMediaVideoCollectionViewCell *videoCell = [collectionView dequeueReusableCellWithReuseIdentifier:VideoCellIdentifier forIndexPath:indexPath];
+        if(!videoCell.delegate) {
+            videoCell.delegate = self;
+        }
         [videoCell loadPost:post];
         mediaCell = videoCell;
     }
     else {
         FRSGalleryMediaImageCollectionViewCell *imageCell = [collectionView dequeueReusableCellWithReuseIdentifier:ImageCellIdentifier forIndexPath:indexPath];
         [imageCell loadPost:post];
+        [self configureMuteIconDisplay:NO];
         mediaCell = imageCell;
     }
     
-//    self.currentCell = cell;
+    //    self.currentCell = cell;
     return mediaCell;
 }
 
@@ -116,23 +115,23 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     //TODO: Mostly sure we can select only once its loaded.
-//    [self.currentCell tap];
-//    UICollectionViewCell *cell = [self collectionView:collectionView cellForItemAtIndexPath:indexPath];
-//    if ([cell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-//        [(FRSGalleryMediaVideoCollectionViewCell *)cell tap];
-//    }
-//    
-//    if (collectionView.visibleCells.count == 0) {
-//        return;
-//    }
+    //    [self.currentCell tap];
+    //    UICollectionViewCell *cell = [self collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    //    if ([cell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
+    //        [(FRSGalleryMediaVideoCollectionViewCell *)cell tap];
+    //    }
+    //
+    //    if (collectionView.visibleCells.count == 0) {
+    //        return;
+    //    }
     
-//    UICollectionViewCell *firstCell = collectionView.visibleCells[0];
-//    if ([firstCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-//        [(FRSGalleryMediaVideoCollectionViewCell *)firstCell tap];
-//    }
-
-//    cell.videoPlayer.muted = !cell.videoPlayer.muted;
-//    [cell tap];
+    //    UICollectionViewCell *firstCell = collectionView.visibleCells[0];
+    //    if ([firstCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
+    //        [(FRSGalleryMediaVideoCollectionViewCell *)firstCell tap];
+    //    }
+    
+    //    cell.videoPlayer.muted = !cell.videoPlayer.muted;
+    //    [cell tap];
 }
 
 #pragma mark - Utilities
@@ -141,7 +140,7 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     //TODO: Scroll - we can avoid calculation everytime by saving against a gallery obj.
     NSInteger totalHeight = 0;
     
-    for (FRSPost *post in self.gallery.posts) {
+    for (FRSPost *post in self.orderedPosts) {
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
         
@@ -153,7 +152,7 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
         }
     }
     
-    float divider = self.gallery.posts.count;
+    float divider = self.orderedPosts.count;
     if (divider == 0) {
         divider = 1;
     }
@@ -179,10 +178,10 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"media scrollViewDidEndDecelerating");
-//    if ([self.delegate respondsToSelector:@selector(mediaScrollViewDidEndDecelerating:)]) {
-//        [self.delegate mediaScrollViewDidEndDecelerating:scrollView];
-//    }
-
+    //    if ([self.delegate respondsToSelector:@selector(mediaScrollViewDidEndDecelerating:)]) {
+    //        [self.delegate mediaScrollViewDidEndDecelerating:scrollView];
+    //    }
+    
     CGFloat pageWidth = scrollView.frame.size.width;
     NSInteger page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     NSLog(@"Current page -> %ld",(long)page);
@@ -190,17 +189,17 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     if ([self.delegate respondsToSelector:@selector(mediaDidChangeToPage:)]) {
         [self.delegate mediaDidChangeToPage:page];
     }
-
+    
     [self play];
-//    self.pageControl.currentPage = page;
+    //    self.pageControl.currentPage = page;
     
-//    self.currentPage = page;
-//    if (self.players.count > page) {
-//        self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
-//        [self.videoPlayer play];
-//    }
+    //    self.currentPage = page;
+    //    if (self.players.count > page) {
+    //        self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
+    //        [self.videoPlayer play];
+    //    }
     
-//    [self configureMuteIcon];
+    //    [self configureMuteIcon];
 }
 
 
@@ -226,11 +225,44 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     }
     
     //pause all visible players before playing the current one.
-//    [self pause];
+    //    [self pause];
     
-    UICollectionViewCell *visibleCell = self.collectionView.visibleCells[0];
-    if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-        [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];
+    //visible cells doesnot work when we drag very little and leave. So consider current page number. play is called only after the scroll did end decelerate. just check which visible cell matches the current xposition of the current page.
+    
+    CGFloat pageWidth = self.collectionView.frame.size.width;
+    NSInteger page = floor((self.collectionView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    NSLog(@"rev play collection view current page -> %ld",(long)page);
+    
+    for (UICollectionViewCell *visibleCell in self.collectionView.visibleCells) {
+        //get the accurate visible cell matching the page.
+        NSLog(@"rev visibleCell x: %f expected page x: %f", visibleCell.frame.origin.x, pageWidth*page);
+        if (visibleCell.frame.origin.x != pageWidth*page) {
+            continue;
+        }
+        BOOL displayMuteIcon = NO;
+        if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
+            NSLog(@"rev visibleCell is video");
+            NSLog(@"visibleCell playing");
+            displayMuteIcon = YES;
+            [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];
+        }
+        else {
+            NSLog(@"rev visibleCell is image");
+        }
+        [self configureMuteIconDisplay:displayMuteIcon];
+        //we should have decided the landed cell by now. So get out of this loop.
+        break;
+
+    }
+    //    UICollectionViewCell *visibleCell = self.collectionView.visibleCells[0];
+    //    if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
+    //        [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];
+    //    }
+}
+
+-(void)configureMuteIconDisplay:(BOOL)display {
+    if([self.delegate respondsToSelector:@selector(mediaShouldShowMuteIcon:)]) {
+        [self.delegate mediaShouldShowMuteIcon:display];
     }
 }
 
@@ -260,5 +292,12 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
      
      */
 }
+
+#pragma mark - FRSGalleryMediaVideoCollectionViewCellDelegate
+
+-(void)mediaShouldShowMuteIcon:(BOOL)show {
+    [self configureMuteIconDisplay:show];
+}
+
 
 @end

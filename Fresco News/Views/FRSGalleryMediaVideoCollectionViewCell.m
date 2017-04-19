@@ -53,17 +53,18 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 -(void)loadPost:(FRSPost *)post {
-    NSLog(@"rev rev load post: %@", post.uid);
+    NSLog(@"rev rev load video post: %@", post.uid);
     self.post = post;
-    
+
+    [self configureMuteIconDisplay:YES];
     [self loadImage];
 
     [self setURL:[NSURL URLWithString:self.post.videoUrl]];
+    
 }
 
 - (void)loadImage {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
         self.imageView.image = nil;
         if(!self.post.imageUrl) return;
         
@@ -73,6 +74,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                                             ]
                      placeholderImage:nil];
 
+        NSLog(@"rev rev load imageView for video post");
     });
     
 }
@@ -94,37 +96,51 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 - (void)play
 {
-    NSLog(@"Rev video video play play: %@", _mPlayer);
+    dispatch_async( dispatch_get_main_queue(),
+                   ^{
 
-    /* If we are at the end of the movie, we must seek to the beginning first
-     before starting playback. */
-    if (YES == seekToZeroBeforePlay)
-    {
-        seekToZeroBeforePlay = NO;
-        [self.mPlayer seekToTime:kCMTimeZero];
-    }
-    
-    [self.mPlayer play];
-    
-//    [self showStopButton];
+                       NSLog(@"Rev video video play play: %@ \nin Cell: %@", _mPlayer, self);
+                       [self sendSubviewToBack:self.imageView];
+                       
+                       /* If we are at the end of the movie, we must seek to the beginning first
+                        before starting playback. */
+                       if (YES == seekToZeroBeforePlay)
+                       {
+                           seekToZeroBeforePlay = NO;
+                           [self.mPlayer seekToTime:kCMTimeZero];
+                       }
+                       
+                       [self.mPlayer play];
+                       
+                       //    [self showStopButton];
+                       NSLog(@"Mute every video that starts playing.");
+                       [self mute:YES];
+                   });
+
 }
 
 - (void)pause
 {
     NSLog(@"Rev video video pause pause");
-
+    [self bringSubviewToFront:self.imageView];
     [self.mPlayer pause];
     
 //    [self showPlayButton];
 }
 
 
--(void)tap {
-    NSLog(@"Rev video video mute mute pause pause");
-//    [self.mPlayer pause];
+//-(void)tap {
+//    NSLog(@"Rev video video mute mute pause pause");
+////    [self.mPlayer pause];
+//
+//    self.mPlayer.muted = !self.mPlayer.muted;
+//    
+//}
+//
+#pragma mark - Mute
 
-    self.mPlayer.muted = !self.mPlayer.muted;
-    
+-(void)mute:(BOOL)mute {
+    self.mPlayer.muted = mute;
 }
 
 -(void)restart {
@@ -135,6 +151,13 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev new video mute Unmute");
 
     self.mPlayer.muted = !self.mPlayer.muted;
+    [self configureMuteIconDisplay:self.mPlayer.muted];
+}
+
+-(void)configureMuteIconDisplay:(BOOL)display {
+    if([self.delegate respondsToSelector:@selector(mediaShouldShowMuteIcon:)]) {
+        [self.delegate mediaShouldShowMuteIcon:display];
+    }
 }
 
 -(NSString *)urlOfCurrentlyPlayingInPlayer:(AVPlayer *)player{
@@ -481,7 +504,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             
             /* Specifies that the player should preserve the video’s aspect ratio and
              fit the video within the layer’s bounds. */
-            [self.mPlaybackView setVideoFillMode:AVLayerVideoGravityResizeAspect];
+            [self.mPlaybackView setVideoFillMode:AVLayerVideoGravityResizeAspectFill];
             
 //            [self syncPlayPauseButtons];
         }
@@ -491,7 +514,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         [super observeValueForKeyPath:path ofObject:object change:change context:context];
     }
 }
-
 
 
 @end

@@ -58,10 +58,10 @@
     self.clipsToBounds = NO;
     self.gallery = gallery;
 
-    [self configureGalleryMediaViewOnRefresh];
-
     self.orderedPosts = [gallery.posts allObjects];
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
+
+    [self configureGalleryMediaViewOnRefresh];
 
     [self.actionBar updateSocialButtonsFromButton:nil];
 
@@ -226,11 +226,10 @@
 
 -(void)configureGalleryMediaViewOnRefresh {
     [self.mediaView setFrame:CGRectMake(0, 0, self.mediaView.bounds.size.width, [self imageViewHeight])];
-    [self.mediaView loadGallery:self.gallery];
+    [self.mediaView loadPosts:self.orderedPosts];
 }
 -(void)configureGalleryMediaViewOnLoad {
-    
-    self.mediaView = [[FRSGalleryMediaView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, [self imageViewHeight]) gallery:self.gallery delegate:self];
+    self.mediaView = [[FRSGalleryMediaView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, [self imageViewHeight]) posts:self.orderedPosts delegate:self];
     [self addSubview:self.mediaView];
 
 }
@@ -260,8 +259,7 @@
 }
 
 
-- (void)configureMuteIcon:(BOOL)display {
-    NSInteger page = (self.mediaView.collectionView.contentOffset.x + self.frame.size.width / 2) / self.mediaView.frame.size.width;
+- (void)configureMuteIconDisplay:(BOOL)display {
     if (!self.muteImageView) {
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
         self.muteImageView.alpha = 0;
@@ -560,6 +558,10 @@
 
 -(void)mediaDidChangeToPage:(NSInteger)page {
     self.pageControl.currentPage = page;
+}
+
+-(void)mediaShouldShowMuteIcon:(BOOL)show {
+    [self configureMuteIconDisplay:show];
 }
 
 #pragma mark - Scroll view delegate 
