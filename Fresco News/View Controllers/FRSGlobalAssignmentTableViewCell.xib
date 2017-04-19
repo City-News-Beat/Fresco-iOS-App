@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16F43c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -141,14 +141,14 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54252403849999997" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo-icon-profile" highlightedImage="photo-icon-profile" translatesAutoresizingMaskIntoConstraints="NO" id="8mu-q5-f49">
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo-icon-profile" highlightedImage="photo-icon-profile" translatesAutoresizingMaskIntoConstraints="NO" id="8mu-q5-f49">
                         <rect key="frame" x="16" y="436" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="1HA-GA-chB"/>
                             <constraint firstAttribute="width" constant="24" id="FvB-6H-Nzy"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kd-in-cRr">
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kd-in-cRr">
                         <rect key="frame" x="46" y="441" width="23" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="iVr-Xk-90y"/>
@@ -157,14 +157,14 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54252403849999997" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-icon" highlightedImage="video-icon" translatesAutoresizingMaskIntoConstraints="NO" id="KUX-3g-Y6j">
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-icon" highlightedImage="video-icon" translatesAutoresizingMaskIntoConstraints="NO" id="KUX-3g-Y6j">
                         <rect key="frame" x="84.5" y="436" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="6kO-Et-gQe"/>
                             <constraint firstAttribute="width" constant="24" id="pQq-Am-Rrf"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2f-dt-5zU">
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2f-dt-5zU">
                         <rect key="frame" x="114.5" y="441" width="23.5" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="dpg-Fv-ORp"/>
@@ -207,6 +207,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="I0N-DT-wge" secondAttribute="trailing" constant="8" id="CFU-P9-IZi"/>
                     <constraint firstItem="4Zn-ax-szl" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leadingMargin" constant="10" id="CK9-U8-Bsf"/>
                     <constraint firstItem="EOj-1T-883" firstAttribute="top" secondItem="SNw-Gn-mLB" secondAttribute="bottom" constant="37" id="Dgo-vH-ifM"/>
+                    <constraint firstItem="4C9-QT-p6a" firstAttribute="top" secondItem="EOj-1T-883" secondAttribute="bottom" constant="14" id="HUq-Vp-fei"/>
                     <constraint firstItem="4C9-QT-p6a" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leading" id="Hpr-gQ-n6L"/>
                     <constraint firstItem="0kd-in-cRr" firstAttribute="leading" secondItem="8mu-q5-f49" secondAttribute="trailing" constant="6" id="O1l-GD-iYX"/>
                     <constraint firstAttribute="bottomMargin" secondItem="34c-07-SJa" secondAttribute="bottom" constant="152" id="OhL-vH-9CQ"/>
