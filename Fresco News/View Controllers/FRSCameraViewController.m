@@ -277,7 +277,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)configureSlider {
-    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, -SLIDER_HEIGHT, self.view.frame.size.width, SLIDER_HEIGHT)];
+    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, -SLIDER_HEIGHT, self.view.frame.size.width, SLIDER_HEIGHT) captureMode:FRSCaptureModeVideo];
     [self.bottomClearContainer addSubview:self.captureModeSlider];
 }
 

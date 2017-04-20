@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSCameraViewController.h"
 
 @interface FRSCaptureModeSlider : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame;
+- (instancetype)initWithFrame:(CGRect)frame captureMode:(FRSCaptureMode)captureMode;
 
 @end

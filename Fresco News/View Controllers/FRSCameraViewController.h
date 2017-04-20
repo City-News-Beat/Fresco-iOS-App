@@ -14,7 +14,10 @@
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,
-    FRSCaptureModeVideo
+    FRSCaptureModeVideo,
+    FRSCaptureModeWide,
+    FRSCaptureModePan,
+    FRSCaptureModeInterview
 };
 
 @interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate> {
