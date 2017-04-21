@@ -929,30 +929,6 @@ static NSInteger const galleriesPerPage = 12;
     }
 }
 
-/*
-func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-    
-    if(self.isScrolling){
-        if(!decelerate){
-            self.isScrolling = false
-            self.tableView.reloadData()
-        }
-    }
-}
-
-func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-    
-    if(self.isScrolling){
-        self.isScrolling = false
-        self.tableView.reloadData()
-    }
-}
-
-func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-    self.isScrolling = true
-}
-*/
-
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if(self.isScrolling){
         if(!decelerate){

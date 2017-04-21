@@ -68,7 +68,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 - (void)loadImage {
-    dispatch_async(dispatch_get_main_queue(), ^{
+//    dispatch_async(dispatch_get_main_queue(), ^{
         if(!self.post.imageUrl) return;
         
         [self.imageView sd_setImageWithURL:[NSURL
@@ -78,7 +78,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                           placeholderImage:nil];
         
         NSLog(@"rev rev load imageView for video post");
-    });
+    //});
     
 }
 
