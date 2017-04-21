@@ -39,6 +39,7 @@ static NSString *const taxInfoDeclinedNotification = @"user-payment-tax-info-dec
 
 // Assignments
 static NSString *const newAssignmentNotification = @"user-dispatch-new-assignment";
+static NSString *const assignmentExpiredNotification = @"user-dispatch-assignment-expired";
 static NSString *const galleryApprovedNotification = @"user-dispatch-content-verified";
 
 // Smooch Whisper

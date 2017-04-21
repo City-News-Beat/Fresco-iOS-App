@@ -305,8 +305,8 @@
 
     }
     /* ASSIGNMENT */
-    else if ([currentKey isEqualToString:newAssignmentNotification]) {
-        FRSAssignmentNotificationTableViewCell *assignmentCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
+    else if ([currentKey isEqualToString:newAssignmentNotification] || [currentKey isEqualToString:assignmentExpiredNotification]) {
+        FRSAssignmentNotificationTableViewCell *assignmentCell = [tableView dequeueReusableCellWithIdentifier:newAssignmentNotification];
         assignmentCell.delegate = self;
 
         [self configureAssignmentCell:assignmentCell dictionary:[self.feed objectAtIndex:indexPath.row]];
