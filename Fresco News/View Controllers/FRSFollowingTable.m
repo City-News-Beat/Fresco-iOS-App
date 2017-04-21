@@ -397,6 +397,9 @@
     [self pausePlayers];
     
     for (FRSGalleryTableViewCell *cell in self.visibleCells) {
+
+        if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
+
         /*
          Start playback mid frame -- at least 60% of the table.
          */

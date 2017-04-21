@@ -992,6 +992,8 @@ static NSInteger const galleriesPerPage = 12;
         /*
          Start playback mid frame -- at least 60% of the table.
          */
+        if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
+        
         if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
             [cell play];
             break;
