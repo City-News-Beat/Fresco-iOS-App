@@ -1345,6 +1345,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 #pragma mark - Assignment Bars
 
 - (void)showGlobalAssignmentsBar {
+    
+    if (self.globalAssignmentsArray.count <= 0) {
+        return;
+    }
+    
     if (self.didAcceptAssignment) {
         return;
     }
