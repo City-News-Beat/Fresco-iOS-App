@@ -61,13 +61,17 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     self.post = post;
     
     [self configureMuteIconDisplay:YES];
+    
+    if(![[self urlOfCurrentlyPlayingInPlayer:_mPlayer] isEqualToString:self.post.videoUrl]){
+        // player already has the correct url. so no need to change the url/asset. just let it play.
+        [self.mPlaybackView setPlayer:nil];
+    }
     [self loadImage];
-    
-    [self setURL:[NSURL URLWithString:self.post.videoUrl]];
-    
 }
 
 - (void)loadImage {
+    [self bringSubviewToFront:self.imageView];
+
 //    dispatch_async(dispatch_get_main_queue(), ^{
         if(!self.post.imageUrl) return;
         
@@ -103,8 +107,15 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                    ^{
                        
                        NSLog(@"Rev video video play play: %@ \nin Cell: %@", _mPlayer, self);
-                       [self sendSubviewToBack:self.imageView];
                        
+                       if(![[self urlOfCurrentlyPlayingInPlayer:_mPlayer] isEqualToString:self.post.videoUrl]){
+                           // player already has the correct url. so no need to change the url/asset. just let it play.
+                           [self setURL:[NSURL URLWithString:self.post.videoUrl]];
+                       }
+                       else {
+                           [self sendSubviewToBack:self.imageView];
+                       }
+
                        /* If we are at the end of the movie, we must seek to the beginning first
                         before starting playback. */
                        if (YES == seekToZeroBeforePlay)
@@ -114,7 +125,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        }
                        
                        [self.mPlayer play];
-                       
+
                        //    [self showStopButton];
                        NSLog(@"Mute every video that starts playing.");
                        [self mute:YES];
@@ -195,14 +206,14 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         NSArray *requestedKeys = @[@"playable"];
         
         /* Tells the asset to load the values of any of the specified keys that are not already loaded. */
-        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
-         ^{
-             dispatch_async( dispatch_get_main_queue(),
-                            ^{
+//        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
+//         ^{
+//             dispatch_async( dispatch_get_main_queue(),
+//                            ^{
                                 /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
                                 [self prepareToPlayAsset:asset withKeys:requestedKeys];
-                            });
-         }];
+//                            });
+//         }];
     }
 }
 
@@ -470,6 +481,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                 
                 //                [self enableScrubber];
                 //                [self enablePlayerButtons];
+                NSLog(@"Rev Ready to play item.....");
             }
                 break;
                 
@@ -511,6 +523,9 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             [self.mPlaybackView setVideoFillMode:AVLayerVideoGravityResizeAspectFill];
             
             //            [self syncPlayPauseButtons];
+            
+            NSLog(@"Rev set new player complete..... can send image to back");
+            [self sendSubviewToBack:self.imageView];
         }
     }
     else
