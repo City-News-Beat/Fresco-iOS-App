@@ -41,6 +41,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev prepare the video player to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
+    [self.mPlaybackView setPlayer:nil];
     self.post = nil;
 
 }
@@ -62,26 +63,32 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     
     [self configureMuteIconDisplay:YES];
     
-    if(![[self urlOfCurrentlyPlayingInPlayer:_mPlayer] isEqualToString:self.post.videoUrl]){
-        // player already has the correct url. so no need to change the url/asset. just let it play.
-        [self.mPlaybackView setPlayer:nil];
-    }
+//    if(![[self urlOfCurrentlyPlayingInPlayer:_mPlayer] isEqualToString:self.post.videoUrl]){
+//        // player already has the correct url. so no need to change the url/asset. just let it play.
+//        [self.mPlaybackView setPlayer:nil];
+//    }
     [self loadImage];
 }
 
 - (void)loadImage {
-    [self bringSubviewToFront:self.imageView];
-
 //    dispatch_async(dispatch_get_main_queue(), ^{
-        if(!self.post.imageUrl) return;
-        
-        [self.imageView sd_setImageWithURL:[NSURL
-                                            URLResizedFromURLString:self.post.imageUrl
-                                            width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
-                                            ]
-                          placeholderImage:nil];
-        
-        NSLog(@"rev rev load imageView for video post");
+    if(!self.post.imageUrl) return;
+    
+    NSLog(@"rev rev load imageView for video post");
+
+    [self.imageView sd_setImageWithURL:[NSURL
+                                        URLResizedFromURLString:self.post.imageUrl
+                                        width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
+                                        ]
+                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                 self.imageView.alpha = 0.0;
+                                 [UIView animateWithDuration:0.5 animations:^{
+                                     self.imageView.alpha = 1.0;
+                                 } completion:^(BOOL finished) {
+                                     
+                                 }];
+                             }];
+    
     //});
     
 }
@@ -113,7 +120,13 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                            [self setURL:[NSURL URLWithString:self.post.videoUrl]];
                        }
                        else {
-                           [self sendSubviewToBack:self.imageView];
+                           //remove image.
+                           self.imageView.alpha = 1.0;
+                           [UIView animateWithDuration:0.5 animations:^{
+                               self.imageView.alpha = 0.0;
+                           } completion:^(BOOL finished) {
+                               
+                           }];
                        }
 
                        /* If we are at the end of the movie, we must seek to the beginning first
@@ -525,7 +538,14 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             //            [self syncPlayPauseButtons];
             
             NSLog(@"Rev set new player complete..... can send image to back");
-            [self sendSubviewToBack:self.imageView];
+            //remove image.
+            self.imageView.alpha = 1.0;
+            [UIView animateWithDuration:0.5 animations:^{
+                self.imageView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                
+            }];
+
         }
     }
     else
