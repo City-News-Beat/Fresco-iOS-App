@@ -41,7 +41,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev prepare the video player to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
-    [self.mPlaybackView setPlayer:nil];
+//    [self.mPlaybackView setPlayer:nil];
     self.post = nil;
 
 }
@@ -121,12 +121,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        }
                        else {
                            //remove image.
-                           self.imageView.alpha = 1.0;
-                           [UIView animateWithDuration:0.5 animations:^{
-                               self.imageView.alpha = 0.0;
-                           } completion:^(BOOL finished) {
-                               
-                           }];
+                           [self removeImage];
                        }
 
                        /* If we are at the end of the movie, we must seek to the beginning first
@@ -228,6 +223,15 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 //                            });
 //         }];
     }
+}
+
+-(void)removeImage {
+    self.imageView.alpha = 1.0;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.imageView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 - (NSURL*)URL
@@ -539,13 +543,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             
             NSLog(@"Rev set new player complete..... can send image to back");
             //remove image.
-            self.imageView.alpha = 1.0;
-            [UIView animateWithDuration:0.5 animations:^{
-                self.imageView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                
-            }];
-
+            [self removeImage];
         }
     }
     else
@@ -553,6 +551,5 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         [super observeValueForKeyPath:path ofObject:object change:change context:context];
     }
 }
-
 
 @end
