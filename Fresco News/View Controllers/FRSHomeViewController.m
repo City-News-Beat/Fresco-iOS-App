@@ -90,7 +90,7 @@ static NSInteger const galleriesPerPage = 12;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
 
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
-        [self checkStatusAndPresentPermissionsAlert];
+        [self checkStatusAndPresentPermissionsAlert:NO];
     }
 }
 

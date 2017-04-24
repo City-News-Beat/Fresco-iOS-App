@@ -40,8 +40,7 @@ static NSString *const kClientToken = @"kClientToken";
 static NSString *const kUserToken = @"kUserToken";
 static NSString *const cachedLocation = @"cachedLocation";
 static NSString *const initialLocationRequested = @"initialLocationRequested";
-
-
+static NSString *const userDeviceToken = @"deviceToken";
 
 
 // nsnotification

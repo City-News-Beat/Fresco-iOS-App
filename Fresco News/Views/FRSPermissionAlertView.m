@@ -220,11 +220,8 @@
 }
 
 - (void)requestNotifications {
-    
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"NotificationsRequested"]) {
-        UIUserNotificationType types = (UIUserNotificationType)(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
-        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+        [((FRSAppDelegate *)[[UIApplication sharedApplication] delegate]) registerForPushNotifications];
     } else {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }

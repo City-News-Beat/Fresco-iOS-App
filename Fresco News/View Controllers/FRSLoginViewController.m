@@ -273,7 +273,7 @@
                                        }
 
 
-                                       [self checkStatusAndPresentPermissionsAlert];
+                                       [self checkStatusAndPresentPermissionsAlert:YES];
                                        
                                        return;
                                    }
@@ -324,7 +324,7 @@
 
           self.didAuthenticateSocial = YES;
 
-          [self checkStatusAndPresentPermissionsAlert];
+          [self checkStatusAndPresentPermissionsAlert:YES];
           [self popToOrigin];
 
           return;
@@ -386,25 +386,25 @@
 
       if (authenticated) {
           NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-
+          
           [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
                                                         completion:^(id responseObject, NSError *error) {
-                                                          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
-
-                                                          [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                                            if (!error) {
-                                                                [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
-                                                            }
-                                                          }];
+                                                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+                                                            
+                                                            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                                                if (!error) {
+                                                                    [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
+                                                                }
+                                                            }];
                                                         }];
-            self.didAuthenticateSocial = YES;
-            [self checkStatusAndPresentPermissionsAlert];
-            [self popToOrigin];
-            
-            [spinner stopLoading];
-            [spinner removeFromSuperview];
-            self.facebookButton.hidden = false;
-            return;
+          self.didAuthenticateSocial = YES;
+          [self checkStatusAndPresentPermissionsAlert:YES];
+          [self popToOrigin];
+          
+          [spinner stopLoading];
+          [spinner removeFromSuperview];
+          self.facebookButton.hidden = false;
+          return;
         }
         
         [spinner stopLoading];

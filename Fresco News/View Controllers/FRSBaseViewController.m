@@ -130,16 +130,21 @@
     [alert show];
 }
 
-- (void)checkStatusAndPresentPermissionsAlert {
+- (void)checkStatusAndPresentPermissionsAlert:(BOOL)reRegister {
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
         UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted) || grantedSettings.types == UIUserNotificationTypeNone) {
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined
+             || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied
+             || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted
+             || grantedSettings.types == UIUserNotificationTypeNone)) {
 
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:userHasSeenPermissionsAlert]; //Used for super edge case, see viewDidLoad in HomeVC for more details.
             FRSPermissionAlertView *alert = [[FRSPermissionAlertView alloc] initPermissionsAlert];
             [alert show];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             delegate.didPresentPermissionsRequest = YES;
+        } else if(reRegister) {
+            [((FRSAppDelegate *)[[UIApplication sharedApplication] delegate]) registerForPushNotifications];
         }
     }
 }
