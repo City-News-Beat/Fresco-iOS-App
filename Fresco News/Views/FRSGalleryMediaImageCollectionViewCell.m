@@ -40,6 +40,7 @@
         self.post = post;
         
         [self loadImage];
+        
     });
 }
 

@@ -68,13 +68,25 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 //        [self.mPlaybackView setPlayer:nil];
 //    }
     [self loadImage];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:self];
+
 }
 
 - (void)loadImage {
+    
+    //remove this after testing
+//    return;
+    
 //    dispatch_async(dispatch_get_main_queue(), ^{
     if(!self.post.imageUrl) return;
     
-    NSLog(@"rev rev load imageView for video post");
+    if(self.isPlaying) {
+        NSLog(@"Rev This cell is playing video so not loading the image for this video cell");
+        return;
+    }
+
+    NSLog(@"rev rev load imageView for video post: %@",self.post.uid);
 
     [self.imageView sd_setImageWithURL:[NSURL
                                         URLResizedFromURLString:self.post.imageUrl
@@ -226,6 +238,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 -(void)removeImage {
+    NSLog(@"Rev removing image from video cell.");
     self.imageView.alpha = 1.0;
     [UIView animateWithDuration:0.5 animations:^{
         self.imageView.alpha = 0.0;
@@ -499,6 +512,9 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                 //                [self enableScrubber];
                 //                [self enablePlayerButtons];
                 NSLog(@"Rev Ready to play item.....");
+                if(self.imageView.alpha == 1.0 && [self isPlaying]) {
+                    [self removeImage];
+                }
             }
                 break;
                 

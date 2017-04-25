@@ -235,13 +235,13 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     
     for (UICollectionViewCell *visibleCell in self.collectionView.visibleCells) {
         //get the accurate visible cell matching the page.
-        NSLog(@"rev visibleCell x: %f expected page x: %f", visibleCell.frame.origin.x, pageWidth*page);
+        NSLog(@"rev visibleCell x: %f expected page x: %f \nCELL: %@", visibleCell.frame.origin.x, pageWidth*page, visibleCell);
         if (visibleCell.frame.origin.x != pageWidth*page) {
             continue;
         }
         BOOL displayMuteIcon = NO;
         if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-            NSLog(@"rev visibleCell is video");
+            NSLog(@"rev visibleCell is video cell ");
             NSLog(@"visibleCell playing");
             displayMuteIcon = YES;
             [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];

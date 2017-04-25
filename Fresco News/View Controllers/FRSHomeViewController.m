@@ -59,6 +59,7 @@ static NSInteger const galleriesPerPage = 12;
 @property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
 @property (assign, nonatomic) BOOL isScrolling;
+@property (assign, nonatomic) BOOL autoPlay;
 
 @end
 
@@ -91,6 +92,9 @@ static NSInteger const galleriesPerPage = 12;
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
     
+    //video cell loaded notification.
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+    
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         [self checkStatusAndPresentPermissionsAlert];
     }
@@ -121,6 +125,7 @@ static NSInteger const galleriesPerPage = 12;
     [self showTabBarAnimated:YES];
     
     if (hasLoadedOnce) {
+        self.autoPlay = YES;
         [self reloadData];
     }
     
@@ -141,6 +146,10 @@ static NSInteger const galleriesPerPage = 12;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
     [self expandNavBar:nil animated:NO];
 }
+
+//-(void)videoCellLoaded:(NSNotification *)notification {
+//    [self handlePlay];
+//}
 
 - (void)logoutNotification {
     [self logoutWithPop:NO];
@@ -259,6 +268,7 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (void)reloadData {
+    NSLog(@"Rev reloadData");
     [self.followingTable reloadFollowing];
     
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
@@ -301,8 +311,9 @@ static NSInteger const galleriesPerPage = 12;
                                                              
                                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                                  self.dataSource = newGalleries;
+                                                                 self.autoPlay = YES;
+                                                                 NSLog(@"Rev self.autoPlay true before table reload");
                                                                  [self.tableView reloadData];
-                                                                 
                                                              });
                                                          }];
                                                      }];
@@ -330,6 +341,7 @@ static NSInteger const galleriesPerPage = 12;
                                          loadingViewSize:20
                                                 velocity:0
                                            actionHandler:^{
+                                               weakSelf.autoPlay = YES;
                                                [weakSelf reloadData];
                                            }
                                              loadingView:loadingView
@@ -459,6 +471,7 @@ static NSInteger const galleriesPerPage = 12;
     }
     
     self.cachedData = [NSMutableArray arrayWithArray:stored];
+    self.autoPlay = YES;
     [self.tableView reloadData];
 }
 
@@ -505,7 +518,8 @@ static NSInteger const galleriesPerPage = 12;
             
             [self.appDelegate saveContext
              ];
-            
+            NSLog(@"Rev cacheLocalData reloading after caci=hing self.autoplay yes");
+            self.autoPlay = YES;
             [self.tableView reloadData];
             
             for (FRSGallery *gallery in self.cachedData) {
@@ -523,6 +537,7 @@ static NSInteger const galleriesPerPage = 12;
         if (shouldAnimate) {
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         } else {
+            self.autoPlay = YES;
             [self.tableView reloadData];
         }
     });
@@ -607,7 +622,11 @@ static NSInteger const galleriesPerPage = 12;
     cell.delegate = self;
     //    [cell setNeedsUpdateConstraints];
     //    [cell updateConstraintsIfNeeded];
-    
+    if (self.autoPlay) {
+        NSLog(@"Rev highlightCellForIndexPath self.autoPlay");
+        [self handlePlay];
+    }
+
     return cell;
 }
 
@@ -639,6 +658,7 @@ static NSInteger const galleriesPerPage = 12;
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                          if ([galleries count] == 0) {
                                                              self.loadNoMore = TRUE;
+                                                             self.autoPlay = YES;
                                                              [self.tableView reloadData];
                                                              return;
                                                          }
@@ -664,6 +684,7 @@ static NSInteger const galleriesPerPage = 12;
                                                                  //                [self.tableView beginUpdates];
                                                                  //                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
                                                                  //                [self.tableView endUpdates];
+                                                                 self.autoPlay = YES;
                                                                  [self.tableView reloadData];
                                                                  needsUpdate = TRUE;
                                                                  isLoading = FALSE;
@@ -689,9 +710,7 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryTableViewCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    
     if (tableView == self.tableView) {
-        
         if (indexPath.row > numberRead) {
             numberRead = indexPath.row;
         }
@@ -826,6 +845,7 @@ static NSInteger const galleriesPerPage = 12;
                                                       loadingViewSize:20
                                                              velocity:0
                                                         actionHandler:^{
+                                                            weakSelf.autoPlay = YES;
                                                             [weakSelf reloadData];
                                                         }
                                                           loadingView:loadingView
@@ -856,6 +876,7 @@ static NSInteger const galleriesPerPage = 12;
                                                  loadingViewSize:20
                                                         velocity:0
                                                    actionHandler:^{
+                                                       weakSelf.autoPlay = YES;
                                                        [weakSelf reloadData];
                                                    }
                                                      loadingView:loadingView
@@ -954,6 +975,8 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 -(void)handlePlay {
+    NSLog(@"Rev handlePlay");
+    
     [self pausePlayers];
     
     //    for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows) {
@@ -980,7 +1003,9 @@ static NSInteger const galleriesPerPage = 12;
         if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
         
         if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
+            NSLog(@"\nRev playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
             [cell play];
+            self.autoPlay = NO;
             break;
         }
         
