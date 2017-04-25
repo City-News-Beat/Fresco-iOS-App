@@ -56,7 +56,6 @@ static NSInteger const galleriesPerPage = 12;
 @property (nonatomic) bool isInHighlights;
 @property (nonatomic) bool isInFollowers;
 
-@property (strong, nonatomic) UIView *sudoNavBar;
 @property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
 @property (assign, nonatomic) BOOL isScrolling;
@@ -362,6 +361,8 @@ static NSInteger const galleriesPerPage = 12;
 - (void)configureNavigationBar {
     [self removeNavigationBarLine];
     
+    self.disableCollapse = YES;
+
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
     
@@ -383,22 +384,6 @@ static NSInteger const galleriesPerPage = 12;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-    /* Configure sudo nav bar when scrolling for scrolling between tabs and nav bar is hidden */
-    self.sudoNavBar = [[UIView alloc] initWithFrame:CGRectMake(0, -88, self.view.frame.size.width, 44)];
-    self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
-    [self.view addSubview:self.sudoNavBar];
-    
-    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 10 - titleView.frame.size.width / 6, 6, 120, 30)];
-    [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
-    [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
-    [sudoHighlightButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.sudoNavBar addSubview:sudoHighlightButton];
-    
-    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 10 + titleView.frame.size.width / 6, 6, 120, 30)];
-    [sudoFollowingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
-    [sudoFollowingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
-    [sudoFollowingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.sudoNavBar addSubview:sudoFollowingButton];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
