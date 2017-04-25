@@ -59,7 +59,7 @@ static NSInteger const galleriesPerPage = 12;
 @property (strong, nonatomic) FRSTOSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSNewPasswordAlertView *migrationAlert;
 @property (assign, nonatomic) BOOL isScrolling;
-@property (assign, nonatomic) BOOL autoPlay;
+@property (assign, nonatomic) BOOL shouldAutoPlayWithoutUserInteraction;
 
 @end
 
@@ -93,11 +93,13 @@ static NSInteger const galleriesPerPage = 12;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
     
     //video cell loaded notification.
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
     
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         [self checkStatusAndPresentPermissionsAlert];
     }
+    
+    self.shouldAutoPlayWithoutUserInteraction = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -125,7 +127,6 @@ static NSInteger const galleriesPerPage = 12;
     [self showTabBarAnimated:YES];
     
     if (hasLoadedOnce) {
-        self.autoPlay = YES;
         [self reloadData];
     }
     
@@ -147,9 +148,11 @@ static NSInteger const galleriesPerPage = 12;
     [self expandNavBar:nil animated:NO];
 }
 
-//-(void)videoCellLoaded:(NSNotification *)notification {
-//    [self handlePlay];
-//}
+-(void)videoCellLoaded:(NSNotification *)notification {
+    if(self.shouldAutoPlayWithoutUserInteraction) {
+        [self handlePlay];
+    }
+}
 
 - (void)logoutNotification {
     [self logoutWithPop:NO];
@@ -311,8 +314,6 @@ static NSInteger const galleriesPerPage = 12;
                                                              
                                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                                  self.dataSource = newGalleries;
-                                                                 self.autoPlay = YES;
-                                                                 NSLog(@"Rev self.autoPlay true before table reload");
                                                                  [self.tableView reloadData];
                                                              });
                                                          }];
@@ -341,7 +342,6 @@ static NSInteger const galleriesPerPage = 12;
                                          loadingViewSize:20
                                                 velocity:0
                                            actionHandler:^{
-                                               weakSelf.autoPlay = YES;
                                                [weakSelf reloadData];
                                            }
                                              loadingView:loadingView
@@ -471,7 +471,6 @@ static NSInteger const galleriesPerPage = 12;
     }
     
     self.cachedData = [NSMutableArray arrayWithArray:stored];
-    self.autoPlay = YES;
     [self.tableView reloadData];
 }
 
@@ -518,8 +517,6 @@ static NSInteger const galleriesPerPage = 12;
             
             [self.appDelegate saveContext
              ];
-            NSLog(@"Rev cacheLocalData reloading after caci=hing self.autoplay yes");
-            self.autoPlay = YES;
             [self.tableView reloadData];
             
             for (FRSGallery *gallery in self.cachedData) {
@@ -537,7 +534,6 @@ static NSInteger const galleriesPerPage = 12;
         if (shouldAnimate) {
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         } else {
-            self.autoPlay = YES;
             [self.tableView reloadData];
         }
     });
@@ -622,10 +618,6 @@ static NSInteger const galleriesPerPage = 12;
     cell.delegate = self;
     //    [cell setNeedsUpdateConstraints];
     //    [cell updateConstraintsIfNeeded];
-    if (self.autoPlay) {
-        NSLog(@"Rev highlightCellForIndexPath self.autoPlay");
-        [self handlePlay];
-    }
 
     return cell;
 }
@@ -658,7 +650,6 @@ static NSInteger const galleriesPerPage = 12;
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                          if ([galleries count] == 0) {
                                                              self.loadNoMore = TRUE;
-                                                             self.autoPlay = YES;
                                                              [self.tableView reloadData];
                                                              return;
                                                          }
@@ -684,7 +675,6 @@ static NSInteger const galleriesPerPage = 12;
                                                                  //                [self.tableView beginUpdates];
                                                                  //                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
                                                                  //                [self.tableView endUpdates];
-                                                                 self.autoPlay = YES;
                                                                  [self.tableView reloadData];
                                                                  needsUpdate = TRUE;
                                                                  isLoading = FALSE;
@@ -805,7 +795,8 @@ static NSInteger const galleriesPerPage = 12;
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
+    self.shouldAutoPlayWithoutUserInteraction = NO;
+
     //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
     
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
@@ -845,7 +836,6 @@ static NSInteger const galleriesPerPage = 12;
                                                       loadingViewSize:20
                                                              velocity:0
                                                         actionHandler:^{
-                                                            weakSelf.autoPlay = YES;
                                                             [weakSelf reloadData];
                                                         }
                                                           loadingView:loadingView
@@ -876,7 +866,6 @@ static NSInteger const galleriesPerPage = 12;
                                                  loadingViewSize:20
                                                         velocity:0
                                                    actionHandler:^{
-                                                       weakSelf.autoPlay = YES;
                                                        [weakSelf reloadData];
                                                    }
                                                      loadingView:loadingView
@@ -1005,7 +994,6 @@ static NSInteger const galleriesPerPage = 12;
         if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
             NSLog(@"\nRev playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
             [cell play];
-            self.autoPlay = NO;
             break;
         }
         

@@ -69,7 +69,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 //    }
     [self loadImage];
     
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
 
 }
 
