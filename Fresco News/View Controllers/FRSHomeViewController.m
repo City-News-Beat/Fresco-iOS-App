@@ -92,13 +92,14 @@ static NSInteger const galleriesPerPage = 12;
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
     
-    //video cell loaded notification.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
     
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         [self checkStatusAndPresentPermissionsAlert];
     }
     
+    //video cell loaded notification.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+
     self.shouldAutoPlayWithoutUserInteraction = YES;
 }
 
