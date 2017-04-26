@@ -313,6 +313,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         return;
     }
     
+    //If the user isn't logged in, don't proceed with caching the token. It will be requested later.
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) return;
+    
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:userDeviceToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -322,12 +325,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
     
-    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
-        [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
-                                                      completion:^(id responseObject, NSError *error) {
-                                                          NSLog(@"Updated user installation");
-                                                      }];
-    }
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
+                                                  completion:^(id responseObject, NSError *error) {
+                                                      NSLog(@"Updated user installation");
+                                                  }];
+
 }
 
 
