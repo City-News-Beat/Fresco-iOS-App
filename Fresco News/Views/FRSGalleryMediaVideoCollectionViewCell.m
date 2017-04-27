@@ -94,7 +94,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                                         ]
                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                  self.imageView.alpha = 0.0;
-                                 [UIView animateWithDuration:0.5 animations:^{
+                                 [UIView animateWithDuration:0.3 animations:^{
                                      self.imageView.alpha = 1.0;
                                  } completion:^(BOOL finished) {
                                      
@@ -240,7 +240,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 -(void)removeImage {
     NSLog(@"Rev removing image from video cell.");
     self.imageView.alpha = 1.0;
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         self.imageView.alpha = 0.0;
     } completion:^(BOOL finished) {
         
