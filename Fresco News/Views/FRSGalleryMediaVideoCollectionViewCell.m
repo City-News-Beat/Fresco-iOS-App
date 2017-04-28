@@ -23,6 +23,7 @@
 @interface FRSGalleryMediaVideoCollectionViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *bufferIndicator;
 
 @property (strong, nonatomic) FRSPost *post;
 @property (strong, nonatomic) AVPlayerLayer *playerLayer;
@@ -32,6 +33,7 @@
 
 static void *AVPlayerDemoPlaybackViewControllerRateObservationContext = &AVPlayerDemoPlaybackViewControllerRateObservationContext;
 static void *AVPlayerDemoPlaybackViewControllerStatusObservationContext = &AVPlayerDemoPlaybackViewControllerStatusObservationContext;
+static void *AVPlayerDemoPlaybackViewControllerBufferObservationContext = &AVPlayerDemoPlaybackViewControllerBufferObservationContext;
 static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext;
 
 @implementation FRSGalleryMediaVideoCollectionViewCell
@@ -43,7 +45,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     self.imageView.image = nil;
 //    [self.mPlaybackView setPlayer:nil];
     self.post = nil;
-
+    [self hideBuffer];
 }
 
 - (void)awakeFromNib {
@@ -55,6 +57,18 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
     [self addGestureRecognizer:tap];
     
+}
+
+-(void)showBuffer {
+    NSLog(@"rev showing buffer.");
+    self.bufferIndicator.hidden = NO;
+    [self.bufferIndicator startAnimating];
+}
+
+-(void)hideBuffer {
+    NSLog(@"rev hiding buffer.");
+    self.bufferIndicator.hidden = YES;
+    [self.bufferIndicator stopAnimating];
 }
 
 -(void)loadPost:(FRSPost *)post {
@@ -394,6 +408,9 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         /* Remove existing player item key value observers and notifications. */
         
         [self.mPlayerItem removeObserver:self forKeyPath:@"status"];
+        [self.mPlayerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+        [self.mPlayerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+        [self.mPlayerItem removeObserver:self forKeyPath:@"playbackBufferFull"];
         
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:AVPlayerItemDidPlayToEndTimeNotification
@@ -408,7 +425,23 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        forKeyPath:@"status"
                           options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                           context:AVPlayerDemoPlaybackViewControllerStatusObservationContext];
-    
+
+    /* Add observers for playerItem for setting up loader */
+    [self.mPlayerItem addObserver:self
+                       forKeyPath:@"playbackBufferEmpty"
+                          options:NSKeyValueObservingOptionNew
+                          context:AVPlayerDemoPlaybackViewControllerBufferObservationContext];
+
+    [self.mPlayerItem addObserver:self
+                       forKeyPath:@"playbackLikelyToKeepUp"
+                          options:NSKeyValueObservingOptionNew
+                          context:AVPlayerDemoPlaybackViewControllerBufferObservationContext];
+
+    [self.mPlayerItem addObserver:self
+                       forKeyPath:@"playbackBufferFull"
+                          options:NSKeyValueObservingOptionNew
+                          context:AVPlayerDemoPlaybackViewControllerBufferObservationContext];
+
     /* When the player item has played to its end time we'll toggle
      the movie controller Pause button to be the Play button */
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -562,10 +595,29 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             [self removeImage];
         }
     }
+    else if (context == AVPlayerDemoPlaybackViewControllerBufferObservationContext) {
+        if ([object isKindOfClass:[AVPlayerItem class]]) {
+            if ([path isEqualToString:@"playbackBufferEmpty"]) {
+                // Show loader
+                [self showBuffer];
+            }
+            else if ([path isEqualToString:@"playbackLikelyToKeepUp"]) {
+                // Hide loader
+                [self hideBuffer];
+            }
+            else if ([path isEqualToString:@"playbackBufferFull"]) {
+                // Hide loader
+                [self hideBuffer];
+            }
+        }
+        
+    }
     else
     {
         [super observeValueForKeyPath:path ofObject:object change:change context:context];
     }
 }
+
+
 
 @end
