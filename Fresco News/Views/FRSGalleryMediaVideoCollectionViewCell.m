@@ -148,21 +148,20 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        else {
                            //remove image.
                            [self removeImage];
-                       }
-
-                       /* If we are at the end of the movie, we must seek to the beginning first
-                        before starting playback. */
-                       if (YES == seekToZeroBeforePlay)
-                       {
-                           seekToZeroBeforePlay = NO;
-                           [self.mPlayer seekToTime:kCMTimeZero];
-                       }
                        
-                       [self.mPlayer play];
-
-                       //    [self showStopButton];
-                       NSLog(@"Mute every video that starts playing.");
-                       [self mute:YES];
+                           /* If we are at the end of the movie, we must seek to the beginning first
+                            before starting playback. */
+                           if (YES == seekToZeroBeforePlay)
+                           {
+                               seekToZeroBeforePlay = NO;
+                               [self.mPlayer seekToTime:kCMTimeZero];
+                           }
+                           
+                           [self.mPlayer play];
+                           
+                           NSLog(@"Mute every video that starts playing.");
+                           [self mute:YES];
+                       }
                    });
     
 }
@@ -490,9 +489,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     //    [self.mScrubber setValue:0.0];
 }
 
-#pragma mark -
-#pragma mark Asset Key Value Observing
-#pragma mark
+#pragma mark - Asset Key Value Observing
 
 #pragma mark Key Value Observer for player rate, currentItem, player item status
 
@@ -545,8 +542,8 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                 //                [self enableScrubber];
                 //                [self enablePlayerButtons];
                 NSLog(@"Rev Ready to play item.....");
-                if(self.imageView.alpha == 1.0 && [self isPlaying]) {
-                    [self removeImage];
+                if(self.imageView.alpha == 1.0) {
+                    [self play];
                 }
             }
                 break;
@@ -592,7 +589,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             
             NSLog(@"Rev set new player complete..... can send image to back");
             //remove image.
-            [self removeImage];
+//            [self removeImage];
         }
     }
     else if (context == AVPlayerDemoPlaybackViewControllerBufferObservationContext) {

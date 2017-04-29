@@ -69,6 +69,7 @@ static NSInteger const galleriesPerPage = 12;
     [super viewDidLoad];
     self.cachedData = [[NSMutableArray alloc] init];
     reloadedFrom = [[NSMutableArray alloc] init];
+    
     if (!self.appDelegate) {
         self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     }
@@ -184,6 +185,8 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (void)scrollToTop {
+    [self pausePlayers];
+    
     if(self.followingTabButton.alpha == 1 && self.followingTable.feed.count > 0) {
         [self.followingTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
         
@@ -574,8 +577,6 @@ static NSInteger const galleriesPerPage = 12;
     }
     
     if (tableView == self.tableView) {
-        //TODO: Remove this static height after experiment
-        //        return 1500;
         return [self heightForItemAtDataSourceIndex:indexPath.row];
     }
     
@@ -1026,6 +1027,30 @@ static NSInteger const galleriesPerPage = 12;
             [cell pause];
         }
     }
+}
+
+
+-(void)revLoadFromServerWithLastGalleryID:(NSString *) galleryID {
+    [self.loadingView startAnimating];
+    
+    // network call
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
+                                                offsetGalleryID:galleryID
+                                                     completion:^(NSArray *galleries, NSError *error) {
+                                                         if ([galleries count] == 0) {
+                                                             
+                                                         } else {
+                                                             [self cacheLocalData:galleries];
+                                                         }
+                                                         
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                             [self.loadingView stopLoading];
+                                                             [self.loadingView removeFromSuperview];
+                                                             hasLoadedOnce = TRUE;
+                                                             
+                                                         });
+                                                     }];
+
 }
 
 @end

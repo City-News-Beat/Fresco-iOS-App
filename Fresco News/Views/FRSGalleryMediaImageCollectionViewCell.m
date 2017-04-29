@@ -30,10 +30,13 @@
     NSLog(@"Rev prepare the image cell to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
+    self.imageView.alpha = 0.0;
+
     self.post = nil;
 }
 
 -(void)loadPost:(FRSPost *)post {
+    NSLog(@"rev loading image post");
     dispatch_async(dispatch_get_main_queue(), ^{
         //    self.imageView.image = nil;
         self.userInteractionEnabled = YES;
@@ -58,8 +61,7 @@
                                         width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
                                         ]
                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                 self.imageView.alpha = 0.0;
-                                 [UIView animateWithDuration:0.5 animations:^{
+                                 [UIView animateWithDuration:0.3 animations:^{
                                      self.imageView.alpha = 1.0;
                                  } completion:^(BOOL finished) {
                                      

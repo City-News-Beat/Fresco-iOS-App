@@ -32,21 +32,13 @@
                         <outlet property="delegate" destination="-1" id="uBQ-m4-Ikn"/>
                     </connections>
                 </collectionView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="hello xib" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4uy-RZ-kdb">
-                    <rect key="frame" x="16" y="20" width="63.5" height="20.5"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
-            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="PPd-ay-4Sc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4o3-w6-iHy"/>
                 <constraint firstAttribute="bottom" secondItem="PPd-ay-4Sc" secondAttribute="bottom" id="594-H1-Pgk"/>
                 <constraint firstItem="PPd-ay-4Sc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8Ot-vw-hon"/>
-                <constraint firstItem="4uy-RZ-kdb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="gCE-d3-CVc"/>
                 <constraint firstAttribute="trailing" secondItem="PPd-ay-4Sc" secondAttribute="trailing" id="ifs-8o-z94"/>
-                <constraint firstItem="4uy-RZ-kdb" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="uzb-zG-GT7"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

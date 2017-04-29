@@ -26,20 +26,21 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="thW-5n-L54">
-                        <rect key="frame" x="65" y="48" width="20" height="20"/>
+                        <rect key="frame" x="16" y="16" width="20" height="20"/>
+                        <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </activityIndicatorView>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="ioq-u9-gia" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="1E5-1K-sTt"/>
                 <constraint firstAttribute="bottom" secondItem="ioq-u9-gia" secondAttribute="bottom" id="3nQ-PK-YMb"/>
+                <constraint firstItem="thW-5n-L54" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="3yN-LU-iN4"/>
                 <constraint firstAttribute="bottom" secondItem="E02-wc-sgd" secondAttribute="bottom" id="B2b-3M-Q7j"/>
                 <constraint firstItem="ioq-u9-gia" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="IVB-Wa-f7j"/>
                 <constraint firstAttribute="trailing" secondItem="ioq-u9-gia" secondAttribute="trailing" id="KRW-D4-OQj"/>
-                <constraint firstItem="thW-5n-L54" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="NyH-qQ-uI6"/>
                 <constraint firstAttribute="trailing" secondItem="E02-wc-sgd" secondAttribute="trailing" id="Rrf-FA-iYB"/>
+                <constraint firstItem="thW-5n-L54" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="SgP-gh-vSH"/>
                 <constraint firstItem="E02-wc-sgd" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Zqz-4J-rP0"/>
-                <constraint firstItem="thW-5n-L54" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="bLi-aZ-1Jr"/>
                 <constraint firstItem="E02-wc-sgd" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="mr5-Vt-IeN"/>
             </constraints>
             <size key="customSize" width="150" height="117"/>
