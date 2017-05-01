@@ -12,5 +12,7 @@
 @interface FRSCaptureModeSlider : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame captureMode:(FRSCaptureMode)captureMode;
-
+- (void)swipeLeft;
+- (void)swipeRight;
+   
 @end

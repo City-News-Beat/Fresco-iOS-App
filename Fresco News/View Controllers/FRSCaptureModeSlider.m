@@ -8,6 +8,10 @@
 
 #import "FRSCaptureModeSlider.h"
 
+@interface FRSCaptureModeSlider ();
+@property NSInteger currentIndex;
+@end
+
 @implementation FRSCaptureModeSlider
 
 - (instancetype)initWithFrame:(CGRect)frame captureMode:(FRSCaptureMode)captureMode {
@@ -24,31 +28,42 @@
 }
 
 - (void)setCaptureMode:(FRSCaptureMode)captureMode {
+    [self centerViewForCaptureMode:captureMode];
+    self.currentIndex = captureMode;
+}
+
+
+
+- (void)centerViewForCaptureMode:(FRSCaptureMode)index {
     
-    switch (captureMode) {
-        case FRSCaptureModePhoto:
-            
-            break;
-            
-        case FRSCaptureModeVideo:
-            
-            break;
-            
-        case FRSCaptureModeWide:
-            
-            break;
-        
-        case FRSCaptureModePan:
-            
-            break;
-        
-        case FRSCaptureModeInterview:
-            
-            break;
-            
-        default:
-            break;
-    }
+    index++; // Add 1 to the index to reflect the acturate position of the button.
+    
+    // Note: All the captureMode buttons in the nib are 100px wide and have 0px padding inbetween.
+    // By adding the leftPadding, the width of all the buttons to the left of the given index, and subtracting half the width of the final button (the button we want in the center),
+    // we're able to take this value and subtract it by half the width of the screen to place the desired button in the center of the screen.
+    
+    NSInteger leftPadding = 40;
+    NSInteger buttonWidth = 100;
+    NSInteger offset = leftPadding + (buttonWidth * index) - buttonWidth/2;
+    
+    self.frame = CGRectMake([UIApplication sharedApplication].keyWindow.frame.size.width/2 - offset, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+}
+
+
+
+- (void)swipeLeft {
+    if (self.currentIndex == 4) return;
+
+    [self setCaptureMode:self.currentIndex+1];
+    
+    return;
+    
+}
+
+- (void)swipeRight {
+    if (self.currentIndex == 0 ) return;
+
+    [self setCaptureMode:self.currentIndex-1];
 }
 
 @end

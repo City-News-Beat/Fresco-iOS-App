@@ -34,6 +34,7 @@
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4 / 3
 #define SLIDER_HEIGHT 40
+#define SLIDER_WIDTH 580
 #define CAPTURE_MODE_COUNT 5
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
@@ -242,32 +243,28 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)configureUI {
     [self configurePreview];
-    [self configureScrollView];
+    [self configureGestureRecognizer];
     [self configureBottomContainer];
     [self configureTopContainer];
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
-- (void)configureScrollView {
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    [scrollView setContentSize:CGSizeMake(self.view.frame.size.width * CAPTURE_MODE_COUNT, self.view.frame.size.height)];
-    scrollView.pagingEnabled = YES;
-    [scrollView setCanCancelContentTouches:YES];
-    [self.view addSubview:scrollView];
+- (void)configureGestureRecognizer {
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
+    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeLeft];
     
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    view.backgroundColor = [UIColor redColor];
-    [scrollView addSubview:view];
-    
-    UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width*2, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    view2.backgroundColor = [UIColor greenColor];
-    [scrollView addSubview:view2];
-    
-    UIView *view3 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width*4, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    view3.backgroundColor = [UIColor blueColor];
-    [scrollView addSubview:view3];
-    
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRight];
+}
+
+-(void)swipeLeft {
+    [self.captureModeSlider swipeLeft];
+}
+
+-(void)swipeRight {
+    [self.captureModeSlider swipeRight];
 }
 
 - (void)configureTopContainer {
@@ -301,7 +298,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)configureSlider {
-    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, -SLIDER_HEIGHT, self.view.frame.size.width, SLIDER_HEIGHT) captureMode:FRSCaptureModeVideo];
+    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, -SLIDER_HEIGHT, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeInterview];
     [self.bottomClearContainer addSubview:self.captureModeSlider];
 }
 

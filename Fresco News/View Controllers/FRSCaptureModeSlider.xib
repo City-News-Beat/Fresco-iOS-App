@@ -1,53 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16F43c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F43c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Nota-Medium.otf">
-            <string>Nota-Medium</string>
+        <array key="Nota-Bold.otf">
+            <string>Nota-Bold</string>
         </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="FRSCaptureModeSlider">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
+            <rect key="frame" x="0.0" y="0.0" width="580" height="40"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7bE-ws-XoN">
-                    <rect key="frame" x="40" y="5" width="71" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GrE-5m-EX5">
+                    <rect key="frame" x="40" y="0.0" width="100" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="7Pi-cr-REl"/>
-                        <constraint firstAttribute="width" constant="71" id="l5C-bG-AWZ"/>
+                        <constraint firstAttribute="width" constant="100" id="56n-e2-gPX"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                     <state key="normal" title="INTERVIEW">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tRp-eM-468">
-                    <rect key="frame" x="119" y="5" width="70" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oou-cd-O0X">
+                    <rect key="frame" x="140" y="0.0" width="100" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="81y-DF-seN"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                     <state key="normal" title="PAN">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zdU-h4-0TT">
+                    <rect key="frame" x="240" y="0.0" width="100" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="9OI-pO-Yg4"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <state key="normal" title="WIDE">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MHq-fX-FpK">
+                    <rect key="frame" x="440" y="0.0" width="100" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="dxU-4k-L2K"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <state key="normal" title="PHOTO">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rzM-9f-wax">
+                    <rect key="frame" x="340" y="0.0" width="100" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="ZvT-TM-ATE"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <state key="normal" title="VIDEO">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.027450980392156862" green="0.094117647058823528" blue="0.15686274509803921" alpha="0.55000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="7bE-ws-XoN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="HTI-su-A8s"/>
-                <constraint firstAttribute="bottom" secondItem="7bE-ws-XoN" secondAttribute="bottom" constant="5" id="Kfj-jC-kOx"/>
-                <constraint firstItem="7bE-ws-XoN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="uwt-PX-VHY"/>
+                <constraint firstAttribute="bottom" secondItem="MHq-fX-FpK" secondAttribute="bottom" id="61v-oT-8Mb"/>
+                <constraint firstAttribute="bottom" secondItem="zdU-h4-0TT" secondAttribute="bottom" id="7ek-kV-gbl"/>
+                <constraint firstAttribute="trailing" secondItem="MHq-fX-FpK" secondAttribute="trailing" constant="40" id="Dby-nh-2bB"/>
+                <constraint firstItem="GrE-5m-EX5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="ITC-z6-AAM"/>
+                <constraint firstItem="Oou-cd-O0X" firstAttribute="leading" secondItem="GrE-5m-EX5" secondAttribute="trailing" id="ZAh-N6-XuE"/>
+                <constraint firstAttribute="bottom" secondItem="GrE-5m-EX5" secondAttribute="bottom" id="bbK-Wa-Udu"/>
+                <constraint firstItem="zdU-h4-0TT" firstAttribute="leading" secondItem="Oou-cd-O0X" secondAttribute="trailing" id="dzd-6e-Z0Y"/>
+                <constraint firstItem="MHq-fX-FpK" firstAttribute="leading" secondItem="rzM-9f-wax" secondAttribute="trailing" id="hBD-uK-qga"/>
+                <constraint firstItem="Oou-cd-O0X" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="jbP-2W-tAJ"/>
+                <constraint firstAttribute="bottom" secondItem="rzM-9f-wax" secondAttribute="bottom" id="mHe-Uw-YBp"/>
+                <constraint firstItem="rzM-9f-wax" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pjQ-I4-efI"/>
+                <constraint firstAttribute="bottom" secondItem="Oou-cd-O0X" secondAttribute="bottom" id="qEe-Wv-ac6"/>
+                <constraint firstItem="zdU-h4-0TT" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="rhK-6d-D9X"/>
+                <constraint firstItem="rzM-9f-wax" firstAttribute="leading" secondItem="zdU-h4-0TT" secondAttribute="trailing" id="tiS-YJ-4sq"/>
+                <constraint firstItem="MHq-fX-FpK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="vP6-pC-2Ca"/>
+                <constraint firstItem="GrE-5m-EX5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yke-dd-hfP"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-82" y="54"/>
+            <point key="canvasLocation" x="-132" y="54"/>
         </view>
     </objects>
 </document>
