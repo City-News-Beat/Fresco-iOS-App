@@ -8,6 +8,7 @@
 
 #import "FRSGalleryMediaVideoCollectionViewCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "NSURL+Fresco.h"
 #import "FRSPost.h"
 
@@ -23,7 +24,7 @@
 @interface FRSGalleryMediaVideoCollectionViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *bufferIndicator;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *bufferIndicator;
 
 @property (strong, nonatomic) FRSPost *post;
 @property (strong, nonatomic) AVPlayerLayer *playerLayer;
@@ -45,30 +46,49 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     self.imageView.image = nil;
 //    [self.mPlaybackView setPlayer:nil];
     self.post = nil;
-    [self hideBuffer];
+    [self hideBufferIndicator];
 }
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
     
-    [self setPlayer:nil];
+    // Configure Buffer
+    [self configureBufferIndicator];
     
+    [self setPlayer:nil];
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
     [self addGestureRecognizer:tap];
     
 }
 
--(void)showBuffer {
-    NSLog(@"rev showing buffer.");
-    self.bufferIndicator.hidden = NO;
-    [self.bufferIndicator startAnimating];
+#pragma mark - Buffer
+
+- (void)configureBufferIndicator {
+    self.bufferIndicator = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.bufferIndicator.frame = CGRectMake(16, 16, 20, 20);
+    self.bufferIndicator.tintColor = [UIColor whiteColor];
+    [self.bufferIndicator setPullProgress:90];
+    
+    self.bufferIndicator.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.bufferIndicator.layer.shadowOffset = CGSizeMake(0, 2);
+    self.bufferIndicator.layer.shadowOpacity = 0.15;
+    self.bufferIndicator.layer.shadowRadius = 1.5;
+    self.bufferIndicator.layer.shouldRasterize = YES;
+    self.bufferIndicator.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 }
 
--(void)hideBuffer {
+-(void)showBufferIndicator {
+    NSLog(@"rev showing buffer.");
+    [self.bufferIndicator startAnimating];
+    [self addSubview:self.bufferIndicator];
+}
+
+-(void)hideBufferIndicator {
     NSLog(@"rev hiding buffer.");
-    self.bufferIndicator.hidden = YES;
-    [self.bufferIndicator stopAnimating];
+    [self.bufferIndicator removeFromSuperview];
+    [self.bufferIndicator startAnimating];
 }
 
 -(void)loadPost:(FRSPost *)post {
@@ -596,15 +616,15 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         if ([object isKindOfClass:[AVPlayerItem class]]) {
             if ([path isEqualToString:@"playbackBufferEmpty"]) {
                 // Show loader
-                [self showBuffer];
+                [self showBufferIndicator];
             }
             else if ([path isEqualToString:@"playbackLikelyToKeepUp"]) {
                 // Hide loader
-                [self hideBuffer];
+                [self hideBufferIndicator];
             }
             else if ([path isEqualToString:@"playbackBufferFull"]) {
                 // Hide loader
-                [self hideBuffer];
+                [self hideBufferIndicator];
             }
         }
         
