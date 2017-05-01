@@ -14,6 +14,7 @@
 		070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66D11C2B395D00AB3D9D /* OEParallax.m */; };
 		0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */; };
 		071D7B881EB7B7840033A56A /* Nota-Xbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 071D7B871EB7B7590033A56A /* Nota-Xbold.otf */; };
+		071D7B8B1EB7D4E10033A56A /* FRSCameraFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */; };
 		072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E21E3951DF00A49DEC /* FRSUserView.m */; };
 		072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E41E3951DF00A49DEC /* FRSGalleryFooterView.m */; };
 		072654EA1E3951DF00A49DEC /* FRSFollowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E61E3951DF00A49DEC /* FRSFollowButton.m */; };
@@ -359,6 +360,8 @@
 		0713D12C1CE5121900F79F49 /* FRSAwkwardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAwkwardView.h; sourceTree = "<group>"; };
 		0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAwkwardView.m; sourceTree = "<group>"; };
 		071D7B871EB7B7590033A56A /* Nota-Xbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Xbold.otf"; sourceTree = "<group>"; };
+		071D7B891EB7D4E10033A56A /* FRSCameraFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCameraFooterView.h; path = ../FRSCameraFooterView.h; sourceTree = "<group>"; };
+		071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCameraFooterView.m; path = ../FRSCameraFooterView.m; sourceTree = "<group>"; };
 		072492291E8967D10019D1F7 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		072654E21E3951DF00A49DEC /* FRSUserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserView.m; sourceTree = "<group>"; };
 		072654E31E3951DF00A49DEC /* FRSUserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserView.h; sourceTree = "<group>"; };
@@ -1384,6 +1387,8 @@
 			children = (
 				0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */,
 				0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */,
+				071D7B891EB7D4E10033A56A /* FRSCameraFooterView.h */,
+				071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */,
 				07D4FB091E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.h */,
 				07D4FB0A1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m */,
 				07D4FB071E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib */,
@@ -2888,6 +2893,7 @@
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */,
 				CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */,
+				071D7B8B1EB7D4E10033A56A /* FRSCameraFooterView.m in Sources */,
 				CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */,
 				CECD8D771E73C617004548D1 /* FRSConnectivityAlertView.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
