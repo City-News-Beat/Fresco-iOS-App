@@ -65,18 +65,14 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 -(void)loadPosts:(NSArray *)posts {
     self.userInteractionEnabled = YES;
     self.orderedPosts = posts;
+    [self updateScrollView];
     [self.collectionView reloadData];
 }
 
 - (void)updateScrollView {
-    if (self.collectionView.contentOffset.x >= 0) {
-        [self.collectionView scrollRectToVisible:CGRectMake(0, 0, self.collectionView.frame.size.width, self.collectionView.frame.size.height) animated:NO];
-        [self scrollViewDidScroll:self.collectionView];
+    if (self.collectionView.contentOffset.x >= 0 && self.orderedPosts.count > 0) {
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
     }
-    
-    //    dispatch_async(dispatch_get_main_queue(), ^{
-    //        [self configureImageViews];
-    //    });
 }
 
 #pragma mark - UICollectionViewDataSource
