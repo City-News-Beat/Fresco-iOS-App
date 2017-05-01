@@ -34,8 +34,7 @@
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4 / 3
 #define SLIDER_HEIGHT 40
-#define SLIDER_WIDTH 580
-#define CAPTURE_MODE_COUNT 5
+#define SLIDER_WIDTH 500
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
@@ -242,29 +241,13 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 #pragma mark - UI configuration methods
 
 - (void)configureUI {
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+
     [self configurePreview];
     [self configureGestureRecognizer];
     [self configureBottomContainer];
     [self configureTopContainer];
-    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-}
-
-- (void)configureGestureRecognizer {
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
-    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    [self.view addGestureRecognizer:swipeLeft];
-    
-    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-    [self.view addGestureRecognizer:swipeRight];
-}
-
--(void)swipeLeft {
-    [self.captureModeSlider swipeLeft];
-}
-
--(void)swipeRight {
-    [self.captureModeSlider swipeRight];
+    [self configureSlider];
 }
 
 - (void)configureTopContainer {
@@ -293,13 +276,29 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
-    
-    [self configureSlider];
 }
 
 - (void)configureSlider {
-    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, -SLIDER_HEIGHT, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeInterview];
+    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, 0, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeInterview];
     [self.bottomClearContainer addSubview:self.captureModeSlider];
+}
+
+- (void)configureGestureRecognizer {
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
+    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeLeft];
+    
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRight];
+}
+
+-(void)swipeLeft {
+    [self.captureModeSlider swipeLeft];
+}
+
+-(void)swipeRight {
+    [self.captureModeSlider swipeRight];
 }
 
 - (NSInteger)assignmentLabelWidth {
@@ -403,10 +402,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)configureBottomContainer {
-    self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO + SLIDER_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO) - SLIDER_HEIGHT)];
+    self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.width * PHOTO_FRAME_RATIO), self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO) + SLIDER_HEIGHT)];
     self.bottomClearContainer.backgroundColor = [UIColor frescoTransparentDarkColor];
     [self.view addSubview:self.bottomClearContainer];
-
+    
     [self configureNextSection];
     [self configureApertureButton];
     [self configureFlashButton];
@@ -414,6 +413,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self setAppropriateIconsForCaptureState];
 }
 
+// TODO: Move next button out
 - (void)configureNextSection {
     self.previewBackgroundIV = [[UIImageView alloc] initWithFrame:CGRectMake(SIDE_PAD, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
     self.previewBackgroundIV.image = [UIImage imageNamed:@"white-background-circle"];
@@ -443,6 +443,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
 
+// TODO: move aperture button out
 - (void)configureApertureButton {
 
     self.apertureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
@@ -817,10 +818,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)adjustFramesForCaptureState {
-    
-    NSInteger topToAperture = (self.bottomClearContainer.frame.size.height - self.apertureBackground.frame.size.height) / 2;
-    NSInteger offset = topToAperture - 10;
-    
+
     CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
     
@@ -829,10 +827,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     
     if (self.captureMode == FRSCaptureModePhoto) {
-        
         self.bottomClearContainer.backgroundColor = [UIColor clearColor];
-        self.captureModeSlider.backgroundColor = [UIColor clearColor]; // this should happen in the subclass
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             self.preview.frame = smallPreviewFrame;
             self.captureVideoPreviewLayer.frame = smallPreviewFrame;
@@ -842,8 +837,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         
     } else {
         self.bottomClearContainer.backgroundColor = [UIColor frescoTransparentDarkColor];
-        self.captureModeSlider.backgroundColor = [UIColor frescoTransparentDarkColor]; // this should happen in the subclass
-
         dispatch_async(dispatch_get_main_queue(), ^{
             self.preview.frame = bigPreviewFrame;
             self.captureVideoPreviewLayer.frame = bigPreviewFrame;

@@ -39,12 +39,11 @@
     index++; // Add 1 to the index to reflect the acturate position of the button.
     
     // Note: All the captureMode buttons in the nib are 100px wide and have 0px padding inbetween.
-    // By adding the leftPadding, the width of all the buttons to the left of the given index, and subtracting half the width of the final button (the button we want in the center),
+    // By adding the width of all the buttons to the left of the given index, and subtracting half the width of the final button (the button we want in the center),
     // we're able to take this value and subtract it by half the width of the screen to place the desired button in the center of the screen.
     
-    NSInteger leftPadding = 40;
     NSInteger buttonWidth = 100;
-    NSInteger offset = leftPadding + (buttonWidth * index) - buttonWidth/2;
+    NSInteger offset = (buttonWidth * index) - buttonWidth/2;
     
     self.frame = CGRectMake([UIApplication sharedApplication].keyWindow.frame.size.width/2 - offset, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
 }
@@ -52,12 +51,9 @@
 
 
 - (void)swipeLeft {
-    if (self.currentIndex == 4) return;
+    if (self.currentIndex == CAPTURE_MODE_COUNT-1) return;
 
     [self setCaptureMode:self.currentIndex+1];
-    
-    return;
-    
 }
 
 - (void)swipeRight {

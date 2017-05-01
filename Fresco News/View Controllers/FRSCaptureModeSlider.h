@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSCameraViewController.h"
+#define CAPTURE_MODE_COUNT 5
 
 @interface FRSCaptureModeSlider : UIView
 
