@@ -34,6 +34,7 @@
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4 / 3
 #define SLIDER_HEIGHT 40
+#define CAPTURE_MODE_COUNT 5
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
@@ -241,9 +242,32 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)configureUI {
     [self configurePreview];
+    [self configureScrollView];
     [self configureBottomContainer];
     [self configureTopContainer];
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+}
+
+- (void)configureScrollView {
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [scrollView setContentSize:CGSizeMake(self.view.frame.size.width * CAPTURE_MODE_COUNT, self.view.frame.size.height)];
+    scrollView.pagingEnabled = YES;
+    [scrollView setCanCancelContentTouches:YES];
+    [self.view addSubview:scrollView];
+    
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    view.backgroundColor = [UIColor redColor];
+    [scrollView addSubview:view];
+    
+    UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width*2, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    view2.backgroundColor = [UIColor greenColor];
+    [scrollView addSubview:view2];
+    
+    UIView *view3 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width*4, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    view3.backgroundColor = [UIColor blueColor];
+    [scrollView addSubview:view3];
+    
 }
 
 - (void)configureTopContainer {
