@@ -8,8 +8,8 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Nota-Bold.otf">
-            <string>Nota-Bold</string>
+        <array key="Nota-Medium.otf">
+            <string>Nota-Medium</string>
         </array>
     </customFonts>
     <objects>
@@ -19,55 +19,70 @@
             <rect key="frame" x="0.0" y="0.0" width="500" height="40"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GrE-5m-EX5">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GrE-5m-EX5">
                     <rect key="frame" x="0.0" y="0.0" width="100" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="56n-e2-gPX"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
                     <state key="normal" title="INTERVIEW">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="interviewTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="h7k-uj-Vuj"/>
+                    </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oou-cd-O0X">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oou-cd-O0X">
                     <rect key="frame" x="100" y="0.0" width="100" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="81y-DF-seN"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
                     <state key="normal" title="PAN">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="panTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="n7a-0D-yzR"/>
+                    </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zdU-h4-0TT">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zdU-h4-0TT">
                     <rect key="frame" x="200" y="0.0" width="100" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="9OI-pO-Yg4"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
                     <state key="normal" title="WIDE">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="wideTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="gQP-cI-qBi"/>
+                    </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MHq-fX-FpK">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MHq-fX-FpK">
                     <rect key="frame" x="400" y="0.0" width="100" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="dxU-4k-L2K"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
                     <state key="normal" title="PHOTO">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="photoButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="x77-hh-4iM"/>
+                    </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rzM-9f-wax">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rzM-9f-wax">
                     <rect key="frame" x="300" y="0.0" width="100" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="ZvT-TM-ATE"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="15"/>
                     <state key="normal" title="VIDEO">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="videoTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="ecf-EY-F3K"/>
+                    </connections>
                 </button>
             </subviews>
             <constraints>
@@ -90,6 +105,13 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="interviewButton" destination="GrE-5m-EX5" id="fSq-mK-ygQ"/>
+                <outlet property="panButton" destination="Oou-cd-O0X" id="RsK-4K-dcf"/>
+                <outlet property="photoButton" destination="MHq-fX-FpK" id="EhS-kb-5eq"/>
+                <outlet property="videoButton" destination="rzM-9f-wax" id="L8c-AG-5zf"/>
+                <outlet property="wideButton" destination="zdU-h4-0TT" id="mkC-52-aZW"/>
+            </connections>
             <point key="canvasLocation" x="-172" y="54"/>
         </view>
     </objects>

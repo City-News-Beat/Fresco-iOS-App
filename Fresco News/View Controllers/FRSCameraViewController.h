@@ -55,7 +55,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 - (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment selectedGlobalAssignment:(NSDictionary *)globalAssignment;
 
 - (void)handlePreviewButtonTapped;
-- (void)toggleCaptureMode;
 
 - (void)dismissAndReturnToPreviousTab;
 

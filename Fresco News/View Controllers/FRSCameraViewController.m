@@ -38,7 +38,7 @@
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
-@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate>
+@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) CMMotionManager *motionManager;
@@ -272,7 +272,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
-    self.assignmentLabel.font = [UIFont helveticaNeueMediumWithSize:15];
+    self.assignmentLabel.font = [UIFont systemFontOfSize:15];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
@@ -280,6 +280,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)configureSlider {
     self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, 0, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeInterview];
+    self.captureModeSlider.delegate = self;
     [self.bottomClearContainer addSubview:self.captureModeSlider];
 }
 
@@ -299,6 +300,16 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 -(void)swipeRight {
     [self.captureModeSlider swipeRight];
+}
+
+#pragma mark - FRSCaptureModeDelegate
+- (void)captureModeDidUpdate:(FRSCaptureMode)captureMode {
+
+    if (captureMode == FRSCaptureModePhoto) {
+        [self toggleCaptureModeToPhoto:YES];
+    } else {
+        [self toggleCaptureModeToPhoto:NO];
+    }
 }
 
 - (NSInteger)assignmentLabelWidth {
@@ -409,7 +420,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self configureNextSection];
     [self configureApertureButton];
     [self configureFlashButton];
-    [self configureToggleView];
     [self setAppropriateIconsForCaptureState];
 }
 
@@ -719,18 +729,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     }
 }
 
-- (void)configureToggleView {
-
-    self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (SIDE_PAD * 2) - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 4, ICON_WIDTH + SIDE_PAD * 2, self.previewBackgroundIV.frame.size.height + 6)];
-    self.captureModeToggleView.userInteractionEnabled = YES;
-    [self.bottomClearContainer addSubview:self.captureModeToggleView];
-
-    [self configureCameraButton];
-    [self configureVideoButton];
-
-    UITapGestureRecognizer *toggleGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleCaptureMode)];
-    [self.captureModeToggleView addGestureRecognizer:toggleGR];
-}
 
 - (void)configureCameraButton {
 
@@ -1045,7 +1043,9 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     // Present an alert in landscape asking the user to rotate their phone.
 }
 
-- (void)toggleCaptureMode {
+
+// TODO: clean up this implementation.
+- (void)toggleCaptureModeToPhoto:(BOOL)displayPhoto {
 
     /* Disables torch when returning from video toggle and torch is enabled */
     [self torch:NO];
@@ -1053,12 +1053,14 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     /* Disable mask for transition animation */
     self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
 
-    if (self.captureMode == FRSCaptureModePhoto) {
+    if (!displayPhoto) {
+        
+        if (self.captureMode == FRSCaptureModeVideo) {
+            return;
+        }
+        
         self.captureMode = FRSCaptureModeVideo;
-        //        self.cameraDisabled = YES;
         self.apertureImageView.alpha = 1;
-
-        /* Delay is used to change color of mask after animation completes */
 
         [self.sessionManager.session beginConfiguration];
 
