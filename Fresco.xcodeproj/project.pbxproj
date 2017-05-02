@@ -23,6 +23,7 @@
 		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
 		0731B1B51E4929F90045E6F4 /* FRSSnapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 0731B1B41E4929F90045E6F4 /* FRSSnapKit.m */; };
+		073C4AB61EB8FE7B007334BC /* FRSCameraTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 073C4AB51EB8FE7B007334BC /* FRSCameraTracker.m */; };
 		0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */; };
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
@@ -376,6 +377,8 @@
 		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
 		0731B1B31E4929F90045E6F4 /* FRSSnapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSnapKit.h; sourceTree = "<group>"; };
 		0731B1B41E4929F90045E6F4 /* FRSSnapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSnapKit.m; sourceTree = "<group>"; };
+		073C4AB41EB8FE7B007334BC /* FRSCameraTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraTracker.h; sourceTree = "<group>"; };
+		073C4AB51EB8FE7B007334BC /* FRSCameraTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraTracker.m; sourceTree = "<group>"; };
 		074154681D5A66C20008C34E /* FRSUserNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserNotificationViewController.h; sourceTree = "<group>"; };
 		074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserNotificationViewController.m; sourceTree = "<group>"; };
 		074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Helpers.h"; path = "Categories/UIImageView+Helpers.h"; sourceTree = "<group>"; };
@@ -1392,6 +1395,8 @@
 				07D4FB091E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.h */,
 				07D4FB0A1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m */,
 				07D4FB071E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib */,
+				073C4AB41EB8FE7B007334BC /* FRSCameraTracker.h */,
+				073C4AB51EB8FE7B007334BC /* FRSCameraTracker.m */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -2864,6 +2869,7 @@
 				07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */,
 				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
+				073C4AB61EB8FE7B007334BC /* FRSCameraTracker.m in Sources */,
 				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				CAF0928A1E25921500F7F711 /* FRSGalleryStatusView.m in Sources */,

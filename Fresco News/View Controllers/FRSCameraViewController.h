@@ -22,24 +22,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 };
 
 @interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate> {
-    float beginGestureScale;
-    float effectiveScale;
-    NSTimer *thumb;
-    NSTimer *wobble;
-    NSTimer *pan;
-    UILabel *title;
 
     NSDate *entry;
     NSDate *exit;
 
-    FRSWobbleView *panAlert;
-    FRSWobbleView *shakeAlert;
-
-    BOOL isShowingWobble;
-    BOOL isShowingPan;
-
-    BOOL hasShaken;
-    BOOL hasPanned;
 }
 
 @property (nonatomic) FRSCaptureMode captureMode;
@@ -55,5 +41,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 - (void)handlePreviewButtonTapped;
 
 - (void)dismissAndReturnToPreviousTab;
+
+
+@property (nonatomic) BOOL isRecording;
+@property (nonatomic) UIDeviceOrientation lastOrientation;
 
 @end

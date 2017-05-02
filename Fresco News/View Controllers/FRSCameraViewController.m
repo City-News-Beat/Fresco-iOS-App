@@ -10,7 +10,6 @@
 
 @import Photos;
 @import AVFoundation;
-@import CoreMotion;
 
 #import "FRSAVSessionManager.h"
 #import "FRSLocator.h"
@@ -19,6 +18,7 @@
 #import "FRSTabBarController.h"
 #import "FRSCaptureModeSlider.h"
 #import "FRSCameraFooterView.h"
+#import "FRSCameraTracker.h"
 
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
@@ -30,7 +30,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate, FRSCameraFooterViewDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
-@property (strong, nonatomic) CMMotionManager *motionManager;
 
 @property (strong, nonatomic) UIView *preview;
 
@@ -79,7 +78,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @property (nonatomic, strong) FRSTabBarController *tabBarController;
 
 @property (strong, nonatomic) CAShapeLayer *circleLayer;
-@property (nonatomic) BOOL isRecording;
 @property (strong, nonatomic) NSTimer *videoTimer;
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
@@ -88,7 +86,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @property (nonatomic) BOOL firstTimeAni;
 
 @property (nonatomic) CGRect originalApertureFrame;
-@property (nonatomic) UIDeviceOrientation lastOrientation;
 @property (nonatomic) CGFloat rotationIVOriginalY;
 
 @property (nonatomic, retain) NSMutableArray *positions;
@@ -96,6 +93,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 
 @property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
+@property (strong, nonatomic) FRSCameraTracker *cameraTracker;
 
 @end
 
@@ -158,8 +156,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
     [self shouldShowStatusBar:NO animated:YES];
     [self.navigationController setNavigationBarHidden:TRUE animated:YES];
-    self.motionManager = [[CMMotionManager alloc] init];
-    [self startTrackingMovement];
+    
+    self.cameraTracker = [[FRSCameraTracker alloc] init];
+    self.cameraTracker.sessionManager = self.sessionManager;
+    self.cameraTracker.parentController = self;
+    [self.cameraTracker startTrackingMovement];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -189,8 +190,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self.sessionManager clearCaptureSession];
     [_captureVideoPreviewLayer removeFromSuperlayer];
 
-    [self.motionManager stopAccelerometerUpdates];
-    [self.motionManager stopGyroUpdates];
+    [self.cameraTracker stopTrackingMovement];
+
     [self shouldShowStatusBar:YES animated:YES];
 }
 
@@ -1525,347 +1526,66 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 
 
-
-
-// TODO: Move all this into it's own class
-
-#pragma mark - Orientation
-
-- (void)startTrackingMovement {
-
-    self.motionManager.accelerometerUpdateInterval = .2;
-    self.motionManager.gyroUpdateInterval = .2;
-
-    [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
-                                             withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
-                                               if (!error) {
-                                                   [self outputAccelertionData:accelerometerData.acceleration];
-
-                                               } else {
-                                                   NSLog(@"Motion Manager Error: %@", error);
-                                               }
-                                             }];
-
-    if (!_motionManager) {
-        _motionManager = [[CMMotionManager alloc] init];
-        _motionManager.gyroUpdateInterval = 2;
-    }
-
-    __block float lastZ = 0;
-    __block float lastY = 0;
-
-    [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue]
-                                withHandler:^(CMGyroData *_Nullable gyroData, NSError *_Nullable error) {
-                                  CGFloat rotationRate = fabs(gyroData.rotationRate.x);
-                                  if (rotationRate > .4) {
-                                      [self alertUserOfFastPan:TRUE];
-                                  }
-
-                                  CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
-                                  if (lastZ == 0) {
-                                      lastZ = wobbleRate;
-                                  } else if (lastZ - wobbleRate < -.7) {
-                                      [self alertUserOfWobble:YES];
-                                  }
-
-                                  CGFloat forwardWobble = fabs(gyroData.rotationRate.y);
-                                  if (lastY == 0) {
-                                      lastY = forwardWobble;
-                                  } else if (lastY - forwardWobble < -1) {
-                                      [self alertUserOfWobble:YES];
-                                  }
-
-                                }];
-}
-
-- (void)outputAccelertionData:(CMAcceleration)acceleration {
-
-    UIDeviceOrientation orientationNew;
-
-    if (self.sessionManager.movieFileOutput.isRecording)
-        return;
-
-    if (acceleration.z > -2 && acceleration.z < 2) {
-
-        if (acceleration.x >= 0.75) {
-            orientationNew = UIDeviceOrientationLandscapeRight;
-
-        } else if (acceleration.x <= -0.75) {
-            orientationNew = UIDeviceOrientationLandscapeLeft;
-
-        } else if (acceleration.y <= -0.75) {
-            orientationNew = UIDeviceOrientationPortrait;
-
-        } else if (acceleration.y >= 0.75) {
-            orientationNew = self.lastOrientation;
-        } else {
-            // Consider same as last time
-            return;
-        }
-    }
-
-    if (orientationNew == self.lastOrientation)
-        return;
-
-    self.lastOrientation = orientationNew;
-
-    [self rotateAppForOrientation:orientationNew];
-}
-
-- (void)alertUserOfFastPan:(BOOL)isTooFast {
-
-    [self showPan];
-
-    if (wobble && [wobble isValid]) {
-        [wobble invalidate];
-    }
-
-    wobble = [NSTimer timerWithTimeInterval:.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
-}
-
-- (void)alertUserOfWobble:(BOOL)isTooFast {
-
-    [self showWobble];
-
-    if (wobble && [wobble isValid]) {
-        [wobble invalidate];
-    }
-
-    wobble = [NSTimer timerWithTimeInterval:.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
-}
-
-- (void)showPan {
-
-    if (!hasPanned) {
-        hasPanned = TRUE;
-        [FRSTracker track:aggressivePan];
-    }
-
-    if (_isRecording == FALSE) {
-        return;
-    }
-
-    if (isShowingPan) {
-        return;
-    }
-
-    isShowingPan = TRUE;
-
-    panAlert = [[FRSWobbleView alloc] init];
-    CGAffineTransform transform;
-
-    if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
-        // 90 degrees
-        double rads = DEGREES_TO_RADIANS(90);
-        transform = CGAffineTransformRotate(panAlert.transform, rads);
-
-        panAlert.transform = transform;
-
-        CGRect shakeFrame = panAlert.frame;
-        shakeFrame.origin.x += self.view.frame.size.width - (panAlert.frame.size.height / 2) - 33;
-        shakeFrame.origin.y += 120;
-
-        if (isShowingWobble) {
-            shakeFrame.origin.x -= 50;
-        }
-
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 25;
-        panAlert.frame = shakeFrame;
-        panAlert.alpha = 0;
-        [self.view addSubview:panAlert];
-
-        [UIView animateWithDuration:.3
-                         animations:^{
-                           panAlert.alpha = 1;
-                         }];
-
-        [self.view bringSubviewToFront:panAlert];
-    } else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
-        double rads = DEGREES_TO_RADIANS(-90);
-        transform = CGAffineTransformRotate(panAlert.transform, rads);
-        panAlert.transform = transform;
-
-        CGRect shakeFrame = panAlert.frame;
-        shakeFrame.origin.x = 15;
-        shakeFrame.origin.y += 120;
-
-        if (isShowingWobble) {
-            shakeFrame.origin.x += 50;
-        }
-
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 25;
-        panAlert.frame = shakeFrame;
-        panAlert.alpha = 0;
-        [self.view addSubview:panAlert];
-
-        [UIView animateWithDuration:.3
-                         animations:^{
-                           panAlert.alpha = 1;
-                         }];
-
-        [self.view bringSubviewToFront:panAlert];
-    }
-}
-
-- (void)showWobble {
-
-    if (!hasShaken) {
-        hasShaken = TRUE;
-        [FRSTracker track:captureWobble];
-    }
-
-    if (_isRecording == FALSE) {
-        return;
-    }
-
-    if (isShowingWobble) {
-        return;
-    }
-
-    isShowingWobble = TRUE;
-
-    shakeAlert = [[FRSWobbleView alloc] init];
-    [shakeAlert configureForWobble];
-    CGAffineTransform transform;
-
-    if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
-        // 90 degrees
-        double rads = DEGREES_TO_RADIANS(90);
-        transform = CGAffineTransformRotate(shakeAlert.transform, rads);
-
-        shakeAlert.transform = transform;
-
-        CGRect shakeFrame = shakeAlert.frame;
-        shakeFrame.origin.x += self.view.frame.size.width - (shakeAlert.frame.size.height / 2) - 33;
-        shakeFrame.origin.y += 120;
-
-        if (isShowingPan) {
-            shakeFrame.origin.x -= 50;
-        }
-
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
-        shakeAlert.frame = shakeFrame;
-        shakeAlert.alpha = 0;
-        [self.view addSubview:shakeAlert];
-
-        [UIView animateWithDuration:.3
-                         animations:^{
-                           shakeAlert.alpha = 1;
-                         }];
-
-        [self.view bringSubviewToFront:shakeAlert];
-    } else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
-        double rads = DEGREES_TO_RADIANS(-90);
-        transform = CGAffineTransformRotate(shakeAlert.transform, rads);
-        shakeAlert.transform = transform;
-
-        CGRect shakeFrame = shakeAlert.frame;
-        shakeFrame.origin.x = 15;
-        shakeFrame.origin.y += 120;
-
-        if (isShowingPan) {
-            shakeFrame.origin.x += 50;
-        }
-
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
-        shakeAlert.frame = shakeFrame;
-        shakeAlert.alpha = 0;
-        [self.view addSubview:shakeAlert];
-
-        [UIView animateWithDuration:.3
-                         animations:^{
-                           shakeAlert.alpha = 1;
-                         }];
-
-        [self.view bringSubviewToFront:shakeAlert];
-    }
-}
-
-- (void)hideAlert {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [UIView animateWithDuration:0.3
-          delay:0.0
-          options:UIViewAnimationOptionCurveEaseInOut
-          animations:^{
-            shakeAlert.alpha = 0;
-            panAlert.alpha = 0;
-          }
-          completion:^(BOOL finished) {
-            [shakeAlert removeFromSuperview];
-            [panAlert removeFromSuperview];
-
-            shakeAlert = Nil;
-            panAlert = Nil;
-            isShowingWobble = FALSE;
-            isShowingPan = FALSE;
-          }];
-    });
-}
-
-- (void)configureAlertWithText:(NSString *)text {
-#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
-
-    if (self.isRecording == FALSE) {
-        return;
-    }
-
-    if (!self.alertContainer) {
-        self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(35, self.view.frame.size.height / 2 - 20, self.view.frame.size.height, 40)];
-        self.alertContainer.backgroundColor = [UIColor frescoRedColor];
-        self.alertContainer.alpha = 0;
-        [self.view addSubview:self.alertContainer];
-
-        title = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, self.view.frame.size.height, 20)];
-        title.text = text;
-        title.textColor = [UIColor whiteColor];
-        title.font = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
-        title.textAlignment = NSTextAlignmentCenter;
-
-        [self.alertContainer addSubview:title];
-
-        CGAffineTransform transform;
-
-        if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
-            // 90 degrees
-            double rads = DEGREES_TO_RADIANS(90);
-            transform = CGAffineTransformRotate(self.alertContainer.transform, rads);
-        } else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
-            double rads = DEGREES_TO_RADIANS(-90);
-            CGAffineTransformRotate(self.alertContainer.transform, rads);
-        }
-
-        self.alertContainer.transform = transform;
-
-        [UIView animateWithDuration:0.3
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.alertContainer.alpha = 8;
-
-                         }
-                         completion:^(BOOL finished){
-
-                         }];
-
-    } else {
-        title.text = text;
-
-        [UIView animateWithDuration:0.3
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.alertContainer.alpha = 8;
-
-                         }
-                         completion:^(BOOL finished){
-
-                         }];
-    }
-}
-
-
+//- (void)configureAlertWithText:(NSString *)text {
+//#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
+//    
+//    if (self.isRecording == FALSE) {
+//        return;
+//    }
+//    
+//    if (!self.alertContainer) {
+//        self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(35, self.view.frame.size.height / 2 - 20, self.view.frame.size.height, 40)];
+//        self.alertContainer.backgroundColor = [UIColor frescoRedColor];
+//        self.alertContainer.alpha = 0;
+//        [self.view addSubview:self.alertContainer];
+//        
+//        title = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, self.view.frame.size.height, 20)];
+//        title.text = text;
+//        title.textColor = [UIColor whiteColor];
+//        title.font = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+//        title.textAlignment = NSTextAlignmentCenter;
+//        
+//        [self.alertContainer addSubview:title];
+//        
+//        CGAffineTransform transform;
+//        
+//        if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
+//            // 90 degrees
+//            double rads = DEGREES_TO_RADIANS(90);
+//            transform = CGAffineTransformRotate(self.alertContainer.transform, rads);
+//        } else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
+//            double rads = DEGREES_TO_RADIANS(-90);
+//            CGAffineTransformRotate(self.alertContainer.transform, rads);
+//        }
+//        
+//        self.alertContainer.transform = transform;
+//        
+//        [UIView animateWithDuration:0.3
+//                              delay:0.0
+//                            options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^{
+//                             self.alertContainer.alpha = 8;
+//                             
+//                         }
+//                         completion:^(BOOL finished){
+//                             
+//                         }];
+//        
+//    } else {
+//        title.text = text;
+//        
+//        [UIView animateWithDuration:0.3
+//                              delay:0.0
+//                            options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^{
+//                             self.alertContainer.alpha = 8;
+//                             
+//                         }
+//                         completion:^(BOOL finished){
+//                             
+//                         }];
+//    }
+//}
 
 
 
