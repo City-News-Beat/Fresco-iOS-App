@@ -8,6 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+#define PHOTO_FRAME_RATIO 4 / 3
+#define SLIDER_HEIGHT 40
+#define ICON_WIDTH 24
+#define PREVIEW_WIDTH 56
+#define APERTURE_WIDTH 72
+#define SIDE_PAD 12
+
+@protocol FRSCameraFooterViewDelegate <NSObject>
+
+- (void)didTapNextButton;
+
+@end
+
 @interface FRSCameraFooterView : UIView
+
+
+- (instancetype)initWithDelegate:(id)delegate;
+
+@property (weak, nonatomic) NSObject<FRSCameraFooterViewDelegate> *delegate;
+
+- (void)updatePreviewButtonWithImage:(UIImage *)image;
 
 @end

@@ -8,45 +8,33 @@
 
 #import "FRSCameraViewController.h"
 
-//Apple APIs
 @import Photos;
 @import AVFoundation;
 @import CoreMotion;
 
-//Managers
 #import "FRSAVSessionManager.h"
 #import "FRSLocator.h"
 
-//Categories
-//#import "UIColor+Additions.h"
+#import "FRSAssignment.h"
+#import "FRSTabBarController.h"
+#import "FRSCaptureModeSlider.h"
+#import "FRSCameraFooterView.h"
+
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIImage+Helpers.h"
-#import "FRSAssignment.h"
 #import "CLLocation+EXIFGPS.h"
-#import "FRSTabBarController.h"
-#import "FRSBaseViewController.h"
-#import "FRSCaptureModeSlider.h"
-
-#define ICON_WIDTH 24
-#define PREVIEW_WIDTH 56
-#define APERTURE_WIDTH 72
-#define SIDE_PAD 12
-#define PHOTO_FRAME_RATIO 4 / 3
-#define SLIDER_HEIGHT 40
-#define SLIDER_WIDTH 500
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
-@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate>
+@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate, FRSCameraFooterViewDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) CMMotionManager *motionManager;
 
 @property (strong, nonatomic) UIView *preview;
 
-@property (strong, nonatomic) UIView *bottomClearContainer;
-@property (strong, nonatomic) UIView *bottomOpaqueContainer;
+@property (strong, nonatomic) FRSCameraFooterView *footerView;
 
 @property (strong, nonatomic) UIImageView *videoRotateIV;
 @property (strong, nonatomic) UIImageView *videoPhoneIV;
@@ -105,7 +93,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 @property (nonatomic, retain) NSMutableArray *positions;
 @property (strong, nonatomic) UIView *alertContainer;
-@property (nonatomic) BOOL didPush;
+
 
 @property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 
@@ -117,13 +105,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self = [super init];
 
     if (self) {
-        self.sessionManager = [FRSAVSessionManager defaultManager];
-        self.captureMode = captureMode;
-        self.lastOrientation = UIDeviceOrientationPortrait;
-        self.firstTime = YES;
-        self.firstTimeAni = YES;
+        [self setupDefaultWithCaptureMode:captureMode];
     }
-
     return self;
 }
 
@@ -131,30 +114,31 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self = [super init];
 
     if (self) {
-        self.sessionManager = [FRSAVSessionManager defaultManager];
-        self.captureMode = captureMode;
-        self.lastOrientation = UIDeviceOrientationPortrait;
-        self.firstTime = YES;
-        self.firstTimeAni = YES;
-
+        [self setupDefaultWithCaptureMode:captureMode];
         self.preselectedGlobalAssignment = globalAssignment;
         self.preselectedAssignment = assignment;
     }
-
     return self;
+}
+
+- (void)setupDefaultWithCaptureMode:(FRSCaptureMode)captureMode {
+    self.sessionManager = [FRSAVSessionManager defaultManager];
+    self.captureMode = captureMode;
+    self.lastOrientation = UIDeviceOrientationPortrait;
+    self.firstTime = YES;
+    self.firstTimeAni = YES;
+    self.isRecording = NO;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     [self configureUI];
-    [self updatePreviewButtonWithImage:Nil];
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     [self rotateAppForOrientation:self.lastOrientation];
     [self checkLibrary];
 
-    self.isRecording = NO;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideoCaptureIfNeeded) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
@@ -164,8 +148,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
     [FRSTracker screen:@"Camera"];
 
-    self.isPresented = YES;
-    self.didPush = NO;
 
     if (!self.sessionManager.session.isRunning) {
         [self.sessionManager startCaptureSessionForCaptureMode:self.captureMode
@@ -187,6 +169,14 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.preview.alpha = 1.0;
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    if (self.sessionManager.movieFileOutput.isRecording) {
+        [self toggleVideoRecording];
+    }
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 
@@ -199,7 +189,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self.sessionManager clearCaptureSession];
     [_captureVideoPreviewLayer removeFromSuperlayer];
 
-    self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
     [self.motionManager stopGyroUpdates];
     [self shouldShowStatusBar:YES animated:YES];
@@ -226,7 +215,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
             [self.fileLoader getDataFromAsset:firstAsset
                                      callback:^(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error) {
                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                             [self updatePreviewButtonWithImage:image];
+                                             [self.footerView updatePreviewButtonWithImage:image];
                                              self.capturingImage = NO;
                                              self.previewButton.userInteractionEnabled = YES;
                                              self.nextButton.userInteractionEnabled = YES;
@@ -281,7 +270,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 - (void)configureSlider {
     self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, 0, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeInterview];
     self.captureModeSlider.delegate = self;
-    [self.bottomClearContainer addSubview:self.captureModeSlider];
+    [self.footerView addSubview:self.captureModeSlider];
 }
 
 - (void)configureGestureRecognizer {
@@ -338,8 +327,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     });
 }
 
-- (void)updatePreviewButtonWithAsset {
-}
 
 - (void)dismissAndReturnToPreviousTab {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -347,120 +334,41 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self shouldShowStatusBar:YES animated:YES];
 }
 
-- (void)updatePreviewButtonWithImage:(UIImage *)image {
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-      UIImageView *temp = [[UIImageView alloc] initWithFrame:self.previewButton.frame];
-      temp.image = image;
-      [temp clipAsCircle];
-      temp.transform = CGAffineTransformMakeScale(0.000001, 0.000001);
-
-      if (self.previewBackgroundIV.alpha <= 0) {
-          [self.previewBackgroundIV addSubview:temp];
-
-          [self createNextButtonWithFrame:self.previewButton.frame];
-          self.nextButton.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
-          [self.previewBackgroundIV addSubview:self.nextButton];
-
-          [UIView animateWithDuration:0.3
-              delay:0
-              options:UIViewAnimationOptionCurveEaseInOut
-              animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
-                self.previewBackgroundIV.alpha = 1.0;
-                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
-                self.nextButton.alpha = 0.7;
-              }
-              completion:^(BOOL finished) {
-                [self.previewButton setImage:image forState:UIControlStateNormal];
-                [temp removeFromSuperview];
-              }];
-      }
-
-      else if (self.nextButton) { //The next button has been animated in once
-          self.previewBackgroundIV.alpha = 1.0;
-          [self.previewBackgroundIV insertSubview:temp belowSubview:self.nextButton];
-          [UIView animateWithDuration:0.3
-              delay:0
-              options:UIViewAnimationOptionCurveEaseInOut
-              animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
-              }
-              completion:^(BOOL finished) {
-                [self.previewButton setImage:image forState:UIControlStateNormal];
-                [temp removeFromSuperview];
-              }];
-      } else { //First time the next button has been animated
-          self.previewBackgroundIV.alpha = 1.0;
-          [self.previewBackgroundIV addSubview:temp];
-
-          [self createNextButtonWithFrame:self.previewButton.frame];
-          self.nextButton.transform = CGAffineTransformMakeScale(0.001, 0.001);
-          [self.previewBackgroundIV addSubview:self.nextButton];
-
-          [UIView animateWithDuration:0.3
-              delay:0
-              options:UIViewAnimationOptionCurveEaseInOut
-              animations:^{
-                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
-                self.nextButton.alpha = 0.7;
-              }
-              completion:^(BOOL finished) {
-                [self.previewButton setImage:image forState:UIControlStateNormal];
-              }];
-      }
-    });
-}
 
 - (void)configureBottomContainer {
-    self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.width * PHOTO_FRAME_RATIO), self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO) + SLIDER_HEIGHT)];
-    self.bottomClearContainer.backgroundColor = [UIColor frescoTransparentDarkColor];
-    [self.view addSubview:self.bottomClearContainer];
+    self.footerView = [[FRSCameraFooterView alloc] initWithDelegate:self];
+    [self.view addSubview:self.footerView];
     
-    [self configureNextSection];
     [self configureApertureButton];
     [self configureFlashButton];
     [self setAppropriateIconsForCaptureState];
 }
 
-// TODO: Move next button out
-- (void)configureNextSection {
-    self.previewBackgroundIV = [[UIImageView alloc] initWithFrame:CGRectMake(SIDE_PAD, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-    self.previewBackgroundIV.image = [UIImage imageNamed:@"white-background-circle"];
-    [self.previewBackgroundIV centerVerticallyInView:self.bottomClearContainer];
-    self.previewBackgroundIV.userInteractionEnabled = YES;
-    self.previewBackgroundIV.alpha = 0.0;
-    [self.bottomClearContainer addSubview:self.previewBackgroundIV];
-    [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
 
-    self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
-    self.previewButton.contentMode = UIViewContentModeScaleAspectFill;
-    self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-    self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    self.previewButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    [self.previewButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.previewButton clipAsCircle];
-    [self.previewBackgroundIV addSubview:self.previewButton];
+
+
+#pragma mark - FRSFooterViewDelegate
+
+- (void)didTapNextButton {
+    
+
+    
+    FRSFileViewController *fileView = [[FRSFileViewController alloc] init];
+    fileView.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
+    fileView.preselectedAssignment = self.preselectedAssignment;
+
+    [self.navigationController pushViewController:fileView animated:YES];
 }
 
-- (void)createNextButtonWithFrame:(CGRect)frame {
-    self.nextButton = [[UIButton alloc] initWithFrame:frame];
-    [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
-    [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.nextButton setBackgroundColor:[UIColor whiteColor]];
-    [self.nextButton clipAsCircle];
-    [self.nextButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-}
 
 // TODO: move aperture button out
 - (void)configureApertureButton {
 
     self.apertureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    [self.apertureShadowView centerHorizontallyInView:self.bottomClearContainer];
-    [self.apertureShadowView centerVerticallyInView:self.bottomClearContainer];
+    [self.apertureShadowView centerHorizontallyInView:self.footerView];
+    [self.apertureShadowView centerVerticallyInView:self.footerView];
     [self.apertureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    [self.bottomClearContainer addSubview:self.apertureShadowView];
+    [self.footerView addSubview:self.apertureShadowView];
 
     self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
     self.apertureBackground.layer.cornerRadius = self.apertureBackground.frame.size.width / 2.;
@@ -515,7 +423,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
     [self.apertureMask addSubview:self.apertureButton];
 
-    [self.bottomClearContainer addSubview:self.ivContainer];
+    [self.footerView addSubview:self.ivContainer];
 
     self.clearButton = [[UIButton alloc] initWithFrame:self.ivContainer.bounds];
     [self.ivContainer addSubview:self.clearButton];
@@ -663,11 +571,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 - (void)configureFlashButton {
     
     self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - ICON_WIDTH*2, 0, ICON_WIDTH, ICON_WIDTH)];
-    [self.flashButton centerVerticallyInView:self.bottomClearContainer];
+    [self.flashButton centerVerticallyInView:self.footerView];
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
-    [self.bottomClearContainer addSubview:self.flashButton];
+    [self.footerView addSubview:self.flashButton];
     [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -825,7 +733,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     
     if (self.captureMode == FRSCaptureModePhoto) {
-        self.bottomClearContainer.backgroundColor = [UIColor clearColor];
+        self.footerView.backgroundColor = [UIColor clearColor];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.preview.frame = smallPreviewFrame;
             self.captureVideoPreviewLayer.frame = smallPreviewFrame;
@@ -834,7 +742,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         self.apertureButton.frame = self.originalApertureFrame;
         
     } else {
-        self.bottomClearContainer.backgroundColor = [UIColor frescoTransparentDarkColor];
+        self.footerView.backgroundColor = [UIColor frescoTransparentDarkColor];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.preview.frame = bigPreviewFrame;
             self.captureVideoPreviewLayer.frame = bigPreviewFrame;
@@ -1247,7 +1155,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                                                                                                         self.previewButton.userInteractionEnabled = YES;
                                                                                                         self.nextButton.userInteractionEnabled = YES;
                                                                                                     } else {
-                                                                                                        [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                                                                                        [self.footerView updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
                                                                                                         self.capturingImage = NO;
                                                                                                         self.previewButton.userInteractionEnabled = YES;
                                                                                                         self.nextButton.userInteractionEnabled = YES;
@@ -1278,7 +1186,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                                                                                                     if (!success) {
                                                                                                         NSLog(@"Error occurred while saving image to photo library: %@", error);
                                                                                                     } else {
-                                                                                                        [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                                                                                        [self.footerView updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
                                                                                                     }
 
                                                                                                     self.capturingImage = NO;
@@ -1344,7 +1252,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
         [self stopRecordingAnimation];
         self.previewBackgroundIV.alpha = 1.0;
-        [self createNextButtonWithFrame:self.previewButton.frame];
         [self.previewBackgroundIV addSubview:self.nextButton];
         [self animateCloseButtonHide:NO];
     } else {
@@ -1593,23 +1500,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 
 #pragma mark - Navigation
-
-- (void)handlePreviewButtonTapped {
-    if (!self.didPush) {
-
-        if (self.sessionManager.movieFileOutput.isRecording) {
-            [self toggleVideoRecording];
-        }
-
-        FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
-        fileView.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
-        fileView.preselectedAssignment = self.preselectedAssignment;
-        fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-
-        [self.navigationController pushViewController:fileView animated:YES];
-    }
-    self.didPush = YES;
-}
 
 - (AVCaptureVideoOrientation)orientationFromDeviceOrientaton {
     switch (self.lastOrientation) {

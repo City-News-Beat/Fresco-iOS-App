@@ -42,8 +42,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     BOOL hasPanned;
 }
 
-@property (nonatomic) BOOL isPresented;
-
 @property (nonatomic) FRSCaptureMode captureMode;
 
 @property (nonatomic, retain) FRSFileLoader *fileLoader;
