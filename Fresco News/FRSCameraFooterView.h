@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSCaptureModeSlider.h"
 
 #define PHOTO_FRAME_RATIO 4 / 3
 #define SLIDER_HEIGHT 40
@@ -19,6 +20,8 @@
 
 - (void)didTapNextButton;
 
+- (void)captureModeDidUpdate:(FRSCaptureMode)captureMode;
+
 @end
 
 @interface FRSCameraFooterView : UIView
@@ -29,5 +32,8 @@
 @property (weak, nonatomic) NSObject<FRSCameraFooterViewDelegate> *delegate;
 
 - (void)updatePreviewButtonWithImage:(UIImage *)image;
+
+@property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
+
 
 @end

@@ -237,7 +237,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self configureGestureRecognizer];
     [self configureBottomContainer];
     [self configureTopContainer];
-    [self configureSlider];
 }
 
 - (void)configureTopContainer {
@@ -268,12 +267,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self.topContainer addSubview:self.assignmentLabel];
 }
 
-- (void)configureSlider {
-    self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, 0, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeInterview];
-    self.captureModeSlider.delegate = self;
-    [self.footerView addSubview:self.captureModeSlider];
-}
-
 - (void)configureGestureRecognizer {
     UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
     swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
@@ -285,11 +278,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 -(void)swipeLeft {
-    [self.captureModeSlider swipeLeft];
+    [self.footerView.captureModeSlider swipeLeft];
 }
 
 -(void)swipeRight {
-    [self.captureModeSlider swipeRight];
+    [self.footerView.captureModeSlider swipeRight];
 }
 
 #pragma mark - FRSCaptureModeDelegate
@@ -351,9 +344,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 #pragma mark - FRSFooterViewDelegate
 
 - (void)didTapNextButton {
-    
 
-    
     FRSFileViewController *fileView = [[FRSFileViewController alloc] init];
     fileView.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
     fileView.preselectedAssignment = self.preselectedAssignment;
@@ -1516,78 +1507,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         return AVCaptureVideoOrientationPortrait;
     }
 }
-
-
-
-
-
-
-
-
-
-
-//- (void)configureAlertWithText:(NSString *)text {
-//#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
-//    
-//    if (self.isRecording == FALSE) {
-//        return;
-//    }
-//    
-//    if (!self.alertContainer) {
-//        self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(35, self.view.frame.size.height / 2 - 20, self.view.frame.size.height, 40)];
-//        self.alertContainer.backgroundColor = [UIColor frescoRedColor];
-//        self.alertContainer.alpha = 0;
-//        [self.view addSubview:self.alertContainer];
-//        
-//        title = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, self.view.frame.size.height, 20)];
-//        title.text = text;
-//        title.textColor = [UIColor whiteColor];
-//        title.font = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
-//        title.textAlignment = NSTextAlignmentCenter;
-//        
-//        [self.alertContainer addSubview:title];
-//        
-//        CGAffineTransform transform;
-//        
-//        if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
-//            // 90 degrees
-//            double rads = DEGREES_TO_RADIANS(90);
-//            transform = CGAffineTransformRotate(self.alertContainer.transform, rads);
-//        } else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
-//            double rads = DEGREES_TO_RADIANS(-90);
-//            CGAffineTransformRotate(self.alertContainer.transform, rads);
-//        }
-//        
-//        self.alertContainer.transform = transform;
-//        
-//        [UIView animateWithDuration:0.3
-//                              delay:0.0
-//                            options:UIViewAnimationOptionCurveEaseInOut
-//                         animations:^{
-//                             self.alertContainer.alpha = 8;
-//                             
-//                         }
-//                         completion:^(BOOL finished){
-//                             
-//                         }];
-//        
-//    } else {
-//        title.text = text;
-//        
-//        [UIView animateWithDuration:0.3
-//                              delay:0.0
-//                            options:UIViewAnimationOptionCurveEaseInOut
-//                         animations:^{
-//                             self.alertContainer.alpha = 8;
-//                             
-//                         }
-//                         completion:^(BOOL finished){
-//                             
-//                         }];
-//    }
-//}
-
-
 
 
 
