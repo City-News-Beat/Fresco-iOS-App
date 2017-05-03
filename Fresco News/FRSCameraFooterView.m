@@ -116,13 +116,12 @@
     //TODO: This does not animate.
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         UIImageView *temp = [[UIImageView alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
         temp.image = image;
         [temp clipAsCircle];
-        
-        self.nextButtonContainer.alpha = 1.0;
         [self.nextButtonContainer addSubview:temp];
-        
+
         [UIView animateWithDuration:0.3
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut

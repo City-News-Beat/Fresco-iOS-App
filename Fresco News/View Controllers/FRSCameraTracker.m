@@ -95,7 +95,7 @@
     
     self.parentController.lastOrientation = orientationNew;
     
-//    [self rotateAppForOrientation:orientationNew];
+    [self.parentController rotateAppForOrientation:orientationNew];
 }
 
 - (void)alertUserOfFastPan:(BOOL)isTooFast {

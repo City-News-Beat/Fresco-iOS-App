@@ -38,12 +38,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 - (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
 - (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment selectedGlobalAssignment:(NSDictionary *)globalAssignment;
 
-- (void)handlePreviewButtonTapped;
-
 - (void)dismissAndReturnToPreviousTab;
-
 
 @property (nonatomic) BOOL isRecording;
 @property (nonatomic) UIDeviceOrientation lastOrientation;
+
+- (void)rotateAppForOrientation:(UIDeviceOrientation)o; // TODO: Abstract orientation into it's own class.
 
 @end
