@@ -781,10 +781,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
         [self.sessionManager.session beginConfiguration];
 
-        //Change the preset to display properly
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
-            //Set the session preset to photo, the default mode we enter in as
-            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+            });
         }
 
         [self.sessionManager.session commitConfiguration];
@@ -795,18 +795,21 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [self animateVideoRotateHide];
 
         [self.sessionManager.session beginConfiguration];
-        //Change the preset to display properly
+
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
-            //Set the session preset to photo, the default mode we enter in as
-            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
+            });
         }
 
         [self.sessionManager.session commitConfiguration];
     }
-
-    [self rotateAppForOrientation:self.lastOrientation];
-    [self setAppropriateIconsForCaptureState];
-    [self adjustFramesForCaptureState];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self rotateAppForOrientation:self.lastOrientation];
+        [self setAppropriateIconsForCaptureState];
+        [self adjustFramesForCaptureState];
+    });
 }
 
 #pragma mark - Camera focus
