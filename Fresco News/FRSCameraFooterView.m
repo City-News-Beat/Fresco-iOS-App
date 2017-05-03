@@ -63,15 +63,16 @@
     }
 }
 
+
+#pragma mark - Footer States
+
 - (void)toggleCaptureModeForPhoto:(BOOL)isPhoto {
-    
     if (isPhoto) {
         self.backgroundColor = [UIColor frescoBackgroundColorDark];
     } else {
         self.backgroundColor = [UIColor frescoTransparentDarkColor];
     }
 }
-
 
 
 #pragma mark - Next Button
@@ -95,14 +96,14 @@
     [self.nextButton clipAsCircle];
     [self.nextButtonContainer addSubview:self.nextButton];
     
-//    UILabel *nextLabel = [[UILabel alloc] initWithFrame:CGRectMake(-4, -4, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-//    nextLabel.text = @"NEXT";
-//    nextLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:.26];
-//    nextLabel.font = [UIFont notaBoldWithSize:15];
-//    nextLabel.textColor = [UIColor colorWithWhite:1 alpha:1];
-//    nextLabel.userInteractionEnabled = NO;
-//    nextLabel.textAlignment = NSTextAlignmentCenter;
-//    [self.nextButton addSubview:nextLabel];
+    UILabel *nextLabel = [[UILabel alloc] initWithFrame:CGRectMake(-4, -4, PREVIEW_WIDTH, PREVIEW_WIDTH)];
+    nextLabel.text = @"";
+    nextLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:.26];
+    nextLabel.font = [UIFont notaBoldWithSize:15];
+    nextLabel.textColor = [UIColor colorWithWhite:1 alpha:1];
+    nextLabel.userInteractionEnabled = NO;
+    nextLabel.textAlignment = NSTextAlignmentCenter;
+    [self.nextButton addSubview:nextLabel];
 }
 
 - (void)previewButtonTapped {

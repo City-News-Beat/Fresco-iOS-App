@@ -63,9 +63,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @property (strong, nonatomic) UIButton *nextButton;
 @property (strong, nonatomic) UIButton *closeButton;
 
-@property (strong, nonatomic) UIImageView *locationIV;
-@property (strong, nonatomic) UILabel *assignmentLabel;
-
 @property (strong, nonatomic) UIView *whiteView;
 
 @property (nonatomic) UIDeviceOrientation currentOrientation;
@@ -251,20 +248,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
     [self.closeButton addTarget:self action:@selector(dismissAndReturnToPreviousTab) forControlEvents:UIControlEventTouchUpInside];
     [self.topContainer addSubview:self.closeButton];
-
-    self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
-    self.locationIV.contentMode = UIViewContentModeScaleAspectFit;
-    self.locationIV.image = [UIImage imageNamed:@"crosshairs-icon"];
-    [self.locationIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    self.locationIV.alpha = 0.0;
-    [self.topContainer addSubview:self.locationIV];
-
-    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
-    self.assignmentLabel.textColor = [UIColor whiteColor];
-    self.assignmentLabel.font = [UIFont systemFontOfSize:15];
-    [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    self.assignmentLabel.alpha = 0.0;
-    [self.topContainer addSubview:self.assignmentLabel];
 }
 
 - (void)configureGestureRecognizer {
@@ -716,32 +699,20 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)adjustFramesForCaptureState {
-
+    
     CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
     
-    //Default to video frame, shouldnt have to animate at all
     self.preview.frame = bigPreviewFrame;
     self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     
     if (self.captureMode == FRSCaptureModePhoto) {
-        self.footerView.backgroundColor = [UIColor clearColor];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.preview.frame = smallPreviewFrame;
-            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
-        });
-        
-        self.apertureButton.frame = self.originalApertureFrame;
+        self.preview.frame = smallPreviewFrame;
+        self.captureVideoPreviewLayer.frame = smallPreviewFrame;
         
     } else {
-        self.footerView.backgroundColor = [UIColor frescoTransparentDarkColor];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.preview.frame = bigPreviewFrame;
-            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
-        });
-        
-        self.apertureButton.frame = self.originalApertureFrame;
-        
+        self.preview.frame = bigPreviewFrame;
+        self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     }
 }
 
@@ -749,7 +720,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     //    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
     CGFloat angle = 0;
     NSInteger labelWidth = self.captureVideoPreviewLayer.frame.size.width;
-    NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
+    NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + 7 + 12;
     if (o == UIDeviceOrientationLandscapeLeft) {
 
         if (self.captureMode == FRSCaptureModeVideo) {
@@ -761,31 +732,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         angle = M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
 
-        if (self.assignmentLabel.text != nil) {
-            [UIView animateWithDuration:0.1
-                                  delay:0
-                                options:UIViewAnimationOptionCurveEaseInOut
-                             animations:^{
-                               self.topContainer.alpha = 0;
-                             }
-                             completion:nil];
-            [UIView animateWithDuration:0.1
-                delay:0.1
-                options:UIViewAnimationOptionCurveEaseInOut
-                animations:^{
-                  self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))), angle);
-                }
-                completion:^(BOOL finished) {
-                  [UIView animateWithDuration:0.1
-                                        delay:0
-                                      options:UIViewAnimationOptionCurveEaseInOut
-                                   animations:^{
-                                     self.topContainer.alpha = 1;
-                                   }
-                                   completion:nil];
-                }];
-        }
-
     } else if (o == UIDeviceOrientationLandscapeRight) {
 
         if (self.captureMode == FRSCaptureModeVideo) {
@@ -796,47 +742,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
         angle = -M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
-
-        if (self.assignmentLabel.text != nil) {
-            [UIView animateWithDuration:0.1
-                                  delay:0
-                                options:UIViewAnimationOptionCurveEaseInOut
-                             animations:^{
-                               self.topContainer.alpha = 0;
-                             }
-                             completion:nil];
-            [UIView animateWithDuration:0.1
-                delay:0.1
-                options:UIViewAnimationOptionCurveEaseInOut
-                animations:^{
-                  self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation(self.view.center.x - (self.view.center.x * 2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH))), angle);
-                }
-                completion:^(BOOL finished) {
-                  [UIView animateWithDuration:0.1
-                                        delay:0
-                                      options:UIViewAnimationOptionCurveEaseInOut
-                                   animations:^{
-                                     self.topContainer.alpha = 1;
-                                   }
-                                   completion:nil];
-                }];
-            [UIView animateWithDuration:0.1
-                delay:0.1
-                options:UIViewAnimationOptionCurveEaseInOut
-                animations:^{
-
-                  self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation(self.view.center.x - (self.view.center.x * 2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH * 2))), angle);
-                }
-                completion:^(BOOL finished) {
-                  [UIView animateWithDuration:0.1
-                                        delay:0
-                                      options:UIViewAnimationOptionCurveEaseInOut
-                                   animations:^{
-                                     self.topContainer.alpha = 1;
-                                   }
-                                   completion:nil];
-                }];
-        }
 
     } else if (o == UIDeviceOrientationPortraitUpsideDown) {
         /* no longer supported */
@@ -889,8 +794,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.previewBackgroundIV.transform = rotation;
 
     [UIView commitAnimations];
-
-    self.assignmentLabel.frame = CGRectMake(12 + 24 + 17 + 22 + 7 + 7, 0, labelWidth - offset, 24);
 }
 
 - (void)animateShutterWithCompletion:(void (^)())completion {
@@ -990,7 +893,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self rotateAppForOrientation:self.lastOrientation];
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
-    self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, self.view.frame.size.width, 24);
 }
 
 #pragma mark - Camera focus
@@ -1383,21 +1285,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)close {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)updateLocationLabelWithAssignment:(FRSAssignment *)assignment {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      if (!assignment.title)
-          return;
-      self.assignmentLabel.text = [assignment.title uppercaseString];
-      self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24);
-
-      [UIView animateWithDuration:0.15
-                       animations:^{
-                         self.locationIV.alpha = 1.0;
-                         self.assignmentLabel.alpha = 1.0;
-                       }];
-    });
 }
 
 - (void)runVideoRecordAnimation {
