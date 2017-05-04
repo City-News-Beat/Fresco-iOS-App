@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="150" height="117"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E02-wc-sgd" customClass="AVPlayerDemoPlaybackView">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E02-wc-sgd" customClass="FRSPlayerPlaybackView">
                         <rect key="frame" x="0.0" y="0.0" width="150" height="117"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
@@ -40,7 +40,7 @@
             <size key="customSize" width="150" height="117"/>
             <connections>
                 <outlet property="imageView" destination="ioq-u9-gia" id="Vyg-Vb-mlC"/>
-                <outlet property="mPlaybackView" destination="E02-wc-sgd" id="HBa-hE-M4K"/>
+                <outlet property="mPlaybackView" destination="E02-wc-sgd" id="bMe-be-VW5"/>
             </connections>
             <point key="canvasLocation" x="30" y="20.5"/>
         </collectionViewCell>

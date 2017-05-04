@@ -272,9 +272,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return NO;
 }
 
-- (void)playerWillPlay:(FRSPlayer *)player {
-}
-
 #pragma mark - Articles
 
 - (void)configureArticles {

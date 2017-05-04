@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSPlayer.h"
-#import "AVPlayerDemoPlaybackView.h"
+#import "FRSPlayerPlaybackView.h"
 
 @protocol FRSGalleryMediaVideoCollectionViewCellDelegate <NSObject>
 -(void)mediaShouldShowMuteIcon:(BOOL)show;
@@ -26,7 +26,7 @@
 @property (nonatomic, copy) NSURL* URL;
 @property (readwrite, strong, setter=setPlayer:, getter=player) FRSPlayer* mPlayer;
 @property (strong) AVPlayerItem* mPlayerItem;
-@property (weak, nonatomic) IBOutlet AVPlayerDemoPlaybackView *mPlaybackView;
+@property (weak, nonatomic) IBOutlet FRSPlayerPlaybackView *mPlaybackView;
 
 -(void)loadPost:(FRSPost *)post;
 

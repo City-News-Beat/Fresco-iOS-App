@@ -73,7 +73,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
-    [self pausePlayers];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -224,19 +223,6 @@
     self.navigationItem.title = @"";
     [self.navigationController pushViewController:vc animated:YES];
     [self hideTabBarAnimated:YES];
-}
-
-- (void)playerWillPlay:(AVPlayer *)play {
-    //TODO: Scroll - Recheck. This is never called. We can remove this
-//    for (UITableView *tableView in @[ self.galleriesTable ]) {
-//        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
-//            for (FRSPlayer *player in cell.galleryView.players) {
-//                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
-//                    [player pause];
-//                }
-//            }
-//        }
-//    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -402,19 +388,6 @@
 
 - (void)removeStatusBarNotification {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kStatusBarTappedNotification object:nil];
-}
-
-- (void)pausePlayers {
-    //TODO: Scroll - Recheck usability and provide alternative method for this.
-//    for (UITableView *tableView in @[ self.galleriesTable ]) {
-//        for (FRSGalleryTableViewCell *cell in [tableView visibleCells]) {
-//            for (FRSPlayer *player in cell.galleryView.players) {
-//                if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-//                    [player pause];
-//                }
-//            }
-//        }
-//    }
 }
 
 @end

@@ -19,8 +19,6 @@
 @protocol FRSGalleryViewDelegate <NSObject>
 - (BOOL)shouldHaveActionBar;
 - (BOOL)shouldHaveTextLimit;
-//TODO: Scroll - check this method. Mostly it is unused. We can remove this.
-- (void)playerWillPlay:(FRSPlayer *)player;
 @property (weak, nonatomic) UINavigationController *navigationController;
 @end
 

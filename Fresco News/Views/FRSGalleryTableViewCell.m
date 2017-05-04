@@ -23,12 +23,6 @@
     // Configure the view for the selected state
 }
 
-- (void)playerWillPlay:(FRSPlayer *)player {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(playerWillPlay:)]) {
-        [self.delegate playerWillPlay:player];
-    }
-}
-
 - (void)configureCell {
     if (self.galleryView != nil) {
         hasPlayed = NO;

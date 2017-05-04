@@ -295,7 +295,7 @@
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */; };
 		E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */; };
-		F2192B881EA682D500F00E81 /* AVPlayerDemoPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */; };
+		F2192B881EA682D500F00E81 /* FRSPlayerPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */; };
 		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
 		F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */; };
 		F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */; };
@@ -891,8 +891,8 @@
 		E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+Fresco.m"; path = "Categories/CLLocation+Fresco.m"; sourceTree = "<group>"; };
 		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
-		F2192B861EA682D500F00E81 /* AVPlayerDemoPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPlayerDemoPlaybackView.h; sourceTree = "<group>"; };
-		F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPlayerDemoPlaybackView.m; sourceTree = "<group>"; };
+		F2192B861EA682D500F00E81 /* FRSPlayerPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayerPlaybackView.h; sourceTree = "<group>"; };
+		F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayerPlaybackView.m; sourceTree = "<group>"; };
 		F21FCB7E1E9BC3A50015B13D /* FRSGalleryMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaView.h; sourceTree = "<group>"; };
 		F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaView.m; sourceTree = "<group>"; };
 		F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaView.xib; sourceTree = "<group>"; };
@@ -1275,6 +1275,7 @@
 				D43C7FF91C90747B00A7A7A7 /* Map Annotations */,
 				D43C7FFA1C90748600A7A7A7 /* Map Circle */,
 				D43C7FFD1C9074A400A7A7A7 /* Articles Table */,
+				D487F1CB1CC14231005742F3 /* Player */,
 				D43C7FFE1C9074B000A7A7A7 /* Gallery View */,
 				D43C7FFF1C9074B500A7A7A7 /* Gallery Cell */,
 				D43C80001C9074BB00A7A7A7 /* Content Action Bar */,
@@ -2047,9 +2048,6 @@
 				F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */,
 				F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */,
 				F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */,
-				F2192B861EA682D500F00E81 /* AVPlayerDemoPlaybackView.h */,
-				F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */,
-				D487F1CB1CC14231005742F3 /* Player */,
 			);
 			name = "Gallery View";
 			sourceTree = "<group>";
@@ -2215,6 +2213,8 @@
 		D487F1CB1CC14231005742F3 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				F2192B861EA682D500F00E81 /* FRSPlayerPlaybackView.h */,
+				F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */,
 				07A2C1491DEE2EE000B8445F /* FRSPlayer.h */,
 				07A2C14A1DEE2EE000B8445F /* FRSPlayer.m */,
 			);
@@ -2981,7 +2981,7 @@
 				CE8DB7AB1E76336E00000F30 /* FRSFindFriendsAlertView.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
-				F2192B881EA682D500F00E81 /* AVPlayerDemoPlaybackView.m in Sources */,
+				F2192B881EA682D500F00E81 /* FRSPlayerPlaybackView.m in Sources */,
 				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
