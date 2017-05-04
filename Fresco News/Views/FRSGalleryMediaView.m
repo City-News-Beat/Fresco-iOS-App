@@ -18,7 +18,6 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
 @property (weak, nonatomic) NSObject<FRSGalleryMediaViewDelegate> *delegate;
 @property (strong, nonatomic) NSArray *orderedPosts;
-//@property (strong, nonatomic) FRSGalleryMediaCollectionViewCell *currentCell;
 
 @end
 
@@ -109,27 +108,6 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     return CGSizeMake(self.bounds.size.width, [self imageViewHeight]);
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    //TODO: Mostly sure we can select only once its loaded.
-    //    [self.currentCell tap];
-    //    UICollectionViewCell *cell = [self collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    //    if ([cell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-    //        [(FRSGalleryMediaVideoCollectionViewCell *)cell tap];
-    //    }
-    //
-    //    if (collectionView.visibleCells.count == 0) {
-    //        return;
-    //    }
-    
-    //    UICollectionViewCell *firstCell = collectionView.visibleCells[0];
-    //    if ([firstCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-    //        [(FRSGalleryMediaVideoCollectionViewCell *)firstCell tap];
-    //    }
-    
-    //    cell.videoPlayer.muted = !cell.videoPlayer.muted;
-    //    [cell tap];
-}
-
 #pragma mark - Utilities
 
 - (NSInteger)imageViewHeight {
@@ -174,9 +152,6 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"media scrollViewDidEndDecelerating");
-    //    if ([self.delegate respondsToSelector:@selector(mediaScrollViewDidEndDecelerating:)]) {
-    //        [self.delegate mediaScrollViewDidEndDecelerating:scrollView];
-    //    }
     
     CGFloat pageWidth = scrollView.frame.size.width;
     NSInteger page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
@@ -187,15 +162,6 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     }
     
     [self play];
-    //    self.pageControl.currentPage = page;
-    
-    //    self.currentPage = page;
-    //    if (self.players.count > page) {
-    //        self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
-    //        [self.videoPlayer play];
-    //    }
-    
-    //    [self configureMuteIcon];
 }
 
 
@@ -214,14 +180,12 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
  
  */
 
+#pragma mark - Key Actions
 -(void)play {
     if (!self.collectionView.visibleCells.count) {
         NSLog(@"oops no visible cells. This can never occur though.");
         return;
     }
-    
-    //pause all visible players before playing the current one.
-    //    [self pause];
     
     //visible cells doesnot work when we drag very little and leave. So consider current page number. play is called only after the scroll did end decelerate. just check which visible cell matches the current xposition of the current page.
     
@@ -248,17 +212,7 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
         [self configureMuteIconDisplay:displayMuteIcon];
         //we should have decided the landed cell by now. So get out of this loop.
         break;
-
-    }
-    //    UICollectionViewCell *visibleCell = self.collectionView.visibleCells[0];
-    //    if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-    //        [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];
-    //    }
-}
-
--(void)configureMuteIconDisplay:(BOOL)display {
-    if([self.delegate respondsToSelector:@selector(mediaShouldShowMuteIcon:)]) {
-        [self.delegate mediaShouldShowMuteIcon:display];
+        
     }
 }
 
@@ -287,6 +241,14 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
      }
      
      */
+}
+
+#pragma mark - Mute Icon
+
+-(void)configureMuteIconDisplay:(BOOL)display {
+    if([self.delegate respondsToSelector:@selector(mediaShouldShowMuteIcon:)]) {
+        [self.delegate mediaShouldShowMuteIcon:display];
+    }
 }
 
 #pragma mark - FRSGalleryMediaVideoCollectionViewCellDelegate

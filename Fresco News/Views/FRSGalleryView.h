@@ -27,7 +27,6 @@
 @interface FRSGalleryView : UIView
 
 @property (weak, nonatomic) NSObject<FRSGalleryViewDelegate> *delegate;
-@property (nonatomic) BOOL hasTapped;
 
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;

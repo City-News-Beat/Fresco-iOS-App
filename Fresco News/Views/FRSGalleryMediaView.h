@@ -13,7 +13,6 @@
 @protocol FRSGalleryMediaViewDelegate <NSObject>
 //TODO: Scroll - Need to remove these two scroll delegate methods
 -(void)mediaScrollViewDidScroll:(UIScrollView *)scrollView;
--(void)mediaScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 
 -(void)mediaDidChangeToPage:(NSInteger)page;
 -(void)mediaShouldShowMuteIcon:(BOOL)show;

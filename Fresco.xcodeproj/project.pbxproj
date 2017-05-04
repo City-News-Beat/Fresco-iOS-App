@@ -303,8 +303,6 @@
 		F23B15D61EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */; };
 		F23B15DA1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */; };
 		F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */; };
-		F26187001E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */; };
-		F26187011E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -906,9 +904,6 @@
 		F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaVideoCollectionViewCell.h; sourceTree = "<group>"; };
 		F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaVideoCollectionViewCell.m; sourceTree = "<group>"; };
 		F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaVideoCollectionViewCell.xib; sourceTree = "<group>"; };
-		F26186FD1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaCollectionViewCell.h; sourceTree = "<group>"; };
-		F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaCollectionViewCell.m; sourceTree = "<group>"; };
-		F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaCollectionViewCell.xib; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2046,9 +2041,6 @@
 				F21FCB7E1E9BC3A50015B13D /* FRSGalleryMediaView.h */,
 				F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */,
 				F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */,
-				F26186FD1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.h */,
-				F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */,
-				F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */,
 				F23B15D21EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.h */,
 				F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */,
 				F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */,
@@ -2664,7 +2656,6 @@
 				CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */,
 				079392811E79B25A004CC2AD /* FRSGalleryUploadedToast.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
-				F26187011E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
 				F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */,
@@ -2843,7 +2834,6 @@
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
-				F26187001E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */,

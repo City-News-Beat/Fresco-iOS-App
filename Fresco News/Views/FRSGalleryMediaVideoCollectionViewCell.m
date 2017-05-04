@@ -13,7 +13,6 @@
 #import "FRSPost.h"
 
 @interface FRSGalleryMediaVideoCollectionViewCell (Player)
-- (void)removePlayerTimeObserver;
 - (CMTime)playerItemDuration;
 - (BOOL)isPlaying;
 - (void)playerItemDidReachEnd:(NSNotification *)notification ;
@@ -44,7 +43,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev prepare the video player to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
-//    [self.mPlaybackView setPlayer:nil];
+    //    [self.mPlaybackView setPlayer:nil];
     self.post = nil;
     [self hideBufferIndicator];
 }
@@ -57,13 +56,13 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     [self configureBufferIndicator];
     
     [self setPlayer:nil];
-
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
     [self addGestureRecognizer:tap];
     
 }
 
-#pragma mark - Buffer
+#pragma mark Buffer
 
 - (void)configureBufferIndicator {
     self.bufferIndicator = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -81,15 +80,18 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)showBufferIndicator {
     NSLog(@"rev showing buffer.");
-    [self.bufferIndicator startAnimating];
+    self.bufferIndicator.frame = CGRectMake(16, 16, 20, 20);
     [self addSubview:self.bufferIndicator];
+    [self.bufferIndicator startAnimating];
 }
 
 -(void)hideBufferIndicator {
     NSLog(@"rev hiding buffer.");
     [self.bufferIndicator removeFromSuperview];
-    [self.bufferIndicator startAnimating];
+    [self.bufferIndicator stopLoading];
 }
+
+#pragma mark Load Info
 
 -(void)loadPost:(FRSPost *)post {
     NSLog(@"rev rev load video post: %@", post.uid);
@@ -97,31 +99,23 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     
     [self configureMuteIconDisplay:YES];
     
-//    if(![[self urlOfCurrentlyPlayingInPlayer:_mPlayer] isEqualToString:self.post.videoUrl]){
-//        // player already has the correct url. so no need to change the url/asset. just let it play.
-//        [self.mPlaybackView setPlayer:nil];
-//    }
     [self loadImage];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
-
+    
 }
 
 - (void)loadImage {
     
-    //remove this after testing
-//    return;
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
     if(!self.post.imageUrl) return;
     
     if(self.isPlaying) {
         NSLog(@"Rev This cell is playing video so not loading the image for this video cell");
         return;
     }
-
+    
     NSLog(@"rev rev load imageView for video post: %@",self.post.uid);
-
+    
     [self.imageView sd_setImageWithURL:[NSURL
                                         URLResizedFromURLString:self.post.imageUrl
                                         width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
@@ -135,24 +129,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                                  }];
                              }];
     
-    //});
     
 }
 
-
-- (void)playerItemDidReachEnd:(NSNotification *)notification {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-        [self.mPlayer play];
-    });
-}
-
-
-#pragma mark -
-#pragma mark Movie controller methods
-
-#pragma mark
-#pragma mark Button Action Methods
+#pragma mark Key Action Methods
 
 - (void)play
 {
@@ -161,14 +141,16 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        
                        NSLog(@"Rev video video play play: %@ \nin Cell: %@", _mPlayer, self);
                        
-                       if(![[self urlOfCurrentlyPlayingInPlayer:_mPlayer] isEqualToString:self.post.videoUrl]){
-                           // player already has the correct url. so no need to change the url/asset. just let it play.
+                       if(![[self urlOfCurrentPlayer:_mPlayer] isEqualToString:self.post.videoUrl]) {
+                           //Player needs to change its URL. can show buffer now.
+                           [self showBufferIndicator];
                            [self setURL:[NSURL URLWithString:self.post.videoUrl]];
                        }
                        else {
+                           // player already has the correct url. so no need to change the url/asset. just let it play.
                            //remove image.
                            [self removeImage];
-                       
+                           
                            /* If we are at the end of the movie, we must seek to the beginning first
                             before starting playback. */
                            if (YES == seekToZeroBeforePlay)
@@ -191,27 +173,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev video video pause pause");
     [self bringSubviewToFront:self.imageView];
     [self.mPlayer pause];
-    
-    //    [self showPlayButton];
 }
-
-
-//-(void)tap {
-//    NSLog(@"Rev video video mute mute pause pause");
-////    [self.mPlayer pause];
-//
-//    self.mPlayer.muted = !self.mPlayer.muted;
-//
-//}
-//
-#pragma mark - Mute
 
 -(void)mute:(BOOL)mute {
     self.mPlayer.muted = mute;
-}
-
--(void)restart {
-    
 }
 
 -(void)tapped {
@@ -229,12 +194,11 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     }
 }
 
--(NSString *)urlOfCurrentlyPlayingInPlayer:(AVPlayer *)player{
+-(NSString *)urlOfCurrentPlayer:(AVPlayer *)player{
     // get current asset
     AVAsset *currentPlayerAsset = player.currentItem.asset;
     // make sure the current asset is an AVURLAsset
     if (![currentPlayerAsset isKindOfClass:AVURLAsset.class]) return nil;
-    // return the string from NSURL
     
     NSString *urlString = [[(AVURLAsset *)currentPlayerAsset URL] absoluteString];
     NSLog(@"Rev urlString of current video player: %@", urlString);
@@ -259,14 +223,16 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         NSArray *requestedKeys = @[@"playable"];
         
         /* Tells the asset to load the values of any of the specified keys that are not already loaded. */
-//        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
-//         ^{
-//             dispatch_async( dispatch_get_main_queue(),
-//                            ^{
-                                /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
-                                [self prepareToPlayAsset:asset withKeys:requestedKeys];
-//                            });
-//         }];
+        //        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
+        //         ^{
+        //             dispatch_async( dispatch_get_main_queue(),
+        //                            ^{
+        /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
+        
+        [self prepareToPlayAsset:asset withKeys:requestedKeys];
+        
+        //                            });
+        //         }];
     }
 }
 
@@ -287,22 +253,17 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 - (void)dealloc
 {
-    [self removePlayerTimeObserver];
-    
     [self.mPlayer removeObserver:self forKeyPath:@"rate"];
     [_mPlayer.currentItem removeObserver:self forKeyPath:@"status"];
     
     [self.mPlayer pause];
 }
 
-
 @end
 
-
+#pragma mark - Player Item
 
 @implementation FRSGalleryMediaVideoCollectionViewCell (Player)
-
-#pragma mark Player Item
 
 - (BOOL)isPlaying
 {
@@ -317,10 +278,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     seekToZeroBeforePlay = YES;
 }
 
-/* ---------------------------------------------------------
- **  Get the duration for a AVPlayerItem.
- ** ------------------------------------------------------- */
-
+/* Get the duration for a AVPlayerItem. */
 - (CMTime)playerItemDuration
 {
     AVPlayerItem *playerItem = [self.mPlayer currentItem];
@@ -332,22 +290,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     return(kCMTimeInvalid);
 }
 
-
-/* Cancels the previously registered time observer. */
--(void)removePlayerTimeObserver
-{
-    if (mTimeObserver)
-    {
-        [self.mPlayer removeTimeObserver:mTimeObserver];
-        mTimeObserver = nil;
-    }
-}
-
-
-#pragma mark -
-#pragma mark Loading the Asset Keys Asynchronously
-
-#pragma mark -
 #pragma mark Error Handling - Preparing Assets for Playback Failed
 
 /* --------------------------------------------------------------
@@ -362,20 +304,9 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)assetFailedToPrepareForPlayback:(NSError *)error
 {
-    [self removePlayerTimeObserver];
-    //    [self syncScrubber];
-    //    [self disableScrubber];
-    //    [self disablePlayerButtons];
-    
     /* Display the error. */
-    NSLog(@"error::: %@", [error localizedDescription]);
+    NSLog(@"Unable to play. The item did not become ready to play. Error::: %@", [error localizedDescription]);
     
-    //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[error localizedDescription]
-    //                                                        message:[error localizedFailureReason]
-    //                                                       delegate:nil
-    //                                              cancelButtonTitle:@"OK"
-    //                                              otherButtonTitles:nil];
-    //    [alertView show];
 }
 
 
@@ -444,23 +375,23 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                        forKeyPath:@"status"
                           options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                           context:AVPlayerDemoPlaybackViewControllerStatusObservationContext];
-
+    
     /* Add observers for playerItem for setting up loader */
     [self.mPlayerItem addObserver:self
                        forKeyPath:@"playbackBufferEmpty"
                           options:NSKeyValueObservingOptionNew
                           context:AVPlayerDemoPlaybackViewControllerBufferObservationContext];
-
+    
     [self.mPlayerItem addObserver:self
                        forKeyPath:@"playbackLikelyToKeepUp"
                           options:NSKeyValueObservingOptionNew
                           context:AVPlayerDemoPlaybackViewControllerBufferObservationContext];
-
+    
     [self.mPlayerItem addObserver:self
                        forKeyPath:@"playbackBufferFull"
                           options:NSKeyValueObservingOptionNew
                           context:AVPlayerDemoPlaybackViewControllerBufferObservationContext];
-
+    
     /* When the player item has played to its end time we'll toggle
      the movie controller Pause button to be the Play button */
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -503,15 +434,12 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
          */
         [self.mPlayer replaceCurrentItemWithPlayerItem:self.mPlayerItem];
         
-        //        [self syncPlayPauseButtons];
     }
-    
-    //    [self.mScrubber setValue:0.0];
 }
 
-#pragma mark - Asset Key Value Observing
+#pragma mark Asset Key Value Observing
 
-#pragma mark Key Value Observer for player rate, currentItem, player item status
+//Key Value Observer for player rate, currentItem, player item status
 
 /* ---------------------------------------------------------
  **  Called when the value at the specified key path relative
@@ -543,24 +471,12 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                  it has not tried to load new media resources for playback */
             case AVPlayerItemStatusUnknown:
             {
-                [self removePlayerTimeObserver];
-                //                [self syncScrubber];
-                
-                //                [self disableScrubber];
-                //                [self disablePlayerButtons];
+
             }
                 break;
                 
             case AVPlayerItemStatusReadyToPlay:
             {
-                /* Once the AVPlayerItem becomes ready to play, i.e.
-                 [playerItem status] == AVPlayerItemStatusReadyToPlay,
-                 its duration can be fetched from the item. */
-                
-                //                [self initScrubberTimer];
-                
-                //                [self enableScrubber];
-                //                [self enablePlayerButtons];
                 NSLog(@"Rev Ready to play item.....");
                 if(self.imageView.alpha == 1.0) {
                     [self play];
@@ -579,7 +495,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     /* AVPlayer "rate" property value observer. */
     else if (context == AVPlayerDemoPlaybackViewControllerRateObservationContext)
     {
-        //        [self syncPlayPauseButtons];
+
     }
     /* AVPlayer "currentItem" property observer.
      Called when the AVPlayer replaceCurrentItemWithPlayerItem:
@@ -591,25 +507,16 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         /* Is the new player item null? */
         if (newPlayerItem == (id)[NSNull null])
         {
-            //            [self disablePlayerButtons];
-            //            [self disableScrubber];
+
         }
         else /* Replacement of player currentItem has occurred */
         {
             /* Set the AVPlayer for which the player layer displays visual output. */
             [self.mPlaybackView setPlayer:_mPlayer];
             
-            //            [self setViewDisplayName];
-            
             /* Specifies that the player should preserve the video’s aspect ratio and
              fit the video within the layer’s bounds. */
             [self.mPlaybackView setVideoFillMode:AVLayerVideoGravityResizeAspectFill];
-            
-            //            [self syncPlayPauseButtons];
-            
-            NSLog(@"Rev set new player complete..... can send image to back");
-            //remove image.
-//            [self removeImage];
         }
     }
     else if (context == AVPlayerDemoPlaybackViewControllerBufferObservationContext) {
@@ -627,7 +534,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                 [self hideBufferIndicator];
             }
         }
-        
     }
     else
     {

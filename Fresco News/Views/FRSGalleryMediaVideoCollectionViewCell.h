@@ -19,7 +19,6 @@
     NSURL* mURL;
     
     BOOL seekToZeroBeforePlay;
-    id mTimeObserver;
     BOOL isSeeking;
 
 }
