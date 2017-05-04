@@ -139,6 +139,25 @@
 
 
 
+#pragma mark = Animation
+
+- (void)hide {
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.backgroundColor = [UIColor clearColor];
+        self.captureModeSlider.alpha = 0;
+        self.nextButtonContainer.alpha = 0;
+        //self.flashButton.alpha = 0;
+    } completion:nil];
+}
+
+- (void)show {
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.backgroundColor = [UIColor frescoTransparentDarkColor];
+        self.captureModeSlider.alpha = 1;
+        self.nextButtonContainer.alpha = 1;
+        //self.flashButton.alpha = 1;
+    } completion:nil];
+}
 
 
 @end

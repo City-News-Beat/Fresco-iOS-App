@@ -69,6 +69,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 @property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 @property (strong, nonatomic) FRSCameraTracker *cameraTracker;
+@property (strong, nonatomic) UIButton *tipsButton;
 
 @end
 
@@ -140,7 +141,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [super viewDidAppear:animated];
 
     entry = [NSDate date];
-    self.preview.alpha = 1.0;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -280,6 +280,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self configureApertureButton];
     [self configureFlashButton];
     [self setAppropriateIconsForCaptureState];
+    [self configureTipsButton];
 }
 
 
@@ -495,6 +496,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                      completion:nil];
 }
 
+
+
+// TODO: Move flash button out and implement in footer view
+#pragma mark - Flash Button
+
 - (void)configureFlashButton {
     
     self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - ICON_WIDTH*2, 0, ICON_WIDTH, ICON_WIDTH)];
@@ -597,6 +603,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     }
 }
 
+
+#pragma mark - Animation
 - (void)animateShutterExpansionWithColor:(UIColor *)color {
 
     self.apertureAnimationView.backgroundColor = color;
@@ -639,8 +647,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 - (void)rotateAppForOrientation:(UIDeviceOrientation)o {
     //    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
     CGFloat angle = 0;
-    NSInteger labelWidth = self.captureVideoPreviewLayer.frame.size.width;
-    NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + 7 + 12;
+    
     if (o == UIDeviceOrientationLandscapeLeft) {
 
         if (self.captureMode == FRSCaptureModeVideo) {
@@ -649,7 +656,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         }
 
         angle = M_PI_2;
-        labelWidth = self.captureVideoPreviewLayer.frame.size.height;
 
     } else if (o == UIDeviceOrientationLandscapeRight) {
 
@@ -659,12 +665,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         }
 
         angle = -M_PI_2;
-        labelWidth = self.captureVideoPreviewLayer.frame.size.height;
-
-    } else if (o == UIDeviceOrientationPortraitUpsideDown) {
-        /* no longer supported */
-        labelWidth = self.captureVideoPreviewLayer.frame.size.width;
-        return;
 
     } else if (o == UIDeviceOrientationPortrait) {
 
@@ -673,34 +673,22 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
             self.videoRotateIV.alpha = 1.0;
         }
 
-        labelWidth = self.captureVideoPreviewLayer.frame.size.width;
         [UIView animateWithDuration:0.1
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                            self.topContainer.alpha = 0;
+                             self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
                          }
-                         completion:nil];
-        [UIView animateWithDuration:0.1
-            delay:0.1
-            options:UIViewAnimationOptionCurveEaseInOut
-            animations:^{
-              self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
-            }
-            completion:^(BOOL finished) {
-              [UIView animateWithDuration:0.1
-                                    delay:0
-                                  options:UIViewAnimationOptionCurveEaseInOut
-                               animations:^{
-                                 self.topContainer.alpha = 1;
-                               }
-                               completion:nil];
-            }];
+                         completion:^(BOOL finished) {
+                             self.topContainer.alpha = 1;
+                         }];
+
     } else {
         return;
     }
 
-    [UIView beginAnimations:@"omar" context:nil];
+    [UIView beginAnimations:@"rotation" context:nil];
     [UIView setAnimationDuration:0.2];
 
     CGAffineTransform rotation = CGAffineTransformMakeRotation(angle);
@@ -1026,6 +1014,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)runVideoRecordAnimation {
+    
+    [self.footerView hide];
 
     [UIView animateWithDuration:0.4
                           delay:0.0
@@ -1080,6 +1070,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)stopRecordingAnimation {
+    
+    [self.footerView show];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -1162,6 +1154,16 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     }
 }
 
+#pragma mark - Tips
+- (void)configureTipsButton {
+    
+    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(12, -28 -12, 28, 28)]; //*** constants
+    [self.tipsButton setImage:[UIImage imageNamed:@"question-white"] forState:UIControlStateNormal];
+    [self.tipsButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    
+    [self.tipsButton addTarget:self action:@selector(dismissAndReturnToPreviousTab) forControlEvents:UIControlEventTouchUpInside];
+    [self.footerView addSubview:self.tipsButton];
+}
 
 
 

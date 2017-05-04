@@ -35,5 +35,8 @@
 
 @property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 
+- (void)hide;
+- (void)show;
+
 
 @end
