@@ -295,6 +295,16 @@
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */; };
 		E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */; };
+		F2192B881EA682D500F00E81 /* AVPlayerDemoPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */; };
+		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
+		F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */; };
+		F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */; };
+		F23B15D51EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */; };
+		F23B15D61EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */; };
+		F23B15DA1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */; };
+		F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */; };
+		F26187001E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */; };
+		F26187011E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -883,6 +893,22 @@
 		E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+Fresco.m"; path = "Categories/CLLocation+Fresco.m"; sourceTree = "<group>"; };
 		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		F2192B861EA682D500F00E81 /* AVPlayerDemoPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPlayerDemoPlaybackView.h; sourceTree = "<group>"; };
+		F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPlayerDemoPlaybackView.m; sourceTree = "<group>"; };
+		F21FCB7E1E9BC3A50015B13D /* FRSGalleryMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaView.h; sourceTree = "<group>"; };
+		F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaView.m; sourceTree = "<group>"; };
+		F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaView.xib; sourceTree = "<group>"; };
+		F21FCB851E9BF4620015B13D /* PSCustomViewFromXib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCustomViewFromXib.h; sourceTree = "<group>"; };
+		F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCustomViewFromXib.m; sourceTree = "<group>"; };
+		F23B15D21EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaImageCollectionViewCell.h; sourceTree = "<group>"; };
+		F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaImageCollectionViewCell.m; sourceTree = "<group>"; };
+		F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaImageCollectionViewCell.xib; sourceTree = "<group>"; };
+		F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaVideoCollectionViewCell.h; sourceTree = "<group>"; };
+		F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaVideoCollectionViewCell.m; sourceTree = "<group>"; };
+		F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaVideoCollectionViewCell.xib; sourceTree = "<group>"; };
+		F26186FD1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaCollectionViewCell.h; sourceTree = "<group>"; };
+		F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaCollectionViewCell.m; sourceTree = "<group>"; };
+		F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaCollectionViewCell.xib; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1266,6 +1292,8 @@
 				0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */,
 				072971A31E5B67AC000AA8FD /* FRSIndicatorDot.h */,
 				072971A41E5B67AC000AA8FD /* FRSIndicatorDot.m */,
+				F21FCB851E9BF4620015B13D /* PSCustomViewFromXib.h */,
+				F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2015,6 +2043,20 @@
 				072654E11E3951D500A49DEC /* Gallery Footer */,
 				07A2C1471DEE2ED900B8445F /* FRSGalleryView.h */,
 				07A2C1461DEE2ED900B8445F /* FRSGalleryView.m */,
+				F21FCB7E1E9BC3A50015B13D /* FRSGalleryMediaView.h */,
+				F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */,
+				F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */,
+				F26186FD1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.h */,
+				F26186FE1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m */,
+				F26186FF1E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib */,
+				F23B15D21EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.h */,
+				F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */,
+				F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */,
+				F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */,
+				F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */,
+				F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */,
+				F2192B861EA682D500F00E81 /* AVPlayerDemoPlaybackView.h */,
+				F2192B871EA682D500F00E81 /* AVPlayerDemoPlaybackView.m */,
 				D487F1CB1CC14231005742F3 /* Player */,
 			);
 			name = "Gallery View";
@@ -2622,8 +2664,10 @@
 				CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */,
 				079392811E79B25A004CC2AD /* FRSGalleryUploadedToast.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
+				F26187011E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
+				F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */,
 				CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */,
 				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
 				0709B8531E687BAA005E9908 /* FRSFileFooterCell.xib in Resources */,
@@ -2651,7 +2695,9 @@
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
+				F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */,
 				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
+				F23B15D61EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
 				CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
@@ -2797,6 +2843,7 @@
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
+				F26187001E9C0D1800CB3DA1 /* FRSGalleryMediaCollectionViewCell.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */,
@@ -2815,6 +2862,7 @@
 				0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */,
 				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
+				F23B15D51EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
 				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
@@ -2877,6 +2925,7 @@
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				CA1637441E27F05500779A92 /* FRSGalleryStatusTableViewCell.m in Sources */,
+				F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */,
 				D453CC7F1CCA80850091A004 /* MagicalRecordInternal.m in Sources */,
 				072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */,
 				D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
@@ -2928,9 +2977,11 @@
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				CE3621B31E3922FB00C4330E /* FRSSessionManager.m in Sources */,
+				F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
 				D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */,
 				0796FF761E54DA0C00ABF9DA /* FRSAssignmentTracker.m in Sources */,
+				F23B15DA1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */,
 				CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */,
@@ -2940,6 +2991,7 @@
 				CE8DB7AB1E76336E00000F30 /* FRSFindFriendsAlertView.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
+				F2192B881EA682D500F00E81 /* AVPlayerDemoPlaybackView.m in Sources */,
 				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
@@ -3171,7 +3223,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				DEVELOPMENT_TEAM = 44LTF25L2W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
@@ -3311,7 +3363,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				DEVELOPMENT_TEAM = 44LTF25L2W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",

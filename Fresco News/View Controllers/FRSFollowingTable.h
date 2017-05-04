@@ -29,6 +29,7 @@
 @property (retain, nonatomic) NSArray *feed;
 @property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
+@property (assign, nonatomic) BOOL isScrolling;
 
 - (void)reloadFollowing;
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath;

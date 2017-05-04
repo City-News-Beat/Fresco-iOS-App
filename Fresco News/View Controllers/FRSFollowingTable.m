@@ -92,6 +92,7 @@
 }
 
 - (void)playerWillPlay:(AVPlayer *)player {
+    /*TODO: Scroll - check the necessity of this method for Following table
     for (FRSGalleryTableViewCell *cell in [self visibleCells]) {
         if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]] || !cell.galleryView.players) {
             continue;
@@ -102,6 +103,7 @@
             }
         }
     }
+     */
 }
 
 - (void)viewDidLayoutSubviews {
@@ -172,6 +174,8 @@
         [self.scrollDelegate scrollViewDidScroll:scrollView];
     }
 
+    return;
+    
     CGPoint currentOffset = scrollView.contentOffset;
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
 
@@ -217,11 +221,11 @@
     });
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (self.scrollDelegate) {
-        [self.scrollDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
-    }
-}
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//    if (self.scrollDelegate) {
+//        [self.scrollDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+//    }
+//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -363,5 +367,59 @@
 
     return height;
 }
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if(self.isScrolling){
+        if(!decelerate){
+            self.isScrolling = NO;
+            [self handlePlay];
+        }
+    }
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    if (needsUpdate) {
+//        needsUpdate = NO;
+//    }
+    
+    if(self.isScrolling){
+        self.isScrolling = NO;
+        [self handlePlay];
+    }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.isScrolling = YES;
+    [self pausePlayers];
+}
+
+-(void)handlePlay {
+    [self pausePlayers];
+    
+    for (FRSGalleryTableViewCell *cell in self.visibleCells) {
+
+        if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
+
+        /*
+         Start playback mid frame -- at least 60% of the table.
+         */
+        if (cell.frame.origin.y - self.contentOffset.y < 0.6*self.frame.size.height && cell.frame.origin.y - self.contentOffset.y > 0) {
+            [cell play];
+            break;
+        }
+        
+    }
+}
+
+- (void)pausePlayers {
+    
+    for (FRSGalleryTableViewCell *cell in [self visibleCells]) {
+        if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+            continue;
+        }
+        [cell pause];
+    }
+}
+
 
 @end

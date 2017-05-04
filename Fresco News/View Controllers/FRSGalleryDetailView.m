@@ -33,6 +33,7 @@
 
 @property BOOL didPrepareForReply;
 @property (strong, nonatomic) FRSActionBar *actionBar;
+@property (assign, nonatomic) BOOL shouldAutoPlayWithoutUserInteraction;
 
 @end
 
@@ -122,11 +123,26 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
     self.galleryView.delegate.navigationController = self.navigationController;
     
-    [self.galleryView play];
+//    [self.galleryView play];
+    //video cell loaded notification.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+    
+    self.shouldAutoPlayWithoutUserInteraction = YES;
+
     [self focusOnPost];
     [self layoutSubviews];
 }
 
+-(void)videoCellLoaded:(NSNotification *)notification {
+    if(self.shouldAutoPlayWithoutUserInteraction) {
+        self.shouldAutoPlayWithoutUserInteraction = NO;
+        [self handlePlay];
+    }
+}
+-(void)handlePlay {
+    NSLog(@"Rev detail view handlePlay");
+    [self.galleryView performSelector:@selector(play) withObject:nil afterDelay:0.2];
+}
 - (void)getGalleryPurchases {
     [[FRSGalleryManager sharedInstance] fetchPurchasesForGalleryID:self.gallery.uid
                                                         completion:^(id responseObject, NSError *error) {
