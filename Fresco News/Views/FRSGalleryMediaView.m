@@ -19,6 +19,8 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 @property (weak, nonatomic) NSObject<FRSGalleryMediaViewDelegate> *delegate;
 @property (strong, nonatomic) NSArray *orderedPosts;
 
+@property (weak, nonatomic) UICollectionViewCell *topCell;
+
 @end
 
 @implementation FRSGalleryMediaView
@@ -98,7 +100,7 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
         mediaCell = imageCell;
     }
     
-    //    self.currentCell = cell;
+    self.topCell = mediaCell;
     return mediaCell;
 }
 
@@ -106,6 +108,14 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(self.bounds.size.width, [self imageViewHeight]);
+}
+
+#pragma mark - UICollectionViewDelegate
+
+-(void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if ([cell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
+        [(FRSGalleryMediaVideoCollectionViewCell *)cell offScreen];
+    }
 }
 
 #pragma mark - Utilities
@@ -210,7 +220,10 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
             NSLog(@"rev visibleCell is image");
         }
         [self configureMuteIconDisplay:displayMuteIcon];
+        
         //we should have decided the landed cell by now. So get out of this loop.
+        self.topCell = visibleCell;
+
         break;
         
     }
@@ -226,21 +239,9 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 }
 
 -(void)offScreen {
-    /*
-     for (FRSPlayer *player in self.players) {
-     if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-     [player.currentItem cancelPendingSeeks];
-     [player.currentItem.asset cancelLoading];
-     
-     for (CALayer *layer in player.container.layer.sublayers) {
-     [layer removeFromSuperlayer];
-     }
-     
-     player.hasEstablished = FALSE;
-     }
-     }
-     
-     */
+    if ([self.topCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
+        [(FRSGalleryMediaVideoCollectionViewCell *)self.topCell offScreen];
+    }
 }
 
 #pragma mark - Mute Icon

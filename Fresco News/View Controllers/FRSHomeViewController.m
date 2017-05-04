@@ -98,7 +98,7 @@ static NSInteger const galleriesPerPage = 12;
     
     //video cell loaded notification.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
-
+    
     self.shouldAutoPlayWithoutUserInteraction = YES;
 }
 
@@ -160,7 +160,7 @@ static NSInteger const galleriesPerPage = 12;
     if (self.TOSAlert) {
         return;
     }
-
+    
     self.TOSAlert = [[FRSTOSAlertView alloc] initWithTOS:tos];
     self.TOSAlert.delegate = self;
     [self.TOSAlert show];
@@ -230,7 +230,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
-
+    
     if ([[FRSUserManager sharedInstance] authenticatedUser]) {
         if (![[FRSUserManager sharedInstance] authenticatedUser].username) {
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
@@ -318,15 +318,6 @@ static NSInteger const galleriesPerPage = 12;
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
 }
 
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//    if (needsUpdate) {
-//        needsUpdate = NO;
-//    }
-//
-//    if (scrollView == self.pageScroller) {
-//    }
-//}
-
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
         needsUpdate = NO;
@@ -341,7 +332,7 @@ static NSInteger const galleriesPerPage = 12;
     [self removeNavigationBarLine];
     
     self.disableCollapse = YES;
-
+    
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
     
@@ -583,7 +574,7 @@ static NSInteger const galleriesPerPage = 12;
     cell.delegate = self;
     //    [cell setNeedsUpdateConstraints];
     //    [cell updateConstraintsIfNeeded];
-
+    
     return cell;
 }
 
@@ -761,23 +752,9 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     self.shouldAutoPlayWithoutUserInteraction = NO;
-
-    //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
-    
-    // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     
     //Make the nav bar expand relative to the x offset
     [super scrollViewDidScroll:scrollView];
-    
-    //    NSMutableArray *barButtonItems = [NSMutableArray array];
-    //    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-    //    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    //    float navBarHeight=20.0;
-    //    float scrollingDifferenceX = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
-    
-    //NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
-    //NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
-    //NSLog(@"SCROLLING Y: %f",scrollingDifference);
     
     if (scrollView == self.pageScroller) {
         self.loadingView.alpha = 1 - (scrollView.contentOffset.x / (scrollView.contentSize.width - scrollView.frame.size.width));
@@ -849,57 +826,6 @@ static NSInteger const galleriesPerPage = 12;
         
         //TODO: Scroll - Need to refactor this.
         return;
-        CGPoint currentOffset = scrollView.contentOffset;
-        NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-        
-        NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
-        if (timeDiff > 0.1) {
-            CGFloat distance = currentOffset.y - lastScrollOffset.y;
-            //The multiply by 10, / 1000 isn't really necessary.......
-            CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
-            
-            CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
-            if (scrollSpeed > maxScrollVelocity) {
-                isScrollingFast = YES;
-            } else {
-                isScrollingFast = NO;
-            }
-            
-            lastScrollOffset = currentOffset;
-            lastOffsetCapture = currentTime;
-        }
-        
-        NSArray *visibleCells = [self.tableView visibleCells];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            BOOL taken = FALSE;
-            
-            for (FRSGalleryTableViewCell *cell in visibleCells) {
-                
-                /*
-                 Start playback mid frame -- at least 300 from top & at least 100 from bottom
-                 */
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-                    
-                    if (!taken) {
-                        
-                        if ([cell respondsToSelector:@selector(play)] && !isScrollingFast) {
-                            taken = TRUE;
-                            [cell play];
-                        }
-                    }
-                    
-                } else {
-                    if ([cell respondsToSelector:@selector(play)]) {
-                        [cell pause];
-                    }
-                }
-            }
-            
-            if (!taken) {
-                lastIndexPath = Nil;
-            }
-        });
     }
 }
 
@@ -933,23 +859,6 @@ static NSInteger const galleriesPerPage = 12;
     
     [self pausePlayers];
     
-    //    for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows) {
-    //        FRSGallery *gallery = self.dataSource[indexPath.row];
-    //        if (gallery.posts.count>0) {
-    //            NSArray *orderedPosts = [gallery.posts allObjects];
-    //            orderedPosts = [orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
-    //            FRSPost *post = orderedPosts[0];
-    //            
-    //            if(post.videoUrl) {
-    //                NSInteger index = [self.tableView.indexPathsForVisibleRows indexOfObject:indexPath];
-    //                FRSGalleryTableViewCell *cell = self.tableView.visibleCells[index];
-    //                [cell play];
-    //                break;
-    //            }
-    //        }
-    //    }
-    
-    
     for (FRSGalleryTableViewCell *cell in self.tableView.visibleCells) {
         /*
          Start playback mid frame -- at least 60% of the table.
@@ -961,7 +870,6 @@ static NSInteger const galleriesPerPage = 12;
             [cell play];
             break;
         }
-        
     }
 }
 
@@ -990,30 +898,6 @@ static NSInteger const galleriesPerPage = 12;
             [cell pause];
         }
     }
-}
-
-
--(void)revLoadFromServerWithLastGalleryID:(NSString *) galleryID {
-    [self.loadingView startAnimating];
-    
-    // network call
-    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
-                                                offsetGalleryID:galleryID
-                                                     completion:^(NSArray *galleries, NSError *error) {
-                                                         if ([galleries count] == 0) {
-                                                             
-                                                         } else {
-                                                             [self cacheLocalData:galleries];
-                                                         }
-                                                         
-                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                             [self.loadingView stopLoading];
-                                                             [self.loadingView removeFromSuperview];
-                                                             hasLoadedOnce = TRUE;
-                                                             
-                                                         });
-                                                     }];
-
 }
 
 @end

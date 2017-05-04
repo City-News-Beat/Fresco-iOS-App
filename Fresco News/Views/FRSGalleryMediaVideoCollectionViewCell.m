@@ -43,7 +43,8 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev prepare the video player to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
-    //    [self.mPlaybackView setPlayer:nil];
+    self.imageView.alpha = 1.0;
+    [self.mPlaybackView setPlayer:nil];
     self.post = nil;
     [self hideBufferIndicator];
 }
@@ -121,12 +122,15 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                                         width:([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])
                                         ]
                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                 self.imageView.alpha = 0.0;
-                                 [UIView animateWithDuration:0.3 animations:^{
+                                 
+                                 if(![self isPlaying])
                                      self.imageView.alpha = 1.0;
-                                 } completion:^(BOOL finished) {
-                                     
-                                 }];
+
+//                                 [UIView animateWithDuration:0.3 animations:^{
+//                                     self.imageView.alpha = 1.0;
+//                                 } completion:^(BOOL finished) {
+//                                     
+//                                 }];
                              }];
     
     
@@ -151,6 +155,11 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                            //remove image.
                            [self removeImage];
                            
+                           [self hideBufferIndicator];
+                           
+                           if(!self.mPlaybackView.player) {
+                               [self.mPlaybackView setPlayer:_mPlayer];
+                           }
                            /* If we are at the end of the movie, we must seek to the beginning first
                             before starting playback. */
                            if (YES == seekToZeroBeforePlay)
@@ -173,6 +182,10 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     NSLog(@"Rev video video pause pause");
     [self bringSubviewToFront:self.imageView];
     [self.mPlayer pause];
+}
+
+- (void)offScreen {
+    [self pause];
 }
 
 -(void)mute:(BOOL)mute {
@@ -238,7 +251,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)removeImage {
     NSLog(@"Rev removing image from video cell.");
-    self.imageView.alpha = 1.0;
     [UIView animateWithDuration:0.3 animations:^{
         self.imageView.alpha = 0.0;
     } completion:^(BOOL finished) {
@@ -478,7 +490,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
             case AVPlayerItemStatusReadyToPlay:
             {
                 NSLog(@"Rev Ready to play item.....");
-                if(self.imageView.alpha == 1.0) {
+                if(self.imageView.alpha == 1) {
                     [self play];
                 }
             }

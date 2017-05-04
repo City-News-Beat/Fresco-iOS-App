@@ -30,7 +30,8 @@
 
 -(void)loadPost:(FRSPost *)post;
 
--(void)play;
--(void)pause;
--(void)mute:(BOOL)mute;
+- (void)play;
+- (void)pause;
+- (void)mute:(BOOL)mute;
+- (void)offScreen;
 @end

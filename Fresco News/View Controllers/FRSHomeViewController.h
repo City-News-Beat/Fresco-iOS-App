@@ -30,7 +30,6 @@
 
     CGPoint lastScrollOffset;
     NSTimeInterval lastOffsetCapture;
-    BOOL isScrollingFast;
 }
 
 @property BOOL loadNoMore;
