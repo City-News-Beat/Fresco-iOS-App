@@ -13,5 +13,6 @@
 #import "FRSAppDelegate.h"
 #import "FRSAPIClient.h"
 #import "FRSTracker.h"
+#import "FRSReachability.h"
 
 #endif

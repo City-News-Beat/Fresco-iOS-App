@@ -72,7 +72,7 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 
 - (void)updateScrollView {
     if (self.collectionView.contentOffset.x >= 0 && self.orderedPosts.count > 0) {
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+        [self.collectionView scrollRectToVisible:CGRectMake(0, 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height) animated:NO];
     }
 }
 

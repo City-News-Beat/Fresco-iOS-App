@@ -296,6 +296,7 @@
 		E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */; };
 		E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */; };
 		F2192B881EA682D500F00E81 /* FRSPlayerPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */; };
+		F21FBA251EBD047900515EA1 /* FRSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FBA241EBD047900515EA1 /* FRSReachability.m */; };
 		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
 		F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */; };
 		F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */; };
@@ -893,6 +894,8 @@
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 		F2192B861EA682D500F00E81 /* FRSPlayerPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayerPlaybackView.h; sourceTree = "<group>"; };
 		F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayerPlaybackView.m; sourceTree = "<group>"; };
+		F21FBA231EBD047900515EA1 /* FRSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSReachability.h; sourceTree = "<group>"; };
+		F21FBA241EBD047900515EA1 /* FRSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSReachability.m; sourceTree = "<group>"; };
 		F21FCB7E1E9BC3A50015B13D /* FRSGalleryMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaView.h; sourceTree = "<group>"; };
 		F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaView.m; sourceTree = "<group>"; };
 		F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaView.xib; sourceTree = "<group>"; };
@@ -1734,6 +1737,8 @@
 			children = (
 				D40BD3CF1CDE1EAE00E39701 /* Reachability.h */,
 				D40BD3D01CDE1EAE00E39701 /* Reachability.m */,
+				F21FBA231EBD047900515EA1 /* FRSReachability.h */,
+				F21FBA241EBD047900515EA1 /* FRSReachability.m */,
 			);
 			name = Rechability;
 			sourceTree = "<group>";
@@ -2948,6 +2953,7 @@
 				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
 				CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */,
 				CE2A155F1E5FE69D004BA72C /* NSDate+Fresco.m in Sources */,
+				F21FBA251EBD047900515EA1 /* FRSReachability.m in Sources */,
 				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
 				076EF3F61E410E53003996BB /* FRSCoreDataController.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,

@@ -28,7 +28,6 @@
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 
-
 static NSInteger const galleriesPerPage = 12;
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
@@ -37,7 +36,6 @@ static NSInteger const galleriesPerPage = 12;
     BOOL shouldAnimate;
 }
 
-@property (strong, nonatomic) NSMutableArray *cachedData;
 @property (strong, nonatomic) NSManagedObjectContext *temp;
 @property (strong, nonatomic) NSMutableArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
@@ -65,8 +63,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.cachedData = [[NSMutableArray alloc] init];
-    reloadedFrom = [[NSMutableArray alloc] init];
+    self.highlights = [[NSMutableArray alloc] init];
     
     if (!self.appDelegate) {
         self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -100,6 +97,11 @@ static NSInteger const galleriesPerPage = 12;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
     
     self.shouldAutoPlayWithoutUserInteraction = YES;
+    
+    [self configureDataSourceOnLoad];
+
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -123,10 +125,6 @@ static NSInteger const galleriesPerPage = 12;
     [super viewDidAppear:animated];
     
     [self showTabBarAnimated:YES];
-    
-    if (hasLoadedOnce) {
-        [self reloadData];
-    }
     
 }
 
@@ -176,7 +174,7 @@ static NSInteger const galleriesPerPage = 12;
     if(self.followingTabButton.alpha == 1 && self.followingTable.feed.count > 0) {
         [self.followingTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
         
-    }else if(self.highlightTabButton.alpha == 1 && self.dataSource.count > 0){
+    }else if(self.highlightTabButton.alpha == 1 && self.highlights.count > 0){
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     else {
@@ -184,7 +182,7 @@ static NSInteger const galleriesPerPage = 12;
         if(self.followingTable.feed.count > 0) {
             [self.followingTable scrollRectToVisible:CGRectMake(0, 0, self.followingTable.frame.size.width, self.followingTable.frame.size.height) animated:YES];
         }
-        if(self.dataSource.count > 0){
+        if(self.highlights.count > 0){
             [self.tableView scrollRectToVisible:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.frame.size.height) animated:YES];
         }
     }
@@ -224,7 +222,6 @@ static NSInteger const galleriesPerPage = 12;
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
-    [self configureDataSource];
     [self configurePullToRefresh];
 }
 
@@ -252,38 +249,8 @@ static NSInteger const galleriesPerPage = 12;
                                                          if (error) {
                                                              return;
                                                          }
-                                                         [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
-                                                             NSInteger index = 0;
-                                                             NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
-                                                             for (NSDictionary *gallery in galleries) {
-                                                                 NSString *galleryID = gallery[@"id"];
-                                                                 NSInteger galleryIndex = [self galleryExists:galleryID];
-                                                                 // Gallery does not exist -- create it in persistence layer & volotile memory
-                                                                 if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-                                                                     FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
-                                                                     
-                                                                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
-                                                                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                                     [newGalleries addObject:galleryToSave];
-                                                                     index++;
-                                                                     continue;
-                                                                 }
-                                                                 
-                                                                 // Gallery already exists, update its index & meta information (things change)
-                                                                 FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                                                                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
-                                                                 [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                                 [newGalleries addObject:galleryToSave];
-                                                                 index++;
-                                                             }
-                                                             
-                                                             //Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
-                                                             
-                                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                                 self.dataSource = newGalleries;
-                                                                 [self.tableView reloadData];
-                                                             });
-                                                         }];
+                                                         
+                                                         [self handlePullToRefreshedData:galleries];
                                                      }];
 }
 
@@ -357,7 +324,7 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.dataSource.count > indexPath.row) {
+    if (self.highlights.count > indexPath.row) {
         return 280.0;
     }
     
@@ -379,27 +346,15 @@ static NSInteger const galleriesPerPage = 12;
     [self.view addSubview:self.pageScroller];
 }
 
-- (void)configureDataSource {
-    // make core data fetch
-    [self fetchLocalData];
-    
-    // network call
-    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
-                                                offsetGalleryID:nil
-                                                     completion:^(NSArray *galleries, NSError *error) {
-                                                         if ([galleries count] == 0) {
-                                                             
-                                                         } else {
-                                                             [self cacheLocalData:galleries];
-                                                         }
-                                                         
-                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                             [self.loadingView stopLoading];
-                                                             [self.loadingView removeFromSuperview];
-                                                             hasLoadedOnce = TRUE;
-                                                             
-                                                         });
-                                                     }];
+- (void)configureDataSourceOnLoad {
+    if([FRSReachability isCurrentlyConnectedToInternet]) {
+        //delete all galleries from core data if this is success.
+        [self initialFetchFromServer];
+    }
+    else {
+        // make core data fetch
+        [self fetchLocalData];
+    }
 }
 
 
@@ -414,28 +369,24 @@ static NSInteger const galleriesPerPage = 12;
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     
-    pulledFromCache = stored;
+    self.highlights = [NSMutableArray arrayWithArray:stored];
     
-    self.dataSource = [NSMutableArray arrayWithArray:stored];
-    self.highlights = self.dataSource;
-    
-    if ([_dataSource count] > 0) {
+    if ([self.highlights count] > 0) {
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
     } else {
-        if ([self.dataSource count] == 0) {
+        if ([self.highlights count] == 0) {
             [self configureSpinner];
         }
     }
     
-    self.cachedData = [NSMutableArray arrayWithArray:stored];
     [self.tableView reloadData];
 }
 
 - (NSInteger)galleryExists:(NSString *)galleryID {
     NSInteger index = 0;
     
-    for (FRSGallery *gallery in self.dataSource) {
+    for (FRSGallery *gallery in self.highlights) {
         NSString *uid = gallery.uid;
         if ([uid isEqualToString:galleryID]) {
             return index;
@@ -447,19 +398,119 @@ static NSInteger const galleriesPerPage = 12;
     return -1;
 }
 
-- (void)cacheLocalData:(NSArray *)localData {
+-(void)handlePullToRefreshedData:(NSArray *)refreshedGalleries {
+    //Now deleting the cache for every pull to refresh.
+    [self deleteCache];
+    [self appendToLocalDataCache:refreshedGalleries];
+
+    /*
+     TODO: The following code is to check if the new data falls in between the cached data. If included, need rigorous testing for edge cases, where top gallery from the new list may fall in between any place. Also for metadata updates.
+     
+//    revcheck Refreshed Galleries From Server Contain Current TopGallery
+//    If our top gallery is in the refreshed batch. just insert only new ones in highlightsArray, else delete cache and just have new ones.
+    FRSGallery *topGallery;
+    if (self.highlights.count>0) {
+        topGallery = self.highlights[0];
+    }
+    if(!topGallery) {
+        // need to directly save the new batch in core data and also display them.
+         [self appendToLocalDataCache:refreshedGalleries];
+        return;
+    }
+    
+    NSArray *refreshedGalleriesIDs = [refreshedGalleries valueForKey:@"id"];
+    
+    if(refreshedGalleriesIDs.count == 0) {
+        // need to directly save the new batch in core data and also display them.
+        [self appendToLocalDataCache:refreshedGalleries];
+        return;
+    }
+    
+    if (![refreshedGalleriesIDs containsObject:topGallery.uid]) {
+        //OK. The current displayed data on the table is outdated. Dont know how far way. So delete all teh cache from Core Data , also frm the local highlights array.
+        //Start fresh.
+        //need to directly save the new batch in core data and also display them.
+        [self deleteCache];
+        [self appendToLocalDataCache:refreshedGalleries];
+        return;
+    }
+    
+    //proceed to insert only the new ones.
+    NSMutableArray *onlyNewGalleries = [[NSMutableArray alloc] initWithCapacity:refreshedGalleries.count];
+    
+    NSInteger index = 0;
+    for(NSDictionary *gallery in refreshedGalleries) {
+        NSString *galleryID = gallery[@"id"];
+        if([galleryID isEqualToString:topGallery.uid]) {
+            break;
+        }
+        else {
+            FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
+            
+            [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+            [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+            [onlyNewGalleries addObject:galleryToSave];
+            index++;
+        }
+        
+    }
+    
+    [self.appDelegate.coreDataController saveContext];
+
+    //update metadata
+    [self updateHighlightsMetadataFromRefreshIndex:index fromArray:refreshedGalleries];
+    
+    [self.tableView reloadData];
+     
+     */
+    
+}
+
+-(void)updateHighlightsMetadataFromRefreshIndex:(NSInteger)index fromArray:(NSArray *)refreshedArray {
+    NSInteger highlightsIndex = 0;
+    
+    //update metadata. Need to use only one for loop here.
+    for(NSInteger i = index; i<refreshedArray.count && i<self.highlights.count; i++) {
+        FRSGallery *galleryToSave = [self.highlights objectAtIndex:highlightsIndex];
+        NSDictionary *fromRefreshedGallery = [refreshedArray objectAtIndex:i];
+        
+        NSString *refreshedGalleryID = fromRefreshedGallery[@"id"];
+        
+        //if id not found continue.
+        if (!refreshedGalleryID) continue;
+        
+        if([refreshedGalleryID isEqualToString:galleryToSave.uid]) {
+            [galleryToSave configureWithDictionary:fromRefreshedGallery context:[self.appDelegate.coreDataController managedObjectContext]];
+        }
+        
+        highlightsIndex++;
+    }
+    
+    //update index
+    NSInteger newIndex = index;
+
+    for(NSInteger i = newIndex; i<self.highlights.count; i++) {
+        FRSGallery *galleryToSave = [self.highlights objectAtIndex:i];
+
+        [galleryToSave setValue:[NSNumber numberWithInteger:newIndex] forKey:@"index"];
+        newIndex++;
+
+    }
+    
+    [self.appDelegate.coreDataController saveContext];
+
+}
+
+- (void)appendToLocalDataCache:(NSArray *)localData {
     if (self.appDelegate.coreDataController.managedObjectContext) {
         [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
-            self.dataSource = [[NSMutableArray alloc] init];
-            self.highlights = [[NSMutableArray alloc] init];
-            
-            NSInteger localIndex = 0;
+            //localIndex = 0 for onLoad and internet avaolable
+            NSInteger localIndex = self.highlights.count;
             for (NSDictionary *gallery in localData) {
                 FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
                 
                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                 [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-                [self.dataSource addObject:galleryToSave];
                 [self.highlights addObject:galleryToSave];
                 localIndex++;
             }
@@ -476,25 +527,9 @@ static NSInteger const galleriesPerPage = 12;
             [self.appDelegate saveContext
              ];
             [self.tableView reloadData];
-            
-            for (FRSGallery *gallery in self.cachedData) {
-                [self.appDelegate.coreDataController.managedObjectContext deleteObject:gallery];
-            }
-            
-            [self.appDelegate saveContext];
         }];
     }
     
-}
-
-- (void)reloadFromLocal {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (shouldAnimate) {
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        } else {
-            [self.tableView reloadData];
-        }
-    });
 }
 
 #pragma mark - UITableView DataSource
@@ -515,7 +550,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.tableView) {
-        return (self.dataSource.count == 0 || self.loadNoMore) ? self.dataSource.count : self.dataSource.count + 1;
+        return (self.highlights.count == 0 || self.loadNoMore) ? self.highlights.count : self.highlights.count + 1;
     }
     
     return 0;
@@ -526,7 +561,7 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row >= self.dataSource.count) {
+    if (indexPath.row >= self.highlights.count) {
         return loadingCellHeight;
     }
     
@@ -546,14 +581,14 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != nil) {
+    if (indexPath.row == self.highlights.count && self.highlights.count != 0 && self.highlights != nil) {
         FRSLoadingTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         return cell;
     }
     
     FRSGalleryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
     cell.navigationController = self.navigationController;
-    cell.gallery = self.dataSource[indexPath.row];
+    cell.gallery = self.highlights[indexPath.row];
     cell.navigationController = self.navigationController;
     cell.trackedScreen = FRSTrackedScreenHighlights;
     
@@ -579,73 +614,21 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (void)loadMore {
-    if (!hasLoadedOnce) {
-        return;
-    }
     
-    isLoading = TRUE;
-    FRSGallery *lastGallery = [self.dataSource lastObject];
+    FRSGallery *lastGallery = [self.highlights lastObject];
     NSString *offsetID = lastGallery.uid;
     
-    if ([reloadedFrom containsObject:offsetID]) {
-        return;
-    }
+    [self fetchFromServerWithOffsetGalleryID:offsetID];
     
-    [reloadedFrom addObject:offsetID];
-    
-    if (lastOffset == self.dataSource.count) {
-        return;
-    }
-    
-    lastOffset = self.dataSource.count;
-    
-    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-    
-    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
-                                                offsetGalleryID:offsetID
-                                                     completion:^(NSArray *galleries, NSError *error) {
-                                                         if ([galleries count] == 0) {
-                                                             self.loadNoMore = TRUE;
-                                                             [self.tableView reloadData];
-                                                             return;
-                                                         }
-                                                         
-                                                         [[[self.appDelegate coreDataController] managedObjectContext] performBlock:^{
-                                                             NSInteger index = self.highlights.count;
-                                                             for (NSDictionary *gallery in galleries) {
-                                                                 FRSGallery *galleryToSave = [NSEntityDescription
-                                                                                              insertNewObjectForEntityForName:@"FRSGallery"
-                                                                                              inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
-                                                                 
-                                                                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
-                                                                 [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                                                                 [self.dataSource addObject:galleryToSave];
-                                                                 [self.highlights addObject:galleryToSave];
-                                                                 [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count - 1 inSection:0]];
-                                                                 index++;
-                                                             }
-                                                             
-                                                             [self.appDelegate saveContext];
-                                                             
-                                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                                 //                [self.tableView beginUpdates];
-                                                                 //                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                                 //                [self.tableView endUpdates];
-                                                                 [self.tableView reloadData];
-                                                                 needsUpdate = TRUE;
-                                                                 isLoading = FALSE;
-                                                             });
-                                                         }];
-                                                     }];
 }
 
 - (NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index {
     
-    if (index == self.dataSource.count) {
+    if (index == self.highlights.count) {
         return 20;
     }
     
-    FRSGallery *gallery = self.dataSource[index];
+    FRSGallery *gallery = self.highlights[index];
     return [gallery heightForGallery];
 }
 
@@ -661,7 +644,7 @@ static NSInteger const galleriesPerPage = 12;
             numberRead = indexPath.row;
         }
         
-        if (indexPath.row == self.dataSource.count - 4) {
+        if (indexPath.row == self.highlights.count - 4) {
             if (!isLoading && !self.loadNoMore) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                     [self loadMore];
@@ -702,7 +685,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = self.dataSource[notification.row];
+    FRSGallery *gallery = self.highlights[notification.row];
     [FRSTracker track:galleryOpenedFromHighlights
            parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
                          @"opened_from" : @"highlights" }];
@@ -899,5 +882,88 @@ static NSInteger const galleriesPerPage = 12;
         }
     }
 }
+
+#pragma mark - DataManager
+
+- (void)initialFetchFromServer {
+    [self.followingTable reloadFollowing];
+
+    // network call
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
+                                                offsetGalleryID:nil
+                                                     completion:^(NSArray *galleries, NSError *error) {
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                             [self.loadingView stopLoading];
+                                                             [self.loadingView removeFromSuperview];
+                                                             hasLoadedOnce = TRUE;
+                                                             [self.tableView reloadData];
+                                                         });
+
+                                                         if (error && error.code == -1009) {
+                                                             // no internet
+                                                         }
+
+                                                         if ([galleries count] == 0) {
+                                                             //if needed reload only the loading cell to remove loading.
+                                                         } else {
+                                                             //since this is initial load, delete the previous entries.
+                                                             [self deleteCache];
+                                                             
+                                                             //add new entries to cache.
+                                                             [self appendToLocalDataCache:galleries];
+                                                         }
+                                                         
+
+                                                     }];
+    
+}
+
+-(void)fetchFromServerWithOffsetGalleryID:(NSString *)offsetGalleryID {
+    // network call
+    isLoading = TRUE;
+
+    [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
+                                                offsetGalleryID:offsetGalleryID
+                                                     completion:^(NSArray *galleries, NSError *error) {
+                                                         isLoading = FALSE;
+
+                                                         if ([galleries count] == 0) {
+                                                             
+                                                         } else {
+                                                             [self appendToLocalDataCache:galleries];
+                                                         }
+                                                         
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                             [self.loadingView stopLoading];
+                                                             [self.loadingView removeFromSuperview];
+                                                             hasLoadedOnce = TRUE;
+                                                             
+                                                         });
+                                                     }];
+
+}
+
+-(void)deleteCache {
+    NSLog(@"Deleting Cached Galleries");
+    
+    //Can directly execute a delete request for all galleries at once, using a predicate. we need not do a for loop here.
+    
+    NSManagedObjectContext *moc = [self.appDelegate.coreDataController managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
+    
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+
+    for (FRSGallery *gallery in stored) {
+        [self.appDelegate.coreDataController.managedObjectContext deleteObject:gallery];
+    }
+    
+    [self.appDelegate saveContext];
+    
+    //Now delete contents of the highlights array also.
+    [self.highlights removeAllObjects];
+}
+
 
 @end

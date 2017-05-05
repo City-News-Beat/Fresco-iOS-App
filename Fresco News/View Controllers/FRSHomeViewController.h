@@ -19,9 +19,7 @@
     BOOL hasLoadedOnce;
     BOOL wasAuthenticated;
     DGElasticPullToRefreshLoadingViewCircle *loadingView;
-    NSArray *pulledFromCache;
-    NSMutableArray *reloadedFrom;
-
+    
     UITableView *followTable;
     NSDate *entry;
     NSDate *exit;
