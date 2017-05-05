@@ -123,9 +123,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
     self.galleryView.delegate.navigationController = self.navigationController;
     
-//    [self.galleryView play];
     //video cell loaded notification.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
     
     self.shouldAutoPlayWithoutUserInteraction = YES;
 
@@ -141,6 +140,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 -(void)handlePlay {
     NSLog(@"Rev detail view handlePlay");
+    //performSelector enqueues play on to the current run loop and returns immediately. performSelector after delay:0 also works. Using performSelector vs [self.galleryView play] makes the difference for autoplay. Need to figure out a better way if possible.
     [self.galleryView performSelector:@selector(play) withObject:nil afterDelay:0.2];
 }
 - (void)getGalleryPurchases {

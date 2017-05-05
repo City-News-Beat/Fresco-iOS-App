@@ -257,6 +257,7 @@
                                attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]}
                                   context:nil];
 
+    //12 - Caption text top padding , 44 - Bottom action bar(bar having like, repost, share icons) height, 20 - Padding below action bar.
     averageHeight += ceil(captionTextHeight.size.height) + 12 + 44 + 20;
 
     self.generatedHeight = averageHeight;

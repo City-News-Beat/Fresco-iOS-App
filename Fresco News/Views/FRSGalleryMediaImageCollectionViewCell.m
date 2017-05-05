@@ -56,12 +56,6 @@
                                         ]
                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                  self.imageView.alpha = 1.0;
-
-//                                 [UIView animateWithDuration:0.3 animations:^{
-//                                     self.imageView.alpha = 1.0;
-//                                 } completion:^(BOOL finished) {
-//                                     
-//                                 }];
                              }];
 }
 

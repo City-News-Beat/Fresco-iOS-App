@@ -102,7 +102,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     
     [self loadImage];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
     
 }
 
@@ -126,11 +126,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                                  if(![self isPlaying])
                                      self.imageView.alpha = 1.0;
 
-//                                 [UIView animateWithDuration:0.3 animations:^{
-//                                     self.imageView.alpha = 1.0;
-//                                 } completion:^(BOOL finished) {
-//                                     
-//                                 }];
                              }];
     
     

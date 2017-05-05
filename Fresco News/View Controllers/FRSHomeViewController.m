@@ -97,7 +97,7 @@ static NSInteger const galleriesPerPage = 12;
     }
     
     //video cell loaded notification.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:@"FRSGalleryMediaVideoCollectionViewCellLoadedPost" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
     
     self.shouldAutoPlayWithoutUserInteraction = YES;
 }
