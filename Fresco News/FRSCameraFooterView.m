@@ -174,6 +174,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.captureModeSlider.alpha = 0;
         self.nextButtonContainer.alpha = 0;
+        self.tipsButton.alpha = 0;
         //self.flashButton.alpha = 0;
     } completion:nil];
 }
@@ -183,6 +184,7 @@
         self.backgroundColor = [UIColor frescoTransparentDarkColor];
         self.captureModeSlider.alpha = 1;
         self.nextButtonContainer.alpha = 1;
+        self.tipsButton.alpha = 1;
         //self.flashButton.alpha = 1;
     } completion:nil];
 }

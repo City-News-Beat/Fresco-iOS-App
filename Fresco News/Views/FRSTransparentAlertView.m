@@ -30,22 +30,35 @@
                       delegate:self];
     
     if (self) {
-        self.backgroundColor = [UIColor frescoTransparentDarkColor];
-        self.titleLabel.textColor = [UIColor whiteColor];
-        self.messageLabel.textColor = [UIColor whiteColor];
-        [self.leftActionButton setTitleColor:[UIColor colorWithWhite:1 alpha:0.54] forState:UIControlStateNormal];
-        self.line.backgroundColor = [UIColor clearColor];
-        
+        [self configureUI];
         [self setTipCountForCaptureMode:captureMode];
+        
     }
     
     return self;
 }
 
 
+/**
+ Configures the alert with a dark/transparent style, in the bottom third of the screen (4:3).
+ */
+- (void)configureUI {
+    
+    // Alert view color configuration
+    self.backgroundColor = [UIColor frescoTransparentDarkColor];
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.messageLabel.textColor = [UIColor whiteColor];
+    [self.leftActionButton setTitleColor:[UIColor colorWithWhite:1 alpha:0.54] forState:UIControlStateNormal];
+    self.line.backgroundColor = [UIColor clearColor];
+
+    // Frame configuration
+    CGSize window = [UIScreen mainScreen].bounds.size;
+    NSInteger offset = window.height - (window.width * 4 / 3);
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y - offset/4, self.frame.size.width, self.frame.size.height);
+}
+
 
 #pragma mark - Data Source
-
 
 /**
  The data source with all the tips, indexed by their FRSCaptureMode.
@@ -70,7 +83,6 @@
 
 #pragma mark - Helpers
 
-
 /**
  Sets the title for the given FRSCaptureMode at the current index.
 
@@ -83,7 +95,6 @@
     
     return title;
 }
-
 
 /**
  Sets the message body for the given FRSCaptureMode at the current index.
