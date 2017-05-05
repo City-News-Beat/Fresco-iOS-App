@@ -20,6 +20,8 @@
 #import "FRSCameraTracker.h"
 #import "FRSCameraCapture.h"
 
+#import "FRSTransparentAlertView.h"
+
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIImage+Helpers.h"
@@ -69,7 +71,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 @property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 @property (strong, nonatomic) FRSCameraTracker *cameraTracker;
-@property (strong, nonatomic) UIButton *tipsButton;
 
 @end
 
@@ -280,7 +281,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     [self configureApertureButton];
     [self configureFlashButton];
     [self setAppropriateIconsForCaptureState];
-    [self configureTipsButton];
 }
 
 
@@ -294,6 +294,12 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     fileView.preselectedAssignment = self.preselectedAssignment;
 
     [self.navigationController pushViewController:fileView animated:YES];
+}
+
+- (void)didTapTipsButton {
+    
+    FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.footerView.captureModeSlider.currentIndex tipIndex:1];
+    [alert show];
 }
 
 
@@ -1153,18 +1159,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         return AVCaptureVideoOrientationPortrait;
     }
 }
-
-#pragma mark - Tips
-- (void)configureTipsButton {
-    
-    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(12, -28 -12, 28, 28)]; //*** constants
-    [self.tipsButton setImage:[UIImage imageNamed:@"question-white"] forState:UIControlStateNormal];
-    [self.tipsButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    
-    [self.tipsButton addTarget:self action:@selector(dismissAndReturnToPreviousTab) forControlEvents:UIControlEventTouchUpInside];
-    [self.footerView addSubview:self.tipsButton];
-}
-
 
 
 @end

@@ -19,6 +19,7 @@
 @protocol FRSCameraFooterViewDelegate <NSObject>
 
 - (void)didTapNextButton;
+- (void)didTapTipsButton;
 
 - (void)captureModeDidUpdate:(FRSCaptureMode)captureMode;
 

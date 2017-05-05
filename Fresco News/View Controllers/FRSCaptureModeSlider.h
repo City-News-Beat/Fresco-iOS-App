@@ -42,4 +42,6 @@
  */
 - (void)setCaptureMode:(FRSCaptureMode)captureMode;
 
+@property NSInteger currentIndex;
+
 @end

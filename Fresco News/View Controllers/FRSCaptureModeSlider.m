@@ -9,7 +9,6 @@
 #import "FRSCaptureModeSlider.h"
 
 @interface FRSCaptureModeSlider ();
-@property NSInteger currentIndex;
 @property (weak, nonatomic) IBOutlet UIButton *interviewButton;
 @property (weak, nonatomic) IBOutlet UIButton *panButton;
 @property (weak, nonatomic) IBOutlet UIButton *wideButton;

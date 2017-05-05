@@ -210,9 +210,9 @@
 
 -(void)configureWithLineViewAtYposition:(CGFloat)ypos {
     /* Action Shadow */
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, ypos, ALERT_WIDTH, 0.5)];
-    line.backgroundColor = [UIColor frescoShadowColor];
-    [self addSubview:line];
+    self.line = [[UIView alloc] initWithFrame:CGRectMake(0, ypos, ALERT_WIDTH, 0.5)];
+    self.line.backgroundColor = [UIColor frescoShadowColor];
+    [self addSubview:self.line];
 }
 
 -(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor{

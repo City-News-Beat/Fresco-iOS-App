@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) UIButton *nextButton;
 @property (strong, nonatomic) UIView *nextButtonContainer;
+@property (strong, nonatomic) UIButton *tipsButton;
 
 @end
 
@@ -34,6 +35,7 @@
     [self configureFrame];
     [self configureNextButton];
     [self configureSlider];
+    [self configureTipsButton];
 }
 
 - (void)configureFrame {
@@ -136,7 +138,33 @@
 }
 
 
+#pragma mark - Tips
+- (void)configureTipsButton {
+    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(12, -12-28, 28, 28)];
+    [self.tipsButton setImage:[UIImage imageNamed:@"question-white"] forState:UIControlStateNormal];
+    [self.tipsButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.tipsButton addTarget:self action:@selector(presentTips) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.tipsButton];
+}
 
+- (void)presentTips {
+    [self.delegate didTapTipsButton];
+}
+
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    if (!self.clipsToBounds && !self.hidden && self.alpha > 0) {
+        for (UIView *subview in self.subviews.reverseObjectEnumerator) {
+            CGPoint subPoint = [subview convertPoint:point fromView:self];
+            UIView *result = [subview hitTest:subPoint withEvent:event];
+            if (result != nil) {
+                return result;
+            }
+        }
+    }
+    
+    return nil;
+}
 
 
 #pragma mark = Animation

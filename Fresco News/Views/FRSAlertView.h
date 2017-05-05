@@ -35,6 +35,7 @@
 @property (strong, nonatomic) UIButton *leftActionButton;
 @property (strong, nonatomic) UIButton *rightCancelButton;
 @property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) UIView *line;
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
 @property CGFloat height;
