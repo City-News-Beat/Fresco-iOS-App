@@ -46,7 +46,6 @@
 
 @property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
-- (void)playerTap:(UITapGestureRecognizer *)tap;
 - (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate;
 - (void)configureWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate;
 - (void)loadGallery:(FRSGallery *)gallery;

@@ -635,7 +635,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Keyboard Handling
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
-    [self.galleryView playerTap:tap];
     [self.commentTextField resignFirstResponder];
 }
 

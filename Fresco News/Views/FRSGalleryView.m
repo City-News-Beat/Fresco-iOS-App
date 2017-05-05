@@ -686,10 +686,6 @@
     [self.mediaView offScreen];
 }
 
-- (void)playerTap:(UITapGestureRecognizer *)tap {
-    
-}
-
 #pragma mark - Base Meta Data Configuration
 
 - (void)configureBaseMetaData {
