@@ -211,6 +211,16 @@
     }
 
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
+    
+    // This is a potential fix for this crash
+    // https://trello.com/c/NzbGdsL4/189-app-is-crashing-when-going-to-notifications
+    if (!currentKey || [currentKey isEqual:[NSNull null]] || ![currentKey isKindOfClass:[NSString class]] || currentKey.length == 0) {
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
+        return defaultCell;
+    }
 
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
