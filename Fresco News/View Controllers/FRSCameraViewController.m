@@ -19,6 +19,7 @@
 #import "FRSCameraFooterView.h"
 #import "FRSCameraTracker.h"
 #import "FRSCameraCapture.h"
+#import "FRSTipsViewController.h"
 
 #import "FRSTransparentAlertView.h"
 
@@ -29,7 +30,7 @@
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
-@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate, FRSCameraFooterViewDelegate, FRSCameraCaptureDelegate>
+@interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate, FRSCameraFooterViewDelegate, FRSCameraCaptureDelegate, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 
@@ -293,11 +294,14 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)didTapTipsButton {
-    
-    FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.footerView.captureModeSlider.currentIndex tipIndex:1];
+    FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.footerView.captureModeSlider.currentIndex tipIndex:1 delegate:self];
     [alert show];
 }
 
+- (void)segueToTipsAction {
+    FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
+    [self.navigationController pushViewController:tipsViewController animated:YES];
+}
 
 // TODO: move aperture button out
 - (void)configureApertureButton {

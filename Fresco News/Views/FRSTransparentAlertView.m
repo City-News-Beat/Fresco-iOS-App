@@ -17,7 +17,7 @@
 
 @implementation FRSTransparentAlertView
 
-- (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode tipIndex:(NSInteger)tipIndex {
+- (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode tipIndex:(NSInteger)tipIndex delegate:(id)delegate {
     
     self.currentTipCount = tipIndex++;
     self.captureMode = captureMode;
@@ -27,7 +27,8 @@
                    actionTitle:@"CLOSE"
                    cancelTitle:[self isLastTipForCaptureMode:captureMode] ? @"NEXT TIP" : @"LEARN MORE"
               cancelTitleColor:[UIColor whiteColor]
-                      delegate:self];
+                      delegate:delegate];
+    self.delegate = delegate;
     
     if (self) {
         [self configureUI];
@@ -151,12 +152,12 @@
 - (void)rightCancelTapped {
     
     if ([self.rightCancelButton.titleLabel.text isEqualToString:@"LEARN MORE"]) {
-        // Segue to tips page, dismiss, and reset the tips count.
+        [self.delegate segueToTipsAction];
         [self leftActionTapped];
     } else {
         // We're delaying the second alert from showing up right after the previous one has been dismissed.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.captureMode tipIndex:self.currentTipCount];
+            FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.captureMode tipIndex:self.currentTipCount delegate:self.delegate];
             [alert show];
         });
         

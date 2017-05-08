@@ -19,6 +19,6 @@
  @param tipIndex NSInteger index of the current tip.
  @return FRSTransparentAlertView
  */
-- (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode tipIndex:(NSInteger)tipIndex;
+- (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode tipIndex:(NSInteger)tipIndex delegate:(id)delegate;
 
 @end

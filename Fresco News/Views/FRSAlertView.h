@@ -24,6 +24,7 @@
 - (void)reportUserAlertAction;
 - (void)blockUserAlertAction;
 - (void)didPressRadioButtonAtIndex:(NSInteger)index;
+- (void)segueToTipsAction;
 
 @end
 
