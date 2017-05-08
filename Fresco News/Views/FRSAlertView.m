@@ -77,12 +77,23 @@
 }
 
 - (void)adjustFrame {
+    
+    [self.messageLabel sizeToFit];
+    self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
+    
     self.height = self.leftActionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
 
     NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
     NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
 
     self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+    
+    // Some alert views have buttons and messages with changing titles.
+    // This makes sure the right button is always sized and placed properly.
+    [self.leftActionButton sizeToFit];
+    self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+    [self.rightCancelButton sizeToFit];
+    [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
 }
 
 - (void)addShadowAndClip {

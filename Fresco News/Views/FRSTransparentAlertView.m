@@ -52,12 +52,18 @@
     [self.leftActionButton setTitleColor:[UIColor colorWithWhite:1 alpha:0.54] forState:UIControlStateNormal];
     self.line.backgroundColor = [UIColor clearColor];
 
-    // Frame configuration
-    CGSize window = [UIScreen mainScreen].bounds.size;
-    NSInteger offset = window.height - (window.width * 4 / 3);
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y - offset/4, self.frame.size.width, self.frame.size.height);
+    [self addOffsetInY];
 }
 
+/**
+ This places the view a bit higher than the center, to compensate for the camera footer.
+ */
+- (void)addOffsetInY {
+    CGSize window = [UIScreen mainScreen].bounds.size;
+    NSInteger offset = window.height - (window.width * 4 / 3);
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y - offset/2, self.frame.size.width, self.frame.size.height);
+
+}
 
 #pragma mark - Data Source
 
@@ -73,7 +79,7 @@
                        @(FRSCaptureModeInterview) : @[@"Interview tip #1", @"Interview tip #2", @"Interview tip #3"],
                        @(FRSCaptureModePan)       : @[@"Pan tip #1", @"Pan tip #2", @"Pan tip #3"],
                        @(FRSCaptureModeWide)      : @[@"Wide tip #1", @"Wide tip #2", @"Wide tip #3"],
-                       @(FRSCaptureModeVideo)     : @[@"Video tip #1", @"Video tip #2", @"Video tip #3"],
+                       @(FRSCaptureModeVideo)     : @[@"Video tip #1", @"Video tip #2 Video tip #2 Video tip #2", @"Video tip #3"],
                        @(FRSCaptureModePhoto)     : @[@"Photo tip #1", @"Photo tip #2", @"Photo tip #3", @"Photo tip #4"]
                        };
     
@@ -155,15 +161,22 @@
         [self.delegate segueToTipsAction];
         [self leftActionTapped];
     } else {
-        // We're delaying the second alert from showing up right after the previous one has been dismissed.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.captureMode tipIndex:self.currentTipCount delegate:self.delegate];
-            [alert show];
-        });
+        [self.titleLabel setText:[self titleForCaptureMode:self.captureMode]];
+        [self.messageLabel setText:[self messageForCaptureMode:self.captureMode]];
         
-        [self dismiss];
+        if ([self isLastTipForCaptureMode:self.captureMode]) {
+            [self.rightCancelButton setTitle:@"NEXT TIP"forState:UIControlStateNormal];
+            self.currentTipCount++;
+        } else {
+            [self.rightCancelButton setTitle:@"LEARN MORE"forState:UIControlStateNormal];
+        }
+        
+        [self adjustFrame];
+        [self addOffsetInY];
     }
 }
+
+
 
 
 @end

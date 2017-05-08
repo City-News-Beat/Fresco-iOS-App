@@ -73,6 +73,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 @property (strong, nonatomic) FRSCameraTracker *cameraTracker;
 
+@property (strong, nonatomic) FRSTransparentAlertView *tipsAlert;
+
 @end
 
 @implementation FRSCameraViewController
@@ -294,8 +296,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)didTapTipsButton {
-    FRSTransparentAlertView *alert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.footerView.captureModeSlider.currentIndex tipIndex:1 delegate:self];
-    [alert show];
+    self.tipsAlert = [[FRSTransparentAlertView alloc] initWithCaptureMode:self.footerView.captureModeSlider.currentIndex tipIndex:1 delegate:self];
+    [self.tipsAlert show];
 }
 
 - (void)segueToTipsAction {
@@ -606,6 +608,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.footerView.tipsButton.transform = rotation;
     self.footerView.nextButtonContainer.transform = rotation;
     self.footerView.flashButton.transform = rotation;
+    self.tipsAlert.transform = rotation;
     [UIView commitAnimations];
     
 }
