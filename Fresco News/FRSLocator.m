@@ -232,7 +232,7 @@
 
 #pragma mark - Communication Methods
 
-/*
+/**
  Sends NSNotification out through the default notification center, for any observers to use the new location
  */
 - (void)sendNotificationForUpdate {
