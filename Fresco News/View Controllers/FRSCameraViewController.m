@@ -153,6 +153,9 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     if (self.sessionManager.movieFileOutput.isRecording) {
         [self toggleVideoRecording];
     }
+    
+    [self.sessionManager clearCaptureSession];
+    [_captureVideoPreviewLayer removeFromSuperlayer];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -163,9 +166,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         NSInteger secondsInCamera = [exit timeIntervalSinceDate:entry];
         [FRSTracker track:cameraSession parameters:@{ activityDuration : @(secondsInCamera) }];
     }
-
-    [self.sessionManager clearCaptureSession];
-    [_captureVideoPreviewLayer removeFromSuperlayer];
 
     [self.cameraTracker stopTrackingMovement];
 
