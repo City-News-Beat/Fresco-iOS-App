@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIButton *nextButton;
 @property BOOL torchIsOn;
 @property BOOL flashIsOn;
+@property (strong, nonatomic) UIImageView *nextButtonPlaceholder;
 
 @end
 
@@ -94,7 +95,12 @@
     self.nextButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.nextButton addTarget:self action:@selector(previewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.nextButton clipAsCircle];
+    
     [self.nextButtonContainer addSubview:self.nextButton];
+    
+    self.nextButtonPlaceholder = [[UIImageView alloc] initWithFrame:CGRectMake(self.nextButton.frame.size.width/2 - 24/2, self.nextButton.frame.size.height/2 - 24/2, 24, 24)];
+    [self.nextButtonPlaceholder setImage:[UIImage imageNamed:@"photo-icon-profile"]];
+    [self.nextButton addSubview:self.nextButtonPlaceholder];
     
     UILabel *nextLabel = [[UILabel alloc] initWithFrame:CGRectMake(-4, -4, PREVIEW_WIDTH, PREVIEW_WIDTH)];
     nextLabel.text = @"";
@@ -104,6 +110,7 @@
     nextLabel.userInteractionEnabled = NO;
     nextLabel.textAlignment = NSTextAlignmentCenter;
     [self.nextButton addSubview:nextLabel];
+    
 }
 
 - (void)previewButtonTapped {
@@ -116,6 +123,7 @@
     //TODO: This does not animate.
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.nextButtonPlaceholder.alpha = 0;
         
         UIImageView *temp = [[UIImageView alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
         temp.image = image;
