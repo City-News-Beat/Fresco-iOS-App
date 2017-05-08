@@ -139,6 +139,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.cameraTracker.sessionManager = self.sessionManager;
     self.cameraTracker.parentController = self;
     [self.cameraTracker startTrackingMovement];
+    
+    if (!self.apertureButton) {
+        [self configureApertureButton];
+        [self rotateAppForOrientation:self.lastOrientation];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -280,7 +285,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 - (void)configureBottomContainer {
     self.footerView = [[FRSCameraFooterView alloc] initWithDelegate:self];
     [self.view addSubview:self.footerView];
-    [self configureApertureButton];
 }
 
 
@@ -307,72 +311,74 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 // TODO: move aperture button out
 - (void)configureApertureButton {
-
-    self.apertureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    [self.apertureShadowView centerHorizontallyInView:self.footerView];
-    [self.apertureShadowView centerVerticallyInView:self.footerView];
-    [self.apertureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    [self.footerView addSubview:self.apertureShadowView];
-
-    self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    self.apertureBackground.layer.cornerRadius = self.apertureBackground.frame.size.width / 2.;
-    self.apertureBackground.layer.masksToBounds = YES;
-    [self.apertureShadowView addSubview:self.apertureBackground];
-
-    self.apertureBackground.backgroundColor = [UIColor blueColor];
-
-    self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    [self.apertureAnimationView centerHorizontallyInView:self.apertureBackground];
-    [self.apertureAnimationView centerVerticallyInView:self.apertureBackground];
-    self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH / 2.;
-    self.apertureAnimationView.layer.masksToBounds = YES;
-    self.apertureAnimationView.alpha = 0.0;
-    self.apertureAnimationView.transform = CGAffineTransformMakeScale(0.1, 0.1);
-    [self.apertureBackground addSubview:self.apertureAnimationView];
-
-    self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
-    self.apertureMask.backgroundColor = [UIColor clearColor];
-    self.apertureMask.layer.borderColor = [UIColor frescoOrangeColor].CGColor;
-    self.apertureMask.layer.borderWidth = 4.0;
-    [self.apertureBackground addSubview:self.apertureMask];
-    self.apertureMask.layer.cornerRadius = self.apertureMask.frame.size.width / 2;
-
-    self.originalApertureFrame = CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8);
-    self.apertureButton = [[UIButton alloc] initWithFrame:self.originalApertureFrame];
-
-    self.apertureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
-    [self.apertureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
-    self.apertureImageView.alpha = 1;
-    self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
-
-    self.ivContainer = [[UIView alloc] initWithFrame:self.apertureShadowView.frame];
-
-    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 72, 72)];
-    [self.videoRotateIV centerHorizontallyInView:self.ivContainer];
-    [self.videoRotateIV centerVerticallyInView:self.ivContainer];
-
-    [self.videoRotateIV setImage:[UIImage imageNamed:@"rotate"]];
-    self.videoRotateIV.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
-    self.videoRotateIV.layer.shadowOpacity = 0.15;
-    self.videoRotateIV.layer.shadowRadius = 1.0;
-    self.videoRotateIV.alpha = 1.0;
-    self.videoRotateIV.userInteractionEnabled = YES;
-
-    [self.apertureButton addSubview:self.apertureImageView];
-
-    [self.ivContainer addSubview:self.videoRotateIV];
-
-    [self.apertureMask addSubview:self.apertureButton];
-
-    [self.footerView addSubview:self.ivContainer];
-
-    self.clearButton = [[UIButton alloc] initWithFrame:self.ivContainer.bounds];
-    [self.ivContainer addSubview:self.clearButton];
-
-    [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-
-    [self.clearButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+        self.apertureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
+        [self.apertureShadowView centerHorizontallyInView:self.footerView];
+        [self.apertureShadowView centerVerticallyInView:self.footerView];
+        [self.apertureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+        [self.footerView addSubview:self.apertureShadowView];
+        
+        self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
+        self.apertureBackground.layer.cornerRadius = self.apertureBackground.frame.size.width / 2.;
+        self.apertureBackground.layer.masksToBounds = YES;
+        [self.apertureShadowView addSubview:self.apertureBackground];
+        
+        self.apertureBackground.backgroundColor = [UIColor blueColor];
+        
+        self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
+        [self.apertureAnimationView centerHorizontallyInView:self.apertureBackground];
+        [self.apertureAnimationView centerVerticallyInView:self.apertureBackground];
+        self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH / 2.;
+        self.apertureAnimationView.layer.masksToBounds = YES;
+        self.apertureAnimationView.alpha = 0.0;
+        self.apertureAnimationView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        [self.apertureBackground addSubview:self.apertureAnimationView];
+        
+        self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
+        self.apertureMask.backgroundColor = [UIColor clearColor];
+        self.apertureMask.layer.borderColor = [UIColor frescoOrangeColor].CGColor;
+        self.apertureMask.layer.borderWidth = 4.0;
+        [self.apertureBackground addSubview:self.apertureMask];
+        self.apertureMask.layer.cornerRadius = self.apertureMask.frame.size.width / 2;
+        
+        self.originalApertureFrame = CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8);
+        self.apertureButton = [[UIButton alloc] initWithFrame:self.originalApertureFrame];
+        
+        self.apertureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
+        [self.apertureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
+        self.apertureImageView.alpha = 1;
+        self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
+        
+        self.ivContainer = [[UIView alloc] initWithFrame:self.apertureShadowView.frame];
+        
+        self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 72, 72)];
+        [self.videoRotateIV centerHorizontallyInView:self.ivContainer];
+        [self.videoRotateIV centerVerticallyInView:self.ivContainer];
+        
+        [self.videoRotateIV setImage:[UIImage imageNamed:@"rotate"]];
+        self.videoRotateIV.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
+        self.videoRotateIV.layer.shadowOpacity = 0.15;
+        self.videoRotateIV.layer.shadowRadius = 1.0;
+        self.videoRotateIV.alpha = 1.0;
+        self.videoRotateIV.userInteractionEnabled = YES;
+        
+        [self.apertureButton addSubview:self.apertureImageView];
+        
+        [self.ivContainer addSubview:self.videoRotateIV];
+        
+        [self.apertureMask addSubview:self.apertureButton];
+        
+        [self.footerView addSubview:self.ivContainer];
+        
+        self.clearButton = [[UIButton alloc] initWithFrame:self.ivContainer.bounds];
+        [self.ivContainer addSubview:self.clearButton];
+        
+        [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.clearButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+//    });
 }
 
 
@@ -555,62 +561,64 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 // TODO: Move out all orientation
 - (void)rotateAppForOrientation:(UIDeviceOrientation)o {
-
-    CGFloat angle = 0;
     
-    if (o == UIDeviceOrientationLandscapeLeft) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGFloat angle = 0;
 
-        if (self.captureMode == FRSCaptureModeVideo) {
-            [self animateVideoRotateHide];
-            self.videoRotateIV.alpha = 0.0;
+        if (o == UIDeviceOrientationLandscapeLeft) {
+            
+            if (self.captureMode == FRSCaptureModeVideo) {
+                [self animateVideoRotateHide];
+                self.videoRotateIV.alpha = 0.0;
+            }
+            
+            angle = M_PI_2;
+            
+        } else if (o == UIDeviceOrientationLandscapeRight) {
+            
+            if (self.captureMode == FRSCaptureModeVideo) {
+                
+                [self animateVideoRotateHide];
+                self.videoRotateIV.alpha = 0.0;
+            }
+            
+            angle = -M_PI_2;
+            
+        } else if (o == UIDeviceOrientationPortrait) {
+            
+            if (self.captureMode == FRSCaptureModeVideo) {
+                [self animateVideoRotationAppear];
+                self.videoRotateIV.alpha = 1.0;
+            }
+            
+            [UIView animateWithDuration:0.1
+                                  delay:0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 self.topContainer.alpha = 0;
+                                 self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
+                             }
+                             completion:^(BOOL finished) {
+                                 self.topContainer.alpha = 1;
+                             }];
+            
+        } else {
+            return;
         }
-
-        angle = M_PI_2;
-
-    } else if (o == UIDeviceOrientationLandscapeRight) {
-
-        if (self.captureMode == FRSCaptureModeVideo) {
-            [self animateVideoRotateHide];
-            self.videoRotateIV.alpha = 0.0;
-        }
-
-        angle = -M_PI_2;
-
-    } else if (o == UIDeviceOrientationPortrait) {
-
-        if (self.captureMode == FRSCaptureModeVideo) {
-            [self animateVideoRotationAppear];
-            self.videoRotateIV.alpha = 1.0;
-        }
-
-        [UIView animateWithDuration:0.1
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                           self.topContainer.alpha = 0;
-                             self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
-                         }
-                         completion:^(BOOL finished) {
-                             self.topContainer.alpha = 1;
-                         }];
-
-    } else {
-        return;
-    }
-
-    [UIView beginAnimations:@"rotation" context:nil];
-    [UIView setAnimationDuration:0.2];
-
-    CGAffineTransform rotation = CGAffineTransformMakeRotation(angle);
-    self.flashButton.transform = rotation;
-    self.apertureBackground.transform = rotation;
-    self.previewBackgroundIV.transform = rotation;
-    self.footerView.tipsButton.transform = rotation;
-    self.footerView.nextButtonContainer.transform = rotation;
-    self.footerView.flashButton.transform = rotation;
-    self.tipsAlert.transform = rotation;
-    [UIView commitAnimations];
-    
+        
+        [UIView beginAnimations:@"rotation" context:nil];
+        [UIView setAnimationDuration:0.2];
+        
+        CGAffineTransform rotation = CGAffineTransformMakeRotation(angle);
+        self.flashButton.transform = rotation;
+        self.apertureBackground.transform = rotation;
+        self.previewBackgroundIV.transform = rotation;
+        self.footerView.tipsButton.transform = rotation;
+        self.footerView.nextButtonContainer.transform = rotation;
+        self.footerView.flashButton.transform = rotation;
+        self.tipsAlert.transform = rotation;
+        [UIView commitAnimations];
+    });
 }
 
 - (void)animateShutterWithCompletion:(void (^)())completion {

@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 
+@property BOOL isFirstRun;
+
 @end
 
 @implementation FRSCaptureModeSlider
@@ -27,7 +29,9 @@
         self = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([self class]) owner:self options:nil] objectAtIndex:0];
         self.frame = frame;
         
+        self.isFirstRun = YES;
         [self setCaptureMode:captureMode];
+        
     }
     
     return self;
@@ -35,10 +39,12 @@
 
 
 - (void)setCaptureMode:(FRSCaptureMode)captureMode {
-    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:self.isFirstRun ? 0.0 : 0.35 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self centerViewForCaptureMode:captureMode];
         [self highlightButtonForCaptureMode:captureMode];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        self.isFirstRun = NO;
+    }];
 
     self.currentIndex = captureMode;
 
