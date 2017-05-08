@@ -1,0 +1,22 @@
+//
+//  FRSCameraConstants.h
+//  Fresco
+//
+//  Created by Omar Elfanek on 5/8/17.
+//  Copyright © 2017 Fresco. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface FRSCameraConstants : NSObject
+
+typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
+    FRSCaptureModeInterview,
+    FRSCaptureModePan,
+    FRSCaptureModeWide,
+    FRSCaptureModeVideo,
+    FRSCaptureModePhoto,
+    
+};
+
+@end

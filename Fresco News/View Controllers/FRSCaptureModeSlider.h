@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSCameraViewController.h"
+#import "FRSCameraConstants.h"
 
 #define CAPTURE_MODE_COUNT 5
 #define SLIDER_WIDTH 500

@@ -7,6 +7,7 @@
 //
 
 #import "FRSCaptureModeSlider.h"
+#import "UIFont+Fresco.h"
 
 @interface FRSCaptureModeSlider ();
 @property (weak, nonatomic) IBOutlet UIButton *interviewButton;

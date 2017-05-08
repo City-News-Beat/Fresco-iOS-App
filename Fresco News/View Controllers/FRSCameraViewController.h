@@ -11,15 +11,7 @@
 #import "FRSFileViewController.h"
 #import "FRSWobbleView.h"
 #import "FRSLocator.h"
-
-typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
-    FRSCaptureModeInterview,
-    FRSCaptureModePan,
-    FRSCaptureModeWide,
-    FRSCaptureModeVideo,
-    FRSCaptureModePhoto,
-    
-};
+#import "FRSCameraConstants.h"
 
 @interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate> {
 
