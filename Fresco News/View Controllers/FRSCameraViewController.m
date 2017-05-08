@@ -543,20 +543,21 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)adjustFramesForCaptureState {
     
-    CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
-    
-    self.preview.frame = bigPreviewFrame;
-    self.captureVideoPreviewLayer.frame = bigPreviewFrame;
-    
-    if (self.captureMode == FRSCaptureModePhoto) {
-        self.preview.frame = smallPreviewFrame;
-        self.captureVideoPreviewLayer.frame = smallPreviewFrame;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
         
-    } else {
         self.preview.frame = bigPreviewFrame;
         self.captureVideoPreviewLayer.frame = bigPreviewFrame;
-    }
+        
+        if (self.captureMode == FRSCaptureModePhoto) {
+            self.preview.frame = smallPreviewFrame;
+            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
+        } else {
+            self.preview.frame = bigPreviewFrame;
+            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+        }
+    });
 }
 
 // TODO: Move out all orientation
@@ -721,6 +722,17 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [self setAppropriateIconsForCaptureState];
         [self adjustFramesForCaptureState];
     });
+    
+}
+
+- (UIImage *)snapShot {
+    UIGraphicsBeginImageContextWithOptions(self.captureVideoPreviewLayer.frame.size, NO, [UIScreen mainScreen].scale);
+    
+    [self.view drawViewHierarchyInRect:self.captureVideoPreviewLayer.bounds afterScreenUpdates:YES];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 #pragma mark - Camera focus
