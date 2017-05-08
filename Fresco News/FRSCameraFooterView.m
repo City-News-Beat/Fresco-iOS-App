@@ -17,6 +17,8 @@
 @property BOOL flashIsOn;
 @property (strong, nonatomic) UIImageView *nextButtonPlaceholder;
 
+@property BOOL hideNewFeaturesForABTesting;
+
 @end
 
 @implementation FRSCameraFooterView
@@ -26,6 +28,9 @@
     
     if (self) {
         self.delegate = delegate;
+        
+        self.hideNewFeaturesForABTesting = NO;
+        
         [self configureUI];
     }
     
@@ -51,6 +56,10 @@
     self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, 0, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeVideo];
     self.captureModeSlider.delegate = self;
     [self addSubview:self.captureModeSlider];
+    
+    if (self.hideNewFeaturesForABTesting) {
+        [self.captureModeSlider hideNewFeaturesForABTesting];
+    }
 }
 
 - (void)captureModeDidUpdate:(FRSCaptureMode)captureMode {
@@ -145,6 +154,9 @@
 
 #pragma mark - Tips
 - (void)configureTipsButton {
+    
+    if (self.hideNewFeaturesForABTesting) return;
+    
     self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(12, -12-28, 28, 28)];
     [self.tipsButton setImage:[UIImage imageNamed:@"question-white"] forState:UIControlStateNormal];
     [self.tipsButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];

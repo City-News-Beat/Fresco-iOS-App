@@ -44,4 +44,6 @@
 
 @property NSInteger currentIndex;
 
+- (void)hideNewFeaturesForABTesting;
+
 @end

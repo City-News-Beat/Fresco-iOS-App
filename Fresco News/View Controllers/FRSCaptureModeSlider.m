@@ -17,6 +17,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 
 @property BOOL isFirstRun;
+@property BOOL shouldHideNewFeaturesForABTesting;
+
+@property NSInteger numberOfCaptureModes;
 
 @end
 
@@ -31,6 +34,8 @@
         
         self.isFirstRun = YES;
         [self setCaptureMode:captureMode];
+        
+        self.numberOfCaptureModes = self.shouldHideNewFeaturesForABTesting ? 2 : 5;
         
     }
     
@@ -144,11 +149,16 @@
 #pragma mark - Gesture Recognizers
 - (void)swipeLeft {
     if (self.currentIndex == CAPTURE_MODE_COUNT-1) return;
+
+
     [self setCaptureMode:self.currentIndex+1];
 }
 
 - (void)swipeRight {
     if (self.currentIndex == 0 ) return;
+    if (self.shouldHideNewFeaturesForABTesting) {
+        if (self.currentIndex == 3) return;
+    }
     [self setCaptureMode:self.currentIndex-1];
 }
 
@@ -175,6 +185,14 @@
 }
 
 
+#pragma mark - AB Testing
+
+- (void)hideNewFeaturesForABTesting {
+    self.shouldHideNewFeaturesForABTesting = YES;
+    [self.interviewButton removeFromSuperview];
+    [self.panButton removeFromSuperview];
+    [self.wideButton removeFromSuperview];
+}
 
 
 
