@@ -20,24 +20,27 @@
 
 - (void)didTapNextButton;
 - (void)didTapTipsButton;
-
 - (void)captureModeDidUpdate:(FRSCaptureMode)captureMode;
 
 @end
 
 @interface FRSCameraFooterView : UIView
 
-
 - (instancetype)initWithDelegate:(id)delegate;
 
 @property (weak, nonatomic) NSObject<FRSCameraFooterViewDelegate> *delegate;
+@property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 
 - (void)updatePreviewButtonWithImage:(UIImage *)image;
-
-@property (strong, nonatomic) FRSCaptureModeSlider *captureModeSlider;
 
 - (void)hide;
 - (void)show;
 
+@property (strong, nonatomic) UIButton *flashButton;
+@property (strong, nonatomic) UIButton *tipsButton;
+@property (strong, nonatomic) UIView *nextButtonContainer;
+
+- (void)flash:(BOOL)on;
+- (void)torch:(BOOL)on;
 
 @end

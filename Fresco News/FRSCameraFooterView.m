@@ -13,8 +13,8 @@
 @interface FRSCameraFooterView() <FRSCaptureModeSliderDelegate>;
 
 @property (strong, nonatomic) UIButton *nextButton;
-@property (strong, nonatomic) UIView *nextButtonContainer;
-@property (strong, nonatomic) UIButton *tipsButton;
+@property BOOL torchIsOn;
+@property BOOL flashIsOn;
 
 @end
 
@@ -36,6 +36,7 @@
     [self configureNextButton];
     [self configureSlider];
     [self configureTipsButton];
+    [self configureFlashButton];
 }
 
 - (void)configureFrame {
@@ -44,9 +45,7 @@
     self.backgroundColor = [UIColor frescoTransparentDarkColor];
 }
 
-
 #pragma mark - Capture Mode Slider
-
 - (void)configureSlider {
     self.captureModeSlider = [[FRSCaptureModeSlider alloc] initWithFrame:CGRectMake(0, 0, SLIDER_WIDTH, SLIDER_HEIGHT) captureMode:FRSCaptureModeVideo];
     self.captureModeSlider.delegate = self;
@@ -63,11 +62,11 @@
     if (self.delegate) {
         [self.delegate captureModeDidUpdate:captureMode];
     }
+    
+    [self setAppropriateIconsForCaptureState];
 }
 
-
 #pragma mark - Footer States
-
 - (void)toggleCaptureModeForPhoto:(BOOL)isPhoto {
     if (isPhoto) {
         self.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -78,7 +77,6 @@
 
 
 #pragma mark - Next Button
-
 // TODO: Move this button into it's own class
 - (void)configureNextButton {
     self.nextButtonContainer = [[UIView alloc] initWithFrame:CGRectMake(SIDE_PAD, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
@@ -137,7 +135,6 @@
     });
 }
 
-
 #pragma mark - Tips
 - (void)configureTipsButton {
     self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(12, -12-28, 28, 28)];
@@ -150,7 +147,6 @@
 - (void)presentTips {
     [self.delegate didTapTipsButton];
 }
-
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     if (!self.clipsToBounds && !self.hidden && self.alpha > 0) {
@@ -166,16 +162,103 @@
     return nil;
 }
 
+#pragma mark - Flash Button
+- (void)configureFlashButton {
+    self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - ICON_WIDTH*2, 0, ICON_WIDTH, ICON_WIDTH)];
+    [self.flashButton centerVerticallyInView:self];
+    [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.flashButton.clipsToBounds = YES;
+    [self addSubview:self.flashButton];
+    [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self setAppropriateIconsForCaptureState];
+}
 
-#pragma mark = Animation
+- (void)flashButtonTapped {
+    
+    if (self.captureModeSlider.currentIndex == FRSCaptureModePhoto) {
+        if (self.flashIsOn == NO) {
+            [self flash:YES];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
+        } else {
+            [self flash:NO];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+        }
+    } else {
+        if (self.torchIsOn == NO) {
+            [self torch:YES];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+        } else {
+            [self torch:NO];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+        }
+    }
+}
 
+- (void)torch:(BOOL)on {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([device hasTorch]) {
+        [device lockForConfiguration:nil];
+        if (on) {
+            [device setTorchMode:AVCaptureTorchModeOn];
+            self.torchIsOn = YES;
+        } else {
+            [device setTorchMode:AVCaptureTorchModeOff];
+            self.torchIsOn = NO;
+        }
+        [device unlockForConfiguration];
+    }
+}
+
+- (void)flash:(BOOL)on {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([device hasFlash]) {
+        [device lockForConfiguration:nil];
+        if (on) {
+            [device setFlashMode:AVCaptureFlashModeOn];
+            self.flashIsOn = YES;
+        } else {
+            [device setFlashMode:AVCaptureFlashModeOff];
+            self.flashIsOn = NO;
+        }
+        [device unlockForConfiguration];
+    }
+}
+
+- (void)setAppropriateIconsForCaptureState {
+    if (self.captureModeSlider.currentIndex == FRSCaptureModePhoto) {
+        [UIView transitionWithView:self
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionNone
+                        animations:^{
+                            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+                        }
+                        completion:^(BOOL finished) {
+                            self.flashButton.layer.shadowOpacity = 0.0;
+                        }];
+    } else {
+        [UIView transitionWithView:self
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionNone
+                        animations:^{
+                            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+                        }
+                        completion:^(BOOL finished) {
+                            self.flashButton.layer.shadowOpacity = 1.0;
+                        }];
+    }
+}
+
+
+#pragma mark - Animation
 - (void)hide {
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.backgroundColor = [UIColor clearColor];
         self.captureModeSlider.alpha = 0;
         self.nextButtonContainer.alpha = 0;
         self.tipsButton.alpha = 0;
-        //self.flashButton.alpha = 0;
+        self.flashButton.alpha = 0;
     } completion:nil];
 }
 
@@ -185,7 +268,7 @@
         self.captureModeSlider.alpha = 1;
         self.nextButtonContainer.alpha = 1;
         self.tipsButton.alpha = 1;
-        //self.flashButton.alpha = 1;
+        self.flashButton.alpha = 1;
     } completion:nil];
 }
 

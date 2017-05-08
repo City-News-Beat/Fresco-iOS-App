@@ -277,12 +277,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 - (void)configureBottomContainer {
     self.footerView = [[FRSCameraFooterView alloc] initWithDelegate:self];
     [self.view addSubview:self.footerView];
-    
     [self configureApertureButton];
-    [self configureFlashButton];
-    [self setAppropriateIconsForCaptureState];
 }
-
 
 
 
@@ -502,110 +498,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                      completion:nil];
 }
 
-
-
-// TODO: Move flash button out and implement in footer view
-#pragma mark - Flash Button
-
-- (void)configureFlashButton {
-    
-    self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - ICON_WIDTH*2, 0, ICON_WIDTH, ICON_WIDTH)];
-    [self.flashButton centerVerticallyInView:self.footerView];
-    [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.flashButton.clipsToBounds = YES;
-    [self.footerView addSubview:self.flashButton];
-    [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)flashButtonTapped {
-
-    if (self.captureMode == FRSCaptureModeVideo) {
-        if (self.torchIsOn == NO) {
-            [self torch:YES];
-
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
-
-        } else {
-            [self torch:NO];
-
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
-        }
-
-    } else {
-        if (self.flashIsOn == NO) {
-            [self flash:YES];
-
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
-
-        } else {
-            [self flash:NO];
-
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-        }
-    }
-}
-
-- (void)torch:(BOOL)on {
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    if ([device hasTorch]) {
-        [device lockForConfiguration:nil];
-        if (on) {
-            [device setTorchMode:AVCaptureTorchModeOn];
-            self.torchIsOn = YES;
-        } else {
-            [device setTorchMode:AVCaptureTorchModeOff];
-            self.torchIsOn = NO;
-        }
-        [device unlockForConfiguration];
-    }
-}
-
-- (void)flash:(BOOL)on {
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    if ([device hasFlash]) {
-        [device lockForConfiguration:nil];
-        if (on) {
-            [device setFlashMode:AVCaptureFlashModeOn];
-            self.flashIsOn = YES;
-        } else {
-            [device setFlashMode:AVCaptureFlashModeOff];
-            self.flashIsOn = NO;
-        }
-        [device unlockForConfiguration];
-    }
-}
-
 - (void)setAppropriateIconsForCaptureState {
     if (self.captureMode == FRSCaptureModePhoto) {
         [self animateShutterExpansionWithColor:[UIColor frescoOrangeColor]];
-
-        [UIView transitionWithView:self.view
-            duration:0.3
-            options:UIViewAnimationOptionTransitionNone
-            animations:^{
-
-              [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-
-            }
-            completion:^(BOOL finished) {
-              self.flashButton.layer.shadowOpacity = 0.0;
-            }];
-
     } else {
         [self animateShutterExpansionWithColor:[UIColor frescoRedColor]];
-
-        [UIView transitionWithView:self.view
-            duration:0.3
-            options:UIViewAnimationOptionTransitionNone
-            animations:^{
-
-              [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
-
-            }
-            completion:^(BOOL finished) {
-              self.flashButton.layer.shadowOpacity = 1.0;
-            }];
     }
 }
 
@@ -650,8 +547,9 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     }
 }
 
+// TODO: Move out all orientation
 - (void)rotateAppForOrientation:(UIDeviceOrientation)o {
-    //    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
+
     CGFloat angle = 0;
     
     if (o == UIDeviceOrientationLandscapeLeft) {
@@ -701,8 +599,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     self.flashButton.transform = rotation;
     self.apertureBackground.transform = rotation;
     self.previewBackgroundIV.transform = rotation;
-
+    self.footerView.tipsButton.transform = rotation;
+    self.footerView.nextButtonContainer.transform = rotation;
+    self.footerView.flashButton.transform = rotation;
     [UIView commitAnimations];
+    
 }
 
 - (void)animateShutterWithCompletion:(void (^)())completion {
@@ -760,7 +661,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 - (void)toggleCaptureModeToPhoto:(BOOL)displayPhoto {
 
     /* Disables torch when returning from video toggle and torch is enabled */
-    [self torch:NO];
+    [self.footerView torch:NO];
 
     /* Disable mask for transition animation */
     self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
