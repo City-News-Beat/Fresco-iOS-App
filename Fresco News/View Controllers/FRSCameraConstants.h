@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FRSCameraConstants : NSObject
-
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModeInterview,
     FRSCaptureModePan,
@@ -18,5 +16,3 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,
     
 };
-
-@end
