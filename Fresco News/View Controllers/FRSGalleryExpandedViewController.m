@@ -109,6 +109,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
+    [galleryDetailView offScreen];
+
     self.navigationItem.titleView = self.titleLabel;
     [self showTabBarAnimated:NO];
 
@@ -168,7 +170,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)popViewController {
     [super popViewController];
     [self showTabBarAnimated:YES];
-    [galleryDetailView offScreen];
 }
 
 - (void)presentReportGallerySheet {
