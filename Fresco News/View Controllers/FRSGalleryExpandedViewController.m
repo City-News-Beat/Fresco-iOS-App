@@ -168,6 +168,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)popViewController {
     [super popViewController];
     [self showTabBarAnimated:YES];
+    [galleryDetailView offScreen];
 }
 
 - (void)presentReportGallerySheet {

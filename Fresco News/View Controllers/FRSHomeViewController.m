@@ -236,21 +236,23 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 - (void)reloadData {
+    __weak typeof(self) weakSelf = self;
+
     [self.followingTable reloadFollowing];
     
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                             [self.tableView dg_stopLoading];
-                                                             [self.followingTable dg_stopLoading];
+                                                             [weakSelf.tableView dg_stopLoading];
+                                                             [weakSelf.followingTable dg_stopLoading];
                                                              isLoading = NO;
                                                          });
                                                          if (error) {
                                                              return;
                                                          }
                                                          
-                                                         [self handlePullToRefreshedData:galleries];
+                                                         [weakSelf handlePullToRefreshedData:galleries];
                                                      }];
 }
 
@@ -607,9 +609,6 @@ static NSInteger const galleriesPerPage = 12;
     };
     
     cell.delegate = self;
-    //    [cell setNeedsUpdateConstraints];
-    //    [cell updateConstraintsIfNeeded];
-    
     return cell;
 }
 
@@ -646,8 +645,9 @@ static NSInteger const galleriesPerPage = 12;
         
         if (indexPath.row == self.highlights.count - 4) {
             if (!isLoading && !self.loadNoMore) {
+                __weak typeof(self) weakSelf = self;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                    [self loadMore];
+                    [weakSelf loadMore];
                 });
             }
         }
@@ -667,6 +667,9 @@ static NSInteger const galleriesPerPage = 12;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    // Delete coredata cache if we receive memory warning. Currently we are saving only highlights in coredata.
+    [self deleteCache];
 }
 
 - (void)galleryClicked:(FRSGallery *)gallery {
@@ -838,7 +841,7 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 -(void)handlePlay {
-    NSLog(@"Rev handlePlay");
+    NSLog(@"handlePlay");
     
     [self pausePlayers];
     
@@ -849,7 +852,7 @@ static NSInteger const galleriesPerPage = 12;
         if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
         
         if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-            NSLog(@"\nRev playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
+            NSLog(@"playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
             [cell play];
             break;
         }
@@ -886,6 +889,8 @@ static NSInteger const galleriesPerPage = 12;
 #pragma mark - DataManager
 
 - (void)initialFetchFromServer {
+    __weak typeof(self) weakSelf = self;
+
     [self.followingTable reloadFollowing];
 
     // network call
@@ -893,10 +898,10 @@ static NSInteger const galleriesPerPage = 12;
                                                 offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                             [self.loadingView stopLoading];
-                                                             [self.loadingView removeFromSuperview];
+                                                             [weakSelf.loadingView stopLoading];
+                                                             [weakSelf.loadingView removeFromSuperview];
                                                              hasLoadedOnce = TRUE;
-                                                             [self.tableView reloadData];
+                                                             [weakSelf.tableView reloadData];
                                                          });
 
                                                          if (error && error.code == -1009) {
@@ -907,10 +912,10 @@ static NSInteger const galleriesPerPage = 12;
                                                              //if needed reload only the loading cell to remove loading.
                                                          } else {
                                                              //since this is initial load, delete the previous entries.
-                                                             [self deleteCache];
+                                                             [weakSelf deleteCache];
                                                              
                                                              //add new entries to cache.
-                                                             [self appendToLocalDataCache:galleries];
+                                                             [weakSelf appendToLocalDataCache:galleries];
                                                          }
                                                          
 
@@ -920,6 +925,8 @@ static NSInteger const galleriesPerPage = 12;
 
 -(void)fetchFromServerWithOffsetGalleryID:(NSString *)offsetGalleryID {
     // network call
+    __weak typeof(self) weakSelf = self;
+
     isLoading = TRUE;
 
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
@@ -930,12 +937,12 @@ static NSInteger const galleriesPerPage = 12;
                                                          if ([galleries count] == 0) {
                                                              
                                                          } else {
-                                                             [self appendToLocalDataCache:galleries];
+                                                             [weakSelf appendToLocalDataCache:galleries];
                                                          }
                                                          
                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                             [self.loadingView stopLoading];
-                                                             [self.loadingView removeFromSuperview];
+                                                             [weakSelf.loadingView stopLoading];
+                                                             [weakSelf.loadingView removeFromSuperview];
                                                              hasLoadedOnce = TRUE;
                                                              
                                                          });

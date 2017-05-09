@@ -175,20 +175,10 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 }
 
 
-/*
- - (void)dealloc {
- for (FRSPlayer *player in self.players) {
- if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
- [player.currentItem cancelPendingSeeks];
- [player.currentItem.asset cancelLoading];
- }
- }
- 
- self.players = Nil;
- self.videoPlayer = Nil;
- }
- 
- */
+
+- (void)dealloc {
+    
+}
 
 #pragma mark - Key Actions
 -(void)play {
@@ -201,23 +191,23 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     
     CGFloat pageWidth = self.collectionView.frame.size.width;
     NSInteger page = floor((self.collectionView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    NSLog(@"rev play collection view current page -> %ld",(long)page);
+    NSLog(@"play collection view current page -> %ld",(long)page);
     
     for (UICollectionViewCell *visibleCell in self.collectionView.visibleCells) {
         //get the accurate visible cell matching the page.
-        NSLog(@"rev visibleCell x: %f expected page x: %f \nCELL: %@", visibleCell.frame.origin.x, pageWidth*page, visibleCell);
+        NSLog(@"visibleCell x: %f expected page x: %f \nCELL: %@", visibleCell.frame.origin.x, pageWidth*page, visibleCell);
         if (visibleCell.frame.origin.x != pageWidth*page) {
             continue;
         }
         BOOL displayMuteIcon = NO;
         if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-            NSLog(@"rev visibleCell is video cell ");
+            NSLog(@"visibleCell is video cell ");
             NSLog(@"visibleCell playing");
             displayMuteIcon = YES;
             [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];
         }
         else {
-            NSLog(@"rev visibleCell is image");
+            NSLog(@"visibleCell is image");
         }
         [self configureMuteIconDisplay:displayMuteIcon];
         

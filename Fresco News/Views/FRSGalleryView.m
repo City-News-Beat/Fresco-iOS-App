@@ -49,10 +49,6 @@
 
 - (void)loadGallery:(FRSGallery *)gallery {
     
-    self.gallery = gallery;
-        
-    self.gallery = nil;
-    
     self.clipsToBounds = NO;
     self.gallery = gallery;
     
@@ -136,8 +132,9 @@
 }
 
 - (void)updateScrollView {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self configureImageViews];
+        [weakSelf configureHorizontalLines];
     });
 }
 
@@ -193,8 +190,9 @@
 - (void)configureUI {
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self configureImageViews];
+        [weakSelf configureHorizontalLines];
     });
     
     //collection view stuff
@@ -230,7 +228,7 @@
     [self addSubview:self.mediaView];
 }
 
-- (void)configureImageViews {
+- (void)configureHorizontalLines {
     [self.nameLabel sizeToFit];
     
     if (!self.topLine) {
@@ -381,15 +379,18 @@
     [self addSubview:self.nameLabel];
     
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
+
+        __weak typeof(self) weakSelf = self;
+
         dispatch_async(dispatch_get_main_queue(), ^{
             //Set user image
             NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+            [weakSelf.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
             
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:weakSelf action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
-            [self.profileIV setUserInteractionEnabled:YES];
-            [self.profileIV addGestureRecognizer:photoTap];
+            [weakSelf.profileIV setUserInteractionEnabled:YES];
+            [weakSelf.profileIV addGestureRecognizer:photoTap];
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -432,13 +433,15 @@
     self.timeLabel.frame = timeFrame;
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         
+        __weak typeof(self) weakSelf = self;
+
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+            [weakSelf.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
-            [self.profileIV setUserInteractionEnabled:YES];
-            [self.profileIV addGestureRecognizer:photoTap];
+            [weakSelf.profileIV setUserInteractionEnabled:YES];
+            [weakSelf.profileIV addGestureRecognizer:photoTap];
         });
         
     } else {
@@ -504,6 +507,7 @@
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
     self.captionLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.captionLabel.text = self.gallery.caption;
+    self.captionLabel.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     if ([self.delegate shouldHaveTextLimit]) {
         self.captionLabel.numberOfLines = 6;
@@ -662,12 +666,13 @@
             }
             
         } else {
+            __weak typeof(self) weakSelf = self;
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
                 
                 if ([currentPost.creator uid] != nil) {
-                    [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                    [weakSelf.delegate.navigationController pushViewController:userViewController animated:YES];
                 }
             });
         }

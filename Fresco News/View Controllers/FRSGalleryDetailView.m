@@ -138,11 +138,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [self handlePlay];
     }
 }
--(void)handlePlay {
-    NSLog(@"Rev detail view handlePlay");
+
+- (void)handlePlay {
+    NSLog(@"detail view handlePlay");
     //performSelector enqueues play on to the current run loop and returns immediately. performSelector after delay:0 also works. Using performSelector vs [self.galleryView play] makes the difference for autoplay. Need to figure out a better way if possible.
     [self.galleryView performSelector:@selector(play) withObject:nil afterDelay:0.2];
 }
+
+- (void)offScreen {
+    [self.galleryView offScreen];
+}
+
 - (void)getGalleryPurchases {
     [[FRSGalleryManager sharedInstance] fetchPurchasesForGalleryID:self.gallery.uid
                                                         completion:^(id responseObject, NSError *error) {

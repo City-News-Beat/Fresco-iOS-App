@@ -15,9 +15,10 @@
 @interface FRSGalleryMediaVideoCollectionViewCell (Player)
 - (CMTime)playerItemDuration;
 - (BOOL)isPlaying;
-- (void)playerItemDidReachEnd:(NSNotification *)notification ;
-- (void)observeValueForKeyPath:(NSString*) path ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
+- (void)playerItemDidReachEnd:(NSNotification *)notification;
 - (void)prepareToPlayAsset:(AVURLAsset *)asset withKeys:(NSArray *)requestedKeys;
+- (void)observeValueForKeyPath:(NSString*) path ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
+- (void)removeObserversForPlayerItem;
 @end
 
 @interface FRSGalleryMediaVideoCollectionViewCell ()
@@ -40,7 +41,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    NSLog(@"Rev prepare the video player to be reusable here.");
+    NSLog(@"prepare the video player to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
     self.imageView.alpha = 1.0;
@@ -80,14 +81,14 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 -(void)showBufferIndicator {
-    NSLog(@"rev showing buffer.");
+    NSLog(@"showing buffer.");
     self.bufferIndicator.frame = CGRectMake(16, 16, 20, 20);
     [self addSubview:self.bufferIndicator];
     [self.bufferIndicator startAnimating];
 }
 
 -(void)hideBufferIndicator {
-    NSLog(@"rev hiding buffer.");
+    NSLog(@"hiding buffer.");
     [self.bufferIndicator removeFromSuperview];
     [self.bufferIndicator stopLoading];
 }
@@ -95,7 +96,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 #pragma mark Load Info
 
 -(void)loadPost:(FRSPost *)post {
-    NSLog(@"rev rev load video post: %@", post.uid);
+    NSLog(@"rev load video post: %@", post.uid);
     self.post = post;
     
     [self configureMuteIconDisplay:YES];
@@ -111,11 +112,11 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     if(!self.post.imageUrl) return;
     
     if(self.isPlaying) {
-        NSLog(@"Rev This cell is playing video so not loading the image for this video cell");
+        NSLog(@"This cell is playing video so not loading the image for this video cell");
         return;
     }
     
-    NSLog(@"rev rev load imageView for video post: %@",self.post.uid);
+    NSLog(@"rev load imageView for video post: %@",self.post.uid);
     
     [self.imageView sd_setImageWithURL:[NSURL
                                         URLResizedFromURLString:self.post.imageUrl
@@ -135,38 +136,41 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 - (void)play
 {
+    //We can remove the dispatch block if Profile VC and Story VC also calls play/pause from the main thread.
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async( dispatch_get_main_queue(),
                    ^{
                        
-                       NSLog(@"Rev video video play play: %@ \nin Cell: %@", _mPlayer, self);
+                       NSLog(@"video video play play: %@ \nin Cell: %@", _mPlayer, weakSelf);
                        
-                       if(![[self urlOfCurrentPlayer:_mPlayer] isEqualToString:self.post.videoUrl]) {
+                       if(![[weakSelf urlOfCurrentPlayer:_mPlayer] isEqualToString:weakSelf.post.videoUrl]) {
                            //Player needs to change its URL. can show buffer now.
-                           [self showBufferIndicator];
-                           [self setURL:[NSURL URLWithString:self.post.videoUrl]];
+                           [weakSelf showBufferIndicator];
+                           [weakSelf setURL:[NSURL URLWithString:weakSelf.post.videoUrl]];
                        }
                        else {
                            // player already has the correct url. so no need to change the url/asset. just let it play.
                            //remove image.
-                           [self removeImage];
+                           [weakSelf removeImage];
                            
-                           [self hideBufferIndicator];
+                           [weakSelf hideBufferIndicator];
                            
-                           if(!self.mPlaybackView.player) {
-                               [self.mPlaybackView setPlayer:_mPlayer];
+                           if(!weakSelf.mPlaybackView.player) {
+                               [weakSelf.mPlaybackView setPlayer:_mPlayer];
                            }
                            /* If we are at the end of the movie, we must seek to the beginning first
                             before starting playback. */
                            if (YES == seekToZeroBeforePlay)
                            {
                                seekToZeroBeforePlay = NO;
-                               [self.mPlayer seekToTime:kCMTimeZero];
+                               [weakSelf.mPlayer seekToTime:kCMTimeZero];
                            }
                            
-                           [self.mPlayer play];
+                           [weakSelf.mPlayer play];
                            
                            NSLog(@"Mute every video that starts playing.");
-                           [self mute:YES];
+                           [weakSelf mute:YES];
                        }
                    });
     
@@ -174,9 +178,14 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 - (void)pause
 {
-    NSLog(@"Rev video video pause pause");
-    [self bringSubviewToFront:self.imageView];
-    [self.mPlayer pause];
+    //We can remove the dispatch block if Profile VC and Story VC also calls pause from the main thread.
+    __weak typeof(self) weakSelf = self;
+    dispatch_async( dispatch_get_main_queue(),
+                   ^{
+                       NSLog(@"video video pause pause");
+                       [weakSelf bringSubviewToFront:weakSelf.imageView];
+                       [weakSelf.mPlayer pause];
+                   });
 }
 
 - (void)offScreen {
@@ -189,7 +198,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)tapped {
     if([self isPlaying]) {
-        NSLog(@"Rev new video mute Unmute");
+        NSLog(@"new video mute Unmute");
         
         self.mPlayer.muted = !self.mPlayer.muted;
         [self configureMuteIconDisplay:self.mPlayer.muted];
@@ -209,7 +218,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     if (![currentPlayerAsset isKindOfClass:AVURLAsset.class]) return nil;
     
     NSString *urlString = [[(AVURLAsset *)currentPlayerAsset URL] absoluteString];
-    NSLog(@"Rev urlString of current video player: %@", urlString);
+    NSLog(@"urlString of current video player: %@", urlString);
     return urlString;
 }
 
@@ -230,22 +239,13 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         
         NSArray *requestedKeys = @[@"playable"];
         
-        /* Tells the asset to load the values of any of the specified keys that are not already loaded. */
-        //        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
-        //         ^{
-        //             dispatch_async( dispatch_get_main_queue(),
-        //                            ^{
-        /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
-        
         [self prepareToPlayAsset:asset withKeys:requestedKeys];
         
-        //                            });
-        //         }];
     }
 }
 
 -(void)removeImage {
-    NSLog(@"Rev removing image from video cell.");
+    NSLog(@"removing image from video cell.");
     [UIView animateWithDuration:0.3 animations:^{
         self.imageView.alpha = 0.0;
     } completion:^(BOOL finished) {
@@ -260,10 +260,24 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 - (void)dealloc
 {
-    [self.mPlayer removeObserver:self forKeyPath:@"rate"];
-    [_mPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+    //playback view
+    self.mPlaybackView.player = nil;
+    self.mPlaybackView = nil;
     
+    //player
     [self.mPlayer pause];
+    [self.mPlayer.currentItem cancelPendingSeeks];
+    [self.mPlayer.currentItem.asset cancelLoading];
+    [self.mPlayer removeObserver:self forKeyPath:@"rate"];
+    [self.mPlayer removeObserver:self forKeyPath:@"currentItem"];
+    self.mPlayer = nil;
+    
+    //player item
+    [self removeObserversForPlayerItem];
+    self.mPlayerItem = nil;
+    
+    self.imageView.image = nil;
+    self.post = nil;
 }
 
 @end
@@ -363,15 +377,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     if (self.mPlayerItem)
     {
         /* Remove existing player item key value observers and notifications. */
-        
-        [self.mPlayerItem removeObserver:self forKeyPath:@"status"];
-        [self.mPlayerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
-        [self.mPlayerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
-        [self.mPlayerItem removeObserver:self forKeyPath:@"playbackBufferFull"];
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:AVPlayerItemDidPlayToEndTimeNotification
-                                                      object:self.mPlayerItem];
+        [self removeObserversForPlayerItem];
     }
     
     /* Create a new instance of AVPlayerItem from the now successfully loaded AVAsset. */
@@ -484,7 +490,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                 
             case AVPlayerItemStatusReadyToPlay:
             {
-                NSLog(@"Rev Ready to play item.....");
+                NSLog(@"Ready to play item.....");
                 if(self.imageView.alpha == 1) {
                     [self play];
                 }
@@ -548,6 +554,15 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     }
 }
 
-
+- (void)removeObserversForPlayerItem {
+    [self.mPlayerItem removeObserver:self forKeyPath:@"status"];
+    [self.mPlayerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+    [self.mPlayerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    [self.mPlayerItem removeObserver:self forKeyPath:@"playbackBufferFull"];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVPlayerItemDidPlayToEndTimeNotification
+                                                  object:self.mPlayerItem];
+}
 
 @end

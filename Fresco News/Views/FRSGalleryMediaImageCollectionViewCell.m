@@ -27,7 +27,7 @@
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    NSLog(@"Rev prepare the image cell to be reusable here.");
+    NSLog(@"prepare the image cell to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
     self.imageView.alpha = 0.0;
@@ -36,14 +36,15 @@
 }
 
 -(void)loadPost:(FRSPost *)post {
-    NSLog(@"rev loading image post");
+    NSLog(@"loading image post");
+    
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        //        self.imageView.image = nil;
-        self.userInteractionEnabled = YES;
-        self.post = post;
+        weakSelf.userInteractionEnabled = YES;
+        weakSelf.post = post;
         
-        [self loadImage];
-        
+        [weakSelf loadImage];
     });
 }
 
@@ -57,6 +58,11 @@
                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                  self.imageView.alpha = 1.0;
                              }];
+}
+
+- (void)dealloc {
+    self.imageView.image = nil;
+    self.post = nil;
 }
 
 @end
