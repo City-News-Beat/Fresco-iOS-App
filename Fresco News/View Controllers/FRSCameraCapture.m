@@ -38,12 +38,6 @@
         }
         
         AVCaptureConnection *connection = [sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-        
-        // Update the orientation on the still image output video connection before capturing.
-//        connection.videoOrientation = [self orientationFromDeviceOrientaton];
-        
-        //         Capture a still image.
-        
 
         [self.delegate didCaptureStillImage];
         
@@ -125,7 +119,6 @@
                                                                                                                                                 self.isCapturing = NO;
                                                                                                                                                 completion(nil, error);
                                                                                                                                             } else {
-//                                                                                                                                                [self.footerView updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
                                                                                                                                                 self.isCapturing = NO;
                                                                                                                                                 completion(newImageData, error);
                                                                                                                                             }
@@ -157,7 +150,6 @@
                                                                                                                                                 NSLog(@"Error occurred while saving image to photo library: %@", error);
                                                                                                                                                 completion(nil, error);
                                                                                                                                             } else {
-//                                                                                                                                                [self.footerView updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
                                                                                                                                                 completion(newImageData, error);
                                                                                                                                             }
                                                                                                                                             
