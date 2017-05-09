@@ -9,6 +9,7 @@
 #import "FRSTracker.h"
 #import "EndpointManager.h"
 #import "FRSUserManager.h"
+#import "FRSAuthManager.h"
 #import "FRSAssignment.h"
 #import "Adjust.h"
 #import <Fabric/Fabric.h>
@@ -24,7 +25,7 @@
 @implementation FRSTracker
 
 + (void)trackUser {
-    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         NSString *userID = nil;
 
         FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
@@ -46,11 +47,11 @@
             identityDictionary[@"username"] = user.username;
         }
         
-        if (userID != nil) {
+        if (userID != nil) { // Note: When this method is called from didFinishLaunching there is no authenticated user.
             [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
             [self tagUXCamUser:userID];
-            [self configureZendesk]; // We don't want to configure Zendesk unless the user is logged in.
         }
+        [self configureZendesk]; // We're adding the Zendesk config here to avoid making another isAuthenticated check.
     }
 }
 
@@ -135,6 +136,11 @@
 #pragma mark - Zendesk
 
 + (void)configureZendesk {
+    
+    #if DEBUG
+        [ZDKLogger enable:YES];
+    #endif
+    
     [[ZDKConfig instance]
      initializeWithAppId:@"ca506e6c52eb2eca41150684af0269b6642facef5d23a84e"
      zendeskUrl:@"https://fresco.zendesk.com"

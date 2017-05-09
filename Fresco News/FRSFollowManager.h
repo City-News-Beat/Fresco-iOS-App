@@ -17,8 +17,8 @@
 - (void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)getFollowersForUser:(FRSUser *)user last:(NSString *)lastUserID completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)getFollowingForUser:(FRSUser *)user last:(NSString *)lastUserID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
 

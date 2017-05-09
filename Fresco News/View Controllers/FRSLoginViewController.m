@@ -202,29 +202,6 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
-//This response object comes back from login
-- (void)setMigrateState:(NSDictionary *)responseObject {
-    BOOL shouldSync = false;
-
-    if (responseObject != nil && (responseObject[@"valid_password"] != nil && ![[responseObject valueForKey:@"valid_password"] boolValue])) {
-        shouldSync = true;
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"needs-password"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
-        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
-    } else if (![[[FRSUserManager sharedInstance] authenticatedUser] username] || ![[[FRSUserManager sharedInstance] authenticatedUser] email]) {
-        shouldSync = true;
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
-        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
-    } else {
-        shouldSync = true;
-        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userNeedsToMigrate];
-    }
-
-    if (shouldSync) {
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
 - (void)popToOrigin {
     [[FRSUserManager sharedInstance] reloadUser];
 
@@ -240,13 +217,6 @@
     }
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-}
-
-- (void)postLoginNotification {
-    // temp fix
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-      [[NSNotificationCenter defaultCenter] postNotificationName:@"user-did-login" object:nil];
-    });
 }
 
 - (IBAction)login:(id)sender {
@@ -289,8 +259,7 @@
                                    [self stopSpinner:self.loadingView onButton:self.loginButton];
 
                                    if (error.code == 0) {
-                                       [self setMigrateState:responseObject];
-
+                                       
                                        [self popToOrigin];
 
                                        if (self.passwordField.text != nil && ![self.passwordField.text isEqualToString:@""]) {
@@ -304,7 +273,7 @@
                                        }
 
 
-                                       [self checkStatusAndPresentPermissionsAlert];
+                                       [self checkStatusAndPresentPermissionsAlert:YES];
                                        
                                        return;
                                    }
@@ -353,11 +322,9 @@
               [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
           }
 
-          [self setMigrateState:responseObject];
-
           self.didAuthenticateSocial = YES;
 
-          [self checkStatusAndPresentPermissionsAlert];
+          [self checkStatusAndPresentPermissionsAlert:YES];
           [self popToOrigin];
 
           return;
@@ -419,26 +386,25 @@
 
       if (authenticated) {
           NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-
-          [self setMigrateState:responseObject];
+          
           [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
                                                         completion:^(id responseObject, NSError *error) {
-                                                          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
-
-                                                          [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                                            if (!error) {
-                                                                [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
-                                                            }
-                                                          }];
+                                                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:facebookConnected];
+                                                            
+                                                            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                                                if (!error) {
+                                                                    [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:facebookName];
+                                                                }
+                                                            }];
                                                         }];
-            self.didAuthenticateSocial = YES;
-            [self checkStatusAndPresentPermissionsAlert];
-            [self popToOrigin];
-            
-            [spinner stopLoading];
-            [spinner removeFromSuperview];
-            self.facebookButton.hidden = false;
-            return;
+          self.didAuthenticateSocial = YES;
+          [self checkStatusAndPresentPermissionsAlert:YES];
+          [self popToOrigin];
+          
+          [spinner stopLoading];
+          [spinner removeFromSuperview];
+          self.facebookButton.hidden = false;
+          return;
         }
         
         [spinner stopLoading];

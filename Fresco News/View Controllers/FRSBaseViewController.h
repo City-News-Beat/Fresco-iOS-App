@@ -44,6 +44,6 @@
 /* FRSAlertView */
 - (void)presentGenericError;
 - (void)presentNoConnectionError;
-- (void)checkStatusAndPresentPermissionsAlert;
+- (void)checkStatusAndPresentPermissionsAlert:(BOOL)reRegister;
 
 @end

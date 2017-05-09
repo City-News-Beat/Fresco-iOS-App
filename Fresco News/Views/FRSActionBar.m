@@ -17,7 +17,7 @@
 #import "FRSStoryManager.h"
 #import "FRSSocialHandler.h"
 #import "FRSUserManager.h"
-#import "FRSDualUserListViewController.h"
+#import "FRSLikeRepostViewController.h"
 
 
 @interface FRSActionBar ()
@@ -331,7 +331,7 @@
 
 - (IBAction)likeLabelTapped:(id)sender {
     if (self.gallery) {
-        FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
+        FRSLikeRepostViewController *vc = [[FRSLikeRepostViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
         [self.navigationController pushViewController:vc animated:YES];
     } else if (self.story) {
         // Pending API support
@@ -340,9 +340,13 @@
 
 - (IBAction)repostLabelTapped:(id)sender {
     if (self.gallery) {
-        FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
-        vc.didTapRepostLabel = YES;
+        FRSLikeRepostViewController *vc = [[FRSLikeRepostViewController alloc] initWithGallery:self.gallery.uid != nil ? self.gallery.uid : @""];
         [self.navigationController pushViewController:vc animated:YES];
+        // Delaying to override the initial configuration in the base view.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [vc handleRightTabTapped]; // We want to display reposts if the repost label is tapped.
+        });
+
     } else if (self.story) {
         // Pending API support
     }

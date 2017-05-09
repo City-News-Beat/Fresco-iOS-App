@@ -10,12 +10,9 @@
 
 @interface FRSCoreDataController : NSObject
 
-@property (strong) NSManagedObjectContext *managedObjectContext;
-
-/**
- Initializes coredata for us
- */
-- (void)initializeCoreData;
+@property (strong, nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic, readonly) NSManagedObjectModel *managedObjectModel;
+@property (strong, nonatomic, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 /**
  Save context in the managed context model
@@ -28,14 +25,6 @@
  @param completion completion block returning success or failre
  */
 - (void)saveContextSynchornously;
-
-/**
- The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it.
- 
- @param applicationURL applicatonURL
- @return Returns an NSPersistentStoreCoordinate
- */
-+ (NSPersistentStoreCoordinator *)createCoordinatorWithUrl;
 
 - (NSURL *)applicationDocumentsDirectory;
 

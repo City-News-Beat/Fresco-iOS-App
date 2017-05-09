@@ -261,7 +261,7 @@
     //Clear UserDefaults except client tokens
     NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in [defaultsDictionary allKeys]) {
-        if (![key isEqualToString:kClientToken]) {
+        if (![key isEqualToString:kClientToken] || ![key isEqualToString:userDeviceToken]) {
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
         }
     }

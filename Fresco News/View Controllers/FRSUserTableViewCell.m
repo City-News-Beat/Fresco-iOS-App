@@ -9,6 +9,7 @@
 #import "Haneke.h"
 #import "FRSUserManager.h"
 #import "FRSFollowManager.h"
+#import "NSURL+Fresco.h"
 
 @interface FRSUserTableViewCell ()
 
@@ -29,7 +30,7 @@
 
     NSURL *avatarURL;
     if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
-        avatarURL = [NSURL URLWithString:user.profileImage];
+        avatarURL = [NSURL URLResizedFromURLString:user.profileImage width:self.profileImageView.frame.size.width * 3]; // Multiplying by 3 to render 3x on iPhone 6/7+ devices
     }
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.profileImageView hnk_setImageFromURL:avatarURL placeholder:[UIImage imageNamed:@"user-24"]];

@@ -83,9 +83,9 @@ static NSString *const followingEndpoint = @"user/%@/following";
                           }];
 }
 
-- (void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)getFollowersForUser:(FRSUser *)user last:(NSString *)lastUserID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUserID];
 
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
@@ -94,9 +94,9 @@ static NSString *const followingEndpoint = @"user/%@/following";
                           }];
 }
 
-- (void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)getFollowingForUser:(FRSUser *)user last:(NSString *)lastUserID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUserID];
 
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil

@@ -66,7 +66,7 @@
     return [allAssets count];
 }
 
-// load a list of all photos / videos from the last 24 hours
+// load a list of all photos / videos from the last 7 days
 - (void)getAssets {
     if (!currentCollection) {
         [self getAlbumCollection];
@@ -76,19 +76,23 @@
         allAssets = [[NSMutableArray alloc] init];
     }
 
+    
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
     // have most recently created assets at this top of list
     options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO] ];
     
+    /* We don't want to limit file age to seven days anymore.
     #if TARGET_OS_SIMULATOR
         //Simulator
     #else
         //Device
         // only load assets w/ creation date within the defined maximum age
-        NSDate *yesterday = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
-        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", yesterday];
+        NSDate *date = [[NSDate date] dateByAddingTimeInterval:-maxFileAge];
+        NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"creationDate >= %@", date];
         options.predicate = dayPredicate;
     #endif
+     */
+     
 
     for (PHAssetCollection *collection in currentCollection) {
         // fetch assets based on the sort and date restrictions we set up
@@ -96,9 +100,9 @@
 
         // add each asset to our file list
         for (PHAsset *asset in assets) {
-            if (asset.location) {
+            //if (asset.location) {
                 [allAssets addObject:asset];
-            }
+            //}
         }
     }
 

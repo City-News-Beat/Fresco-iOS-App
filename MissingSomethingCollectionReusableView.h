@@ -10,5 +10,9 @@
 
 @interface MissingSomethingCollectionReusableView : UICollectionReusableView
 
+/**
+ Configures the UI by setting colors and formatting textviews.
+ */
 -(void)setup;
+
 @end

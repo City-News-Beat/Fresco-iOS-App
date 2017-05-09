@@ -11,8 +11,16 @@
 
 @interface FRSDualUserListViewController : FRSBaseViewController
 
-- (instancetype)initWithGallery:(NSString *)galleryID;
+- (void)fetchLeftDataSourceWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)fetchRightDataSourceWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 
-@property BOOL didTapRepostLabel; // used to determine which navigation bar tab should be selected
+- (void)loadMoreLeftUsersFromLast:(NSString *)lastUserID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)loadMoreRightUsersFromLast:(NSString *)lastUserID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+
+@property (strong, nonatomic) NSString *leftTitle;
+@property (strong, nonatomic) NSString *rightTitle;
+
+- (void)handleLeftTabTapped;
+- (void)handleRightTabTapped;
 
 @end

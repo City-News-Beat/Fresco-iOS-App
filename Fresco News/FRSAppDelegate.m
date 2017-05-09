@@ -34,6 +34,7 @@
 #import <Stripe/Stripe.h>
 #import "FRSIndicatorDot.h"
 #import "FRSConnectivityAlertView.h"
+#import "FRSUploadFailAlertView.h"
 
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
@@ -50,7 +51,6 @@
     [FRSTracker launchAdjust];
     [FRSTracker configureSmooch];
     [FRSTracker startSegmentAnalytics];
-    [FRSTracker trackUser];
     
     //Check if we 
     if ([self isFirstRun] && ![[FRSAuthManager sharedInstance] isAuthenticated]) {
@@ -61,7 +61,12 @@
     
     [self configureStartDate];
     [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
-    
+
+    [FRSTracker trackUser];
+
+    // Check for cached uploads from core data after core data setup has been completed.
+    [[FRSUploadManager sharedInstance] checkCachedUploads];
+
     EndpointManager *manager = [EndpointManager sharedInstance];
     [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
 
@@ -70,12 +75,6 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     [self configureWindow];
-
-    //Migration checks
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
-        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userNeedsToMigrate];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
 
     if ([[FRSAuthManager sharedInstance] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
@@ -251,26 +250,17 @@
 #pragma mark - Local/Push Notifications
 
 - (void)registerForPushNotifications {
-    
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0") == FALSE) {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]){
+        // iOS 8 Notifications
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
         
-    } else {
-        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        center.delegate = self;
-        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge)
-                              completionHandler:^(BOOL granted, NSError *_Nullable error) {
-                                  if (!error) {
-                                      [[UIApplication sharedApplication] registerForRemoteNotifications]; // required to get the app to do anything at all about push notifications
-                                      NSLog(@"Push registration success.");
-                                  } else {
-                                      NSLog(@"Push registration FAILED");
-                                      NSLog(@"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription);
-                                      NSLog(@"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion);
-                                  }
-                              }];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
+    else{
+        // iOS < 8 Notifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+    }
+
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
@@ -303,42 +293,43 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    [self application:application
-didReceiveRemoteNotification:userInfo
-fetchCompletionHandler:^(UIBackgroundFetchResult result) {
-    // nothing
-    [FRSNotificationHandler handleNotification:userInfo track:YES];
-}];
+    [self application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult result) {
+        // nothing
+        [FRSNotificationHandler handleNotification:userInfo track:YES];
+    }];
 }
 
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    const unsigned *tokenData = [deviceToken bytes];
-    NSString *newDeviceToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-                                ntohl(tokenData[0]), ntohl(tokenData[1]), ntohl(tokenData[2]),
-                                ntohl(tokenData[3]), ntohl(tokenData[4]), ntohl(tokenData[5]),
-                                ntohl(tokenData[6]), ntohl(tokenData[7])];
+    NSString *newDeviceToken = [deviceToken description];
+    newDeviceToken = [newDeviceToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    newDeviceToken = [newDeviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] == Nil) {
+    NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:userDeviceToken];
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:userDeviceToken] == Nil) {
         [FRSTracker track:notificationsEnabled];
+    } else if(oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && [oldDeviceToken isEqualToString:newDeviceToken]) {
+        return;
     }
     
-    NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    //If the user isn't logged in, don't proceed with caching the token. It will be requested later.
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) return;
     
-    [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
+    [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:userDeviceToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAuthManager sharedInstance] currentInstallation];
     
-    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && ![oldDeviceToken isEqualToString:newDeviceToken]) {
+    if(oldDeviceToken) {
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
     
-    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
-        [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
-                                                      completion:^(id responseObject, NSError *error) {
-                                                          NSLog(@"Updated user installation");
-                                                      }];
-    }
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
+                                                  completion:^(id responseObject, NSError *error) {
+                                                      NSLog(@"Updated user installation");
+                                                  }];
+
 }
 
 
@@ -350,6 +341,7 @@ fetchCompletionHandler:^(UIBackgroundFetchResult result) {
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     [FRSTracker track:notificationsDisabled];
 }
+
 // TODO: Move out of App Delegate and into FRSTabBarController
 - (void)startNotificationTimer {
     if (!notificationTimer) {
@@ -466,16 +458,20 @@ fetchCompletionHandler:^(UIBackgroundFetchResult result) {
     if(!self.isPresentingError && self.errorAlertView.window == nil){
         self.isPresentingError = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.errorAlertView = [[FRSAlertView alloc]
-                                   initWithTitle:[title uppercaseString]
-                                   message:error.localizedDescription
-                                   actionTitle:@"OK"
-                                   cancelTitle:@""
-                                   cancelTitleColor:nil
-                                   delegate:nil];
-            
-            [self.errorAlertView show];
-            
+            if ([title isEqualToString:uploadError]) {
+                FRSUploadFailAlertView *alert = [[FRSUploadFailAlertView alloc] initUploadFailAlertViewWithError:error];
+                [alert show];
+            } else {
+                self.errorAlertView = [[FRSAlertView alloc]
+                                       initWithTitle:[title uppercaseString]
+                                       message:error.localizedDescription
+                                       actionTitle:@"OK"
+                                       cancelTitle:@""
+                                       cancelTitleColor:nil
+                                       delegate:nil];
+                
+                [self.errorAlertView show];
+            }
             self.isPresentingError = NO;
         });
     }

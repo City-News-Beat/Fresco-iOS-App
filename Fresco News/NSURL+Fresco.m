@@ -13,7 +13,7 @@
 + (NSURL *)URLResizedFromURLString:(NSString *)url width:(NSInteger)width {
     NSString *adjustedURL = url;
     
-    if ([adjustedURL containsString:@"cdn.fresconews"]) {
+    if ([adjustedURL containsString:@"cdn.fresconews"] || [adjustedURL containsString:@"cdn.dev.fresconews"]) {
         NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)width];
         adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
         adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];

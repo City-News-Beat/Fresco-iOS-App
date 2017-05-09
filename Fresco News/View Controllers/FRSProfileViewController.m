@@ -25,6 +25,7 @@
 #import "FRSNotificationManager.h"
 #import "FRSStory.h"
 #import "FRSModerationAlertView.h"
+#import "FRSFollowersFollowingViewController.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
@@ -1485,28 +1486,30 @@
 
 - (void)shouldRefresh:(BOOL)refresh {
 
-    if ([self.navigationController.viewControllers count] < 2) {
-        return;
-    }
-
-    UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
-    FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
-    FRSFollowersViewController *followersVC = (FRSFollowersViewController *)previousController;
-
-    if (refresh) {
-        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
-            searchVC.shouldUpdateOnReturn = YES;
-        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
-            followersVC.shouldUpdateOnReturn = YES;
-        }
-
-    } else {
-        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
-            searchVC.shouldUpdateOnReturn = NO;
-        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
-            followersVC.shouldUpdateOnReturn = NO;
-        }
-    }
+    //TODO: Rewrite this using FRSDualUserVC
+    
+//    if ([self.navigationController.viewControllers count] < 2) {
+//        return;
+//    }
+//
+//    UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+//    FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
+//    FRSFollowersViewController *followersVC = (FRSFollowersViewController *)previousController;
+//
+//    if (refresh) {
+//        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+//            searchVC.shouldUpdateOnReturn = YES;
+//        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
+//            followersVC.shouldUpdateOnReturn = YES;
+//        }
+//
+//    } else {
+//        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+//            searchVC.shouldUpdateOnReturn = NO;
+//        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
+//            followersVC.shouldUpdateOnReturn = NO;
+//        }
+//    }
 }
 
 - (void)showEditProfile {
@@ -1522,8 +1525,7 @@
 }
 
 - (void)showFollowers {
-    FRSFollowersViewController *vc = [[FRSFollowersViewController alloc] init];
-    vc.representedUser = _representedUser;
+    FRSFollowersFollowingViewController *vc = [[FRSFollowersFollowingViewController alloc] initWithUser:self.representedUser];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

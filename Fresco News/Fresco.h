@@ -9,7 +9,7 @@
 
 // file loading
 
-static int const maxFileAge = 86400; //1 day, in seconds
+static int const maxFileAge = 86400 * 7; // 86400 = 1 day in seconds. Multiply by 7 for 1 week.
 
 // notifications
 static NSString *const kStatusBarTappedNotification = @"statusBarTappedNotification";
@@ -18,9 +18,6 @@ static NSString *const serviceName = @"frescoNewsService3";
 static NSString *const FRSUploadNotification = @"FRSUploadUpdateNotification";
 static NSString *const FRSRetryUpload = @"FRSRetryUpload";
 static NSString *const FRSDismissUpload = @"FRSDismissUpload";
-
-static NSString *const userNeedsToMigrate = @"userNeedsToMigrate";
-static NSString *const userHasFinishedMigrating = @"userHasFinishedMigrating";
 
 // object types
 static NSString *const postObjectType = @"post";
@@ -43,8 +40,7 @@ static NSString *const kClientToken = @"kClientToken";
 static NSString *const kUserToken = @"kUserToken";
 static NSString *const cachedLocation = @"cachedLocation";
 static NSString *const initialLocationRequested = @"initialLocationRequested";
-
-
+static NSString *const userDeviceToken = @"deviceToken";
 
 
 // nsnotification

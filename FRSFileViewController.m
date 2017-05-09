@@ -46,11 +46,7 @@ static NSInteger const maxAssets = 8;
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
 
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-
-    self.uploadViewController = [[FRSUploadViewController alloc] init];
-    self.uploadViewController.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
-    self.uploadViewController.preselectedAssignment = self.preselectedAssignment;
-    [self.uploadViewController view];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -79,6 +75,15 @@ static NSInteger const maxAssets = 8;
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    
+    // This is a hotfix. We're recreating the UploadVC to reset the carousel and keyboard.
+    self.uploadViewController = [[FRSUploadViewController alloc] init];
+    self.uploadViewController.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
+    self.uploadViewController.preselectedAssignment = self.preselectedAssignment;
+    [self.uploadViewController view];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -269,12 +274,6 @@ static NSInteger const maxAssets = 8;
         nextButton.enabled = YES;
     } else {
         nextButton.enabled = NO;
-    }
-
-    NSMutableArray *locations = [[NSMutableArray alloc] init];
-
-    for (PHAsset *asset in selectedAssets) {
-        [locations addObject:asset.location];
     }
 }
 

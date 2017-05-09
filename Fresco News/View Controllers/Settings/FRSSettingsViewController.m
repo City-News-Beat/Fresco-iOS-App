@@ -444,6 +444,9 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
     // Show Help Center
     [ZDKHelpCenter pushHelpCenterOverview:self.navigationController withContentModel:helpCenterContentModel];
+    
+    // Track event
+    [FRSTracker track:@"FAQ opened"];
 }
 
 #pragma mark - Easter Egg

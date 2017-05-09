@@ -99,13 +99,10 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
         [FRSTracker trackUser];
         [FRSTracker track:loginEvent];
         
-        NSDictionary *currentInstallation = [self currentInstallation];
-        
-        if ([currentInstallation objectForKey:@"device_token"]) {
-            NSDictionary *update = @{ @"installation" : currentInstallation };
-            [[FRSUserManager sharedInstance] updateUserWithDigestion:update completion:nil];
-        }
-        
+        // Set social toggles in settings
+        [[NSUserDefaults standardUserDefaults] setBool:userResponseObject[@"social_links"][@"twitter"]  != nil ? YES : NO forKey:twitterConnected];
+        [[NSUserDefaults standardUserDefaults] setBool:userResponseObject[@"social_links"][@"facebook"] != nil ? YES : NO forKey:facebookConnected];
+
         completion(userResponseObject, nil);
     }];
 }
@@ -180,7 +177,7 @@ static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
 
 - (NSDictionary *)currentInstallation {
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
-    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
+    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:userDeviceToken];
 
     if (deviceToken != Nil || [deviceToken isEqual:[NSNull null]]) {
         currentInstallation[@"device_token"] = deviceToken;

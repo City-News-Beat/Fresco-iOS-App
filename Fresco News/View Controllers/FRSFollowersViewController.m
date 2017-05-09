@@ -260,6 +260,12 @@
                                                       [following addObject:newUser];
                                                   }
 
+                                                  // Avoid reloading if we don't need one.
+                                                  if ([[(FRSUser *)[following lastObject] uid] isEqualToString:[(FRSUser *)[self.followingArray lastObject] uid]]) {
+                                                      [self.followingTable dg_stopLoading];
+                                                      return;
+                                                  }
+                                                    
                                                   self.followingArray = following;
 
                                                   if (self.followingArray.count == 0) {
@@ -268,12 +274,11 @@
                                                       [self displayAwkwardView:false followingTable:true];
                                                   }
 
-                                                  [self.tableView reloadData];
-                                                  [self.tableView dg_stopLoading];
                                                   [self.followingTable reloadData];
                                                   [self.followingTable dg_stopLoading];
 
                                                   self.hasLoadedOnce = TRUE;
+                                                    isAtBottomFollowing = NO;
                                                 }];
 }
 
@@ -289,6 +294,12 @@
                                                       FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSFollowManager sharedInstance] managedObjectContext]];
                                                       [followers addObject:newUser];
                                                   }
+                                                    
+                                                  // Avoid reloading if we don't need one.
+                                                  if ([[(FRSUser *)[followers lastObject] uid] isEqualToString:[(FRSUser *)[self.followerArray lastObject] uid]]) {
+                                                      [self.tableView dg_stopLoading];
+                                                      return;
+                                                  }
 
                                                   self.followerArray = followers;
 
@@ -299,12 +310,9 @@
                                                       [self displayAwkwardView:false followingTable:false];
                                                   }
 
-                                                  [self.followingTable reloadData];
-                                                  [self.followingTable dg_stopLoading];
                                                   [self.tableView reloadData];
                                                   [self.tableView dg_stopLoading];
-                                                  //[self.followerSpinner stopLoading];
-                                                  //self.followerSpinner.hidden = true;
+                                                    isAtBottomFollowers = NO;
                                                 }];
 }
 
@@ -434,10 +442,6 @@
 #pragma mark - UITableView Delegate DataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.tableView == tableView) {
-
-    } else {
-    }
     return 1;
 }
 
@@ -523,7 +527,7 @@
                                                       loadingViewSize:20
                                                              velocity:0
                                                         actionHandler:^{
-                                                          [self reloadData];
+                                                            [self reloadFollowing];
                                                         }
                                                           loadingView:self.loadingView
                                                                  yPos:0];
@@ -548,7 +552,7 @@
                                                  loadingViewSize:20
                                                         velocity:0
                                                    actionHandler:^{
-                                                     [self reloadData];
+                                                       [self reloadFollowers];
                                                    }
                                                      loadingView:self.loadingView
                                                             yPos:0];
