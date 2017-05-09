@@ -75,6 +75,9 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 @property (strong, nonatomic) FRSTransparentAlertView *tipsAlert;
 
+@property (strong, nonatomic) UISwipeGestureRecognizer *swipeLeftGestureRec;
+@property (strong, nonatomic) UISwipeGestureRecognizer *swipeRightGestureRec;
+
 @end
 
 @implementation FRSCameraViewController
@@ -232,13 +235,13 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)configureGestureRecognizer {
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
-    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    [self.view addGestureRecognizer:swipeLeft];
+    self.swipeLeftGestureRec = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
+    self.swipeLeftGestureRec.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:self.swipeLeftGestureRec];
     
-    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-    [self.view addGestureRecognizer:swipeRight];
+    self.swipeRightGestureRec = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
+    self.swipeRightGestureRec.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:self.swipeRightGestureRec];
 }
 
 -(void)swipeLeft {
@@ -827,6 +830,9 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     dispatch_async(self.sessionManager.sessionQueue, ^{
 
       if (!self.sessionManager.movieFileOutput.isRecording) {
+          
+          self.swipeRightGestureRec.enabled = NO;
+          self.swipeLeftGestureRec.enabled = NO;
 
           AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
 
@@ -905,6 +911,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
           }
 
       } else {
+          self.swipeRightGestureRec.enabled = YES;
+          self.swipeLeftGestureRec.enabled = YES;
           [self.sessionManager.movieFileOutput stopRecording];
       }
     });
