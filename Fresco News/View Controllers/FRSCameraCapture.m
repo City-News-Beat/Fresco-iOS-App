@@ -76,6 +76,8 @@
                                                                                               [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
                                                                                           }
                                                                                           
+                                                                                          [metadata setObject:@"photo" forKey:@"capture_mode"];
+
                                                                                           CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
                                                                                           
                                                                                           //this will be the data CGImageDestinationRef will write into
