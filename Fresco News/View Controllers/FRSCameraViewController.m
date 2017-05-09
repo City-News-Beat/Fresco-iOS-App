@@ -852,7 +852,33 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                             stringWithFormat:@"%+08.4lf%+09.4lf/",
                             [FRSLocator sharedLocator].currentLocation.coordinate.latitude,
                             [FRSLocator sharedLocator].currentLocation.coordinate.longitude];
-              self.sessionManager.movieFileOutput.metadata = @[ item ];
+              
+              AVMutableMetadataItem *captureType = [[AVMutableMetadataItem alloc] init];
+              NSString *captureTypeString = @"";
+
+              switch (self.footerView.captureModeSlider.currentIndex) {
+                  case FRSCaptureModeVideo:
+                      captureTypeString = @"video";
+                      break;
+                  case FRSCaptureModeWide:
+                      captureTypeString = @"wide";
+                      break;
+                  case FRSCaptureModeInterview:
+                      captureTypeString = @"interview";
+                      break;
+                  case FRSCaptureModePan:
+                      captureTypeString = @"pan";
+                      break;
+                      
+                  default:
+                      break;
+              }
+              
+              captureType.keySpace = AVMetadataKeySpaceCommon;
+              captureType.key = @"capture_type";
+              captureType.value = captureTypeString;
+              
+              self.sessionManager.movieFileOutput.metadata = @[ item , captureType ];
 
               if ([UIDevice currentDevice].isMultitaskingSupported) {
                   // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
