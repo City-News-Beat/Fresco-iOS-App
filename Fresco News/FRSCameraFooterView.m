@@ -13,10 +13,9 @@
 @interface FRSCameraFooterView() <FRSCaptureModeSliderDelegate>;
 
 @property (strong, nonatomic) UIButton *nextButton;
+@property (strong, nonatomic) UIImageView *nextButtonPlaceholder;
 @property BOOL torchIsOn;
 @property BOOL flashIsOn;
-@property (strong, nonatomic) UIImageView *nextButtonPlaceholder;
-
 @property BOOL hideNewFeaturesForABTesting;
 
 @end
@@ -62,6 +61,8 @@
     }
 }
 
+
+
 - (void)captureModeDidUpdate:(FRSCaptureMode)captureMode {
     if (captureMode == FRSCaptureModePhoto) {
         [self toggleCaptureModeForPhoto:YES];
@@ -84,6 +85,7 @@
         self.backgroundColor = [UIColor frescoTransparentDarkColor];
     }
 }
+
 
 
 #pragma mark - Next Button
@@ -130,7 +132,6 @@
 
 - (void)updatePreviewButtonWithImage:(UIImage *)image {
     //TODO: This does not animate.
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.nextButtonPlaceholder.alpha = 0;
         
@@ -138,7 +139,7 @@
         temp.image = image;
         [temp clipAsCircle];
         [self.nextButtonContainer addSubview:temp];
-
+        
         [UIView animateWithDuration:0.3
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -168,6 +169,9 @@
     [self.delegate didTapTipsButton];
 }
 
+/**
+ We're adding this because the tips button is out of the footerview frame.
+ */
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     if (!self.clipsToBounds && !self.hidden && self.alpha > 0) {
         for (UIView *subview in self.subviews.reverseObjectEnumerator) {
@@ -178,11 +182,11 @@
             }
         }
     }
-    
     return nil;
 }
 
 #pragma mark - Flash Button
+// TODO: Move this button out into it's own class.
 - (void)configureFlashButton {
     self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - ICON_WIDTH*2, 0, ICON_WIDTH, ICON_WIDTH)];
     [self.flashButton centerVerticallyInView:self];
