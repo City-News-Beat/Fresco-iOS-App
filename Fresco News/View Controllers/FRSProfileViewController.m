@@ -76,6 +76,8 @@
 @property (strong, nonatomic) NSString *reportUserReasonString;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 
+@property (assign, nonatomic) BOOL isScrolling;
+
 @property BOOL currentFeedIsLikes;
 
 @end
@@ -1385,49 +1387,55 @@
         // self.sectionView.backgroundColor = [UIColor greenColor]; // Debug
     }
 
-    NSArray *visibleCells = [self.tableView visibleCells];
-
-    CGPoint currentOffset = scrollView.contentOffset;
-    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-
-    NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
-    if (timeDiff > 0.1) {
-        CGFloat distance = currentOffset.y - lastScrollOffset.y;
-        //The multiply by 10, / 1000 isn't really necessary.......
-        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
-
-        CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
-        if (scrollSpeed > maxScrollVelocity) {
-            isScrollingFast = YES;
-        } else {
-            isScrollingFast = NO;
-        }
-
-        lastScrollOffset = currentOffset;
-        lastOffsetCapture = currentTime;
-    }
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      BOOL taken = NO;
-
-      for (FRSGalleryTableViewCell *cell in visibleCells) {
-          if ([[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
-              if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-                  if (!taken && !isScrollingFast) {
-                      [cell play];
-                      taken = YES;
-                  } else {
-                      [cell pause];
-                  }
-              } else {
-                  [cell pause];
-              }
-          }
-      }
-    });
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if(self.isScrolling){
+        if(!decelerate){
+            self.isScrolling = NO;
+            [self handlePlay];
+        }
+    }
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if(self.isScrolling){
+        self.isScrolling = NO;
+        [self handlePlay];
+    }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.isScrolling = YES;
+    [self pausePlayers];
+}
+
+-(void)handlePlay {
+    NSLog(@"handlePlay");
+    
+    [self pausePlayers];
+    
+    for (FRSGalleryTableViewCell *cell in self.tableView.visibleCells) {
+        /*
+         Start playback mid frame -- at least 60% of the table.
+         */
+        if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
+        
+        if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
+            NSLog(@"playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
+            [cell play];
+            break;
+        }
+    }
+}
+
+- (void)pausePlayers {
+    for (FRSGalleryTableViewCell *cell in [self.tableView visibleCells]) {
+        if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+            continue;
+        }
+        [cell pause];
+    }
 }
 
 #pragma mark - Navigation

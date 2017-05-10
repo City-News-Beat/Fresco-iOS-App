@@ -816,12 +816,6 @@ static NSInteger const galleriesPerPage = 12;
             self.isInFollowers = true;
         }
     }
-    
-    if (scrollView == self.tableView) {
-        
-        //TODO: Scroll - Need to refactor this.
-        return;
-    }
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
