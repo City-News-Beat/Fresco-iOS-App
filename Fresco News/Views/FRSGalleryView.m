@@ -52,33 +52,57 @@
     self.clipsToBounds = NO;
     self.gallery = gallery;
     
+    //load labels and icons for first page initially
+    self.adjustedPage = 0;
     self.orderedPosts = [gallery.posts allObjects];
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
+    
+    if (self.orderedPosts.count == 0) return;
     
     [self configureGalleryMediaViewOnRefresh];
     
     [self.actionBar updateSocialButtonsFromButton:nil];
     
-    self.pageControl.numberOfPages = self.gallery.posts.count;
-    [self.pageControl setCurrentPage:0];
+    [self updateCarouselViews];
+    
+    [self updateCaption];
+    
+    [self adjustHeight];
+    
+    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+    }
+    
+    [self configureActionBar];
+}
+
+- (void)updateCarouselViews {
+    //page control
+    self.pageControl.numberOfPages = self.orderedPosts.count;
+    [self.pageControl setCurrentPage:self.adjustedPage];
     [self.pageControl sizeToFit];
     
     self.pageControl.frame = CGRectMake(self.frame.size.width - ((self.gallery.posts.count) * 16) - 16, self.mediaView.frame.size.height - 15 - 8, (self.gallery.posts.count) * 16, 8);
     
-    [self updateUser];
-    [self updateLabels];
-    
+    //horizontal line views
     self.topLine.frame = CGRectMake(0, 0, self.mediaView.frame.size.width, 0.5);
     self.bottomLine.frame = CGRectMake(0, self.mediaView.frame.size.height - 0.5, self.mediaView.frame.size.width, 0.5);
-    self.clockIV.center = self.pageControl.center;
     
+    //clock/time icon
+    self.clockIV.center = self.pageControl.center;
     self.clockIV.frame = CGRectMake(21, self.clockIV.frame.origin.y, 16, 16);
+    
+    //location icon
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
     
-    // RIGHT HUR
+    //profile icon
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
     [self.profileIV setContentMode:UIViewContentModeScaleAspectFill];
     
+    [self updateLabels];
+}
+
+- (void)updateCaption {
     self.captionLabel.text = self.gallery.caption;
     
     if ([self.delegate shouldHaveTextLimit]) {
@@ -90,52 +114,25 @@
     [self.captionLabel sizeToFit];
     
     [self.captionLabel setFrame:CGRectMake(16, [self imageViewHeight] + TEXTVIEW_TOP_PAD, self.mediaView.frame.size.width - 32, self.captionLabel.frame.size.height)];
-    
-    self.timeLabel.center = self.clockIV.center;
-    [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
-    CGRect timeFrame = self.timeLabel.frame;
-    timeFrame.size.width = 100;
-    self.timeLabel.frame = timeFrame;
-    self.locationLabel.center = self.locationIV.center;
-    [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
-    
-    self.nameLabel.center = self.profileIV.center;
-    [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
-    [self.nameLabel sizeToFit];
-    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
-    
-    [self updateScrollView];
-    [self adjustHeight];
-    
-    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
-    }
-    
-    
-    [self configureActionBar];
-    
 }
 
-- (void)updateUser {
-    FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
+- (void)updateUserInfoForCurrentPost {
+    FRSPost *adjustedPost = (FRSPost *)self.orderedPosts[self.adjustedPage];
     
-    if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
-        NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
+    NSLog(@"updateUserInfoForCurrentPost adjustedPost.creator.profileImage: %@", adjustedPost.creator.profileImage);
+    
+    if (adjustedPost.creator.profileImage != Nil && ![adjustedPost.creator.profileImage isEqual:[NSNull null]] && [[adjustedPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![adjustedPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:adjustedPost.creator.profileImage].absoluteString.length > 1) {
+        NSString *smallAvatar = [adjustedPost.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+        self.profileIV.hidden = NO;
         
-        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+        [self.nameLabel setOriginWithPoint:CGPointMake(self.locationLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     } else {
         [self.profileIV setImage:Nil];
-        [self.nameLabel setOriginWithPoint:CGPointMake(0, self.nameLabel.frame.origin.y)];
-    }
-}
+        self.profileIV.hidden = YES;
 
-- (void)updateScrollView {
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf configureHorizontalLines];
-    });
+        [self.nameLabel setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.nameLabel.frame.origin.y)];
+    }
 }
 
 - (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate {
@@ -155,6 +152,7 @@
         
         self.orderedPosts = posts;
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
+        self.adjustedPage = 0;
         
         [self configureUI];
         
@@ -178,22 +176,16 @@
     
     self.orderedPosts = posts;
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
+    self.adjustedPage = 0;
     
     [self configureUI];
     [self.actionBar updateSocialButtonsFromButton:nil]; // Called in the expanded VC
 }
 
-- (void)contentTap:(UITapGestureRecognizer *)sender {
-    //NSLog(@"TAP");
-}
-
 - (void)configureUI {
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf configureHorizontalLines];
-    });
+    [self configureHorizontalLines];
     
     //collection view stuff
     [self configureGalleryMediaViewOnLoad];
@@ -229,21 +221,19 @@
 }
 
 - (void)configureHorizontalLines {
-    [self.nameLabel sizeToFit];
+    self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mediaView.frame.size.width, 0.5)];
+    self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    [self addSubview:self.topLine];
     
-    if (!self.topLine) {
-        self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mediaView.frame.size.width, 0.5)];
-        self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:self.topLine];
-        
-        self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.mediaView.frame.size.height - 0.5, self.mediaView.frame.size.width, 0.5)];
-        self.bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-        [self addSubview:self.bottomLine];
-    }
+    self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.mediaView.frame.size.height - 0.5, self.mediaView.frame.size.width, 0.5)];
+    self.bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    [self addSubview:self.bottomLine];
 }
 
 - (void)dealloc {
-    
+    self.gallery = nil;
+    self.orderedPosts = nil;
+    self.delegate = nil;
 }
 
 - (void)configureMuteIconDisplay:(BOOL)display {
@@ -318,7 +308,7 @@
     
     [self addSubview:self.clockIV];
     
-    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    FRSPost *post = [self.orderedPosts firstObject];
     
     self.timeLabel = [self galleryInfoLabelWithText:[FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate] fontSize:13];
     self.timeLabel.center = self.clockIV.center;
@@ -340,7 +330,7 @@
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
     [self addSubview:self.locationIV];
     
-    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    FRSPost *post = [self.orderedPosts firstObject];
     
     self.locationLabel = [self galleryInfoLabelWithText:post.address fontSize:13];
     self.locationLabel.center = self.locationIV.center;
@@ -361,7 +351,7 @@
     self.profileIV.clipsToBounds = YES;
     [self addSubview:self.profileIV];
     
-    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    FRSPost *post = [self.orderedPosts firstObject];
     
     self.nameLabel = [self galleryInfoLabelWithText:[FRSPost bylineForPost:post] fontSize:17];
     
@@ -378,23 +368,14 @@
     self.nameLabel.layer.masksToBounds = NO;
     [self addSubview:self.nameLabel];
     
-    if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
+    [self updateUserInfoForCurrentPost];
+    
+    //tap gesture
+    UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+    [photoTap setNumberOfTapsRequired:1];
+    [self.profileIV setUserInteractionEnabled:YES];
+    [self.profileIV addGestureRecognizer:photoTap];
 
-        __weak typeof(self) weakSelf = self;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //Set user image
-            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
-            [weakSelf.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
-            
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:weakSelf action:@selector(segueToUserProfile:)];
-            [photoTap setNumberOfTapsRequired:1];
-            [weakSelf.profileIV setUserInteractionEnabled:YES];
-            [weakSelf.profileIV addGestureRecognizer:photoTap];
-        });
-    } else {
-        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-    }
     UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
     [bylineTap setNumberOfTapsRequired:1];
     [self.nameLabel setUserInteractionEnabled:YES];
@@ -407,6 +388,7 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
+    //text
     self.nameLabel.text = [FRSPost bylineForPost:post];
     
     self.locationLabel.text = post.address;
@@ -417,6 +399,7 @@
     
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
+    //frames
     self.nameLabel.numberOfLines = 1;
     [self.nameLabel sizeToFit];
     self.nameLabel.center = self.profileIV.center;
@@ -431,27 +414,8 @@
     CGRect timeFrame = self.timeLabel.frame;
     timeFrame.size.width = 100;
     self.timeLabel.frame = timeFrame;
-    if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
-        
-        __weak typeof(self) weakSelf = self;
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
-            [weakSelf.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            [photoTap setNumberOfTapsRequired:1];
-            [weakSelf.profileIV setUserInteractionEnabled:YES];
-            [weakSelf.profileIV addGestureRecognizer:photoTap];
-        });
-        
-    } else {
-        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-    }
-    
-    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-    [bylineTap setNumberOfTapsRequired:1];
-    [self.nameLabel setUserInteractionEnabled:YES];
-    [self.nameLabel addGestureRecognizer:bylineTap];
+    [self updateUserInfoForCurrentPost];
     
     [self addShadowToLabel:self.nameLabel];
     [self addShadowToLabel:self.locationLabel];
@@ -544,6 +508,8 @@
 
 -(void)mediaDidChangeToPage:(NSInteger)page {
     self.pageControl.currentPage = page;
+    self.adjustedPage = page;
+    [self updateLabels];
 }
 
 -(void)mediaShouldShowMuteIcon:(BOOL)show {
@@ -567,6 +533,8 @@
     if (page >= self.gallery.posts.count) {
         return;
     }
+    
+    self.adjustedPage = page;
 
     [self updateLabels];
     
@@ -600,18 +568,7 @@
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
     
-    self.profileIV.image = Nil;
-    
-    FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
-    if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
-    } else {
-        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-    }
-    
-    if (adjustedPost.videoUrl == nil) {
-        self.muteImageView.alpha = 0;
-    }
+    [self updateUserInfoForCurrentPost];
 }
 
 - (NSInteger)imageViewHeight {
@@ -671,6 +628,7 @@
                 
                 FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
                 
+                NSLog(@"[currentPost.creator uid]: %@", [currentPost.creator uid]);
                 if ([currentPost.creator uid] != nil) {
                     [weakSelf.delegate.navigationController pushViewController:userViewController animated:YES];
                 }
