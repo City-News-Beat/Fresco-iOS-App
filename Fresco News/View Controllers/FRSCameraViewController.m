@@ -80,6 +80,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 @property (strong, nonatomic) FRSAlertView *rotateDeviceAlert;
 
+@property (nonatomic) BOOL firstRun;
+
 @end
 
 @implementation FRSCameraViewController
@@ -215,7 +217,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-
+    self.firstRun = YES;
     [self configurePreview];
     [self configureGestureRecognizer];
     [self configureBottomContainer];
@@ -466,7 +468,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)animateVideoRotationAppear {
 
-    CGFloat duration = 0.45;
+    CGFloat duration = self.firstRun ? 0.0 : 0.45;
 
     [UIView animateWithDuration:duration / 2
         delay:0.0
@@ -499,7 +501,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
                      }
                      completion:^(BOOL finished){
-
+                         self.firstRun = NO;
                      }];
 
     [UIView animateWithDuration:duration
