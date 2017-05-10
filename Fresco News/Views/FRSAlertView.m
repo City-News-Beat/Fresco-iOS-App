@@ -90,7 +90,7 @@
     
     // The FRSTransparentAlertView needs to support dynamic strings for the message body and button titles.
     // This makes sure the buttons are always sized and placed properly if there are two buttons in the alert.
-    if (![self.rightCancelButton.titleLabel.text isEqual:@""]) {
+    if (![self.rightCancelButton.titleLabel.text isEqual:@""] && ![self.leftActionButton.titleLabel.text isEqual:@""] && self.leftActionButton.titleLabel.text != nil && self.rightCancelButton.titleLabel.text != nil) {
         [self.leftActionButton sizeToFit];
         self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
         [self.rightCancelButton sizeToFit];

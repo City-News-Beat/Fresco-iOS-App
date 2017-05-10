@@ -78,6 +78,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeLeftGestureRec;
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeRightGestureRec;
 
+@property (strong, nonatomic) FRSAlertView *rotateDeviceAlert;
+
 @end
 
 @implementation FRSCameraViewController
@@ -570,6 +572,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         return;
     }
     
+    if (self.rotateDeviceAlert) {
+        [self.rotateDeviceAlert dismiss];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat angle = 0;
 
@@ -676,7 +682,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)presentRotateAlert {
-    // Present an alert in landscape asking the user to rotate their phone.
+    if (!self.rotateDeviceAlert) {
+        self.rotateDeviceAlert = [[FRSAlertView alloc] initWithTitle:@"ROTATE YOUR PHONE!" message:@"Videos look way better on the big screen when they're in landscape! Tilt your device left or right to start shooting a video." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+    }
+    [self.rotateDeviceAlert show];
 }
 
 
