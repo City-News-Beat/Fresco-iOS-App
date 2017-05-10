@@ -88,12 +88,14 @@
 
     self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
     
-    // Some alert views have buttons and messages with changing titles.
-    // This makes sure the right button is always sized and placed properly.
-    [self.leftActionButton sizeToFit];
-    self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
-    [self.rightCancelButton sizeToFit];
-    [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+    // The FRSTransparentAlertView needs to support dynamic strings for the message body and button titles.
+    // This makes sure the buttons are always sized and placed properly if there are two buttons in the alert.
+    if (![self.rightCancelButton.titleLabel.text isEqual:@""]) {
+        [self.leftActionButton sizeToFit];
+        self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+        [self.rightCancelButton sizeToFit];
+        [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+    }
 }
 
 - (void)addShadowAndClip {
