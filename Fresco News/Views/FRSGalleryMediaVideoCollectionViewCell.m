@@ -96,15 +96,17 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 #pragma mark Load Info
 
 -(void)loadPost:(FRSPost *)post {
-    NSLog(@"rev load video post: %@", post.uid);
-    self.post = post;
-    
-    [self configureMuteIconDisplay:YES];
-    
-    [self loadImage];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSLog(@"rev load video post: %@", post.uid);
+        self.post = post;
+        
+        [self configureMuteIconDisplay:YES];
+        
+        [self loadImage];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
+    });
 }
 
 - (void)loadImage {
@@ -126,7 +128,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                                  
                                  if(![self isPlaying])
                                      self.imageView.alpha = 1.0;
-
+                                 
                              }];
     
     
@@ -138,7 +140,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 {
     //We can remove the dispatch block if Profile VC and Story VC also calls play/pause from the main thread.
     __weak typeof(self) weakSelf = self;
-
+    
     dispatch_async( dispatch_get_main_queue(),
                    ^{
                        
@@ -484,7 +486,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                  it has not tried to load new media resources for playback */
             case AVPlayerItemStatusUnknown:
             {
-
+                
             }
                 break;
                 
@@ -508,7 +510,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     /* AVPlayer "rate" property value observer. */
     else if (context == AVPlayerDemoPlaybackViewControllerRateObservationContext)
     {
-
+        
     }
     /* AVPlayer "currentItem" property observer.
      Called when the AVPlayer replaceCurrentItemWithPlayerItem:
@@ -520,7 +522,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
         /* Is the new player item null? */
         if (newPlayerItem == (id)[NSNull null])
         {
-
+            
         }
         else /* Replacement of player currentItem has occurred */
         {

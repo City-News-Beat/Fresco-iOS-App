@@ -99,9 +99,9 @@ static NSInteger const galleriesPerPage = 12;
     self.shouldAutoPlayWithoutUserInteraction = YES;
     
     [self configureDataSourceOnLoad];
-
     
-
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -237,7 +237,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)reloadData {
     __weak typeof(self) weakSelf = self;
-
+    
     [self.followingTable reloadFollowing];
     
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
@@ -401,68 +401,73 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 -(void)handlePullToRefreshedData:(NSArray *)refreshedGalleries {
+    NSLog(@"Home VC handlePullToRefreshedData");
+    
     //Now deleting the cache for every pull to refresh.
     [self deleteCache];
+    //Now delete contents of the highlights array also.
+    [self.highlights removeAllObjects];
+    
     [self appendToLocalDataCache:refreshedGalleries];
-
+    
     /*
      TODO: The following code is to check if the new data falls in between the cached data. If included, need rigorous testing for edge cases, where top gallery from the new list may fall in between any place. Also for metadata updates.
      
-//    revcheck Refreshed Galleries From Server Contain Current TopGallery
-//    If our top gallery is in the refreshed batch. just insert only new ones in highlightsArray, else delete cache and just have new ones.
-    FRSGallery *topGallery;
-    if (self.highlights.count>0) {
-        topGallery = self.highlights[0];
-    }
-    if(!topGallery) {
-        // need to directly save the new batch in core data and also display them.
-         [self appendToLocalDataCache:refreshedGalleries];
-        return;
-    }
-    
-    NSArray *refreshedGalleriesIDs = [refreshedGalleries valueForKey:@"id"];
-    
-    if(refreshedGalleriesIDs.count == 0) {
-        // need to directly save the new batch in core data and also display them.
-        [self appendToLocalDataCache:refreshedGalleries];
-        return;
-    }
-    
-    if (![refreshedGalleriesIDs containsObject:topGallery.uid]) {
-        //OK. The current displayed data on the table is outdated. Dont know how far way. So delete all teh cache from Core Data , also frm the local highlights array.
-        //Start fresh.
-        //need to directly save the new batch in core data and also display them.
-        [self deleteCache];
-        [self appendToLocalDataCache:refreshedGalleries];
-        return;
-    }
-    
-    //proceed to insert only the new ones.
-    NSMutableArray *onlyNewGalleries = [[NSMutableArray alloc] initWithCapacity:refreshedGalleries.count];
-    
-    NSInteger index = 0;
-    for(NSDictionary *gallery in refreshedGalleries) {
-        NSString *galleryID = gallery[@"id"];
-        if([galleryID isEqualToString:topGallery.uid]) {
-            break;
-        }
-        else {
-            FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
-            
-            [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
-            [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-            [onlyNewGalleries addObject:galleryToSave];
-            index++;
-        }
-        
-    }
-    
-    [self.appDelegate.coreDataController saveContext];
-
-    //update metadata
-    [self updateHighlightsMetadataFromRefreshIndex:index fromArray:refreshedGalleries];
-    
-    [self.tableView reloadData];
+     //    revcheck Refreshed Galleries From Server Contain Current TopGallery
+     //    If our top gallery is in the refreshed batch. just insert only new ones in highlightsArray, else delete cache and just have new ones.
+     FRSGallery *topGallery;
+     if (self.highlights.count>0) {
+     topGallery = self.highlights[0];
+     }
+     if(!topGallery) {
+     // need to directly save the new batch in core data and also display them.
+     [self appendToLocalDataCache:refreshedGalleries];
+     return;
+     }
+     
+     NSArray *refreshedGalleriesIDs = [refreshedGalleries valueForKey:@"id"];
+     
+     if(refreshedGalleriesIDs.count == 0) {
+     // need to directly save the new batch in core data and also display them.
+     [self appendToLocalDataCache:refreshedGalleries];
+     return;
+     }
+     
+     if (![refreshedGalleriesIDs containsObject:topGallery.uid]) {
+     //OK. The current displayed data on the table is outdated. Dont know how far way. So delete all teh cache from Core Data , also frm the local highlights array.
+     //Start fresh.
+     //need to directly save the new batch in core data and also display them.
+     [self deleteCache];
+     [self appendToLocalDataCache:refreshedGalleries];
+     return;
+     }
+     
+     //proceed to insert only the new ones.
+     NSMutableArray *onlyNewGalleries = [[NSMutableArray alloc] initWithCapacity:refreshedGalleries.count];
+     
+     NSInteger index = 0;
+     for(NSDictionary *gallery in refreshedGalleries) {
+     NSString *galleryID = gallery[@"id"];
+     if([galleryID isEqualToString:topGallery.uid]) {
+     break;
+     }
+     else {
+     FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.coreDataController.managedObjectContext];
+     
+     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
+     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+     [onlyNewGalleries addObject:galleryToSave];
+     index++;
+     }
+     
+     }
+     
+     [self.appDelegate.coreDataController saveContext];
+     
+     //update metadata
+     [self updateHighlightsMetadataFromRefreshIndex:index fromArray:refreshedGalleries];
+     
+     [self.tableView reloadData];
      
      */
     
@@ -490,17 +495,17 @@ static NSInteger const galleriesPerPage = 12;
     
     //update index
     NSInteger newIndex = index;
-
+    
     for(NSInteger i = newIndex; i<self.highlights.count; i++) {
         FRSGallery *galleryToSave = [self.highlights objectAtIndex:i];
-
+        
         [galleryToSave setValue:[NSNumber numberWithInteger:newIndex] forKey:@"index"];
         newIndex++;
-
+        
     }
     
     [self.appDelegate.coreDataController saveContext];
-
+    
 }
 
 - (void)appendToLocalDataCache:(NSArray *)localData {
@@ -667,9 +672,13 @@ static NSInteger const galleriesPerPage = 12;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    
-    // Delete coredata cache if we receive memory warning. Currently we are saving only highlights in coredata.
-    [self deleteCache];
+    NSLog(@"Home VC didReceiveMemoryWarning");
+    //Deleting the cache from the core data deletes the objects in the highlights array as well and results in wierd issues like crashes/miscalclutaion of heightForGallery. Because highlights array has reference to the same object.
+    //Also NSManagedObject class does not conform to NSCopying protocol to implement copyWithZone method and copy the objects into a different instance.
+    //We actually need to use our own model objects instead of directly using the coredata managed object instances.
+    //Then delete the core data cache. We will still have model objects which are copied originally from managed objects.
+    //deleteCache is not the correct solution right now for memory warnings.
+    //    [self deleteCache];
 }
 
 - (void)galleryClicked:(FRSGallery *)gallery {
@@ -890,9 +899,9 @@ static NSInteger const galleriesPerPage = 12;
 
 - (void)initialFetchFromServer {
     __weak typeof(self) weakSelf = self;
-
+    
     [self.followingTable reloadFollowing];
-
+    
     // network call
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:nil
@@ -903,22 +912,26 @@ static NSInteger const galleriesPerPage = 12;
                                                              hasLoadedOnce = TRUE;
                                                              [weakSelf.tableView reloadData];
                                                          });
-
+                                                         
                                                          if (error && error.code == -1009) {
                                                              // no internet
                                                          }
-
+                                                         
                                                          if ([galleries count] == 0) {
                                                              //if needed reload only the loading cell to remove loading.
                                                          } else {
                                                              //since this is initial load, delete the previous entries.
+                                                             NSLog(@"Home VC initial load");
+                                                             
                                                              [weakSelf deleteCache];
+                                                             //Now delete contents of the highlights array also.
+                                                             [self.highlights removeAllObjects];
                                                              
                                                              //add new entries to cache.
                                                              [weakSelf appendToLocalDataCache:galleries];
                                                          }
                                                          
-
+                                                         
                                                      }];
     
 }
@@ -926,14 +939,14 @@ static NSInteger const galleriesPerPage = 12;
 -(void)fetchFromServerWithOffsetGalleryID:(NSString *)offsetGalleryID {
     // network call
     __weak typeof(self) weakSelf = self;
-
+    
     isLoading = TRUE;
-
+    
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:offsetGalleryID
                                                      completion:^(NSArray *galleries, NSError *error) {
                                                          isLoading = FALSE;
-
+                                                         
                                                          if ([galleries count] == 0) {
                                                              
                                                          } else {
@@ -947,7 +960,7 @@ static NSInteger const galleriesPerPage = 12;
                                                              
                                                          });
                                                      }];
-
+    
 }
 
 -(void)deleteCache {
@@ -961,15 +974,13 @@ static NSInteger const galleriesPerPage = 12;
     
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
-
+    
     for (FRSGallery *gallery in stored) {
         [self.appDelegate.coreDataController.managedObjectContext deleteObject:gallery];
     }
     
     [self.appDelegate saveContext];
     
-    //Now delete contents of the highlights array also.
-    [self.highlights removeAllObjects];
 }
 
 

@@ -48,32 +48,39 @@
 @implementation FRSGalleryView
 
 - (void)loadGallery:(FRSGallery *)gallery {
-    
-    self.clipsToBounds = NO;
-    self.gallery = gallery;
-    
-    //load labels and icons for first page initially
-    self.adjustedPage = 0;
-    self.orderedPosts = [gallery.posts allObjects];
-    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
-    
-    if (self.orderedPosts.count == 0) return;
-    
-    [self configureGalleryMediaViewOnRefresh];
-    
-    [self.actionBar updateSocialButtonsFromButton:nil];
-    
-    [self updateCarouselViews];
-    
-    [self updateCaption];
-    
-    [self adjustHeight];
-    
-    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
-    }
-    
-    [self configureActionBar];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        weakSelf.clipsToBounds = NO;
+        weakSelf.gallery = gallery;
+        
+        //load labels and icons for first page initially
+        weakSelf.adjustedPage = 0;
+        weakSelf.orderedPosts = [gallery.posts allObjects];
+        weakSelf.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
+        
+        if (weakSelf.orderedPosts.count == 0) {
+            NSLog(@"Ooops Gallery does not have posts!!!! this should never happen at loadGallery");
+            return;
+        }
+        
+        [weakSelf configureGalleryMediaViewOnRefresh];
+        
+        [weakSelf.actionBar updateSocialButtonsFromButton:nil];
+        
+        [weakSelf updateCarouselViews];
+        
+        [weakSelf updateCaption];
+        
+        [weakSelf adjustHeight];
+        
+        if ([weakSelf.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+            [weakSelf configureRepostWithName:[weakSelf.gallery valueForKey:@"reposted_by"]];
+        }
+        
+        [weakSelf configureActionBar];
+        
+    });
 }
 
 - (void)updateCarouselViews {
@@ -97,7 +104,6 @@
     
     //profile icon
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
-    [self.profileIV setContentMode:UIViewContentModeScaleAspectFill];
     
     [self updateLabels];
 }
@@ -130,7 +136,7 @@
     } else {
         [self.profileIV setImage:Nil];
         self.profileIV.hidden = YES;
-
+        
         [self.nameLabel setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.nameLabel.frame.origin.y)];
     }
 }
@@ -154,6 +160,11 @@
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
         self.adjustedPage = 0;
         
+        if (self.orderedPosts.count == 0) {
+            NSLog(@"Ooops Gallery does not have posts!!!! this should never happen at initWithFrame");
+            return nil;
+        }
+
         [self configureUI];
         
     }
@@ -178,6 +189,11 @@
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
     self.adjustedPage = 0;
     
+    if (self.orderedPosts.count == 0) {
+        NSLog(@"Ooops Gallery does not have posts!!!! this should never happen at configureWithFrame");
+       return;
+    }
+
     [self configureUI];
     [self.actionBar updateSocialButtonsFromButton:nil]; // Called in the expanded VC
 }
@@ -346,6 +362,7 @@
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
+    [self.profileIV setContentMode:UIViewContentModeScaleAspectFill];
     
     self.profileIV.layer.cornerRadius = 12;
     self.profileIV.clipsToBounds = YES;
@@ -375,7 +392,7 @@
     [photoTap setNumberOfTapsRequired:1];
     [self.profileIV setUserInteractionEnabled:YES];
     [self.profileIV addGestureRecognizer:photoTap];
-
+    
     UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
     [bylineTap setNumberOfTapsRequired:1];
     [self.nameLabel setUserInteractionEnabled:YES];
@@ -414,7 +431,7 @@
     CGRect timeFrame = self.timeLabel.frame;
     timeFrame.size.width = 100;
     self.timeLabel.frame = timeFrame;
-
+    
     [self updateUserInfoForCurrentPost];
     
     [self addShadowToLabel:self.nameLabel];
@@ -535,7 +552,7 @@
     }
     
     self.adjustedPage = page;
-
+    
     [self updateLabels];
     
     if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count - 1) * scrollView.frame.size.width))
@@ -623,30 +640,39 @@
             }
             
         } else {
-            __weak typeof(self) weakSelf = self;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
-                
-                NSLog(@"[currentPost.creator uid]: %@", [currentPost.creator uid]);
-                if ([currentPost.creator uid] != nil) {
-                    [weakSelf.delegate.navigationController pushViewController:userViewController animated:YES];
-                }
-            });
+            
+            FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
+            
+            NSLog(@"[currentPost.creator uid]: %@", [currentPost.creator uid]);
+            if ([currentPost.creator uid] != nil) {
+                [self.delegate.navigationController pushViewController:userViewController animated:YES];
+            }
         }
     }
 }
 
 - (void)pause {
-    [self.mediaView pause];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async( dispatch_get_main_queue(),
+                   ^{
+                       [weakSelf.mediaView pause];
+                   });
 }
 
 - (void)play {
-    [self.mediaView play];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async( dispatch_get_main_queue(),
+                   ^{
+                       [weakSelf.mediaView play];
+                   });
 }
 
 - (void)offScreen {
-    [self.mediaView offScreen];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async( dispatch_get_main_queue(),
+                   ^{
+                       [weakSelf.mediaView offScreen];
+                   });
 }
 
 #pragma mark - Base Meta Data Configuration
