@@ -68,7 +68,7 @@
     
     UIDeviceOrientation orientationNew;
     
-    if (self.sessionManager.movieFileOutput.isRecording)
+    if (self.parentController.isRecording)
         return;
     
     if (acceleration.z > -2 && acceleration.z < 2) {

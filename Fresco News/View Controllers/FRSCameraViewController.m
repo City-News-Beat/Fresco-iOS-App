@@ -566,6 +566,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 // TODO: Move out all orientation
 - (void)rotateAppForOrientation:(UIDeviceOrientation)o {
     
+    if (self.isRecording) {
+        return;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat angle = 0;
 
@@ -830,6 +834,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     dispatch_async(self.sessionManager.sessionQueue, ^{
 
       if (!self.sessionManager.movieFileOutput.isRecording) {
+          self.isRecording = TRUE;
           
           self.swipeRightGestureRec.enabled = NO;
           self.swipeLeftGestureRec.enabled = NO;
@@ -904,7 +909,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
               NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
               [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
               //                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-              self.isRecording = TRUE;
               dispatch_async(dispatch_get_main_queue(), ^{
                 [self runVideoRecordAnimation];
               });
