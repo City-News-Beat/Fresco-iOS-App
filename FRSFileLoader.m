@@ -100,9 +100,9 @@
 
         // add each asset to our file list
         for (PHAsset *asset in assets) {
-            //if (asset.location) {
+            if (asset.duration <= 60) {
                 [allAssets addObject:asset];
-            //}
+            }
         }
     }
 
