@@ -26,27 +26,31 @@
 }
 
 
+
 #pragma mark - UI Configuration
 - (void)configureUI {
+    
     NSInteger topPadding = 88;
-    self.frame = CGRectMake(0, topPadding, SCREEN_WIDTH, 170);
+    
+    self.frame = CGRectMake(0, topPadding, SCREEN_WIDTH, HEADER_HEIGHT);
     
     [self configureIcons];
     [self configureTitleLabel];
     [self configureBodyLabel];
 }
 
+
 - (void)configureIcons {
     
     NSInteger center = SCREEN_WIDTH/2 - ICON_SIZE/2;
     
-    [self addImageNamed:@"wide-54"      xPosition: center];
-    [self addImageNamed:@"interview-54" xPosition: center - ICON_SIZE];
-    [self addImageNamed:@"pan-54"       xPosition: center + ICON_SIZE];
+        [self addImageNamed:@"wide-54"      xPosition: center];
+        [self addImageNamed:@"interview-54" xPosition: center - ICON_SIZE];
+        [self addImageNamed:@"pan-54"       xPosition: center + ICON_SIZE];
 }
 
 - (void)configureTitleLabel {
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ICON_SIZE, SCREEN_WIDTH, LEFT_PADDING)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ICON_SIZE, SCREEN_WIDTH, LEFT_PADDING+12)];
     titleLabel.text = @"Creating a Story";
     titleLabel.textColor = [UIColor frescoDarkTextColor];
     titleLabel.font = [UIFont karminaBoldWithSize:28];
@@ -57,8 +61,9 @@
 - (void)configureBodyLabel {
     
     NSInteger topPadding = 48;
-    
-    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, ICON_SIZE + topPadding, SCREEN_WIDTH - LEFT_PADDING * 2, 80)];
+    NSInteger height = 80;
+
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, ICON_SIZE + topPadding, SCREEN_WIDTH - LEFT_PADDING * 2, height)];
     bodyLabel.text = [self bodyStringForDevice];
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
@@ -68,8 +73,8 @@
 }
 
 
-#pragma mark - Helpers
 
+#pragma mark - Helpers
 
 /**
  Creates and adds a UIImageView with a given name at a given x position, configured with static alpha and frame values.
@@ -83,8 +88,6 @@
     imageView.alpha = 0.87;
     [self addSubview:imageView];
 }
-
-
 
 /**
  Returns an NSString formatted for the current device. The only changes made to the strings are where linebreaks are placed.

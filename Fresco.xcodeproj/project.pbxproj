@@ -15,6 +15,8 @@
 		0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */; };
 		071D7B881EB7B7840033A56A /* Nota-Xbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 071D7B871EB7B7590033A56A /* Nota-Xbold.otf */; };
 		071D7B8B1EB7D4E10033A56A /* FRSCameraFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */; };
+		072348B21EC4F71100FF2B7E /* FRSTipsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */; };
+		072348B31EC4F71100FF2B7E /* FRSTipsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */; };
 		072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E21E3951DF00A49DEC /* FRSUserView.m */; };
 		072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E41E3951DF00A49DEC /* FRSGalleryFooterView.m */; };
 		072654EA1E3951DF00A49DEC /* FRSFollowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E61E3951DF00A49DEC /* FRSFollowButton.m */; };
@@ -369,6 +371,9 @@
 		071D7B871EB7B7590033A56A /* Nota-Xbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Xbold.otf"; sourceTree = "<group>"; };
 		071D7B891EB7D4E10033A56A /* FRSCameraFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCameraFooterView.h; path = ../FRSCameraFooterView.h; sourceTree = "<group>"; };
 		071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCameraFooterView.m; path = ../FRSCameraFooterView.m; sourceTree = "<group>"; };
+		072348AF1EC4F71100FF2B7E /* FRSTipsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTipsTableViewCell.h; sourceTree = "<group>"; };
+		072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTipsTableViewCell.m; sourceTree = "<group>"; };
+		072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSTipsTableViewCell.xib; sourceTree = "<group>"; };
 		072492291E8967D10019D1F7 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
 		072654E21E3951DF00A49DEC /* FRSUserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserView.m; sourceTree = "<group>"; };
 		072654E31E3951DF00A49DEC /* FRSUserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserView.h; sourceTree = "<group>"; };
@@ -1126,6 +1131,9 @@
 				076C3D901EBD104000094249 /* FRSTipsViewController.m */,
 				07C8B4B51EC4C4D000C3CA5C /* FRSTipsHeaderView.h */,
 				07C8B4B61EC4C4D000C3CA5C /* FRSTipsHeaderView.m */,
+				072348AF1EC4F71100FF2B7E /* FRSTipsTableViewCell.h */,
+				072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */,
+				072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */,
 			);
 			name = Tips;
 			sourceTree = "<group>";
@@ -2684,6 +2692,7 @@
 				CE1322461E5031F400A46D4D /* FRSNearbyUserTableViewCell.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
+				072348B31EC4F71100FF2B7E /* FRSTipsTableViewCell.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
@@ -2951,6 +2960,7 @@
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
 				07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */,
 				CE1322401E4FDAFC00A46D4D /* FRSUserTableViewCell.m in Sources */,
+				072348B21EC4F71100FF2B7E /* FRSTipsTableViewCell.m in Sources */,
 				07A2C14B1DEE2EE000B8445F /* FRSPlayer.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
 				CE13224F1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m in Sources */,

@@ -8,6 +8,8 @@
 
 #import "FRSBaseViewController.h"
 
-@interface FRSTipsViewController : FRSBaseViewController
+@interface FRSTipsViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
