@@ -11,5 +11,6 @@
 @interface FRSTipsViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSMutableArray *videosArray;
 
 @end

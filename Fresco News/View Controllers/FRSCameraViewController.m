@@ -632,7 +632,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         self.footerView.tipsButton.transform = rotation;
         self.footerView.nextButtonContainer.transform = rotation;
         self.footerView.flashButton.transform = rotation;
-        self.tipsAlert.transform = rotation;
+//        self.tipsAlert.transform = rotation;
         [UIView commitAnimations];
     });
 }

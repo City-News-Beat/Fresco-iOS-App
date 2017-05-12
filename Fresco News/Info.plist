@@ -153,6 +153,7 @@
 		<string>fbshareextension</string>
 		<string>comgooglemaps</string>
 		<string>comgooglemaps-x-callback</string>
+		<string>vnd.youtube</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -253,5 +254,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>sss</key>
+	<string></string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 </dict>
 </plist>

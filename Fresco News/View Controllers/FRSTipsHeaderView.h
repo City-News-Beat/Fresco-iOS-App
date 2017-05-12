@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define HEADER_HEIGHT 206
+#define HEADER_HEIGHT 218
 
 @interface FRSTipsHeaderView : UIView
 

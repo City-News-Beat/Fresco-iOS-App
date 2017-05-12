@@ -11,10 +11,11 @@
 #import <Smooch/Smooch.h>
 #import <AFNetworking/AFNetworking.h>
 #import "FRSTipsTableViewCell.h"
+#import "NSString+Fresco.h"
 
 static NSString *const tipsCellIdentifier = @"tips-cell";
 
-@interface FRSTipsHeaderView () 
+@interface FRSTipsHeaderView ()
 
 @end
 
@@ -22,22 +23,37 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self configureUI];
+    [self fetchVideos];
 }
 
 
 #pragma mark - YouTube Fetching
 
-- (void)fetchVideosFromYoutube {
+
+/**
+ Fetches videos from the Fresco tutorial playlist on YouTube.
+ */
+- (void)fetchVideos {
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] init];
     
-    [manager GET:@""
+    [manager GET:@"https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyAPjRuCjGHO6Ra13Lt8niJ4IUtbSnukNHs&part=snippet&maxResults=25&playlistId=PLbYhNm7s63x_xM7r9eCYHgGLPI5Ora-rc"
       parameters:@{}
         progress:nil
          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
          
-         } failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+             if (responseObject[@"items"]) {
+                 self.videosArray = responseObject[@"items"];
+                 [self.tableView reloadData];
+                 [self configureFooterView];
 
+             } else {
+                 [self presentGenericError];
+             }
+             
+         } failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+             [self presentGenericError];
          }];
 }
 
@@ -74,14 +90,31 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
     self.tableView.tableHeaderView = [[FRSTipsHeaderView alloc] init];
 }
 
+- (void)configureFooterView {
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 72)];
+    footerView.userInteractionEnabled = YES;
+    self.tableView.tableFooterView = footerView;
+    
+    UILabel *lineOne = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, footerView.frame.size.width, 20)];
+    lineOne.attributedText = [NSString formattedAttributedStringFromString:@"Questions? We're here to help." boldText:@""];
+    [footerView addSubview:lineOne];
+    
+    UILabel *lineTwo = [[UILabel alloc] initWithFrame:CGRectMake(0, 35, footerView.frame.size.width, 20)];
+    lineTwo.attributedText = [NSString formattedAttributedStringFromString:@" Chat with us. " boldText:@"Chat with us."];
+    [footerView addSubview:lineTwo];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(presentSmooch)];
+    [footerView addGestureRecognizer:tap];
+}
+
 #pragma mark - UITableView Delegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 10;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return self.videosArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -89,9 +122,18 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:tipsCellIdentifier];
+    FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:tipsCellIdentifier];    
+    NSDictionary *dictionary = [self.videosArray objectAtIndex:indexPath.row];
+    
+    NSString *videoID = dictionary[@"snippet"][@"resourceId"][@"videoId"];
+    NSString *playlistID = dictionary[@"snippet"][@"playlistId"];
+    
+    NSString *videoURL =  [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"vnd.youtube://"]] ? [NSString stringWithFormat:@"vnd.youtube://watch?v=%@&list=%@", videoID, playlistID] : [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@&list=%@", videoID, playlistID];
+    [tipsCell configureWithTitle:dictionary[@"snippet"][@"title"] subtitle:dictionary[@"snippet"][@"description"] thumbnailURL:dictionary[@"snippet"][@"thumbnails"][@"medium"][@"url"] videoURL:videoURL];
     return tipsCell;
 }
+
+
 
 #pragma mark - Support
 

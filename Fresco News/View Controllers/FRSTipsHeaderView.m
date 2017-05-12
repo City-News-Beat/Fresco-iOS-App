@@ -39,7 +39,6 @@
     [self configureBodyLabel];
 }
 
-
 - (void)configureIcons {
     
     NSInteger center = SCREEN_WIDTH/2 - ICON_SIZE/2;
