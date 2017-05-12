@@ -76,9 +76,9 @@
     
     NSDictionary *tipsDictionary;
     tipsDictionary = @{
-                       @(FRSCaptureModeInterview) : @[@"Interview tip #1", @"Interview tip #2", @"Interview tip #3"],
-                       @(FRSCaptureModePan)       : @[@"Pan tip #1", @"Pan tip #2", @"Pan tip #3"],
-                       @(FRSCaptureModeWide)      : @[@"Wide tip #1", @"Wide tip #2", @"Wide tip #3"],
+                       @(FRSCaptureModeVideoInterview) : @[@"Interview tip #1", @"Interview tip #2", @"Interview tip #3"],
+                       @(FRSCaptureModeVideoPan)       : @[@"Pan tip #1", @"Pan tip #2", @"Pan tip #3"],
+                       @(FRSCaptureModeVideoWide)      : @[@"Wide tip #1", @"Wide tip #2", @"Wide tip #3"],
                        @(FRSCaptureModeVideo)     : @[@"Video tip #1", @"Video tip #2 Video tip #2 Video tip #2", @"Video tip #3"],
                        @(FRSCaptureModePhoto)     : @[@"Photo tip #1", @"Photo tip #2", @"Photo tip #3", @"Photo tip #4"]
                        };

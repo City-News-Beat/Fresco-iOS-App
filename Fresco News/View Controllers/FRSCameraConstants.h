@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
-    FRSCaptureModeInterview,
-    FRSCaptureModePan,
-    FRSCaptureModeWide,
+    FRSCaptureModeVideoInterview,
+    FRSCaptureModeVideoPan,
+    FRSCaptureModeVideoWide,
     FRSCaptureModeVideo,
     FRSCaptureModePhoto,
     

@@ -70,13 +70,13 @@
     [self resetAllButtonsToColor:(captureMode == FRSCaptureModePhoto ? [UIColor frescoLightTextColor] : [UIColor whiteColor]) font:[UIFont notaMediumWithSize:15]];
     
     switch (captureMode) {
-        case FRSCaptureModeInterview:
+        case FRSCaptureModeVideoInterview:
             [self highlightButton:self.interviewButton];
             break;
-        case FRSCaptureModePan:
+        case FRSCaptureModeVideoPan:
             [self highlightButton:self.panButton];
             break;
-        case FRSCaptureModeWide:
+        case FRSCaptureModeVideoWide:
             [self highlightButton:self.wideButton];
             break;
         case FRSCaptureModeVideo:
@@ -165,15 +165,15 @@
 #pragma mark - Button Actions
 
 - (IBAction)interviewTapped:(id)sender {
-    [self setCaptureMode:FRSCaptureModeInterview];
+    [self setCaptureMode:FRSCaptureModeVideoInterview];
 }
 
 - (IBAction)panTapped:(id)sender {
-    [self setCaptureMode:FRSCaptureModePan];
+    [self setCaptureMode:FRSCaptureModeVideoPan];
 }
 
 - (IBAction)wideTapped:(id)sender {
-    [self setCaptureMode:FRSCaptureModeWide];
+    [self setCaptureMode:FRSCaptureModeVideoWide];
 }
 
 - (IBAction)videoTapped:(id)sender {

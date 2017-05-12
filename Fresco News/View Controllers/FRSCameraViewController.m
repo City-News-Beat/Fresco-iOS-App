@@ -882,13 +882,13 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                   case FRSCaptureModeVideo:
                       captureTypeString = @"video";
                       break;
-                  case FRSCaptureModeWide:
+                  case FRSCaptureModeVideoWide:
                       captureTypeString = @"wide";
                       break;
-                  case FRSCaptureModeInterview:
+                  case FRSCaptureModeVideoInterview:
                       captureTypeString = @"interview";
                       break;
-                  case FRSCaptureModePan:
+                  case FRSCaptureModeVideoPan:
                       captureTypeString = @"pan";
                       break;
                       
