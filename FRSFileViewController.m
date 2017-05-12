@@ -17,6 +17,7 @@ static NSInteger const maxAssets = 8;
 @interface FRSFileViewController ()
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
+@property (strong, nonatomic) NSMutableArray *selectedIndexPaths;
 @end
 
 @implementation FRSFileViewController
@@ -25,6 +26,7 @@ static NSInteger const maxAssets = 8;
     [super viewDidLoad];
 
     selectedAssets = [[NSMutableArray alloc] init];
+    self.selectedIndexPaths = [[NSMutableArray alloc] initWithCapacity:0];
 
     [self.navigationController.navigationBar setTitleTextAttributes:
                                                  @{ NSForegroundColorAttributeName : [UIColor whiteColor],
@@ -245,7 +247,7 @@ static NSInteger const maxAssets = 8;
 
     if ([selectedAssets containsObject:representedAsset]) {
         [cell selected:YES];
-        //if video and if > 60 seconds
+        [cell updateFileNumber:([selectedAssets indexOfObject:representedAsset] + 1)];
     } else {
         [cell selected:NO];
     }
@@ -255,11 +257,9 @@ static NSInteger const maxAssets = 8;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
-    FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
 
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
-        [cell selected:NO];
     } else {
         if ([selectedAssets count] == maxAssets) {
             //should tell user why they can't select anymore cc:imogen
@@ -267,7 +267,6 @@ static NSInteger const maxAssets = 8;
         }
 
         [selectedAssets addObject:representedAsset];
-        [cell selected:YES];
     }
 
     if (selectedAssets.count >= 1) {
@@ -275,6 +274,13 @@ static NSInteger const maxAssets = 8;
     } else {
         nextButton.enabled = NO;
     }
+    
+    //indexPaths
+    if (![self.selectedIndexPaths containsObject:indexPath]) {
+        [self.selectedIndexPaths addObject:indexPath];
+    } else {
+    }
+    [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
 }
 
 - (void)applicationNotAuthorized {

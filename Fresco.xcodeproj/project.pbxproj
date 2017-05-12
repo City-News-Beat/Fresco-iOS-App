@@ -71,9 +71,9 @@
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
 		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
 		07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */; };
+		07C77EFE1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */; };
 		07D4FB081E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07D4FB071E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib */; };
 		07D4FB0B1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D4FB0A1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m */; };
-		07C77EFE1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */; };
 		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
 		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
 		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
@@ -303,6 +303,8 @@
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */; };
 		E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */; };
+		F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */; };
+		F22315E11EC5E2C800D2A6A4 /* FRSFileNumberedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -474,11 +476,11 @@
 		07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGlobalAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		07B6FB531D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentTableViewCell.h; sourceTree = "<group>"; };
 		07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentTableViewCell.m; sourceTree = "<group>"; };
+		07C77EFC1EA65BC1000281F6 /* FRSFollowersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowersFollowingViewController.h; sourceTree = "<group>"; };
+		07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowersFollowingViewController.m; sourceTree = "<group>"; };
 		07D4FB071E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCaptureModeSlider.xib; sourceTree = "<group>"; };
 		07D4FB091E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCaptureModeSlider.h; sourceTree = "<group>"; };
 		07D4FB0A1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCaptureModeSlider.m; sourceTree = "<group>"; };
-		07C77EFC1EA65BC1000281F6 /* FRSFollowersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowersFollowingViewController.h; sourceTree = "<group>"; };
-		07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowersFollowingViewController.m; sourceTree = "<group>"; };
 		07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLaunchScreen.xib; sourceTree = "<group>"; };
 		07ED92D71C752037000DBEA8 /* DGElasticPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefresh.h; sourceTree = "<group>"; };
 		07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefresh.m; sourceTree = "<group>"; };
@@ -906,6 +908,9 @@
 		E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+Fresco.m"; path = "Categories/CLLocation+Fresco.m"; sourceTree = "<group>"; };
 		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		F22315DB1EC5DD4C00D2A6A4 /* FRSFileNumberedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileNumberedView.h; sourceTree = "<group>"; };
+		F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileNumberedView.m; sourceTree = "<group>"; };
+		F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileNumberedView.xib; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1805,6 +1810,9 @@
 				D43C7FD31C8E46A500A7A7A7 /* FRSImageViewCell.h */,
 				D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */,
 				D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */,
+				F22315DB1EC5DD4C00D2A6A4 /* FRSFileNumberedView.h */,
+				F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */,
+				F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */,
 				D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */,
 				D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */,
 			);
@@ -2653,6 +2661,7 @@
 				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
 				07A915C51E5F65060081D219 /* FRSActionBar.xib in Resources */,
 				CE3799B61E5825C600B6743A /* FRSLogOutTableViewCell.xib in Resources */,
+				F22315E11EC5E2C800D2A6A4 /* FRSFileNumberedView.xib in Resources */,
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
@@ -2958,6 +2967,7 @@
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
 				D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */,
 				CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */,
+				F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */,
 				072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
