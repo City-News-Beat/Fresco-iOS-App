@@ -13,7 +13,7 @@
 #import "FRSTipsTableViewCell.h"
 #import "NSString+Fresco.h"
 
-static NSString *const tipsCellIdentifier = @"tips-cell";
+#define TIPS_CELL_ID @"tips-cell"
 
 @interface FRSTipsHeaderView ()
 
@@ -89,7 +89,7 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
     NSInteger topPadding = 48;
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, topPadding, self.view.frame.size.width, self.view.frame.size.height - topPadding)];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTipsTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:tipsCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTipsTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:TIPS_CELL_ID];
 
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -134,7 +134,7 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:tipsCellIdentifier];    
+    FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:TIPS_CELL_ID];
     NSDictionary *dictionary = [self.videosArray objectAtIndex:indexPath.row];
     
     NSString *videoID = dictionary[@"snippet"][@"resourceId"][@"videoId"];

@@ -48,7 +48,7 @@
     // Alert view color configuration
     self.backgroundColor = [UIColor frescoTransparentDarkColor];
     self.titleLabel.textColor = [UIColor whiteColor];
-    self.messageLabel.textColor = [UIColor whiteColor];
+    self.messageLabel.textColor = [UIColor colorWithWhite:1 alpha:0.87];
     [self.leftActionButton setTitleColor:[UIColor colorWithWhite:1 alpha:0.54] forState:UIControlStateNormal];
     self.line.backgroundColor = [UIColor clearColor];
 

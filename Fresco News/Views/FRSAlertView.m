@@ -208,7 +208,7 @@
 -(void)configureWithAttributedMessage:(NSMutableAttributedString *)attributedMessage {
     /* Body Label */
     self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
-    self.messageLabel.alpha = .54;
+    self.messageLabel.textColor = [UIColor colorWithWhite:0 alpha:0.54];
     self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.messageLabel.numberOfLines = 0;
