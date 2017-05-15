@@ -76,11 +76,27 @@
     
     NSDictionary *tipsDictionary;
     tipsDictionary = @{
-                       @(FRSCaptureModeInterview) : @[@"Interview tip #1", @"Interview tip #2", @"Interview tip #3"],
-                       @(FRSCaptureModePan)       : @[@"Pan tip #1", @"Pan tip #2", @"Pan tip #3"],
-                       @(FRSCaptureModeWide)      : @[@"Wide tip #1", @"Wide tip #2", @"Wide tip #3"],
-                       @(FRSCaptureModeVideo)     : @[@"Video tip #1", @"Video tip #2 Video tip #2 Video tip #2", @"Video tip #3"],
-                       @(FRSCaptureModePhoto)     : @[@"Photo tip #1", @"Photo tip #2", @"Photo tip #3", @"Photo tip #4"]
+                       @(FRSCaptureModeInterview) : @[@"Hold your device at the subject's eye level, and make sure you're not tilting your device up or down during the interview.",
+                                                      @"Wait until your subject has finished speaking before talking again — don’t talk over their answer, even in agreement. It makes it hard to get a sound bite!",
+                                                      @"Ask your subject to speak up! A good interview can quickly lose its chances of being purchased if the sound quality is poor.",
+                                                      @"Avoid interviewing in places with machines humming, music playing or loud talking in the background. Your microphone is more likely to pick up sounds that your ears usually tune out.",
+                                                      @"Make sure your back is to the light. In other words, always have a good amount of light coming from behind your camera and shining onto the subject",
+                                                      @"Try to frame your subject with the action in the background. An interview becomes significantly more valuable when we can see what your subject is talking about!",
+                                                      @"Remember the rule of thirds: having your focal point off-center (slightly left, right, up, or down) is more pleasing than placing them in the middle of the frame."],
+                       @(FRSCaptureModePan)       : @[@"Plan the pan! Think about where you want to start and end the shot before you hit record.",
+                                                      @"Slow and steady pans are best. Firmly plant your feet and rotate your body slowly to capture as much of the scene as possible",
+                                                      @"It's better to pan too slow than too fast. The best pans last between 30 and 45 seconds. Take your time!"],
+                       @(FRSCaptureModeWide)      : @[@"Take a step back! Try your best to capture the entire scene with this shot.",
+                                                      @"Pick a point of interest. Take more than one wide shot if there are multiple points of interest on the scene.",
+                                                      @"Move as little as possible. You want to keep your point of interest in the frame at all times."],
+                       @(FRSCaptureModeVideo)     : @[@"Find the most captivating part of the scene and hit record! Avoid any sudden movements and focus on keeping your device steady.",
+                                                      @"Use both hands, and tuck in your elbows for more stability.",
+                                                      @"Make sure your shots are focused and exposed properly. Tap where you want your viewer to pay attention before you start recording.",
+                                                      @"Pay attention to any parts of your frame that are so bright they appear white. For example, a clear blue sky will appear white if it’s overexposed.",
+                                                      @"When capturing footage at night, try your best to avoid grainy video—that happens when you don't have enough light on your subject.",
+                                                      @"Watch those fingers! Videos quickly lose quality when a finger makes its way into the shot."],
+                       @(FRSCaptureModePhoto)     : @[@"When shooting action shots, be safe - take multiple shots at once.",
+                                                      @"Never depend on just one shot. Some may come out blurry, the more shots the better. You can discard the bad photos later, but it never works the other way around."]
                        };
     
     return tipsDictionary;
