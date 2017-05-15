@@ -312,8 +312,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)segueToTipsAction {
-    FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
-    [self.navigationController pushViewController:tipsViewController animated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
+        [self.navigationController pushViewController:tipsViewController animated:YES];
+    });
 }
 
 // TODO: move aperture button out
