@@ -17,6 +17,7 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
 
 @interface FRSTipsHeaderView ()
 
+
 @end
 
 @implementation FRSTipsViewController 
@@ -29,8 +30,9 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
 }
 
 
-#pragma mark - YouTube Fetching
 
+
+#pragma mark - YouTube Fetching
 
 /**
  Fetches videos from the Fresco tutorial playlist on YouTube.
@@ -52,16 +54,23 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
                  [self presentGenericError];
              }
              
+             self.spinner.alpha = 0;
          } failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
              [self presentGenericError];
+             
+             self.spinner.alpha = 0;
          }];
 }
+
+
+
 
 #pragma mark - UI Configuration
 
 - (void)configureUI {
     [self configureNavigationBar];
     [self configureTableView];
+    [self configureSpinner];
 }
 
 - (void)configureNavigationBar {
@@ -107,6 +116,9 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
     [footerView addGestureRecognizer:tap];
 }
 
+
+
+
 #pragma mark - UITableView Delegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -132,6 +144,21 @@ static NSString *const tipsCellIdentifier = @"tips-cell";
     [tipsCell configureWithTitle:dictionary[@"snippet"][@"title"] subtitle:dictionary[@"snippet"][@"description"] thumbnailURL:dictionary[@"snippet"][@"thumbnails"][@"medium"][@"url"] videoURL:videoURL];
     return tipsCell;
 }
+
+
+
+
+#pragma mark - Loading Spinner
+
+- (void)configureSpinner {
+    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.spinner.frame = CGRectMake(self.tableView.frame.size.width / 2 - 10, self.tableView.frame.size.height / 2 - 10, 20, 20);
+    self.spinner.tintColor = [UIColor frescoOrangeColor];
+    [self.spinner setPullProgress:90];
+    [self.spinner startAnimating];
+    [self.tableView addSubview:self.spinner];
+}
+
 
 
 
