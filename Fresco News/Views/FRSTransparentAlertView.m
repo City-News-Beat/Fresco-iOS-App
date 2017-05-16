@@ -187,7 +187,7 @@
             [self.rightCancelButton setTitle:@"LEARN MORE"forState:UIControlStateNormal];
         }
         
-        [self adjustFrame];
+        [self adjustFrameForRotatedState];
         [self addOffsetInY];
     }
 }

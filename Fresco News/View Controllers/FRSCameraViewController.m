@@ -592,6 +592,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
             
             angle = M_PI_2;
             
+            self.tipsAlert.isRotated = YES;
+            
         } else if (o == UIDeviceOrientationLandscapeRight) {
             
             if (self.captureMode == FRSCaptureModeVideo) {
@@ -600,6 +602,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                 self.videoRotateIV.alpha = 0.0;
             }
             
+            self.tipsAlert.isRotated = YES;
+
             angle = -M_PI_2;
             
         } else if (o == UIDeviceOrientationPortrait) {
@@ -620,7 +624,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                                  self.topContainer.alpha = 1;
                              }];
             
+            self.tipsAlert.isRotated = NO;
+            
         } else {
+            self.tipsAlert.isRotated = NO;
             return;
         }
         
@@ -634,7 +641,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         self.footerView.tipsButton.transform = rotation;
         self.footerView.nextButtonContainer.transform = rotation;
         self.footerView.flashButton.transform = rotation;
-//        self.tipsAlert.transform = rotation;
+        self.tipsAlert.transform = rotation;
         [UIView commitAnimations];
     });
 }

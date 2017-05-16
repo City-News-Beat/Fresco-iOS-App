@@ -77,24 +77,49 @@
 }
 
 - (void)adjustFrame {
+    self.height = self.leftActionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
+    
+    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
+    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
+    
+    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+}
+
+- (void)adjustFrameForRotatedState {
+    
+    // The FRSTransparentAlertView needs to support dynamic strings for the message body and button titles.
+    // This makes sure the buttons are always sized and placed properly if there are two buttons in the alert.
     
     [self.messageLabel sizeToFit];
     self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
     
     self.height = self.leftActionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
-
-    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
-    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
-
-    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
     
-    // The FRSTransparentAlertView needs to support dynamic strings for the message body and button titles.
-    // This makes sure the buttons are always sized and placed properly if there are two buttons in the alert.
-    if (![self.rightCancelButton.titleLabel.text isEqual:@""] && ![self.leftActionButton.titleLabel.text isEqual:@""] && self.leftActionButton.titleLabel.text != nil && self.rightCancelButton.titleLabel.text != nil) {
-        [self.leftActionButton sizeToFit];
-        self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
-        [self.rightCancelButton sizeToFit];
-        [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+
+    // This gets kind of messy. Because we're rotating the view when the device is in landscape,
+    // the width becomes the height, and the height becomes the width.
+    if (!self.isRotated) {
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
+        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
+        self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+        
+        if (![self.rightCancelButton.titleLabel.text isEqual:@""] && ![self.leftActionButton.titleLabel.text isEqual:@""] && self.leftActionButton.titleLabel.text != nil && self.rightCancelButton.titleLabel.text != nil) {
+            [self.leftActionButton sizeToFit];
+            self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+            [self.rightCancelButton sizeToFit];
+            [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+        }
+    } else {
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - self.height) / 2;
+        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - ALERT_WIDTH) / 2;
+        self.frame = CGRectMake(xOrigin, yOrigin, self.height, ALERT_WIDTH);
+        
+        if (![self.rightCancelButton.titleLabel.text isEqual:@""] && ![self.leftActionButton.titleLabel.text isEqual:@""] && self.leftActionButton.titleLabel.text != nil && self.rightCancelButton.titleLabel.text != nil) {
+            [self.leftActionButton sizeToFit];
+            self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+            [self.rightCancelButton sizeToFit];
+            [self.rightCancelButton setFrame:CGRectMake(self.frame.size.height - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+        }
     }
 }
 
