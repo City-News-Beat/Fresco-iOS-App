@@ -35,7 +35,6 @@
 
 
 
-
 #pragma mark - YouTube Fetching
 
 /**
@@ -96,10 +95,14 @@
     self.tableView.tableHeaderView = [[FRSTipsHeaderView alloc] init];
 }
 
+
+/**
+ Footerview config is pulled out of tableview configuration because we need to wait until the tableview has been populated
+ before adding the footerview. Otherwise the footerview looks out of place and overlaps with the loading spinner.
+ */
 - (void)configureFooterView {
     self.tableView.tableFooterView = [[FRSSupportFooterView alloc] initWithDelegate:self];
 }
-
 
 
 
@@ -132,7 +135,6 @@
 
 
 
-
 #pragma mark - Loading Spinner
 
 - (void)configureSpinner {
@@ -143,7 +145,6 @@
     [self.spinner startAnimating];
     [self.tableView addSubview:self.spinner];
 }
-
 
 
 

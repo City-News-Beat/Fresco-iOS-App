@@ -422,8 +422,8 @@
 		076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSDefaultNotificationTableViewCell.xib; sourceTree = "<group>"; };
 		0772512A1D47EF4A007FDB6C /* FRSUserAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserAnnotation.h; sourceTree = "<group>"; };
 		0772512B1D47EF4A007FDB6C /* FRSUserAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserAnnotation.m; sourceTree = "<group>"; };
-		077753161ECA57AF00862120 /* FRSTipsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTipsManager.h; sourceTree = "<group>"; };
-		077753171ECA57AF00862120 /* FRSTipsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTipsManager.m; sourceTree = "<group>"; };
+		077753161ECA57AF00862120 /* FRSTipsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTipsManager.h; path = "View Controllers/FRSTipsManager.h"; sourceTree = "<group>"; };
+		077753171ECA57AF00862120 /* FRSTipsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTipsManager.m; path = "View Controllers/FRSTipsManager.m"; sourceTree = "<group>"; };
 		077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAboutFrescoViewController.h; path = "Fresco News/View Controllers/Settings/FRSAboutFrescoViewController.h"; sourceTree = "<group>"; };
 		077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAboutFrescoViewController.m; path = "Fresco News/View Controllers/Settings/FRSAboutFrescoViewController.m"; sourceTree = "<group>"; };
 		077FBC381CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentPickerTableViewCell.h; sourceTree = "<group>"; };
@@ -1142,8 +1142,6 @@
 				072348AF1EC4F71100FF2B7E /* FRSTipsTableViewCell.h */,
 				072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */,
 				072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */,
-				077753161ECA57AF00862120 /* FRSTipsManager.h */,
-				077753171ECA57AF00862120 /* FRSTipsManager.m */,
 			);
 			name = Tips;
 			sourceTree = "<group>";
@@ -1387,6 +1385,8 @@
 				CE0A6FCF1E3E9E5800E67766 /* FRSNotificationManager.m */,
 				CE0A6FD11E3EA95800E67766 /* FRSPaymentManager.h */,
 				CE0A6FD21E3EA95800E67766 /* FRSPaymentManager.m */,
+				077753161ECA57AF00862120 /* FRSTipsManager.h */,
+				077753171ECA57AF00862120 /* FRSTipsManager.m */,
 				076EF3F41E410E53003996BB /* FRSCoreDataController.h */,
 				076EF3F51E410E53003996BB /* FRSCoreDataController.m */,
 			);
