@@ -7,7 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FRSBaseManager.h"
 
-@interface FRSTipsManager : NSObject
+@interface FRSTipsManager : FRSBaseManager
+
++ (instancetype)sharedInstance;
+
+- (void)fetchTipsWithCompletion:(void (^)(id videos, NSError *error))completion;
+
++ (NSString *)titleFromDictionary:(NSDictionary *)dictionary;
++ (NSString *)subtitleFromDictionary:(NSDictionary *)dictionary;
++ (NSString *)thumbnailURLStringFromDictionary:(NSDictionary *)dictionary;
++ (NSString *)videoURLStringFromDictionary:(NSDictionary *)dictionary;
 
 @end

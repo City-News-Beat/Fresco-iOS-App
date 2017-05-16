@@ -12,6 +12,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "FRSTipsTableViewCell.h"
 #import "NSString+Fresco.h"
+#import "FRSTipsManager.h"
 
 #define TIPS_CELL_ID @"tips-cell"
 
@@ -38,28 +39,21 @@
  Fetches videos from the Fresco tutorial playlist on YouTube.
  */
 - (void)fetchVideos {
-    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] init];
-    
-    [manager GET:@"https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyAPjRuCjGHO6Ra13Lt8niJ4IUtbSnukNHs&part=snippet&maxResults=25&playlistId=PLbYhNm7s63x_xM7r9eCYHgGLPI5Ora-rc"
-      parameters:@{}
-        progress:nil
-         success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-         
-             if (responseObject[@"items"]) {
-                 self.videosArray = responseObject[@"items"];
-                 [self.tableView reloadData];
-                 [self configureFooterView];
-
-             } else {
-                 [self presentGenericError];
-             }
-             
-             self.spinner.alpha = 0;
-         } failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-             [self presentGenericError];
-             
-             self.spinner.alpha = 0;
-         }];
+    [[FRSTipsManager sharedInstance] fetchTipsWithCompletion:^(id videos, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (videos) {
+                self.videosArray = videos[@"items"];
+                [self.tableView reloadData];
+                [self configureFooterView];
+            } else {
+                [self presentGenericError];
+            }
+            
+            self.spinner.alpha = 0;
+        });
+    }];
 }
 
 
@@ -134,14 +128,15 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
     FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:TIPS_CELL_ID];
     NSDictionary *dictionary = [self.videosArray objectAtIndex:indexPath.row];
     
-    NSString *videoID = dictionary[@"snippet"][@"resourceId"][@"videoId"];
-    NSString *playlistID = dictionary[@"snippet"][@"playlistId"];
+    [tipsCell configureWithTitle:[FRSTipsManager titleFromDictionary:dictionary]
+                        subtitle:[FRSTipsManager subtitleFromDictionary:dictionary]
+                    thumbnailURL:[FRSTipsManager thumbnailURLStringFromDictionary:dictionary]
+                        videoURL:[FRSTipsManager videoURLStringFromDictionary:dictionary]];
     
-    NSString *videoURL =  [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"vnd.youtube://"]] ? [NSString stringWithFormat:@"vnd.youtube://watch?v=%@&list=%@", videoID, playlistID] : [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@&list=%@", videoID, playlistID];
-    [tipsCell configureWithTitle:dictionary[@"snippet"][@"title"] subtitle:dictionary[@"snippet"][@"description"] thumbnailURL:dictionary[@"snippet"][@"thumbnails"][@"medium"][@"url"] videoURL:videoURL];
     return tipsCell;
 }
 
