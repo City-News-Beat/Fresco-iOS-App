@@ -230,7 +230,7 @@
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
     if (![NSString isStringValid:currentKey]) {
         //ideally this should not occur.
-        return [self getInvalidCell];
+        return [self getInvalidCellForType:currentKey];
     }
     
     /* NEWS */
@@ -394,11 +394,11 @@
         return defaultCell;
 
     } else {
-        return [self getInvalidCell];
+        return [self getInvalidCellForType:currentKey];
     }
 
-    return [self getInvalidCell];
-;
+    return [self getInvalidCellForType:currentKey];
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -756,12 +756,18 @@
 
 #pragma mark - Invalid cell
 
--(UITableViewCell *)getInvalidCell {
+-(UITableViewCell *)getInvalidCellForType:(NSString *)type {
     UITableViewCell *invalidCell = [self.tableView dequeueReusableCellWithIdentifier:invalidNotificationEventName];
     invalidCell.backgroundColor = [UIColor frescoRedColor];
+    [FRSTracker track:notificationFeedUnexpectedType
+           parameters:@{
+                        @"type": [NSString getValidString:type orAlternativeString:@"type is nil"],
+                        @"screen": self.navigationItem.title,
+                        @"handled": @"Displaying a blank cell"
+                        }];
     return invalidCell;
-
 }
+
 #pragma mark - Actions
 
 - (void)popViewController {

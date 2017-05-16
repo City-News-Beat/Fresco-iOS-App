@@ -39,6 +39,7 @@ static NSString *const addressError = @"Address Error";
 static NSString *const notificationsEnabled = @"Permissions notification enables";
 static NSString *const notificationsDisabled = @"Permissions notification disables";
 static NSString *const notificationOpened = @"Notification opened";
+static NSString *const notificationFeedUnexpectedType = @"Notification Type Unexpected";
 static NSString *const cameraEnabled = @"Permissions camera enabled";
 static NSString *const cameraDisabled = @"Permissions camera disables";
 static NSString *const microphoneEnabled = @"Permissions microphone enables";

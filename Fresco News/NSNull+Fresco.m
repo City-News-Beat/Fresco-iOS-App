@@ -50,7 +50,7 @@
     [FRSTracker track:kNullHandlingTrackingKey
            parameters:@{kNullHandlingMethodKey : @"componentsSeparatedByString",
                         kNullHandlingHandledReturnValueKey : @"Empty Array",
-                        @"separator" : separator ? separator : @"separator is nil"
+                        @"separator" : [NSString getValidString:separator orAlternativeString:@"separator is nil"]
                         }];
     return @[];
 }
@@ -59,7 +59,7 @@
     [FRSTracker track:kNullHandlingTrackingKey
            parameters:@{kNullHandlingMethodKey : @"objectForKey",
                         kNullHandlingHandledReturnValueKey : @"nil value",
-                        @"key" : key ? key : @"key is nil"
+                        @"key" : [NSString getValidString:key orAlternativeString:@"key is nil"]
                         }];
     return nil;
 }
@@ -68,7 +68,7 @@
     [FRSTracker track:kNullHandlingTrackingKey
            parameters:@{kNullHandlingMethodKey : @"valueForKey",
                         kNullHandlingHandledReturnValueKey : @"nil value",
-                        @"key" : key ? key : @"key is nil"
+                        @"key" : [NSString getValidString:key orAlternativeString:@"key is nil"]
                         }];
     return nil;
 }
@@ -85,9 +85,18 @@
     [FRSTracker track:kNullHandlingTrackingKey
            parameters:@{kNullHandlingMethodKey : @"isEqualToString",
                         kNullHandlingHandledReturnValueKey : @"NO",
-                        @"anotherString" : aString ? aString : @"anotherString is nil"
+                        @"anotherString" : [NSString getValidString:aString orAlternativeString:@"anotherString is nil"]
                         }];
     return NO;
+}
+
+- (NSComparisonResult)caseInsensitiveCompare:(NSString *)string {
+    [FRSTracker track:kNullHandlingTrackingKey
+           parameters:@{kNullHandlingMethodKey : @"caseInsensitiveCompare",
+                        kNullHandlingHandledReturnValueKey : @"NSNotFound",
+                        @"string" : [NSString getValidString:string orAlternativeString:@"anotherString is nil"]
+                        }];
+    return NSNotFound;
 }
 
 @end
