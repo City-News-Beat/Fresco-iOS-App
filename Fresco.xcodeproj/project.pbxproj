@@ -76,6 +76,7 @@
 		07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */; };
 		07C77EFE1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */; };
 		07C8B4B71EC4C4D000C3CA5C /* FRSTipsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C8B4B61EC4C4D000C3CA5C /* FRSTipsHeaderView.m */; };
+		07CA2A0E1ECB5BCB000122EF /* FRSSupportFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CA2A0D1ECB5BCB000122EF /* FRSSupportFooterView.m */; };
 		07D4FB081E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07D4FB071E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib */; };
 		07D4FB0B1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D4FB0A1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m */; };
 		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
@@ -487,6 +488,8 @@
 		07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowersFollowingViewController.m; sourceTree = "<group>"; };
 		07C8B4B51EC4C4D000C3CA5C /* FRSTipsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTipsHeaderView.h; sourceTree = "<group>"; };
 		07C8B4B61EC4C4D000C3CA5C /* FRSTipsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTipsHeaderView.m; sourceTree = "<group>"; };
+		07CA2A0C1ECB5BCB000122EF /* FRSSupportFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSupportFooterView.h; sourceTree = "<group>"; };
+		07CA2A0D1ECB5BCB000122EF /* FRSSupportFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSupportFooterView.m; sourceTree = "<group>"; };
 		07D4FB071E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCaptureModeSlider.xib; sourceTree = "<group>"; };
 		07D4FB091E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCaptureModeSlider.h; sourceTree = "<group>"; };
 		07D4FB0A1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCaptureModeSlider.m; sourceTree = "<group>"; };
@@ -1134,6 +1137,8 @@
 				076C3D901EBD104000094249 /* FRSTipsViewController.m */,
 				07C8B4B51EC4C4D000C3CA5C /* FRSTipsHeaderView.h */,
 				07C8B4B61EC4C4D000C3CA5C /* FRSTipsHeaderView.m */,
+				07CA2A0C1ECB5BCB000122EF /* FRSSupportFooterView.h */,
+				07CA2A0D1ECB5BCB000122EF /* FRSSupportFooterView.m */,
 				072348AF1EC4F71100FF2B7E /* FRSTipsTableViewCell.h */,
 				072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */,
 				072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */,
@@ -2995,6 +3000,7 @@
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
 				E7092B531E510BEF00C3B704 /* NSError+Fresco.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
+				07CA2A0E1ECB5BCB000122EF /* FRSSupportFooterView.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,

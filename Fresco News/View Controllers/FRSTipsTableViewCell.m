@@ -22,6 +22,7 @@
     
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.actionButton.adjustsImageWhenHighlighted = NO;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -38,9 +39,6 @@
 - (IBAction)actionButtonTapped:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.videoURL] options:@{} completionHandler:nil];
 }
-
-
-
 
 
 @end

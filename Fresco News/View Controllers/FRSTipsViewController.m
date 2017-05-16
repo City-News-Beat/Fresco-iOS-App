@@ -8,18 +8,21 @@
 
 #import "FRSTipsViewController.h"
 #import "FRSTipsHeaderView.h"
+#import "FRSSupportFooterView.h"
 #import <Smooch/Smooch.h>
-#import <AFNetworking/AFNetworking.h>
 #import "FRSTipsTableViewCell.h"
-#import "NSString+Fresco.h"
 #import "FRSTipsManager.h"
 
 #define TIPS_CELL_ID @"tips-cell"
 
-@interface FRSTipsHeaderView ()
+@interface FRSTipsViewController () <UITableViewDelegate, UITableViewDataSource, FRSSupportFooterViewDelegate>
 
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSMutableArray *videosArray;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
 
 @end
+
 
 @implementation FRSTipsViewController 
 
@@ -94,20 +97,7 @@
 }
 
 - (void)configureFooterView {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 72)];
-    footerView.userInteractionEnabled = YES;
-    self.tableView.tableFooterView = footerView;
-    
-    UILabel *lineOne = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, footerView.frame.size.width, 20)];
-    lineOne.attributedText = [NSString formattedAttributedStringFromString:@"Questions? We're here to help." boldText:@""];
-    [footerView addSubview:lineOne];
-    
-    UILabel *lineTwo = [[UILabel alloc] initWithFrame:CGRectMake(0, 35, footerView.frame.size.width, 20)];
-    lineTwo.attributedText = [NSString formattedAttributedStringFromString:@" Chat with us. " boldText:@"Chat with us."];
-    [footerView addSubview:lineTwo];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(presentSmooch)];
-    [footerView addGestureRecognizer:tap];
+    self.tableView.tableFooterView = [[FRSSupportFooterView alloc] initWithDelegate:self];
 }
 
 
