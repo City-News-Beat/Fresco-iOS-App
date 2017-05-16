@@ -300,10 +300,12 @@
 		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
 		F21FCB841E9BE9D80015B13D /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */; };
 		F21FCB871E9BF4620015B13D /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */; };
+		F2223C0D1ECB47CD00EB0CA8 /* bad_notifications_response.json in Resources */ = {isa = PBXBuildFile; fileRef = F2223C0C1ECB47CD00EB0CA8 /* bad_notifications_response.json */; };
 		F23B15D51EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */; };
 		F23B15D61EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */; };
 		F23B15DA1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */; };
 		F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */; };
+		F2AB0CD21ECA3FBB00E22542 /* NSNull+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AB0CD11ECA3FBB00E22542 /* NSNull+Fresco.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -901,12 +903,15 @@
 		F21FCB831E9BE9D80015B13D /* FRSGalleryMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaView.xib; sourceTree = "<group>"; };
 		F21FCB851E9BF4620015B13D /* PSCustomViewFromXib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCustomViewFromXib.h; sourceTree = "<group>"; };
 		F21FCB861E9BF4620015B13D /* PSCustomViewFromXib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCustomViewFromXib.m; sourceTree = "<group>"; };
+		F2223C0C1ECB47CD00EB0CA8 /* bad_notifications_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bad_notifications_response.json; sourceTree = "<group>"; };
 		F23B15D21EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaImageCollectionViewCell.h; sourceTree = "<group>"; };
 		F23B15D31EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaImageCollectionViewCell.m; sourceTree = "<group>"; };
 		F23B15D41EA006AE00A50CB2 /* FRSGalleryMediaImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		F23B15D71EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryMediaVideoCollectionViewCell.h; sourceTree = "<group>"; };
 		F23B15D81EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryMediaVideoCollectionViewCell.m; sourceTree = "<group>"; };
 		F23B15D91EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryMediaVideoCollectionViewCell.xib; sourceTree = "<group>"; };
+		F2AB0CD01ECA3FBB00E22542 /* NSNull+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNull+Fresco.h"; sourceTree = "<group>"; };
+		F2AB0CD11ECA3FBB00E22542 /* NSNull+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNull+Fresco.m"; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1219,6 +1224,7 @@
 			children = (
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
+				F2223C0C1ECB47CD00EB0CA8 /* bad_notifications_response.json */,
 				D4F91A451C8B50670078BF15 /* Fresco API */,
 				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				6596ECA01C5032000011C18B /* Subclasses */,
@@ -2527,6 +2533,8 @@
 				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
 				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
 				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
+				F2AB0CD01ECA3FBB00E22542 /* NSNull+Fresco.h */,
+				F2AB0CD11ECA3FBB00E22542 /* NSNull+Fresco.m */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
@@ -2685,6 +2693,7 @@
 				CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */,
+				F2223C0D1ECB47CD00EB0CA8 /* bad_notifications_response.json in Resources */,
 				CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
@@ -2961,6 +2970,7 @@
 				CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */,
 				072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
+				F2AB0CD21ECA3FBB00E22542 /* NSNull+Fresco.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,

@@ -14,5 +14,6 @@
 #import "FRSAPIClient.h"
 #import "FRSTracker.h"
 #import "FRSReachability.h"
+#import "NSString+Validation.h"
 
 #endif

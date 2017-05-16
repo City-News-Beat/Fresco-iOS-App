@@ -69,13 +69,26 @@
 - (void)getNotifications {
     [[FRSNotificationManager sharedInstance] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
       self.feed = [responseObject objectForKey:@"feed"];
-
       [self configureTableView];
       [self registerNibs];
       [self.spinner stopLoading];
 
       [self readAllNotifications];
     }];
+}
+
+- (void)setUpFeedWithBadJSON {
+    // This is purely used for testing purpose. this should be later moved to unit tests or UI tests.
+    NSError *deserializingError;
+    NSString *pathStringToLocalFile = [[NSBundle mainBundle] pathForResource:@"bad_notifications_response" ofType:@"json"];
+
+    NSURL *localFileURL = [NSURL fileURLWithPath:pathStringToLocalFile];
+    NSData *contentOfLocalFile = [NSData dataWithContentsOfURL:localFileURL];
+    id object = [NSJSONSerialization JSONObjectWithData:contentOfLocalFile
+                                                options:NSJSONReadingMutableContainers
+                                                  error:&deserializingError];
+
+    self.feed = (NSArray *)object[@"feed"];
 }
 
 #pragma mark - UI
@@ -136,6 +149,7 @@
 
 - (void)registerNibs {
     // default
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:invalidNotificationEventName];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:likedNotification];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:repostedNotification];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:followedNotification];
@@ -156,7 +170,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentDeclinedNotification];
 
     // text
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userNewsCustomNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userNewsCustomNotification]; 
 
     // assignment
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:newAssignmentNotification];
@@ -175,7 +189,10 @@
 - (void)loadMore {
     if (!loadingMoreNotifications && !reachedBottom) {
         loadingMoreNotifications = TRUE;
-        NSString *lastNotifID = [[self.feed lastObject] objectForKey:@"id"];
+        NSString *lastNotifID;
+        if(self.feed.count > 0) {
+            lastNotifID = [[self.feed lastObject] objectForKey:@"id"];
+        }
 
         [[FRSNotificationManager sharedInstance] getNotificationsWithLast:lastNotifID
                                                                completion:^(id responseObject, NSError *error) {
@@ -211,7 +228,11 @@
     }
 
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
-
+    if (![NSString isStringValid:currentKey]) {
+        //ideally this should not occur.
+        return [self getInvalidCell];
+    }
+    
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
 
@@ -373,19 +394,11 @@
         return defaultCell;
 
     } else {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
-        if ([self seen:indexPath]) {
-            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
-        }
-        return defaultCell;
+        return [self getInvalidCell];
     }
 
-    FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
-
-    if ([self seen:indexPath]) {
-        defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
-    }
-    return defaultCell;
+    return [self getInvalidCell];
+;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -400,7 +413,7 @@
     titleLabel.font = [UIFont notaMediumWithSize:17];
     titleLabel.numberOfLines = 0;
     titleLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding - rightPadding, 22);
-    titleLabel.text = (notif[@"title"] && ![notif[@"title"] isEqual:[NSNull null]]) ? notif[@"title"] : @"";
+    titleLabel.text = [NSString getValidStringOrEmptyStringFrom:notif[@"title"]];
     [titleLabel sizeToFit];
 
     UILabel *bodyLabel = [[UILabel alloc] init];
@@ -408,7 +421,7 @@
     topPadding = 33;
     bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding - rightPadding, 60);
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    bodyLabel.text = (notif[@"body"] && ![notif[@"body"] isEqual:[NSNull null]]) ? notif[@"body"] : @"";
+    bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:notif[@"body"]];
     bodyLabel.numberOfLines = 0;
     bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
 
@@ -506,8 +519,8 @@
 - (void)configureTodayInNews:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = dictionary[@"title"];
-    cell.bodyLabel.text = dictionary[@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
@@ -517,8 +530,8 @@
 - (void)configureGalleryCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = dictionary[@"title"];
-    cell.bodyLabel.text = dictionary[@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
@@ -528,10 +541,10 @@
 - (void)configureStoryCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCell];
 
-    NSString *storyTitle = @"(null)"; //pass in from api
-
-    cell.titleLabel.text = [NSString stringWithFormat:@"Featured Story:%@", storyTitle];
-    cell.bodyLabel.text = dictionary[@"body"];
+//    NSString *storyTitle = @"(null)"; //pass in from api
+//
+//    cell.titleLabel.text = [NSString stringWithFormat:@"Featured Story:%@", storyTitle];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
@@ -540,7 +553,7 @@
 
 - (void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell dictionary:(NSDictionary *)dictionary {
     textCell.label.numberOfLines = 0;
-    textCell.textLabel.text = [dictionary objectForKey:@"body"];
+    textCell.textLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)readAllNotifications {
@@ -564,8 +577,8 @@
         assignmentCell.actionButton.hidden = false;
         assignmentCell.actionButton.tintColor = [UIColor blackColor];
     }
-    assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
-    assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    assignmentCell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    assignmentCell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
     assignmentCell.bodyLabel.numberOfLines = 0;
 }
 
@@ -574,14 +587,14 @@
 - (void)configureFollowCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
     cell.titleLabel.numberOfLines = 2;
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
     NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
     cell.followButton.alpha = 0;
     [cell.followButton removeFromSuperview];
 
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
@@ -592,8 +605,8 @@
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
     //cell.count = userIDs.count; //pull from api
     //user image
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
     NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
     cell.count = userIDs.count;
 
@@ -634,8 +647,8 @@
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
     //    cell.count = userIDs.count;
     //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -659,12 +672,17 @@
         cell.followButton.alpha = 0;
     }
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (BOOL)hasImage:(NSDictionary *)dictionary {
-    if (dictionary[@"meta"][@"image"] != Nil && ![dictionary[@"meta"][@"image"] isEqual:[NSNull null]] && [[dictionary[@"meta"][@"image"] class] isSubclassOfClass:[NSString class]]) {
+    NSDictionary *meta = dictionary[@"meta"];
+    if(!meta || ![meta isKindOfClass:[NSDictionary class]]) {
+        return FALSE;
+    }
+    
+    if ([NSString isStringValid:meta[@"image"]]) {
         return TRUE;
     }
 
@@ -675,8 +693,8 @@
 
 - (void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -684,9 +702,9 @@
     [cell.image removeFromSuperview];
     [cell configureDefaultCell];
 
-    NSString *total = @"(null)";
-
-    cell.titleLabel.text = [NSString stringWithFormat:@"You have %@ expiring soon", total];
+//    NSString *total = @"(null)";
+//
+//    cell.titleLabel.text = [NSString stringWithFormat:@"You have %@ expiring soon", total];
     cell.bodyLabel.text = @"Add a payment method to get paid";
 }
 
@@ -695,8 +713,8 @@
     [cell.image removeFromSuperview];
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -704,8 +722,8 @@
 
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -714,8 +732,8 @@
 
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -723,8 +741,8 @@
 
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
+    cell.bodyLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"body"]];
 }
 
 - (void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -732,10 +750,18 @@
 
     [cell configureDefaultCell];
 
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.titleLabel.text = [NSString getValidStringOrEmptyStringFrom:dictionary[@"title"]];
     cell.bodyLabel.text = @"Your tax info was declined.";
 }
 
+#pragma mark - Invalid cell
+
+-(UITableViewCell *)getInvalidCell {
+    UITableViewCell *invalidCell = [self.tableView dequeueReusableCellWithIdentifier:invalidNotificationEventName];
+    invalidCell.backgroundColor = [UIColor frescoRedColor];
+    return invalidCell;
+
+}
 #pragma mark - Actions
 
 - (void)popViewController {
