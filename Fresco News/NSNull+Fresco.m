@@ -94,7 +94,7 @@
     [FRSTracker track:kNullHandlingTrackingKey
            parameters:@{kNullHandlingMethodKey : @"caseInsensitiveCompare",
                         kNullHandlingHandledReturnValueKey : @"NSNotFound",
-                        @"string" : [NSString getValidString:string orAlternativeString:@"anotherString is nil"]
+                        @"string" : [NSString getValidString:string orAlternativeString:@"string is nil"]
                         }];
     return NSNotFound;
 }

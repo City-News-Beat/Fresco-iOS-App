@@ -35,4 +35,6 @@
 
 - (BOOL)boolValue;
 
+- (NSComparisonResult)caseInsensitiveCompare:(NSString *)string;
+
 @end
