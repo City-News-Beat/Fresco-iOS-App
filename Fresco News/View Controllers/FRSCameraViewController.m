@@ -196,16 +196,19 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)fetchGalleryAssetsInBackgroundWithCompletion:(void (^)())completion {
+    
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        self.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
+        weakSelf.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
         PHAsset *firstAsset = [self.fileLoader assetAtIndex:0];
         
         if (firstAsset) {
             // image that fits predicate at index 0
-            [self.fileLoader getDataFromAsset:firstAsset
+            [weakSelf.fileLoader getDataFromAsset:firstAsset
                                      callback:^(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error) {
-                                         [self.footerView updatePreviewButtonWithImage:image];
-                                         self.capturingImage = NO;
+                                         [weakSelf.footerView updatePreviewButtonWithImage:image];
+                                         weakSelf.capturingImage = NO;
                                      }];
         } else {
             // no image
@@ -278,13 +281,15 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 
 - (void)configurePreviewLayer {
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_main_queue(), ^{
       CALayer *viewLayer = self.preview.layer;
-      self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
-      self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-      self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+      weakSelf.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
+      weakSelf.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+      weakSelf.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
       [viewLayer addSublayer:self.captureVideoPreviewLayer];
-      self.captureVideoPreviewLayer.frame = self.preview.frame;
+      weakSelf.captureVideoPreviewLayer.frame = self.preview.frame;
     });
 }
 
@@ -553,19 +558,21 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 - (void)adjustFramesForCaptureState {
     
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_main_queue(), ^{
         CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
         CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
         
-        self.preview.frame = bigPreviewFrame;
-        self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+        weakSelf.preview.frame = bigPreviewFrame;
+        weakSelf.captureVideoPreviewLayer.frame = bigPreviewFrame;
         
-        if (self.captureMode == FRSCaptureModePhoto) {
-            self.preview.frame = smallPreviewFrame;
-            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
+        if (weakSelf.captureMode == FRSCaptureModePhoto) {
+            weakSelf.preview.frame = smallPreviewFrame;
+            weakSelf.captureVideoPreviewLayer.frame = smallPreviewFrame;
         } else {
-            self.preview.frame = bigPreviewFrame;
-            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+            weakSelf.preview.frame = bigPreviewFrame;
+            weakSelf.captureVideoPreviewLayer.frame = bigPreviewFrame;
         }
     });
 }
@@ -581,14 +588,16 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [self.rotateDeviceAlert dismiss];
     }
     
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat angle = 0;
 
         if (o == UIDeviceOrientationLandscapeLeft) {
             
-            if (self.captureMode == FRSCaptureModeVideo) {
-                [self animateVideoRotateHide];
-                self.videoRotateIV.alpha = 0.0;
+            if (weakSelf.captureMode == FRSCaptureModeVideo) {
+                [weakSelf animateVideoRotateHide];
+                weakSelf.videoRotateIV.alpha = 0.0;
             }
             
             angle = M_PI_2;
@@ -599,8 +608,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
             
             if (self.captureMode == FRSCaptureModeVideo) {
                 
-                [self animateVideoRotateHide];
-                self.videoRotateIV.alpha = 0.0;
+                [weakSelf animateVideoRotateHide];
+                weakSelf.videoRotateIV.alpha = 0.0;
             }
             
             self.tipsAlert.isRotated = YES;
@@ -610,19 +619,19 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         } else if (o == UIDeviceOrientationPortrait) {
             
             if (self.captureMode == FRSCaptureModeVideo) {
-                [self animateVideoRotationAppear];
-                self.videoRotateIV.alpha = 1.0;
+                [weakSelf animateVideoRotationAppear];
+                weakSelf.videoRotateIV.alpha = 1.0;
             }
             
             [UIView animateWithDuration:0.1
                                   delay:0
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
-                                 self.topContainer.alpha = 0;
-                                 self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
+                                 weakSelf.topContainer.alpha = 0;
+                                 weakSelf.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
                              }
                              completion:^(BOOL finished) {
-                                 self.topContainer.alpha = 1;
+                                 weakSelf.topContainer.alpha = 1;
                              }];
             
             self.tipsAlert.isRotated = NO;
@@ -636,25 +645,27 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [UIView setAnimationDuration:0.2];
         
         CGAffineTransform rotation = CGAffineTransformMakeRotation(angle);
-        self.flashButton.transform = rotation;
-        self.apertureBackground.transform = rotation;
-        self.previewBackgroundIV.transform = rotation;
-        self.footerView.tipsButton.transform = rotation;
-        self.footerView.nextButtonContainer.transform = rotation;
-        self.footerView.flashButton.transform = rotation;
-        self.tipsAlert.transform = rotation;
+        weakSelf.flashButton.transform = rotation;
+        weakSelf.apertureBackground.transform = rotation;
+        weakSelf.previewBackgroundIV.transform = rotation;
+        weakSelf.footerView.tipsButton.transform = rotation;
+        weakSelf.footerView.nextButtonContainer.transform = rotation;
+        weakSelf.footerView.flashButton.transform = rotation;
+        weakSelf.tipsAlert.transform = rotation;
         [UIView commitAnimations];
     });
 }
 
 - (void)animateShutterWithCompletion:(void (^)())completion {
+    
+    __weak typeof(self) weakSelf = self;
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [UIView animateWithDuration:0.15
                             delay:0.0
                           options:UIViewAnimationOptionCurveEaseInOut
                        animations:^{
-                         self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI / -2);
+                         weakSelf.apertureButton.transform = CGAffineTransformMakeRotation(M_PI / -2);
                        }
                        completion:nil];
 
@@ -662,17 +673,17 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
           delay:0
           options:UIViewAnimationOptionCurveEaseInOut
           animations:^{
-            self.apertureButton.transform = CGAffineTransformMakeScale(4.00, 4.00);
+            weakSelf.apertureButton.transform = CGAffineTransformMakeScale(4.00, 4.00);
           }
           completion:^(BOOL finished) {
             [UIView animateWithDuration:0.15
                 delay:0.06
                 options:UIViewAnimationOptionCurveEaseOut
                 animations:^{
-                  self.apertureButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
+                  weakSelf.apertureButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                 }
                 completion:^(BOOL finished) {
-                  self.apertureButton.frame = self.originalApertureFrame;
+                  weakSelf.apertureButton.frame = self.originalApertureFrame;
                 }];
           }];
     });
@@ -745,10 +756,12 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [self.sessionManager.session commitConfiguration];
     }
     
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self rotateAppForOrientation:self.lastOrientation];
-        [self setAppropriateIconsForCaptureState];
-        [self adjustFramesForCaptureState];
+        [weakSelf rotateAppForOrientation:self.lastOrientation];
+        [weakSelf setAppropriateIconsForCaptureState];
+        [weakSelf adjustFramesForCaptureState];
     });
     
 }
@@ -810,8 +823,9 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
 
 - (void)didCaptureStillImage {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self animateShutterWithCompletion:nil];
+        [weakSelf animateShutterWithCompletion:nil];
     });
 }
 
@@ -852,28 +866,30 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [self animateCloseButtonHide:YES];
     }
 
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(self.sessionManager.sessionQueue, ^{
 
-      if (!self.sessionManager.movieFileOutput.isRecording) {
-          self.isRecording = TRUE;
+      if (!weakSelf.sessionManager.movieFileOutput.isRecording) {
+          weakSelf.isRecording = TRUE;
           
-          self.swipeRightGestureRec.enabled = NO;
-          self.swipeLeftGestureRec.enabled = NO;
+          weakSelf.swipeRightGestureRec.enabled = NO;
+          weakSelf.swipeLeftGestureRec.enabled = NO;
 
-          AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+          AVCaptureConnection *movieConnection = [weakSelf.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
 
           if (!movieConnection) {
-              [self.sessionManager.session beginConfiguration];
+              [weakSelf.sessionManager.session beginConfiguration];
 
-              if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+              if ([weakSelf.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
                   //Set the session preset to photo, the default mode we enter in as
-                  [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+                  [weakSelf.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
               }
 
-              [self.sessionManager.session commitConfiguration];
+              [weakSelf.sessionManager.session commitConfiguration];
           }
 
-          movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+          movieConnection = [weakSelf.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
 
           if (movieConnection.active) {
 
@@ -892,13 +908,13 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                   case FRSCaptureModeVideo:
                       captureTypeString = @"video";
                       break;
-                  case FRSCaptureModeWide:
+                  case FRSCaptureModeVideoWide:
                       captureTypeString = @"wide";
                       break;
-                  case FRSCaptureModeInterview:
+                  case FRSCaptureModeVideoInterview:
                       captureTypeString = @"interview";
                       break;
-                  case FRSCaptureModePan:
+                  case FRSCaptureModeVideoPan:
                       captureTypeString = @"pan";
                       break;
                       
@@ -910,7 +926,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
               captureType.key = @"capture_type";
               captureType.value = captureTypeString;
               
-              self.sessionManager.movieFileOutput.metadata = @[ item , captureType ];
+              weakSelf.sessionManager.movieFileOutput.metadata = @[ item , captureType ];
 
               if ([UIDevice currentDevice].isMultitaskingSupported) {
                   // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
@@ -918,27 +934,27 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                   // This also ensures that there will be time to write the file to the photo library when AVCam is backgrounded.
                   // To conclude this background execution, -endBackgroundTask is called in
                   // -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:] after the recorded file has been saved.
-                  self.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+                  weakSelf.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
               }
 
               // Update the orientation on the movie file output video connection before starting recording.
-              AVCaptureConnection *connection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
-              connection.videoOrientation = [self orientationFromDeviceOrientaton];
+              AVCaptureConnection *connection = [weakSelf.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+              connection.videoOrientation = [weakSelf orientationFromDeviceOrientaton];
 
               // Start recording to a temporary file.
               NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
               NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
-              [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+              [weakSelf.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
               //                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
               dispatch_async(dispatch_get_main_queue(), ^{
-                [self runVideoRecordAnimation];
+                [weakSelf runVideoRecordAnimation];
               });
           }
 
       } else {
-          self.swipeRightGestureRec.enabled = YES;
-          self.swipeLeftGestureRec.enabled = YES;
-          [self.sessionManager.movieFileOutput stopRecording];
+          weakSelf.swipeRightGestureRec.enabled = YES;
+          weakSelf.swipeLeftGestureRec.enabled = YES;
+          [weakSelf.sessionManager.movieFileOutput stopRecording];
       }
     });
 }
@@ -1066,6 +1082,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     
     [self.footerView show];
     
+    __weak typeof(self) weakSelf = self;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [UIView animateWithDuration:0.15
@@ -1073,14 +1091,14 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
                              
-                             self.circleLayer.opacity = 0;
+                             weakSelf.circleLayer.opacity = 0;
                              
-                             self.apertureButton.alpha = 1;
-                             self.apertureButton.transform = CGAffineTransformMakeScale(1.000, 1.000);
+                             weakSelf.apertureButton.alpha = 1;
+                             weakSelf.apertureButton.transform = CGAffineTransformMakeScale(1.000, 1.000);
                              
                          }
                          completion:^(BOOL finished) {
-                             [self.circleLayer removeFromSuperlayer];
+                             [weakSelf.circleLayer removeFromSuperlayer];
                              
                          }];
         
@@ -1089,7 +1107,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              
-                             self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI);
+                             weakSelf.apertureButton.transform = CGAffineTransformMakeRotation(M_PI);
                              
                          }
                          completion:nil];
