@@ -5,6 +5,7 @@
 //  Created by Omar Elfanek on 5/5/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
+//  This is a semi-transparent alert view that is used in the CameraVC for the tips alerts.
 
 #import "FRSAlertView.h"
 #import "FRSCameraViewController.h"
