@@ -9,9 +9,10 @@
 #import "FRSTipsViewController.h"
 #import "FRSTipsHeaderView.h"
 #import "FRSSupportFooterView.h"
-#import <Smooch/Smooch.h>
 #import "FRSTipsTableViewCell.h"
-#import "FRSTipsManager.h"
+#import "FRSTip.h"
+
+#import <Smooch/Smooch.h>
 
 #define TIPS_CELL_ID @"tips-cell"
 
@@ -121,14 +122,15 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:TIPS_CELL_ID];
-    NSDictionary *dictionary = [self.videosArray objectAtIndex:indexPath.row];
     
-    [tipsCell configureWithTitle:[FRSTipsManager titleFromDictionary:dictionary]
-                        subtitle:[FRSTipsManager subtitleFromDictionary:dictionary]
-                    thumbnailURL:[FRSTipsManager thumbnailURLStringFromDictionary:dictionary]
-                        videoURL:[FRSTipsManager videoURLStringFromDictionary:dictionary]];
+    FRSTipsTableViewCell *tipsCell = [self.tableView dequeueReusableCellWithIdentifier:TIPS_CELL_ID];
+    
+    FRSTip *tip = [[FRSTip alloc] initWithDictionary:[self.videosArray objectAtIndex:indexPath.row]];
+    
+    [tipsCell configureWithTitle:tip.title
+                        subtitle:tip.subtitle
+                    thumbnailURL:tip.thumbnailURL
+                        videoURL:tip.videoURL];
     
     return tipsCell;
 }

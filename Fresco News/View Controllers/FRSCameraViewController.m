@@ -312,9 +312,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)segueToTipsAction {
+    __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
-        [self.navigationController pushViewController:tipsViewController animated:YES];
+        [weakSelf.navigationController pushViewController:tipsViewController animated:YES];
     });
 }
 

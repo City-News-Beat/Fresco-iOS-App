@@ -40,5 +40,4 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.videoURL] options:@{} completionHandler:nil];
 }
 
-
 @end
