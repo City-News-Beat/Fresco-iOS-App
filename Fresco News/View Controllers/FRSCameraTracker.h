@@ -5,6 +5,7 @@
 //  Created by Omar Elfanek on 5/2/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
+//  This class handles all gyroscope and accelerometer actions, such as showing the wobble and pan alerts.
 
 #import <UIKit/UIKit.h>
 #import "FRSAVSessionManager.h"

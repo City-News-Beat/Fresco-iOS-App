@@ -5,6 +5,7 @@
 //  Created by Omar Elfanek on 4/11/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
+//  This class creates and manages the capture mode slider in the CameraVC.
 
 #import <UIKit/UIKit.h>
 #import "FRSCameraConstants.h"
@@ -42,8 +43,15 @@
  */
 - (void)setCaptureMode:(FRSCaptureMode)captureMode;
 
+/**
+ Hides the capture modes and the tips button.
+ */
+- (void)hideNewFeaturesForABTesting;
+
+/**
+ The current index of the slider. This is interchangeable with FRSCaptureMode.
+ */
 @property NSInteger currentIndex;
 
-- (void)hideNewFeaturesForABTesting;
 
 @end
