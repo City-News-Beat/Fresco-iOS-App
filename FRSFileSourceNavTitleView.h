@@ -10,6 +10,7 @@
 
 @interface FRSFileSourceNavTitleView : UIView
 
-- (void)updateWithTitle:(NSString *)title arrowUp:(BOOL)up;
+- (void)updateWithTitle:(NSString *)title;
+- (void)arrowUp:(BOOL)up;
 
 @end

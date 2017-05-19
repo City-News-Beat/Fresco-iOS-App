@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSFileSourcePickerViewModel.h"
 
 @interface FRSFileSourcePickerTableView : UITableView
+
+@property (strong, nonatomic) NSMutableArray *sourceViewModelsArray;
+@property (strong, nonatomic) FRSFileSourcePickerViewModel *selectedSourceViewModel;
+@property (assign, nonatomic) BOOL isExpanded;
 
 @end

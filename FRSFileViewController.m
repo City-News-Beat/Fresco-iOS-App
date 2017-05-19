@@ -13,6 +13,7 @@
 #import "FRSFileFooterCell.h"
 #import "FRSFileSourceNavTitleView.h"
 #import "FRSFileSourcePickerTableView.h"
+#import "FRSFileSourcePickerViewModel.h"
 
 static NSInteger const maxAssets = 8;
 
@@ -38,7 +39,7 @@ static NSInteger const maxAssets = 8;
     [self setupCollectionView];
     [self setupSecondaryUI];
     [self setupNavigationBarViews];
-    
+    [self setupFileSourcePickerTableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -95,11 +96,29 @@ static NSInteger const maxAssets = 8;
         NSFontAttributeName : [UIFont notaBoldWithSize:18] }];
     
     [self setupNavigationBarButtons];
+}
 
+-(void)setupFileSourcePickerTableView {
     self.fileSourcePickerTableView = [[FRSFileSourcePickerTableView alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 4*44) style:UITableViewStylePlain];
     [self.view addSubview:self.fileSourcePickerTableView];
     self.fileSourcePickerTableView.alpha = 0;
+    self.fileSourcePickerTableView.isExpanded = NO;
+    //temp creating static view models. later these should be from the available source folders.
+    FRSFileSourcePickerViewModel *cameraSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Camera Roll"];
+    cameraSourceViewModel.isSelected = YES;
     
+    FRSFileSourcePickerViewModel *favSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Favorites"];
+    
+    FRSFileSourcePickerViewModel *videosSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Videos"];
+    
+    FRSFileSourcePickerViewModel *customFolderSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Custom Folder"];
+    
+    self.fileSourcePickerTableView.sourceViewModelsArray = [[NSMutableArray alloc] initWithObjects:cameraSourceViewModel, favSourceViewModel, videosSourceViewModel, customFolderSourceViewModel, nil];
+    [self.fileSourcePickerTableView reloadData];
+    
+    [self.fileSourcePickerTableView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
+    [self.fileSourcePickerTableView addObserver:self forKeyPath:@"isExpanded" options:0 context:nil];
+
 }
 
 - (void)setupNavigationBarButtons {
@@ -132,21 +151,40 @@ static NSInteger const maxAssets = 8;
     //title view
     self.navigationItem.titleView = [[FRSFileSourceNavTitleView alloc] init];
     self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
-    [self.fileSourceNavTitleView updateWithTitle:@"CAMERA ROLL" arrowUp:YES];
-    
+//    [self.fileSourceNavTitleView updateWithTitle:@"CAMERA ROLL"];
+    [self.fileSourceNavTitleView arrowUp:NO];
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fileSourceTapped:)];
     singleTap.numberOfTapsRequired = 1;
+    self.fileSourceNavTitleView.userInteractionEnabled = YES;
     [self.fileSourceNavTitleView addGestureRecognizer:singleTap];
     
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
+        NSLog(@"selectedSourceViewModel changed.");
+        [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
+    }
+    //isExpanded
+    if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"isExpanded"]) {
+        NSLog(@"isExpanded changed.");
+        [self.fileSourceNavTitleView arrowUp:self.fileSourcePickerTableView.isExpanded];
+    }
+
 }
 
 - (void)questionTapped {
     if(self.fileSourcePickerTableView.alpha == 0) {
         self.fileSourcePickerTableView.alpha = 1;
+        self.fileSourcePickerTableView.isExpanded = YES;
     }
     else {
         self.fileSourcePickerTableView.alpha = 0;
+        self.fileSourcePickerTableView.isExpanded = NO;
     }
+    [self.fileSourcePickerTableView reloadData];
 }
 
 - (void)fileSourceTapped:(UITapGestureRecognizer *)tap {
@@ -406,8 +444,11 @@ static NSInteger const maxAssets = 8;
 -(void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+    
+    [self.fileSourcePickerTableView removeObserver:self forKeyPath:@"selectedSourceViewModel"];
+    [self.fileSourcePickerTableView removeObserver:self forKeyPath:@"isExpanded"];
 
+}
 
 -(void)addObservers {
     

@@ -14,7 +14,12 @@
 @property (strong, nonatomic) UIImage *selectedImage;
 @property (strong, nonatomic) UIImage *unSelectedImage;
 
-@property (strong, nonatomic) UIImage *selectedTitleFont;
-@property (strong, nonatomic) UIImage *unSelectedTitleFont;
+@property (strong, nonatomic) UIFont *selectedTitleFont;
+@property (strong, nonatomic) UIFont *unSelectedTitleFont;
+
+@property (strong, nonatomic) NSString *name;
+@property (assign, nonatomic) BOOL isSelected;
+
+- (instancetype)initWithName:(NSString *)name;
 
 @end

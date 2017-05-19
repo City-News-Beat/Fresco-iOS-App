@@ -47,8 +47,11 @@
     view.frame = self.bounds;
 }
 
-- (void)updateWithTitle:(NSString *)title arrowUp:(BOOL)up {
-    self.titleLabel.text = title;
+- (void)updateWithTitle:(NSString *)title {
+    self.titleLabel.text = title.uppercaseString;
+}
+
+- (void)arrowUp:(BOOL)up {
     self.arrowImageView.image = up ? [UIImage imageNamed:@"arrow-up-white-icon"] : [UIImage imageNamed:@"arrow-down-white-icon"];
 }
 

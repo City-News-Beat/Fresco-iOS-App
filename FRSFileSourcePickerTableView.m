@@ -36,12 +36,18 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return self.sourceViewModelsArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FRSFileSourcePickerTableViewCell *cell = [self dequeueReusableCellWithIdentifier:@"FRSFileSourcePickerTableViewCellIdentifier" forIndexPath:indexPath];
+    
+    [cell updateWithViewModel:self.sourceViewModelsArray[indexPath.row]];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedSourceViewModel = self.sourceViewModelsArray[indexPath.row];
 }
 
 @end
