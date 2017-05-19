@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet FRSFileNumberedView *fileNumberedView;
 @property (nonatomic, weak) PHAsset *currentAsset;
+@property (weak, nonatomic) IBOutlet UIImageView *tagIconImageView;
 
 @end
 
@@ -26,6 +27,7 @@
 - (void)loadAsset:(PHAsset *)asset {
     self.currentAsset = asset;
     self.imageView.backgroundColor = [UIColor frescoShadowColor];
+    self.tagIconImageView.image = [UIImage imageNamed:@"tag-photo-icon"];
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
                        targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)

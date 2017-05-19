@@ -11,6 +11,8 @@
 #import "UIFont+Fresco.h"
 #import "FRSImageViewCell.h"
 #import "FRSFileFooterCell.h"
+#import "FRSFileSourceNavTitleView.h"
+#import "FRSFileSourcePickerTableView.h"
 
 static NSInteger const maxAssets = 8;
 
@@ -18,6 +20,10 @@ static NSInteger const maxAssets = 8;
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
 @property (strong, nonatomic) NSMutableArray *selectedIndexPaths;
+
+@property (weak, nonatomic) FRSFileSourceNavTitleView *fileSourceNavTitleView;
+@property (strong, nonatomic) FRSFileSourcePickerTableView *fileSourcePickerTableView;
+
 @end
 
 @implementation FRSFileViewController
@@ -28,35 +34,16 @@ static NSInteger const maxAssets = 8;
     selectedAssets = [[NSMutableArray alloc] init];
     self.selectedIndexPaths = [[NSMutableArray alloc] initWithCapacity:0];
 
-    [self.navigationController.navigationBar setTitleTextAttributes:
-                                                 @{ NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                    NSFontAttributeName : [UIFont notaBoldWithSize:18] }];
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self setupCollectionView];
     [self setupSecondaryUI];
-
-    self.navigationItem.title = @"CHOOSE MEDIA";
-
-    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-    [container addSubview:backButton];
-
-    backButton.tintColor = [UIColor whiteColor];
-    backButton.frame = CGRectMake(-3, 0, 24, 24);
-    [backButton setImage:backButtonImage forState:UIControlStateNormal];
-    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
-
-    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    [self setupNavigationBarViews];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
 
     if (selectedAssets.count >= 1) {
@@ -96,6 +83,74 @@ static NSInteger const maxAssets = 8;
 - (void)back {
     [self.navigationController popViewControllerAnimated:YES];
     [self.backTapButton removeFromSuperview];
+}
+
+- (void)setupNavigationBarViews {
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{ NSForegroundColorAttributeName : [UIColor whiteColor],
+        NSFontAttributeName : [UIFont notaBoldWithSize:18] }];
+    
+    [self setupNavigationBarButtons];
+
+    self.fileSourcePickerTableView = [[FRSFileSourcePickerTableView alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 4*44) style:UITableViewStylePlain];
+    [self.view addSubview:self.fileSourcePickerTableView];
+    self.fileSourcePickerTableView.alpha = 0;
+    
+}
+
+- (void)setupNavigationBarButtons {
+    //left
+    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *backContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [backContainer addSubview:backButton];
+    
+    backButton.tintColor = [UIColor whiteColor];
+    backButton.frame = CGRectMake(-3, 0, 24, 24);
+    [backButton setImage:backButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backContainer];
+    
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+
+    //right
+    UIImage *questionButtonImage = [UIImage imageNamed:@"question-white"];
+    UIButton *questionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *questionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [questionContainer addSubview:questionButton];
+    
+    questionButton.tintColor = [UIColor whiteColor];
+    questionButton.frame = CGRectMake(-3, 0, 24, 24);
+    [questionButton setImage:questionButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *questionBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:questionContainer];
+    [questionButton addTarget:self action:@selector(questionTapped) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = questionBarButtonItem;
+
+    //title view
+    self.navigationItem.titleView = [[FRSFileSourceNavTitleView alloc] init];
+    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
+    [self.fileSourceNavTitleView updateWithTitle:@"CAMERA ROLL" arrowUp:YES];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fileSourceTapped:)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.fileSourceNavTitleView addGestureRecognizer:singleTap];
+    
+}
+
+- (void)questionTapped {
+    if(self.fileSourcePickerTableView.alpha == 0) {
+        self.fileSourcePickerTableView.alpha = 1;
+    }
+    else {
+        self.fileSourcePickerTableView.alpha = 0;
+    }
+}
+
+- (void)fileSourceTapped:(UITapGestureRecognizer *)tap {
+    NSLog(@"fileSourceTapped: ");
 }
 
 - (void)setupSecondaryUI {
