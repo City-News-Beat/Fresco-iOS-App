@@ -14,6 +14,7 @@
 + (instancetype)sharedInstance;
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)getAssignmentsByCheckingPostsLocationWithUserLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;

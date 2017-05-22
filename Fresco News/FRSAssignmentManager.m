@@ -12,6 +12,7 @@
 @import MapKit;
 
 static NSString *const assignmentsEndpoint = @"assignment/find";
+static NSString *const assignmentPostsCheckEndpoint = @"assignment/posts/check";
 static NSString *const acceptAssignmentEndpoint = @"assignment/%@/accept";
 static NSString *const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
 static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
@@ -46,6 +47,26 @@ static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
                       withParameters:params
                           completion:^(id responseObject, NSError *error) {
                             completion(responseObject, error);
+                          }];
+}
+
+/*
+ Fetch assignments by checking the posts location, This will return only those assignments which are within the location points
+ */
+- (void)getAssignmentsByCheckingPostsLocationWithUserLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
+    [geoData setObject:@"MultiPoint" forKey:@"type"];
+    [geoData setObject:location forKey:@"coordinates"];
+    
+    NSDictionary *params = @{
+                             @"geo" : geoData,
+                             };
+    
+    [[FRSAPIClient sharedClient] get:assignmentPostsCheckEndpoint
+                      withParameters:params
+                          completion:^(id responseObject, NSError *error) {
+                              completion(responseObject, error);
                           }];
 }
 

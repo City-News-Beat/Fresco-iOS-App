@@ -921,8 +921,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     self.isFetching = YES;
 
     // TODO: Pull out a lot of this code into separate methods.
-    [[FRSAssignmentManager sharedInstance] getAssignmentsWithinRadius:radii
-                                                           ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
+    [[FRSAssignmentManager sharedInstance] getAssignmentsByCheckingPostsLocationWithUserLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
                                                        withCompletion:^(id responseObject, NSError *error) {
                                                          NSArray *assignments = (NSArray *)responseObject[@"nearby"];
                                                          NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
