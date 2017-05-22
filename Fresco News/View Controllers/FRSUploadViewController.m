@@ -899,29 +899,24 @@ static NSString *const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 - (void)configureAssignments {
-    int i = 0; // Counter to let us know when the loop has ended
-    
+    NSMutableArray *assetLocationsArray = [[NSMutableArray alloc] initWithCapacity:0];
     for (PHAsset *asset in self.content) {
-        i++; // Increment counter
-        
-        if (asset.location) { // If location exists fetch assignment near location
-            [self fetchAssignmentsNearLocation:asset.location radius:50];
-            break;
-            
-        } else if (i == self.content.count) { // Else if counter is equal to total count (we've reached the end), configure "No assignment"
-            [self fetchAssignmentsNearLocation:nil radius:0]; // We still need to make data call for global assignments.
+        if(asset.location) {
+            [assetLocationsArray addObject:@[ @(asset.location.coordinate.longitude), @(asset.location.coordinate.latitude) ]];
         }
     }
+    [self fetchAssignmentsNearAssetLocations:assetLocationsArray];
+
 }
 
-- (void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+- (void)fetchAssignmentsNearAssetLocations:(NSArray *)locations {
     if (self.isFetching) {
         return;
     }
     self.isFetching = YES;
 
     // TODO: Pull out a lot of this code into separate methods.
-    [[FRSAssignmentManager sharedInstance] getAssignmentsByCheckingPostsLocationWithUserLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
+    [[FRSAssignmentManager sharedInstance] getAssignmentsByCheckingPostsLocations:locations
                                                        withCompletion:^(id responseObject, NSError *error) {
                                                          NSArray *assignments = (NSArray *)responseObject[@"nearby"];
                                                          NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
@@ -968,7 +963,11 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                                      // Format assignment start date
                                                                      NSString *assignmentStartString = [[NSString alloc] initWithFormat:@"%@", [assignment objectForKey:@"starts_at"]];
                                                                      NSDate *assignmentStartDate = [NSString dateFromString:assignmentStartString];
-                                                                     
+
+                                                                     // Format assignment end date
+                                                                     NSString *assignmentEndString = [[NSString alloc] initWithFormat:@"%@", [assignment objectForKey:@"ends_at"]];
+                                                                     NSDate *assignmentEndDate = [NSString dateFromString:assignmentEndString];
+
                                                                      if ([assetCreationDate timeIntervalSinceDate:assignmentStartDate] > 0) { // Check if the asset was created after when the assignment started
                                                                          if (miles < radius) {
                                                                              shouldAdd = TRUE;

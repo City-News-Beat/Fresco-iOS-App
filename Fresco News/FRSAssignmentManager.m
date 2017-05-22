@@ -53,7 +53,7 @@ static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
 /*
  Fetch assignments by checking the posts location, This will return only those assignments which are within the location points
  */
-- (void)getAssignmentsByCheckingPostsLocationWithUserLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)getAssignmentsByCheckingPostsLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"MultiPoint" forKey:@"type"];
