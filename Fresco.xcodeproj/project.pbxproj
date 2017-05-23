@@ -295,6 +295,7 @@
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */; };
 		E7F88EDF1E652AA2007D9D05 /* CLLocation+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */; };
+		F20DC75D1ED4BAFB00F03A30 /* FRSDateFormatters.m in Sources */ = {isa = PBXBuildFile; fileRef = F20DC75C1ED4BAFB00F03A30 /* FRSDateFormatters.m */; };
 		F2192B881EA682D500F00E81 /* FRSPlayerPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */; };
 		F21FBA251EBD047900515EA1 /* FRSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FBA241EBD047900515EA1 /* FRSReachability.m */; };
 		F21FCB801E9BC3A50015B13D /* FRSGalleryMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = F21FCB7F1E9BC3A50015B13D /* FRSGalleryMediaView.m */; };
@@ -894,6 +895,8 @@
 		E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+Fresco.m"; path = "Categories/CLLocation+Fresco.m"; sourceTree = "<group>"; };
 		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		F20DC75B1ED4BAFB00F03A30 /* FRSDateFormatters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDateFormatters.h; sourceTree = "<group>"; };
+		F20DC75C1ED4BAFB00F03A30 /* FRSDateFormatters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDateFormatters.m; sourceTree = "<group>"; };
 		F2192B861EA682D500F00E81 /* FRSPlayerPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayerPlaybackView.h; sourceTree = "<group>"; };
 		F2192B871EA682D500F00E81 /* FRSPlayerPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayerPlaybackView.m; sourceTree = "<group>"; };
 		F21FBA231EBD047900515EA1 /* FRSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSReachability.h; sourceTree = "<group>"; };
@@ -1965,6 +1968,8 @@
 			children = (
 				65EBEDAF1C4404A800BE671F /* FRSDateFormatter.h */,
 				65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */,
+				F20DC75B1ED4BAFB00F03A30 /* FRSDateFormatters.h */,
+				F20DC75C1ED4BAFB00F03A30 /* FRSDateFormatters.m */,
 			);
 			name = "Date Formatter";
 			sourceTree = "<group>";
@@ -2952,6 +2957,7 @@
 				CE13224A1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m in Sources */,
 				0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */,
 				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,
+				F20DC75D1ED4BAFB00F03A30 /* FRSDateFormatters.m in Sources */,
 				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,
 				654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */,
 				072654EA1E3951DF00A49DEC /* FRSFollowButton.m in Sources */,

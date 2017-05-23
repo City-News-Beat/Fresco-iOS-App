@@ -55,14 +55,22 @@ static NSString *const acceptedAssignmentEndpoint = @"assignment/accepted";
  */
 - (void)getAssignmentsByCheckingPostsLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
     
+    NSMutableDictionary *arrayDict = [[NSMutableDictionary alloc] init];
+    int counter = 0;
+    for (NSMutableDictionary *arrayItem in location) {
+        [arrayDict setObject:arrayItem forKey:[NSNumber numberWithInt:counter]];
+        counter++;
+    }
+
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"MultiPoint" forKey:@"type"];
-    [geoData setObject:location forKey:@"coordinates"];
+    [geoData setObject:arrayDict forKey:@"coordinates"];
     
     NSDictionary *params = @{
                              @"geo" : geoData,
                              };
     
+
     [[FRSAPIClient sharedClient] get:assignmentPostsCheckEndpoint
                       withParameters:params
                           completion:^(id responseObject, NSError *error) {
