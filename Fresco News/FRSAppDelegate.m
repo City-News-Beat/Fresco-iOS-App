@@ -305,7 +305,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     newDeviceToken = [newDeviceToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     newDeviceToken = [newDeviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    if([NSString isStringValid:newDeviceToken]) return; //No need to send an invalid/null string to server.
+    if(![NSString isStringValid:newDeviceToken]) return; //No need to send an invalid/null string to server.
     
     //If the user isn't logged in, don't proceed with caching the token. It will be requested later.
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) return;
