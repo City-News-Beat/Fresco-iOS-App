@@ -149,7 +149,7 @@
 }
 
 + (BOOL)isStringValid:(NSString *)aString {
-    BOOL isStringValid = aString && ![aString isEqual:[NSNull null]] && [aString isKindOfClass:[NSString class]];
+    BOOL isStringValid = aString && ![aString isEqual:[NSNull null]] && [aString isKindOfClass:[NSString class]] && ![aString containsString:@"null"] && ![aString containsString:@"Null"] && ![aString containsString:@"NULL"];
     return isStringValid;
 }
 
