@@ -408,11 +408,7 @@
     //text
     self.nameLabel.text = [FRSPost bylineForPost:post];
     
-    self.locationLabel.text = post.address;
-    
-    if ([self.locationLabel.text length] == 0) {
-        self.locationLabel.text = @"No Location";
-    }
+    self.locationLabel.text = [NSString getValidString:post.address orAlternativeString:@"No Location"];
     
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
