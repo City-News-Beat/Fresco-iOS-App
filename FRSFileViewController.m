@@ -26,6 +26,7 @@ static NSInteger const maxAssets = 8;
 @property (weak, nonatomic) FRSFileSourceNavTitleView *fileSourceNavTitleView;
 @property (strong, nonatomic) FRSFileSourcePickerTableView *fileSourcePickerTableView;
 @property (strong, nonatomic) FRSFileLoader *fileLoader;
+@property (strong, nonatomic) PHAssetCollection *currentAssetCollection;
 
 
 @end
@@ -161,6 +162,7 @@ static NSInteger const maxAssets = 8;
     if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
         NSLog(@"selectedSourceViewModel changed.");
         [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
+        [self updateAssetsForCurrentCollection];
     }
     //isExpanded
     if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"isExpanded"]) {
@@ -251,7 +253,6 @@ static NSInteger const maxAssets = 8;
         self.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
         [self updateFileSourcePickerTableView];
     });
-    
 }
 
 - (void)next:(id)sender {
@@ -426,6 +427,16 @@ static NSInteger const maxAssets = 8;
 
 }
 
+- (void)updateAssetsForCurrentCollection {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        self.currentAssetCollection = [[self.fileLoader collections] objectAtIndex:self.fileSourcePickerTableView.selectedIndex];
+        [self.fileLoader fetchAssetsForCollection:self.currentAssetCollection];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [fileCollectionView reloadData];
+        });
+
+    });
+}
 
 #pragma mark - Bottom Bar Buttons
 

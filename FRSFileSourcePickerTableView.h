@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) NSMutableArray *sourceViewModelsArray;
 @property (strong, nonatomic) FRSFileSourcePickerViewModel *selectedSourceViewModel;
+@property (assign, nonatomic) NSInteger selectedIndex;
 @property (assign, nonatomic) BOOL isExpanded;
 
 @end

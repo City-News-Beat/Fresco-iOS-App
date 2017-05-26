@@ -39,6 +39,23 @@
     return self;
 }
 
+- (void)fetchAssetsForCollection:(PHAssetCollection *)collection {
+    currentCollection = collection;
+    [assetsForCurrentCollection removeAllObjects];
+    
+    PHFetchOptions *options = [[PHFetchOptions alloc] init];
+    // have most recently created assets at this top of list
+    options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO] ];
+
+    PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:currentCollection options:options];
+    
+    // add each asset to our file list
+    for (PHAsset *asset in assets) {
+        [assetsForCurrentCollection addObject:asset];
+    }
+
+}
+
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback {
     currentRange = range;
 
@@ -46,24 +63,24 @@
         [self getAuthorization];
     }
 
-    if (range.location + range.length >= [allAssets count]) {
-        range.length = [allAssets count] - range.length - 1; // reached end of media
+    if (range.location + range.length >= [assetsForCurrentCollection count]) {
+        range.length = [assetsForCurrentCollection count] - range.length - 1; // reached end of media
     }
 
-    NSArray *toReturn = [allAssets objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    NSArray *toReturn = [assetsForCurrentCollection objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     callback(toReturn, Nil);
 }
 
 - (PHAsset *)assetAtIndex:(NSInteger)index {
-    if (index >= [allAssets count]) {
+    if (index >= [assetsForCurrentCollection count]) {
         return Nil;
     }
 
-    return [allAssets objectAtIndex:index];
+    return [assetsForCurrentCollection objectAtIndex:index];
 }
 
 - (NSInteger)numberOfAssets {
-    return [allAssets count];
+    return [assetsForCurrentCollection count];
 }
 
 - (NSInteger)numberOfCollections {
@@ -79,8 +96,8 @@
         [self getAlbumCollection];
     }
 
-    if (!allAssets) { // discount doublecheck
-        allAssets = [[NSMutableArray alloc] init];
+    if (!assetsForCurrentCollection) { // discount doublecheck
+        assetsForCurrentCollection = [[NSMutableArray alloc] init];
     }
 
     
@@ -109,7 +126,7 @@
 //    
 //    // add each asset to our file list
 //    for (PHAsset *asset in assets) {
-//        [allAssets addObject:asset];
+//        [assetsForCurrentCollection addObject:asset];
 //    }
 
     // delegate called to notify that we are authorized (only used first time user opens app, and gets the "Please allow access to photos" prompt
@@ -139,7 +156,7 @@
 
 // request authorization, take appropriate actions
 - (void)getAuthorization {
-    if ([allAssets count] > 0)
+    if ([assetsForCurrentCollection count] > 0)
         return;
 
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {

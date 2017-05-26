@@ -28,7 +28,8 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
     PHFetchResult<PHAssetCollection *> *currentCollections;
     MediaCallback returnCallback;
     NSRange currentRange;
-    NSMutableArray *allAssets;
+    NSMutableArray *assetsForCurrentCollection;
+    PHAssetCollection *currentCollection;
 
     BOOL wasPreviouslyAuthorized;
 }
@@ -38,6 +39,7 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
 - (id)initWithDelegate:(id<FRSFileLoaderDelegate>)del;
 
 - (NSInteger)numberOfAssets;
+- (void)fetchAssetsForCollection:(PHAssetCollection *)collection;
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback;
 - (void)getDataFromAsset:(PHAsset *)asset callback:(DataCallback)callback;
 - (PHAsset *)assetAtIndex:(NSInteger)index;

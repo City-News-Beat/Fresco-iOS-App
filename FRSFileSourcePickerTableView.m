@@ -48,6 +48,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedSourceViewModel = self.sourceViewModelsArray[indexPath.row];
+    self.selectedIndex = indexPath.row;
 }
 
 @end
