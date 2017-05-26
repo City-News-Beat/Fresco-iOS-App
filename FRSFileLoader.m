@@ -66,9 +66,16 @@
     return [allAssets count];
 }
 
+- (NSInteger)numberOfCollections {
+    if (!currentCollections) {
+        return 0;
+    }
+    return [currentCollections count];
+}
+
 // load a list of all photos / videos from the last 7 days
 - (void)getAssets {
-    if (!currentCollection) {
+    if (!currentCollections) {
         [self getAlbumCollection];
     }
 
@@ -92,29 +99,42 @@
         options.predicate = dayPredicate;
     #endif
      */
-     
-
-    for (PHAssetCollection *collection in currentCollection) {
-        // fetch assets based on the sort and date restrictions we set up
-        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
-
-        // add each asset to our file list
-        for (PHAsset *asset in assets) {
-            //if (asset.location) {
-                [allAssets addObject:asset];
-            //}
-        }
-    }
+    
+    if(currentCollections.count == 0) return;
+    
+//    PHAssetCollection *firstCollection = currentCollections[0];
+//    
+//    // fetch assets based on the sort and date restrictions we set up
+//    PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:firstCollection options:options];
+//    
+//    // add each asset to our file list
+//    for (PHAsset *asset in assets) {
+//        [allAssets addObject:asset];
+//    }
 
     // delegate called to notify that we are authorized (only used first time user opens app, and gets the "Please allow access to photos" prompt
-    if (self.delegate) {
+    if ([self.delegate respondsToSelector:@selector(filesLoaded)]) {
         [self.delegate filesLoaded];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(collectionsLoaded)]) {
+        [self.delegate collectionsLoaded];
+    }
+
+}
+
+- (PHFetchResult<PHAssetCollection *> *)collections {
+    return currentCollections;
 }
 
 // create collection from photo library
 - (void)getAlbumCollection {
-    currentCollection = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:Nil];
+    currentCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:Nil];
+
+    [currentCollections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@"currentCollections [(PHAssetCollection *)obj localizedTitle]::: %@", [(PHAssetCollection *)obj localizedTitle]);
+    }];
+    
 }
 
 // request authorization, take appropriate actions
@@ -195,6 +215,26 @@
                                                   callback([UIImage imageWithData:imageData], Nil, phAsset.mediaType, error);
                                                 }];
 }
+
+#pragma mark - Fetch assets on the fly
+
+// multiple folder collections
+//- (NSInteger)numberOfAssetsInCollection:(PHAssetCollection *)assetCollection {
+//    
+//}
+//
+//- (void)fetchAssetsWithinIndexRange:(NSRange)range inCollection:(PHAssetCollection *)assetCollection callback:(MediaCallback)callback {
+//    
+//}
+//
+//- (void)getDataFromAsset:(PHAsset *)asset inCollection:(PHAssetCollection *)assetCollection callback:(DataCallback)callback {
+//    
+//}
+//
+//- (PHAsset *)assetAtIndex:(NSInteger)index inCollection:(PHAssetCollection *)assetCollection {
+//    
+//}
+
 
 @end
 

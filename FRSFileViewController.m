@@ -14,16 +14,19 @@
 #import "FRSFileSourceNavTitleView.h"
 #import "FRSFileSourcePickerTableView.h"
 #import "FRSFileSourcePickerViewModel.h"
+#import "FRSFileLoader.h"
 
 static NSInteger const maxAssets = 8;
 
-@interface FRSFileViewController ()
+@interface FRSFileViewController () <FRSFileLoaderDelegate>
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
 @property (strong, nonatomic) NSMutableArray *selectedIndexPaths;
 
 @property (weak, nonatomic) FRSFileSourceNavTitleView *fileSourceNavTitleView;
 @property (strong, nonatomic) FRSFileSourcePickerTableView *fileSourcePickerTableView;
+@property (strong, nonatomic) FRSFileLoader *fileLoader;
+
 
 @end
 
@@ -36,10 +39,13 @@ static NSInteger const maxAssets = 8;
     self.selectedIndexPaths = [[NSMutableArray alloc] initWithCapacity:0];
 
     self.automaticallyAdjustsScrollViewInsets = NO;
+
+    [self setupFileSourcePickerTableView];
     [self setupCollectionView];
     [self setupSecondaryUI];
     [self setupNavigationBarViews];
-    [self setupFileSourcePickerTableView];
+    [self setupFileLoader];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -103,22 +109,11 @@ static NSInteger const maxAssets = 8;
     [self.view addSubview:self.fileSourcePickerTableView];
     self.fileSourcePickerTableView.alpha = 0;
     self.fileSourcePickerTableView.isExpanded = NO;
-    //temp creating static view models. later these should be from the available source folders.
-    FRSFileSourcePickerViewModel *cameraSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Camera Roll"];
-    cameraSourceViewModel.isSelected = YES;
     
-    FRSFileSourcePickerViewModel *favSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Favorites"];
-    
-    FRSFileSourcePickerViewModel *videosSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Videos"];
-    
-    FRSFileSourcePickerViewModel *customFolderSourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:@"Custom Folder"];
-    
-    self.fileSourcePickerTableView.sourceViewModelsArray = [[NSMutableArray alloc] initWithObjects:cameraSourceViewModel, favSourceViewModel, videosSourceViewModel, customFolderSourceViewModel, nil];
-    [self.fileSourcePickerTableView reloadData];
-    
+    self.fileSourcePickerTableView.sourceViewModelsArray = [[NSMutableArray alloc] initWithCapacity:0];
     [self.fileSourcePickerTableView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
     [self.fileSourcePickerTableView addObserver:self forKeyPath:@"isExpanded" options:0 context:nil];
-
+    
 }
 
 - (void)setupNavigationBarButtons {
@@ -184,6 +179,7 @@ static NSInteger const maxAssets = 8;
         self.fileSourcePickerTableView.alpha = 0;
         self.fileSourcePickerTableView.isExpanded = NO;
     }
+    [self.view bringSubviewToFront:self.fileSourcePickerTableView];
     [self.fileSourcePickerTableView reloadData];
 }
 
@@ -214,8 +210,6 @@ static NSInteger const maxAssets = 8;
     // Do any additional setup after loading the view.
     UINib *imageNib = [UINib nibWithNibName:@"FRSImageViewCell" bundle:[NSBundle mainBundle]]; // used a xib for cell b/c originally I was going to have separate cells for video and image.
     UINib *footerNib = [UINib nibWithNibName:@"FRSFileFooterCell" bundle:[NSBundle mainBundle]];
-
-    fileLoader = [[FRSFileLoader alloc] initWithDelegate:self]; // single instance of class which manages requesting file info to populate UI
 
     // layout for collection view (3 across, 1px spacing, like in sketch)
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -252,6 +246,14 @@ static NSInteger const maxAssets = 8;
     fileCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
 }
 
+- (void)setupFileLoader {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        self.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
+        [self updateFileSourcePickerTableView];
+    });
+    
+}
+
 - (void)next:(id)sender {
     int numberOfVideos = 0;
     int numberOfPhotos = 0;
@@ -277,7 +279,7 @@ static NSInteger const maxAssets = 8;
 /* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    int numberOfAssets = (int)[fileLoader numberOfAssets];
+    int numberOfAssets = (int)[self.fileLoader numberOfAssets];
     int currentAsset = (int)indexPath.row;
 
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -307,7 +309,7 @@ static NSInteger const maxAssets = 8;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [fileLoader numberOfAssets];
+    return [self.fileLoader numberOfAssets];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -331,11 +333,11 @@ static NSInteger const maxAssets = 8;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+    PHAsset *representedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
 
     // dequeues cell, as we've registered a nib we will always get a non-nil value
     FRSImageViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:imageCellIdentifier forIndexPath:indexPath];
-    cell.fileLoader = fileLoader; // gives the cell our (weakly stored) instance of our file loader
+    cell.fileLoader = self.fileLoader; // gives the cell our (weakly stored) instance of our file loader
     [cell loadAsset:representedAsset]; // gives instruction to update UI
 
     if ([selectedAssets containsObject:representedAsset]) {
@@ -349,7 +351,7 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+    PHAsset *representedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
 
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
@@ -392,14 +394,36 @@ static NSInteger const maxAssets = 8;
     });
 }
 
+#pragma mark - FRSFileLoaderDelegate
+
 - (void)filesLoaded {
-    if ([fileLoader numberOfAssets] == 0) {
+    if ([self.fileLoader numberOfAssets] == 0) {
         return;
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [fileCollectionView reloadData];
     });
+}
+
+- (void)updateFileSourcePickerTableView {
+    if ([self.fileLoader numberOfCollections] == 0) {
+        return;
+    }
+
+    [self.fileSourcePickerTableView.sourceViewModelsArray removeAllObjects];
+    
+    for (PHAssetCollection *assetCollection in [self.fileLoader collections]) {
+        FRSFileSourcePickerViewModel *sourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:assetCollection.localizedTitle];
+        sourceViewModel.isSelected = YES;
+        [self.fileSourcePickerTableView.sourceViewModelsArray addObject:sourceViewModel];
+
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.fileSourcePickerTableView reloadData];        
+    });
+
 }
 
 

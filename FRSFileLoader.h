@@ -14,9 +14,10 @@
 /*
     Class to manage pulling assets from the users library & managing permissions. Also responsible for generation of asset thumbnails.
 */
-@protocol FRSFileLoaderDelegate
+@protocol FRSFileLoaderDelegate <NSObject>
 - (void)applicationNotAuthorized;
 - (void)filesLoaded;
+- (void)collectionsLoaded;
 @end
 
 typedef void (^AuthCallback)(BOOL authorized);
@@ -24,7 +25,7 @@ typedef void (^MediaCallback)(NSArray *media, NSError *error);
 typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error);
 
 @interface FRSFileLoader : NSObject {
-    PHFetchResult *currentCollection;
+    PHFetchResult<PHAssetCollection *> *currentCollections;
     MediaCallback returnCallback;
     NSRange currentRange;
     NSMutableArray *allAssets;
@@ -40,5 +41,14 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback;
 - (void)getDataFromAsset:(PHAsset *)asset callback:(DataCallback)callback;
 - (PHAsset *)assetAtIndex:(NSInteger)index;
+
+- (PHFetchResult<PHAssetCollection *> *)collections;
+- (NSInteger)numberOfCollections;
+
+// multiple folder collections
+- (NSInteger)numberOfAssetsInCollection:(PHAssetCollection *)assetCollection;
+- (void)fetchAssetsWithinIndexRange:(NSRange)range inCollection:(PHAssetCollection *)assetCollection callback:(MediaCallback)callback;
+- (void)getDataFromAsset:(PHAsset *)asset inCollection:(PHAssetCollection *)assetCollection callback:(DataCallback)callback;
+- (PHAsset *)assetAtIndex:(NSInteger)index inCollection:(PHAssetCollection *)assetCollection;
 
 @end
