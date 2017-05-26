@@ -146,7 +146,11 @@
 
 // create collection from photo library
 - (void)getAlbumCollection {
-    currentCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:Nil];
+    PHFetchOptions *options = [[PHFetchOptions alloc] init];
+    // alphabetical order of the folders.
+    options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"localizedTitle" ascending:YES] ];
+
+    currentCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:options];
 
     [currentCollections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSLog(@"currentCollections [(PHAssetCollection *)obj localizedTitle]::: %@", [(PHAssetCollection *)obj localizedTitle]);

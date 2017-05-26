@@ -156,12 +156,15 @@ static NSInteger const maxAssets = 8;
     
 }
 
+#pragma mark - Key Value Observing
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
     if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
         NSLog(@"selectedSourceViewModel changed.");
         [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
+        [self hideFileSourcePickerTableView];
         [self updateAssetsForCurrentCollection];
     }
     //isExpanded
@@ -174,15 +177,23 @@ static NSInteger const maxAssets = 8;
 
 - (void)questionTapped {
     if(self.fileSourcePickerTableView.alpha == 0) {
-        self.fileSourcePickerTableView.alpha = 1;
-        self.fileSourcePickerTableView.isExpanded = YES;
+        [self showFileSourcePickerTableView];
     }
     else {
-        self.fileSourcePickerTableView.alpha = 0;
-        self.fileSourcePickerTableView.isExpanded = NO;
+        [self hideFileSourcePickerTableView];
     }
-    [self.view bringSubviewToFront:self.fileSourcePickerTableView];
     [self.fileSourcePickerTableView reloadData];
+}
+
+- (void)showFileSourcePickerTableView {
+    self.fileSourcePickerTableView.alpha = 1;
+    self.fileSourcePickerTableView.isExpanded = YES;
+    [self.view bringSubviewToFront:self.fileSourcePickerTableView];
+}
+
+- (void)hideFileSourcePickerTableView {
+    self.fileSourcePickerTableView.alpha = 0;
+    self.fileSourcePickerTableView.isExpanded = NO;
 }
 
 - (void)fileSourceTapped:(UITapGestureRecognizer *)tap {
@@ -421,6 +432,10 @@ static NSInteger const maxAssets = 8;
 
     }
 
+    if(self.fileSourcePickerTableView.sourceViewModelsArray.count > 0) {
+        self.fileSourcePickerTableView.selectedSourceViewModel = self.fileSourcePickerTableView.sourceViewModelsArray[0];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.fileSourcePickerTableView reloadData];        
     });

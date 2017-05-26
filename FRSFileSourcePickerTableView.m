@@ -42,7 +42,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FRSFileSourcePickerTableViewCell *cell = [self dequeueReusableCellWithIdentifier:@"FRSFileSourcePickerTableViewCellIdentifier" forIndexPath:indexPath];
     
-    [cell updateWithViewModel:self.sourceViewModelsArray[indexPath.row]];
+    FRSFileSourcePickerViewModel *sourceViewModel = self.sourceViewModelsArray[indexPath.row];
+    if(sourceViewModel == self.selectedSourceViewModel) {
+        sourceViewModel.isSelected = YES;
+    }
+    else {
+        sourceViewModel.isSelected = NO;
+    }
+    [cell updateWithViewModel:sourceViewModel];
     return cell;
 }
 
