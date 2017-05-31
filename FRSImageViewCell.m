@@ -7,6 +7,7 @@
 //
 
 #import "FRSImageViewCell.h"
+#import "FRSFileNumberedView.h"
 
 #define ASSET_SIZE 150
 
@@ -15,8 +16,9 @@
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIView *coverView;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@property (nonatomic, weak) IBOutlet UIImageView *checkBox;
+@property (weak, nonatomic) IBOutlet FRSFileNumberedView *fileNumberedView;
 @property (nonatomic, weak) PHAsset *currentAsset;
+@property (weak, nonatomic) IBOutlet UIImageView *tagIconImageView;
 
 @end
 
@@ -25,6 +27,7 @@
 - (void)loadAsset:(PHAsset *)asset {
     self.currentAsset = asset;
     self.imageView.backgroundColor = [UIColor frescoShadowColor];
+    self.tagIconImageView.image = [UIImage imageNamed:@"tag-photo-icon"];
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
                        targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)
@@ -95,12 +98,23 @@
 }
 
 - (void)selected:(BOOL)selected {
-    if (selected) {
-        self.checkBox.image = [UIImage imageNamed:@"picker-checkmark"];
-    } else {
-        self.checkBox.image = [UIImage imageNamed:@"checkboxBlankCircleOutline24W2"];
-    }
+    [self showSelectedBorder:selected];
     self.coverView.hidden = !selected;
+    self.fileNumberedView.hidden = !selected;
+}
+
+- (void)showSelectedBorder:(BOOL)show {
+    if (show) {
+        self.layer.borderWidth = 3.0;
+        self.layer.borderColor = [UIColor frescoBlueColor].CGColor;
+    }
+    else {
+        self.layer.borderWidth = 0.0;
+    }
+}
+
+- (void)updateFileNumber:(NSInteger)number {
+    [self.fileNumberedView updateWithNumber:number];
 }
 
 @end

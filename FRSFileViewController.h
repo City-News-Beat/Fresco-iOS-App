@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSFileLoader.h"
 #import "FRSBaseViewController.h"
 
 /*
@@ -16,8 +15,7 @@
     Used footer from spec, which is just a supplemental view.
     Ideally footer would normally be a reusable supplemental view, but already had the nib made, doesn't break any rules or affect efficiency
  */
-@interface FRSFileViewController : FRSBaseViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FRSFileLoaderDelegate> {
-    FRSFileLoader *fileLoader;
+@interface FRSFileViewController : FRSBaseViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout> {
     UICollectionView *fileCollectionView;
 
     // fit spec
