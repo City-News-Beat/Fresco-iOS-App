@@ -317,8 +317,11 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 }
 
 - (void)segueToTipsAction {
-    FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
-    [self.navigationController pushViewController:tipsViewController animated:YES];
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
+        [weakSelf.navigationController pushViewController:tipsViewController animated:YES];
+    });
 }
 
 // TODO: move aperture button out
@@ -599,6 +602,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
             
             angle = M_PI_2;
             
+            self.tipsAlert.isRotated = YES;
+            
         } else if (o == UIDeviceOrientationLandscapeRight) {
             
             if (self.captureMode == FRSCaptureModeVideo) {
@@ -607,6 +612,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                 weakSelf.videoRotateIV.alpha = 0.0;
             }
             
+            self.tipsAlert.isRotated = YES;
+
             angle = -M_PI_2;
             
         } else if (o == UIDeviceOrientationPortrait) {
@@ -627,7 +634,10 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                                  weakSelf.topContainer.alpha = 1;
                              }];
             
+            self.tipsAlert.isRotated = NO;
+            
         } else {
+            self.tipsAlert.isRotated = NO;
             return;
         }
         

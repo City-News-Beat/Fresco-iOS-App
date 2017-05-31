@@ -123,6 +123,13 @@
  */
 - (void)rightCancelTapped;
 
+/**
+ Adjusts the frame when the device is rotated. This is used in the transparent alert when paginating tips in the CameraVC.
+ */
+- (void)adjustFrameForRotatedState;
+
+@property BOOL isRotated;
+
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end

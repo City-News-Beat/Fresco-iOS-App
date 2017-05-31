@@ -7,6 +7,8 @@
 //
 
 #import "FRSBaseViewController.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
+
 
 @interface FRSTipsViewController : FRSBaseViewController
 
