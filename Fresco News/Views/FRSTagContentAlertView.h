@@ -12,7 +12,9 @@
 
 @interface FRSTagContentAlertView : FRSAlertView
 
+@property (strong, nonatomic) NSMutableArray *sourceViewModelsArray;
+
 - (instancetype)initTagContentAlertView;
-- (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode;
+- (void)showAlertWithTagViewMode:(FRSTagViewMode)tagViewMode;
 
 @end

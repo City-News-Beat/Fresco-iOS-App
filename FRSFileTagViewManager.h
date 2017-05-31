@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "FRSBaseViewController.h"
 #import "FRSCameraConstants.h"
+#import <Photos/Photos.h>
 
 @protocol FRSFileTagViewManagerDelegate <NSObject>
 
 @required
-@property (nonatomic, strong) UIView *view;
 
 
 @end
@@ -22,5 +22,8 @@
 
 - (instancetype)initWithDelegate:(id)delegate;
 - (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode;
+
+- (void)showTagViewForAsset:(PHAsset *)asset;
+- (NSMutableArray *)availableTags;
 
 @end

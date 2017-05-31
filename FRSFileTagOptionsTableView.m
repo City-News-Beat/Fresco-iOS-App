@@ -1,19 +1,20 @@
 //
-//  FRSFileSourcePickerTableView.m
+//  FRSFileTagOptionsTableView.m
 //  Fresco
 //
-//  Created by Revanth Kumar Yarlagadda on 5/12/17.
+//  Created by Revanth Kumar Yarlagadda on 5/31/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 
-#import "FRSFileSourcePickerTableView.h"
-#import "FRSFileSourcePickerTableViewCell.h"
+#import "FRSFileTagOptionsTableView.h"
+#import "FRSFileTagOptionsTableViewCell.h"
+#import "FRSFileTagOptionsViewModel.h"
 
-@interface FRSFileSourcePickerTableView() <UITableViewDataSource, UITableViewDelegate>
-
+@interface FRSFileTagOptionsTableView() <UITableViewDataSource, UITableViewDelegate>
+@property (strong, nonatomic) FRSFileTagOptionsViewModel *selectedSourceViewModel;
 @end
 
-@implementation FRSFileSourcePickerTableView
+@implementation FRSFileTagOptionsTableView
 
 - (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
     self = [super initWithFrame:frame style:style];
@@ -22,7 +23,7 @@
         self.delegate = self;
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        [self registerNib:[UINib nibWithNibName:@"FRSFileSourcePickerTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"FRSFileSourcePickerTableViewCellIdentifier"];
+        [self registerNib:[UINib nibWithNibName:@"FRSFileTagOptionsTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"FRSFileTagOptionsTableViewCellIdentifier"];
     }
     return self;
 }
@@ -32,9 +33,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FRSFileSourcePickerTableViewCell *cell = [self dequeueReusableCellWithIdentifier:@"FRSFileSourcePickerTableViewCellIdentifier" forIndexPath:indexPath];
+    FRSFileTagOptionsTableViewCell *cell = [self dequeueReusableCellWithIdentifier:@"FRSFileTagOptionsTableViewCellIdentifier" forIndexPath:indexPath];
     
-    FRSFileSourcePickerViewModel *sourceViewModel = self.sourceViewModelsArray[indexPath.row];
+    FRSFileTagOptionsViewModel *sourceViewModel = self.sourceViewModelsArray[indexPath.row];
     if(sourceViewModel == self.selectedSourceViewModel) {
         sourceViewModel.isSelected = YES;
     }
@@ -47,7 +48,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedSourceViewModel = self.sourceViewModelsArray[indexPath.row];
-    self.selectedIndex = indexPath.row;
+//    self.selectedIndex = indexPath.row;
 }
 
 @end

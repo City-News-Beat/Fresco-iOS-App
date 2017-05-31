@@ -319,6 +319,12 @@
 		F22315F21EC6614100D2A6A4 /* FRSFileSourcePickerViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315F11EC6614100D2A6A4 /* FRSFileSourcePickerViewModel.m */; };
 		F25A04661EDE12530077ABBE /* FRSTagContentAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25A04651EDE12530077ABBE /* FRSTagContentAlertView.m */; };
 		F26F29621EDF3F1D000CD021 /* FRSFileTagViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */; };
+		F26F29661EDF5F24000CD021 /* FRSFileTagOptionsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */; };
+		F26F296A1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */; };
+		F26F296B1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F26F29691EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib */; };
+		F26F296E1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */; };
+		F26F29711EDF656A000CD021 /* FRSFileTag.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29701EDF656A000CD021 /* FRSFileTag.m */; };
+		F26F29741EDF6C03000CD021 /* PHAsset+Tagging.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -950,6 +956,17 @@
 		F25A04651EDE12530077ABBE /* FRSTagContentAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTagContentAlertView.m; sourceTree = "<group>"; };
 		F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagViewManager.h; sourceTree = "<group>"; };
 		F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagViewManager.m; sourceTree = "<group>"; };
+		F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsTableView.h; sourceTree = "<group>"; };
+		F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagOptionsTableView.m; sourceTree = "<group>"; };
+		F26F29671EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsTableViewCell.h; sourceTree = "<group>"; };
+		F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagOptionsTableViewCell.m; sourceTree = "<group>"; };
+		F26F29691EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileTagOptionsTableViewCell.xib; sourceTree = "<group>"; };
+		F26F296C1EDF604B000CD021 /* FRSFileTagOptionsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsViewModel.h; sourceTree = "<group>"; };
+		F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagOptionsViewModel.m; sourceTree = "<group>"; };
+		F26F296F1EDF656A000CD021 /* FRSFileTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTag.h; sourceTree = "<group>"; };
+		F26F29701EDF656A000CD021 /* FRSFileTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTag.m; sourceTree = "<group>"; };
+		F26F29721EDF6C03000CD021 /* PHAsset+Tagging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PHAsset+Tagging.h"; sourceTree = "<group>"; };
+		F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PHAsset+Tagging.m"; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1450,6 +1467,8 @@
 				E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */,
 				E7F88EDA1E6528FA007D9D05 /* PHAsset+Fresco.h */,
 				E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */,
+				F26F29721EDF6C03000CD021 /* PHAsset+Tagging.h */,
+				F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */,
 				E7E582F01BBDC0CA00287324 /* Foundation */,
 				E7E582EF1BBDC0B200287324 /* UIKit */,
 			);
@@ -2622,6 +2641,15 @@
 			children = (
 				F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */,
 				F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */,
+				F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */,
+				F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */,
+				F26F29671EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.h */,
+				F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */,
+				F26F29691EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib */,
+				F26F296C1EDF604B000CD021 /* FRSFileTagOptionsViewModel.h */,
+				F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */,
+				F26F296F1EDF656A000CD021 /* FRSFileTag.h */,
+				F26F29701EDF656A000CD021 /* FRSFileTag.m */,
 			);
 			name = "File Tag";
 			sourceTree = "<group>";
@@ -2789,6 +2817,7 @@
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
+				F26F296B1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
 				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
@@ -2963,6 +2992,7 @@
 				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */,
+				F26F29711EDF656A000CD021 /* FRSFileTag.m in Sources */,
 				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
 				F22315E91EC6483E00D2A6A4 /* FRSFileSourcePickerTableView.m in Sources */,
 				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
@@ -2996,6 +3026,7 @@
 				079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryTableViewCell.m in Sources */,
+				F26F29741EDF6C03000CD021 /* PHAsset+Tagging.m in Sources */,
 				CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */,
 				D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */,
 				078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */,
@@ -3065,6 +3096,7 @@
 				076EF3F61E410E53003996BB /* FRSCoreDataController.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
 				D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */,
+				F26F296E1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m in Sources */,
 				CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */,
 				F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */,
 				072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */,
@@ -3101,6 +3133,7 @@
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
+				F26F296A1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
@@ -3125,6 +3158,7 @@
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				F26F29661EDF5F24000CD021 /* FRSFileTagOptionsTableView.m in Sources */,
 				CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				CA70746A1E2EAEB70072643B /* NSURL+Fresco.m in Sources */,

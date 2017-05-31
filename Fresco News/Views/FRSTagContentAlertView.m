@@ -7,6 +7,13 @@
 //
 
 #import "FRSTagContentAlertView.h"
+#import "FRSFileTagOptionsTableView.h"
+
+@interface FRSTagContentAlertView ()
+
+@property (strong, nonatomic) FRSFileTagOptionsTableView *fileTagOptionsTableView;
+
+@end
 
 @implementation FRSTagContentAlertView
 
@@ -17,9 +24,10 @@
         /* Title Label */
         [self configureWithTitle:@""];
         
-        /* Action Shadow */
-        [self configureWithLineViewAtYposition:self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height + 14.5];
+        [self configureFileTagOptionsTableView];
         
+        /* Action Shadow */
+        [self configureWithLineViewAtYposition:self.fileTagOptionsTableView.frame.origin.y + self.fileTagOptionsTableView.frame.size.height + 15];
         
     }
     
@@ -27,9 +35,8 @@
 }
 
 
-- (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode {
+- (void)showAlertWithTagViewMode:(FRSTagViewMode)tagViewMode {
     [self removeUncommonViews];
-    [self configureWithLineViewAtYposition:self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height + 15];
 
     switch (tagViewMode) {
         case FRSTagViewModeNewTag:
@@ -46,13 +53,18 @@
         default:
             break;
     }
+    
+    //table view
+    self.fileTagOptionsTableView.sourceViewModelsArray = self.sourceViewModelsArray;
+    [self.fileTagOptionsTableView reloadData];
+    
     [self adjustFrame];
     [self show];
     
 }
 
 - (void)adjustFrame {
-    self.height = self.titleLabel.frame.size.height + self.leftActionButton.frame.size.height + 15;
+    self.height = self.titleLabel.frame.size.height + self.fileTagOptionsTableView.frame.size.height + self.leftActionButton.frame.size.height + 15;
     
     NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
     NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
@@ -61,14 +73,26 @@
 }
 
 - (void)removeUncommonViews {
-    [self.line removeFromSuperview];
-    self.line = nil;
-
     [self.leftActionButton removeFromSuperview];
     self.leftActionButton = nil;
 
     [self.rightCancelButton removeFromSuperview];
-    self.line = nil;
+    self.rightCancelButton = nil;
+}
+
+#pragma mark - Table view
+
+- (void)configureFileTagOptionsTableView {
+    self.fileTagOptionsTableView = [[FRSFileTagOptionsTableView alloc] initWithFrame:CGRectMake(0, self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height, self.bounds.size.width, 4*44) style:UITableViewStylePlain];
+    self.fileTagOptionsTableView.sourceViewModelsArray = self.sourceViewModelsArray;
+    [self addSubview:self.fileTagOptionsTableView];
+    
+//    self.fileTagOptionsTableView.alpha = 0;
+//    self.fileTagOptionsTableView.isExpanded = NO;
+    
+//    [self.fileTagOptionsTableView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
+//    [self.fileTagOptionsTableView addObserver:self forKeyPath:@"isExpanded" options:0 context:nil];
+ 
 }
 
 @end

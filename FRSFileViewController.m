@@ -365,6 +365,8 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    PHAsset *tappedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+
     if (!self.fileTagViewManager) {
         self.fileTagViewManager = [[FRSFileTagViewManager alloc] initWithDelegate:self];
     }
@@ -375,6 +377,7 @@ static NSInteger const maxAssets = 8;
         [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeNewTag];
     }
     
+    [self.fileTagViewManager showTagViewForAsset:tappedAsset];
         
     
     return;
