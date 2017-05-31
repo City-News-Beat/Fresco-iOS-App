@@ -26,5 +26,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModeVideoWide,
     FRSCaptureModeVideo,
     FRSCaptureModePhoto,
-    
+};
+
+typedef NS_ENUM(NSUInteger, FRSTagViewMode) {
+    FRSTagViewModeNewTag,
+    FRSTagViewModeEditTag,
 };

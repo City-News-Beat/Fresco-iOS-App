@@ -15,6 +15,7 @@
 #import "FRSFileSourcePickerTableView.h"
 #import "FRSFileSourcePickerViewModel.h"
 #import "FRSFileLoader.h"
+#import "FRSFileTagViewManager.h"
 
 static NSInteger const maxAssets = 8;
 
@@ -27,6 +28,7 @@ static NSInteger const maxAssets = 8;
 @property (strong, nonatomic) FRSFileSourcePickerTableView *fileSourcePickerTableView;
 @property (strong, nonatomic) FRSFileLoader *fileLoader;
 @property (strong, nonatomic) PHAssetCollection *currentAssetCollection;
+@property (strong, nonatomic) FRSFileTagViewManager *fileTagViewManager;
 
 
 @end
@@ -363,6 +365,20 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (!self.fileTagViewManager) {
+        self.fileTagViewManager = [[FRSFileTagViewManager alloc] initWithDelegate:self];
+    }
+    if(indexPath.row % 2 == 0) {
+        [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeEditTag];
+    }
+    else {
+        [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeNewTag];
+    }
+    
+        
+    
+    return;
+    
     PHAsset *representedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
 
     if ([selectedAssets containsObject:representedAsset]) {

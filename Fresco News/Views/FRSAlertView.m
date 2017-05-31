@@ -191,6 +191,8 @@
         completion:^(BOOL finished) {
             [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
           [self removeFromSuperview];
+          self.transform = CGAffineTransformMakeScale(1.0, 1.0);
+
         }];
 }
 
@@ -258,7 +260,7 @@
         /* Single Action Button */
         self.leftActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.leftActionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.leftActionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
+        self.leftActionButton.frame = CGRectMake(0, self.line.frame.origin.y + self.line.frame.size.height, ALERT_WIDTH, 44);
         if(actionTitleColor) {
             [self.leftActionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
         }
@@ -272,7 +274,7 @@
         /* Left Action */
         self.leftActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.leftActionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+        self.leftActionButton.frame = CGRectMake(16, self.line.frame.origin.y + self.line.frame.size.height, 121, 44);
         self.leftActionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         if(actionTitleColor) {
             [self.leftActionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
