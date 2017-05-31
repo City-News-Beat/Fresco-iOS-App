@@ -76,17 +76,17 @@
     
     NSDictionary *tipsDictionary;
     tipsDictionary = @{
-                       @(FRSCaptureModeInterview) : @[@"Hold your device at the subject's eye level, and make sure you're not tilting your device up or down during the interview.",
+                       @(FRSCaptureModeVideoInterview) : @[@"Hold your device at the subject's eye level, and make sure you're not tilting your device up or down during the interview.",
                                                       @"Wait until your subject has finished speaking before talking again — don’t talk over their answer, even in agreement. It makes it hard to get a sound bite!",
                                                       @"Ask your subject to speak up! A good interview can quickly lose its chances of being purchased if the sound quality is poor.",
                                                       @"Avoid interviewing in places with machines humming, music playing or loud talking in the background. Your microphone is more likely to pick up sounds that your ears usually tune out.",
                                                       @"Make sure your back is to the light. In other words, always have a good amount of light coming from behind your camera and shining onto the subject",
                                                       @"Try to frame your subject with the action in the background. An interview becomes significantly more valuable when we can see what your subject is talking about!",
                                                       @"Remember the rule of thirds: having your focal point off-center (slightly left, right, up, or down) is more pleasing than placing them in the middle of the frame."],
-                       @(FRSCaptureModePan)       : @[@"Plan the pan! Think about where you want to start and end the shot before you hit record.",
+                       @(FRSCaptureModeVideoPan)       : @[@"Plan the pan! Think about where you want to start and end the shot before you hit record.",
                                                       @"Slow and steady pans are best. Firmly plant your feet and rotate your body slowly to capture as much of the scene as possible",
                                                       @"It's better to pan too slow than too fast. The best pans last between 30 and 45 seconds. Take your time!"],
-                       @(FRSCaptureModeWide)      : @[@"Take a step back! Try your best to capture the entire scene with this shot.",
+                       @(FRSCaptureModeVideoWide)      : @[@"Take a step back! Try your best to capture the entire scene with this shot.",
                                                       @"Pick a point of interest. Take more than one wide shot if there are multiple points of interest on the scene.",
                                                       @"Move as little as possible. You want to keep your point of interest in the frame at all times."],
                        @(FRSCaptureModeVideo)     : @[@"Find the most captivating part of the scene and hit record! Avoid any sudden movements and focus on keeping your device steady.",
