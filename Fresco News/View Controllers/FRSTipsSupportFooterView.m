@@ -1,15 +1,15 @@
 //
-//  FRSSupportFooterView.m
+//  FRSTipsSupportFooterView.m
 //  Fresco
 //
 //  Created by Omar Elfanek on 5/16/17.
 //  Copyright © 2017 Fresco. All rights reserved.
 //
 
-#import "FRSSupportFooterView.h"
+#import "FRSTipsSupportFooterView.h"
 #import "NSString+Fresco.h"
 
-@implementation FRSSupportFooterView
+@implementation FRSTipsSupportFooterView
 
 - (instancetype)initWithDelegate:(id)delegate {
     self = [super init];

@@ -1,5 +1,5 @@
 //
-//  FRSSupportFooterView.h
+//  FRSTipsSupportFooterView.h
 //  Fresco
 //
 //  Created by Omar Elfanek on 5/16/17.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@protocol FRSSupportFooterViewDelegate <NSObject>
+@protocol FRSTipsSupportFooterViewDelegate <NSObject>
 
 - (void)presentSmooch;
 
@@ -17,10 +17,10 @@
 
 
 
-@interface FRSSupportFooterView : UIView
+@interface FRSTipsSupportFooterView : UIView
 
 - (instancetype)initWithDelegate:(id)delegate;
 
-@property (weak, nonatomic) NSObject<FRSSupportFooterViewDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSTipsSupportFooterViewDelegate> *delegate;
 
 @end

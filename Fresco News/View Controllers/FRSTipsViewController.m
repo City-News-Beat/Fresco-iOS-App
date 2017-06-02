@@ -8,7 +8,7 @@
 
 #import "FRSTipsViewController.h"
 #import "FRSTipsHeaderView.h"
-#import "FRSSupportFooterView.h"
+#import "FRSTipsSupportFooterView.h"
 #import "FRSTipsTableViewCell.h"
 #import "FRSTip.h"
 
@@ -16,7 +16,7 @@
 
 #define TIPS_CELL_ID @"tips-cell"
 
-@interface FRSTipsViewController () <UITableViewDelegate, UITableViewDataSource, FRSSupportFooterViewDelegate>
+@interface FRSTipsViewController () <UITableViewDelegate, UITableViewDataSource, FRSTipsSupportFooterViewDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *videosArray;
@@ -102,7 +102,7 @@
  before adding the footerview. Otherwise the footerview looks out of place and overlaps with the loading spinner.
  */
 - (void)configureFooterView {
-    self.tableView.tableFooterView = [[FRSSupportFooterView alloc] initWithDelegate:self];
+    self.tableView.tableFooterView = [[FRSTipsSupportFooterView alloc] initWithDelegate:self];
 }
 
 
