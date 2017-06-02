@@ -79,6 +79,16 @@
     return [assetsForCurrentCollection objectAtIndex:index];
 }
 
+- (NSInteger)indexOfAsset:(PHAsset *)asset {
+    if (asset) {
+        return [assetsForCurrentCollection indexOfObject:asset];
+    }
+    else {
+        return -1;
+    }
+    
+}
+
 - (NSInteger)numberOfAssets {
     return [assetsForCurrentCollection count];
 }

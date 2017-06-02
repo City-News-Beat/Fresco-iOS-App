@@ -19,7 +19,7 @@
 
 static NSInteger const maxAssets = 8;
 
-@interface FRSFileViewController () <FRSFileLoaderDelegate>
+@interface FRSFileViewController () <FRSFileLoaderDelegate, FRSFileTagViewManagerDelegate>
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
 @property (strong, nonatomic) NSMutableArray *selectedIndexPaths;
@@ -29,7 +29,8 @@ static NSInteger const maxAssets = 8;
 @property (strong, nonatomic) FRSFileLoader *fileLoader;
 @property (strong, nonatomic) PHAssetCollection *currentAssetCollection;
 @property (strong, nonatomic) FRSFileTagViewManager *fileTagViewManager;
-
+@property (strong, nonatomic) PHAsset *tappedAsset;
+@property (strong, nonatomic) NSIndexPath *tappedIndexPath;
 
 @end
 
@@ -48,7 +49,7 @@ static NSInteger const maxAssets = 8;
     [self setupSecondaryUI];
     [self setupNavigationBarViews];
     [self setupFileLoader];
-
+    [self setupTagViewManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -158,6 +159,12 @@ static NSInteger const maxAssets = 8;
     
 }
 
+- (void)setupTagViewManager {
+    self.fileTagViewManager = [[FRSFileTagViewManager alloc] initWithDelegate:self];
+    self.fileTagViewManager.delegate = self;
+    [self.fileTagViewManager addObserver:self forKeyPath:@"tagUpdated" options:0 context:nil];
+}
+
 #pragma mark - Key Value Observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -173,6 +180,15 @@ static NSInteger const maxAssets = 8;
     if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"isExpanded"]) {
         NSLog(@"isExpanded changed.");
         [self.fileSourceNavTitleView arrowUp:self.fileSourcePickerTableView.isExpanded];
+    }
+    //tagUpdated
+    if (object == self.fileTagViewManager && [keyPath isEqualToString:@"tagUpdated"]) {
+        NSLog(@"tagUpdated changed.");
+        //NSInteger index = [self.fileLoader indexOfAsset:self.tappedAsset];
+        //if(index >= 0) {
+         //   [fileCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+        //}
+        [self updateSelectedAssets];
     }
 
 }
@@ -365,11 +381,9 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PHAsset *tappedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
-
-    if (!self.fileTagViewManager) {
-        self.fileTagViewManager = [[FRSFileTagViewManager alloc] initWithDelegate:self];
-    }
+    self.tappedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+    self.tappedIndexPath = indexPath;
+    
     if(indexPath.row % 2 == 0) {
         [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeEditTag];
     }
@@ -377,24 +391,40 @@ static NSInteger const maxAssets = 8;
         [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeNewTag];
     }
     
-    [self.fileTagViewManager showTagViewForAsset:tappedAsset];
+    [self.fileTagViewManager showTagViewForAsset:self.tappedAsset];
         
-    
-    return;
-    
-    PHAsset *representedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+}
 
+- (void)removeTappedAsset {
+    PHAsset *representedAsset = self.tappedAsset;
+    
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
+    }
+    
+    //indexPaths
+    if (![self.selectedIndexPaths containsObject:self.tappedIndexPath]) {
+        [self.selectedIndexPaths addObject:self.tappedIndexPath];
+    } else {
+    }
+    [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
+
+}
+
+- (void)updateSelectedAssets {
+    PHAsset *representedAsset = self.tappedAsset;
+    
+    if ([selectedAssets containsObject:representedAsset]) {
+        //[selectedAssets removeObject:representedAsset];
     } else {
         if ([selectedAssets count] == maxAssets) {
             //should tell user why they can't select anymore cc:imogen
             return;
         }
-
+        
         [selectedAssets addObject:representedAsset];
     }
-
+    
     if (selectedAssets.count >= 1) {
         nextButton.enabled = YES;
     } else {
@@ -402,11 +432,12 @@ static NSInteger const maxAssets = 8;
     }
     
     //indexPaths
-    if (![self.selectedIndexPaths containsObject:indexPath]) {
-        [self.selectedIndexPaths addObject:indexPath];
+    if (![self.selectedIndexPaths containsObject:self.tappedIndexPath]) {
+        [self.selectedIndexPaths addObject:self.tappedIndexPath];
     } else {
     }
     [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
+
 }
 
 - (void)applicationNotAuthorized {
@@ -517,6 +548,8 @@ static NSInteger const maxAssets = 8;
     [self.fileSourcePickerTableView removeObserver:self forKeyPath:@"selectedSourceViewModel"];
     [self.fileSourcePickerTableView removeObserver:self forKeyPath:@"isExpanded"];
 
+    [self.fileTagViewManager removeObserver:self forKeyPath:@"tagUpdated"];
+
 }
 
 -(void)addObservers {
@@ -545,5 +578,9 @@ static NSInteger const maxAssets = 8;
     }
 }
 
+#pragma mark - FRSFileTagViewManagerDelegate
 
+- (void)removeSelection {
+    [self removeTappedAsset];
+}
 @end

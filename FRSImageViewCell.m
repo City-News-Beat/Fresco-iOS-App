@@ -8,6 +8,7 @@
 
 #import "FRSImageViewCell.h"
 #import "FRSFileNumberedView.h"
+#import "PHAsset+Tagging.h"
 
 #define ASSET_SIZE 150
 
@@ -27,7 +28,7 @@
 - (void)loadAsset:(PHAsset *)asset {
     self.currentAsset = asset;
     self.imageView.backgroundColor = [UIColor frescoShadowColor];
-    self.tagIconImageView.image = [UIImage imageNamed:@"tag-photo-icon"];
+    [self configureTagIconImageView];
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
                        targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)
@@ -39,6 +40,42 @@
                         [self updateUIForAsset];
                       });
                     }];
+}
+
+- (void)configureTagIconImageView {
+    if(self.currentAsset.fileTag) {
+        switch (self.currentAsset.fileTag.captureMode) {
+            case FRSCaptureModeVideoInterview:
+                self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-interview-icon"];
+                break;
+            case FRSCaptureModeVideoPan:
+                self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-pan-icon"];
+                break;
+            case FRSCaptureModeVideoWide:
+                self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-wide-icon"];
+                break;
+            case FRSCaptureModeOther: {
+                if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
+                    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
+                }
+                else {
+                    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
+                }
+            }
+                break;
+
+            default:
+                break;
+        }
+    }
+    else {
+        if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
+        }
+        else {
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
+        }
+    }
 }
 
 - (void)updateUIForAsset { // always called on main thread

@@ -12,12 +12,12 @@
 #import "FRSFileTagOptionsViewModel.h"
 #import "PHAsset+Tagging.h"
 
-@interface FRSFileTagViewManager ()
+@interface FRSFileTagViewManager ()<FRSTagContentAlertViewDelegate>
 
-@property(weak, nonatomic) id<FRSFileTagViewManagerDelegate> delegate;
 @property(strong, nonatomic) FRSTagContentAlertView *tagAlertView;
 @property(strong, nonatomic) NSMutableArray *availableTags;
 @property(strong, nonatomic) NSMutableArray *tagViewModels;
+@property(strong, nonatomic) PHAsset *currentAsset;
 
 @end
 
@@ -35,6 +35,9 @@
 
 - (void)setupTagAlertView {
     self.tagAlertView = [[FRSTagContentAlertView alloc] initTagContentAlertView];
+    self.tagAlertView.delegate = self;
+    [self.tagAlertView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
+
 }
 
 - (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode {
@@ -42,6 +45,7 @@
 }
 
 - (void)showTagViewForAsset:(PHAsset *)asset {
+    self.currentAsset = asset;
     [self resetTagViewModels];
     
     FRSTagViewMode tagViewMode = FRSTagViewModeNewTag;
@@ -81,8 +85,11 @@
 
 - (void)configureSelectedTagViewModelForAsset:(PHAsset *)asset {
     for (FRSFileTagOptionsViewModel *tagViewModel in _tagViewModels) {
-        if(asset.fileTag.captureMode == tagViewModel.captureMode) {
+        if(asset.fileTag.captureMode == tagViewModel.fileTag.captureMode) {
             tagViewModel.isSelected = YES;
+            tagViewModel.nameText = tagViewModel.fileTag.name;
+            tagViewModel.captureMode = tagViewModel.fileTag.captureMode;
+            self.tagAlertView.selectedSourceViewModel = tagViewModel;
             break;
         }
     }
@@ -94,5 +101,33 @@
         tagViewModel.captureMode = FRSCaptureModeOther;
     }
 }
+
+#pragma mark - Key Value Observing
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if (object == self.tagAlertView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
+        NSLog(@"tag manager selectedSourceViewModel changed.");
+        //self.selectedSourceViewModel = self.fileTagOptionsTableView.selectedSourceViewModel;
+        self.currentAsset.fileTag = self.tagAlertView.selectedSourceViewModel.fileTag;
+        self.tagUpdated = YES;
+       // self.currentAsset.fileTag.captureMode = self.tagAlertView.selectedSourceViewModel.fileTag.captureMode;
+       // self.currentAsset.fileTag.name = self.tagAlertView.selectedSourceViewModel.fileTag.name;
+    }
+}
+
+-(void)dealloc {
+    [self.tagAlertView removeObserver:self forKeyPath:@"selectedSourceViewModel"];
+}
+
+#pragma mark - FRSTagContentAlertViewDelegate
+
+- (void)removeSelection {
+    if([self.delegate respondsToSelector:@selector(removeSelection)]) {
+        [self.delegate removeSelection];
+    }
+}
+
 
 @end

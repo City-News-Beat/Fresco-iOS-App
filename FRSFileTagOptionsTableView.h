@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSFileTagOptionsViewModel.h"
 
 @interface FRSFileTagOptionsTableView : UITableView
 
 @property (strong, nonatomic) NSMutableArray *sourceViewModelsArray;
+@property (strong, nonatomic) FRSFileTagOptionsViewModel *selectedSourceViewModel;
 
 @end

@@ -10,9 +10,6 @@
 
 @interface FRSFileTag ()
 
-@property(readwrite, nonatomic, strong) NSString *name;
-@property(readwrite, nonatomic, assign) FRSCaptureMode captureMode;
-
 @end
 
 @implementation FRSFileTag
@@ -39,6 +36,17 @@
     else {
         self.captureMode = FRSCaptureModeOther;
     }
+}
+
+- (instancetype) copyWithZone: (NSZone *) zone
+{
+    FRSFileTag *obj = [[[self class] allocWithZone:zone] init];
+    if (obj) {
+        [obj setCaptureMode:_captureMode];
+        [obj setName:_name];
+    }
+    
+    return obj;
 }
 
 @end

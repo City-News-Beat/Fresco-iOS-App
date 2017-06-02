@@ -11,6 +11,6 @@
 
 @interface PHAsset (Tagging)
 
-@property (nonatomic, strong) FRSFileTag *fileTag;
+@property (nonatomic, copy) FRSFileTag *fileTag;
 
 @end

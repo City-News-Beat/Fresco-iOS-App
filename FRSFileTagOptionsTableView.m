@@ -8,10 +8,8 @@
 
 #import "FRSFileTagOptionsTableView.h"
 #import "FRSFileTagOptionsTableViewCell.h"
-#import "FRSFileTagOptionsViewModel.h"
 
 @interface FRSFileTagOptionsTableView() <UITableViewDataSource, UITableViewDelegate>
-@property (strong, nonatomic) FRSFileTagOptionsViewModel *selectedSourceViewModel;
 @end
 
 @implementation FRSFileTagOptionsTableView
@@ -36,19 +34,23 @@
     FRSFileTagOptionsTableViewCell *cell = [self dequeueReusableCellWithIdentifier:@"FRSFileTagOptionsTableViewCellIdentifier" forIndexPath:indexPath];
     
     FRSFileTagOptionsViewModel *sourceViewModel = self.sourceViewModelsArray[indexPath.row];
-    if(sourceViewModel == self.selectedSourceViewModel) {
-        sourceViewModel.isSelected = YES;
-    }
-    else {
-        sourceViewModel.isSelected = NO;
-    }
     [cell updateWithViewModel:sourceViewModel];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedSourceViewModel = self.sourceViewModelsArray[indexPath.row];
-//    self.selectedIndex = indexPath.row;
+    
+    for (FRSFileTagOptionsViewModel *sourceViewModel in self.sourceViewModelsArray) {
+        if (sourceViewModel == self.selectedSourceViewModel) {
+            sourceViewModel.isSelected = YES;
+        }
+        else {
+            sourceViewModel.isSelected = NO;
+        }
+    }
+    [self reloadData];
+    
 }
 
 @end

@@ -87,12 +87,39 @@
     self.fileTagOptionsTableView.sourceViewModelsArray = self.sourceViewModelsArray;
     [self addSubview:self.fileTagOptionsTableView];
     
+    [self.fileTagOptionsTableView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
+
 //    self.fileTagOptionsTableView.alpha = 0;
 //    self.fileTagOptionsTableView.isExpanded = NO;
     
 //    [self.fileTagOptionsTableView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
 //    [self.fileTagOptionsTableView addObserver:self forKeyPath:@"isExpanded" options:0 context:nil];
  
+}
+
+#pragma mark - Key Value Observing
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if (object == self.fileTagOptionsTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
+        NSLog(@"tag alert selectedSourceViewModel changed.");
+        self.selectedSourceViewModel = self.fileTagOptionsTableView.selectedSourceViewModel;
+        [self dismiss];
+    }
+}
+
+-(void)dealloc {
+    [self.fileTagOptionsTableView removeObserver:self forKeyPath:@"selectedSourceViewModel"];
+}
+
+#pragma mark - Overrides
+
+- (void)rightCancelTapped {
+    [super rightCancelTapped];
+    if([self.delegate respondsToSelector:@selector(removeSelection)]) {
+        [self.delegate removeSelection];
+    }
 }
 
 @end

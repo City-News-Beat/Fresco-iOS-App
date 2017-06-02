@@ -13,16 +13,17 @@
 
 @protocol FRSFileTagViewManagerDelegate <NSObject>
 
-@required
-
+- (void)removeSelection;
 
 @end
 
 @interface FRSFileTagViewManager : NSObject
 
+@property(assign, nonatomic) BOOL tagUpdated;
+@property(weak, nonatomic) id<FRSFileTagViewManagerDelegate> delegate;
+
 - (instancetype)initWithDelegate:(id)delegate;
 - (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode;
-
 - (void)showTagViewForAsset:(PHAsset *)asset;
 - (NSMutableArray *)availableTags;
 

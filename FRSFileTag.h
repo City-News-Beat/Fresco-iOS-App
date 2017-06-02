@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "FRSCameraConstants.h"
 
-@interface FRSFileTag : NSObject
+@interface FRSFileTag : NSObject<NSCopying>
 
-@property(readonly, nonatomic, strong) NSString *name;
-@property(readonly, nonatomic, assign) FRSCaptureMode captureMode;
+@property(nonatomic, copy) NSString *name;
+@property(nonatomic, assign) FRSCaptureMode captureMode;
 
 - (instancetype)initWithName:(NSString *)name;
 

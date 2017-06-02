@@ -15,7 +15,7 @@ NSString * const kFrescoFileTagPropertyKey = @"kFrescoFileTagPropertyKey";
 
 - (void)setFileTag:(FRSFileTag *)fileTag
 {
-    objc_setAssociatedObject(self, (__bridge const void *)(kFrescoFileTagPropertyKey), fileTag, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, (__bridge const void *)(kFrescoFileTagPropertyKey), fileTag, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (FRSFileTag *)fileTag
