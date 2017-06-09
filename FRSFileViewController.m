@@ -47,13 +47,13 @@ static NSInteger const maxAssets = 8;
     [self setupFileSourcePickerTableView];
     [self setupCollectionView];
     [self setupSecondaryUI];
-    [self setupNavigationBarViews];
     [self setupFileLoader];
     [self setupTagViewManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setupNavigationBarViews];
 
     [self shouldShowStatusBar:YES animated:YES];
 
@@ -148,14 +148,21 @@ static NSInteger const maxAssets = 8;
     self.navigationItem.rightBarButtonItem = questionBarButtonItem;
 
     //title view
-    self.navigationItem.titleView = [[FRSFileSourceNavTitleView alloc] init];
-    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
+    self.fileSourceNavTitleView = [[[NSBundle mainBundle] loadNibNamed:@"FRSFileSourceNavTitleView" owner:self options:nil] lastObject];
+    
+    //    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
+    self.navigationItem.titleView = self.fileSourceNavTitleView;
+    
+    [self.fileSourceNavTitleView.actionButton addTarget:self action:@selector(questionTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+//    self.navigationItem.titleView = [[FRSFileSourceNavTitleView alloc] init];
+//    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
 //    [self.fileSourceNavTitleView updateWithTitle:@"CAMERA ROLL"];
     [self.fileSourceNavTitleView arrowUp:NO];
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fileSourceTapped:)];
-    singleTap.numberOfTapsRequired = 1;
-    self.fileSourceNavTitleView.userInteractionEnabled = YES;
-    [self.fileSourceNavTitleView addGestureRecognizer:singleTap];
+//    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fileSourceTapped:)];
+//    singleTap.numberOfTapsRequired = 1;
+//    self.fileSourceNavTitleView.userInteractionEnabled = YES;
+//    [self.fileSourceNavTitleView addGestureRecognizer:singleTap];
     
 }
 

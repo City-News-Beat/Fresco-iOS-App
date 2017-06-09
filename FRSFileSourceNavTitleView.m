@@ -21,21 +21,21 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
     if (self = [super initWithCoder:aDecoder]) {
-        [self setupView];
+        // [self setupView];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        [self setupView];
+        // [self setupView];
     }
     return self;
 }
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-
+    
 }
 
 - (void)setupView{
