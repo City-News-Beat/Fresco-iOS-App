@@ -18,6 +18,7 @@
 #import "FRSFileLoader.h"
 #import "FRSFileTagViewManager.h"
 #import "FRSFilePackageGuidelinesAlertView.h"
+#import "FRSTipsViewController.h"
 
 static NSInteger const maxAssets = 8;
 
@@ -213,12 +214,14 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)questionTapped {
-    
-
+    [self segueToTipsAction];
 }
 
 - (void)showPackageGuidelines {
     FRSFilePackageGuidelinesAlertView *guidelinesView= [[FRSFilePackageGuidelinesAlertView alloc] init];
+    guidelinesView.seeTipsAction = ^{
+        [self segueToTipsAction];
+    };
     [guidelinesView show];
 }
 
@@ -579,6 +582,14 @@ static NSInteger const maxAssets = 8;
     }
 }
 
+#pragma mark - Tips 
+- (void)segueToTipsAction {
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
+        [weakSelf.navigationController pushViewController:tipsViewController animated:YES];
+    });
+}
 
 #pragma mark - NSNotification Center
 

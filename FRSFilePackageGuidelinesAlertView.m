@@ -79,7 +79,7 @@
     
 }
 
--(void)configureWithFooterMessage {
+- (void)configureWithFooterMessage {
     self.footerMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, self.fileTagOptionsTableView.frame.origin.y + self.fileTagOptionsTableView.frame.size.height + 10, MESSAGE_WIDTH, 0)];
     self.footerMessageLabel.textColor = [UIColor colorWithWhite:0 alpha:0.54];
     self.footerMessageLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
@@ -92,5 +92,10 @@
     [self addSubview:self.footerMessageLabel];
 }
 
-
+- (void)leftActionTapped {
+    if (self.seeTipsAction) {
+        self.seeTipsAction();
+    }
+    [super leftActionTapped];
+}
 @end

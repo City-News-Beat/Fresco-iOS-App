@@ -10,4 +10,6 @@
 
 @interface FRSFilePackageGuidelinesAlertView : FRSAlertView
 
+@property (strong, nonatomic) SimpleActionBlock seeTipsAction;
+
 @end
