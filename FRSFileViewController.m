@@ -371,7 +371,7 @@ static NSInteger const maxAssets = 8;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
-    return CGSizeMake(screenWidth, 225);
+    return CGSizeMake(screenWidth, 76);
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -379,7 +379,7 @@ static NSInteger const maxAssets = 8;
         FRSFileFooterCell *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
         
         CGRect newFrame = footer.frame;
-        newFrame.size.height = 76;
+        newFrame.size.height = 225;
         [footer setFrame:newFrame];
         [footer setup];
         
