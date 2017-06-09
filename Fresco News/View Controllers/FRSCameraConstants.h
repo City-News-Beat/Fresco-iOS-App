@@ -33,3 +33,11 @@ typedef NS_ENUM(NSUInteger, FRSTagViewMode) {
     FRSTagViewModeNewTag,
     FRSTagViewModeEditTag,
 };
+
+typedef NS_ENUM(NSUInteger, FRSPackageProgressLevel) {
+    FRSPackageProgressLevelZero = 0,
+    FRSPackageProgressLevelOne,
+    FRSPackageProgressLevelTwo,
+    FRSPackageProgressLevelThree,
+};
+

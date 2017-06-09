@@ -16,6 +16,9 @@
             <subviews>
                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great Job! You created a perfect package! Tap here to review guidelines" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Yn-23-nV8">
                     <rect key="frame" x="24" y="30" width="366" height="36"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="36" id="8eK-Ev-okr"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -31,6 +34,7 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="qot-HV-E9p" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="13" id="BzC-VL-3hS"/>
                 <constraint firstItem="7Yn-23-nV8" firstAttribute="top" secondItem="qot-HV-E9p" secondAttribute="bottom" constant="10" id="L48-Vh-9Bl"/>
                 <constraint firstAttribute="bottom" secondItem="7Yn-23-nV8" secondAttribute="bottom" constant="10" id="Z6y-Hp-icu"/>
                 <constraint firstItem="7Yn-23-nV8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="24" id="jmC-Af-AeZ"/>

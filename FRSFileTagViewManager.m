@@ -18,15 +18,28 @@
 @property(strong, nonatomic) NSMutableArray *availableTags;
 @property(strong, nonatomic) NSMutableArray *tagViewModels;
 @property(strong, nonatomic) PHAsset *currentAsset;
+@property(assign, nonatomic) FRSPackageProgressLevel packageProgressLevel;
 
 @end
 
 @implementation FRSFileTagViewManager
 
-- (instancetype)initWithDelegate:(id<FRSFileTagViewManagerDelegate>)delegate {
++ (FRSFileTagViewManager *)sharedInstance {
+    static FRSFileTagViewManager *instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] init];
+    });
+    return instance;
+}
+
+- (instancetype)init {
     self = [super init];
     if(self) {
-        self.delegate = delegate;
+        self.interviewTaggedAssetsArray = [[NSMutableArray alloc] initWithCapacity:0];
+        self.wideShotTaggedAssetsArray = [[NSMutableArray alloc] initWithCapacity:0];
+        self.steadyPanTaggedAssetsArray = [[NSMutableArray alloc] initWithCapacity:0];
+        self.packageProgressLevel = FRSPackageProgressLevelZero;
         [self setupTagAlertView];
         [self setupAvailableTagsAndViewModels];
     }
@@ -37,7 +50,6 @@
     self.tagAlertView = [[FRSTagContentAlertView alloc] initTagContentAlertView];
     self.tagAlertView.delegate = self;
     [self.tagAlertView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
-
 }
 
 - (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode {
@@ -114,10 +126,67 @@
         self.tagUpdated = YES;
        // self.currentAsset.fileTag.captureMode = self.tagAlertView.selectedSourceViewModel.fileTag.captureMode;
        // self.currentAsset.fileTag.name = self.tagAlertView.selectedSourceViewModel.fileTag.name;
+        
+        [self updateArrays];
+        [self updatePackageProgressLevel];
     }
 }
 
--(void)dealloc {
+- (void)updateArrays {
+    if([self.interviewTaggedAssetsArray containsObject:self.currentAsset]) {
+        [self.interviewTaggedAssetsArray removeObject:self.currentAsset];
+    }
+    if([self.wideShotTaggedAssetsArray containsObject:self.currentAsset]) {
+        [self.wideShotTaggedAssetsArray removeObject:self.currentAsset];
+    }
+    if([self.steadyPanTaggedAssetsArray containsObject:self.currentAsset]) {
+        [self.steadyPanTaggedAssetsArray removeObject:self.currentAsset];
+    }
+    
+    if(self.currentAsset.fileTag) {
+        switch (self.currentAsset.fileTag.captureMode) {
+            case FRSCaptureModeVideoInterview:
+            {
+                [self.interviewTaggedAssetsArray addObject:self.currentAsset];
+            }
+                break;
+            case FRSCaptureModeVideoWide:
+            {
+                [self.wideShotTaggedAssetsArray addObject:self.currentAsset];
+            }
+                break;
+            case FRSCaptureModeVideoPan:
+            {
+                [self.steadyPanTaggedAssetsArray addObject:self.currentAsset];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+- (FRSPackageProgressLevel)packageProgressLevel {
+    return _packageProgressLevel;
+}
+
+- (void)updatePackageProgressLevel {
+    NSInteger progress = 0;
+    if(self.interviewTaggedAssetsArray.count > 0) {
+        progress = progress + 1;
+    }
+    if(self.wideShotTaggedAssetsArray.count > 0) {
+        progress = progress + 1;
+    }
+    if(self.steadyPanTaggedAssetsArray.count > 0) {
+        progress = progress + 1;
+    }
+    
+    self.packageProgressLevel = progress;
+}
+
+- (void)dealloc {
     [self.tagAlertView removeObserver:self forKeyPath:@"selectedSourceViewModel"];
 }
 

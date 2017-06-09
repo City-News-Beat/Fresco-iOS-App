@@ -170,7 +170,7 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)setupTagViewManager {
-    self.fileTagViewManager = [[FRSFileTagViewManager alloc] initWithDelegate:self];
+    self.fileTagViewManager = [FRSFileTagViewManager sharedInstance];
     self.fileTagViewManager.delegate = self;
     [self.fileTagViewManager addObserver:self forKeyPath:@"tagUpdated" options:0 context:nil];
 }
@@ -374,7 +374,7 @@ static NSInteger const maxAssets = 8;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
-    return CGSizeMake(screenWidth, 76);
+    return CGSizeMake(screenWidth, 80);
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -394,7 +394,7 @@ static NSInteger const maxAssets = 8;
         FRSFileProgressWithTextView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader forIndexPath:indexPath];
         
         CGRect newFrame = header.frame;
-        newFrame.size.height = 76;
+        newFrame.size.height = 80;
         [header setFrame:newFrame];
         [header setupWithShowPackageGuidelinesBlock:^{
             [weakSelf showPackageGuidelines];
