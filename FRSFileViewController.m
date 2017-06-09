@@ -155,11 +155,11 @@ static NSInteger const maxAssets = 8;
     //    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
     self.navigationItem.titleView = self.fileSourceNavTitleView;
     
-    [self.fileSourceNavTitleView.actionButton addTarget:self action:@selector(questionTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.fileSourceNavTitleView.actionButton addTarget:self action:@selector(navigationBarTapped) forControlEvents:UIControlEventTouchUpInside];
     
 //    self.navigationItem.titleView = [[FRSFileSourceNavTitleView alloc] init];
 //    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
-//    [self.fileSourceNavTitleView updateWithTitle:@"CAMERA ROLL"];
+    [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
     [self.fileSourceNavTitleView arrowUp:NO];
 //    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fileSourceTapped:)];
 //    singleTap.numberOfTapsRequired = 1;
@@ -202,14 +202,17 @@ static NSInteger const maxAssets = 8;
 
 }
 
+- (void)navigationBarTapped {
+    if(self.fileSourcePickerTableView.alpha == 0) {
+        [self showFileSourcePickerTableView];
+    }
+    else {
+        [self hideFileSourcePickerTableView];
+    }
+    [self.fileSourcePickerTableView reloadData];
+}
+
 - (void)questionTapped {
-//    if(self.fileSourcePickerTableView.alpha == 0) {
-//        [self showFileSourcePickerTableView];
-//    }
-//    else {
-//        [self hideFileSourcePickerTableView];
-//    }
-//    [self.fileSourcePickerTableView reloadData];
     
     [self showPackageGuidelines];
 }
