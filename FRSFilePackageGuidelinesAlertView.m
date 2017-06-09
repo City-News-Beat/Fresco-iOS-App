@@ -10,6 +10,7 @@
 #import "FRSFilePackageGuidelinesTagsTableView.h"
 #import "FRSFileTag.h"
 #import "FRSFileTagOptionsViewModel.h"
+#import "FRSFileTagViewManager.h"
 
 @interface FRSFilePackageGuidelinesAlertView ()
 
@@ -65,10 +66,14 @@
     
     //view models
     FRSFileTagOptionsViewModel *tagViewModel1 = [[FRSFileTagOptionsViewModel alloc] initWithFileTag:tag1];
-    tagViewModel1.isSelected = YES;
+    tagViewModel1.isSelected = [[FRSFileTagViewManager sharedInstance] isInterviewTagged];
     
     FRSFileTagOptionsViewModel *tagViewModel2 = [[FRSFileTagOptionsViewModel alloc] initWithFileTag:tag2];
+    tagViewModel2.isSelected = [[FRSFileTagViewManager sharedInstance] isWideShotTagged];
+
     FRSFileTagOptionsViewModel *tagViewModel3 = [[FRSFileTagOptionsViewModel alloc] initWithFileTag:tag3];
+    tagViewModel3.isSelected = [[FRSFileTagViewManager sharedInstance] isSteadyPanTagged];
+
     
     NSMutableArray *tagViewModels = [[NSMutableArray alloc] initWithObjects:tagViewModel1, tagViewModel2, tagViewModel3, nil];
 

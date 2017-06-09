@@ -20,6 +20,10 @@
 @property(strong, nonatomic) PHAsset *currentAsset;
 @property(assign, nonatomic) FRSPackageProgressLevel packageProgressLevel;
 
+@property(strong, nonatomic) NSMutableArray *interviewTaggedAssetsArray;
+@property(strong, nonatomic) NSMutableArray *wideShotTaggedAssetsArray;
+@property(strong, nonatomic) NSMutableArray *steadyPanTaggedAssetsArray;
+
 @end
 
 @implementation FRSFileTagViewManager
@@ -184,6 +188,18 @@
     }
     
     self.packageProgressLevel = progress;
+}
+
+- (BOOL)isInterviewTagged {
+    return self.interviewTaggedAssetsArray.count > 0;
+}
+
+- (BOOL)isWideShotTagged {
+    return self.wideShotTaggedAssetsArray.count > 0;
+}
+
+- (BOOL)isSteadyPanTagged {
+    return self.steadyPanTaggedAssetsArray.count > 0;
 }
 
 - (void)dealloc {

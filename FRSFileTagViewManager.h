@@ -22,11 +22,6 @@
 @property(assign, nonatomic) BOOL tagUpdated;
 @property(weak, nonatomic) id<FRSFileTagViewManagerDelegate> delegate;
 
-@property(strong, nonatomic) NSMutableArray *interviewTaggedAssetsArray;
-@property(strong, nonatomic) NSMutableArray *wideShotTaggedAssetsArray;
-@property(strong, nonatomic) NSMutableArray *steadyPanTaggedAssetsArray;
-
-
 + (FRSFileTagViewManager *)sharedInstance;
 
 - (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode;
@@ -34,4 +29,7 @@
 - (NSMutableArray *)availableTags;
 - (FRSPackageProgressLevel)packageProgressLevel;
 
+- (BOOL)isInterviewTagged;
+- (BOOL)isWideShotTagged;
+- (BOOL)isSteadyPanTagged;
 @end
