@@ -13,6 +13,8 @@
 @interface FRSFileProgressWithTextView ()
 
 @property (weak, nonatomic) IBOutlet UILabel *mainLabel;
+@property (strong, nonatomic) SimpleActionBlock actionBlock;
+
 @property BOOL isSetup;
 
 @end
@@ -22,10 +24,12 @@
 
 #pragma mark - UI Setup
 
-- (void)setup {
+- (void)setupWithShowPackageGuidelinesBlock:(SimpleActionBlock)actionBlock {
     if (!self.isSetup) {
         self.isSetup = YES;
     }
+    
+    self.actionBlock = actionBlock;
     
     [self.superview setBackgroundColor:[UIColor whiteColor]];
     [self.superview setBackgroundColor:[UIColor frescoBackgroundColorDark]];
@@ -41,6 +45,7 @@
 
 - (void)mainLabelTapped {
     NSLog(@"progress mainLabelTapped.");
+    if(self.actionBlock) self.actionBlock();
 }
 
 @end

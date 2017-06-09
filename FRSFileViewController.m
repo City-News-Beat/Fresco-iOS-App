@@ -214,7 +214,7 @@ static NSInteger const maxAssets = 8;
 
 - (void)questionTapped {
     
-    [self showPackageGuidelines];
+
 }
 
 - (void)showPackageGuidelines {
@@ -386,12 +386,16 @@ static NSInteger const maxAssets = 8;
         return footer;
     }
     else if (kind == UICollectionElementKindSectionHeader) {
+        __weak typeof(self) weakSelf = self;
+
         FRSFileProgressWithTextView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader forIndexPath:indexPath];
         
         CGRect newFrame = header.frame;
         newFrame.size.height = 76;
         [header setFrame:newFrame];
-        [header setup];
+        [header setupWithShowPackageGuidelinesBlock:^{
+            [weakSelf showPackageGuidelines];
+        }];
         
         return header;
     }

@@ -13,6 +13,6 @@
 /**
  Configures the UI by setting colors and formatting textviews.
  */
--(void)setup;
+- (void)setupWithShowPackageGuidelinesBlock:(SimpleActionBlock)actionBlock;
 
 @end
