@@ -11,6 +11,7 @@
 #import "UIFont+Fresco.h"
 #import "FRSImageViewCell.h"
 #import "FRSFileFooterCell.h"
+#import "FRSFileProgressWithTextView.h"
 #import "FRSFileSourceNavTitleView.h"
 #import "FRSFileSourcePickerTableView.h"
 #import "FRSFileSourcePickerViewModel.h"
@@ -248,6 +249,8 @@ static NSInteger const maxAssets = 8;
     // Do any additional setup after loading the view.
     UINib *imageNib = [UINib nibWithNibName:@"FRSImageViewCell" bundle:[NSBundle mainBundle]]; // used a xib for cell b/c originally I was going to have separate cells for video and image.
     UINib *footerNib = [UINib nibWithNibName:@"FRSFileFooterCell" bundle:[NSBundle mainBundle]];
+    UINib *headerNib = [UINib nibWithNibName:@"FRSFileHeaderCell" bundle:[NSBundle mainBundle]];
+
 
     // layout for collection view (3 across, 1px spacing, like in sketch)
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -265,6 +268,7 @@ static NSInteger const maxAssets = 8;
 
     [fileCollectionView registerNib:imageNib forCellWithReuseIdentifier:imageCellIdentifier];
     [fileCollectionView registerNib:footerNib forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter];
+    [fileCollectionView registerNib:headerNib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader];
     [self.view addSubview:fileCollectionView];
     fileCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
 
@@ -354,16 +358,31 @@ static NSInteger const maxAssets = 8;
     return CGSizeMake(screenWidth, 225);
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    float screenWidth = [UIScreen mainScreen].bounds.size.width;
+    return CGSizeMake(screenWidth, 225);
+}
+
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if (kind == UICollectionElementKindSectionFooter) {
         FRSFileFooterCell *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
-
+        
         CGRect newFrame = footer.frame;
-        newFrame.size.height = 225;
+        newFrame.size.height = 76;
         [footer setFrame:newFrame];
         [footer setup];
-
+        
         return footer;
+    }
+    else if (kind == UICollectionElementKindSectionHeader) {
+        FRSFileProgressWithTextView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader forIndexPath:indexPath];
+        
+        CGRect newFrame = header.frame;
+        newFrame.size.height = 76;
+        [header setFrame:newFrame];
+        [header setup];
+        
+        return header;
     }
 
     return nil;
@@ -590,4 +609,5 @@ static NSInteger const maxAssets = 8;
 - (void)removeSelection {
     [self removeTappedAsset];
 }
+
 @end
