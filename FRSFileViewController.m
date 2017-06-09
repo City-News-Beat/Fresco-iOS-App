@@ -17,6 +17,7 @@
 #import "FRSFileSourcePickerViewModel.h"
 #import "FRSFileLoader.h"
 #import "FRSFileTagViewManager.h"
+#import "FRSFilePackageGuidelinesAlertView.h"
 
 static NSInteger const maxAssets = 8;
 
@@ -202,13 +203,20 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)questionTapped {
-    if(self.fileSourcePickerTableView.alpha == 0) {
-        [self showFileSourcePickerTableView];
-    }
-    else {
-        [self hideFileSourcePickerTableView];
-    }
-    [self.fileSourcePickerTableView reloadData];
+//    if(self.fileSourcePickerTableView.alpha == 0) {
+//        [self showFileSourcePickerTableView];
+//    }
+//    else {
+//        [self hideFileSourcePickerTableView];
+//    }
+//    [self.fileSourcePickerTableView reloadData];
+    
+    [self showPackageGuidelines];
+}
+
+- (void)showPackageGuidelines {
+    FRSFilePackageGuidelinesAlertView *guidelinesView= [[FRSFilePackageGuidelinesAlertView alloc] init];
+    [guidelinesView show];
 }
 
 - (void)showFileSourcePickerTableView {

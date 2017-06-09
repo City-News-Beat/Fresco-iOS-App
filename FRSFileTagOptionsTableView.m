@@ -10,6 +10,7 @@
 #import "FRSFileTagOptionsTableViewCell.h"
 
 @interface FRSFileTagOptionsTableView() <UITableViewDataSource, UITableViewDelegate>
+
 @end
 
 @implementation FRSFileTagOptionsTableView
