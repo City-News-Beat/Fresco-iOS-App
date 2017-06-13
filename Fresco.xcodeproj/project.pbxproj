@@ -326,6 +326,7 @@
 		F25F0C641EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C631EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m */; };
 		F25F0C681EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C661EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m */; };
 		F25F0C691EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F25F0C671EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib */; };
+		F25F0C6C1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */; };
 		F26F29621EDF3F1D000CD021 /* FRSFileTagViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */; };
 		F26F29661EDF5F24000CD021 /* FRSFileTagOptionsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */; };
 		F26F296A1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */; };
@@ -975,6 +976,8 @@
 		F25F0C651EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFilePackageGuidelinesTagTableCell.h; sourceTree = "<group>"; };
 		F25F0C661EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFilePackageGuidelinesTagTableCell.m; sourceTree = "<group>"; };
 		F25F0C671EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFilePackageGuidelinesTagTableCell.xib; sourceTree = "<group>"; };
+		F25F0C6A1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCaptureModeEnumHelper.h; sourceTree = "<group>"; };
+		F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCaptureModeEnumHelper.m; sourceTree = "<group>"; };
 		F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagViewManager.h; sourceTree = "<group>"; };
 		F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagViewManager.m; sourceTree = "<group>"; };
 		F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsTableView.h; sourceTree = "<group>"; };
@@ -2683,6 +2686,8 @@
 			children = (
 				F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */,
 				F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */,
+				F25F0C6A1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.h */,
+				F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */,
 				F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */,
 				F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */,
 				F26F29671EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.h */,
@@ -3015,6 +3020,7 @@
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
+				F25F0C6C1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */,
 				072971A51E5B67AC000AA8FD /* FRSIndicatorDot.m in Sources */,
