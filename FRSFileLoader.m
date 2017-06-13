@@ -75,7 +75,9 @@
     if (index >= [assetsForCurrentCollection count]) {
         return Nil;
     }
-
+    //rev testing
+    PHAsset *asset = [assetsForCurrentCollection objectAtIndex:index];
+    NSLog(@"rev testing asset.localIdentifier: %@", asset.localIdentifier);
     return [assetsForCurrentCollection objectAtIndex:index];
 }
 
@@ -86,7 +88,6 @@
     else {
         return -1;
     }
-    
 }
 
 - (NSInteger)numberOfAssets {

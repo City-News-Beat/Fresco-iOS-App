@@ -988,6 +988,8 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
     }
     if (success) {
         // Check authorization status.
+        __block PHObjectPlaceholder *assetPlaceholder = nil;
+        
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
           if (status == PHAuthorizationStatusAuthorized) {
               // Save the movie file to the photo library and cleanup.
@@ -999,14 +1001,20 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                     options.shouldMoveFile = YES;
                     PHAssetCreationRequest *changeRequest = [PHAssetCreationRequest creationRequestForAsset];
                     [changeRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:outputFileURL options:options];
+                    assetPlaceholder = changeRequest.placeholderForCreatedAsset;
                 } else {
-                    [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
+                    PHAssetChangeRequest *changeRequest = [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
+                    assetPlaceholder = changeRequest.placeholderForCreatedAsset;
                 }
               }
                   completionHandler:^(BOOL success, NSError *error) {
                     if (!success) {
                         NSLog(@"Could not save movie to photo library: %@", error);
                     } else {
+                        //rev testing
+                        NSString *localID = assetPlaceholder.localIdentifier;
+                        NSLog(@"rev testing after creation localID: %@",localID);
+
                         // This dispatch_after is a hotfix. Without it the next button does not update.
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self fetchGalleryAssetsInBackgroundWithCompletion:nil];
