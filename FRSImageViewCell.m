@@ -9,6 +9,7 @@
 #import "FRSImageViewCell.h"
 #import "FRSFileNumberedView.h"
 #import "PHAsset+Tagging.h"
+#import "FRSFileTagManager.h"
 
 #define ASSET_SIZE 150
 
@@ -43,8 +44,17 @@
 }
 
 - (void)configureTagIconImageView {
-    if(self.currentAsset.fileTag) {
-        switch (self.currentAsset.fileTag.captureMode) {
+    FRSCaptureMode captureMode = [[FRSFileTagManager sharedInstance] fetchCaptureModeForAsset:self.currentAsset];
+    if(captureMode == FRSCaptureModeInvalid) {
+        if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
+        }
+        else {
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
+        }
+    }
+    else {
+        switch (captureMode) {
             case FRSCaptureModeVideoInterview:
                 self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-interview-icon"];
                 break;
@@ -63,17 +73,9 @@
                 }
             }
                 break;
-
+                
             default:
                 break;
-        }
-    }
-    else {
-        if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
-            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
-        }
-        else {
-            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
         }
     }
 }

@@ -334,6 +334,10 @@
 		F26F296E1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */; };
 		F26F29711EDF656A000CD021 /* FRSFileTag.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29701EDF656A000CD021 /* FRSFileTag.m */; };
 		F26F29741EDF6C03000CD021 /* PHAsset+Tagging.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */; };
+		F2B0A5851EF1A99000868A92 /* FRSFileTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A5841EF1A99000868A92 /* FRSFileTagManager.m */; };
+		F2B0A59F1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A59C1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.m */; };
+		F2B0A5A01EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A59E1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m */; };
+		F2B0A5A41EF1B7A000868A92 /* FRSTaggedAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A5A31EF1B7A000868A92 /* FRSTaggedAsset.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -991,6 +995,14 @@
 		F26F29701EDF656A000CD021 /* FRSFileTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTag.m; sourceTree = "<group>"; };
 		F26F29721EDF6C03000CD021 /* PHAsset+Tagging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PHAsset+Tagging.h"; sourceTree = "<group>"; };
 		F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PHAsset+Tagging.m"; sourceTree = "<group>"; };
+		F2B0A5831EF1A99000868A92 /* FRSFileTagManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagManager.h; sourceTree = "<group>"; };
+		F2B0A5841EF1A99000868A92 /* FRSFileTagManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagManager.m; sourceTree = "<group>"; };
+		F2B0A59B1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSTaggedAssetModel+CoreDataClass.h"; sourceTree = "<group>"; };
+		F2B0A59C1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSTaggedAssetModel+CoreDataClass.m"; sourceTree = "<group>"; };
+		F2B0A59D1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSTaggedAssetModel+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F2B0A59E1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSTaggedAssetModel+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F2B0A5A21EF1B7A000868A92 /* FRSTaggedAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTaggedAsset.h; sourceTree = "<group>"; };
+		F2B0A5A31EF1B7A000868A92 /* FRSTaggedAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTaggedAsset.m; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1470,6 +1482,7 @@
 			isa = PBXGroup;
 			children = (
 				6501D56E1C249612001F54EF /* Core Data */,
+				F2B0A5A51EF1B7AE00868A92 /* Fresco Models */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1673,6 +1686,7 @@
 			children = (
 				D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */,
 				D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */,
+				F2B0A5A11EF1B77E00868A92 /* FRSTaggedAssetModel */,
 				D4B35F5D1CD1B51A00F5C8A8 /* FRSUpload */,
 				65135FDD1C286E1900839149 /* FRSArticle */,
 				65135FDE1C286E2200839149 /* FRSUser */,
@@ -2686,6 +2700,8 @@
 			children = (
 				F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */,
 				F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */,
+				F2B0A5831EF1A99000868A92 /* FRSFileTagManager.h */,
+				F2B0A5841EF1A99000868A92 /* FRSFileTagManager.m */,
 				F25F0C6A1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.h */,
 				F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */,
 				F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */,
@@ -2699,6 +2715,26 @@
 				F26F29701EDF656A000CD021 /* FRSFileTag.m */,
 			);
 			name = "File Tag";
+			sourceTree = "<group>";
+		};
+		F2B0A5A11EF1B77E00868A92 /* FRSTaggedAssetModel */ = {
+			isa = PBXGroup;
+			children = (
+				F2B0A59B1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.h */,
+				F2B0A59C1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.m */,
+				F2B0A59D1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataProperties.h */,
+				F2B0A59E1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m */,
+			);
+			name = FRSTaggedAssetModel;
+			sourceTree = "<group>";
+		};
+		F2B0A5A51EF1B7AE00868A92 /* Fresco Models */ = {
+			isa = PBXGroup;
+			children = (
+				F2B0A5A21EF1B7A000868A92 /* FRSTaggedAsset.h */,
+				F2B0A5A31EF1B7A000868A92 /* FRSTaggedAsset.m */,
+			);
+			name = "Fresco Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2999,6 +3035,7 @@
 				077753181ECA57AF00862120 /* FRSTipsManager.m in Sources */,
 				0731B1B51E4929F90045E6F4 /* FRSSnapKit.m in Sources */,
 				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
+				F2B0A59F1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataClass.m in Sources */,
 				D453CC861CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */,
 				07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */,
@@ -3120,6 +3157,7 @@
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */,
 				CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */,
+				F2B0A5851EF1A99000868A92 /* FRSFileTagManager.m in Sources */,
 				071D7B8B1EB7D4E10033A56A /* FRSCameraFooterView.m in Sources */,
 				CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */,
 				CECD8D771E73C617004548D1 /* FRSConnectivityAlertView.m in Sources */,
@@ -3153,6 +3191,7 @@
 				F26F296E1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m in Sources */,
 				CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */,
 				F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */,
+				F2B0A5A41EF1B7A000868A92 /* FRSTaggedAsset.m in Sources */,
 				072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
@@ -3214,6 +3253,7 @@
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				F2B0A5A01EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m in Sources */,
 				F26F29661EDF5F24000CD021 /* FRSFileTagOptionsTableView.m in Sources */,
 				CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,

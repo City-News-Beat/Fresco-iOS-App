@@ -12,6 +12,7 @@
 #import "FRSFileTagOptionsViewModel.h"
 #import "PHAsset+Tagging.h"
 #import "FRSCaptureModeEnumHelper.h"
+#import "FRSFileTagManager.h"
 
 @interface FRSFileTagViewManager ()<FRSTagContentAlertViewDelegate>
 
@@ -132,12 +133,13 @@
        // self.currentAsset.fileTag.captureMode = self.tagAlertView.selectedSourceViewModel.fileTag.captureMode;
        // self.currentAsset.fileTag.name = self.tagAlertView.selectedSourceViewModel.fileTag.name;
         
-        [self updateArrays];
+        [self saveCaptureModeForCurrentAsset:self.currentAsset.fileTag.captureMode];
+        [self updateTaggedAssetsArrays];
         [self updatePackageProgressLevel];
     }
 }
 
-- (void)updateArrays {
+- (void)updateTaggedAssetsArrays {
     if([self.interviewTaggedAssetsArray containsObject:self.currentAsset]) {
         [self.interviewTaggedAssetsArray removeObject:self.currentAsset];
     }
@@ -215,5 +217,10 @@
     }
 }
 
+#pragma mark - Tags Manager
+
+- (void)saveCaptureModeForCurrentAsset:(FRSCaptureMode)captureMode {
+    [[FRSFileTagManager sharedInstance] saveCaptureMode:captureMode forAsset:self.currentAsset];
+}
 
 @end

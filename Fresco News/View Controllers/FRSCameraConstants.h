@@ -19,13 +19,16 @@
  - FRSCaptureModeVideo: Regular video capture mode
  - FRSCaptureModePhoto: Photo capture mode
  */
+
+
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
-    FRSCaptureModeVideoInterview,
+    FRSCaptureModeVideoInterview = 0,
     FRSCaptureModeVideoPan,
     FRSCaptureModeVideoWide,
     FRSCaptureModeVideo,
     FRSCaptureModePhoto,
     FRSCaptureModeOther,
+    FRSCaptureModeInvalid = -1,
 };
 
 typedef NS_ENUM(NSUInteger, FRSTagViewMode) {
