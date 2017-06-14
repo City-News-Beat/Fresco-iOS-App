@@ -7,6 +7,7 @@
 //
 
 #import "FRSFileTag.h"
+#import "FRSCaptureModeEnumHelper.h"
 
 @interface FRSFileTag ()
 
@@ -24,13 +25,13 @@
 }
 
 - (void)setupCaptureMode {
-    if([self.name isEqualToString:@"Interview"]) {
+    if([self.name isEqualToString:FRSCaptureModeVideoInterview_StandardDisplayName]) {
         self.captureMode = FRSCaptureModeVideoInterview;
     }
-    else if([self.name isEqualToString:@"Wide Shot"]) {
+    else if([self.name isEqualToString:FRSCaptureModeVideoWide_StandardDisplayName]) {
         self.captureMode = FRSCaptureModeVideoWide;
     }
-    else if([self.name isEqualToString:@"Steady Pan"]) {
+    else if([self.name isEqualToString:FRSCaptureModeVideoPan_StandardDisplayName]) {
         self.captureMode = FRSCaptureModeVideoPan;
     }
     else {

@@ -11,6 +11,7 @@
 #import "FRSFileTag.h"
 #import "FRSFileTagOptionsViewModel.h"
 #import "PHAsset+Tagging.h"
+#import "FRSCaptureModeEnumHelper.h"
 
 @interface FRSFileTagViewManager ()<FRSTagContentAlertViewDelegate>
 
@@ -82,10 +83,10 @@
 
 - (void)setupAvailableTagsAndViewModels {
     //models
-    FRSFileTag *tag1 = [[FRSFileTag alloc] initWithName:@"Interview"];
-    FRSFileTag *tag2 = [[FRSFileTag alloc] initWithName:@"Wide Shot"];
-    FRSFileTag *tag3 = [[FRSFileTag alloc] initWithName:@"Steady Pan"];
-    FRSFileTag *tag4 = [[FRSFileTag alloc] initWithName:@"Other"];
+    FRSFileTag *tag1 = [[FRSFileTag alloc] initWithName:FRSCaptureModeVideoInterview_StandardDisplayName];
+    FRSFileTag *tag2 = [[FRSFileTag alloc] initWithName:FRSCaptureModeVideoWide_StandardDisplayName];
+    FRSFileTag *tag3 = [[FRSFileTag alloc] initWithName:FRSCaptureModeVideoPan_StandardDisplayName];
+    FRSFileTag *tag4 = [[FRSFileTag alloc] initWithName:FRSCaptureModeOther_StandardDisplayName];
     
     _availableTags = [[NSMutableArray alloc] initWithObjects:tag1, tag2, tag3, tag4, nil];
     

@@ -11,6 +11,7 @@
 #import "FRSFileTag.h"
 #import "FRSFileTagOptionsViewModel.h"
 #import "FRSFileTagViewManager.h"
+#import "FRSCaptureModeEnumHelper.h"
 
 @interface FRSFilePackageGuidelinesAlertView ()
 
@@ -60,9 +61,9 @@
 
 - (void)configureTagOptionsTableView {
     //models
-    FRSFileTag *tag1 = [[FRSFileTag alloc] initWithName:@"Interview"];
-    FRSFileTag *tag2 = [[FRSFileTag alloc] initWithName:@"Wide Shot"];
-    FRSFileTag *tag3 = [[FRSFileTag alloc] initWithName:@"Steady Pan"];
+    FRSFileTag *tag1 = [[FRSFileTag alloc] initWithName:FRSCaptureModeVideoInterview_StandardDisplayName];
+    FRSFileTag *tag2 = [[FRSFileTag alloc] initWithName:FRSCaptureModeVideoWide_StandardDisplayName];
+    FRSFileTag *tag3 = [[FRSFileTag alloc] initWithName:FRSCaptureModeVideoPan_StandardDisplayName];
     
     //view models
     FRSFileTagOptionsViewModel *tagViewModel1 = [[FRSFileTagOptionsViewModel alloc] initWithFileTag:tag1];

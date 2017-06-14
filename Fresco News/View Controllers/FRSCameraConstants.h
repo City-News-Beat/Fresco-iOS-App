@@ -10,7 +10,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 /**
  This enum is used across the app when tagging and setting camera types.
 
