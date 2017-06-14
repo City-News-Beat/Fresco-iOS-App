@@ -27,6 +27,8 @@
 #import "UIView+Helpers.h"
 #import "UIImage+Helpers.h"
 #import "CLLocation+EXIFGPS.h"
+#import "FRSFileTagManager.h"
+
 
 static int const maxVideoLength = 60.0; // in seconds, triggers trim
 
@@ -1014,7 +1016,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
                         //rev testing
                         NSString *localID = assetPlaceholder.localIdentifier;
                         NSLog(@"rev testing after creation localID: %@",localID);
-
+                        [[FRSFileTagManager sharedInstance] saveCaptureMode:self.footerView.captureModeSlider.currentIndex forAssetWithLocalIdentifier:localID];
                         // This dispatch_after is a hotfix. Without it the next button does not update.
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self fetchGalleryAssetsInBackgroundWithCompletion:nil];

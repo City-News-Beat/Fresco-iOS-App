@@ -40,26 +40,8 @@
 
 - (void)saveCaptureMode:(FRSCaptureMode)captureMode forAsset:(PHAsset *)asset {
     if (!asset) return;
-    
-    NSArray *assetModels =  [self fetchCachedTaggedAssetModelForLocalIdentifier:asset.localIdentifier];
-    
-    
-    if(assetModels && assetModels.count>0) {
-        //update
-        FRSTaggedAssetModel *assetModel = assetModels[0];
-        if (assetModel.captureMode.unsignedIntegerValue != captureMode) {
-            assetModel.captureMode = @(captureMode);
-        }
-    }
-    else {
-        //create new
-        FRSTaggedAssetModel *assetModel = [FRSTaggedAssetModel insertNewObjectIntoContext:self.context];
-        assetModel.localIdentifier = asset.localIdentifier;
-        assetModel.captureMode = @(captureMode);
-    }
 
-    [self.context save:nil];
-    
+    [self saveCaptureMode:captureMode forAssetWithLocalIdentifier:asset.localIdentifier];
 }
 
 - (NSArray *)fetchCachedTaggedAssetModelForLocalIdentifier:(NSString *)localIdentifier {
@@ -94,5 +76,31 @@
     }
     return captureMode;
 }
+
+- (void)saveCaptureMode:(FRSCaptureMode)captureMode forAssetWithLocalIdentifier:(NSString *)localIdentifier {
+    if (!localIdentifier) return;
+    
+    NSArray *assetModels =  [self fetchCachedTaggedAssetModelForLocalIdentifier:localIdentifier];
+    
+    
+    if(assetModels && assetModels.count>0) {
+        //update
+        FRSTaggedAssetModel *assetModel = assetModels[0];
+        if (assetModel.captureMode.unsignedIntegerValue != captureMode) {
+            assetModel.captureMode = @(captureMode);
+        }
+    }
+    else {
+        //create new
+        FRSTaggedAssetModel *assetModel = [FRSTaggedAssetModel insertNewObjectIntoContext:self.context];
+        assetModel.localIdentifier = localIdentifier;
+        assetModel.captureMode = @(captureMode);
+    }
+    
+    [self.context save:nil];
+
+}
+
+
 
 @end

@@ -15,7 +15,8 @@
 + (FRSFileTagManager *)sharedInstance;
 
 - (void)saveCaptureMode:(FRSCaptureMode)captureMode forAsset:(PHAsset *)asset;
+- (void)saveCaptureMode:(FRSCaptureMode)captureMode forAssetWithLocalIdentifier:(NSString *)localIdentifier;
 - (FRSCaptureMode)fetchCaptureModeForAsset:(PHAsset *)asset;
-    
+
 
 @end

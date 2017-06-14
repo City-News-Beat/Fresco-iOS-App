@@ -45,39 +45,42 @@
 
 - (void)configureTagIconImageView {
     FRSCaptureMode captureMode = [[FRSFileTagManager sharedInstance] fetchCaptureModeForAsset:self.currentAsset];
-    if(captureMode == FRSCaptureModeInvalid) {
-        if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
-            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
-        }
-        else {
-            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
-        }
-    }
-    else {
-        switch (captureMode) {
-            case FRSCaptureModeVideoInterview:
-                self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-interview-icon"];
-                break;
-            case FRSCaptureModeVideoPan:
-                self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-pan-icon"];
-                break;
-            case FRSCaptureModeVideoWide:
-                self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-wide-icon"];
-                break;
-            case FRSCaptureModeOther: {
-                if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
-                    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
-                }
-                else {
-                    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
-                }
+    switch (captureMode) {
+        case FRSCaptureModeVideoInterview:
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-interview-icon"];
+            break;
+        case FRSCaptureModeVideoPan:
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-pan-icon"];
+            break;
+        case FRSCaptureModeVideoWide:
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-wide-icon"];
+            break;
+        case FRSCaptureModeVideo:
+            [self setVideoTagIcon];
+            break;
+        case FRSCaptureModePhoto:
+            [self setPhotoTagIcon];
+            break;
+        default:
+        {
+            if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
+                [self setVideoTagIcon];
             }
-                break;
-                
-            default:
-                break;
+            else {
+                [self setPhotoTagIcon];
+            }
         }
+            
+            break;
     }
+}
+
+- (void)setPhotoTagIcon {
+    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
+}
+
+- (void)setVideoTagIcon {
+    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
 }
 
 - (void)updateUIForAsset { // always called on main thread
