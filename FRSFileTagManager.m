@@ -72,7 +72,7 @@
     NSArray *assetModels =  [self fetchCachedTaggedAssetModelForLocalIdentifier:asset.localIdentifier];
     if(assetModels && assetModels.count>0) {
         FRSTaggedAssetModel *assetModel = assetModels[0];
-        captureMode = assetModel.captureMode.unsignedIntegerValue;
+        captureMode = assetModel.captureMode.integerValue;
     }
     return captureMode;
 }
@@ -86,7 +86,7 @@
     if(assetModels && assetModels.count>0) {
         //update
         FRSTaggedAssetModel *assetModel = assetModels[0];
-        if (assetModel.captureMode.unsignedIntegerValue != captureMode) {
+        if (assetModel.captureMode.integerValue != captureMode) {
             assetModel.captureMode = @(captureMode);
         }
     }

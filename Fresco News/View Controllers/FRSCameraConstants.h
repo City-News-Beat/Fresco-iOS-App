@@ -21,7 +21,7 @@
  */
 
 
-typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
+typedef NS_ENUM(NSInteger, FRSCaptureMode) {
     FRSCaptureModeVideoInterview = 0,
     FRSCaptureModeVideoPan,
     FRSCaptureModeVideoWide,

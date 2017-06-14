@@ -68,13 +68,24 @@
     
     FRSTagViewMode tagViewMode = FRSTagViewModeNewTag;
     
-    if(asset.fileTag) {
-        [self configureSelectedTagViewModelForAsset: asset];
+    FRSCaptureMode captureMode = [[FRSFileTagManager sharedInstance] fetchCaptureModeForAsset:asset];
+    
+    if([self isCaptureModeInRangeOfAvailableModes:captureMode]) {
+        [self configureSelectedTagViewModelForCaptureMode: captureMode];
         tagViewMode = FRSTagViewModeEditTag;
     }
     
     self.tagAlertView.sourceViewModelsArray = self.tagViewModels;
     [self.tagAlertView showAlertWithTagViewMode:tagViewMode];
+}
+
+- (BOOL)isCaptureModeInRangeOfAvailableModes:(FRSCaptureMode)captureMode {
+    if(captureMode == FRSCaptureModeVideoInterview || captureMode == FRSCaptureModeVideoPan || captureMode == FRSCaptureModeVideoWide || captureMode == FRSCaptureModeOther) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
 }
 
 #pragma mark - Tags
@@ -101,9 +112,10 @@
 
 }
 
-- (void)configureSelectedTagViewModelForAsset:(PHAsset *)asset {
+- (void)configureSelectedTagViewModelForCaptureMode:(FRSCaptureMode)assetCaptureMode {
+
     for (FRSFileTagOptionsViewModel *tagViewModel in _tagViewModels) {
-        if(asset.fileTag.captureMode == tagViewModel.fileTag.captureMode) {
+        if(assetCaptureMode == tagViewModel.fileTag.captureMode) {
             tagViewModel.isSelected = YES;
             tagViewModel.nameText = tagViewModel.fileTag.name;
             tagViewModel.captureMode = tagViewModel.fileTag.captureMode;

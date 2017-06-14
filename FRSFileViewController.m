@@ -480,7 +480,9 @@ static NSInteger const maxAssets = 8;
         [self.selectedIndexPaths addObject:self.tappedIndexPath];
     } else {
     }
-    [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
+    });
 
 }
 
