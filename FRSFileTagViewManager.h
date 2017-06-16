@@ -24,7 +24,6 @@
 
 + (FRSFileTagViewManager *)sharedInstance;
 
-- (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode;
 - (void)showTagViewForAsset:(PHAsset *)asset;
 - (NSMutableArray *)availableTags;
 - (FRSPackageProgressLevel)packageProgressLevel;

@@ -58,10 +58,6 @@
     [self.tagAlertView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
 }
 
-- (void)showTagViewForCaptureMode:(FRSCaptureMode)captureMode andTagViewMode:(FRSTagViewMode)tagViewMode {
-//    [self.tagAlertView showTagViewForCaptureMode:captureMode andTagViewMode:tagViewMode];
-}
-
 - (void)showTagViewForAsset:(PHAsset *)asset {
     self.currentAsset = asset;
     [self resetTagViewModels];

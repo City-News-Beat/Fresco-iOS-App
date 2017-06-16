@@ -427,16 +427,13 @@ static NSInteger const maxAssets = 8;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     self.tappedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     self.tappedIndexPath = indexPath;
-    
-    if(indexPath.row % 2 == 0) {
-        [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeEditTag];
+
+    if (self.tappedAsset.mediaType == PHAssetMediaTypeVideo) {
+        [self.fileTagViewManager showTagViewForAsset:self.tappedAsset];
     }
     else {
-        [self.fileTagViewManager showTagViewForCaptureMode:FRSCaptureModeVideoWide andTagViewMode:FRSTagViewModeNewTag];
+        [self updateSelectedAssets];
     }
-    
-    [self.fileTagViewManager showTagViewForAsset:self.tappedAsset];
-        
 }
 
 - (void)removeTappedAsset {
@@ -459,7 +456,9 @@ static NSInteger const maxAssets = 8;
     PHAsset *representedAsset = self.tappedAsset;
     
     if ([selectedAssets containsObject:representedAsset]) {
-        //[selectedAssets removeObject:representedAsset];
+        if (self.tappedAsset.mediaType == PHAssetMediaTypeImage) {
+            [self removeTappedAsset];
+        }
     } else {
         if ([selectedAssets count] == maxAssets) {
             //should tell user why they can't select anymore cc:imogen
