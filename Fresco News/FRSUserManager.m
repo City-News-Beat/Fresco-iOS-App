@@ -19,6 +19,7 @@ static NSString *const updateUserEndpoint = @"user/update";
 static NSString *const authenticatedUserEndpoint = @"user/me";
 static NSString *const locationEndpoint = @"user/locate";
 static NSString *const getTermsEndpoint = @"terms";
+static NSString *const getMOTDEndpoint = @"motd";
 static NSString *const acceptTermsEndpoint = @"terms/accept";
 static NSString *const settingsEndpoint = @"user/settings";
 static NSString *const updateSettingsEndpoint = @"user/settings/update";
@@ -407,6 +408,12 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 
 - (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     [[FRSAPIClient sharedClient] post:acceptTermsEndpoint withParameters:Nil completion:completion];
+}
+
+#pragma mark - Message of the Day
+
+- (void)getMOTDWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    [[FRSAPIClient sharedClient] post:getMOTDEndpoint withParameters:@{} completion:completion];
 }
 
 #pragma mark - User Defaults

@@ -27,6 +27,7 @@
 #import "FRSTOSAlertView.h"
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
+#import "FRSMOTDAlertView.h"
 
 
 static NSInteger const galleriesPerPage = 12;
@@ -92,6 +93,8 @@ static NSInteger const galleriesPerPage = 12;
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         [self checkStatusAndPresentPermissionsAlert:NO];
     }
+    
+    [FRSMOTDAlertView checkAndPresentAlert];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

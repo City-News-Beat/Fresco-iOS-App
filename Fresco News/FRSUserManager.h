@@ -26,6 +26,7 @@
 - (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)getMOTDWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)reloadUser;
 - (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
