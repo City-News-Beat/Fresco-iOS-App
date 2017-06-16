@@ -28,6 +28,8 @@
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 
+#import "FRSFullScreenViewController.h" // DEBUG.
+
 static NSInteger const galleriesPerPage = 12;
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
@@ -100,8 +102,12 @@ static NSInteger const galleriesPerPage = 12;
     
     [self configureDataSourceOnLoad];
     
-    
-    
+    // DEBUG.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        FRSFullScreenViewController *fullScreenVC = [[FRSFullScreenViewController alloc] init];
+        [self presentViewController:fullScreenVC animated:YES completion:nil];
+    });
+    // DEBUG.
 }
 
 - (void)viewWillAppear:(BOOL)animated {

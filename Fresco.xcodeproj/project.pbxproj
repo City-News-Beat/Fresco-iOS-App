@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0704E5F31EF2E231005B5780 /* FRSFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0704E5F21EF2E231005B5780 /* FRSFullScreenViewController.m */; };
+		0704E5F91EF2F152005B5780 /* FRSFullScreenCloseButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0704E5F81EF2F152005B5780 /* FRSFullScreenCloseButton.xib */; };
+		0704E5FC1EF2F162005B5780 /* FRSFullScreenCloseButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0704E5FB1EF2F162005B5780 /* FRSFullScreenCloseButton.m */; };
 		0709B8511E687B78005E9908 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */; };
 		0709B8531E687BAA005E9908 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */; };
 		070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */; };
@@ -38,6 +41,8 @@
 		0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */; };
 		078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */; };
 		078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */; };
+		078977AC1EF2FCB800F68F95 /* FRSFullScreenUserFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078977AB1EF2FCB800F68F95 /* FRSFullScreenUserFooterView.xib */; };
+		078977AF1EF2FCD400F68F95 /* FRSFullScreenUserFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078977AE1EF2FCD300F68F95 /* FRSFullScreenUserFooterView.m */; };
 		078A536D1E084B100018F112 /* FRSDualUserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 078A536C1E084B100018F112 /* FRSDualUserListViewController.m */; };
 		079392811E79B25A004CC2AD /* FRSGalleryUploadedToast.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0793927E1E79B25A004CC2AD /* FRSGalleryUploadedToast.xib */; };
 		079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 0793927F1E79B25A004CC2AD /* FRSGalleryUploadedToast.m */; };
@@ -358,6 +363,11 @@
 		05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
 		070333451E52811400F57562 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
+		0704E5F11EF2E231005B5780 /* FRSFullScreenViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSFullScreenViewController.h; sourceTree = "<group>"; };
+		0704E5F21EF2E231005B5780 /* FRSFullScreenViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSFullScreenViewController.m; sourceTree = "<group>"; };
+		0704E5F81EF2F152005B5780 /* FRSFullScreenCloseButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSFullScreenCloseButton.xib; sourceTree = "<group>"; };
+		0704E5FA1EF2F162005B5780 /* FRSFullScreenCloseButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSFullScreenCloseButton.h; sourceTree = "<group>"; };
+		0704E5FB1EF2F162005B5780 /* FRSFullScreenCloseButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSFullScreenCloseButton.m; sourceTree = "<group>"; };
 		0709B84F1E687B78005E9908 /* MissingSomethingCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingSomethingCollectionReusableView.h; sourceTree = "<group>"; };
 		0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingSomethingCollectionReusableView.m; sourceTree = "<group>"; };
 		0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
@@ -415,6 +425,9 @@
 		078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSTextNotificationTableViewCell.xib; sourceTree = "<group>"; };
 		078737FB1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTextNotificationTableViewCell.h; sourceTree = "<group>"; };
 		078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextNotificationTableViewCell.m; sourceTree = "<group>"; };
+		078977AB1EF2FCB800F68F95 /* FRSFullScreenUserFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSFullScreenUserFooterView.xib; sourceTree = "<group>"; };
+		078977AD1EF2FCD300F68F95 /* FRSFullScreenUserFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFullScreenUserFooterView.h; sourceTree = "<group>"; };
+		078977AE1EF2FCD300F68F95 /* FRSFullScreenUserFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFullScreenUserFooterView.m; sourceTree = "<group>"; };
 		078A536B1E084B100018F112 /* FRSDualUserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDualUserListViewController.h; sourceTree = "<group>"; };
 		078A536C1E084B100018F112 /* FRSDualUserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDualUserListViewController.m; sourceTree = "<group>"; };
 		0793927E1E79B25A004CC2AD /* FRSGalleryUploadedToast.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryUploadedToast.xib; sourceTree = "<group>"; };
@@ -968,6 +981,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0704E5F41EF2E238005B5780 /* Full Screen */ = {
+			isa = PBXGroup;
+			children = (
+				0704E5F11EF2E231005B5780 /* FRSFullScreenViewController.h */,
+				0704E5F21EF2E231005B5780 /* FRSFullScreenViewController.m */,
+				0704E5FA1EF2F162005B5780 /* FRSFullScreenCloseButton.h */,
+				0704E5FB1EF2F162005B5780 /* FRSFullScreenCloseButton.m */,
+				0704E5F81EF2F152005B5780 /* FRSFullScreenCloseButton.xib */,
+				078977AD1EF2FCD300F68F95 /* FRSFullScreenUserFooterView.h */,
+				078977AE1EF2FCD300F68F95 /* FRSFullScreenUserFooterView.m */,
+				078977AB1EF2FCB800F68F95 /* FRSFullScreenUserFooterView.xib */,
+			);
+			name = "Full Screen";
+			sourceTree = "<group>";
+		};
 		072654E11E3951D500A49DEC /* Gallery Footer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1543,6 +1571,7 @@
 				D41365AB1CA32D63004FE848 /* Detail */,
 				07A30C0B1C50495C00C536EB /* FRSStoriesViewController.h */,
 				07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */,
+				0704E5F41EF2E238005B5780 /* Full Screen */,
 			);
 			name = Stories;
 			sourceTree = "<group>";
@@ -2704,6 +2733,7 @@
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
+				078977AC1EF2FCB800F68F95 /* FRSFullScreenUserFooterView.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
 				F23B15DB1EA006D400A50CB2 /* FRSGalleryMediaVideoCollectionViewCell.xib in Resources */,
 				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
@@ -2715,6 +2745,7 @@
 				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
 				076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */,
 				D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */,
+				0704E5F91EF2F152005B5780 /* FRSFullScreenCloseButton.xib in Resources */,
 				CECB2C9C1E46B48F0035FDCE /* FRSAddDebitCardView.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 			);
@@ -2848,6 +2879,7 @@
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				075962BD1E8C062B0003CC8A /* FRSUploadFailAlertView.m in Sources */,
 				D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */,
+				078977AF1EF2FCD400F68F95 /* FRSFullScreenUserFooterView.m in Sources */,
 				D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */,
 				D4C217D31D64DC010076172D /* FRSPaymentCell.m in Sources */,
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
@@ -2940,6 +2972,7 @@
 				D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
 				CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */,
+				0704E5F31EF2E231005B5780 /* FRSFullScreenViewController.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */,
@@ -2947,6 +2980,7 @@
 				CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */,
 				CECD8D771E73C617004548D1 /* FRSConnectivityAlertView.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
+				0704E5FC1EF2F162005B5780 /* FRSFullScreenCloseButton.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
 				07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */,
