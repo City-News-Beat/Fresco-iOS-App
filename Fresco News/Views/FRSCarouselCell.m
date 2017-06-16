@@ -37,7 +37,6 @@
 - (void)loadImage:(PHAsset *)asset {
     self.asset = asset;
     [self removePlayers];
-    [self updateTagInfo];
 
     if (!imageView) {
         imageView = [[UIImageView alloc] init];
@@ -57,9 +56,8 @@
                      // We should re implement the stretchy header in the carousel cell at some point.
                      // Good resource to follow https://nrj.io/stretchy-uicollectionview-headers/
                      [FRSSnapKit constrainSubview:imageView ToBottomOfParentView:self WithHeight:imageView.frame.size.height];
-                     [self.contentView bringSubviewToFront:self.tagIconImageView];
-                     [self.contentView bringSubviewToFront:self.tagNameLabel];
-                     [self.contentView bringSubviewToFront:self.timeLabel];
+
+                     [self updateTagInfo];
                      
                  });
              }];
@@ -99,8 +97,7 @@
                  [self addGestureRecognizer:tap];
                  
                  [self.contentView bringSubviewToFront:self.muteImageView];
-                 
-                 
+                 [self updateTagInfo];
              });
          }];
     }

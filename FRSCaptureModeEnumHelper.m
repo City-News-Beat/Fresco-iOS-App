@@ -60,9 +60,10 @@
             rawValue = FRSCaptureModePhoto_RawValue;
             break;
         case FRSCaptureModeOther:
-            
-        default:
             rawValue = FRSCaptureModeOther_RawValue;
+
+        default:
+            rawValue = @"";
             break;
     }
     

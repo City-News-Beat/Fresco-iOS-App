@@ -50,7 +50,7 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="LP3-4e-7vc" firstAttribute="top" secondItem="2se-c5-YIB" secondAttribute="bottom" constant="5" id="Bz0-U7-bbQ"/>
+                <constraint firstItem="LP3-4e-7vc" firstAttribute="top" secondItem="mzo-Si-Tlp" secondAttribute="bottom" constant="-4" id="KbJ-A4-Lqi"/>
                 <constraint firstAttribute="trailing" secondItem="IWs-Ay-emF" secondAttribute="trailing" id="RkQ-5J-fZP"/>
                 <constraint firstItem="2se-c5-YIB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="30" id="Z0A-no-jJh"/>
                 <constraint firstItem="IWs-Ay-emF" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bgM-9u-6Qs"/>
