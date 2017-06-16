@@ -231,4 +231,12 @@
     [[FRSFileTagManager sharedInstance] saveCaptureMode:captureMode forAsset:self.currentAsset];
 }
 
+- (void)clearAllCachedInfo {
+    [self.interviewTaggedAssetsArray removeAllObjects];
+    [self.wideShotTaggedAssetsArray removeAllObjects];
+    [self.steadyPanTaggedAssetsArray removeAllObjects];
+    
+    _packageProgressLevel = FRSPackageProgressLevelZero;
+}
+
 @end

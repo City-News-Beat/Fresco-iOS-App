@@ -31,4 +31,6 @@
 - (BOOL)isInterviewTagged;
 - (BOOL)isWideShotTagged;
 - (BOOL)isSteadyPanTagged;
+
+- (void)clearAllCachedInfo;
 @end

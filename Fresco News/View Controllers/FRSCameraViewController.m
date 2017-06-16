@@ -153,6 +153,7 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
         [self configureApertureButton];
         [self rotateAppForOrientation:self.lastOrientation];
     }
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {

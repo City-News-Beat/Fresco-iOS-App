@@ -42,6 +42,8 @@ static NSInteger const maxAssets = 8;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[FRSFileTagViewManager sharedInstance] clearAllCachedInfo];
+    
     selectedAssets = [[NSMutableArray alloc] init];
     self.selectedIndexPaths = [[NSMutableArray alloc] initWithCapacity:0];
 
