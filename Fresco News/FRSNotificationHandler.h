@@ -47,6 +47,9 @@ static NSString *const smoochSupportNotification = @"user-support-request";
 static NSString *const smoochSupportTempNotification = @"Fresco Support Request"; // This will be removed when support is added on the web platform
 static NSString *const smoochNotificationEventName = @"smooch-invite";
 
+// Invalid - that which is not expected from server.
+static NSString *const invalidNotificationEventName = @"invalid-notification-event-name";
+
 @interface FRSNotificationHandler : NSObject
 
 

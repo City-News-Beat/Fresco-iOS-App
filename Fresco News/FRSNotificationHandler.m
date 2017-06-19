@@ -30,8 +30,8 @@ BOOL isSegueingToAssignment;
 
 + (void)handleNotification:(NSDictionary *)push track:(BOOL)shouldTrack {
     
-    NSString *type  = push[TYPE]  ? push[TYPE]  : @"";
-    NSString *title = push[TITLE] ? push[TITLE] : @"";
+    NSString *type  = [NSString getValidStringOrEmptyStringFrom:push[TYPE]];
+    NSString *title = [NSString getValidStringOrEmptyStringFrom:push[TITLE]];
     
     NSMutableDictionary *paramsToTrack = [[NSMutableDictionary alloc] init]; // Create an NSMutableDictionary that will be populated according to the push[TYPE]
     

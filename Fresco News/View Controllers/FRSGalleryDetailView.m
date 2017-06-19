@@ -33,6 +33,7 @@
 
 @property BOOL didPrepareForReply;
 @property (strong, nonatomic) FRSActionBar *actionBar;
+@property (assign, nonatomic) BOOL shouldAutoPlayWithoutUserInteraction;
 
 @end
 
@@ -122,9 +123,30 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
     self.galleryView.delegate.navigationController = self.navigationController;
     
-    [self.galleryView play];
+    //video cell loaded notification.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoCellLoaded:) name:FRSGalleryMediaVideoCollectionViewCellLoadedPost object:nil];
+    
+    self.shouldAutoPlayWithoutUserInteraction = YES;
+
     [self focusOnPost];
     [self layoutSubviews];
+}
+
+-(void)videoCellLoaded:(NSNotification *)notification {
+    if(self.shouldAutoPlayWithoutUserInteraction) {
+        self.shouldAutoPlayWithoutUserInteraction = NO;
+        [self handlePlay];
+    }
+}
+
+- (void)handlePlay {
+    NSLog(@"detail view handlePlay");
+    //performSelector enqueues play on to the current run loop and returns immediately. performSelector after delay:0 also works. Using performSelector vs [self.galleryView play] makes the difference for autoplay. Need to figure out a better way if possible.
+    [self.galleryView performSelector:@selector(play) withObject:nil afterDelay:0.2];
+}
+
+- (void)offScreen {
+    [self.galleryView offScreen];
 }
 
 - (void)getGalleryPurchases {
@@ -254,9 +276,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (BOOL)shouldHaveTextLimit {
     return NO;
-}
-
-- (void)playerWillPlay:(FRSPlayer *)player {
 }
 
 #pragma mark - Articles
@@ -622,7 +641,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Keyboard Handling
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
-    [self.galleryView playerTap:tap];
     [self.commentTextField resignFirstResponder];
 }
 
