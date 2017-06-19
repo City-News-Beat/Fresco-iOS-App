@@ -30,7 +30,7 @@
 #import "FRSFileTagManager.h"
 
 
-static int const maxVideoLength = 60.0; // in seconds, triggers trim
+static int const maxVideoLength = 61.0; // in seconds, triggers trim
 
 @interface FRSCameraViewController () <AVCaptureFileOutputRecordingDelegate, FRSCaptureModeSliderDelegate, FRSCameraFooterViewDelegate, FRSCameraCaptureDelegate, FRSAlertViewDelegate>
 

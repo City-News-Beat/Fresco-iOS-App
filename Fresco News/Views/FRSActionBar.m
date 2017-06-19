@@ -58,7 +58,13 @@
     return self;
 }
 
--(void)configureWithObject:(id)object {
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    self.likeLabel.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.repostLabel.backgroundColor = [UIColor frescoBackgroundColorLight];
+}
+
+- (void)configureWithObject:(id)object {
     
     if ([object isKindOfClass:[FRSGallery class]]) {
         self.gallery = (FRSGallery *)object;

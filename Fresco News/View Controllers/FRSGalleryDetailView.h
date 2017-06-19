@@ -27,7 +27,7 @@
 
 @property (strong, nonatomic) IBOutlet FRSGalleryView *galleryView;
 @property (nonatomic, retain) NSMutableArray *comments;
-@property (strong, nonatomic) FRSGalleryExpandedViewController *parentVC;
+@property (weak, nonatomic) FRSGalleryExpandedViewController *parentVC;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *commentTextField;
 @property (strong, nonatomic) IBOutlet UITableView *articlesTableView;
@@ -40,5 +40,6 @@
 -(void)sendComment;
 -(void)loadGalleryDetailViewWithGallery:(FRSGallery *)gallery parentVC:(FRSGalleryExpandedViewController *)parentVC;
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap;
+- (void)offScreen;
 
 @end

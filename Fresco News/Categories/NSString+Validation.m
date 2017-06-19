@@ -148,4 +148,22 @@
     return [[input componentsSeparatedByCharactersInSet:special] componentsJoinedByString:@""];
 }
 
++ (BOOL)isStringValid:(NSString *)aString {
+    BOOL isStringValid = aString && ![aString isEqual:[NSNull null]] && [aString isKindOfClass:[NSString class]] && ![aString containsString:@"null"] && ![aString containsString:@"Null"] && ![aString containsString:@"NULL"];
+    return isStringValid;
+}
+
++ (NSString *)getValidStringOrEmptyStringFrom:(NSString *)aString {
+    NSString *validString;
+    validString = [self isStringValid:aString] ? aString : @"";
+    return validString;
+}
+
++ (NSString *)getValidString:(NSString *)aString orAlternativeString:(NSString *)altString {
+    NSString *validString;
+    validString = [self isStringValid:aString] ? aString : [NSString getValidStringOrEmptyStringFrom:altString];
+    return validString;
+}
+
+
 @end

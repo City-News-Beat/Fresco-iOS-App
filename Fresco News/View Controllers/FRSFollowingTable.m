@@ -65,7 +65,6 @@
     [self registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
     [self registerNib:[UINib nibWithNibName:@"FRSStoryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyCellIdentifier];
 
-    [self reloadFollowing];
 }
 
 - (void)reloadFollowing {
@@ -89,19 +88,6 @@
         [self reloadData];
       });
     }];
-}
-
-- (void)playerWillPlay:(AVPlayer *)player {
-    for (FRSGalleryTableViewCell *cell in [self visibleCells]) {
-        if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]] || !cell.galleryView.players) {
-            continue;
-        }
-        for (FRSPlayer *cellPlayer in cell.players) {
-            if (cellPlayer != player) {
-                [player pause];
-            }
-        }
-    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -170,56 +156,6 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollDelegate) {
         [self.scrollDelegate scrollViewDidScroll:scrollView];
-    }
-
-    CGPoint currentOffset = scrollView.contentOffset;
-    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-
-    NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
-    if (timeDiff > 0.1) {
-        CGFloat distance = currentOffset.y - lastScrollOffset.y;
-        //The multiply by 10, / 1000 isn't really necessary.......
-        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
-
-        CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
-        if (scrollSpeed > maxScrollVelocity) {
-            isScrollingFast = YES;
-        } else {
-            isScrollingFast = NO;
-        }
-
-        lastScrollOffset = currentOffset;
-        lastOffsetCapture = currentTime;
-    }
-
-    NSArray *visibleCells = [self visibleCells];
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      BOOL taken = FALSE;
-
-      if (visibleCells) {
-          for (FRSGalleryTableViewCell *cell in visibleCells) {
-              /*
-             Start playback mid frame -- at least 300 from top & at least 100 from bottom
-             */
-              if ([cell isKindOfClass:[FRSGalleryTableViewCell class]]) {
-                  if (cell.frame.origin.y - self.contentOffset.y < 300 && cell.frame.origin.y - self.contentOffset.y > 0) {
-                      if (!taken && !isScrollingFast) {
-                          taken = TRUE;
-                          [cell play];
-                      }
-                  } else {
-                      [cell pause];
-                  }
-              }
-          }
-      }
-    });
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (self.scrollDelegate) {
-        [self.scrollDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
     }
 }
 
@@ -363,5 +299,64 @@
 
     return height;
 }
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if(self.isScrolling){
+        if(!decelerate){
+            self.isScrolling = NO;
+            [self handlePlay];
+        }
+    }
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    if (needsUpdate) {
+//        needsUpdate = NO;
+//    }
+    
+    if(self.isScrolling){
+        self.isScrolling = NO;
+        [self handlePlay];
+    }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.isScrolling = YES;
+    [self pausePlayers];
+}
+
+-(void)handlePlay {
+    //Pause currently playing players
+    [self pausePlayers];
+    
+    for (FRSGalleryTableViewCell *cell in self.visibleCells) {
+
+        //Proceed further for gallery cell only.
+        if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
+
+        //Calculate cell Y position relative to the table
+        CGFloat cellRelativeYPosition = cell.frame.origin.y - self.contentOffset.y;
+        
+        if (cellRelativeYPosition < 0.6*self.frame.size.height && cellRelativeYPosition > 0) {
+            //Play the cell which starts at atleast 0 to 60% of the table
+            [cell play];
+            
+            //Need not play any other cells. so break.
+            break;
+        }
+    }
+}
+
+- (void)pausePlayers {
+    for (FRSGalleryTableViewCell *cell in [self visibleCells]) {
+        if (![[cell class] isSubclassOfClass:[FRSGalleryTableViewCell class]]) {
+            continue;
+        }
+        
+        //pause the player in the cell
+        [cell pause];
+    }
+}
+
 
 @end

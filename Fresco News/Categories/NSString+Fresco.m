@@ -7,6 +7,7 @@
 //
 
 #import "NSString+Fresco.h"
+#import "FRSDateFormatters.h"
 
 @implementation NSString (Fresco)
 
@@ -33,11 +34,7 @@
 }
 
 + (NSDate *)dateFromString:(NSString *)string {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-    dateFormatter.timeZone = timeZone;
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
+    NSDateFormatter *dateFormatter = [[FRSDateFormatters sharedInstance] defaultUTCTimeZoneFullDateFormatter];
     return [dateFormatter dateFromString:string];
 }
 
