@@ -51,7 +51,9 @@
     
     // add each asset to our file list
     for (PHAsset *asset in assets) {
-        [assetsForCurrentCollection addObject:asset];
+        if (asset.duration <= 61 && asset.location && asset.creationDate) {
+            [assetsForCurrentCollection addObject:asset];
+        }
     }
 
 }
@@ -128,19 +130,19 @@
      #endif
      */
     
-    
-    for (PHAssetCollection *collection in currentCollection) {
-        // fetch assets based on the sort and date restrictions we set up
-        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
-        
-        // add each asset to our file list
-        for (PHAsset *asset in assets) {
-            //mandating the creation date also. And writing only one if condition that satisfies all requirements.
-            if (asset.duration <= 61 && asset.location && asset.creationDate) {
-                [assetsForCurrentCollection addObject:asset];
-            }
-        }
-    }
+//    
+//    for (PHAssetCollection *collection in currentCollection) {
+//        // fetch assets based on the sort and date restrictions we set up
+//        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
+//        
+//        // add each asset to our file list
+//        for (PHAsset *asset in assets) {
+//            //mandating the creation date also. And writing only one if condition that satisfies all requirements.
+//            if (asset.duration <= 61 && asset.location && asset.creationDate) {
+//                [assetsForCurrentCollection addObject:asset];
+//            }
+//        }
+//    }
     
     // delegate called to notify that we are authorized (only used first time user opens app, and gets the "Please allow access to photos" prompt
     if ([self.delegate respondsToSelector:@selector(filesLoaded)]) {
