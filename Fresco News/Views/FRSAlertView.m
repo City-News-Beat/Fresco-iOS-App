@@ -78,11 +78,49 @@
 
 - (void)adjustFrame {
     self.height = self.leftActionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
-
+    
     NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
     NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
-
+    
     self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+}
+
+- (void)adjustFrameForRotatedState {
+    
+    // The FRSTransparentAlertView needs to support dynamic strings for the message body and button titles.
+    // This makes sure the buttons are always sized and placed properly if there are two buttons in the alert.
+    
+    [self.messageLabel sizeToFit];
+    self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
+    
+    self.height = self.leftActionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
+    
+
+    // This gets kind of messy. Because we're rotating the view when the device is in landscape,
+    // the width becomes the height, and the height becomes the width.
+    if (!self.isRotated) {
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
+        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
+        self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+        
+        if (![self.rightCancelButton.titleLabel.text isEqual:@""] && ![self.leftActionButton.titleLabel.text isEqual:@""] && self.leftActionButton.titleLabel.text != nil && self.rightCancelButton.titleLabel.text != nil) {
+            [self.leftActionButton sizeToFit];
+            self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+            [self.rightCancelButton sizeToFit];
+            [self.rightCancelButton setFrame:CGRectMake(self.frame.size.width - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+        }
+    } else {
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - self.height) / 2;
+        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - ALERT_WIDTH) / 2;
+        self.frame = CGRectMake(xOrigin, yOrigin, self.height, ALERT_WIDTH);
+        
+        if (![self.rightCancelButton.titleLabel.text isEqual:@""] && ![self.leftActionButton.titleLabel.text isEqual:@""] && self.leftActionButton.titleLabel.text != nil && self.rightCancelButton.titleLabel.text != nil) {
+            [self.leftActionButton sizeToFit];
+            self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+            [self.rightCancelButton sizeToFit];
+            [self.rightCancelButton setFrame:CGRectMake(self.frame.size.height - self.rightCancelButton.frame.size.width - 32, self.leftActionButton.frame.origin.y, self.rightCancelButton.frame.size.width + 32, 44)];
+        }
+    }
 }
 
 - (void)addShadowAndClip {
@@ -153,6 +191,8 @@
         completion:^(BOOL finished) {
             [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
           [self removeFromSuperview];
+          self.transform = CGAffineTransformMakeScale(1.0, 1.0);
+
         }];
 }
 
@@ -195,7 +235,7 @@
 -(void)configureWithAttributedMessage:(NSMutableAttributedString *)attributedMessage {
     /* Body Label */
     self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
-    self.messageLabel.alpha = .54;
+    self.messageLabel.textColor = [UIColor colorWithWhite:0 alpha:0.54];
     self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.messageLabel.numberOfLines = 0;
@@ -210,9 +250,9 @@
 
 -(void)configureWithLineViewAtYposition:(CGFloat)ypos {
     /* Action Shadow */
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, ypos, ALERT_WIDTH, 0.5)];
-    line.backgroundColor = [UIColor frescoShadowColor];
-    [self addSubview:line];
+    self.line = [[UIView alloc] initWithFrame:CGRectMake(0, ypos, ALERT_WIDTH, 0.5)];
+    self.line.backgroundColor = [UIColor frescoShadowColor];
+    [self addSubview:self.line];
 }
 
 -(void)configureWithLeftActionTitle:(NSString *)actionTitle withColor:(UIColor *)actionTitleColor andRightCancelTitle:(NSString *)cancelTitle withColor:(UIColor *)cancelTitleColor{
@@ -220,7 +260,7 @@
         /* Single Action Button */
         self.leftActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.leftActionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.leftActionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
+        self.leftActionButton.frame = CGRectMake(0, self.line.frame.origin.y + self.line.frame.size.height, ALERT_WIDTH, 44);
         if(actionTitleColor) {
             [self.leftActionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];
         }
@@ -234,7 +274,7 @@
         /* Left Action */
         self.leftActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.leftActionButton addTarget:self action:@selector(leftActionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.leftActionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+        self.leftActionButton.frame = CGRectMake(16, self.line.frame.origin.y + self.line.frame.size.height, 121, 44);
         self.leftActionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         if(actionTitleColor) {
             [self.leftActionButton setTitleColor:actionTitleColor forState:UIControlStateNormal];

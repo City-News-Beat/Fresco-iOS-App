@@ -24,6 +24,7 @@
 - (void)reportUserAlertAction;
 - (void)blockUserAlertAction;
 - (void)didPressRadioButtonAtIndex:(NSInteger)index;
+- (void)segueToTipsAction;
 
 @end
 
@@ -35,6 +36,7 @@
 @property (strong, nonatomic) UIButton *leftActionButton;
 @property (strong, nonatomic) UIButton *rightCancelButton;
 @property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) UIView *line;
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
 @property CGFloat height;
@@ -120,6 +122,13 @@
  Subclasses can override to perform any custom action. Make sure to call [super rightCancelTapped].
  */
 - (void)rightCancelTapped;
+
+/**
+ Adjusts the frame when the device is rotated. This is used in the transparent alert when paginating tips in the CameraVC.
+ */
+- (void)adjustFrameForRotatedState;
+
+@property BOOL isRotated;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 

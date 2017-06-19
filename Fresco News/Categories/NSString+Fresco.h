@@ -13,5 +13,6 @@
 + (NSString *)randomString;
 + (NSString *)random64CharacterString;
 + (NSDate *)dateFromString:(NSString *)string;
++ (NSAttributedString *)formattedAttributedStringFromString:(NSString *)text boldText:(NSString *)boldText;
 
 @end

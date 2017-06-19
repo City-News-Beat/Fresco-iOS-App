@@ -40,4 +40,6 @@
 
 + (UIColor *)frescoLightBlueColor;
 
++ (UIColor *)frescoTransparentDarkColor;
+
 @end

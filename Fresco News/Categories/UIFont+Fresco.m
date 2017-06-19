@@ -10,10 +10,6 @@
 
 @implementation UIFont (Fresco)
 
-+ (UIFont *)helveticaNeueMediumWithSize:(NSInteger)size {
-    return [UIFont fontWithName:@"HelveticaNeue-Medium" size:size];
-}
-
 + (UIFont *)notaBoldWithSize:(NSInteger)size {
     return [UIFont fontWithName:@"Nota-Bold" size:size];
 }
@@ -28,6 +24,10 @@
 
 + (UIFont *)karminaBoldWithSize:(NSInteger)size {
     return [UIFont fontWithName:@"Karmina-Bold" size:size];
+}
+
++ (UIFont *)notaXBoldWithSize:(NSInteger)size {
+    return [UIFont fontWithName:@"Nota-Xbold" size:size];
 }
 @end
 
