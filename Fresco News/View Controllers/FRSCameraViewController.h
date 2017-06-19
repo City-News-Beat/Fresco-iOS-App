@@ -11,34 +11,14 @@
 #import "FRSFileViewController.h"
 #import "FRSWobbleView.h"
 #import "FRSLocator.h"
-
-typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
-    FRSCaptureModePhoto,
-    FRSCaptureModeVideo
-};
+#import "FRSCameraConstants.h"
 
 @interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate> {
-    float beginGestureScale;
-    float effectiveScale;
-    NSTimer *thumb;
-    NSTimer *wobble;
-    NSTimer *pan;
-    UILabel *title;
 
     NSDate *entry;
     NSDate *exit;
 
-    FRSWobbleView *panAlert;
-    FRSWobbleView *shakeAlert;
-
-    BOOL isShowingWobble;
-    BOOL isShowingPan;
-
-    BOOL hasShaken;
-    BOOL hasPanned;
 }
-
-@property (nonatomic) BOOL isPresented;
 
 @property (nonatomic) FRSCaptureMode captureMode;
 
@@ -50,9 +30,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 - (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
 - (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment selectedGlobalAssignment:(NSDictionary *)globalAssignment;
 
-- (void)handlePreviewButtonTapped;
-- (void)toggleCaptureMode;
-
 - (void)dismissAndReturnToPreviousTab;
+
+@property (nonatomic) BOOL isRecording;
+@property (nonatomic) UIDeviceOrientation lastOrientation;
+
+- (void)rotateAppForOrientation:(UIDeviceOrientation)o; // TODO: Abstract orientation into it's own class.
 
 @end

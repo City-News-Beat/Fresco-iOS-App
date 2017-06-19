@@ -38,4 +38,33 @@
     return [dateFormatter dateFromString:string];
 }
 
+/**
+ Convenience method to format an NSAttributedString with the proper paragraph style.
+ 
+ @param text NSString Entire string to be returned.
+ @param boldText NSString The string you want to be bold.
+ @return NSAttributedString formatted and bolded where specified.
+ */
++ (NSAttributedString *)formattedAttributedStringFromString:(NSString *)text boldText:(NSString *)boldText {
+    
+    NSRange boldRange = [text rangeOfString:boldText];
+    
+    NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
+    paragraphStyle.lineSpacing = 1.2;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attribs = @{
+                              NSForegroundColorAttributeName : [[UIColor blackColor] colorWithAlphaComponent:0.54],
+                              NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightRegular],
+                              NSParagraphStyleAttributeName : paragraphStyle
+                              };
+    
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text attributes:attribs];
+    UIFont *font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
+    NSDictionary *dictBoldText = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    [attributedText setAttributes:dictBoldText range:boldRange];
+    
+    return attributedText;
+}
+
 @end

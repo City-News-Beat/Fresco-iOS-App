@@ -70,4 +70,8 @@
     return [UIColor colorWithRed:59.0 / 255.0 green:89.0 / 255.0 blue:152.0 / 255.0 alpha:1.0];
 }
 
++ (UIColor *)frescoTransparentDarkColor {
+    return [UIColor colorWithRed:7.0 / 255.0 green:24.0 / 255.0 blue:40.0 / 255.0 alpha:0.55];
+}
+
 @end

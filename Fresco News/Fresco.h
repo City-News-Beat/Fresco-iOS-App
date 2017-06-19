@@ -93,6 +93,7 @@ static NSString *const settingsCellIdentifier = @"SettingsCell";
 typedef void (^StoryImageBlock)(NSInteger storyImageIndex);
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);
 typedef void (^ActionButtonBlock)();
+typedef void (^SimpleActionBlock)();
 typedef void (^TransferPercentage)(float percentage);
 typedef void (^FRSAPIResponseBlock)(id responseObject, NSError *error);
 typedef void (^FRSDataResponseBlock)(NSData *data, NSError *error);

@@ -19,5 +19,6 @@ static NSString *const imageCellIdentifier = @"image-picker-cell";
 
 - (void)selected:(BOOL)selected;
 - (void)loadAsset:(PHAsset *)asset;
+- (void)updateFileNumber:(NSInteger)number;
 
 @end

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSFileProgressBarView">
+            <connections>
+                <outlet property="firstBarView" destination="QIz-yp-9TB" id="vUi-ll-tXY"/>
+                <outlet property="secondBarView" destination="6PL-fe-YPF" id="cxg-km-c6H"/>
+                <outlet property="thirdBarView" destination="noq-ZM-HaK" id="upk-n8-187"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="hZa-M0-6gF">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="10"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="tno-8t-rSv">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="10"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QIz-yp-9TB">
+                            <rect key="frame" x="0.0" y="2" width="121.5" height="6"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="6" id="e3W-eA-0Iu"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6PL-fe-YPF">
+                            <rect key="frame" x="126.5" y="2" width="122" height="6"/>
+                            <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="6" id="BXb-e5-FCS"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="noq-ZM-HaK">
+                            <rect key="frame" x="253.5" y="2" width="121.5" height="6"/>
+                            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="6" id="Lo0-TX-nB4"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="noq-ZM-HaK" firstAttribute="centerY" secondItem="tno-8t-rSv" secondAttribute="centerY" id="Nrh-9u-4Ux"/>
+                        <constraint firstItem="6PL-fe-YPF" firstAttribute="centerY" secondItem="tno-8t-rSv" secondAttribute="centerY" id="apj-vm-ktc"/>
+                        <constraint firstItem="QIz-yp-9TB" firstAttribute="centerY" secondItem="tno-8t-rSv" secondAttribute="centerY" id="yJd-Eh-xht"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="tno-8t-rSv" secondAttribute="bottom" id="0Ma-pj-T7p"/>
+                <constraint firstAttribute="trailing" secondItem="tno-8t-rSv" secondAttribute="trailing" id="Dxq-SS-igd"/>
+                <constraint firstItem="tno-8t-rSv" firstAttribute="leading" secondItem="hZa-M0-6gF" secondAttribute="leading" id="T5g-Tu-xpV"/>
+                <constraint firstItem="tno-8t-rSv" firstAttribute="top" secondItem="hZa-M0-6gF" secondAttribute="top" id="ZaU-Ln-sha"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="139.5" y="129"/>
+        </view>
+    </objects>
+</document>

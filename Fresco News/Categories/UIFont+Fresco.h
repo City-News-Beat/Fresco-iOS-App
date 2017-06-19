@@ -10,7 +10,7 @@
 
 @interface UIFont (Fresco)
 
-+ (UIFont *)helveticaNeueMediumWithSize:(NSInteger)size;
++ (UIFont *)notaXBoldWithSize:(NSInteger)size;
 
 + (UIFont *)notaBoldWithSize:(NSInteger)size;
 
