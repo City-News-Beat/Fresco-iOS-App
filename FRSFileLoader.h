@@ -43,6 +43,7 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback;
 - (void)getDataFromAsset:(PHAsset *)asset callback:(DataCallback)callback;
 - (PHAsset *)assetAtIndex:(NSInteger)index;
+- (NSInteger)indexOfAsset:(PHAsset *)asset;
 
 - (PHFetchResult<PHAssetCollection *> *)collections;
 - (NSInteger)numberOfCollections;

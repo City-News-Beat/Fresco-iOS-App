@@ -10,7 +10,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 /**
  This enum is used across the app when tagging and setting camera types.
 
@@ -20,11 +19,27 @@
  - FRSCaptureModeVideo: Regular video capture mode
  - FRSCaptureModePhoto: Photo capture mode
  */
-typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
-    FRSCaptureModeVideoInterview,
+
+
+typedef NS_ENUM(NSInteger, FRSCaptureMode) {
+    FRSCaptureModeVideoInterview = 0,
     FRSCaptureModeVideoPan,
     FRSCaptureModeVideoWide,
     FRSCaptureModeVideo,
     FRSCaptureModePhoto,
-    
+    FRSCaptureModeOther,
+    FRSCaptureModeInvalid = -1,
 };
+
+typedef NS_ENUM(NSUInteger, FRSTagViewMode) {
+    FRSTagViewModeNewTag,
+    FRSTagViewModeEditTag,
+};
+
+typedef NS_ENUM(NSUInteger, FRSPackageProgressLevel) {
+    FRSPackageProgressLevelZero = 0,
+    FRSPackageProgressLevelOne,
+    FRSPackageProgressLevelTwo,
+    FRSPackageProgressLevelThree,
+};
+

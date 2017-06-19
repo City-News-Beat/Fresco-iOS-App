@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface FRSFileSourceNavTitleView : UIView
+@property(nonatomic,weak) IBOutlet UIButton *actionButton;
 
 - (void)updateWithTitle:(NSString *)title;
 - (void)arrowUp:(BOOL)up;

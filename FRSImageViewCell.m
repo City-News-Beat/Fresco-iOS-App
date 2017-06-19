@@ -8,6 +8,8 @@
 
 #import "FRSImageViewCell.h"
 #import "FRSFileNumberedView.h"
+#import "PHAsset+Tagging.h"
+#import "FRSFileTagManager.h"
 
 #define ASSET_SIZE 150
 
@@ -27,7 +29,7 @@
 - (void)loadAsset:(PHAsset *)asset {
     self.currentAsset = asset;
     self.imageView.backgroundColor = [UIColor frescoShadowColor];
-    self.tagIconImageView.image = [UIImage imageNamed:@"tag-photo-icon"];
+    [self configureTagIconImageView];
     PHImageManager *manager = [PHImageManager defaultManager];
     [manager requestImageForAsset:asset
                        targetSize:CGSizeMake(ASSET_SIZE, ASSET_SIZE)
@@ -39,6 +41,46 @@
                         [self updateUIForAsset];
                       });
                     }];
+}
+
+- (void)configureTagIconImageView {
+    FRSCaptureMode captureMode = [[FRSFileTagManager sharedInstance] fetchCaptureModeForAsset:self.currentAsset];
+    switch (captureMode) {
+        case FRSCaptureModeVideoInterview:
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-interview-icon"];
+            break;
+        case FRSCaptureModeVideoPan:
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-pan-icon"];
+            break;
+        case FRSCaptureModeVideoWide:
+            self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-wide-icon"];
+            break;
+        case FRSCaptureModeVideo:
+            [self setVideoTagIcon];
+            break;
+        case FRSCaptureModePhoto:
+            [self setPhotoTagIcon];
+            break;
+        default:
+        {
+            if (_currentAsset.mediaType == PHAssetMediaTypeVideo) {
+                [self setVideoTagIcon];
+            }
+            else {
+                [self setPhotoTagIcon];
+            }
+        }
+            
+            break;
+    }
+}
+
+- (void)setPhotoTagIcon {
+    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-photo-icon"];
+}
+
+- (void)setVideoTagIcon {
+    self.tagIconImageView.image = [UIImage imageNamed:@"tag-select-media-video-icon"];
 }
 
 - (void)updateUIForAsset { // always called on main thread

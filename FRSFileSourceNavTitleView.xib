@@ -13,19 +13,14 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSFileSourceNavTitleView">
-            <connections>
-                <outlet property="arrowImageView" destination="UYC-aA-xcI" id="vAa-My-p7i"/>
-                <outlet property="titleLabel" destination="mwa-9h-9bd" id="mls-f2-p2T"/>
-            </connections>
-        </placeholder>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSFileSourceNavTitleView"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="FRSFileSourceNavTitleView">
             <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Dpf-JP-Psg">
-                    <rect key="frame" x="105" y="7" width="165" height="50"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ck-tz-0t4">
+                    <rect key="frame" x="120.5" y="7" width="134" height="50"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UYC-aA-xcI">
                             <rect key="frame" x="0.0" y="13" width="24" height="24"/>
@@ -35,27 +30,53 @@
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CAMERA ROLL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mwa-9h-9bd">
-                            <rect key="frame" x="29" y="16.5" width="136" height="17"/>
+                            <rect key="frame" x="31" y="12" width="103" height="26"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="26" id="Dxl-iu-24p"/>
+                            </constraints>
                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qaS-hV-Dlw">
+                            <rect key="frame" x="0.0" y="8" width="134" height="34"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal">
+                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
                     </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="165" id="W91-A8-NJT"/>
-                        <constraint firstAttribute="height" constant="50" id="ZUf-UW-HKA"/>
+                        <constraint firstItem="mwa-9h-9bd" firstAttribute="centerY" secondItem="8Ck-tz-0t4" secondAttribute="centerY" id="9yo-vg-yqh"/>
+                        <constraint firstItem="UYC-aA-xcI" firstAttribute="centerY" secondItem="8Ck-tz-0t4" secondAttribute="centerY" id="JXp-zN-N5Q"/>
+                        <constraint firstAttribute="height" constant="50" id="OC0-Fh-ATh"/>
+                        <constraint firstItem="mwa-9h-9bd" firstAttribute="leading" secondItem="UYC-aA-xcI" secondAttribute="trailing" constant="7" id="UTC-Wy-s44"/>
+                        <constraint firstAttribute="trailing" secondItem="qaS-hV-Dlw" secondAttribute="trailing" id="XF1-ea-T6S"/>
+                        <constraint firstItem="UYC-aA-xcI" firstAttribute="leading" secondItem="8Ck-tz-0t4" secondAttribute="leading" id="aLj-gR-KF6"/>
+                        <constraint firstItem="qaS-hV-Dlw" firstAttribute="leading" secondItem="8Ck-tz-0t4" secondAttribute="leading" id="bOi-EX-tdK"/>
+                        <constraint firstAttribute="trailing" secondItem="mwa-9h-9bd" secondAttribute="trailing" id="eVb-sy-RO8"/>
+                        <constraint firstAttribute="width" priority="250" constant="134" id="nEi-qh-w4i"/>
+                        <constraint firstItem="qaS-hV-Dlw" firstAttribute="top" secondItem="8Ck-tz-0t4" secondAttribute="top" constant="8" id="w8T-i9-v5h"/>
+                        <constraint firstAttribute="bottom" secondItem="qaS-hV-Dlw" secondAttribute="bottom" constant="8" id="yXU-UB-8fU"/>
                     </constraints>
-                </stackView>
+                </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="Dpf-JP-Psg" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="FiF-Ti-S8F"/>
-                <constraint firstItem="Dpf-JP-Psg" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="SZL-SI-Mgg"/>
+                <constraint firstItem="8Ck-tz-0t4" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="hkL-kE-Le5"/>
+                <constraint firstItem="8Ck-tz-0t4" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="-0.5" id="uHk-FR-SZ1"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="actionButton" destination="qaS-hV-Dlw" id="DKw-KT-hXH"/>
+                <outlet property="arrowImageView" destination="UYC-aA-xcI" id="E9U-Iy-kEn"/>
+                <outlet property="titleLabel" destination="mwa-9h-9bd" id="rfO-6Z-2Uf"/>
+            </connections>
+            <point key="canvasLocation" x="33.5" y="54"/>
         </view>
     </objects>
 </document>

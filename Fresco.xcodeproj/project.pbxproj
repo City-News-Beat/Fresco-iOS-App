@@ -317,6 +317,27 @@
 		F22315ED1EC648A500D2A6A4 /* FRSFileSourcePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315EB1EC648A500D2A6A4 /* FRSFileSourcePickerTableViewCell.m */; };
 		F22315EE1EC648A500D2A6A4 /* FRSFileSourcePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F22315EC1EC648A500D2A6A4 /* FRSFileSourcePickerTableViewCell.xib */; };
 		F22315F21EC6614100D2A6A4 /* FRSFileSourcePickerViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315F11EC6614100D2A6A4 /* FRSFileSourcePickerViewModel.m */; };
+		F25A04661EDE12530077ABBE /* FRSTagContentAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25A04651EDE12530077ABBE /* FRSTagContentAlertView.m */; };
+		F25F0C551EEAE556007170E2 /* FRSFileHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F25F0C541EEAE556007170E2 /* FRSFileHeaderCell.xib */; };
+		F25F0C581EEAE6B4007170E2 /* FRSFileProgressWithTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C571EEAE6B4007170E2 /* FRSFileProgressWithTextView.m */; };
+		F25F0C5C1EEAF3C5007170E2 /* FRSFileProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C5B1EEAF3C5007170E2 /* FRSFileProgressBarView.m */; };
+		F25F0C5E1EEAF3DB007170E2 /* FRSFileProgressBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F25F0C5D1EEAF3DB007170E2 /* FRSFileProgressBarView.xib */; };
+		F25F0C611EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C601EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.m */; };
+		F25F0C641EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C631EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m */; };
+		F25F0C681EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C661EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m */; };
+		F25F0C691EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F25F0C671EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib */; };
+		F25F0C6C1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */; };
+		F26F29621EDF3F1D000CD021 /* FRSFileTagViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */; };
+		F26F29661EDF5F24000CD021 /* FRSFileTagOptionsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */; };
+		F26F296A1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */; };
+		F26F296B1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F26F29691EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib */; };
+		F26F296E1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */; };
+		F26F29711EDF656A000CD021 /* FRSFileTag.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29701EDF656A000CD021 /* FRSFileTag.m */; };
+		F26F29741EDF6C03000CD021 /* PHAsset+Tagging.m in Sources */ = {isa = PBXBuildFile; fileRef = F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */; };
+		F2B0A5851EF1A99000868A92 /* FRSFileTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A5841EF1A99000868A92 /* FRSFileTagManager.m */; };
+		F2B0A59F1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A59C1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.m */; };
+		F2B0A5A01EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A59E1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m */; };
+		F2B0A5A41EF1B7A000868A92 /* FRSTaggedAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B0A5A31EF1B7A000868A92 /* FRSTaggedAsset.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -944,6 +965,44 @@
 		F22315EC1EC648A500D2A6A4 /* FRSFileSourcePickerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileSourcePickerTableViewCell.xib; sourceTree = "<group>"; };
 		F22315F01EC6614100D2A6A4 /* FRSFileSourcePickerViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileSourcePickerViewModel.h; sourceTree = "<group>"; };
 		F22315F11EC6614100D2A6A4 /* FRSFileSourcePickerViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileSourcePickerViewModel.m; sourceTree = "<group>"; };
+		F25A04641EDE12530077ABBE /* FRSTagContentAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTagContentAlertView.h; sourceTree = "<group>"; };
+		F25A04651EDE12530077ABBE /* FRSTagContentAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTagContentAlertView.m; sourceTree = "<group>"; };
+		F25F0C541EEAE556007170E2 /* FRSFileHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileHeaderCell.xib; sourceTree = "<group>"; };
+		F25F0C561EEAE6B4007170E2 /* FRSFileProgressWithTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileProgressWithTextView.h; sourceTree = "<group>"; };
+		F25F0C571EEAE6B4007170E2 /* FRSFileProgressWithTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileProgressWithTextView.m; sourceTree = "<group>"; };
+		F25F0C5A1EEAF3C5007170E2 /* FRSFileProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileProgressBarView.h; sourceTree = "<group>"; };
+		F25F0C5B1EEAF3C5007170E2 /* FRSFileProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileProgressBarView.m; sourceTree = "<group>"; };
+		F25F0C5D1EEAF3DB007170E2 /* FRSFileProgressBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileProgressBarView.xib; sourceTree = "<group>"; };
+		F25F0C5F1EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFilePackageGuidelinesAlertView.h; sourceTree = "<group>"; };
+		F25F0C601EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFilePackageGuidelinesAlertView.m; sourceTree = "<group>"; };
+		F25F0C621EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFilePackageGuidelinesTagsTableView.h; sourceTree = "<group>"; };
+		F25F0C631EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFilePackageGuidelinesTagsTableView.m; sourceTree = "<group>"; };
+		F25F0C651EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFilePackageGuidelinesTagTableCell.h; sourceTree = "<group>"; };
+		F25F0C661EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFilePackageGuidelinesTagTableCell.m; sourceTree = "<group>"; };
+		F25F0C671EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFilePackageGuidelinesTagTableCell.xib; sourceTree = "<group>"; };
+		F25F0C6A1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCaptureModeEnumHelper.h; sourceTree = "<group>"; };
+		F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCaptureModeEnumHelper.m; sourceTree = "<group>"; };
+		F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagViewManager.h; sourceTree = "<group>"; };
+		F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagViewManager.m; sourceTree = "<group>"; };
+		F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsTableView.h; sourceTree = "<group>"; };
+		F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagOptionsTableView.m; sourceTree = "<group>"; };
+		F26F29671EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsTableViewCell.h; sourceTree = "<group>"; };
+		F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagOptionsTableViewCell.m; sourceTree = "<group>"; };
+		F26F29691EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileTagOptionsTableViewCell.xib; sourceTree = "<group>"; };
+		F26F296C1EDF604B000CD021 /* FRSFileTagOptionsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagOptionsViewModel.h; sourceTree = "<group>"; };
+		F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagOptionsViewModel.m; sourceTree = "<group>"; };
+		F26F296F1EDF656A000CD021 /* FRSFileTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTag.h; sourceTree = "<group>"; };
+		F26F29701EDF656A000CD021 /* FRSFileTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTag.m; sourceTree = "<group>"; };
+		F26F29721EDF6C03000CD021 /* PHAsset+Tagging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PHAsset+Tagging.h"; sourceTree = "<group>"; };
+		F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PHAsset+Tagging.m"; sourceTree = "<group>"; };
+		F2B0A5831EF1A99000868A92 /* FRSFileTagManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileTagManager.h; sourceTree = "<group>"; };
+		F2B0A5841EF1A99000868A92 /* FRSFileTagManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileTagManager.m; sourceTree = "<group>"; };
+		F2B0A59B1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSTaggedAssetModel+CoreDataClass.h"; sourceTree = "<group>"; };
+		F2B0A59C1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSTaggedAssetModel+CoreDataClass.m"; sourceTree = "<group>"; };
+		F2B0A59D1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSTaggedAssetModel+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F2B0A59E1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSTaggedAssetModel+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F2B0A5A21EF1B7A000868A92 /* FRSTaggedAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTaggedAsset.h; sourceTree = "<group>"; };
+		F2B0A5A31EF1B7A000868A92 /* FRSTaggedAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTaggedAsset.m; sourceTree = "<group>"; };
 		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1423,6 +1482,7 @@
 			isa = PBXGroup;
 			children = (
 				6501D56E1C249612001F54EF /* Core Data */,
+				F2B0A5A51EF1B7AE00868A92 /* Fresco Models */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1444,6 +1504,8 @@
 				E7F88EDE1E652AA2007D9D05 /* CLLocation+Fresco.m */,
 				E7F88EDA1E6528FA007D9D05 /* PHAsset+Fresco.h */,
 				E7F88EDB1E6528FA007D9D05 /* PHAsset+Fresco.m */,
+				F26F29721EDF6C03000CD021 /* PHAsset+Tagging.h */,
+				F26F29731EDF6C03000CD021 /* PHAsset+Tagging.m */,
 				E7E582F01BBDC0CA00287324 /* Foundation */,
 				E7E582EF1BBDC0B200287324 /* UIKit */,
 			);
@@ -1624,6 +1686,7 @@
 			children = (
 				D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */,
 				D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */,
+				F2B0A5A11EF1B77E00868A92 /* FRSTaggedAssetModel */,
 				D4B35F5D1CD1B51A00F5C8A8 /* FRSUpload */,
 				65135FDD1C286E1900839149 /* FRSArticle */,
 				65135FDE1C286E2200839149 /* FRSUser */,
@@ -1859,6 +1922,7 @@
 				0709B84F1E687B78005E9908 /* MissingSomethingCollectionReusableView.h */,
 				0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */,
 				0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */,
+				F25F0C541EEAE556007170E2 /* FRSFileHeaderCell.xib */,
 				D43C7FD31C8E46A500A7A7A7 /* FRSImageViewCell.h */,
 				D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */,
 				D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */,
@@ -1868,6 +1932,8 @@
 				F22315EF1EC65DE900D2A6A4 /* Media Source */,
 				D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */,
 				D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */,
+				F25F0C591EEAE6C2007170E2 /* Package Progress */,
+				F26F29631EDF4247000CD021 /* File Tag */,
 			);
 			name = "Image Picker";
 			path = ../..;
@@ -2160,6 +2226,8 @@
 				076C3D8D1EBCE1F100094249 /* FRSTransparentAlertView.m */,
 				075962BB1E8C062B0003CC8A /* FRSUploadFailAlertView.h */,
 				075962BC1E8C062B0003CC8A /* FRSUploadFailAlertView.m */,
+				F25A04641EDE12530077ABBE /* FRSTagContentAlertView.h */,
+				F25A04651EDE12530077ABBE /* FRSTagContentAlertView.m */,
 			);
 			name = "Alert View";
 			sourceTree = "<group>";
@@ -2608,6 +2676,67 @@
 			name = "Media Source";
 			sourceTree = "<group>";
 		};
+		F25F0C591EEAE6C2007170E2 /* Package Progress */ = {
+			isa = PBXGroup;
+			children = (
+				F25F0C561EEAE6B4007170E2 /* FRSFileProgressWithTextView.h */,
+				F25F0C571EEAE6B4007170E2 /* FRSFileProgressWithTextView.m */,
+				F25F0C5A1EEAF3C5007170E2 /* FRSFileProgressBarView.h */,
+				F25F0C5B1EEAF3C5007170E2 /* FRSFileProgressBarView.m */,
+				F25F0C5D1EEAF3DB007170E2 /* FRSFileProgressBarView.xib */,
+				F25F0C5F1EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.h */,
+				F25F0C601EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.m */,
+				F25F0C621EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.h */,
+				F25F0C631EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m */,
+				F25F0C651EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.h */,
+				F25F0C661EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m */,
+				F25F0C671EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib */,
+			);
+			name = "Package Progress";
+			sourceTree = "<group>";
+		};
+		F26F29631EDF4247000CD021 /* File Tag */ = {
+			isa = PBXGroup;
+			children = (
+				F26F29601EDF3F1D000CD021 /* FRSFileTagViewManager.h */,
+				F26F29611EDF3F1D000CD021 /* FRSFileTagViewManager.m */,
+				F2B0A5831EF1A99000868A92 /* FRSFileTagManager.h */,
+				F2B0A5841EF1A99000868A92 /* FRSFileTagManager.m */,
+				F25F0C6A1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.h */,
+				F25F0C6B1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m */,
+				F26F29641EDF5F24000CD021 /* FRSFileTagOptionsTableView.h */,
+				F26F29651EDF5F24000CD021 /* FRSFileTagOptionsTableView.m */,
+				F26F29671EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.h */,
+				F26F29681EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m */,
+				F26F29691EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib */,
+				F26F296C1EDF604B000CD021 /* FRSFileTagOptionsViewModel.h */,
+				F26F296D1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m */,
+				F26F296F1EDF656A000CD021 /* FRSFileTag.h */,
+				F26F29701EDF656A000CD021 /* FRSFileTag.m */,
+			);
+			name = "File Tag";
+			sourceTree = "<group>";
+		};
+		F2B0A5A11EF1B77E00868A92 /* FRSTaggedAssetModel */ = {
+			isa = PBXGroup;
+			children = (
+				F2B0A59B1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.h */,
+				F2B0A59C1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataClass.m */,
+				F2B0A59D1EF1B76200868A92 /* FRSTaggedAssetModel+CoreDataProperties.h */,
+				F2B0A59E1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m */,
+			);
+			name = FRSTaggedAssetModel;
+			sourceTree = "<group>";
+		};
+		F2B0A5A51EF1B7AE00868A92 /* Fresco Models */ = {
+			isa = PBXGroup;
+			children = (
+				F2B0A5A21EF1B7A000868A92 /* FRSTaggedAsset.h */,
+				F2B0A5A31EF1B7A000868A92 /* FRSTaggedAsset.m */,
+			);
+			name = "Fresco Models";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2753,6 +2882,7 @@
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				072348B31EC4F71100FF2B7E /* FRSTipsTableViewCell.xib in Resources */,
+				F25F0C691EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
@@ -2765,12 +2895,15 @@
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
 				CE3799BB1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
+				F25F0C551EEAE556007170E2 /* FRSFileHeaderCell.xib in Resources */,
 				CE1322531E51680200A46D4D /* FRSUsernameViewController.xib in Resources */,
 				CE1322501E5112FF00A46D4D /* FRSStorySearchTableViewCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
+				F25F0C5E1EEAF3DB007170E2 /* FRSFileProgressBarView.xib in Resources */,
 				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
 				CEC570061E5559B9000CCD95 /* FRSDisableAccountViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
+				F26F296B1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.xib in Resources */,
 				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
 				CE5A6FE61E62C3F30001255F /* FRSAssignmentsViewController.xib in Resources */,
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
@@ -2902,6 +3035,7 @@
 				077753181ECA57AF00862120 /* FRSTipsManager.m in Sources */,
 				0731B1B51E4929F90045E6F4 /* FRSSnapKit.m in Sources */,
 				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
+				F2B0A59F1EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataClass.m in Sources */,
 				D453CC861CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */,
 				07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */,
@@ -2923,6 +3057,7 @@
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
+				F25F0C6C1EF03DDB007170E2 /* FRSCaptureModeEnumHelper.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				CE0AABA41E3DEB4A00DD6A8A /* FRSModerationManager.m in Sources */,
 				072971A51E5B67AC000AA8FD /* FRSIndicatorDot.m in Sources */,
@@ -2942,9 +3077,11 @@
 				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
+				F25F0C641EEB12FC007170E2 /* FRSFilePackageGuidelinesTagsTableView.m in Sources */,
 				CE0A6FCA1E3E82AC00E67766 /* FRSGalleryManager.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				CE0AABAE1E3E00BF00DD6A8A /* FRSAssignmentManager.m in Sources */,
+				F26F29711EDF656A000CD021 /* FRSFileTag.m in Sources */,
 				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
 				F22315E91EC6483E00D2A6A4 /* FRSFileSourcePickerTableView.m in Sources */,
 				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
@@ -2978,6 +3115,7 @@
 				079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryTableViewCell.m in Sources */,
+				F26F29741EDF6C03000CD021 /* PHAsset+Tagging.m in Sources */,
 				CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */,
 				D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */,
 				078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */,
@@ -2992,6 +3130,7 @@
 				077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */,
 				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
+				F25F0C5C1EEAF3C5007170E2 /* FRSFileProgressBarView.m in Sources */,
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */,
@@ -3005,17 +3144,20 @@
 				CECB2C9A1E46B4750035FDCE /* FRSAddDebitCardView.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				076C3D911EBD104000094249 /* FRSTipsViewController.m in Sources */,
+				F25F0C611EEB0A23007170E2 /* FRSFilePackageGuidelinesAlertView.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				CA1637441E27F05500779A92 /* FRSGalleryStatusTableViewCell.m in Sources */,
 				D453CC7F1CCA80850091A004 /* MagicalRecordInternal.m in Sources */,
 				072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */,
 				D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
+				F26F29621EDF3F1D000CD021 /* FRSFileTagViewManager.m in Sources */,
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
 				CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */,
 				CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */,
+				F2B0A5851EF1A99000868A92 /* FRSFileTagManager.m in Sources */,
 				071D7B8B1EB7D4E10033A56A /* FRSCameraFooterView.m in Sources */,
 				CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */,
 				CECD8D771E73C617004548D1 /* FRSConnectivityAlertView.m in Sources */,
@@ -3046,8 +3188,10 @@
 				076EF3F61E410E53003996BB /* FRSCoreDataController.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
 				D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */,
+				F26F296E1EDF604B000CD021 /* FRSFileTagOptionsViewModel.m in Sources */,
 				CE1E6EFA1E1C82F900236AC7 /* NSString+Fresco.m in Sources */,
 				F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */,
+				F2B0A5A41EF1B7A000868A92 /* FRSTaggedAsset.m in Sources */,
 				072654E91E3951DF00A49DEC /* FRSGalleryFooterView.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
@@ -3057,6 +3201,7 @@
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				07CA2A0E1ECB5BCB000122EF /* FRSTipsSupportFooterView.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
+				F25F0C581EEAE6B4007170E2 /* FRSFileProgressWithTextView.m in Sources */,
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
@@ -3070,6 +3215,7 @@
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */,
 				CE0AABA81E3DF15B00DD6A8A /* FRSFollowManager.m in Sources */,
+				F25A04661EDE12530077ABBE /* FRSTagContentAlertView.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07C77EFE1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
@@ -3077,10 +3223,12 @@
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
+				F25F0C681EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
+				F26F296A1EDF5FBB000CD021 /* FRSFileTagOptionsTableViewCell.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
@@ -3105,6 +3253,8 @@
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				F2B0A5A01EF1B76300868A92 /* FRSTaggedAssetModel+CoreDataProperties.m in Sources */,
+				F26F29661EDF5F24000CD021 /* FRSFileTagOptionsTableView.m in Sources */,
 				CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				CA70746A1E2EAEB70072643B /* NSURL+Fresco.m in Sources */,
