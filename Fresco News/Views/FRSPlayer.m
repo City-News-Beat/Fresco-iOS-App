@@ -46,6 +46,7 @@
                                                        queue:nil
                                                   usingBlock:^(NSNotification *notification) {
                                                     if (notification.object != self) {
+                                                        NSLog(@"video video UNIVERSAL pause pause");
                                                         [self pause];
                                                     }
                                                   }];

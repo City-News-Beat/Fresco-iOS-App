@@ -305,25 +305,20 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     newDeviceToken = [newDeviceToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     newDeviceToken = [newDeviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:userDeviceToken];
-    
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:userDeviceToken] == Nil) {
-        [FRSTracker track:notificationsEnabled];
-    } else if(oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && [oldDeviceToken isEqualToString:newDeviceToken]) {
-        return;
-    }
+    if(![NSString isStringValid:newDeviceToken]) return; //No need to send an invalid/null string to server.
     
     //If the user isn't logged in, don't proceed with caching the token. It will be requested later.
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) return;
     
+    //Track and send to server.
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:userDeviceToken] == Nil) {
+        [FRSTracker track:notificationsEnabled];
+    }
+
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:userDeviceToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAuthManager sharedInstance] currentInstallation];
-    
-    if(oldDeviceToken) {
-        [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
-    }
     
     [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
                                                   completion:^(id responseObject, NSError *error) {

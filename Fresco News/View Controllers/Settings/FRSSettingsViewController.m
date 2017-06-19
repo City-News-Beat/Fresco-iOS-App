@@ -261,7 +261,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         case AssignmentNotifications: {
             FRSAssignmentNotificationsSwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:assignmentNotficationsSwitchCellIdentifier];
             cell.delegate = self;
-            [cell notificationsEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+            [cell notificationsEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]];
             return cell;
         }
         case NotificationRadius: {
@@ -559,7 +559,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         [[FRSNotificationManager sharedInstance] setPushNotificationWithBool:YES
                                                                   completion:^(id responseObject, NSError *error) {
                                                                     if (responseObject && !error) {
-                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
                                                                         [[NSUserDefaults standardUserDefaults] synchronize];
 
                                                                     } else {
@@ -572,7 +572,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         [[FRSNotificationManager sharedInstance] setPushNotificationWithBool:NO
                                                                   completion:^(id responseObject, NSError *error) {
                                                                     if (responseObject && !error) {
-                                                                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+                                                                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
                                                                         [[NSUserDefaults standardUserDefaults] synchronize];
                                                                     } else {
                                                                         [sender setOn:YES];

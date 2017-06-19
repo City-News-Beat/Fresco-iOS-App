@@ -999,9 +999,6 @@
             [self.radiusSlider setValue:0 animated:YES];
             [[NSUserDefaults standardUserDefaults] setValue:@0 forKey:settingsUserNotificationRadius];
 
-            //Unregister notifications
-            [[UIApplication sharedApplication] unregisterForRemoteNotifications];
-
             [UIView animateWithDuration:0.3
                                   delay:0.15
                                 options:UIViewAnimationOptionCurveEaseInOut

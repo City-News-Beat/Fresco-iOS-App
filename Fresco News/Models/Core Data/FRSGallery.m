@@ -251,16 +251,15 @@
     NSInteger averageHeight = totalHeight / divider;
 
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4 / 3);
+    
+    CGRect captionTextHeight = [self.caption boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 32, 110)
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                               attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]}
+                                  context:nil];
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32, 0)];
+    //12 - Caption text top padding , 44 - Bottom action bar(bar having like, repost, share icons) height, 20 - Padding below action bar.
+    averageHeight += ceil(captionTextHeight.size.height) + 12 + 44 + 20;
 
-    label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    label.text = self.caption;
-    label.numberOfLines = 6;
-
-    averageHeight += [label sizeThatFits:CGSizeMake([UIScreen mainScreen].bounds.size.width - 32, INT_MAX)].height + 12 + 44 + 20;
-
-    label = nil;
     self.generatedHeight = averageHeight;
 
     return averageHeight > 0 ? averageHeight : 280;
