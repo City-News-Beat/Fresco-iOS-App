@@ -27,7 +27,6 @@
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    NSLog(@"prepare the image cell to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
     self.imageView.alpha = 0.0;
@@ -36,7 +35,6 @@
 }
 
 -(void)loadPost:(FRSPost *)post {
-    NSLog(@"loading image post");
     
     __weak typeof(self) weakSelf = self;
 

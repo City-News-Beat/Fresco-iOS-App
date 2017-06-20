@@ -1411,7 +1411,6 @@
 }
 
 -(void)handlePlay {
-    NSLog(@"handlePlay");
     
     [self pausePlayers];
     
@@ -1422,7 +1421,6 @@
         if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
         
         if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-            NSLog(@"playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
             [cell play];
             break;
         }

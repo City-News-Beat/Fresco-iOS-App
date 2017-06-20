@@ -160,7 +160,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:directory isDirectory:&isDir]) {
         if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil]) {
-            NSLog(@"Error: Create folder failed %@", directory);
+            DDLogError(@"Error: Create folder failed %@", directory);
             return;
         }
     }
@@ -174,7 +174,7 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
             BOOL success = [fileManager removeItemAtPath:filePath error:&error];
             
             if (!success || error) {
-                NSLog(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
+                DDLogError(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
             }
         }
     });
@@ -217,9 +217,9 @@ static NSString *const totalUploadFileSize = @"totalUploadFileSize";
     [center addNotificationRequest:request
              withCompletionHandler:^(NSError *_Nullable error) {
                if (!error) {
-                   NSLog(@"Local Notification succeeded!");
+                   DDLogInfo(@"Local Notification succeeded");
                } else {
-                   NSLog(@"Local Notification failed.");
+                   DDLogError(@"Local Notification failed");
                }
              }];
 }

@@ -183,19 +183,16 @@ static NSInteger const maxAssets = 8;
                         change:(NSDictionary *)change
                        context:(void *)context {
     if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
-        NSLog(@"selectedSourceViewModel changed.");
         [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
         [self hideFileSourcePickerTableView];
         [self updateAssetsForCurrentCollection];
     }
     //isExpanded
     if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"isExpanded"]) {
-        NSLog(@"isExpanded changed.");
         [self.fileSourceNavTitleView arrowUp:self.fileSourcePickerTableView.isExpanded];
     }
     //tagUpdated
     if (object == self.fileTagViewManager && [keyPath isEqualToString:@"tagUpdated"]) {
-        NSLog(@"tagUpdated changed.");
         //NSInteger index = [self.fileLoader indexOfAsset:self.tappedAsset];
         //if(index >= 0) {
          //   [fileCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
@@ -239,7 +236,6 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)fileSourceTapped:(UITapGestureRecognizer *)tap {
-    NSLog(@"fileSourceTapped: ");
 }
 
 - (void)setupSecondaryUI {

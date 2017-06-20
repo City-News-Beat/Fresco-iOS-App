@@ -197,7 +197,7 @@
         [[FRSUserManager sharedInstance] postAvatarWithParameters:@{ @"avatar" : imageData }
             completion:^(id responseObject, NSError *error) {
               if (error) {
-                  NSLog(@"Digestion Update Error: %@", error);
+                  DDLogError(@"Digestion Update Error: %@", error);
                   [self presentGenericError];
               } else {
                   dispatch_async(dispatch_get_main_queue(), ^{

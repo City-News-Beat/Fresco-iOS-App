@@ -103,7 +103,6 @@
                         change:(NSDictionary *)change
                        context:(void *)context {
     if (object == self.fileTagOptionsTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
-        NSLog(@"tag alert selectedSourceViewModel changed.");
         self.selectedSourceViewModel = self.fileTagOptionsTableView.selectedSourceViewModel;
         [self dismiss];
     }

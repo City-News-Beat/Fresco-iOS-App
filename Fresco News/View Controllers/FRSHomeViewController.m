@@ -401,7 +401,6 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 -(void)handlePullToRefreshedData:(NSArray *)refreshedGalleries {
-    NSLog(@"Home VC handlePullToRefreshedData");
     
     //Now deleting the cache for every pull to refresh.
     [self deleteCache];
@@ -527,7 +526,7 @@ static NSInteger const galleriesPerPage = 12;
                     [self.appDelegate.coreDataController.managedObjectContext save:Nil];
                 }
                 @catch (NSException *exception) {
-                    NSLog(@"Exception:%@", exception);
+                    
                 }
             }
             
@@ -672,7 +671,6 @@ static NSInteger const galleriesPerPage = 12;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    NSLog(@"Home VC didReceiveMemoryWarning");
     //Deleting the cache from the core data deletes the objects in the highlights array as well and results in wierd issues like crashes/miscalclutaion of heightForGallery. Because highlights array has reference to the same object.
     //Also NSManagedObject class does not conform to NSCopying protocol to implement copyWithZone method and copy the objects into a different instance.
     //We actually need to use our own model objects instead of directly using the coredata managed object instances.
@@ -844,7 +842,6 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 -(void)handlePlay {
-    NSLog(@"handlePlay");
     
     [self pausePlayers];
     
@@ -855,7 +852,6 @@ static NSInteger const galleriesPerPage = 12;
         if (![cell isKindOfClass:[FRSGalleryTableViewCell class]]) continue;
         
         if (cell.frame.origin.y - self.tableView.contentOffset.y < 0.6*self.tableView.frame.size.height && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-            NSLog(@"playing from handle play cell: \n%@ \n%@", cell, [self.tableView indexPathForCell:cell]);
             [cell play];
             break;
         }
@@ -915,7 +911,6 @@ static NSInteger const galleriesPerPage = 12;
                                                              //if needed reload only the loading cell to remove loading.
                                                          } else {
                                                              //since this is initial load, delete the previous entries.
-                                                             NSLog(@"Home VC initial load");
                                                              
                                                              [weakSelf deleteCache];
                                                              //Now delete contents of the highlights array also.
@@ -958,7 +953,6 @@ static NSInteger const galleriesPerPage = 12;
 }
 
 -(void)deleteCache {
-    NSLog(@"Deleting Cached Galleries");
     
     //Can directly execute a delete request for all galleries at once, using a predicate. we need not do a for loop here.
     

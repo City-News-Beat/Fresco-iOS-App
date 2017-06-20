@@ -570,7 +570,6 @@
 
 #pragma mark - Assignments
 - (void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
-    NSLog(@"DICTIONARY: %@", dictionary);
     assignmentCell.assignmentID = [[dictionary objectForKey:@"meta"] objectForKey:@"assignment_id"];
     if ([[[dictionary objectForKey:@"meta"] objectForKey:@"is_global"] boolValue]) {
         assignmentCell.actionButton.hidden = true;

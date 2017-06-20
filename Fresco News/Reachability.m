@@ -28,7 +28,7 @@ NSString *kReachabilityChangedNotification = @"kNetworkReachabilityChangedNotifi
 static void PrintReachabilityFlags(SCNetworkReachabilityFlags flags, const char *comment) {
 #if kShouldPrintReachabilityFlags
 
-    NSLog(@"Reachability Flag Status: %c%c %c%c%c%c%c%c%c %s\n",
+    DDLogInfo(@"Reachability Flag Status: %c%c %c%c%c%c%c%c%c %s\n",
           (flags & kSCNetworkReachabilityFlagsIsWWAN) ? 'W' : '-',
           (flags & kSCNetworkReachabilityFlagsReachable) ? 'R' : '-',
 

@@ -208,7 +208,7 @@
           device.subjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange;
           [device unlockForConfiguration];
       } else {
-          NSLog(@"Could not lock device for configuration: %@", error.localizedDescription);
+          DDLogError(@"Could not lock device for configuration: %@", error.localizedDescription);
       }
     });
 }

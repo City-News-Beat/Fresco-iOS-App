@@ -46,7 +46,6 @@
 #pragma mark - Actions
 
 - (void)mainLabelTapped {
-    NSLog(@"progress mainLabelTapped.");
     if(self.actionBlock) self.actionBlock();
 }
 

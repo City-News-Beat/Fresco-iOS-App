@@ -162,7 +162,6 @@
                              }];
         });
     } else if ([notificationInfo[@"type"] isEqualToString:@"failure"]) {
-        NSLog(@"handleUploadNotificaiton");
         
         dispatch_async(dispatch_get_main_queue(), ^{
             CGRect navFrame = self.frame;

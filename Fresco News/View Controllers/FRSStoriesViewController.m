@@ -294,10 +294,9 @@ static NSInteger const storiesPerPage = 12;
                                                  completion:^(NSArray *stories, NSError *error) {
                                                    if (!stories.count) {
                                                        if (error) {
-                                                           NSLog(@"Fetch Stories Error: %@", error.localizedDescription);
+                                                           DDLogError(@"Fetch Stories Error: %@", error.localizedDescription);
                                                        } else {
                                                            self.loadNoMore = YES;
-                                                           NSLog(@"No error fetching stories but the request returned zero results");
                                                        }
                                                    }
 

@@ -96,7 +96,7 @@
 
         return responseObjects;
     } else {
-        NSLog(@"Error. No route of serialization.");
+        DDLogError(@"Error. No route of serialization.");
     }
 
     return response;

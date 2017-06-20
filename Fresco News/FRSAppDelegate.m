@@ -269,9 +269,9 @@
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)())completionHandler {
     
-    NSLog(@"Handle push from background or closed");
+    DDLogInfo(@"Handle push from background or closed");
+    
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
-    NSLog(@"%@", response.notification.request.content.userInfo);
     [FRSNotificationHandler handleNotification:response.notification.request.content.userInfo track:YES];
 }
 
@@ -324,7 +324,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
                                                   completion:^(id responseObject, NSError *error) {
-                                                      NSLog(@"Updated user installation");
+                                                      DDLogInfo(@"Updated user installation");
                                                   }];
 
 }

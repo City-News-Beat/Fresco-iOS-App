@@ -260,8 +260,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     self.currentCommentUserDictionary = comment.userDictionary;
 
-    NSLog(@"userDictionary: %@", comment.userDictionary);
-
     NSString *username;
 
     if (comment.userDictionary[@"username"] != [NSNull null] && (![comment.userDictionary[@"username"] isEqualToString:@"<null>"])) {

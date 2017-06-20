@@ -134,7 +134,6 @@
                         change:(NSDictionary *)change
                        context:(void *)context {
     if (object == self.tagAlertView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
-        NSLog(@"tag manager selectedSourceViewModel changed.");
         //self.selectedSourceViewModel = self.fileTagOptionsTableView.selectedSourceViewModel;
         self.currentAsset.fileTag = self.tagAlertView.selectedSourceViewModel.fileTag;
         self.tagUpdated = YES;

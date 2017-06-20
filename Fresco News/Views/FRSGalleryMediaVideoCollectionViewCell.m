@@ -41,7 +41,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    NSLog(@"prepare the video player to be reusable here.");
     [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
     self.imageView.alpha = 1.0;
@@ -81,14 +80,12 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 -(void)showBufferIndicator {
-    NSLog(@"showing buffer.");
     self.bufferIndicator.frame = CGRectMake(16, 16, 20, 20);
     [self addSubview:self.bufferIndicator];
     [self.bufferIndicator startAnimating];
 }
 
 -(void)hideBufferIndicator {
-    NSLog(@"hiding buffer.");
     [self.bufferIndicator removeFromSuperview];
     [self.bufferIndicator stopLoading];
 }
@@ -98,7 +95,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 -(void)loadPost:(FRSPost *)post {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSLog(@"rev load video post: %@", post.uid);
         self.post = post;
         
         [self configureMuteIconDisplay:YES];
@@ -114,11 +110,8 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     if(!self.post.imageUrl) return;
     
     if(self.isPlaying) {
-        NSLog(@"This cell is playing video so not loading the image for this video cell");
         return;
     }
-    
-    NSLog(@"rev load imageView for video post: %@",self.post.uid);
     
     [self.imageView sd_setImageWithURL:[NSURL
                                         URLResizedFromURLString:self.post.imageUrl
@@ -143,8 +136,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     
     dispatch_async( dispatch_get_main_queue(),
                    ^{
-                       
-                       NSLog(@"video video play play: %@ \nin Cell: %@", _mPlayer, weakSelf);
                        
                        if(![[weakSelf urlOfCurrentPlayer:_mPlayer] isEqualToString:weakSelf.post.videoUrl]) {
                            //Player needs to change its URL. can show buffer now.
@@ -171,7 +162,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                            
                            [weakSelf.mPlayer play];
                            
-                           NSLog(@"Mute every video that starts playing.");
                            [weakSelf mute:YES];
                        }
                    });
@@ -184,7 +174,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     __weak typeof(self) weakSelf = self;
     dispatch_async( dispatch_get_main_queue(),
                    ^{
-                       NSLog(@"video video pause pause");
                        [weakSelf bringSubviewToFront:weakSelf.imageView];
                        [weakSelf.mPlayer pause];
                    });
@@ -200,8 +189,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 
 -(void)tapped {
     if([self isPlaying]) {
-        NSLog(@"new video mute Unmute");
-        
         self.mPlayer.muted = !self.mPlayer.muted;
         [self configureMuteIconDisplay:self.mPlayer.muted];
     }
@@ -220,7 +207,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
     if (![currentPlayerAsset isKindOfClass:AVURLAsset.class]) return nil;
     
     NSString *urlString = [[(AVURLAsset *)currentPlayerAsset URL] absoluteString];
-    NSLog(@"urlString of current video player: %@", urlString);
     return urlString;
 }
 
@@ -247,7 +233,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 }
 
 -(void)removeImage {
-    NSLog(@"removing image from video cell.");
     [UIView animateWithDuration:0.3 animations:^{
         self.imageView.alpha = 0.0;
     } completion:^(BOOL finished) {
@@ -328,7 +313,7 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
 -(void)assetFailedToPrepareForPlayback:(NSError *)error
 {
     /* Display the error. */
-    NSLog(@"Unable to play. The item did not become ready to play. Error::: %@", [error localizedDescription]);
+    DDLogError(@"Unable to play media. Error: %@", [error localizedDescription]);
     
 }
 
@@ -492,7 +477,6 @@ static void *AVPlayerDemoPlaybackViewControllerCurrentItemObservationContext = &
                 
             case AVPlayerItemStatusReadyToPlay:
             {
-                NSLog(@"Ready to play item.....");
                 if(self.imageView.alpha == 1) {
                     [self play];
                 }

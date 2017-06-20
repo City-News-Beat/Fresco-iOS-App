@@ -77,9 +77,7 @@
     if (index >= [assetsForCurrentCollection count]) {
         return Nil;
     }
-    //rev testing
-    PHAsset *asset = [assetsForCurrentCollection objectAtIndex:index];
-    NSLog(@"rev testing asset.localIdentifier: %@", asset.localIdentifier);
+    
     return [assetsForCurrentCollection objectAtIndex:index];
 }
 
@@ -168,7 +166,6 @@
     currentCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:options];
 
     [currentCollections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"currentCollections [(PHAssetCollection *)obj localizedTitle]::: %@", [(PHAssetCollection *)obj localizedTitle]);
     }];
     
 }

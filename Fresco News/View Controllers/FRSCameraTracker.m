@@ -22,7 +22,7 @@
                                                      [self outputAccelertionData:accelerometerData.acceleration];
                                                      
                                                  } else {
-                                                     NSLog(@"Motion Manager Error: %@", error);
+                                                     DDLogError(@"Motion Manager Error: %@", error);
                                                  }
                                              }];
     

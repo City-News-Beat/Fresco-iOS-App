@@ -80,7 +80,7 @@
                                                                                           CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
                                                                                           
                                                                                           if (!destination)
-                                                                                              NSLog(@"***Could not create image destination ***");
+                                                                                              DDLogError(@"Could not create image destination");
                                                                                           
                                                                                           //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
                                                                                           CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef)metadata);
@@ -91,7 +91,7 @@
                                                                                           success = CGImageDestinationFinalize(destination);
                                                                                           
                                                                                           if (!success) {
-                                                                                              NSLog(@"***Could not create data from image destination ***");
+                                                                                              DDLogError(@"Could not create data from image destination");
                                                                                               completion(nil, error);
                                                                                               self.isCapturing = NO;
                                                                                               
@@ -115,7 +115,7 @@
                                                                                                                                         completionHandler:^(BOOL success, NSError *error) {
                                                                                                                                             
                                                                                                                                             if (!success) {
-                                                                                                                                                NSLog(@"Error occurred while saving image to photo library: %@", error);
+                                                                                                                                                DDLogError(@"Error occurred while saving image to photo library: %@", error);
                                                                                                                                                 self.isCapturing = NO;
                                                                                                                                                 completion(nil, error);
                                                                                                                                             } else {
@@ -137,7 +137,7 @@
                                                                                                           [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
                                                                                                           
                                                                                                           if (error) {
-                                                                                                              NSLog(@"Error occured while writing image data to a temporary file: %@", error);
+                                                                                                              DDLogError(@"Error occured while writing image data to a temporary file: %@", error);
                                                                                                               completion(nil, error);
                                                                                                           } else {
                                                                                                               [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
@@ -147,7 +147,7 @@
                                                                                                                                         completionHandler:^(BOOL success, NSError *error) {
                                                                                                                                             
                                                                                                                                             if (!success) {
-                                                                                                                                                NSLog(@"Error occurred while saving image to photo library: %@", error);
+                                                                                                                                                DDLogError(@"Error occurred while saving image to photo library: %@", error);
                                                                                                                                                 completion(nil, error);
                                                                                                                                             } else {
                                                                                                                                                 completion(newImageData, error);
@@ -163,12 +163,12 @@
                                                                                               }
                                                                                           }];
                                                                                       } else {
-                                                                                          NSLog(@"Could not capture still image: %@", error);
+                                                                                          DDLogError(@"Could not capture still image: %@", error);
                                                                                           completion(NO, nil);
                                                                                       }
                                                                                   });
                                                                               } else {
-                                                                                  NSLog(@"Could not capture still image: %@", error);
+                                                                                  DDLogError(@"Could not capture still image: %@", error);
                                                                                   completion(NO, nil);
                                                                               }
                                                                           }];

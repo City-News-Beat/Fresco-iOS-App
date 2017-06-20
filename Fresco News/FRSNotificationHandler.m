@@ -270,7 +270,7 @@ BOOL isSegueingToAssignment;
                                                                [navController pushViewController:detailVC animated:TRUE];
                                                            }
                                                        } else {
-                                                           NSLog(@"Unable to create gallery from id: %@", [galleryIDs objectAtIndex:i]);
+                                                           DDLogError(@"Unable to create gallery from id: %@", [galleryIDs objectAtIndex:i]);
                                                        }
                                                    }];
     }

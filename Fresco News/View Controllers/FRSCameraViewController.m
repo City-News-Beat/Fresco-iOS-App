@@ -986,7 +986,7 @@ static int const maxVideoLength = 61.0; // in seconds, triggers trim
     BOOL success = YES;
 
     if (error) {
-        NSLog(@"Movie file finishing error: %@", error);
+        DDLogError(@"Movie file finishing error: %@", error);
         success = [error.userInfo[AVErrorRecordingSuccessfullyFinishedKey] boolValue];
     }
     if (success) {
@@ -1012,11 +1012,9 @@ static int const maxVideoLength = 61.0; // in seconds, triggers trim
               }
                   completionHandler:^(BOOL success, NSError *error) {
                     if (!success) {
-                        NSLog(@"Could not save movie to photo library: %@", error);
+                        DDLogError(@"Could not save movie to photo library: %@", error);
                     } else {
-                        //rev testing
                         NSString *localID = assetPlaceholder.localIdentifier;
-                        NSLog(@"rev testing after creation localID: %@",localID);
                         [[FRSFileTagManager sharedInstance] saveCaptureMode:self.footerView.captureModeSlider.currentIndex forAssetWithLocalIdentifier:localID];
                         // This dispatch_after is a hotfix. Without it the next button does not update.
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
