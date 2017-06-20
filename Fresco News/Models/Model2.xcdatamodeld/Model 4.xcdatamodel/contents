@@ -159,6 +159,22 @@
         <relationship name="galleries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="creator" inverseEntity="FRSGallery" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSPost" inverseName="creator" inverseEntity="FRSPost" syncable="YES"/>
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSStory" inverseName="creator" inverseEntity="FRSStory" syncable="YES"/>
+        <relationship name="userStories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUserStory" inverseName="creator" inverseEntity="FRSUserStory" syncable="YES"/>
+    </entity>
+    <entity name="FRSUserStory" representedClassName="FRSUserStory" syncable="YES">
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="editedDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="imageURLs" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="liked" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="reposted" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="reposted_by" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reposts" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="userStories" inverseEntity="FRSUser" syncable="YES"/>
     </entity>
     <elements>
         <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
@@ -167,8 +183,9 @@
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="270"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
-        <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="285"/>
-        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="645"/>
         <element name="FRSTaggedAssetModel" positionX="-981" positionY="0" width="128" height="75"/>
+        <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="285"/>
+        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="660"/>
+        <element name="FRSUserStory" positionX="-981" positionY="0" width="128" height="240"/>
     </elements>
 </model>
