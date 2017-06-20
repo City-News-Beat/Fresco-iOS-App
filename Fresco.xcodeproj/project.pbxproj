@@ -319,6 +319,7 @@
 		F20595551EF84C76001AA390 /* FRSGalleryMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F205954F1EF84C76001AA390 /* FRSGalleryMediaView.xib */; };
 		F20595581EF84CFA001AA390 /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F20595571EF84CFA001AA390 /* PSCustomViewFromXib.m */; };
 		F205955B1EF84D28001AA390 /* FRSPlayerPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F205955A1EF84D28001AA390 /* FRSPlayerPlaybackView.m */; };
+		F20595B81EF9B49D001AA390 /* FRSUserStoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20595B71EF9B49D001AA390 /* FRSUserStoryManager.swift */; };
 		F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */; };
 		F22315E11EC5E2C800D2A6A4 /* FRSFileNumberedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */; };
 		F22315E41EC632CC00D2A6A4 /* FRSFileSourceNavTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315E31EC632CC00D2A6A4 /* FRSFileSourceNavTitleView.m */; };
@@ -979,6 +980,8 @@
 		F20595571EF84CFA001AA390 /* PSCustomViewFromXib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCustomViewFromXib.m; sourceTree = "<group>"; };
 		F20595591EF84D28001AA390 /* FRSPlayerPlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayerPlaybackView.h; sourceTree = "<group>"; };
 		F205955A1EF84D28001AA390 /* FRSPlayerPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayerPlaybackView.m; sourceTree = "<group>"; };
+		F20595B71EF9B49D001AA390 /* FRSUserStoryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSUserStoryManager.swift; sourceTree = "<group>"; };
+		F20595BA1EF9BB3C001AA390 /* Fresco-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Fresco-Bridging-Header.h"; path = "Headers/Fresco-Bridging-Header.h"; sourceTree = "<group>"; };
 		F22315DB1EC5DD4C00D2A6A4 /* FRSFileNumberedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileNumberedView.h; sourceTree = "<group>"; };
 		F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileNumberedView.m; sourceTree = "<group>"; };
 		F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileNumberedView.xib; sourceTree = "<group>"; };
@@ -1380,6 +1383,7 @@
 		1EDA44B31AA4CCC70082E08D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F20595BA1EF9BB3C001AA390 /* Fresco-Bridging-Header.h */,
 				D4DBF1921CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png */,
 				D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */,
 				1E408B761AA79A370057AC16 /* PrefixHeader.pch */,
@@ -1504,6 +1508,7 @@
 				077753171ECA57AF00862120 /* FRSTipsManager.m */,
 				076EF3F41E410E53003996BB /* FRSCoreDataController.h */,
 				076EF3F51E410E53003996BB /* FRSCoreDataController.m */,
+				F20595B71EF9B49D001AA390 /* FRSUserStoryManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -3160,6 +3165,7 @@
 				D453CC881CCA80850091A004 /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				CE3799BA1E5826B900B6743A /* FRSAssignmentNotificationsSwitchTableViewCell.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
+				F20595B81EF9B49D001AA390 /* FRSUserStoryManager.swift in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
@@ -3492,8 +3498,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Headers/Fresco-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -3535,7 +3542,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Headers/Fresco-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -3543,6 +3551,7 @@
 		1EDA44DA1AA4CCC70082E08D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -3565,6 +3574,7 @@
 		1EDA44DB1AA4CCC70082E08D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -3675,7 +3685,8 @@
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Headers/Fresco-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Beta;
@@ -3683,6 +3694,7 @@
 		E78493011BA882D2004491DA /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
