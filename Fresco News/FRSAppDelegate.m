@@ -46,7 +46,9 @@
                              didFinishLaunchingWithOptions:launchOptions];
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-
+    
+    [self configureLogger];
+    
     [FRSTracker configureFabric];
     [FRSTracker launchAdjust];
     [FRSTracker configureSmooch];
@@ -117,7 +119,7 @@
 
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-
+    
     return YES;
 }
 
@@ -383,6 +385,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [self.window makeKeyAndVisible];
 }
 
+- (void)configureLogger {
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+}
 
 #pragma mark - Quick Actions
 
