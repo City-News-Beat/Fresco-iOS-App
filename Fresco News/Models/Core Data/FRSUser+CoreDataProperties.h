@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 @property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
+@property (nullable, nonatomic, retain) NSSet<FRSStory *> *userStories;
 @property (nullable, nonatomic, retain) NSString *address;
 @property (nullable, nonatomic, retain) NSString *disabledReason;
 @property (nullable, nonatomic, retain) NSArray *fieldsNeeded;

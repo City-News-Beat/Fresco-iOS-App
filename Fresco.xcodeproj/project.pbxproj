@@ -320,6 +320,8 @@
 		F20595581EF84CFA001AA390 /* PSCustomViewFromXib.m in Sources */ = {isa = PBXBuildFile; fileRef = F20595571EF84CFA001AA390 /* PSCustomViewFromXib.m */; };
 		F205955B1EF84D28001AA390 /* FRSPlayerPlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = F205955A1EF84D28001AA390 /* FRSPlayerPlaybackView.m */; };
 		F20595B81EF9B49D001AA390 /* FRSUserStoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20595B71EF9B49D001AA390 /* FRSUserStoryManager.swift */; };
+		F20595BF1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = F20595BC1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.m */; };
+		F20595C01EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F20595BE1EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.m */; };
 		F22315DD1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */; };
 		F22315E11EC5E2C800D2A6A4 /* FRSFileNumberedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */; };
 		F22315E41EC632CC00D2A6A4 /* FRSFileSourceNavTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F22315E31EC632CC00D2A6A4 /* FRSFileSourceNavTitleView.m */; };
@@ -982,6 +984,10 @@
 		F205955A1EF84D28001AA390 /* FRSPlayerPlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayerPlaybackView.m; sourceTree = "<group>"; };
 		F20595B71EF9B49D001AA390 /* FRSUserStoryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSUserStoryManager.swift; sourceTree = "<group>"; };
 		F20595BA1EF9BB3C001AA390 /* Fresco-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Fresco-Bridging-Header.h"; path = "Headers/Fresco-Bridging-Header.h"; sourceTree = "<group>"; };
+		F20595BB1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUserStory+CoreDataClass.h"; sourceTree = "<group>"; };
+		F20595BC1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUserStory+CoreDataClass.m"; sourceTree = "<group>"; };
+		F20595BD1EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUserStory+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F20595BE1EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUserStory+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F22315DB1EC5DD4C00D2A6A4 /* FRSFileNumberedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileNumberedView.h; sourceTree = "<group>"; };
 		F22315DC1EC5DD4C00D2A6A4 /* FRSFileNumberedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileNumberedView.m; sourceTree = "<group>"; };
 		F22315E01EC5E2C800D2A6A4 /* FRSFileNumberedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileNumberedView.xib; sourceTree = "<group>"; };
@@ -1721,6 +1727,7 @@
 			children = (
 				D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */,
 				D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */,
+				F20595C11EF9C6C6001AA390 /* FRSUserStory */,
 				F2B0A5A11EF1B77E00868A92 /* FRSTaggedAssetModel */,
 				D4B35F5D1CD1B51A00F5C8A8 /* FRSUpload */,
 				65135FDD1C286E1900839149 /* FRSArticle */,
@@ -2708,6 +2715,17 @@
 			name = Foundation;
 			sourceTree = "<group>";
 		};
+		F20595C11EF9C6C6001AA390 /* FRSUserStory */ = {
+			isa = PBXGroup;
+			children = (
+				F20595BB1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.h */,
+				F20595BC1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.m */,
+				F20595BD1EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.h */,
+				F20595BE1EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.m */,
+			);
+			name = FRSUserStory;
+			sourceTree = "<group>";
+		};
 		F22315EF1EC65DE900D2A6A4 /* Media Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -3196,6 +3214,7 @@
 				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				F22315ED1EC648A500D2A6A4 /* FRSFileSourcePickerTableViewCell.m in Sources */,
+				F20595BF1EF9C6BE001AA390 /* FRSUserStory+CoreDataClass.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				CECB2C9A1E46B4750035FDCE /* FRSAddDebitCardView.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
@@ -3261,6 +3280,7 @@
 				07CA2A0E1ECB5BCB000122EF /* FRSTipsSupportFooterView.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				F25F0C581EEAE6B4007170E2 /* FRSFileProgressWithTextView.m in Sources */,
+				F20595C01EF9C6BE001AA390 /* FRSUserStory+CoreDataProperties.m in Sources */,
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,

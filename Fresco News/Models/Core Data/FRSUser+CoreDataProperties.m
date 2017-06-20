@@ -30,6 +30,7 @@
 @dynamic galleries;
 @dynamic posts;
 @dynamic stories;
+@dynamic userStories;
 @dynamic address;
 @dynamic fieldsNeeded;
 @dynamic blocked;
