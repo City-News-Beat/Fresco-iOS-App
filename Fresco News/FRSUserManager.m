@@ -317,7 +317,7 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
             [appDelegate.coreDataController saveContext];
         }
     } @catch (NSException *exception) {
-        NSLog(@"Error saving context.");
+        DDLogError(@"Error saving context.");
     }
 }
 
@@ -351,7 +351,6 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         if(completion) return completion(nil, [NSError unAuthenticatedError]);
     } else {
-        NSLog(@"UPDATED USER LOCATION");
         [[FRSAPIClient sharedClient] post:locationEndpoint
                            withParameters:@{
                                             @"lat": [NSNumber numberWithDouble:(float)location.coordinate.latitude],

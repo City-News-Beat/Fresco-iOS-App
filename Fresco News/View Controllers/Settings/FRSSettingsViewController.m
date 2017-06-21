@@ -591,7 +591,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         [alert show];
 
         [[FRSAuthManager sharedInstance] unlinkTwitter:^(id responseObject, NSError *error) {
-            NSLog(@"Disconnect Twitter Error: %@", error);
+            DDLogError(@"Disconnect Twitter Error: %@", error);
         }];
 
     } else {
@@ -649,7 +649,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
             
             self.facebookCell.connectedSwitch.enabled = YES;
             if (error) {
-                NSLog(@"Disconnect Facebook Error: %@", error);
+                DDLogError(@"Disconnect Facebook Error: %@", error);
                 [sender setOn:YES];
             } else {
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:facebookConnected];

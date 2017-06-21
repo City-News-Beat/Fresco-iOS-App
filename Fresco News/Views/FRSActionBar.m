@@ -71,7 +71,7 @@
     } else if ([object isKindOfClass:[FRSStory class]]) {
         self.story = (FRSStory *)object;
     } else {
-        NSLog(@"Unable to identify object for action bar: %@", object);
+        DDLogError(@"Unable to identify object for action bar: %@", object);
         return; // We don't want to configure the action bar if it's not associated with a gallery or a story.
     }
     

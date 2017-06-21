@@ -56,7 +56,7 @@
 
           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
           NSInteger responseCode = response.statusCode;
-          NSLog(@"Disable Account Error: %ld", (long)responseCode);
+          DDLogError(@"Disable Account Error: %ld", (long)responseCode);
 
           if (error.code == -1009) {
               FRSConnectivityAlertView *alert = [[FRSConnectivityAlertView alloc] initNoConnectionBannerWithBackButton:YES];

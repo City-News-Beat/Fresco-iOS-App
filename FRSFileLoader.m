@@ -39,41 +39,76 @@
     return self;
 }
 
+- (void)fetchAssetsForCollection:(PHAssetCollection *)collection {
+    currentCollection = collection;
+    [assetsForCurrentCollection removeAllObjects];
+    
+    PHFetchOptions *options = [[PHFetchOptions alloc] init];
+    // have most recently created assets at this top of list
+    options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO] ];
+
+    PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:currentCollection options:options];
+    
+    // add each asset to our file list
+    for (PHAsset *asset in assets) {
+        if (asset.duration <= 61 && asset.location && asset.creationDate) {
+            [assetsForCurrentCollection addObject:asset];
+        }
+    }
+
+}
+
 - (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback {
     currentRange = range;
     
     if (![self checkAuthorization]) {
         [self getAuthorization];
     }
-    
-    if (range.location + range.length >= [allAssets count]) {
-        range.length = [allAssets count] - range.length - 1; // reached end of media
+
+    if (range.location + range.length >= [assetsForCurrentCollection count]) {
+        range.length = [assetsForCurrentCollection count] - range.length - 1; // reached end of media
     }
-    
-    NSArray *toReturn = [allAssets objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+
+    NSArray *toReturn = [assetsForCurrentCollection objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     callback(toReturn, Nil);
 }
 
 - (PHAsset *)assetAtIndex:(NSInteger)index {
-    if (index >= [allAssets count]) {
+    if (index >= [assetsForCurrentCollection count]) {
         return Nil;
     }
     
-    return [allAssets objectAtIndex:index];
+    return [assetsForCurrentCollection objectAtIndex:index];
+}
+
+- (NSInteger)indexOfAsset:(PHAsset *)asset {
+    if (asset) {
+        return [assetsForCurrentCollection indexOfObject:asset];
+    }
+    else {
+        return -1;
+    }
 }
 
 - (NSInteger)numberOfAssets {
-    return [allAssets count];
+    return [assetsForCurrentCollection count];
+}
+
+- (NSInteger)numberOfCollections {
+    if (!currentCollections) {
+        return 0;
+    }
+    return [currentCollections count];
 }
 
 // load a list of all photos / videos from the last 7 days
 - (void)getAssets {
-    if (!currentCollection) {
+    if (!currentCollections) {
         [self getAlbumCollection];
     }
-    
-    if (!allAssets) { // discount doublecheck
-        allAssets = [[NSMutableArray alloc] init];
+
+    if (!assetsForCurrentCollection) { // discount doublecheck
+        assetsForCurrentCollection = [[NSMutableArray alloc] init];
     }
     
     
@@ -93,34 +128,51 @@
      #endif
      */
     
-    
-    for (PHAssetCollection *collection in currentCollection) {
-        // fetch assets based on the sort and date restrictions we set up
-        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
-        
-        // add each asset to our file list
-        for (PHAsset *asset in assets) {
-            //mandating the creation date also. And writing only one if condition that satisfies all requirements.
-            if (asset.duration <= 61 && asset.location && asset.creationDate) {
-                [allAssets addObject:asset];
-            }
-        }
-    }
+//    
+//    for (PHAssetCollection *collection in currentCollection) {
+//        // fetch assets based on the sort and date restrictions we set up
+//        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
+//        
+//        // add each asset to our file list
+//        for (PHAsset *asset in assets) {
+//            //mandating the creation date also. And writing only one if condition that satisfies all requirements.
+//            if (asset.duration <= 61 && asset.location && asset.creationDate) {
+//                [assetsForCurrentCollection addObject:asset];
+//            }
+//        }
+//    }
     
     // delegate called to notify that we are authorized (only used first time user opens app, and gets the "Please allow access to photos" prompt
-    if (self.delegate) {
+    if ([self.delegate respondsToSelector:@selector(filesLoaded)]) {
         [self.delegate filesLoaded];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(collectionsLoaded)]) {
+        [self.delegate collectionsLoaded];
+    }
+
+}
+
+- (PHFetchResult<PHAssetCollection *> *)collections {
+    return currentCollections;
 }
 
 // create collection from photo library
 - (void)getAlbumCollection {
-    currentCollection = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:Nil];
+    PHFetchOptions *options = [[PHFetchOptions alloc] init];
+    // alphabetical order of the folders.
+    options.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"localizedTitle" ascending:YES] ];
+
+    currentCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:options];
+
+    [currentCollections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    }];
+    
 }
 
 // request authorization, take appropriate actions
 - (void)getAuthorization {
-    if ([allAssets count] > 0)
+    if ([assetsForCurrentCollection count] > 0)
         return;
     
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
@@ -196,6 +248,26 @@
                                                     callback([UIImage imageWithData:imageData], Nil, phAsset.mediaType, error);
                                                 }];
 }
+
+#pragma mark - Fetch assets on the fly
+
+// multiple folder collections
+//- (NSInteger)numberOfAssetsInCollection:(PHAssetCollection *)assetCollection {
+//    
+//}
+//
+//- (void)fetchAssetsWithinIndexRange:(NSRange)range inCollection:(PHAssetCollection *)assetCollection callback:(MediaCallback)callback {
+//    
+//}
+//
+//- (void)getDataFromAsset:(PHAsset *)asset inCollection:(PHAssetCollection *)assetCollection callback:(DataCallback)callback {
+//    
+//}
+//
+//- (PHAsset *)assetAtIndex:(NSInteger)index inCollection:(PHAssetCollection *)assetCollection {
+//    
+//}
+
 
 @end
 

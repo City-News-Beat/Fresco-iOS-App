@@ -176,7 +176,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
     [[FRSPaymentManager sharedInstance] deletePayment:payment[@"id"]
                                            completion:^(id responseObject, NSError *error) {
-                                             NSLog(@"%@", responseObject);
+                                               DDLogError(@"Delete Payment Error: %@", responseObject);
                                              if (!error) {
                                                  [self reloadPayments];
                                              } else {

@@ -16,4 +16,12 @@
 #import "FRSReachability.h"
 #import "NSString+Validation.h"
 
+#import <CocoaLumberjack/CocoaLumberjack.h>
+
+#if DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelOff;
+#endif
+
 #endif

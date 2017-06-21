@@ -107,16 +107,16 @@
     
     if([application respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)]){
         bgTaskId = [application beginBackgroundTaskWithExpirationHandler:^{
-            NSLog(@"background task %lu expired", (unsigned long)bgTaskId);
+            DDLogInfo(@"Background task %lu expired", (unsigned long)bgTaskId);
             [application endBackgroundTask:bgTaskId];
             bgTaskId = UIBackgroundTaskInvalid;
         }];
         
         if (self.backgroundTask == UIBackgroundTaskInvalid || self.backgroundTask == 0) {
             self.backgroundTask = bgTaskId;
-            NSLog(@"started master task %lu", (unsigned long)self.backgroundTask);
+            DDLogInfo(@"Started master task %lu", (unsigned long)self.backgroundTask);
         } else {
-            NSLog(@"started background task %lu", (unsigned long)bgTaskId);
+            DDLogInfo(@"Started background task %lu", (unsigned long)bgTaskId);
         }
     }
 }
@@ -232,7 +232,7 @@
 
 #pragma mark - Communication Methods
 
-/*
+/**
  Sends NSNotification out through the default notification center, for any observers to use the new location
  */
 - (void)sendNotificationForUpdate {

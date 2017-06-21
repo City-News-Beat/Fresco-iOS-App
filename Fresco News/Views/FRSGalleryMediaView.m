@@ -151,7 +151,6 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 #pragma mark - ScrollView Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"media scrollViewDidScroll");
     if ([self.delegate respondsToSelector:@selector(mediaScrollViewDidScroll:)]) {
         [self.delegate mediaScrollViewDidScroll:scrollView];
     }
@@ -161,11 +160,9 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"media scrollViewDidEndDecelerating");
     
     CGFloat pageWidth = scrollView.frame.size.width;
     NSInteger page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    NSLog(@"Current page -> %ld",(long)page);
     
     if ([self.delegate respondsToSelector:@selector(mediaDidChangeToPage:)]) {
         [self.delegate mediaDidChangeToPage:page];
@@ -183,7 +180,7 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 #pragma mark - Key Actions
 -(void)play {
     if (!self.collectionView.visibleCells.count) {
-        NSLog(@"oops no visible cells. This can never occur though.");
+        DDLogError(@"No visible cells.");
         return;
     }
     
@@ -191,23 +188,19 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
     
     CGFloat pageWidth = self.collectionView.frame.size.width;
     NSInteger page = floor((self.collectionView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    NSLog(@"play collection view current page -> %ld",(long)page);
     
     for (UICollectionViewCell *visibleCell in self.collectionView.visibleCells) {
         //get the accurate visible cell matching the page.
-        NSLog(@"visibleCell x: %f expected page x: %f \nCELL: %@", visibleCell.frame.origin.x, pageWidth*page, visibleCell);
         if (visibleCell.frame.origin.x != pageWidth*page) {
             continue;
         }
         BOOL displayMuteIcon = NO;
         if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-            NSLog(@"visibleCell is video cell ");
-            NSLog(@"visibleCell playing");
             displayMuteIcon = YES;
             [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell play];
         }
         else {
-            NSLog(@"visibleCell is image");
+            // visibleCell is an image.
         }
         [self configureMuteIconDisplay:displayMuteIcon];
         
@@ -222,7 +215,6 @@ static NSString *VideoCellIdentifier = @"FRSGalleryMediaVideoCellIdentifier";
 -(void)pause {
     for (UICollectionViewCell *visibleCell in self.collectionView.visibleCells) {
         if ([visibleCell isKindOfClass:[FRSGalleryMediaVideoCollectionViewCell class]]) {
-            NSLog(@"pausing.. cell.. : %@", visibleCell);
             [(FRSGalleryMediaVideoCollectionViewCell *)visibleCell pause];
         }
     }

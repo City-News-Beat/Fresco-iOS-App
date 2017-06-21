@@ -41,7 +41,7 @@
           }
         }
         failure:^(NSError *error) {
-          NSLog(@"ERROR %@", error);
+            DDLogError(@"Haneke imageview error: %@", error);
         }];
 }
 

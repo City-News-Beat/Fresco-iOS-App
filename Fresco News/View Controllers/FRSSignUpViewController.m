@@ -1549,8 +1549,6 @@
 
         NSArray *views = [self.scrollView subviews];
 
-        NSLog(@"%lu", (unsigned long)[views count]);
-
         if (self.notificationsEnabled) {
 
             //            for(UIView *subview in vi)
@@ -1560,7 +1558,6 @@
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
             //self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
             //self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
-            NSLog(@"TOSContainer View Y %f", self.TOSContainerView.frame.origin.y);
             self.TOSContainerView.frame = CGRectMake(self.TOSContainerView.frame.origin.x, 658, self.TOSContainerView.frame.size.width, self.TOSContainerView.frame.size.height);
             self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + 44);
 

@@ -60,7 +60,7 @@
         weakSelf.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
         
         if (weakSelf.orderedPosts.count == 0) {
-            NSLog(@"Ooops Gallery does not have posts!!!! this should never happen at loadGallery");
+            DDLogError(@"This gallery does not have posts");
             return;
         }
         
@@ -125,8 +125,6 @@
 - (void)updateUserInfoForCurrentPost {
     FRSPost *adjustedPost = (FRSPost *)self.orderedPosts[self.adjustedPage];
     
-    NSLog(@"updateUserInfoForCurrentPost adjustedPost.creator.profileImage: %@", adjustedPost.creator.profileImage);
-    
     if (adjustedPost.creator.profileImage != Nil && ![adjustedPost.creator.profileImage isEqual:[NSNull null]] && [[adjustedPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![adjustedPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:adjustedPost.creator.profileImage].absoluteString.length > 1) {
         NSString *smallAvatar = [adjustedPost.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
@@ -161,7 +159,7 @@
         self.adjustedPage = 0;
         
         if (self.orderedPosts.count == 0) {
-            NSLog(@"Ooops Gallery does not have posts!!!! this should never happen at initWithFrame");
+            DDLogError(@"This gallery does not have posts");
             return nil;
         }
 
@@ -190,7 +188,7 @@
     self.adjustedPage = 0;
     
     if (self.orderedPosts.count == 0) {
-        NSLog(@"Ooops Gallery does not have posts!!!! this should never happen at configureWithFrame");
+        DDLogError(@"This gallery does not have posts");
        return;
     }
 
@@ -639,7 +637,6 @@
             
             FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
             
-            NSLog(@"[currentPost.creator uid]: %@", [currentPost.creator uid]);
             if ([currentPost.creator uid] != nil) {
                 [self.delegate.navigationController pushViewController:userViewController animated:YES];
             }

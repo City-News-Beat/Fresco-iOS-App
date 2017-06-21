@@ -178,7 +178,7 @@
     } else if (dict[@"curator"] != [NSNull null] && dict[@"curator"] != nil) {
         dictKey = @"curator";
     } else {
-        NSLog(@"Unable to find owner or curator on gallery");
+        DDLogError(@"Unable to find owner or curator on gallery");
         return;
     }
 

@@ -11,12 +11,30 @@
 #import "UIFont+Fresco.h"
 #import "FRSImageViewCell.h"
 #import "FRSFileFooterCell.h"
+#import "FRSFileProgressWithTextView.h"
+#import "FRSFileSourceNavTitleView.h"
+#import "FRSFileSourcePickerTableView.h"
+#import "FRSFileSourcePickerViewModel.h"
+#import "FRSFileLoader.h"
+#import "FRSFileTagViewManager.h"
+#import "FRSFilePackageGuidelinesAlertView.h"
+#import "FRSTipsViewController.h"
 
 static NSInteger const maxAssets = 8;
 
-@interface FRSFileViewController ()
+@interface FRSFileViewController () <FRSFileLoaderDelegate, FRSFileTagViewManagerDelegate>
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
+@property (strong, nonatomic) NSMutableArray *selectedIndexPaths;
+
+@property (weak, nonatomic) FRSFileSourceNavTitleView *fileSourceNavTitleView;
+@property (strong, nonatomic) FRSFileSourcePickerTableView *fileSourcePickerTableView;
+@property (strong, nonatomic) FRSFileLoader *fileLoader;
+@property (strong, nonatomic) PHAssetCollection *currentAssetCollection;
+@property (strong, nonatomic) FRSFileTagViewManager *fileTagViewManager;
+@property (strong, nonatomic) PHAsset *tappedAsset;
+@property (strong, nonatomic) NSIndexPath *tappedIndexPath;
+
 @end
 
 @implementation FRSFileViewController
@@ -24,37 +42,24 @@ static NSInteger const maxAssets = 8;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[FRSFileTagViewManager sharedInstance] clearAllCachedInfo];
+    
     selectedAssets = [[NSMutableArray alloc] init];
+    self.selectedIndexPaths = [[NSMutableArray alloc] initWithCapacity:0];
 
-    [self.navigationController.navigationBar setTitleTextAttributes:
-                                                 @{ NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                    NSFontAttributeName : [UIFont notaBoldWithSize:18] }];
     self.automaticallyAdjustsScrollViewInsets = NO;
+
+    [self setupFileSourcePickerTableView];
     [self setupCollectionView];
     [self setupSecondaryUI];
-
-    self.navigationItem.title = @"CHOOSE MEDIA";
-
-    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-    [container addSubview:backButton];
-
-    backButton.tintColor = [UIColor whiteColor];
-    backButton.frame = CGRectMake(-3, 0, 24, 24);
-    [backButton setImage:backButtonImage forState:UIControlStateNormal];
-    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
-
-    self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
+    [self setupFileLoader];
+    [self setupTagViewManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setupNavigationBarViews];
 
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
 
     if (selectedAssets.count >= 1) {
@@ -96,6 +101,143 @@ static NSInteger const maxAssets = 8;
     [self.backTapButton removeFromSuperview];
 }
 
+- (void)setupNavigationBarViews {
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{ NSForegroundColorAttributeName : [UIColor whiteColor],
+        NSFontAttributeName : [UIFont notaBoldWithSize:18] }];
+    
+    [self setupNavigationBarButtons];
+}
+
+-(void)setupFileSourcePickerTableView {
+    self.fileSourcePickerTableView = [[FRSFileSourcePickerTableView alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 4*44) style:UITableViewStylePlain];
+    [self.view addSubview:self.fileSourcePickerTableView];
+    self.fileSourcePickerTableView.alpha = 0;
+    self.fileSourcePickerTableView.isExpanded = NO;
+    
+    self.fileSourcePickerTableView.sourceViewModelsArray = [[NSMutableArray alloc] initWithCapacity:0];
+    [self.fileSourcePickerTableView addObserver:self forKeyPath:@"selectedSourceViewModel" options:0 context:nil];
+    [self.fileSourcePickerTableView addObserver:self forKeyPath:@"isExpanded" options:0 context:nil];
+    
+}
+
+- (void)setupNavigationBarButtons {
+    //left
+    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *backContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [backContainer addSubview:backButton];
+    
+    backButton.tintColor = [UIColor whiteColor];
+    backButton.frame = CGRectMake(-3, 0, 24, 24);
+    [backButton setImage:backButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backContainer];
+    
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+
+    //right
+    UIImage *questionButtonImage = [UIImage imageNamed:@"question-white"];
+    UIButton *questionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *questionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [questionContainer addSubview:questionButton];
+    
+    questionButton.tintColor = [UIColor whiteColor];
+    questionButton.frame = CGRectMake(-3, 0, 24, 24);
+    [questionButton setImage:questionButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *questionBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:questionContainer];
+    [questionButton addTarget:self action:@selector(questionTapped) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = questionBarButtonItem;
+
+    //title view
+    self.fileSourceNavTitleView = [[[NSBundle mainBundle] loadNibNamed:@"FRSFileSourceNavTitleView" owner:self options:nil] lastObject];
+    
+    //    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
+    self.navigationItem.titleView = self.fileSourceNavTitleView;
+    
+    [self.fileSourceNavTitleView.actionButton addTarget:self action:@selector(navigationBarTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+//    self.navigationItem.titleView = [[FRSFileSourceNavTitleView alloc] init];
+//    self.fileSourceNavTitleView = (FRSFileSourceNavTitleView *)self.navigationItem.titleView;
+    [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
+    [self.fileSourceNavTitleView arrowUp:NO];
+//    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fileSourceTapped:)];
+//    singleTap.numberOfTapsRequired = 1;
+//    self.fileSourceNavTitleView.userInteractionEnabled = YES;
+//    [self.fileSourceNavTitleView addGestureRecognizer:singleTap];
+    
+}
+
+- (void)setupTagViewManager {
+    self.fileTagViewManager = [FRSFileTagViewManager sharedInstance];
+    self.fileTagViewManager.delegate = self;
+    [self.fileTagViewManager addObserver:self forKeyPath:@"tagUpdated" options:0 context:nil];
+}
+
+#pragma mark - Key Value Observing
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"selectedSourceViewModel"]) {
+        [self.fileSourceNavTitleView updateWithTitle:self.fileSourcePickerTableView.selectedSourceViewModel.name];
+        [self hideFileSourcePickerTableView];
+        [self updateAssetsForCurrentCollection];
+    }
+    //isExpanded
+    if (object == self.fileSourcePickerTableView && [keyPath isEqualToString:@"isExpanded"]) {
+        [self.fileSourceNavTitleView arrowUp:self.fileSourcePickerTableView.isExpanded];
+    }
+    //tagUpdated
+    if (object == self.fileTagViewManager && [keyPath isEqualToString:@"tagUpdated"]) {
+        //NSInteger index = [self.fileLoader indexOfAsset:self.tappedAsset];
+        //if(index >= 0) {
+         //   [fileCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+        //}
+        [self updateSelectedAssets];
+    }
+
+}
+
+- (void)navigationBarTapped {
+    if(self.fileSourcePickerTableView.alpha == 0) {
+        [self showFileSourcePickerTableView];
+    }
+    else {
+        [self hideFileSourcePickerTableView];
+    }
+    [self.fileSourcePickerTableView reloadData];
+}
+
+- (void)questionTapped {
+    [self segueToTipsAction];
+}
+
+- (void)showPackageGuidelines {
+    FRSFilePackageGuidelinesAlertView *guidelinesView= [[FRSFilePackageGuidelinesAlertView alloc] init];
+    guidelinesView.seeTipsAction = ^{
+        [self segueToTipsAction];
+    };
+    [guidelinesView show];
+}
+
+- (void)showFileSourcePickerTableView {
+    self.fileSourcePickerTableView.alpha = 1;
+    self.fileSourcePickerTableView.isExpanded = YES;
+    [self.view bringSubviewToFront:self.fileSourcePickerTableView];
+}
+
+- (void)hideFileSourcePickerTableView {
+    self.fileSourcePickerTableView.alpha = 0;
+    self.fileSourcePickerTableView.isExpanded = NO;
+}
+
+- (void)fileSourceTapped:(UITapGestureRecognizer *)tap {
+}
+
 - (void)setupSecondaryUI {
 
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -119,8 +261,8 @@ static NSInteger const maxAssets = 8;
     // Do any additional setup after loading the view.
     UINib *imageNib = [UINib nibWithNibName:@"FRSImageViewCell" bundle:[NSBundle mainBundle]]; // used a xib for cell b/c originally I was going to have separate cells for video and image.
     UINib *footerNib = [UINib nibWithNibName:@"FRSFileFooterCell" bundle:[NSBundle mainBundle]];
+    UINib *headerNib = [UINib nibWithNibName:@"FRSFileHeaderCell" bundle:[NSBundle mainBundle]];
 
-    fileLoader = [[FRSFileLoader alloc] initWithDelegate:self]; // single instance of class which manages requesting file info to populate UI
 
     // layout for collection view (3 across, 1px spacing, like in sketch)
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -138,6 +280,7 @@ static NSInteger const maxAssets = 8;
 
     [fileCollectionView registerNib:imageNib forCellWithReuseIdentifier:imageCellIdentifier];
     [fileCollectionView registerNib:footerNib forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter];
+    [fileCollectionView registerNib:headerNib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader];
     [self.view addSubview:fileCollectionView];
     fileCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
 
@@ -155,6 +298,13 @@ static NSInteger const maxAssets = 8;
 
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     fileCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
+}
+
+- (void)setupFileLoader {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        self.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
+        [self updateFileSourcePickerTableView];
+    });
 }
 
 - (void)next:(id)sender {
@@ -182,7 +332,7 @@ static NSInteger const maxAssets = 8;
 /* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    int numberOfAssets = (int)[fileLoader numberOfAssets];
+    int numberOfAssets = (int)[self.fileLoader numberOfAssets];
     int currentAsset = (int)indexPath.row;
 
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -212,7 +362,7 @@ static NSInteger const maxAssets = 8;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [fileLoader numberOfAssets];
+    return [self.fileLoader numberOfAssets];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -220,32 +370,51 @@ static NSInteger const maxAssets = 8;
     return CGSizeMake(screenWidth, 225);
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    float screenWidth = [UIScreen mainScreen].bounds.size.width;
+    return CGSizeMake(screenWidth, 80);
+}
+
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if (kind == UICollectionElementKindSectionFooter) {
         FRSFileFooterCell *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
-
+        
         CGRect newFrame = footer.frame;
         newFrame.size.height = 225;
         [footer setFrame:newFrame];
         [footer setup];
-
+        
         return footer;
+    }
+    else if (kind == UICollectionElementKindSectionHeader) {
+        __weak typeof(self) weakSelf = self;
+
+        FRSFileProgressWithTextView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader forIndexPath:indexPath];
+        
+        CGRect newFrame = header.frame;
+        newFrame.size.height = 80;
+        [header setFrame:newFrame];
+        [header setupWithShowPackageGuidelinesBlock:^{
+            [weakSelf showPackageGuidelines];
+        }];
+        
+        return header;
     }
 
     return nil;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+    PHAsset *representedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
 
     // dequeues cell, as we've registered a nib we will always get a non-nil value
     FRSImageViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:imageCellIdentifier forIndexPath:indexPath];
-    cell.fileLoader = fileLoader; // gives the cell our (weakly stored) instance of our file loader
+    cell.fileLoader = self.fileLoader; // gives the cell our (weakly stored) instance of our file loader
     [cell loadAsset:representedAsset]; // gives instruction to update UI
 
     if ([selectedAssets containsObject:representedAsset]) {
         [cell selected:YES];
-        //if video and if > 60 seconds
+        [cell updateFileNumber:([selectedAssets indexOfObject:representedAsset] + 1)];
     } else {
         [cell selected:NO];
     }
@@ -254,27 +423,64 @@ static NSInteger const maxAssets = 8;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
-    FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
+    self.tappedAsset = [self.fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
+    self.tappedIndexPath = indexPath;
 
+    if (self.tappedAsset.mediaType == PHAssetMediaTypeVideo) {
+        [self.fileTagViewManager showTagViewForAsset:self.tappedAsset];
+    }
+    else {
+        [self updateSelectedAssets];
+    }
+}
+
+- (void)removeTappedAsset {
+    PHAsset *representedAsset = self.tappedAsset;
+    
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
-        [cell selected:NO];
+    }
+    
+    //indexPaths
+    if (![self.selectedIndexPaths containsObject:self.tappedIndexPath]) {
+        [self.selectedIndexPaths addObject:self.tappedIndexPath];
+    } else {
+    }
+    [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
+
+}
+
+- (void)updateSelectedAssets {
+    PHAsset *representedAsset = self.tappedAsset;
+    
+    if ([selectedAssets containsObject:representedAsset]) {
+        if (self.tappedAsset.mediaType == PHAssetMediaTypeImage) {
+            [self removeTappedAsset];
+        }
     } else {
         if ([selectedAssets count] == maxAssets) {
             //should tell user why they can't select anymore cc:imogen
             return;
         }
-
+        
         [selectedAssets addObject:representedAsset];
-        [cell selected:YES];
     }
-
+    
     if (selectedAssets.count >= 1) {
         nextButton.enabled = YES;
     } else {
         nextButton.enabled = NO;
     }
+    
+    //indexPaths
+    if (![self.selectedIndexPaths containsObject:self.tappedIndexPath]) {
+        [self.selectedIndexPaths addObject:self.tappedIndexPath];
+    } else {
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [fileCollectionView reloadItemsAtIndexPaths:self.selectedIndexPaths];
+    });
+
 }
 
 - (void)applicationNotAuthorized {
@@ -293,8 +499,10 @@ static NSInteger const maxAssets = 8;
     });
 }
 
+#pragma mark - FRSFileLoaderDelegate
+
 - (void)filesLoaded {
-    if ([fileLoader numberOfAssets] == 0) {
+    if ([self.fileLoader numberOfAssets] == 0) {
         return;
     }
 
@@ -303,6 +511,40 @@ static NSInteger const maxAssets = 8;
     });
 }
 
+- (void)updateFileSourcePickerTableView {
+    if ([self.fileLoader numberOfCollections] == 0) {
+        return;
+    }
+
+    [self.fileSourcePickerTableView.sourceViewModelsArray removeAllObjects];
+    
+    for (PHAssetCollection *assetCollection in [self.fileLoader collections]) {
+        FRSFileSourcePickerViewModel *sourceViewModel = [[FRSFileSourcePickerViewModel alloc] initWithName:assetCollection.localizedTitle];
+        sourceViewModel.isSelected = YES;
+        [self.fileSourcePickerTableView.sourceViewModelsArray addObject:sourceViewModel];
+
+    }
+
+    if(self.fileSourcePickerTableView.sourceViewModelsArray.count > 0) {
+        self.fileSourcePickerTableView.selectedSourceViewModel = self.fileSourcePickerTableView.sourceViewModelsArray[0];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.fileSourcePickerTableView reloadData];        
+    });
+
+}
+
+- (void)updateAssetsForCurrentCollection {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        self.currentAssetCollection = [[self.fileLoader collections] objectAtIndex:self.fileSourcePickerTableView.selectedIndex];
+        [self.fileLoader fetchAssetsForCollection:self.currentAssetCollection];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [fileCollectionView reloadData];
+        });
+
+    });
+}
 
 #pragma mark - Bottom Bar Buttons
 
@@ -339,14 +581,27 @@ static NSInteger const maxAssets = 8;
     }
 }
 
+#pragma mark - Tips 
+- (void)segueToTipsAction {
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSTipsViewController *tipsViewController = [[FRSTipsViewController alloc] init];
+        [weakSelf.navigationController pushViewController:tipsViewController animated:YES];
+    });
+}
 
 #pragma mark - NSNotification Center
 
 -(void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+    
+    [self.fileSourcePickerTableView removeObserver:self forKeyPath:@"selectedSourceViewModel"];
+    [self.fileSourcePickerTableView removeObserver:self forKeyPath:@"isExpanded"];
 
+    [self.fileTagViewManager removeObserver:self forKeyPath:@"tagUpdated"];
+
+}
 
 -(void)addObservers {
     
@@ -374,5 +629,10 @@ static NSInteger const maxAssets = 8;
     }
 }
 
+#pragma mark - FRSFileTagViewManagerDelegate
+
+- (void)removeSelection {
+    [self removeTappedAsset];
+}
 
 @end

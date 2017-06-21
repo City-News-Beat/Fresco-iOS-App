@@ -189,7 +189,7 @@
                                                       last:user
                                                 completion:^(id responseObject, NSError *error) {
                                                   if (error || !responseObject) {
-                                                      NSLog(@"Load More Following Error: %@", error);
+                                                      DDLogError(@"Load More Following Error: %@", error);
                                                       return;
                                                   }
 
@@ -222,7 +222,7 @@
                                                       last:user
                                                 completion:^(id responseObject, NSError *error) {
                                                   if (error || !responseObject) {
-                                                      NSLog(@"Load More Followers Error: %@", error);
+                                                      DDLogError(@"Load More Followers Error: %@", error);
                                                       return;
                                                   }
 
