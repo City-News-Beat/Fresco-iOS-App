@@ -59,6 +59,7 @@ static NSString *const galleryOpenedFromStories = @"Gallery opened";
 static NSString *const galleryOpenedFromSearch = @"Gallery opened";
 static NSString *const galleryOpenedFromFollowing = @"Gallery opened";
 static NSString *const galleryOpenedFromPush = @"Gallery opened";
+static NSString *const FAQOpened = @"FAQ opened";
 static NSString *const locationPermissionsEnabled = @"Permissions location enables";
 static NSString *const locationPermissionsDisabled = @"Permissions location disables";
 static NSString *const loginError = @"Login Error";

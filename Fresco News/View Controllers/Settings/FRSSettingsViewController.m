@@ -446,7 +446,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     [ZDKHelpCenter pushHelpCenterOverview:self.navigationController withContentModel:helpCenterContentModel];
     
     // Track event
-    [FRSTracker track:@"FAQ opened"];
+    [FRSTracker track:FAQOpened];
 }
 
 #pragma mark - Easter Egg
