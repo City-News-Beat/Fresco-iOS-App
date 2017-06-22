@@ -21,8 +21,8 @@ static NSString *const awsSecretKeyProd = @"maStuGRQsr2xL0dyHjz6k127mGVRE2uMwESo
 static NSString *const clientIdProd = @"NkaQ3byyrcvDcS42cN4g3ZdMZyJBB9EC3iz5WTNW4BvO6acrtTvShWB1RV4R";
 static NSString *const clientSecretProd = @"YwoofO1b3uTyryUpxfcWAQdBvk2iXOaohV09q6PMKt8nauEOweowJbqzXOsbSeEVRxsE4xRHHhIwV1nZ8sPLRE8Avp9OlLzP6nZ7A09VzdNbcPKhwxdgv82uX48b6scmfMvPoV64uIHql37mkI30xn9yxjHTXR1alePH65Hu23UvIJncjtuUYaEQZ0lyTp";
 
-static NSString *const clientIdDev = @"FggpZkXKiur4zzFWOhkQJRcDQpsg0g8jgbazLYNcCf2RfSukoYutk2wSJLFf";
-static NSString *const clientSecretDev = @"tI8a6k1oRuwi32hozZfLloVmyEzbpAvSxRnc6eKyiLUSq0eP61NFT03WOAewPcKQENayE986q6e2ajA97O9vr5PvnG9m3wNG6DGMkCNWpzKtkDBuYL1wBL8LOK7EDJJWYXljzzxcI6paSULEvAtI6YvneQmlBOYShvzhR0IMHl3roMNi3sK2MMIB3EKDQM";
+static NSString *const clientIdDev = @"lm7b8qP7LkPS3cEYLGxQONztOfcfCcPxPWZWOydij3BmfPL1fJR4gRy47bjJ";
+static NSString *const clientSecretDev = @"E9IdgrA4qnmaqxNXOhX41z8hR7lYiVrweAZL2jPsYCTPBqvZYUcZUlHus3TaYMXDW8YYrxRPBuoLlluKGXtjJAfCD9mlVKy2SXaKW2jgwZ3iKx3aVwKo7z1K9n6e86gadHuAJfqHFtzZr3ANyUC6UDRd1XHAcxkGFfQYLHpaBpA3rKQrocxIpOvqvD0ZBk";
 
 //SDKs
 static NSString *const segmentWriteKeyProd = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
