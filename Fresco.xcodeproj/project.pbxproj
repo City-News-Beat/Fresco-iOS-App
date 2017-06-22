@@ -9,10 +9,16 @@
 /* Begin PBXBuildFile section */
 		070717AD1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070717AB1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m */; };
 		070717AE1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070717AC1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib */; };
-		070717B71EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 070717B51EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.m */; };
-		070717B81EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070717B61EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.xib */; };
 		0709B8511E687B78005E9908 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */; };
 		0709B8531E687BAA005E9908 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */; };
+		070B735C1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 070B735A1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m */; };
+		070B735D1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070B735B1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib */; };
+		070B73681EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */; };
+		070B73691EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */; };
+		070B736A1EFC55AE002A381B /* FRSUserStoryDetailMediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 070B73611EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.m */; };
+		070B736B1EFC55B2002A381B /* FRSUserStoryDetailHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 070B73621EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.m */; };
+		070B736C1EFC5707002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070B73631EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib */; };
+		070B736D1EFC570B002A381B /* FRSUserStoryDetailMediaTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070B73601EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.xib */; };
 		070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */; };
 		070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */; };
 		070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66D11C2B395D00AB3D9D /* OEParallax.m */; };
@@ -409,12 +415,21 @@
 		070717AA1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FRSUserStoryDetailViewController.h; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		070717AB1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FRSUserStoryDetailViewController.m; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		070717AC1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FRSUserStoryDetailViewController.xib; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailViewController.xib"; sourceTree = SOURCE_ROOT; };
-		070717B41EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FRSUserStoryDetailHeaderTableViewCell.h; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailHeaderTableViewCell.h"; sourceTree = SOURCE_ROOT; };
-		070717B51EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FRSUserStoryDetailHeaderTableViewCell.m; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailHeaderTableViewCell.m"; sourceTree = SOURCE_ROOT; };
-		070717B61EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FRSUserStoryDetailHeaderTableViewCell.xib; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailHeaderTableViewCell.xib"; sourceTree = SOURCE_ROOT; };
 		0709B84F1E687B78005E9908 /* MissingSomethingCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingSomethingCollectionReusableView.h; sourceTree = "<group>"; };
 		0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingSomethingCollectionReusableView.m; sourceTree = "<group>"; };
 		0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		070B73591EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSUserStoryDetailArticlesTableViewCell.h; sourceTree = "<group>"; };
+		070B735A1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSUserStoryDetailArticlesTableViewCell.m; sourceTree = "<group>"; };
+		070B735B1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSUserStoryDetailArticlesTableViewCell.xib; sourceTree = "<group>"; };
+		070B735F1EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSUserStoryDetailMediaTableViewCell.h; sourceTree = "<group>"; };
+		070B73601EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSUserStoryDetailMediaTableViewCell.xib; sourceTree = "<group>"; };
+		070B73611EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSUserStoryDetailMediaTableViewCell.m; sourceTree = "<group>"; };
+		070B73621EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSUserStoryDetailHeaderTableViewCell.m; sourceTree = "<group>"; };
+		070B73631EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSUserStoryDetailHeaderTableViewCell.xib; sourceTree = "<group>"; };
+		070B73641EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSUserStoryDetailHeaderTableViewCell.h; sourceTree = "<group>"; };
+		070B73651EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSUserStoryDetailCommentsTableViewCell.h; sourceTree = "<group>"; };
+		070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSUserStoryDetailCommentsTableViewCell.m; sourceTree = "<group>"; };
+		070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSUserStoryDetailCommentsTableViewCell.xib; sourceTree = "<group>"; };
 		070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardTwoView.h; sourceTree = "<group>"; };
 		070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardTwoView.m; sourceTree = "<group>"; };
 		070D66CD1C2AEFE000AB3D9D /* FRSOnboardThreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardThreeView.h; sourceTree = "<group>"; };
@@ -1110,12 +1125,29 @@
 				070717AC1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib */,
 				07F013791EFC21D3006C727B /* FRSUserStoryDetailTableView.h */,
 				07F0137A1EFC21D3006C727B /* FRSUserStoryDetailTableView.m */,
-				070717B41EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.h */,
-				070717B51EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.m */,
-				070717B61EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.xib */,
+				070B735E1EFC53B5002A381B /* Cells */,
 			);
 			name = "User Story";
 			path = "New Group";
+			sourceTree = "<group>";
+		};
+		070B735E1EFC53B5002A381B /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				070B73641EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.h */,
+				070B73621EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.m */,
+				070B73631EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib */,
+				070B735F1EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.h */,
+				070B73611EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.m */,
+				070B73601EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.xib */,
+				070B73591EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.h */,
+				070B735A1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m */,
+				070B735B1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib */,
+				070B73651EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.h */,
+				070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */,
+				070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		072654E11E3951D500A49DEC /* Gallery Footer */ = {
@@ -2958,6 +2990,7 @@
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
 				F22315E61EC632EC00D2A6A4 /* FRSFileSourceNavTitleView.xib in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
+				070B736D1EFC570B002A381B /* FRSUserStoryDetailMediaTableViewCell.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				CA1637451E27F05500779A92 /* FRSGalleryStatusTableViewCell.xib in Resources */,
 				CEC5700B1E55641C000CCD95 /* FRSSettingsTextTableViewCell.xib in Resources */,
@@ -2966,6 +2999,8 @@
 				07D4FB081E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
+				070B73691EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib in Resources */,
+				070B736C1EFC5707002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib in Resources */,
 				CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */,
 				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
 				0709B8531E687BAA005E9908 /* FRSFileFooterCell.xib in Resources */,
@@ -2975,13 +3010,13 @@
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				072348B31EC4F71100FF2B7E /* FRSTipsTableViewCell.xib in Resources */,
+				070B735D1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib in Resources */,
 				F25F0C691EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib in Resources */,
 				070717AE1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
 				CECB2C9E1E46CE360035FDCE /* FRSAddBankAccountView.xib in Resources */,
-				070717B81EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.xib in Resources */,
 				CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */,
 				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
@@ -3141,6 +3176,7 @@
 				D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */,
 				D48C72371D11D312000677BF /* FRSGenericActivityCell.m in Sources */,
 				07D4FB0B1E9D7A8F00E0DAD8 /* FRSCaptureModeSlider.m in Sources */,
+				070B735C1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */,
 				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
@@ -3192,6 +3228,7 @@
 				07EEF3BD1EA562C9004E4AC1 /* FRSLikeRepostViewController.m in Sources */,
 				65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */,
 				D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
+				070B736A1EFC55AE002A381B /* FRSUserStoryDetailMediaTableViewCell.m in Sources */,
 				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,
 				D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */,
 				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
@@ -3276,7 +3313,6 @@
 				CE13224F1E5112FF00A46D4D /* FRSStorySearchTableViewCell.m in Sources */,
 				CE13224A1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.m in Sources */,
 				0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */,
-				070717B71EFB1D4E007DEFAB /* FRSUserStoryDetailHeaderTableViewCell.m in Sources */,
 				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,
 				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,
 				654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */,
@@ -3306,6 +3342,7 @@
 				F205955B1EF84D28001AA390 /* FRSPlayerPlaybackView.m in Sources */,
 				E7092B531E510BEF00C3B704 /* NSError+Fresco.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
+				070B736B1EFC55B2002A381B /* FRSUserStoryDetailHeaderTableViewCell.m in Sources */,
 				07CA2A0E1ECB5BCB000122EF /* FRSTipsSupportFooterView.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				F25F0C581EEAE6B4007170E2 /* FRSFileProgressWithTextView.m in Sources */,
@@ -3342,6 +3379,7 @@
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */,
+				070B73681EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryTableViewCell.m in Sources */,
 				076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */,

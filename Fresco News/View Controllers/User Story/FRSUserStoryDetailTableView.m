@@ -8,6 +8,9 @@
 
 #import "FRSUserStoryDetailTableView.h"
 #import "FRSUserStoryDetailHeaderTableViewCell.h"
+#import "FRSUserStoryDetailMediaTableViewCell.h"
+#import "FRSUserStoryDetailArticlesTableViewCell.h"
+#import "FRSUserStoryDetailCommentsTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     Header,
@@ -17,8 +20,6 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 };
 
 @interface FRSUserStoryDetailTableView () <UITableViewDataSource, UITableViewDelegate>
-
-@property (strong, nonatomic) FRSUserStory *userStory;
 
 @end
 
@@ -32,7 +33,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
         self.dataSource = self;
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+        self.allowsSelection = NO;
         [self registerNibs];
     }
     return self;
@@ -40,6 +41,9 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 
 - (void)registerNibs {
     [self registerNib:[UINib nibWithNibName:@"FRSUserStoryDetailHeaderTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyDetailHeaderCellIdentifier];
+    [self registerNib:[UINib nibWithNibName:@"FRSUserStoryDetailMediaTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyDetailMediaCellIdentifier];
+    [self registerNib:[UINib nibWithNibName:@"FRSUserStoryDetailArticlesTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyDetailArticlesCellIdentifier];
+    [self registerNib:[UINib nibWithNibName:@"FRSUserStoryDetailCommentsTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyDetailCommentsCellIdentifier];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -55,14 +59,23 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
             return cell;
         } break;
             
-        case Media:
-            break;
+        case Media: {
+            FRSUserStoryDetailMediaTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailMediaCellIdentifier];
+            [cell configureWithStory:self.userStory];
+            return cell;
+        } break;
             
-        case Articles:
-            break;
+        case Articles: {
+            FRSUserStoryDetailArticlesTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailArticlesCellIdentifier];
+            [cell configureWithStory:self.userStory];
+            return cell;
+        } break;
             
-        case Comments:
-            break;
+        case Comments: {
+            FRSUserStoryDetailCommentsTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailCommentsCellIdentifier];
+            [cell configureWithStory:self.userStory];
+            return cell;
+        } break;
             
         default:
             break;
@@ -72,7 +85,29 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 300;
+    
+    switch (indexPath.row) {
+        case Header: {
+            return 275;
+        } break;
+            
+        case Media: {
+            return 300;
+        } break;
+            
+        case Articles: {
+            return 300;
+        } break;
+            
+        case Comments: {
+            return 300;
+        } break;
+        
+        default:
+            break;
+    }
+    
+    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
