@@ -7,6 +7,7 @@
 //
 
 #import "FRSUserStoryDetailViewController.h"
+#import "FRSUserStoryDetailTableView.h"
 
 
 @interface FRSUserStoryDetailViewController ()
@@ -32,11 +33,11 @@
     [super viewDidLoad];
     
     [self configureUI];
-    
 }
 
 - (void)configureUI {
     [self configureNavigationBar];
+    [self configureTableView];
 }
 
 - (void)configureNavigationBar {
@@ -49,10 +50,15 @@
     nav.navigationBar.tintColor = [UIColor whiteColor];
     [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName :[UIFont notaBoldWithSize:17]}];
     
-//    self.title = self.userStory.location.uppercaseString;
-    
     // DEBUG
     self.title = @"VANCOUVER, BC";
+    // self.title = self.userStory.location.uppercaseString;
+}
+
+- (void)configureTableView {
+    FRSUserStoryDetailTableView *tableView = [[FRSUserStoryDetailTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) userStory:self.userStory];
+    [self.view addSubview:tableView];
+    
 }
 
 @end

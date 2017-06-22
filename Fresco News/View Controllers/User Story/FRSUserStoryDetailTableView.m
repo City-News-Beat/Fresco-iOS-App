@@ -1,0 +1,82 @@
+//
+//  FRSUserStoryDetailTableView.m
+//  Fresco
+//
+//  Created by Omar Elfanek on 6/22/17.
+//  Copyright © 2017 Fresco. All rights reserved.
+//
+
+#import "FRSUserStoryDetailTableView.h"
+#import "FRSUserStoryDetailHeaderTableViewCell.h"
+
+typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
+    Header,
+    Media,
+    Articles,
+    Comments
+};
+
+@interface FRSUserStoryDetailTableView () <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) FRSUserStory *userStory;
+
+@end
+
+@implementation FRSUserStoryDetailTableView
+
+- (instancetype)initWithFrame:(CGRect)frame userStory:(FRSUserStory *)userStory {
+    self = [super initWithFrame:frame style:UITableViewStylePlain];
+    
+    if (self) {
+        self.delegate = self;
+        self.dataSource = self;
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        
+        [self registerNibs];
+    }
+    return self;
+}
+
+- (void)registerNibs {
+    [self registerNib:[UINib nibWithNibName:@"FRSUserStoryDetailHeaderTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyDetailHeaderCellIdentifier];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 4;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    switch (indexPath.row) {
+        case Header: {
+            FRSUserStoryDetailHeaderTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailHeaderCellIdentifier];
+            [cell configureWithStory:self.userStory];
+            return cell;
+        } break;
+            
+        case Media:
+            break;
+            
+        case Articles:
+            break;
+            
+        case Comments:
+            break;
+            
+        default:
+            break;
+    }
+    
+    return [UITableViewCell new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 300;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+@end
