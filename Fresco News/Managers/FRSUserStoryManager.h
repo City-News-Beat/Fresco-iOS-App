@@ -12,4 +12,6 @@
 
 + (instancetype)sharedInstance;
 
+- (void)fetchUserStoriesWithLimit:(NSInteger)limit offsetStoryID:(NSString *)offset completion:(FRSAPIDefaultCompletionBlock)completion;
+
 @end

@@ -27,6 +27,7 @@
 #import "FRSTOSAlertView.h"
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
+#import "FRSUserStoryManager.h"
 
 static NSInteger const galleriesPerPage = 12;
 
@@ -897,6 +898,10 @@ static NSInteger const galleriesPerPage = 12;
     [self.followingTable reloadFollowing];
     
     // network call
+    [[FRSUserStoryManager sharedInstance] fetchUserStoriesWithLimit:galleriesPerPage offsetStoryID:nil completion:^(id responseObject, NSError *error) {
+        NSLog(@"Story responseObject: %@ \n error: %@", responseObject, error);
+    }];
+    
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
