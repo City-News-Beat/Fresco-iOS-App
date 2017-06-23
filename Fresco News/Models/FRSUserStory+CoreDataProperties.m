@@ -27,5 +27,6 @@
 @dynamic title;
 @dynamic uid;
 @dynamic creator;
+@dynamic posts;
 
 @end

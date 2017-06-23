@@ -28,6 +28,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *title;
 @property (nullable, nonatomic, copy) NSString *uid;
 @property (nullable, nonatomic, retain) FRSUser *creator;
+@property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
+
+@end
+
+@interface FRSUserStory (CoreDataGeneratedAccessors)
+
+- (void)addPostsObject:(FRSPost *)value;
+- (void)removePostsObject:(FRSPost *)value;
+- (void)addPosts:(NSSet<FRSPost *> *)values;
+- (void)removePosts:(NSSet<FRSPost *> *)values;
 
 @end
 

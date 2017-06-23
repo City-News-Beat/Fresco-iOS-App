@@ -13,7 +13,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSUserStory : NSManagedObject
+@interface FRSUserStory : NSManagedObject {
+    BOOL save;
+}
+
+@property (nonatomic, retain) NSNumber *postsCount;
+@property (strong, nonatomic, retain) NSDictionary *curatorDict;
+@property (nullable, nonatomic, retain) FRSUser *sourceUser;
+@property (nullable, nonatomic, retain) FRSUser *creator;
+
+- (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
+- (NSDictionary *)jsonObject;
+- (NSInteger)heightForUserStory;
 
 @end
 

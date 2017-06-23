@@ -79,6 +79,7 @@
         <attribute name="visibility" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="posts" inverseEntity="FRSUser" syncable="YES"/>
         <relationship name="gallery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="posts" inverseEntity="FRSGallery" syncable="YES"/>
+        <relationship name="userStory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUserStory" inverseName="posts" inverseEntity="FRSUserStory" syncable="YES"/>
     </entity>
     <entity name="FRSStory" representedClassName="FRSStory" syncable="YES">
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
@@ -175,17 +176,18 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="userStories" inverseEntity="FRSUser" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSPost" inverseName="userStory" inverseEntity="FRSPost" syncable="YES"/>
     </entity>
     <elements>
         <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
         <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="255"/>
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="450"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
-        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="270"/>
+        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="285"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
         <element name="FRSTaggedAssetModel" positionX="-981" positionY="0" width="128" height="75"/>
         <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="285"/>
         <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="660"/>
-        <element name="FRSUserStory" positionX="-981" positionY="0" width="128" height="240"/>
+        <element name="FRSUserStory" positionX="-981" positionY="0" width="128" height="255"/>
     </elements>
 </model>
