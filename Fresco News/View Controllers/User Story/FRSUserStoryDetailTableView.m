@@ -11,6 +11,7 @@
 #import "FRSUserStoryDetailMediaTableViewCell.h"
 #import "FRSUserStoryDetailArticlesTableViewCell.h"
 #import "FRSUserStoryDetailCommentsTableViewCell.h"
+#import "FRSUserStoryDetailHeaderCellViewModel.h"
 
 typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     Header,
@@ -32,7 +33,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
         self.delegate = self;
         self.dataSource = self;
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        self.backgroundColor = [UIColor clearColor];
         self.allowsSelection = NO;
         [self registerNibs];
     }
@@ -55,7 +56,8 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     switch (indexPath.row) {
         case Header: {
             FRSUserStoryDetailHeaderTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailHeaderCellIdentifier];
-            [cell configureWithStory:self.userStory];
+            FRSUserStoryDetailHeaderCellViewModel *vm = [[FRSUserStoryDetailHeaderCellViewModel alloc] initWithUserStory:self.userStory];
+            [cell configureWithStoryHeaderCellViewModel: vm];
             return cell;
         } break;
             
@@ -88,7 +90,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     
     switch (indexPath.row) {
         case Header: {
-            return 275;
+            return UITableViewAutomaticDimension;
         } break;
             
         case Media: {
@@ -102,13 +104,23 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
         case Comments: {
             return 300;
         } break;
-        
+            
         default:
             break;
     }
     
     return 0;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return UITableViewAutomaticDimension;
+}
+
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//
+//    return UITableViewAutomaticDimension;
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     

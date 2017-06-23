@@ -10,12 +10,11 @@
 #import "FRSUserStoryDetailTableView.h"
 #import "FRSActionBar.h"
 
-#define FOOT_SPACING 64
+#define FOOT_PADDING 100
 
-@interface FRSUserStoryDetailViewController ()
+@interface FRSUserStoryDetailViewController () <FRSActionBarDelegate>
 
 @property (strong, nonatomic) FRSUserStory *userStory;
-@property (strong, nonatomic) IBOutlet FRSUserStoryDetailTableView *tableView;
 
 @end
 
@@ -24,9 +23,6 @@
 - (instancetype)initWithUserStory:(FRSUserStory *)userStory {
     self = [super init];
     if (self) {
-        
-        self = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([self class]) owner:self options:nil] objectAtIndex:0];
-        [self hideTabBarAnimated:YES];
         self.userStory = userStory;
     }
     return self;
@@ -39,9 +35,12 @@
 }
 
 - (void)configureUI {
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self configureNavigationBar];
     [self configureTableView];
     [self configureActionBar];
+    
+    [self hideTabBarAnimated:YES];
 }
 
 - (void)configureNavigationBar {
@@ -60,7 +59,7 @@
 }
 
 - (void)configureTableView {
-    FRSUserStoryDetailTableView *tableView = [[FRSUserStoryDetailTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - FOOT_SPACING) userStory:self.userStory];
+    FRSUserStoryDetailTableView *tableView = [[FRSUserStoryDetailTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - FOOT_PADDING) userStory:self.userStory];
     [self.view addSubview:tableView];
 }
 

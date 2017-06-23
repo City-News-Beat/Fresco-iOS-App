@@ -22,7 +22,7 @@
 }
 
 - (void)configureWithStory:(FRSUserStory *)userStory {
-    self.backgroundColor = [UIColor blueColor];
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 @end

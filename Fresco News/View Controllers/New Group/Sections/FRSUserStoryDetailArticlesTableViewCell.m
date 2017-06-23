@@ -8,6 +8,10 @@
 
 #import "FRSUserStoryDetailArticlesTableViewCell.h"
 
+@interface FRSUserStoryDetailArticlesTableViewCell ()
+
+@end
+
 @implementation FRSUserStoryDetailArticlesTableViewCell
 
 - (void)awakeFromNib {
@@ -22,7 +26,8 @@
 }
 
 - (void)configureWithStory:(FRSUserStory *)userStory {
-    self.backgroundColor = [UIColor greenColor];
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 @end
+

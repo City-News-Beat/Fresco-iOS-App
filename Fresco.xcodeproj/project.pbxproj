@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		070717AD1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070717AB1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m */; };
-		070717AE1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 070717AC1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib */; };
 		0709B8511E687B78005E9908 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */; };
 		0709B8531E687BAA005E9908 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */; };
 		070B735C1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 070B735A1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m */; };
@@ -25,6 +24,7 @@
 		0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */; };
 		071D7B881EB7B7840033A56A /* Nota-Xbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 071D7B871EB7B7590033A56A /* Nota-Xbold.otf */; };
 		071D7B8B1EB7D4E10033A56A /* FRSCameraFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */; };
+		071F75CA1EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F75C91EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m */; };
 		072348B21EC4F71100FF2B7E /* FRSTipsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */; };
 		072348B31EC4F71100FF2B7E /* FRSTipsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */; };
 		072654E81E3951DF00A49DEC /* FRSUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 072654E21E3951DF00A49DEC /* FRSUserView.m */; };
@@ -414,7 +414,6 @@
 		070333451E52811400F57562 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		070717AA1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FRSUserStoryDetailViewController.h; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		070717AB1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FRSUserStoryDetailViewController.m; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailViewController.m"; sourceTree = SOURCE_ROOT; };
-		070717AC1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FRSUserStoryDetailViewController.xib; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailViewController.xib"; sourceTree = SOURCE_ROOT; };
 		0709B84F1E687B78005E9908 /* MissingSomethingCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingSomethingCollectionReusableView.h; sourceTree = "<group>"; };
 		0709B8501E687B78005E9908 /* MissingSomethingCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingSomethingCollectionReusableView.m; sourceTree = "<group>"; };
 		0709B8521E687BAA005E9908 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
@@ -441,6 +440,8 @@
 		071D7B871EB7B7590033A56A /* Nota-Xbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Xbold.otf"; sourceTree = "<group>"; };
 		071D7B891EB7D4E10033A56A /* FRSCameraFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCameraFooterView.h; path = ../FRSCameraFooterView.h; sourceTree = "<group>"; };
 		071D7B8A1EB7D4E10033A56A /* FRSCameraFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCameraFooterView.m; path = ../FRSCameraFooterView.m; sourceTree = "<group>"; };
+		071F75C81EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSUserStoryDetailHeaderCellViewModel.h; sourceTree = "<group>"; };
+		071F75C91EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSUserStoryDetailHeaderCellViewModel.m; sourceTree = "<group>"; };
 		072348AF1EC4F71100FF2B7E /* FRSTipsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTipsTableViewCell.h; sourceTree = "<group>"; };
 		072348B01EC4F71100FF2B7E /* FRSTipsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTipsTableViewCell.m; sourceTree = "<group>"; };
 		072348B11EC4F71100FF2B7E /* FRSTipsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSTipsTableViewCell.xib; sourceTree = "<group>"; };
@@ -1122,21 +1123,22 @@
 			children = (
 				070717AA1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.h */,
 				070717AB1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m */,
-				070717AC1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib */,
 				07F013791EFC21D3006C727B /* FRSUserStoryDetailTableView.h */,
 				07F0137A1EFC21D3006C727B /* FRSUserStoryDetailTableView.m */,
-				070B735E1EFC53B5002A381B /* Cells */,
+				070B735E1EFC53B5002A381B /* Sections */,
 			);
 			name = "User Story";
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		070B735E1EFC53B5002A381B /* Cells */ = {
+		070B735E1EFC53B5002A381B /* Sections */ = {
 			isa = PBXGroup;
 			children = (
 				070B73641EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.h */,
 				070B73621EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.m */,
 				070B73631EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib */,
+				071F75C81EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.h */,
+				071F75C91EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m */,
 				070B735F1EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.h */,
 				070B73611EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.m */,
 				070B73601EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.xib */,
@@ -1147,7 +1149,7 @@
 				070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */,
 				070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */,
 			);
-			path = Cells;
+			path = Sections;
 			sourceTree = "<group>";
 		};
 		072654E11E3951D500A49DEC /* Gallery Footer */ = {
@@ -3012,7 +3014,6 @@
 				072348B31EC4F71100FF2B7E /* FRSTipsTableViewCell.xib in Resources */,
 				070B735D1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib in Resources */,
 				F25F0C691EEB13CF007170E2 /* FRSFilePackageGuidelinesTagTableCell.xib in Resources */,
-				070717AE1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
@@ -3294,6 +3295,7 @@
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
 				CEC20DEF1E1C7A0100532D75 /* FRSAuthManager.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
+				071F75CA1EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				CECB2CA11E46CE4C0035FDCE /* FRSAddBankAccountView.m in Sources */,
 				CE1E6EF71E1C828600236AC7 /* FRSBaseManager.m in Sources */,

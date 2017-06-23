@@ -7,14 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSUserStory+CoreDataProperties.h"
+#import "FRSUserStoryDetailHeaderCellViewModel.h"
 
 static NSString *const storyDetailHeaderCellIdentifier = @"story-detail-header-cell";
 
 @interface FRSUserStoryDetailHeaderTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) FRSUserStory *userStory;
 
-- (void)configureWithStory:(FRSUserStory *)userStory;
+- (void)configureWithStoryHeaderCellViewModel:(FRSUserStoryDetailHeaderCellViewModel *)userStoryDetailHeaderCellViewModel;
 
 @end
