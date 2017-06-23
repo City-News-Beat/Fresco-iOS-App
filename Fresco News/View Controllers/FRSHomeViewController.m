@@ -18,6 +18,7 @@
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
 #import "FRSGallery+CoreDataProperties.h"
+#import "FRSUserStory+CoreDataClass.h"
 #import "FRSFollowingTable.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
@@ -28,6 +29,7 @@
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
 #import "FRSUserStoryManager.h"
+#import "FRSStoryTableViewCell.h"
 
 static NSInteger const galleriesPerPage = 12;
 
@@ -339,6 +341,8 @@ static NSInteger const galleriesPerPage = 12;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSGalleryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyCellIdentifier];
+
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height + 20);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -474,6 +478,7 @@ static NSInteger const galleriesPerPage = 12;
     
 }
 
+/*
 -(void)updateHighlightsMetadataFromRefreshIndex:(NSInteger)index fromArray:(NSArray *)refreshedArray {
     NSInteger highlightsIndex = 0;
     
@@ -508,6 +513,7 @@ static NSInteger const galleriesPerPage = 12;
     [self.appDelegate.coreDataController saveContext];
     
 }
+*/
 
 - (void)appendToLocalDataCache:(NSArray *)localData {
     if (self.appDelegate.coreDataController.managedObjectContext) {
@@ -520,6 +526,37 @@ static NSInteger const galleriesPerPage = 12;
                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate.coreDataController managedObjectContext]];
                 [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
                 [self.highlights addObject:galleryToSave];
+                localIndex++;
+            }
+            
+            if ([self.appDelegate.coreDataController.managedObjectContext hasChanges]) {
+                @try {
+                    [self.appDelegate.coreDataController.managedObjectContext save:Nil];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"Exception:%@", exception);
+                }
+            }
+            
+            [self.appDelegate saveContext
+             ];
+            [self.tableView reloadData];
+        }];
+    }
+    
+}
+
+- (void)appendToLocalDataCacheUserStories:(NSArray *)localData {
+    if (self.appDelegate.coreDataController.managedObjectContext) {
+        [self.appDelegate.coreDataController.managedObjectContext performBlock:^{
+            //localIndex = 0 for onLoad and internet avaolable
+            NSInteger localIndex = self.highlights.count;
+            for (NSDictionary *userStoryDict in localData) {
+                FRSUserStory *userStoryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUserStory" inManagedObjectContext:[self.appDelegate.coreDataController managedObjectContext]];
+                
+                [userStoryToSave configureWithDictionary:userStoryDict context:[self.appDelegate.coreDataController managedObjectContext]];
+                [userStoryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+                [self.highlights addObject:userStoryToSave];
                 localIndex++;
             }
             
@@ -582,7 +619,7 @@ static NSInteger const galleriesPerPage = 12;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.tableView && indexPath) {
-        return [self highlightCellForIndexPath:indexPath];
+        return [self highlightCellForIndexPathUserStory:indexPath];
     }
     
     return nil;
@@ -618,6 +655,36 @@ static NSInteger const galleriesPerPage = 12;
     return cell;
 }
 
+- (UITableViewCell *)highlightCellForIndexPathUserStory:(NSIndexPath *)indexPath {
+    if (indexPath.row == self.highlights.count && self.highlights.count != 0 && self.highlights != nil) {
+        FRSLoadingTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        return cell;
+    }
+    FRSStoryTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
+    cell.trackedScreen = FRSTrackedScreenHighlights;
+    
+    [cell clearCell];
+    
+    if (indexPath.row < self.highlights.count) {
+        
+        __weak typeof(self) weakSelf = self;
+        cell.userStory = self.highlights[indexPath.row];
+        
+        cell.actionBlock = ^{
+//            [weakSelf readMore:indexPath.row];
+        };
+        
+        cell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
+        [cell configureCell];
+        cell.navigationController = self.navigationController;
+        
+    }
+    return cell;
+}
+
 - (void)loadMore {
     
     FRSGallery *lastGallery = [self.highlights lastObject];
@@ -633,8 +700,8 @@ static NSInteger const galleriesPerPage = 12;
         return 20;
     }
     
-    FRSGallery *gallery = self.highlights[index];
-    return [gallery heightForGallery];
+    FRSUserStory *userStory = self.highlights[index];
+    return [userStory heightForUserStory];
 }
 
 #pragma mark - UITableView Delegate
@@ -898,10 +965,35 @@ static NSInteger const galleriesPerPage = 12;
     [self.followingTable reloadFollowing];
     
     // network call
-    [[FRSUserStoryManager sharedInstance] fetchUserStoriesWithLimit:galleriesPerPage offsetStoryID:nil completion:^(id responseObject, NSError *error) {
-        NSLog(@"Story responseObject: %@ \n error: %@", responseObject, error);
+    [[FRSUserStoryManager sharedInstance] fetchUserStoriesWithLimit:galleriesPerPage offsetStoryID:nil completion:^(NSArray *userStories, NSError *error) {
+        NSLog(@"Story responseObject: %@ \n error: %@", userStories, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.loadingView stopLoading];
+            [weakSelf.loadingView removeFromSuperview];
+            hasLoadedOnce = TRUE;
+            [weakSelf.tableView reloadData];
+        });
+        
+        if (error && error.code == -1009) {
+            // no internet
+        }
+        
+        if ([userStories count] == 0) {
+            //if needed reload only the loading cell to remove loading.
+        } else {
+            //since this is initial load, delete the previous entries.
+            NSLog(@"Home VC initial load");
+            
+            [weakSelf deleteCacheUserStories];
+            //Now delete contents of the highlights array also.
+            [self.highlights removeAllObjects];
+            
+            //add new entries to cache.
+            [weakSelf appendToLocalDataCacheUserStories:userStories];
+        }
+
     }];
-    
+    /*
     [[FRSGalleryManager sharedInstance] fetchGalleriesWithLimit:galleriesPerPage
                                                 offsetGalleryID:nil
                                                      completion:^(NSArray *galleries, NSError *error) {
@@ -932,6 +1024,7 @@ static NSInteger const galleriesPerPage = 12;
                                                          
                                                          
                                                      }];
+     */
     
 }
 
@@ -981,6 +1074,27 @@ static NSInteger const galleriesPerPage = 12;
     [self.appDelegate saveContext];
     
 }
+
+-(void)deleteCacheUserStories {
+    NSLog(@"Deleting Cached user stories");
+    
+    //Can directly execute a delete request for all galleries at once, using a predicate. we need not do a for loop here.
+    
+    NSManagedObjectContext *moc = [self.appDelegate.coreDataController managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSUserStory"];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ];
+    
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    
+    for (FRSUserStory *userStory in stored) {
+        [self.appDelegate.coreDataController.managedObjectContext deleteObject:userStory];
+    }
+    
+    [self.appDelegate saveContext];
+    
+}
+
 
 
 @end

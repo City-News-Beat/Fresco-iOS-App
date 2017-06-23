@@ -11,6 +11,7 @@
 
 
 @class FRSStory;
+@class FRSUserStory;
 
 @protocol FRSStoryViewDelegate <NSObject>
 
@@ -31,10 +32,11 @@
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) FRSStory *story;
+@property (strong, nonatomic) FRSUserStory *userStory;
 @property (weak, nonatomic) UINavigationController *navigationController;
 
 @property (nonatomic, readwrite) FRSTrackedScreen trackedScreen;
 
-- (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate;
+- (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story userStory:(FRSUserStory *)userStory delegate:(id<FRSStoryViewDelegate>)delegate;
 
 @end

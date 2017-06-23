@@ -18,6 +18,7 @@ static NSString *const storyCellIdentifier = @"story-cell";
 
 @property (strong, nonatomic) FRSStoryView *storyView;
 @property (strong, nonatomic) FRSStory *story;
+@property (strong, nonatomic) FRSUserStory *userStory;
 @property (strong, nonatomic) ActionButtonBlock actionBlock;
 @property (strong, nonatomic) StoryImageBlock imageBlock;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;

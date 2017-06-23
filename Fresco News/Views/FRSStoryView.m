@@ -10,6 +10,7 @@
 #import "FRSStoryView.h"
 #import "FRSPost.h"
 #import "FRSStory.h"
+#import "FRSUserStory+CoreDataClass.h"
 #import "FRSGallery.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
@@ -40,18 +41,20 @@
 @property (strong, nonatomic) UIImageView *repostImageView;
 @property (strong, nonatomic) UILabel *repostLabel;
 
+@property (strong, nonatomic) NSMutableArray *smallImageURLS;
+
 @end
 
 @implementation FRSStoryView
 
-- (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate {
+- (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story userStory:(FRSUserStory *)userStory delegate:(id<FRSStoryViewDelegate>)delegate {
     self = [super initWithFrame:frame];
 
     if (self) {
         self.delegate = delegate;
-        self.story = story;
+        self.userStory = userStory;
         self.navigationController = self.delegate.navigationController;
-
+        
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
             [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
@@ -86,70 +89,69 @@
     CGFloat halfHeight = self.topContainer.frame.size.height / 2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
 
-    NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
+    self.smallImageURLS = [[NSMutableArray alloc] init];
 
-    for (NSURL *url in (NSArray *)self.story.imageURLs) {
-        if ([url.absoluteString containsString:@"cdn.fresconews"]) {
-            NSString *newURL = [url.absoluteString stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/400"];
-            [smallImageURLS addObject:[NSURL URLWithString:newURL]];
-        } else {
-            [smallImageURLS addObject:url];
+    for (FRSPost *post in self.userStory.posts) {
+        NSLog(@"story caption:%@ post.image: %@",self.userStory.caption, post.imageUrl);
+        if ([post.imageUrl containsString:@"cdn."]) {
+            NSString *newURL = [(NSString *)post.imageUrl stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
+            [self.smallImageURLS addObject:[NSURL URLWithString:newURL]];
         }
     }
 
-    if (smallImageURLS.count < 6 && smallImageURLS.count != 0) {
+    if (self.smallImageURLS.count < 6 && self.smallImageURLS.count != 0) {
 
-        switch (smallImageURLS.count) {
+        switch (self.smallImageURLS.count) {
         case 1: {
             UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
             iv.contentMode = UIViewContentModeScaleAspectFill;
             iv.clipsToBounds = YES;
-            [iv hnk_setImageFromURL:smallImageURLS[0]];
+            [iv hnk_setImageFromURL:self.smallImageURLS[0]];
             [self.topContainer addSubview:iv];
         } break;
 
         default: {
             UIImageView *iv = [UIImageView new];
-            [self configureImageFromImageView:iv atIndex:0 xPos:0 total:smallImageURLS.count];
+            [self configureImageFromImageView:iv atIndex:0 xPos:0 total:self.smallImageURLS.count];
         } break;
         }
 
-    } else if (smallImageURLS.count != 0) {
+    } else if (self.smallImageURLS.count != 0) {
 
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
         iv.contentMode = UIViewContentModeScaleAspectFill;
         iv.clipsToBounds = YES;
-        [iv hnk_setImageFromURL:smallImageURLS[0]];
+        [iv hnk_setImageFromURL:self.smallImageURLS[0]];
         [self.topContainer addSubview:iv];
 
         UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(width + 1, 0, width, halfHeight)];
         iv2.contentMode = UIViewContentModeScaleAspectFill;
         iv2.clipsToBounds = YES;
-        [iv2 hnk_setImageFromURL:smallImageURLS[1]];
+        [iv2 hnk_setImageFromURL:self.smallImageURLS[1]];
         [self.topContainer addSubview:iv2];
 
         UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(width * 2 + 2, 0, width, halfHeight)];
         iv3.contentMode = UIViewContentModeScaleAspectFill;
         iv3.clipsToBounds = YES;
-        [iv3 hnk_setImageFromURL:smallImageURLS[2]];
+        [iv3 hnk_setImageFromURL:self.smallImageURLS[2]];
         [self.topContainer addSubview:iv3];
 
         UIImageView *iv4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) - width, halfHeight + 0.5, width, halfHeight)];
         iv4.contentMode = UIViewContentModeScaleAspectFill;
         iv4.clipsToBounds = YES;
-        [iv4 hnk_setImageFromURL:smallImageURLS[3]];
+        [iv4 hnk_setImageFromURL:self.smallImageURLS[3]];
         [self.topContainer addSubview:iv4];
 
         UIImageView *iv5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) + 1, halfHeight + 0.5, width, halfHeight)];
         iv5.contentMode = UIViewContentModeScaleAspectFill;
         iv5.clipsToBounds = YES;
-        [iv5 hnk_setImageFromURL:smallImageURLS[4]];
+        [iv5 hnk_setImageFromURL:self.smallImageURLS[4]];
         [self.topContainer addSubview:iv5];
 
         UIImageView *iv6 = [[UIImageView alloc] initWithFrame:CGRectOffset(iv5.frame, width + 1, 0)];
         iv6.contentMode = UIViewContentModeScaleAspectFill;
         iv6.clipsToBounds = YES;
-        [iv6 hnk_setImageFromURL:smallImageURLS[5]];
+        [iv6 hnk_setImageFromURL:self.smallImageURLS[5]];
         [self.topContainer addSubview:iv6];
     }
 }
@@ -162,7 +164,7 @@
 
     __weak typeof(self) weakSelf = self;
 
-    [imageView hnk_setImageFromURL:self.story.imageURLs[index]
+    [imageView hnk_setImageFromURL:self.smallImageURLS[index]
                        placeholder:nil
                            success:^(UIImage *image) {
                              dispatch_async(dispatch_get_main_queue(), ^{
@@ -205,7 +207,7 @@
 
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 0)];
     self.titleLabel.numberOfLines = 1;
-    self.titleLabel.text = self.story.title;
+    self.titleLabel.text = self.userStory.title;
     self.titleLabel.font = [UIFont notaBoldWithSize:24];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.clipsToBounds = NO;
@@ -218,24 +220,21 @@
     [self addShadowToLabel:self.titleLabel];
     [self.topContainer addSubview:self.titleLabel];
 
-    if (self.story.editedDate) { //CHECK FOR LOCATION HERE TOO
-        UIImageView *clockIV = [[UIImageView alloc] initWithFrame:CGRectMake(16, self.topContainer.frame.size.height - 12 - 24, 24, 24)];
-        clockIV.image = [UIImage imageNamed:@"gallery-clock"];
-        [self.topContainer addSubview:clockIV];
-
-        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(clockIV.frame.origin.x + 24 + 8, clockIV.frame.origin.y + 4, self.frame.size.width, 16)]; //MAKE WIDTH DYNAMIC WHEN ADDING LOCATION
-        timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:[_story editedDate]];
-
-        timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
-        timestampLabel.textColor = [UIColor whiteColor];
-        [self.topContainer addSubview:timestampLabel];
-
-        self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
-
-        //self.titleLabel.backgroundColor = [UIColor greenColor];
-        //timestampLabel.backgroundColor = [UIColor orangeColor];
-        //clockIV.backgroundColor = [UIColor redColor];
-    }
+    UIImageView *profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(16, self.topContainer.frame.size.height - 12 - 24, 24, 24)];
+    profileIV.layer.cornerRadius = 12;
+    profileIV.clipsToBounds = YES;
+    //profileIV.image = [UIImage imageNamed:@"gallery-clock"];
+    profileIV.backgroundColor = [UIColor frescoSliderGray];
+    [self.topContainer addSubview:profileIV];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(profileIV.frame.origin.x + 24 + 8, profileIV.frame.origin.y + 4, self.frame.size.width, 20)]; //MAKE WIDTH DYNAMIC WHEN ADDING LOCATION
+    nameLabel.text = @"Catbug";
+    
+    nameLabel.font = [UIFont notaBoldWithSize:17];
+    nameLabel.textColor = [UIColor whiteColor];
+    [self.topContainer addSubview:nameLabel];
+    
+    self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
 }
 
 - (void)configureCaption {
@@ -243,7 +242,7 @@
     self.caption.numberOfLines = 6;
     self.caption.textColor = [UIColor frescoDarkTextColor];
     self.caption.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.caption.text = self.story.caption;
+    self.caption.text = self.userStory.caption;
     [self.caption sizeToFit];
     [self.caption setFrame:CGRectMake(16, self.topContainer.frame.size.height + 11, self.frame.size.width - 32, self.caption.frame.size.height)];
 
@@ -291,7 +290,7 @@
 }
 
 - (void)addShadowToLabel:(UILabel *)label {
-    if ([label.text isEqualToString:@""] || !label) {
+    if (![NSString isStringValid:label.text] || !label) {
         return;
     }
 

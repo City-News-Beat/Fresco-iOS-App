@@ -30,7 +30,7 @@ static NSString *const kUserStoryListEndpoint = @"story/list";
                              @"sortBy" : @"highlighted_at",
                              @"direction" : @"desc",
                              @"limit" : @(10),
-                             @"expand" : @[@"posts[6]"]
+                             @"expand" : @[@"posts[6]", @"owner"]
                              };
     
     //the 'n' in posts[n] is number of posts per story we want to fetch.
