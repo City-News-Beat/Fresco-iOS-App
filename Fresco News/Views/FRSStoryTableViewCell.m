@@ -8,6 +8,7 @@
 
 #import "FRSStoryTableViewCell.h"
 #import "FRSStory.h"
+#import "FRSUserStory+CoreDataClass.h"
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
@@ -20,11 +21,11 @@
 - (void)configureCell {
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
 
-    self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story delegate:self];
+    self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story userStory:self.userStory delegate:self];
     self.storyView.navigationController = self.navigationController;
     self.storyView.trackedScreen = self.trackedScreen;
     
-    if (self.story.caption.length == 0) {
+    if (self.userStory.caption.length == 0) {
         self.storyView.backgroundColor = [UIColor greenColor];
     }
 
