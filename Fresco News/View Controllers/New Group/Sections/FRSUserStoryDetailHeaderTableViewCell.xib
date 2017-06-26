@@ -25,7 +25,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W6S-i8-f1c">
-                        <rect key="frame" x="24" y="120.5" width="24" height="24"/>
+                        <rect key="frame" x="24" y="85.5" width="24" height="24"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="MBe-8u-Jc9"/>
@@ -38,7 +38,7 @@
                         </userDefinedRuntimeAttributes>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSt-42-n9C">
-                        <rect key="frame" x="56" y="120.5" width="4.5" height="24"/>
+                        <rect key="frame" x="56" y="85.5" width="4.5" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="ZmT-am-tnT"/>
                         </constraints>
@@ -47,7 +47,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8WC-9k-2g3">
-                        <rect key="frame" x="341.5" y="120" width="3.5" height="24"/>
+                        <rect key="frame" x="341.5" y="85" width="3.5" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="8nq-TY-ACV"/>
                         </constraints>
@@ -56,10 +56,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xAb-Pn-nue">
-                        <rect key="frame" x="24" y="156.5" width="321" height="117"/>
+                        <rect key="frame" x="24" y="121.5" width="321" height="152"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.77468532986111116" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <attributedString key="attributedText">
-                            <fragment content=" ">
+                            <fragment content="   ">
                                 <attributes>
                                     <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
                                     <font key="NSFont" size="15" name="SFUIText-Light"/>
@@ -89,9 +89,9 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8f5-Lf-xvR">
-                        <rect key="frame" x="16" y="36" width="337" height="60.5"/>
+                        <rect key="frame" x="16" y="36" width="337" height="25.5"/>
                         <attributedString key="attributedText">
-                            <fragment content="Wild Elephant Eats Small Bird Without Fork">
+                            <fragment content="   ">
                                 <attributes>
                                     <font key="NSFont" size="28" name="Karmina-Bold"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="10" tighteningFactorForTruncation="0.0"/>

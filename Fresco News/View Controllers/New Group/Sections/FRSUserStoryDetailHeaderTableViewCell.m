@@ -41,17 +41,18 @@
 //    [self configureCaptionTextViewFromString:viewModel.caption];
     
     // DEBUG
-    self.titleLabel.text = @"Hungry Elephant is Denied Service From Local NYC Diner";
+    [self configureTitleLabelFromString: @"Hungry Elephant Denied Service From Local NYC Diner"];
     self.userNameLabel.text = @"First Last";
     self.timestampLabel.text = @"1 day ago • Updated 12:03 a.m";
-    [self configureCaptionTextViewFromString: @"The wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.\n\nThe wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way."];
+    self.captionTextView.text = @"The wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.\n\nThe wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.";
 }
 
 #pragma mark - Private
-- (void)configureCaptionTextViewFromString:(NSString *)caption {
+- (void)configureTitleLabelFromString:(NSString *)caption {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 10;
-    self.captionTextView.attributedText = [[NSAttributedString alloc] initWithString:caption attributes: @{ NSParagraphStyleAttributeName: paragraphStyle }];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:caption attributes: @{ NSParagraphStyleAttributeName: paragraphStyle }];
 }
 
 @end
