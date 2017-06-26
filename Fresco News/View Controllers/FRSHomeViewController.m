@@ -30,6 +30,7 @@
 #import "NSString+Fresco.h"
 #import "FRSUserStoryManager.h"
 #import "FRSStoryTableViewCell.h"
+#import "FRSUserStoryDetailViewController.h"
 
 static NSInteger const galleriesPerPage = 12;
 
@@ -784,6 +785,8 @@ static NSInteger const galleriesPerPage = 12;
 - (void)readMoreForUserStoryAtIndexPath:(NSIndexPath *)indexPath {
     FRSUserStory *userStory = self.highlights[indexPath.row];
     NSLog(@"Read More for User Story: %@", userStory);
+    FRSUserStoryDetailViewController *detailVC = [[FRSUserStoryDetailViewController alloc] initWithUserStory:userStory];
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 #pragma mark - Nav Bar Actions

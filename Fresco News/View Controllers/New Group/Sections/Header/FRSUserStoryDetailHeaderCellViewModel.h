@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSString *caption;
 @property (nonatomic, strong) FRSUser *creator;
 @property (nonatomic, strong) NSDate *createdDate;
+@property (nonatomic, strong) NSDate *editedDate;
 
 - (instancetype)initWithUserStory:(FRSUserStory *)userStory;
 

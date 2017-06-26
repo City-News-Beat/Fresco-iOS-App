@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 
 @interface FRSUserStoryDetailTableView () <UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) FRSUserStory *userStory;
+
 @end
 
 @implementation FRSUserStoryDetailTableView
@@ -36,6 +38,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
         self.backgroundColor = [UIColor clearColor];
         self.allowsSelection = NO;
         [self registerNibs];
+        self.userStory = userStory;
     }
     return self;
 }
@@ -86,41 +89,43 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     return [UITableViewCell new];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    switch (indexPath.row) {
-        case Header: {
-            return UITableViewAutomaticDimension;
-        } break;
-            
-        case Media: {
-            return 300;
-        } break;
-            
-        case Articles: {
-            return 300;
-        } break;
-            
-        case Comments: {
-            return 300;
-        } break;
-            
-        default:
-            break;
-    }
-    
-    return 0;
-}
+// DEBUG // DEBUG // DEBUG // DEBUG
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//
+//    switch (indexPath.row) {
+//        case Header: {
+//            return UITableViewAutomaticDimension;
+//        } break;
+//
+//        case Media: {
+//            return 300;
+//        } break;
+//
+//        case Articles: {
+//            return 300;
+//        } break;
+//
+//        case Comments: {
+//            return 300;
+//        } break;
+//
+//        default:
+//            break;
+//    }
+//
+//    return 0;
+//}
+// DEBUG // DEBUG // DEBUG // DEBUG
 
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return UITableViewAutomaticDimension;
 }
 
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    return UITableViewAutomaticDimension;
-//}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return UITableViewAutomaticDimension;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     

@@ -7,6 +7,7 @@
 //
 
 #import "FRSUserStoryDetailHeaderTableViewCell.h"
+#import "FRSDateFormatter.h"
 
 @interface FRSUserStoryDetailHeaderTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -34,25 +35,30 @@
 
 - (void)configureWithStoryHeaderCellViewModel:(FRSUserStoryDetailHeaderCellViewModel *)viewModel {
     
-//    self.titleLabel.text = viewModel.title;
-//    self.userImageView.image = viewModel.creator.profileImage; // Needs to be formatted
-//    self.userNameLabel.text = viewModel.creator.username;
-//    self.timestampLabel.text = [NSString stringWithFormat:@"%@", viewModel.createdDate]; // Needs to be formatted
-//    [self configureCaptionTextViewFromString:viewModel.caption];
+    self.userStoryDetailHeaderCellViewModel = viewModel;
     
-    // DEBUG
-    [self configureTitleLabelFromString: @"Hungry Elephant Denied Service From Local NYC Diner"];
-    self.userNameLabel.text = @"First Last";
-    self.timestampLabel.text = @"1 day ago • Updated 12:03 a.m";
-    self.captionTextView.text = @"The wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.\n\nThe wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.";
+    self.userImageView.image = viewModel.creator.profileImage; // Needs to be formatted
+    self.userNameLabel.text = viewModel.creator.firstName != nil ? viewModel.creator.firstName : viewModel.creator.username;
+    self.captionTextView.text = viewModel.caption;
+    self.titleLabel.attributedText = [self formattedTitleLabelAttributedString];
+    self.timestampLabel.text = [self formattedTimestampString];
 }
 
 #pragma mark - Private
-- (void)configureTitleLabelFromString:(NSString *)caption {
+- (NSAttributedString *)formattedTitleLabelAttributedString {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 10;
     paragraphStyle.alignment = NSTextAlignmentCenter;
-    self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:caption attributes: @{ NSParagraphStyleAttributeName: paragraphStyle }];
+    return [[NSAttributedString alloc] initWithString:self.userStoryDetailHeaderCellViewModel.title attributes: @{ NSParagraphStyleAttributeName: paragraphStyle }];
+}
+
+- (NSString *)formattedTimestampString {
+    
+    if (self.userStoryDetailHeaderCellViewModel.editedDate) {
+        return [NSString stringWithFormat:@"%@ • Updated %@", [FRSDateFormatter timestampStringFromDate:self.userStoryDetailHeaderCellViewModel.createdDate], [FRSDateFormatter timestampStringFromDate:self.userStoryDetailHeaderCellViewModel.editedDate]];
+    } else {
+        return [FRSDateFormatter timestampStringFromDate:self.userStoryDetailHeaderCellViewModel.createdDate];
+    }
 }
 
 @end

@@ -102,7 +102,11 @@
     if (!self.posts || self.posts.count == 0) {
         [self addPostsWithArray:dict[@"posts"]];
     }
-
+    
+    
+    // DEBUG
+    self.editedDate = [NSDate date];
+    self.creator = [[FRSUserManager sharedInstance] authenticatedUser];
 }
 
 - (void)addPostsWithArray:(NSArray *)posts {
