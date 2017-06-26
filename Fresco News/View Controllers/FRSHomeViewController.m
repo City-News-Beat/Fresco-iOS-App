@@ -670,8 +670,8 @@ static NSInteger const galleriesPerPage = 12;
         __weak typeof(self) weakSelf = self;
         cell.userStory = self.highlights[indexPath.row];
         
-        cell.actionBlock = ^{
-//            [weakSelf readMore:indexPath.row];
+        cell.readMoreBlock = ^void(NSArray *sharedContent) {
+            [weakSelf readMoreForUserStoryAtIndexPath:indexPath];
         };
         
         cell.shareBlock = ^void(NSArray *sharedContent) {
@@ -781,6 +781,11 @@ static NSInteger const galleriesPerPage = 12;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
+}
+
+- (void)readMoreForUserStoryAtIndexPath:(NSIndexPath *)indexPath {
+    FRSUserStory *userStory = self.highlights[indexPath.row];
+    NSLog(@"Read More for User Story: %@", userStory);
 }
 
 #pragma mark - Nav Bar Actions
