@@ -27,6 +27,7 @@
 #import "FRSTOSAlertView.h"
 #import "NSDate+Fresco.h"
 #import "NSString+Fresco.h"
+#import "FRSUserStoryDetailViewController.h"
 
 static NSInteger const galleriesPerPage = 12;
 
@@ -100,7 +101,9 @@ static NSInteger const galleriesPerPage = 12;
     
     [self configureDataSourceOnLoad];
     
-    
+    FRSUserStoryDetailViewController *detail = [[FRSUserStoryDetailViewController alloc] init];
+    [self hideTabBarAnimated:YES];
+    [self.navigationController pushViewController:detail animated:YES];
     
 }
 

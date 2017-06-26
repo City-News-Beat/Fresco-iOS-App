@@ -11,10 +11,11 @@
 
 @interface FRSUserStoryDetailHeaderCellViewModel : NSObject
 
-@property(nonatomic, strong) NSString *title;
-@property(nonatomic, strong) NSString *caption;
-@property(nonatomic, strong) NSString *userName;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *caption;
+@property (nonatomic, strong) FRSUser *creator;
+@property (nonatomic, strong) NSDate *createdDate;
 
-- (instancetype)initWithUserStory:(FRSStory *)userStory;
 - (instancetype)initWithUserStory:(FRSUserStory *)userStory;
+
 @end

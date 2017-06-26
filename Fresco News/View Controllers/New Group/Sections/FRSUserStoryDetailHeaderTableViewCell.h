@@ -13,7 +13,6 @@ static NSString *const storyDetailHeaderCellIdentifier = @"story-detail-header-c
 
 @interface FRSUserStoryDetailHeaderTableViewCell : UITableViewCell
 
-
 - (void)configureWithStoryHeaderCellViewModel:(FRSUserStoryDetailHeaderCellViewModel *)userStoryDetailHeaderCellViewModel;
 
 @end

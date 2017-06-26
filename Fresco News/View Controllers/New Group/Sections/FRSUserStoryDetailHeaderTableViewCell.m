@@ -32,30 +32,26 @@
     // Configure the view for the selected state
 }
 
-- (void)configureWithStory:(FRSUserStoryDetailHeaderCellViewModel *)userStoryDetailHeaderCellViewModel{
-
-//    self.titleLabel.text = userStory.title;
-//    self.userImageView.image = userStory.creator.profileImage;
-//    self.userNameLabel.text = userStory.creator.firstName;
-//    self.timestampLabel.text = [NSString stringWithFormat:@"%@", userStory.createdDate];
-//    self.captionTextView.text = userStory.caption;
+- (void)configureWithStoryHeaderCellViewModel:(FRSUserStoryDetailHeaderCellViewModel *)viewModel {
     
-    
+//    self.titleLabel.text = viewModel.title;
+//    self.userImageView.image = viewModel.creator.profileImage; // Needs to be formatted
+//    self.userNameLabel.text = viewModel.creator.username;
+//    self.timestampLabel.text = [NSString stringWithFormat:@"%@", viewModel.createdDate]; // Needs to be formatted
+//    [self configureCaptionTextViewFromString:viewModel.caption];
     
     // DEBUG
-    
-//    [[FRSAPIClient sharedClient] get:@"story/highlights" withParameters:@{@"rating" : @2, @"sortBy" : @"highlighted"} completion:^(id responseObject, NSError *error) {
-//
-//    }];
-    
-    self.titleLabel.text = userStoryDetailHeaderCellViewModel.title;
-    self.userNameLabel.text = userStoryDetailHeaderCellViewModel.userName;
-    self.timestampLabel.text = @"1 day ago • Updated 12:03 a.m";
-    self.captionTextView.text = @"The wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.\n\nThe wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.";
-    self.titleLabel.text = @"Wild Elephant Eats Small Bird Without Fork";
+    self.titleLabel.text = @"Hungry Elephant is Denied Service From Local NYC Diner";
     self.userNameLabel.text = @"First Last";
     self.timestampLabel.text = @"1 day ago • Updated 12:03 a.m";
-    self.captionTextView.text = @"The wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.\n\nThe wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.";
+    [self configureCaptionTextViewFromString: @"The wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way.\n\nThe wait is nearly over: after just over two weeks of voting, Vancouver is set to announce its official city bird on Thursday. There are four west coast species in the running to be named official spokesbird: Anna’s hummingbird, the varied thrush, the spotted towhee and the northern flicker, each of which is thought to embody the spirit of Vancouver in some way."];
+}
+
+#pragma mark - Private
+- (void)configureCaptionTextViewFromString:(NSString *)caption {
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 10;
+    self.captionTextView.attributedText = [[NSAttributedString alloc] initWithString:caption attributes: @{ NSParagraphStyleAttributeName: paragraphStyle }];
 }
 
 @end
