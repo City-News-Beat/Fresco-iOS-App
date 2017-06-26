@@ -85,6 +85,7 @@
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
 		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
 		07B6FB551D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */; };
+		07C5C6741F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C5C6731F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.m */; };
 		07C77EFE1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */; };
 		07C8B4B71EC4C4D000C3CA5C /* FRSTipsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C8B4B61EC4C4D000C3CA5C /* FRSTipsHeaderView.m */; };
 		07CA2A0E1ECB5BCB000122EF /* FRSTipsSupportFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CA2A0D1ECB5BCB000122EF /* FRSTipsSupportFooterView.m */; };
@@ -555,6 +556,8 @@
 		07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGlobalAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		07B6FB531D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentTableViewCell.h; sourceTree = "<group>"; };
 		07B6FB541D0A0F3F001C3120 /* FRSGlobalAssignmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentTableViewCell.m; sourceTree = "<group>"; };
+		07C5C6721F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FRSUserStoryDetailCommentsTableView.h; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailCommentsTableView.h"; sourceTree = SOURCE_ROOT; };
+		07C5C6731F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FRSUserStoryDetailCommentsTableView.m; path = "Fresco News/View Controllers/User Story/FRSUserStoryDetailCommentsTableView.m"; sourceTree = SOURCE_ROOT; };
 		07C77EFC1EA65BC1000281F6 /* FRSFollowersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowersFollowingViewController.h; sourceTree = "<group>"; };
 		07C77EFD1EA65BC1000281F6 /* FRSFollowersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowersFollowingViewController.m; sourceTree = "<group>"; };
 		07C8B4B51EC4C4D000C3CA5C /* FRSTipsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTipsHeaderView.h; sourceTree = "<group>"; };
@@ -1205,6 +1208,8 @@
 				070B73651EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.h */,
 				070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */,
 				070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */,
+				07C5C6721F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.h */,
+				07C5C6731F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.m */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -3256,6 +3261,7 @@
 				070717AD1EFB16D6007DEFAB /* FRSUserStoryDetailViewController.m in Sources */,
 				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
+				07C5C6741F0167F9004FBE01 /* FRSUserStoryDetailCommentsTableView.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
 				07EEF3BD1EA562C9004E4AC1 /* FRSLikeRepostViewController.m in Sources */,

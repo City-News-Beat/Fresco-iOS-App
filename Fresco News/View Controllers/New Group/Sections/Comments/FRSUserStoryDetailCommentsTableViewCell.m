@@ -7,22 +7,28 @@
 //
 
 #import "FRSUserStoryDetailCommentsTableViewCell.h"
+#import "FRSUserStoryDetailCommentsTableView.h"
+
+@interface FRSUserStoryDetailCommentsTableViewCell ()
+@property (weak, nonatomic) IBOutlet FRSUserStoryDetailCommentsTableView *tableView;
+@end
+
 
 @implementation FRSUserStoryDetailCommentsTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
     // Configure the view for the selected state
 }
 
 - (void)configureWithStory:(FRSUserStory *)userStory {
-    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.tableView configureCommentsTableViewWithUserStory:userStory];
 }
 
 @end

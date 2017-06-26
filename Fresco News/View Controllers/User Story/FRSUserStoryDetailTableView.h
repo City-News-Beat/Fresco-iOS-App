@@ -12,7 +12,6 @@
 @interface FRSUserStoryDetailTableView : UITableView
 
 - (instancetype)initWithFrame:(CGRect)frame userStory:(FRSUserStory *)userStory;
-
 @property (strong, nonatomic) FRSUserStory *userStory;
 
 @end

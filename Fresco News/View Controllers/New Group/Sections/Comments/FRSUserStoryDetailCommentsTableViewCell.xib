@@ -52,7 +52,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RmV-45-BQd">
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RmV-45-BQd" customClass="FRSUserStoryDetailCommentsTableView">
                         <rect key="frame" x="0.0" y="56" width="375" height="351.5"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </tableView>
@@ -70,6 +70,9 @@
                     <constraint firstAttribute="bottom" secondItem="wfI-Z8-jG5" secondAttribute="bottom" id="wgX-tu-Ftw"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="tableView" destination="RmV-45-BQd" id="axt-b9-fIf"/>
+            </connections>
             <point key="canvasLocation" x="40.5" y="-448"/>
         </tableViewCell>
     </objects>
