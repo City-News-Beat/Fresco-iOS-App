@@ -1134,20 +1134,10 @@
 		070B735E1EFC53B5002A381B /* Sections */ = {
 			isa = PBXGroup;
 			children = (
-				070B73641EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.h */,
-				070B73621EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.m */,
-				070B73631EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib */,
-				071F75C81EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.h */,
-				071F75C91EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m */,
-				070B735F1EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.h */,
-				070B73611EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.m */,
-				070B73601EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.xib */,
-				070B73591EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.h */,
-				070B735A1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m */,
-				070B735B1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib */,
-				070B73651EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.h */,
-				070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */,
-				070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */,
+				072BB63E1F0163F3002B8D89 /* Header */,
+				072BB63F1F016401002B8D89 /* Media */,
+				072BB6401F01640F002B8D89 /* Articles */,
+				072BB6411F016418002B8D89 /* Comments */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -1175,6 +1165,48 @@
 				072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		072BB63E1F0163F3002B8D89 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				071F75C81EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.h */,
+				071F75C91EFDB46300CCA634 /* FRSUserStoryDetailHeaderCellViewModel.m */,
+				070B73641EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.h */,
+				070B73621EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.m */,
+				070B73631EFC5460002A381B /* FRSUserStoryDetailHeaderTableViewCell.xib */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
+		072BB63F1F016401002B8D89 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				070B735F1EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.h */,
+				070B73611EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.m */,
+				070B73601EFC543C002A381B /* FRSUserStoryDetailMediaTableViewCell.xib */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
+		072BB6401F01640F002B8D89 /* Articles */ = {
+			isa = PBXGroup;
+			children = (
+				070B73591EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.h */,
+				070B735A1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.m */,
+				070B735B1EFC4EF6002A381B /* FRSUserStoryDetailArticlesTableViewCell.xib */,
+			);
+			path = Articles;
+			sourceTree = "<group>";
+		};
+		072BB6411F016418002B8D89 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				070B73651EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.h */,
+				070B73661EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.m */,
+				070B73671EFC54D1002A381B /* FRSUserStoryDetailCommentsTableViewCell.xib */,
+			);
+			path = Comments;
 			sourceTree = "<group>";
 		};
 		0731B1B21E4929CD0045E6F4 /* FRSSnapKit */ = {
