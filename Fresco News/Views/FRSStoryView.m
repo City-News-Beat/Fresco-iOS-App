@@ -17,7 +17,7 @@
 #import "UIFont+Fresco.h"
 #import "FRSDateFormatter.h"
 #import "FRSScrollViewImageView.h"
-#import <Haneke/Haneke.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "FRSProfileViewController.h"
 #import "FRSDualUserListViewController.h"
 #import "FRSStoryManager.h"
@@ -106,7 +106,10 @@
             UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
             iv.contentMode = UIViewContentModeScaleAspectFill;
             iv.clipsToBounds = YES;
-            [iv hnk_setImageFromURL:self.smallImageURLS[0]];
+            [iv sd_setImageWithURL:self.smallImageURLS[0]
+                                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                     }];
+
             [self.topContainer addSubview:iv];
         } break;
 
@@ -121,37 +124,49 @@
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
         iv.contentMode = UIViewContentModeScaleAspectFill;
         iv.clipsToBounds = YES;
-        [iv hnk_setImageFromURL:self.smallImageURLS[0]];
+        [iv sd_setImageWithURL:self.smallImageURLS[0]
+                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                     }];
         [self.topContainer addSubview:iv];
 
         UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(width + 1, 0, width, halfHeight)];
         iv2.contentMode = UIViewContentModeScaleAspectFill;
         iv2.clipsToBounds = YES;
-        [iv2 hnk_setImageFromURL:self.smallImageURLS[1]];
+        [iv sd_setImageWithURL:self.smallImageURLS[1]
+                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                     }];
         [self.topContainer addSubview:iv2];
 
         UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(width * 2 + 2, 0, width, halfHeight)];
         iv3.contentMode = UIViewContentModeScaleAspectFill;
         iv3.clipsToBounds = YES;
-        [iv3 hnk_setImageFromURL:self.smallImageURLS[2]];
+        [iv sd_setImageWithURL:self.smallImageURLS[2]
+                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                     }];
         [self.topContainer addSubview:iv3];
 
         UIImageView *iv4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) - width, halfHeight + 0.5, width, halfHeight)];
         iv4.contentMode = UIViewContentModeScaleAspectFill;
         iv4.clipsToBounds = YES;
-        [iv4 hnk_setImageFromURL:self.smallImageURLS[3]];
+        [iv sd_setImageWithURL:self.smallImageURLS[3]
+                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                     }];
         [self.topContainer addSubview:iv4];
 
         UIImageView *iv5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) + 1, halfHeight + 0.5, width, halfHeight)];
         iv5.contentMode = UIViewContentModeScaleAspectFill;
         iv5.clipsToBounds = YES;
-        [iv5 hnk_setImageFromURL:self.smallImageURLS[4]];
+        [iv sd_setImageWithURL:self.smallImageURLS[4]
+                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                     }];
         [self.topContainer addSubview:iv5];
 
         UIImageView *iv6 = [[UIImageView alloc] initWithFrame:CGRectOffset(iv5.frame, width + 1, 0)];
         iv6.contentMode = UIViewContentModeScaleAspectFill;
         iv6.clipsToBounds = YES;
-        [iv6 hnk_setImageFromURL:self.smallImageURLS[5]];
+        [iv sd_setImageWithURL:self.smallImageURLS[5]
+                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                     }];
         [self.topContainer addSubview:iv6];
     }
 }
@@ -163,36 +178,32 @@
     [self.topContainer addSubview:imageView];
 
     __weak typeof(self) weakSelf = self;
+    [imageView sd_setImageWithURL:self.smallImageURLS[index]
+                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                
+                                NSInteger imageWidth = image.size.width;
+                                NSInteger imageHeight = image.size.height;
+                                NSInteger viewHeight = self.topContainer.frame.size.height;
+                                
+                                float multiplier = (float)viewHeight / (float)imageHeight;
+                                
+                                CGRect imageFrame = CGRectMake(xPos, 0, multiplier * imageWidth, viewHeight);
+                                
+                                imageView.frame = imageFrame;
+                                imageView.image = image;
+                                
+                                if (index + 1 >= total) {
+                                    [self.titleLabel.superview bringSubviewToFront:self.titleLabel];
+                                    return;
+                                }
+                                
+                                [weakSelf configureImageFromImageView:[[UIImageView alloc] init] atIndex:index + 1 xPos:xPos + imageView.frame.size.width + (index + 1) total:total];
+                                
+                            });
+                            
+                        }];
 
-    [imageView hnk_setImageFromURL:self.smallImageURLS[index]
-                       placeholder:nil
-                           success:^(UIImage *image) {
-                             dispatch_async(dispatch_get_main_queue(), ^{
-
-                               NSInteger imageWidth = image.size.width;
-                               NSInteger imageHeight = image.size.height;
-                               NSInteger viewHeight = self.topContainer.frame.size.height;
-
-                               float multiplier = (float)viewHeight / (float)imageHeight;
-
-                               CGRect imageFrame = CGRectMake(xPos, 0, multiplier * imageWidth, viewHeight);
-
-                               imageView.frame = imageFrame;
-                               imageView.image = image;
-
-                               if (index + 1 >= total) {
-                                   [self.titleLabel.superview bringSubviewToFront:self.titleLabel];
-                                   return;
-                               }
-
-                               [weakSelf configureImageFromImageView:[[UIImageView alloc] init] atIndex:index + 1 xPos:xPos + imageView.frame.size.width + (index + 1) total:total];
-
-                             });
-
-                           }
-                           failure:^(NSError *error){
-                               //failure
-                           }];
 }
 
 - (void)configureTitle {
