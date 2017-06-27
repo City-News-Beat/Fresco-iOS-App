@@ -37,8 +37,8 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSt-42-n9C">
-                        <rect key="frame" x="56" y="85.5" width="4.5" height="24"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="123123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSt-42-n9C">
+                        <rect key="frame" x="56" y="85.5" width="47.5" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="ZmT-am-tnT"/>
                         </constraints>
@@ -46,7 +46,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8WC-9k-2g3">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8WC-9k-2g3">
                         <rect key="frame" x="341.5" y="85" width="3.5" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="8nq-TY-ACV"/>
@@ -111,6 +111,7 @@
                     <constraint firstItem="xAb-Pn-nue" firstAttribute="top" secondItem="sSt-42-n9C" secondAttribute="bottom" constant="12" id="NBZ-Sn-MwI"/>
                     <constraint firstItem="sSt-42-n9C" firstAttribute="leading" secondItem="W6S-i8-f1c" secondAttribute="trailing" constant="8" id="O3u-Y2-gcD"/>
                     <constraint firstAttribute="bottom" secondItem="ghl-g6-edS" secondAttribute="bottom" id="RRU-46-fgr"/>
+                    <constraint firstItem="8WC-9k-2g3" firstAttribute="leading" secondItem="sSt-42-n9C" secondAttribute="trailing" constant="8" id="Tku-cu-sPv"/>
                     <constraint firstAttribute="bottomMargin" secondItem="xAb-Pn-nue" secondAttribute="bottom" constant="12" id="WYO-tV-KyV"/>
                     <constraint firstItem="8f5-Lf-xvR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="XJ5-ZP-FnU"/>
                     <constraint firstItem="8f5-Lf-xvR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="36" id="ZYg-39-Dgr"/>
