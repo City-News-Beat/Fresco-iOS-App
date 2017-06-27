@@ -16,7 +16,7 @@
 typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     Header,
     Media,
-    Articles,
+    //Articles,
     Comments
 };
 
@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -70,11 +70,11 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
             return cell;
         } break;
             
-        case Articles: {
+        /* case Articles: {
             FRSUserStoryDetailArticlesTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailArticlesCellIdentifier];
             [cell configureWithStory:self.userStory];
             return cell;
-        } break;
+         } break; */ // Note: Articles are currently unsupported, but may come back in the future.
             
         case Comments: {
             FRSUserStoryDetailCommentsTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailCommentsCellIdentifier];
@@ -88,34 +88,6 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     
     return [UITableViewCell new];
 }
-
-// DEBUG // DEBUG // DEBUG // DEBUG
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//
-//    switch (indexPath.row) {
-//        case Header: {
-//            return UITableViewAutomaticDimension;
-//        } break;
-//
-//        case Media: {
-//            return 300;
-//        } break;
-//
-//        case Articles: {
-//            return 300;
-//        } break;
-//
-//        case Comments: {
-//            return 300;
-//        } break;
-//
-//        default:
-//            break;
-//    }
-//
-//    return 0;
-//}
-// DEBUG // DEBUG // DEBUG // DEBUG
 
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
     

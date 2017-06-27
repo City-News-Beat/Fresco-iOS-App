@@ -14,4 +14,6 @@
 
 - (void)fetchUserStoriesWithLimit:(NSInteger)limit offsetStoryID:(NSString *)offset completion:(FRSAPIDefaultCompletionBlock)completion;
 
+- (void)fetchCommentsForStoryID:(NSString *)storyID completion:(FRSAPIDefaultCompletionBlock)completion;
+
 @end

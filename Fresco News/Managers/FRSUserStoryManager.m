@@ -10,6 +10,7 @@
 #import "FRSAPIClient.h"
 
 static NSString *const kUserStoryListEndpoint = @"story/list";
+static NSString *const kUserStoryFetchCommentsEndpoint = @"story/%@/comments";
 
 @implementation FRSUserStoryManager
 
@@ -44,6 +45,13 @@ static NSString *const kUserStoryListEndpoint = @"story/list";
                           completion:^(id responseObject, NSError *error) {
                               completion(responseObject, error);
                           }];
+}
+
+- (void)fetchCommentsForStoryID:(NSString *)storyID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:kUserStoryFetchCommentsEndpoint, storyID];
+    [[FRSAPIClient sharedClient] get:endpoint
+                      withParameters:Nil
+                          completion:completion];
 }
 
 @end

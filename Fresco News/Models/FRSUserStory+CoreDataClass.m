@@ -103,7 +103,6 @@
         [self addPostsWithArray:dict[@"posts"]];
     }
     
-    
     // DEBUG
     self.editedDate = [NSDate date];
     self.creator = [[FRSUserManager sharedInstance] authenticatedUser];
