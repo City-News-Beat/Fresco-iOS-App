@@ -12,7 +12,7 @@
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
-@interface FRSUserStoryDetailCommentsTableView () <UITableViewDelegate, UITableViewDataSource>
+@interface FRSUserStoryDetailCommentsTableView () <UITableViewDelegate, UITableViewDataSource, FRSCommentCellDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) FRSUserStory *userStory;
 @property (nonatomic, retain) NSMutableArray *comments;
@@ -35,41 +35,40 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSUserStoryManager sharedInstance] fetchCommentsForStoryID:self.userStory.uid completion:^(id responseObject, NSError *error) {
         NSLog(@"RESPONSE: %@, ERROR: %@", responseObject, error);
         
-        
         self.comments = [[NSMutableArray alloc] init];
         NSArray *response = (NSArray *)responseObject;
         for (NSInteger i = response.count - 1; i >= 0; i--) {
             FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
-            [_comments addObject:commentObject];
+            [self.comments addObject:commentObject];
         }
-        
-//        if ([self.gallery.comments integerValue] <= 10) {
-//            showsMoreButton = FALSE;
-//        } else {
-//            showsMoreButton = TRUE;
-//        }
         
         [self reloadData];
     }];
 }
 
-- (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma mark - Tableview Delegate and Datasource
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FRSCommentCell *commentCell = [[FRSCommentCell alloc] init];
     commentCell.backgroundColor = [UIColor redColor];
     [commentCell configureCell:[self.comments objectAtIndex:indexPath.row] delegate:self];
     return commentCell;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
--(NSInteger)numberOfRowsInSection:(NSInteger)section {
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     return self.comments.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
 }
+
+#pragma mark - Comment Cell Delegate
+- (void)didPressProfilePictureWithUserId:(NSString *)uid {
+    
+}
+
+
 
 @end

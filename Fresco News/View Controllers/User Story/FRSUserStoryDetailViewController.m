@@ -46,6 +46,7 @@
 - (void)configureNavigationBar {
     [self configureBackButtonAnimated:YES];
     
+    // TODO: Consolidate the navigation bar formatting logic into one place.
     // Ideally we would just use self.navigationController, but it's nil for some reason. Needs to be debugged, might have to do with presenting an nib.
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     UITabBarController *tabBar = (UITabBarController *)appDelegate.tabBarController;
@@ -53,9 +54,7 @@
     nav.navigationBar.tintColor = [UIColor whiteColor];
     [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName :[UIFont notaBoldWithSize:17]}];
     
-    // DEBUG
-    self.title = @"VANCOUVER, BC";
-    // self.title = self.userStory.location.uppercaseString;
+    self.title = @"STORY"; // This should be "CITY, STATE". Pending API.
 }
 
 - (void)configureTableView {
