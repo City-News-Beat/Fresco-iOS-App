@@ -11,6 +11,7 @@
 
 static NSString *const kUserStoryListEndpoint = @"story/list";
 static NSString *const kUserStoryFetchCommentsEndpoint = @"story/%@/comments";
+static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
 
 @implementation FRSUserStoryManager
 
@@ -49,6 +50,14 @@ static NSString *const kUserStoryFetchCommentsEndpoint = @"story/%@/comments";
 
 - (void)fetchCommentsForStoryID:(NSString *)storyID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kUserStoryFetchCommentsEndpoint, storyID];
+    [[FRSAPIClient sharedClient] get:endpoint
+                      withParameters:Nil
+                          completion:completion];
+}
+
+- (void)fetchMoreComments:(FRSUserStory *)story last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:paginateComments, story.uid, last];
+    
     [[FRSAPIClient sharedClient] get:endpoint
                       withParameters:Nil
                           completion:completion];

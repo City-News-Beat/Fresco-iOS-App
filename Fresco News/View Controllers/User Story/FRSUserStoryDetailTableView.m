@@ -215,12 +215,44 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     }];
 }
 
+- (void)loadMoreComments {
+    FRSComment *comment = self.comments[0];
+    NSString *lastID = comment.uid;
+    
+//    [self configureCommentsSpinner];
+    
+    [[FRSUserStoryManager sharedInstance] fetchMoreComments:self.userStory
+                                                     last:lastID
+                                               completion:^(id responseObject, NSError *error) {
+                                                   if (!responseObject || error) {
+                                                       return;
+                                                   }
+                                                   
+                                                   int count = 0;
+                                                   
+                                                   for (NSDictionary *comment in responseObject) {
+                                                       FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+                                                       [self.comments insertObject:commentObject atIndex:0];
+                                                       count++;
+                                                   }
+                                                   
+                                                   if (count < 10 || ([self visibleCells].count - 1) == (int)self.userStory.commentCount - 10) {
+                                                       self.shouldDisplayLoadMoreCommentsButton = FALSE;
+                                                   } else {
+                                                       self.shouldDisplayLoadMoreCommentsButton = TRUE;
+                                                   }
+                                                   
+//                                                   [self stopCommentsSpinner];
+                                                   [self reloadData];
+                                               }];
+}
+
 - (void)showComments {
     [self reloadData];
 }
 
 - (void)hideComments {
-
+    
 }
 
 @end
