@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 @implementation FRSUserStoryDetailTableView
 
 - (instancetype)initWithFrame:(CGRect)frame userStory:(FRSUserStory *)userStory {
-    self = [super initWithFrame:frame style:UITableViewStylePlain];
+    self = [super initWithFrame:frame style:UITableViewStyleGrouped];
     
     if (self) {
         self.delegate = self;
@@ -86,17 +86,18 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
             FRSUserStoryDetailHeaderTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailHeaderCellIdentifier];
             FRSUserStoryDetailHeaderCellViewModel *vm = [[FRSUserStoryDetailHeaderCellViewModel alloc] initWithUserStory:self.userStory];
             [cell configureWithStoryHeaderCellViewModel: vm];
+            cell.backgroundView = [[UIView alloc] initWithFrame:cell.frame];
             return cell;
         } break;
             
         case FRSMediaSection: {
             FRSUserStoryDetailMediaTableViewCell *cell = [self dequeueReusableCellWithIdentifier:storyDetailMediaCellIdentifier];
             [cell configureWithStory:self.userStory];
+            cell.backgroundView = [[UIView alloc] initWithFrame:cell.frame];
             return cell;
         } break;
             
         case FRSCommentsSection: {
-            
             // We shouldn't have to set the delegate in three places.
             FRSCommentCell *commentCell = [self dequeueReusableCellWithIdentifier:storyDetailCommentsCellIdentifier];
             commentCell.delegate = self;
@@ -107,6 +108,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
             commentCell.backgroundColor = [UIColor whiteColor];
             commentCell.contentView.backgroundColor = [UIColor whiteColor];
             
+            commentCell.backgroundView = [[UIView alloc] initWithFrame:commentCell.frame];
             return commentCell;
             
         } break;
@@ -132,17 +134,36 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     return 3;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     switch (section) {
         case FRSCommentsSection: {
-            FRSTableViewSectionHeaderView *header = (FRSTableViewSectionHeaderView*)view;
-            [view addSubview:header];
+            return [[FRSTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 56) title:@"COMMENTS"];
         } break;
             
         default:
             break;
     }
+    
+    return [[UIView alloc] initWithFrame:CGRectZero];
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    switch (section) {
+        case FRSCommentsSection: {
+            return 56;
+        } break;
+            
+        default:
+            break;
+    }
+    
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0;
+}
+
 
 - (void)fetchComments {
     [[FRSUserStoryManager sharedInstance] fetchCommentsForStoryID:self.userStory.uid completion:^(id responseObject, NSError *error) {

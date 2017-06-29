@@ -10,4 +10,6 @@
 
 @interface FRSTableViewSectionHeaderView : UIView
 
+- (instancetype)initWithFrame:(CGRect)frame title:(NSString *)title;
+
 @end

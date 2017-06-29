@@ -98,6 +98,7 @@
 		07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DC1C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m */; };
 		07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DE1C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m */; };
 		07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92E01C752037000DBEA8 /* DGElasticPullToRefreshView.m */; };
+		07EED5841F055510001ACF54 /* FRSTableViewSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07408AF91F044F10007458CC /* FRSTableViewSectionHeaderView.xib */; };
 		07EEF3BD1EA562C9004E4AC1 /* FRSLikeRepostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EEF3BC1EA562C9004E4AC1 /* FRSLikeRepostViewController.m */; };
 		07F0137B1EFC21D3006C727B /* FRSUserStoryDetailTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F0137A1EFC21D3006C727B /* FRSUserStoryDetailTableView.m */; };
 		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
@@ -3047,6 +3048,7 @@
 				079392811E79B25A004CC2AD /* FRSGalleryUploadedToast.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				07D4FB081E9D6AA500E0DAD8 /* FRSCaptureModeSlider.xib in Resources */,
+				07EED5841F055510001ACF54 /* FRSTableViewSectionHeaderView.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				CE3799B11E58239200B6743A /* FRSSocialToggleTableViewCell.xib in Resources */,
 				CE13224B1E510F2200A46D4D /* FRSSeeAllLabelTableViewCell.xib in Resources */,
