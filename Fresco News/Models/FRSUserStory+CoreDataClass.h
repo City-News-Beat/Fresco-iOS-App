@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (nonatomic, retain) NSNumber *postsCount;
+@property (nonatomic, retain) NSNumber *commentCount;
 @property (strong, nonatomic, retain) NSDictionary *curatorDict;
 @property (nullable, nonatomic, retain) FRSUser *sourceUser;
 @property (nullable, nonatomic, retain) FRSUser *creator;

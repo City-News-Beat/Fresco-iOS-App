@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 
 @property (strong, nonatomic) FRSUserStory *userStory;
 @property (nonatomic, retain) NSMutableArray *comments;
+@property (nonatomic) BOOL shouldDisplayLoadMoreCommentsButton;
 
 @end
 
@@ -98,18 +99,56 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
         } break;
             
         case FRSCommentsSection: {
-            // We shouldn't have to set the delegate in three places.
-            FRSCommentCell *commentCell = [self dequeueReusableCellWithIdentifier:storyDetailCommentsCellIdentifier];
-            commentCell.delegate = self;
-            commentCell.cellDelegate = self;
             
-            FRSComment *comment = self.comments[indexPath.row];
-            [commentCell configureCell:comment delegate:self];
-            commentCell.backgroundColor = [UIColor whiteColor];
-            commentCell.contentView.backgroundColor = [UIColor whiteColor];
             
-            commentCell.backgroundView = [[UIView alloc] initWithFrame:commentCell.frame];
-            return commentCell;
+            if (indexPath.row == 0 && self.shouldDisplayLoadMoreCommentsButton) {
+                UITableViewCell *paginationCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"pagination-cell"];
+                
+                UIButton *loadMoreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 40)];
+                
+                loadMoreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
+                
+                
+                int total = (int)[self.userStory.commentCount floatValue] - [@(self.comments.count) floatValue];
+                if (total < 0 || total == (int)nil) {
+                    total = 0;
+                }
+                
+                if (total == 1) {
+                    [loadMoreCommentsButton setTitle:[NSString stringWithFormat:@"Show %d comment", total] forState:UIControlStateNormal];
+                } else {
+                    [loadMoreCommentsButton setTitle:[NSString stringWithFormat:@"Show %d more comments", total] forState:UIControlStateNormal];
+                }
+                
+                [loadMoreCommentsButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                [loadMoreCommentsButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+                loadMoreCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                loadMoreCommentsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 0);
+                loadMoreCommentsButton.backgroundColor = [UIColor whiteColor];
+                [loadMoreCommentsButton addTarget:self action:@selector(loadMoreComments) forControlEvents:UIControlEventTouchUpInside];
+                [paginationCell addSubview:loadMoreCommentsButton];
+                
+                paginationCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                paginationCell.backgroundColor = [UIColor whiteColor];
+                paginationCell.backgroundView.backgroundColor = [UIColor whiteColor];
+                
+                return paginationCell;
+                
+            } else {
+                
+                // We shouldn't have to set the delegate in three places.
+                FRSCommentCell *commentCell = [self dequeueReusableCellWithIdentifier:storyDetailCommentsCellIdentifier];
+                commentCell.delegate = self;
+                commentCell.cellDelegate = self;
+                
+                FRSComment *comment = self.comments[indexPath.row];
+                [commentCell configureCell:comment delegate:self];
+                commentCell.backgroundColor = [UIColor whiteColor];
+                commentCell.contentView.backgroundColor = [UIColor whiteColor];
+                
+                commentCell.backgroundView = [[UIView alloc] initWithFrame:commentCell.frame];
+                return commentCell;
+            }
             
         } break;
             
@@ -135,40 +174,24 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    switch (section) {
-        case FRSCommentsSection: {
-            return [[FRSTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 56) title:@"COMMENTS"];
-        } break;
-            
-        default:
-            break;
-    }
-    
-    return [[UIView alloc] initWithFrame:CGRectZero];
+    return section == FRSCommentsSection ? [[FRSTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 56) title:@"COMMENTS"] : [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    switch (section) {
-        case FRSCommentsSection: {
-            return 56;
-        } break;
-            
-        default:
-            break;
-    }
-    
-    return 0;
+    return section == FRSCommentsSection ? 56 : 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0;
-}
-
+#pragma mark Comments
 
 - (void)fetchComments {
     [[FRSUserStoryManager sharedInstance] fetchCommentsForStoryID:self.userStory.uid completion:^(id responseObject, NSError *error) {
-        NSLog(@"RESPONSE: %@, ERROR: %@", responseObject, error);
         
+        if (error) {
+            // Handle error
+            return;
+        }
+        
+        // Retreive comments from responseObject and populate array with FRSComment objects
         self.comments = [[NSMutableArray alloc] init];
         NSArray *response = (NSArray *)responseObject;
         for (NSInteger i = response.count - 1; i >= 0; i--) {
@@ -176,9 +199,28 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
             [self.comments addObject:commentObject];
         }
         
-        [self reloadData];
+        // Only display comments if comments are returned
+        if (self.comments.count > 0) {
+            [self showComments];
+        } else {
+            [self hideComments];
+        }
+        
+        // Display "Load More" button if there are more than 10 comments
+        if ((int)self.userStory.commentCount > 10) {
+            self.shouldDisplayLoadMoreCommentsButton = YES;
+        } else {
+            self.shouldDisplayLoadMoreCommentsButton = NO;
+        }
     }];
 }
 
+- (void)showComments {
+    [self reloadData];
+}
+
+- (void)hideComments {
+
+}
 
 @end

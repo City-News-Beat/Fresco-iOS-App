@@ -24,7 +24,7 @@
 
 @implementation FRSUserStory
 
-@synthesize postsCount = _postsCount, sourceUser = _sourceUser, creator = _creator, curatorDict = _curatorDict, currentContext = _currentContext;
+@synthesize postsCount = _postsCount, commentCount = _commentCOunt, sourceUser = _sourceUser, creator = _creator, curatorDict = _curatorDict, currentContext = _currentContext;
 
 - (NSDictionary *)curatorDict {
     return _curatorDict;
@@ -51,6 +51,7 @@
     
     self.title = dict[@"title"];
     self.uid = dict[@"id"];
+    self.commentCount = (NSNumber *)dict[@"comment_count"];
 //    self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];
 //    self.postsCount = dict[@"galleries"];
     
