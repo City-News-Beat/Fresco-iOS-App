@@ -11,7 +11,7 @@
 
 static NSString *const kUserStoryListEndpoint = @"story/list";
 static NSString *const kUserStoryFetchCommentsEndpoint = @"story/%@/comments";
-static NSString *const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
+static NSString *const paginateComments = @"story/%@/comments?limit=10&last=%@";
 
 @implementation FRSUserStoryManager
 
