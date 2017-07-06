@@ -19,4 +19,6 @@
 
 - (void)fetchMoreComments:(FRSUserStory *)story last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 
+- (void)deleteComment:(NSString *)commentID fromStory:(FRSUserStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
 @end

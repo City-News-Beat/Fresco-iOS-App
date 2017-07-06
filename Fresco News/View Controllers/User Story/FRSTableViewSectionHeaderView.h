@@ -12,4 +12,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame title:(NSString *)title;
 
+- (void)startLoading;
+- (void)stopLoading;
+
 @end

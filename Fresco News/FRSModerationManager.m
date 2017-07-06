@@ -17,7 +17,7 @@ static NSString *const blockedUsersEndpoint = @"user/blocked";
 static NSString *const blockUserEndpoint = @"user/%@/block";
 static NSString *const unblockUserEndpoint = @"user/%@/unblock";
 static NSString *const reportUserEndpoint = @"user/%@/report";
-static NSString *const reportGalleryEndpoint = @"gallery/%@/report";
+static NSString *const reportGalleryEndpoint = @"story/%@/report";
 
 @interface FRSModerationManager () <FRSAlertViewDelegate>
 

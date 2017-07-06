@@ -22,11 +22,12 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
     FRSCommentsSection
 };
 
-@interface FRSUserStoryDetailTableView () <UITableViewDataSource, UITableViewDelegate>
+@interface FRSUserStoryDetailTableView () <UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate>
 
 @property (strong, nonatomic) FRSUserStory *userStory;
 @property (nonatomic, retain) NSMutableArray *comments;
 @property (nonatomic) BOOL shouldDisplayLoadMoreCommentsButton;
+@property (strong, nonatomic) FRSTableViewSectionHeaderView *sectionHeader;
 
 @end
 
@@ -254,5 +255,46 @@ typedef NS_ENUM(NSInteger, UserStoryDetailSections) {
 - (void)hideComments {
     
 }
+
+#pragma mark - MGSwipeTableCellDelegate
+
+- (BOOL)swipeTableCell:(MGSwipeTableCell *)cell tappedButtonAtIndex:(NSInteger)index direction:(MGSwipeDirection)direction fromExpansion:(BOOL)fromExpansion {
+    FRSComment *comment = [self.comments objectAtIndex:[self indexPathForCell:cell].row - self.shouldDisplayLoadMoreCommentsButton];
+    
+    if (comment.isDeletable && comment.isReportable) {
+        if (index == 0) {
+            [self deleteAtIndexPath:[self indexPathForCell:cell]];
+        } else if (index == 1) {
+            [self.delegate reportComment:comment];            
+        }
+        
+    } else if (comment.isDeletable && !comment.isReportable) {
+        if (index == 0) {
+            [self deleteAtIndexPath:[self indexPathForCell:cell]];
+        }
+        
+    } else if (!comment.isDeletable && comment.isReportable) {
+        if (index == 0) {
+            [self.delegate reportComment:comment];
+        }
+    }
+    
+    return YES;
+}
+
+- (void)deleteAtIndexPath:(NSIndexPath *)indexPath {
+    FRSComment *comment = self.comments[indexPath.row - self.shouldDisplayLoadMoreCommentsButton];
+    [[FRSUserStoryManager sharedInstance] deleteComment:comment.uid
+                                              fromStory:self.userStory
+                                             completion:^(id responseObject, NSError *error) {
+                                                 
+                                                 if (!error) {
+                                                     [self reloadData];
+                                                 }
+                                             }];
+}
+
+
+
 
 @end

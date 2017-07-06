@@ -7,10 +7,11 @@
 //
 
 #import "FRSTableViewSectionHeaderView.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @interface FRSTableViewSectionHeaderView ()
 @property (unsafe_unretained, nonatomic) IBOutlet UILabel *titleLabel;
-
+@property (weak, nonatomic) IBOutlet DGElasticPullToRefreshLoadingView *spinner;
 @end
 
 @implementation FRSTableViewSectionHeaderView
@@ -26,4 +27,15 @@
     return self;
 }
 
+- (void)startLoading {
+    self.spinner.tintColor = [UIColor frescoOrangeColor];
+    [self.spinner setPullProgress:90];
+    [self.spinner startAnimating];
+    self.spinner.alpha = 1;
+}
+
+- (void)stopLoading {
+    [self.spinner stopLoading];
+    self.spinner.alpha = 0;
+}
 @end

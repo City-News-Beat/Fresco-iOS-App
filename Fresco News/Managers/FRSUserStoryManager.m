@@ -12,6 +12,8 @@
 static NSString *const kUserStoryListEndpoint = @"story/list";
 static NSString *const kUserStoryFetchCommentsEndpoint = @"story/%@/comments";
 static NSString *const paginateComments = @"story/%@/comments?limit=10&last=%@";
+static NSString *const deleteCommentEndpoint = @"story/%@/comment/delete";
+
 
 @implementation FRSUserStoryManager
 
@@ -62,5 +64,17 @@ static NSString *const paginateComments = @"story/%@/comments?limit=10&last=%@";
                       withParameters:Nil
                           completion:completion];
 }
+
+- (void)deleteComment:(NSString *)commentID fromStory:(FRSUserStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, story.uid];
+    NSDictionary *params = @{ @"comment_id" : commentID };
+    
+    [[FRSAPIClient sharedClient] post:endpoint
+                       withParameters:params
+                           completion:^(id responseObject, NSError *error) {
+                               completion(responseObject, error);
+                           }];
+}
+
 
 @end

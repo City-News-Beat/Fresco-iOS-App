@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSUserStory+CoreDataProperties.h"
+#import "FRSComment.h"
+
+@protocol FRSUserStoryDetailTableViewDelegate <NSObject>
+
+- (void)reportComment:(FRSComment *)comment;
+
+@end
 
 @interface FRSUserStoryDetailTableView : UITableView
+
+@property (weak, nonatomic) NSObject <FRSUserStoryDetailTableViewDelegate> *delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame userStory:(FRSUserStory *)userStory;
 
