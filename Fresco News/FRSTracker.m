@@ -25,42 +25,42 @@
 @implementation FRSTracker
 
 + (void)trackUser {
-    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
-        NSString *userID = nil;
-
-        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
-        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
-
-        if (user.uid && ![user.uid isEqual:[NSNull null]]) {
-            userID = user.uid;
-        }
-
-        if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
-            identityDictionary[@"name"] = user.firstName;
-        }
-
-        if (user.email && ![user.email isEqual:[NSNull null]]) {
-            identityDictionary[@"email"] = user.email;
-        }
-        
-        if (user.username && ![user.username isEqual:[NSNull null]]) {
-            identityDictionary[@"username"] = user.username;
-        }
-        
-        if (userID != nil) { // Note: When this method is called from didFinishLaunching there is no authenticated user.
-            [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
-            [self tagUXCamUser:userID];
-        }
-        [self configureZendesk]; // We're adding the Zendesk config here to avoid making another isAuthenticated check.
-    }
+//    if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
+//        NSString *userID = nil;
+//
+//        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
+//        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+//
+//        if (user.uid && ![user.uid isEqual:[NSNull null]]) {
+//            userID = user.uid;
+//        }
+//
+//        if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
+//            identityDictionary[@"name"] = user.firstName;
+//        }
+//
+//        if (user.email && ![user.email isEqual:[NSNull null]]) {
+//            identityDictionary[@"email"] = user.email;
+//        }
+//
+//        if (user.username && ![user.username isEqual:[NSNull null]]) {
+//            identityDictionary[@"username"] = user.username;
+//        }
+//
+//        if (userID != nil) { // Note: When this method is called from didFinishLaunching there is no authenticated user.
+//            [[SEGAnalytics sharedAnalytics] identify:userID traits:identityDictionary];
+//            [self tagUXCamUser:userID];
+//        }
+//        [self configureZendesk]; // We're adding the Zendesk config here to avoid making another isAuthenticated check.
+//    }
 }
 
 #pragma mark - Segment
 
 + (void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
-    [[SEGAnalytics sharedAnalytics] track:eventName
-                               properties:parameters
-                                  options:@{ @"integrations": @{ @"All": @YES }}];
+//    [[SEGAnalytics sharedAnalytics] track:eventName
+//                               properties:parameters
+//                                  options:@{ @"integrations": @{ @"All": @YES }}];
 }
 
 + (void)track:(NSString *)eventName {
@@ -82,12 +82,12 @@
 }
 
 + (void)screen:(NSString *)screen parameters:(NSDictionary *)parameters {
-    [[SEGAnalytics sharedAnalytics] screen:screen
-                                properties:parameters];
+//    [[SEGAnalytics sharedAnalytics] screen:screen
+//                                properties:parameters];
 }
 
 + (void)reset {
-    [[SEGAnalytics sharedAnalytics] reset];
+//    [[SEGAnalytics sharedAnalytics] reset];
 }
 
 #pragma mark - UXCam

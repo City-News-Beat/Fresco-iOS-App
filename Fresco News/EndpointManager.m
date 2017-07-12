@@ -22,13 +22,13 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.currentEndpoint = [Endpoint new];
-        #ifdef DEBUG
-            [self.currentEndpoint setEndpoint:Dev];
-            self.currentEndpoint.segmentKey = segmentWriteKeyDev;
-        #else
+//        #ifdef DEBUG
+//            [self.currentEndpoint setEndpoint:Dev];
+//            self.currentEndpoint.segmentKey = segmentWriteKeyDev;
+//        #else
             [self.currentEndpoint setEndpoint:Prod];
             self.currentEndpoint.segmentKey = segmentWriteKeyProd;
-        #endif
+//        #endif
     }
     return self;
 }

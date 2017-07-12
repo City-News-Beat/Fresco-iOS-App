@@ -166,9 +166,9 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
             return;
         }
         
-        [self.managedObjectContext performBlock:^{
-            [self saveUserFields:responseObject andSynchronously:NO];
-        }];
+//        [self.managedObjectContext performBlock:^{
+//            [self saveUserFields:responseObject andSynchronously:NO];
+//        }];
 
         [self refreshSettings];
         
@@ -182,143 +182,143 @@ static NSString *const disableAccountEndpoint = @"user/disable/";
 }
 
 - (void)saveUserFields:(NSDictionary *)responseObject andSynchronously:(BOOL)synchronously {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
-    if (!authenticatedUser) {
-        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
-    }
-
-    // update user
-    if (responseObject[@"id"] && ![responseObject[@"id"] isEqual:[NSNull null]]) {
-        authenticatedUser.uid = responseObject[@"id"];
-    }
-    if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
-        authenticatedUser.firstName = responseObject[@"full_name"];
-    }
-    if (responseObject[@"username"] && ![responseObject[@"username"] isEqual:[NSNull null]]) {
-        authenticatedUser.username = responseObject[@"username"];
-    }
-    if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
-        authenticatedUser.bio = responseObject[@"bio"];
-    }
-    if (![responseObject[@"email"] isEqual:[NSNull null]]) {
-        authenticatedUser.email = responseObject[@"email"];
-    }
-    authenticatedUser.isLoggedIn = @(TRUE);
-    if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
-        authenticatedUser.profileImage = responseObject[@"avatar"];
-    }
-    if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
-        [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
-    }
-    if (responseObject[@"followed_count"] != Nil && ![responseObject[@"followed_count"] isEqual:[NSNull null]]) {
-        [authenticatedUser setValue:responseObject[@"followed_count"] forKey:@"followedCount"];
-    }
-    if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
-        [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
-    }
-    if (responseObject[@"terms"] && ![responseObject[@"terms"] isEqual:[NSNull null]] && [responseObject[@"terms"][@"valid"] boolValue] == FALSE && ![responseObject[@"terms"][@"terms"] isEqual:[NSNull null]]) {
-        UITabBarController *tabBar = (UITabBarController *)appDelegate.tabBarController;
-        UINavigationController *nav = [tabBar.viewControllers firstObject];
-        FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
-        [homeViewController presentWithTOS:responseObject[@"terms"][@"terms"]];
-    }
-
-    if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {
-        authenticatedUser.blocked = [responseObject[@"blocked"] boolValue];
-    }
-
-    if (responseObject[@"blocking"] && ![responseObject[@"blocking"] isEqual:[NSNull null]]) {
-        authenticatedUser.blocking = [responseObject[@"blocking"] boolValue];
-    }
-
-    if (responseObject[@"suspended_until"] && ![responseObject[@"suspended_until"] isEqual:[NSNull null]]) {
-        authenticatedUser.suspended = YES;
-    } else {
-        authenticatedUser.suspended = NO;
-    }
-
-    if (responseObject[@"disabled"] && ![responseObject[@"disabled"] isEqual:[NSNull null]]) {
-        authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
-    }
-
-    if (responseObject[@"identity"] && ![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
-
-        if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
-        }
-        if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
-        }
-
-        NSDictionary *identity = responseObject[@"identity"];
-
-        NSString *birthDay = identity[@"dob_day"];
-        NSString *birthMonth = identity[@"dob_month"];
-        NSString *birthYear = identity[@"dob_year"];
-        NSString *addressLineOne = identity[@"address_line1"];
-        NSString *addressLineTwo = identity[@"address_line2"];
-        NSString *addressZip = identity[@"address_zip"];
-        NSString *addressCity = identity[@"address_city"];
-        NSString *addressState = identity[@"address_state"];
-
-        NSString *radius = [responseObject valueForKey:@"radius"];
-        if (radius != Nil && ![radius isEqual:[NSNull null]]) {
-            [[NSUserDefaults standardUserDefaults] setValue:radius forKey:settingsUserNotificationRadius];
-            authenticatedUser.notificationRadius = @([radius floatValue]);
-        }
-
-        BOOL hasSavedFields = FALSE;
-        if (birthDay != Nil && ![birthDay isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
-            hasSavedFields = TRUE;
-        }
-        if (birthMonth != Nil && ![birthMonth isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
-            hasSavedFields = TRUE;
-        }
-        if (birthYear != Nil && ![birthYear isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
-            hasSavedFields = TRUE;
-        }
-        if (addressLineOne != Nil && ![addressLineOne isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
-            hasSavedFields = TRUE;
-        }
-        if (addressLineTwo != Nil && ![addressLineTwo isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
-            hasSavedFields = TRUE;
-        }
-        if (addressZip != Nil && ![addressZip isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
-            hasSavedFields = TRUE;
-        }
-        if (addressCity != Nil && ![addressCity isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:addressCity forKey:@"address_city"];
-            hasSavedFields = TRUE;
-        }
-        if (addressState != Nil && ![addressState isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:addressState forKey:@"address_state"];
-            hasSavedFields = TRUE;
-        }
-
-        NSArray *fieldsNeeded = identity[@"fields_needed"];
-
-        if (fieldsNeeded) {
-            [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
-            [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
-        }
-    }
-    
-    @try {
-        if(synchronously) {
-            [appDelegate.coreDataController saveContextSynchornously];
-        } else {
-            [appDelegate.coreDataController saveContext];
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"Error saving context.");
-    }
+//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
+//    if (!authenticatedUser) {
+//        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
+//    }
+//
+//    // update user
+//    if (responseObject[@"id"] && ![responseObject[@"id"] isEqual:[NSNull null]]) {
+//        authenticatedUser.uid = responseObject[@"id"];
+//    }
+//    if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
+//        authenticatedUser.firstName = responseObject[@"full_name"];
+//    }
+//    if (responseObject[@"username"] && ![responseObject[@"username"] isEqual:[NSNull null]]) {
+//        authenticatedUser.username = responseObject[@"username"];
+//    }
+//    if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
+//        authenticatedUser.bio = responseObject[@"bio"];
+//    }
+//    if (![responseObject[@"email"] isEqual:[NSNull null]]) {
+//        authenticatedUser.email = responseObject[@"email"];
+//    }
+//    authenticatedUser.isLoggedIn = @(TRUE);
+//    if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
+//        authenticatedUser.profileImage = responseObject[@"avatar"];
+//    }
+//    if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
+//        [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
+//    }
+//    if (responseObject[@"followed_count"] != Nil && ![responseObject[@"followed_count"] isEqual:[NSNull null]]) {
+//        [authenticatedUser setValue:responseObject[@"followed_count"] forKey:@"followedCount"];
+//    }
+//    if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
+//        [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
+//    }
+//    if (responseObject[@"terms"] && ![responseObject[@"terms"] isEqual:[NSNull null]] && [responseObject[@"terms"][@"valid"] boolValue] == FALSE && ![responseObject[@"terms"][@"terms"] isEqual:[NSNull null]]) {
+//        UITabBarController *tabBar = (UITabBarController *)appDelegate.tabBarController;
+//        UINavigationController *nav = [tabBar.viewControllers firstObject];
+//        FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
+//        [homeViewController presentWithTOS:responseObject[@"terms"][@"terms"]];
+//    }
+//
+//    if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {
+//        authenticatedUser.blocked = [responseObject[@"blocked"] boolValue];
+//    }
+//
+//    if (responseObject[@"blocking"] && ![responseObject[@"blocking"] isEqual:[NSNull null]]) {
+//        authenticatedUser.blocking = [responseObject[@"blocking"] boolValue];
+//    }
+//
+//    if (responseObject[@"suspended_until"] && ![responseObject[@"suspended_until"] isEqual:[NSNull null]]) {
+//        authenticatedUser.suspended = YES;
+//    } else {
+//        authenticatedUser.suspended = NO;
+//    }
+//
+//    if (responseObject[@"disabled"] && ![responseObject[@"disabled"] isEqual:[NSNull null]]) {
+//        authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
+//    }
+//
+//    if (responseObject[@"identity"] && ![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
+//
+//        if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
+//        }
+//        if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
+//        }
+//
+//        NSDictionary *identity = responseObject[@"identity"];
+//
+//        NSString *birthDay = identity[@"dob_day"];
+//        NSString *birthMonth = identity[@"dob_month"];
+//        NSString *birthYear = identity[@"dob_year"];
+//        NSString *addressLineOne = identity[@"address_line1"];
+//        NSString *addressLineTwo = identity[@"address_line2"];
+//        NSString *addressZip = identity[@"address_zip"];
+//        NSString *addressCity = identity[@"address_city"];
+//        NSString *addressState = identity[@"address_state"];
+//
+//        NSString *radius = [responseObject valueForKey:@"radius"];
+//        if (radius != Nil && ![radius isEqual:[NSNull null]]) {
+//            [[NSUserDefaults standardUserDefaults] setValue:radius forKey:settingsUserNotificationRadius];
+//            authenticatedUser.notificationRadius = @([radius floatValue]);
+//        }
+//
+//        BOOL hasSavedFields = FALSE;
+//        if (birthDay != Nil && ![birthDay isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (birthMonth != Nil && ![birthMonth isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (birthYear != Nil && ![birthYear isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (addressLineOne != Nil && ![addressLineOne isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (addressLineTwo != Nil && ![addressLineTwo isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (addressZip != Nil && ![addressZip isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (addressCity != Nil && ![addressCity isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:addressCity forKey:@"address_city"];
+//            hasSavedFields = TRUE;
+//        }
+//        if (addressState != Nil && ![addressState isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:addressState forKey:@"address_state"];
+//            hasSavedFields = TRUE;
+//        }
+//
+//        NSArray *fieldsNeeded = identity[@"fields_needed"];
+//
+//        if (fieldsNeeded) {
+//            [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
+//            [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
+//        }
+//    }
+//
+//    @try {
+//        if(synchronously) {
+//            [appDelegate.coreDataController saveContextSynchornously];
+//        } else {
+//            [appDelegate.coreDataController saveContext];
+//        }
+//    } @catch (NSException *exception) {
+//        NSLog(@"Error saving context.");
+//    }
 }
 
 #pragma mark - Check User

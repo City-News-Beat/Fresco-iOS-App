@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-@interface FRSUsernameViewController : FRSBaseViewController
+@interface FRSAssignmentTitleViewController : FRSBaseViewController
+@property (strong, nonatomic) NSMutableDictionary *assignment;
 @end

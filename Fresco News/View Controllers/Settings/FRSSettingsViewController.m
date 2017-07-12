@@ -10,7 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSAlertView.h"
-#import "FRSUsernameViewController.h"
+//#import "FRSUsernameViewController.h"
 #import "FRSEmailViewController.h"
 #import "FRSPasswordChangeViewController.h"
 #import "FRSDisableAccountViewController.h"
@@ -367,8 +367,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     case Me:
         switch (indexPath.row) {
         case ChangeUsername: {
-            FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
-            [self.navigationController pushViewController:username animated:YES];
+//            FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
+//            [self.navigationController pushViewController:username animated:YES];
             break;
         }
         case ChangeEmail: {

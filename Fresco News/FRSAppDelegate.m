@@ -35,6 +35,7 @@
 #import "FRSIndicatorDot.h"
 #import "FRSConnectivityAlertView.h"
 #import "FRSUploadFailAlertView.h"
+#import "FRSDispatchViewController.h"
 
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
@@ -42,8 +43,22 @@
 @implementation FRSAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[FBSDKApplicationDelegate sharedInstance] application:application
-                             didFinishLaunchingWithOptions:launchOptions];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    FRSDispatchViewController *dispatchVC = [[FRSDispatchViewController alloc] init];
+    FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+    
+    [mainNav pushViewController:dispatchVC animated:NO];
+    [mainNav setNavigationBarHidden:NO];
+    
+    self.window.rootViewController = mainNav;
+    [self.window makeKeyAndVisible];
+    
+    return YES;
+    
+    
+    
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
