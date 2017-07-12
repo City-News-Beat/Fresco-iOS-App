@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
+#import "FRSDispatchConstants.h"
 
-@interface FRSAssignmentDescriptionViewController : UIViewController
+@interface FRSAssignmentDescriptionViewController : FRSBaseViewController
+
+@property (strong, nonatomic) NSMutableDictionary *assignment;
+@property AssignmentTypes assignmentType;
 
 @end

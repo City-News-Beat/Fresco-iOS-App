@@ -7,6 +7,7 @@
 
 #import "FRSAssignmentTypeViewController.h"
 #import "FRSDispatchConstants.h"
+#import "FRSAssignmentDescriptionViewController.h"
 
 @interface FRSAssignmentTypeViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -51,8 +52,6 @@
     tableView.dataSource = self;
     tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:tableView];
-    
-//    [tableView registerNib:[UINib nibWithNibName:@"FRSUnratedAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"unrated-cell"];
     
 }
 
@@ -107,7 +106,6 @@
             break;
     }
     
-    
     return cell;
 }
 
@@ -117,6 +115,56 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    FRSAssignmentDescriptionViewController *assignmentDescriptionVC = [[FRSAssignmentDescriptionViewController alloc] init];
+    assignmentDescriptionVC.assignment = self.assignment;
+    
+    switch (indexPath.row) {
+        case TYPE_ACCIDENT:
+            assignmentDescriptionVC.assignmentType = TYPE_ACCIDENT;
+            break;
+        case TYPE_BROLL:
+            assignmentDescriptionVC.assignmentType = TYPE_BROLL;
+            break;
+        case TYPE_BANK:
+            assignmentDescriptionVC.assignmentType = TYPE_BANK;
+            break;
+        case TYPE_BOMB:
+            assignmentDescriptionVC.assignmentType = TYPE_BOMB;
+            break;
+        case TYPE_BUILDING_COLLAPSE:
+            assignmentDescriptionVC.assignmentType = TYPE_BUILDING_COLLAPSE;
+            break;
+        case TYPE_EVENT:
+            assignmentDescriptionVC.assignmentType = TYPE_EVENT;
+            break;
+        case TYPE_FIRE:
+            assignmentDescriptionVC.assignmentType = TYPE_FIRE;
+            break;
+        case TYPE_HAZ_SUSPICIOUS:
+            assignmentDescriptionVC.assignmentType = TYPE_HAZ_SUSPICIOUS;
+            break;
+        case TYPE_HIGH_SPEED_CHASE:
+            assignmentDescriptionVC.assignmentType = TYPE_HIGH_SPEED_CHASE;
+            break;
+        case TYPE_SHOOTING_STABBING:
+            assignmentDescriptionVC.assignmentType = TYPE_SHOOTING_STABBING;
+            break;
+        case TYPE_RESCUE:
+            assignmentDescriptionVC.assignmentType = TYPE_RESCUE;
+            break;
+        case TYPE_TRAUMA:
+            assignmentDescriptionVC.assignmentType = TYPE_TRAUMA;
+            break;
+        case TYPE_WEATHER:
+            assignmentDescriptionVC.assignmentType = TYPE_WEATHER;
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self.navigationController pushViewController:assignmentDescriptionVC animated:YES];
 }
 
 @end
