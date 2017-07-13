@@ -50,8 +50,23 @@
 - (void)configureUI {
     [self fetchAssignemnts];
     [self configureNavigationBar];
+    [self configureSpinner];
 }
 
+- (void)configureSpinner {
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.view addSubview:activityIndicator];
+    activityIndicator.tag = 999;
+    activityIndicator.frame = CGRectMake(self.view.frame.size.width/2 - 12, self.view.frame.size.height/2 - 12, 24, 24);
+    [activityIndicator startAnimating];
+}
+
+- (void)removeSpinner {
+    UIView *removeView;
+    while((removeView = [self.view viewWithTag:999]) != nil) {
+        [removeView removeFromSuperview];
+    }
+}
 
 
 - (void)configureNavigationBar {

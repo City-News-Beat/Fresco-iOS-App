@@ -22,20 +22,24 @@
     [self configureTextField];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    
 }
 
 - (void)configureNavigationBar {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
-    label.text = @"DESCRIPTION";
-    label.font = [UIFont notaBoldWithSize:17];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor whiteColor];
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+//    label.text = @"DESCRIPTION";
+//    label.font = [UIFont notaBoldWithSize:17];
+//    label.textAlignment = NSTextAlignmentCenter;
+//    label.textColor = [UIColor whiteColor];
+//
+//    [self configureBackButtonAnimated:YES];
+//    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+//
+//    self.view.backgroundColor = [UIColor whiteColor];
+//    [self.navigationItem setTitleView:label];
     
-    [self configureBackButtonAnimated:YES];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self.navigationItem setTitleView:label];
+    
 }
 
 - (void)configureTextField {
@@ -50,11 +54,9 @@
     [textView becomeFirstResponder];
     textView.tintColor = [UIColor frescoBlueColor];
     
+    // NSAttributedString *caption = self.assignment[@"caption"];
     
-//    NSAttributedString *caption = self.assignment[@"caption"];
-    
-    
-//    textView.attributedText = [self stringWithFormat:[self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]], caption, NULL];
+    // textView.attributedText = [self stringWithFormat:[self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]], caption, NULL];
     
     textView.attributedText = [self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]];
     
@@ -63,7 +65,6 @@
     // Maybe add gesture rec?
     // Concat attributed strings would be ideal.
     // Save this for the end.
-    
     
     [containerView addSubview:textView];
 }
