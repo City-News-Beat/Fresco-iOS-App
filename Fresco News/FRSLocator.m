@@ -16,21 +16,21 @@
 + (instancetype)sharedLocator {
     static FRSLocator *sharedLocator = nil;
     static dispatch_once_t onceToken;
-
+    
     dispatch_once(&onceToken, ^{
-      sharedLocator = [[FRSLocator alloc] init];
+        sharedLocator = [[FRSLocator alloc] init];
     });
-
+    
     return sharedLocator;
 }
 
 - (instancetype)init {
     self = [super init];
-
+    
     if (self) {
         [self setupLocationManager];
     }
-
+    
     return self;
 }
 
@@ -46,10 +46,10 @@
 - (void)setupLocationManager {
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    self.locationManager.activityType = CLActivityTypeFitness;
-    self.locationManager.distanceFilter = 10;
+    self.locationManager.activityType = CLActivityTypeOther;
+    self.locationManager.distanceFilter = 20;
     self.locationManager.pausesLocationUpdatesAutomatically = YES;
-
+    
     // background notifications
     if ([self.locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]) {
         self.locationManager.allowsBackgroundLocationUpdates = TRUE;
@@ -124,7 +124,7 @@
 #pragma mark - CLLocationManager Delegate
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-
+    
     if ([locations count] == 0) return;
     
     [self updateWithAccurateLocation:locations];
@@ -156,10 +156,8 @@
 
 /**
  Handle location update as if user has application open. We use a timer here
- to make sure we only save locations every 10 seconds. After 10 seconds the location manager is 
+ to make sure we only save locations every 60 seconds. After 60 seconds the location manager is
  restarted and the timer is cleared. In this method it'll be re-created once the location manager handles an active change
- 
- @param location Location to handle change with
  */
 - (void)handleActiveChange {
     [self.locationManager stopUpdatingLocation];
@@ -168,7 +166,7 @@
     
     //Restart in 10 seconds
     self.stopTimer = [NSTimer
-                      scheduledTimerWithTimeInterval:10
+                      scheduledTimerWithTimeInterval:60
                       target:self
                       selector:@selector(restartLocationUpdate)
                       userInfo:nil
@@ -178,16 +176,16 @@
 /**
  Handle location update if user has application in background. Here we
  don't want to stop the location manager because that will prevent the app from re-opening.
- We simply save and cache, and then restart the timer in about 60 seconds.
+ We simply save and cache, and then restart the timer in 300 seconds.
  */
 - (void)handlePassiveChange {
     [self startBackgroundLocationTask];
     [self cacheLocation:self.currentLocation];
     [self sendLocationToServerWithCompletionHandler:nil];
     
-    //Restart in 20 seconds
+    //Restart in 300 seconds
     self.stopTimer = [NSTimer
-                      scheduledTimerWithTimeInterval:20
+                      scheduledTimerWithTimeInterval:300
                       target:self
                       selector:@selector(restartLocationUpdate)
                       userInfo:nil
@@ -266,7 +264,7 @@
     if(!location || location[@"longitude"] == nil || location[@"latitude"] == nil) {
         return nil;
     }
-
+    
     
     return [[CLLocation alloc]
             initWithLatitude:(CLLocationDegrees)[location[@"latitude"] floatValue]
@@ -277,9 +275,9 @@
 #pragma mark - Networking
 
 /**
-  Sends location to the server through NSURLSession which is permitted in the background.
-  *Note* We only have 30 seconds here
-
+ Sends location to the server through NSURLSession which is permitted in the background.
+ *Note* We only have 30 seconds here
+ 
  @param completion The completion handler sent to us through the delegate method. Must be called when finished.
  */
 - (void)sendLocationToServerWithCompletionHandler:(id)completion{
@@ -291,15 +289,16 @@
         if(completionHandler) completionHandler(UIBackgroundFetchResultNoData);
         return;
     }
-
+    
     [[FRSUserManager sharedInstance] updateUserLocation:location completion:^(id responseObject, NSError *error) {
         if(error){
             if(completionHandler) completionHandler(UIBackgroundFetchResultFailed);
         } else {
-           if(completionHandler) completionHandler(UIBackgroundFetchResultNewData);
+            if(completionHandler) completionHandler(UIBackgroundFetchResultNewData);
         }
     }];
 }
 
 
 @end
+
