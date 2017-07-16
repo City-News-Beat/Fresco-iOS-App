@@ -55,6 +55,8 @@
     self.window.rootViewController = mainNav;
     [self.window makeKeyAndVisible];
     
+    [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
+
     return YES;
     
     
@@ -75,8 +77,7 @@
     }
     
     [self configureStartDate];
-    [self setCoreDataController:[[FRSCoreDataController alloc] init]]; //Initialize CoreData
-
+    
     [FRSTracker trackUser];
 
     // Check for cached uploads from core data after core data setup has been completed.

@@ -8,8 +8,11 @@
 
 #import "FRSAssignmentDescriptionViewController.h"
 #import "UIView+Helpers.h"
+#import "FRSRadiusViewController.h"
 
-@interface FRSAssignmentDescriptionViewController ()
+@interface FRSAssignmentDescriptionViewController () <UITextViewDelegate>
+
+@property (strong, nonatomic) UITextView *textView;
 
 @end
 
@@ -26,21 +29,19 @@
 }
 
 - (void)configureNavigationBar {
-//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
-//    label.text = @"DESCRIPTION";
-//    label.font = [UIFont notaBoldWithSize:17];
-//    label.textAlignment = NSTextAlignmentCenter;
-//    label.textColor = [UIColor whiteColor];
-//
-//    [self configureBackButtonAnimated:YES];
-//    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-//
-//    self.view.backgroundColor = [UIColor whiteColor];
-//    [self.navigationItem setTitleView:label];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    label.text = @"DESCRIPTION";
+    label.font = [UIFont notaBoldWithSize:17];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor whiteColor];
     
+    [self configureBackButtonAnimated:YES];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.navigationItem setTitleView:label];
 }
+
 
 - (void)configureTextField {
     UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.height/2))];
@@ -48,49 +49,38 @@
     [self.view addSubview:containerView];
     [containerView addSubview:[UIView lineAtPoint:CGPointMake(0, containerView.frame.size.height)]];
     
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, containerView.frame.size.height -32)];
-    textView.backgroundColor = [UIColor clearColor];
-    textView.font = [UIFont systemFontOfSize:16];
-    [textView becomeFirstResponder];
-    textView.tintColor = [UIColor frescoBlueColor];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, containerView.frame.size.height -32)];
+    self.textView.backgroundColor = [UIColor clearColor];
+    self.textView.font = [UIFont systemFontOfSize:16];
+    [self.textView becomeFirstResponder];
+    self.textView.tintColor = [UIColor frescoBlueColor];
+    self.textView.delegate = self;
+    self.textView.returnKeyType = UIReturnKeyNext;
     
-    // NSAttributedString *caption = self.assignment[@"caption"];
+    self.textView.attributedText = [self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]];
     
-    // textView.attributedText = [self stringWithFormat:[self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]], caption, NULL];
+    [containerView addSubview:self.textView];
+                     
     
-    textView.attributedText = [self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]];
-    
-    // We should show old caption here too
-    // Maybe add scrollview and swipe down?
-    // Maybe add gesture rec?
-    // Concat attributed strings would be ideal.
-    // Save this for the end.
-    
-    [containerView addSubview:textView];
 }
 
-
-- (NSAttributedString*)stringWithFormat:(NSAttributedString*)format, ...{
-    va_list args;
-    va_start(args, format);
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    NSMutableAttributedString *mutableAttributedString = (NSMutableAttributedString*)[format mutableCopy];
-    NSString *mutableString = [mutableAttributedString string];
-    
-    while (true) {
-        NSAttributedString *arg = va_arg(args, NSAttributedString*);
-        if (!arg) {
-            break;
-        }
-        NSRange rangeOfStringToBeReplaced = [mutableString rangeOfString:@"%@"];
-        [mutableAttributedString replaceCharactersInRange:rangeOfStringToBeReplaced withAttributedString:arg];
+    if([text isEqualToString:@"\n"]) {
+        
+        NSMutableDictionary *mutableDict = [self.assignment mutableCopy];
+        [mutableDict setObject:textView.text forKey:@"caption"];
+        self.assignment = [mutableDict mutableCopy];
+        
+        FRSRadiusViewController *locvc = [[FRSRadiusViewController alloc] init];
+        locvc.assignment = self.assignment;
+        [self.navigationController pushViewController:locvc animated:YES];
+        
+        return NO;
     }
     
-    va_end(args);
-    
-    return mutableAttributedString;
+    return YES;
 }
-
 
 - (NSString *)formattedTextForAssignmentType:(AssignmentTypes)assignmentType {
     

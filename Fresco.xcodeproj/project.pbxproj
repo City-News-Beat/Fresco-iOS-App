@@ -448,8 +448,8 @@
 		07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSPasswordChangeViewController.m; path = "Fresco News/View Controllers/Settings/FRSPasswordChangeViewController.m"; sourceTree = "<group>"; };
 		07A30BF11C50488800C536EB /* FRSPromoCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSPromoCodeViewController.h; path = "Fresco News/View Controllers/Settings/FRSPromoCodeViewController.h"; sourceTree = "<group>"; };
 		07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSPromoCodeViewController.m; path = "Fresco News/View Controllers/Settings/FRSPromoCodeViewController.m"; sourceTree = "<group>"; };
-		07A30BF31C50488800C536EB /* FRSRadiusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSRadiusViewController.h; path = "Fresco News/View Controllers/Settings/FRSRadiusViewController.h"; sourceTree = "<group>"; };
-		07A30BF41C50488800C536EB /* FRSRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSRadiusViewController.m; path = "Fresco News/View Controllers/Settings/FRSRadiusViewController.m"; sourceTree = "<group>"; };
+		07A30BF31C50488800C536EB /* FRSRadiusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRadiusViewController.h; sourceTree = "<group>"; };
+		07A30BF41C50488800C536EB /* FRSRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRadiusViewController.m; sourceTree = "<group>"; };
 		07A30BF51C50488800C536EB /* FRSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSettingsViewController.h; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.h"; sourceTree = "<group>"; };
 		07A30BF61C50488800C536EB /* FRSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSettingsViewController.m; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.m"; sourceTree = "<group>"; };
 		07A30BFB1C50488800C536EB /* FRSAssignmentTitleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignmentTitleViewController.h; path = "Fresco News/View Controllers/Settings/FRSAssignmentTitleViewController.h"; sourceTree = "<group>"; };
@@ -1162,6 +1162,8 @@
 				07CE123E1F15C27F003317A7 /* FRSAssignmentTypeViewController.m */,
 				07F6526E1F15F0AF0090EB31 /* FRSAssignmentDescriptionViewController.h */,
 				07F6526F1F15F0AF0090EB31 /* FRSAssignmentDescriptionViewController.m */,
+				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
+				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
 			);
 			name = "Fresco Dispatch";
 			sourceTree = "<group>";
@@ -1951,8 +1953,6 @@
 		D43C7FEA1C8F358A00A7A7A7 /* Radius */ = {
 			isa = PBXGroup;
 			children = (
-				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
-				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
 			);
 			name = Radius;
 			sourceTree = "<group>";
@@ -3256,7 +3256,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dispatch.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3299,7 +3299,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dispatch.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3439,7 +3439,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dispatch.fresconews.Fresco;
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

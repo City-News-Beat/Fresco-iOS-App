@@ -11,4 +11,6 @@
 
 @interface FRSRadiusViewController : FRSBaseViewController
 
+@property (strong, nonatomic) NSMutableDictionary *assignment;
+
 @end
