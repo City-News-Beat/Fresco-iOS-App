@@ -43,6 +43,7 @@
 		079392821E79B25A004CC2AD /* FRSGalleryUploadedToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 0793927F1E79B25A004CC2AD /* FRSGalleryUploadedToast.m */; };
 		0796FF761E54DA0C00ABF9DA /* FRSAssignmentTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0796FF751E54DA0C00ABF9DA /* FRSAssignmentTracker.m */; };
 		0796FF791E54DF9E00ABF9DA /* FRSPostTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0796FF781E54DF9E00ABF9DA /* FRSPostTracker.m */; };
+		0797AEE91F1B2BC40008CF8B /* FRSAssignmentReviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0797AEE81F1B2BC40008CF8B /* FRSAssignmentReviewViewController.xib */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */; };
 		07A2C1481DEE2ED900B8445F /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A2C1461DEE2ED900B8445F /* FRSGalleryView.m */; };
@@ -70,6 +71,7 @@
 		07CE12381F15A8F7003317A7 /* FRSUnratedAssignmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE12361F15A8F7003317A7 /* FRSUnratedAssignmentTableViewCell.m */; };
 		07CE12391F15A8F7003317A7 /* FRSUnratedAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07CE12371F15A8F7003317A7 /* FRSUnratedAssignmentTableViewCell.xib */; };
 		07CE12401F15C27F003317A7 /* FRSAssignmentTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE123E1F15C27F003317A7 /* FRSAssignmentTypeViewController.m */; };
+		07CFC9F71F1B22A70048EB9E /* FRSAssignmentReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CFC9F51F1B22A70048EB9E /* FRSAssignmentReviewViewController.m */; };
 		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
 		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
 		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
@@ -429,6 +431,7 @@
 		0796FF751E54DA0C00ABF9DA /* FRSAssignmentTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentTracker.m; sourceTree = "<group>"; };
 		0796FF771E54DF9E00ABF9DA /* FRSPostTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPostTracker.h; sourceTree = "<group>"; };
 		0796FF781E54DF9E00ABF9DA /* FRSPostTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPostTracker.m; sourceTree = "<group>"; };
+		0797AEE81F1B2BC40008CF8B /* FRSAssignmentReviewViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSAssignmentReviewViewController.xib; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
 		07A138BD1CBC053C00163BA0 /* FRSLoadingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLoadingTableViewCell.h; sourceTree = "<group>"; };
@@ -481,6 +484,8 @@
 		07CE12371F15A8F7003317A7 /* FRSUnratedAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSUnratedAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		07CE123E1F15C27F003317A7 /* FRSAssignmentTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentTypeViewController.m; sourceTree = "<group>"; };
 		07CE123F1F15C27F003317A7 /* FRSAssignmentTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentTypeViewController.h; sourceTree = "<group>"; };
+		07CFC9F41F1B22A70048EB9E /* FRSAssignmentReviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentReviewViewController.h; sourceTree = "<group>"; };
+		07CFC9F51F1B22A70048EB9E /* FRSAssignmentReviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentReviewViewController.m; sourceTree = "<group>"; };
 		07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLaunchScreen.xib; sourceTree = "<group>"; };
 		07ED92D71C752037000DBEA8 /* DGElasticPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefresh.h; sourceTree = "<group>"; };
 		07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefresh.m; sourceTree = "<group>"; };
@@ -1164,6 +1169,9 @@
 				07F6526F1F15F0AF0090EB31 /* FRSAssignmentDescriptionViewController.m */,
 				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
 				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
+				07CFC9F41F1B22A70048EB9E /* FRSAssignmentReviewViewController.h */,
+				07CFC9F51F1B22A70048EB9E /* FRSAssignmentReviewViewController.m */,
+				0797AEE81F1B2BC40008CF8B /* FRSAssignmentReviewViewController.xib */,
 			);
 			name = "Fresco Dispatch";
 			sourceTree = "<group>";
@@ -2752,6 +2760,7 @@
 				CECB2CA71E47A7190035FDCE /* FRSPasswordChangeViewController.xib in Resources */,
 				CEA7FB631E5EA2BC0081B07A /* FRSGalleryTableViewCell.xib in Resources */,
 				07CE12391F15A8F7003317A7 /* FRSUnratedAssignmentTableViewCell.xib in Resources */,
+				0797AEE91F1B2BC40008CF8B /* FRSAssignmentReviewViewController.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
 				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
@@ -3023,6 +3032,7 @@
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				E7F88EDC1E6528FA007D9D05 /* PHAsset+Fresco.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
+				07CFC9F71F1B22A70048EB9E /* FRSAssignmentReviewViewController.m in Sources */,
 				E7092B531E510BEF00C3B704 /* NSError+Fresco.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,

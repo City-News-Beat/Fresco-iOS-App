@@ -14,6 +14,7 @@
 #import "Haneke.h"
 #import "FRSUserManager.h"
 #import "FRSAssignment.h"
+#import "FRSAssignmentReviewViewController.h"
 
 @import MapKit;
 
@@ -102,6 +103,7 @@
     textField.keyboardType = UIKeyboardTypeNumberPad;
     [textField becomeFirstResponder];
     textField.delegate = self;
+    textField.placeholder = @"Radius (feet)";
     textField.text = [NSString stringWithFormat:@"%.0f", RoundTo(([self.assignment[@"radius"] floatValue] * metersInAMile), 100)];
     [textField addTarget:self action:@selector(updateMapFromTextFieldText:) forControlEvents:UIControlEventEditingChanged];
     [sliderContainer addSubview:textField];
@@ -121,9 +123,9 @@
     [mutableDict setObject:@(self.distance / 1609.34) forKey:@"radius"];
     self.assignment = [mutableDict mutableCopy];
     
-//    FRSRadiusViewController *locvc = [[FRSRadiusViewController alloc] init];
-//    locvc.assignment = self.assignment;
-//    [self.navigationController pushViewController:locvc animated:YES];
+    FRSAssignmentReviewViewController *reviewvc = [[FRSAssignmentReviewViewController alloc] init];
+    reviewvc.assignment = self.assignment;
+    [self.navigationController pushViewController:reviewvc animated:YES];
     
     
 }
