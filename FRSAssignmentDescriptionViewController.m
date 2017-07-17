@@ -57,10 +57,12 @@
     self.textView.delegate = self;
     self.textView.returnKeyType = UIReturnKeyNext;
     
-    self.textView.attributedText = [self formattedAttributedStringFromString:[self formattedTextForAssignmentType:self.assignmentType]];
     
     [containerView addSubview:self.textView];
-                     
+    
+    
+    //this triggers method. dirty. sorry. v tired.
+    NSString *string = [self formattedTextForAssignmentType:self.assignmentType];
     
 }
 
@@ -132,9 +134,32 @@
             break;
     }
     
-    NSString *outletString = [description stringByReplacingOccurrencesOfString:@"{OUTLET}" withString:[self.assignment[@"outlets"] objectAtIndex:0][@"title"]];
+    
+    NSString *appendedString = [NSString stringWithFormat:@"%@\n\n---\n\n%@", self.assignment[@"caption"], description];
+    
+    
+    
+    NSString *outletString = [appendedString stringByReplacingOccurrencesOfString:@"{OUTLET}" withString:[self.assignment[@"outlets"] objectAtIndex:0][@"title"]];
+    
+    
+    CLGeocoder *ceo = [[CLGeocoder alloc] init];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.assignment[@"location"][@"coordinates"][1] doubleValue] longitude:[self.assignment[@"location"][@"coordinates"][0] doubleValue]];
+    [ceo reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error){
+        CLPlacemark *placemark = [placemarks objectAtIndex:0];
+        
+        NSString *addressString = [outletString stringByReplacingOccurrencesOfString:@"{ADDRESS}" withString:placemark.name];
+        NSString *cityStateString = [addressString stringByReplacingOccurrencesOfString:@"{CITY, STATE}" withString:[NSString stringWithFormat:@"%@, %@", placemark.subLocality ? placemark.subLocality : placemark.locality, placemark.administrativeArea]];        
+        
+        [self updateTextFieldWithString:cityStateString];
+    }];
     
     return outletString;
+}
+
+- (void)updateTextFieldWithString:(NSString *)string {
+    
+    self.textView.attributedText = [self formattedAttributedStringFromString:string];
+    
 }
 
 - (NSAttributedString *)formattedAttributedStringFromString:(NSString *)text {
