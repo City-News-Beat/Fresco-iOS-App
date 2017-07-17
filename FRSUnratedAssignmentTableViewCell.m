@@ -13,6 +13,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    self.indicatorCircle.layer.cornerRadius = self.indicatorCircle.frame.size.width/2;
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

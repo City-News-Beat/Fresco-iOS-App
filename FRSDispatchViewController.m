@@ -111,11 +111,11 @@
                                   counter++;
                                   
                                   // Check for if returned assignments are unrated
-                                  if ([[assignment valueForKey:@"rating"] isEqual:@1]) { // SHOULD BE 0 -- check for [nsnull null];
+//                                  if ([[assignment valueForKey:@"rating"] isEqual:@1]) { // SHOULD BE 0 -- check for [nsnull null];
                                       // Add unrated assignments to array
                                       [self.assignments addObject:assignment];
-                                  }
-                                  
+//                                  }
+                                      
                                   NSLog(@"counter = %ld", counter);
                                   NSLog(@"totalCount = %ld", totalCount);
                                   NSLog(@"self.assignments.count = %ld", self.assignments.count);
@@ -160,6 +160,15 @@
     
     cell.timestampLabel.text = [NSString stringWithFormat:@"%@", [FRSDateFormatter relativeTimeFromDate:date]];
     cell.captionLabel.text = [self.assignments objectAtIndex:indexPath.row][@"caption"];
+    
+    if ([[self.assignments objectAtIndex:indexPath.row][@"rating"] isEqual:@1]) {
+        cell.indicatorCircle.backgroundColor = [UIColor frescoGreenColor];
+    } else if ([[self.assignments objectAtIndex:indexPath.row][@"rating"] isEqual:@0]) {
+        cell.indicatorCircle.backgroundColor = [UIColor frescoLightTextColor];
+    } else {
+        cell.indicatorCircle.backgroundColor = [UIColor frescoRedColor];
+    }
+    
     return cell;
 }
 
