@@ -51,7 +51,7 @@
     
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, containerView.frame.size.height -32)];
     self.textView.backgroundColor = [UIColor clearColor];
-    self.textView.font = [UIFont systemFontOfSize:16];
+    self.textView.font = [UIFont systemFontOfSize:15];
     [self.textView becomeFirstResponder];
     self.textView.tintColor = [UIColor frescoBlueColor];
     self.textView.delegate = self;
@@ -155,11 +155,12 @@
     
     
     NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
+    paragraphStyle.lineHeightMultiple = 1.2;
     
     
     NSDictionary *attribs = @{
                               NSForegroundColorAttributeName : [[UIColor blackColor] colorWithAlphaComponent:0.87],
-                              NSFontAttributeName : [UIFont systemFontOfSize:16 weight:UIFontWeightRegular],
+                              NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightRegular],
                               NSParagraphStyleAttributeName : paragraphStyle
                               };
     

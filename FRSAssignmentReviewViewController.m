@@ -7,52 +7,125 @@
 //
 
 #import "FRSAssignmentReviewViewController.h"
-@import MapKit;
 #import "FRSAssignment.h"
 #import "FRSMapCircle.h"
 #import "FRSAssignmentAnnotation.h"
+#import "ReviewContainerView.h"
 
-@interface FRSAssignmentReviewViewController () <MKMapViewDelegate>
+@interface FRSAssignmentReviewViewController () <MKMapViewDelegate, UITextFieldDelegate, UITextViewDelegate>
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UITextField *titleTextField;
-@property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet UITextField *expirationTextField;
-
-
+@property (strong, nonatomic) ReviewContainerView *containerView;
+@property (strong, nonatomic) UIScrollView *scrollView;
+@property (nonatomic) CGSize kbSize;
 @end
 
 
 @implementation FRSAssignmentReviewViewController
 
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self showKeyboardAnimation];
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [self showKeyboardAnimation];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [self hideKeyboardAnimation];
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self hideKeyboardAnimation];
+}
+
+- (void)showKeyboardAnimation {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height - 226);
+        } completion:nil];
+        
+        
+        if ([self.containerView.titleTextField isFirstResponder]) {
+            [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+        } else if ([self.containerView.captionTextView isFirstResponder]) {
+            [self.scrollView setContentOffset:CGPointMake(0, 148) animated:YES];
+        } else {
+            CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+            [self.scrollView setContentOffset:bottomOffset animated:YES];
+        }
+    });
+}
+
+- (void)hideKeyboardAnimation {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height + 226);
+        } completion:nil];
+    });
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.containerView.expirationTextField.delegate = self;
+    self.containerView.captionTextView.delegate = self;
+    self.containerView.titleTextField.delegate = self;
+    
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
     [self configureNavigationBar];
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    self.mapView.layer.cornerRadius = 3;
-    self.mapView.layer.borderColor = [UIColor frescoShadowColor].CGColor;
-    self.mapView.layer.borderWidth = 0.5;
-    self.mapView.delegate = self;
+    
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(self.view.frame.size.width, 790)];
+    [self.view addSubview:self.scrollView];
+    
+    self.containerView = [[[NSBundle mainBundle] loadNibNamed:@"ReviewContainerView" owner:self options:nil] objectAtIndex:0];
+    self.containerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.containerView.frame.size.height);
+    [self.scrollView addSubview:self.containerView];
+    
+    self.scrollView.delaysContentTouches = NO;
+    
+    
+    self.containerView.mapView.layer.borderColor = [UIColor frescoShadowColor].CGColor;
+    self.containerView.mapView.layer.borderWidth = 0.5;
+    self.containerView.mapView.delegate = self;
     
     MKCoordinateRegion region;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.assignment[@"location"][@"coordinates"][0] doubleValue] longitude:[self.assignment[@"location"][@"coordinates"][1] doubleValue]];
     region.center.latitude = location.coordinate.longitude;
     region.center.longitude = location.coordinate.latitude;
-    [self.mapView setRegion:region animated:YES];
-    [self.view addSubview:self.mapView];
+    [self.containerView.mapView setRegion:region animated:YES];
+    
     [self zoomToCoordinates:region.center.latitude lon:region.center.longitude withRadius:@([self.assignment[@"radius"] doubleValue]) withAnimation:YES];
-    [self.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+    [self.containerView.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     [self addAssignmentAnnotation:self.assignment index:0];
     
-    self.titleTextField.text = self.assignment[@"title"];
-    self.captionTextView.text = self.assignment[@"caption"];
+    self.containerView.titleTextField.text = self.assignment[@"title"];
+    self.containerView.captionTextView.text = self.assignment[@"caption"];
     
     
     // need to get expiration date from `ends_at`
-    self.expirationTextField.text = self.assignment[@""];
+    self.containerView.expirationTextField.text = self.assignment[@""];
+//
+    
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+    [self.view addGestureRecognizer:tap];
+    
 }
+
+- (void)dismiss {
+    [self.containerView.expirationTextField resignFirstResponder];
+    [self.containerView.titleTextField resignFirstResponder];
+    [self.containerView.captionTextView resignFirstResponder];
+}
+
+
 
 
 
@@ -62,10 +135,10 @@
                                                  ([radius floatValue] / 30),
                                                  ([radius floatValue] / 30));
     MKCoordinateRegion region = { CLLocationCoordinate2DMake(lat, lon), span };
-    MKCoordinateRegion regionThatFits = [self.mapView regionThatFits:region];
+    MKCoordinateRegion regionThatFits = [self.containerView.mapView regionThatFits:region];
     
     [UIView animateWithDuration:0.33 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        [self.mapView setRegion:regionThatFits animated:animate];
+        [self.containerView.mapView setRegion:regionThatFits animated:animate];
     } completion:nil];
 }
 
@@ -84,14 +157,14 @@
     FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:distance];
     circle.circleType = FRSMapCircleTypeAssignment;
     
-    [self.mapView addOverlay:circle];
-    [self.mapView addAnnotation:ann];
+    [self.containerView.mapView addOverlay:circle];
+    [self.containerView.mapView addAnnotation:ann];
     
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     static NSString *annotationIdentifer = @"assignment-annotation";
-    MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
+    MKAnnotationView *annotationView = (MKAnnotationView *)[self.containerView.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
     annotationView = nil; // clear these to force redraw, avoid yellow annotations that shoud be green and visa versa
     
     if (annotationView == nil) {
@@ -140,7 +213,6 @@
     [self configureBackButtonAnimated:YES];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.view.backgroundColor = [UIColor whiteColor];
     [self.navigationItem setTitleView:label];
 }
 
