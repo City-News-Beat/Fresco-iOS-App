@@ -62,15 +62,15 @@
     
     
     
-    if ([self.assignment[@"rating"] isEqual:@0]) {
-        
+//    if ([self.assignment[@"rating"] isEqual:@0]) {
+    
         //this triggers method. dirty. sorry. v tired.
         NSString *string = [self formattedTextForAssignmentType:self.assignmentType];
         
-    } else {
-        self.textView.text = self.assignment[@"caption"];
-    }
-    
+//    } else {
+//        self.textView.text = self.assignment[@"caption"];
+//    }
+        
     
     
 }
@@ -157,7 +157,7 @@
         CLPlacemark *placemark = [placemarks objectAtIndex:0];
         
         NSString *addressString = [outletString stringByReplacingOccurrencesOfString:@"{ADDRESS}" withString:placemark.name];
-        NSString *cityStateString = [addressString stringByReplacingOccurrencesOfString:@"{CITY, STATE}" withString:[NSString stringWithFormat:@"%@, %@", placemark.subLocality ? placemark.subLocality : placemark.locality, placemark.administrativeArea]];
+        NSString *cityStateString = [addressString stringByReplacingOccurrencesOfString:@"{CITY, STATE}" withString:[NSString stringWithFormat:@"%@, %@", placemark.locality ? placemark.locality : placemark.subLocality, placemark.administrativeArea]];
         
         [self updateTextFieldWithString:cityStateString];
     }];
