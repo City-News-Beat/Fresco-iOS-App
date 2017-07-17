@@ -62,15 +62,15 @@
     
     
     
-//    if ([self.assignment[@"rating"] isEqual:@0]) {
-    
+    if ([self.assignment[@"rating"] isEqual:@0]) {
+        
         //this triggers method. dirty. sorry. v tired.
         NSString *string = [self formattedTextForAssignmentType:self.assignmentType];
         
-//    } else {
-//        self.textView.text = self.assignment[@"caption"];
-//    }
-        
+    } else {
+        self.textView.text = self.assignment[@"caption"];
+    }
+
     
     
 }
