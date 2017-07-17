@@ -12,9 +12,9 @@
 #import "FRSUnratedAssignmentTableViewCell.h"
 #import "FRSDateFormatter.h"
 #import "NSString+Fresco.h"
-#import "FRSAssignmentTitleViewController.h"
 //#import "FRSUsernameViewController.h"
 #import "FRSAssignmentTypeViewController.h"
+#import "FRSAssignmentDescriptionViewController.h"
 
 @interface FRSDispatchViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -84,7 +84,7 @@
 - (void)fetchAssignemnts {
     
     NSDictionary *params = @{ @"assignments" : @(TRUE),
-                              @"limit" : @30 };
+                              @"limit" : @12 };
     
     NSLog(@"LOADING...");
     
@@ -116,9 +116,6 @@
                                       [self.assignments addObject:assignment];
 //                                  }
                                       
-                                  NSLog(@"counter = %ld", counter);
-                                  NSLog(@"totalCount = %ld", totalCount);
-                                  NSLog(@"self.assignments.count = %ld", self.assignments.count);
                                   
                                   if (counter == totalCount) {
                                       // Configure and load tableView with assignments from self.assignments
@@ -176,9 +173,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    FRSAssignmentTypeViewController *typevc = [[FRSAssignmentTypeViewController alloc] init];
-    typevc.assignment = [self.assignments objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:typevc animated:YES];
+    if ([[self.assignments objectAtIndex:indexPath.row][@"rating"] isEqual:@1]) {
+        FRSAssignmentDescriptionViewController *descvc = [[FRSAssignmentDescriptionViewController alloc] init];
+        descvc.assignment = [self.assignments objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:descvc animated:YES];
+    } else {
+        FRSAssignmentTypeViewController *typevc = [[FRSAssignmentTypeViewController alloc] init];
+        typevc.assignment = [self.assignments objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:typevc animated:YES];
+    }
+    
+    
+    
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

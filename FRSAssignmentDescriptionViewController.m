@@ -61,8 +61,17 @@
     [containerView addSubview:self.textView];
     
     
-    //this triggers method. dirty. sorry. v tired.
-    NSString *string = [self formattedTextForAssignmentType:self.assignmentType];
+    
+    if ([self.assignment[@"rating"] isEqual:@0]) {
+        
+        //this triggers method. dirty. sorry. v tired.
+        NSString *string = [self formattedTextForAssignmentType:self.assignmentType];
+        
+    } else {
+        self.textView.text = self.assignment[@"caption"];
+    }
+    
+    
     
 }
 
@@ -158,8 +167,12 @@
 
 - (void)updateTextFieldWithString:(NSString *)string {
     
-    self.textView.attributedText = [self formattedAttributedStringFromString:string];
     
+    if ([self.assignment[@"rating"] isEqual:@0]) {
+        self.textView.attributedText = [self formattedAttributedStringFromString:string];
+    } else {
+        self.textView.text = self.assignment[@"caption"];
+    }
 }
 
 - (NSAttributedString *)formattedAttributedStringFromString:(NSString *)text {

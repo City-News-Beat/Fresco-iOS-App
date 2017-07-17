@@ -11,6 +11,9 @@
 #import "FRSMapCircle.h"
 #import "FRSAssignmentAnnotation.h"
 #import "ReviewContainerView.h"
+#import "FRSDispatchViewController.h"
+
+
 
 @interface FRSAssignmentReviewViewController () <MKMapViewDelegate, UITextFieldDelegate, UITextViewDelegate>
 
@@ -20,56 +23,8 @@
 @end
 
 
+
 @implementation FRSAssignmentReviewViewController
-
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-    [self showKeyboardAnimation];
-}
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self showKeyboardAnimation];
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    [self hideKeyboardAnimation];
-}
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [self hideKeyboardAnimation];
-}
-
-- (void)showKeyboardAnimation {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height - 226);
-        } completion:nil];
-        
-        
-        if ([self.containerView.titleTextField isFirstResponder]) {
-            [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        } else if ([self.containerView.captionTextView isFirstResponder]) {
-            [self.scrollView setContentOffset:CGPointMake(0, 148) animated:YES];
-        } else {
-            CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-            [self.scrollView setContentOffset:bottomOffset animated:YES];
-        }
-    });
-}
-
-- (void)hideKeyboardAnimation {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height + 226);
-        } completion:nil];
-    });
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    self.containerView.expirationTextField.delegate = self;
-    self.containerView.captionTextView.delegate = self;
-    self.containerView.titleTextField.delegate = self;
-    
-}
 
 
 - (void)viewDidLoad {
@@ -93,7 +48,14 @@
     
     self.containerView.mapView.layer.borderColor = [UIColor frescoShadowColor].CGColor;
     self.containerView.mapView.layer.borderWidth = 0.5;
+    self.containerView.mapView.layer.cornerRadius = 5;
     self.containerView.mapView.delegate = self;
+    
+    self.containerView.confirmButtonView.layer.borderColor = [UIColor frescoShadowColor].CGColor;
+    self.containerView.confirmButtonView.layer.borderWidth = 0.5;
+    self.containerView.confirmButtonView.layer.cornerRadius = 5;
+    
+    
     
     MKCoordinateRegion region;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.assignment[@"location"][@"coordinates"][0] doubleValue] longitude:[self.assignment[@"location"][@"coordinates"][1] doubleValue]];
@@ -111,24 +73,136 @@
     
     // need to get expiration date from `ends_at`
     self.containerView.expirationTextField.text = self.assignment[@""];
-//
     
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     [self.view addGestureRecognizer:tap];
     
+    if ([self.assignment[@"rating"] isEqual:@1]) {
+        [self.containerView.confirmButton setTitle:@"UPDATE DISPATCH" forState:UIControlStateNormal];
+        self.containerView.confirmButtonView.backgroundColor = [UIColor frescoBlueColor];
+        [self.containerView.confirmButton addTarget:self action:@selector(updateDispatch) forControlEvents:UIControlEventTouchUpInside];
+    } else if ([self.assignment[@"rating"] isEqual:@0]) {
+        [self.containerView.confirmButton setTitle:@"APPROVE DISPATCH" forState:UIControlStateNormal];
+        self.containerView.confirmButtonView.backgroundColor = [UIColor frescoGreenColor];
+        [self.containerView.confirmButton addTarget:self action:@selector(approveDispatch) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [self.containerView.confirmButton setTitle:@"APPROVE DISPATCH" forState:UIControlStateNormal];
+        self.containerView.confirmButtonView.backgroundColor = [UIColor frescoGreenColor];
+        [self.containerView.confirmButton addTarget:self action:@selector(approveDispatch) forControlEvents:UIControlEventTouchUpInside];
+    }
 }
 
-- (void)dismiss {
-    [self.containerView.expirationTextField resignFirstResponder];
-    [self.containerView.titleTextField resignFirstResponder];
-    [self.containerView.captionTextView resignFirstResponder];
+- (void)updateDispatch {
+    
+    
+    NSString *endpoint = [NSString stringWithFormat:@"assignment/%@/update", self.assignment[@"id"]];
+    
+    [self startSpinner];
+    
+    // ***** NEED TO UPDATE `ends_at` FOR EXPIRATION TIME *****
+    [[FRSAPIClient sharedClient] post:endpoint withParameters:@{@"title" : self.assignment[@"title"], @"caption" : self.assignment[@"caption"], @"radius" : self.assignment[@"radius"]} completion:^(id responseObject, NSError *error) {
+        
+        [self stopSpinner];
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
+            [alert show];
+            return;
+        }
+        
+        
+        if (responseObject) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISPATCH UPDATED" message:@"Great job!" actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
+            [alert show];
+            
+            [self segueHome];
+        }
+    }];
+}
+
+- (void)approveDispatch {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"assignment/%@/approve", self.assignment[@"id"]];
+    
+    [self startSpinner];
+    
+    [[FRSAPIClient sharedClient] post:endpoint withParameters:@{@"title" : self.assignment[@"title"], @"caption" : self.assignment[@"caption"], @"radius" : self.assignment[@"radius"]} completion:^(id responseObject, NSError *error) {
+        [self stopSpinner];
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
+            [alert show];
+            return;
+        }
+        
+        if (responseObject) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISPATCH APPROVED" message:@"Nice work!" actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
+            [alert show];
+            
+            [self segueHome];
+        }
+    }];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.containerView.expirationTextField.delegate = self;
+    self.containerView.captionTextView.delegate = self;
+    self.containerView.titleTextField.delegate = self;
+    
+    [self.containerView.titleTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
+    [self.containerView.expirationTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
+    
 }
 
 
+- (void)updateTextFields:(UITextField *)textField {
+    NSMutableDictionary *mutableDict = [self.assignment mutableCopy];
+    if ([textField isEqual:self.containerView.titleTextField]) {
+        [mutableDict setObject:textField.text forKey:@"title"];
+    } else if([textField isEqual:self.containerView.expirationTextField]) {
+//        [mutableDict setObject:textField.text forKey:@"ends_at"];
+    }
+    
+    self.assignment = [mutableDict mutableCopy];
+}
 
 
+- (void)textViewDidChange:(UITextView *)textView {
+    NSMutableDictionary *mutableDict = [self.assignment mutableCopy];
+    [mutableDict setObject:textView.text forKey:@"caption"];
+    self.assignment = [mutableDict mutableCopy];
+}
 
+
+- (void)configureNavigationBar {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    label.text = @"REVIEW";
+    label.font = [UIFont notaBoldWithSize:17];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor whiteColor];
+    
+    [self configureBackButtonAnimated:YES];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    [self.navigationItem setTitleView:label];
+}
+
+
+- (void)segueHome {
+    
+    
+    FRSDispatchViewController *dispatchVC = [[FRSDispatchViewController alloc] init];
+    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:dispatchVC];
+    
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+    
+}
+
+
+#pragma mark - Map
 - (void)zoomToCoordinates:(double)lat lon:(double)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
     // Span uses degrees, 1 degree = 69 miles
     MKCoordinateSpan span = MKCoordinateSpanMake(
@@ -203,17 +277,74 @@
 
 
 
-- (void)configureNavigationBar {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
-    label.text = @"REVIEW";
-    label.font = [UIFont notaBoldWithSize:17];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor whiteColor];
-    
-    [self configureBackButtonAnimated:YES];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    
-    [self.navigationItem setTitleView:label];
+
+#pragma mark - Keyboard
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self showKeyboardAnimation];
 }
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [self showKeyboardAnimation];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [self hideKeyboardAnimation];
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self hideKeyboardAnimation];
+}
+
+- (void)showKeyboardAnimation {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height - 226);
+        } completion:nil];
+        
+        
+        if ([self.containerView.titleTextField isFirstResponder]) {
+            [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+        } else if ([self.containerView.captionTextView isFirstResponder]) {
+            [self.scrollView setContentOffset:CGPointMake(0, 148) animated:YES];
+        } else {
+            CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+            [self.scrollView setContentOffset:bottomOffset animated:YES];
+        }
+    });
+}
+
+- (void)hideKeyboardAnimation {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height + 226);
+        } completion:nil];
+    });
+}
+
+- (void)dismiss {
+    [self.containerView.expirationTextField resignFirstResponder];
+    [self.containerView.titleTextField resignFirstResponder];
+    [self.containerView.captionTextView resignFirstResponder];
+}
+
+- (void)startSpinner {
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.containerView.confirmButtonView addSubview:activityIndicator];
+    self.containerView.confirmButtonView.userInteractionEnabled = NO;
+    [self.containerView.confirmButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    activityIndicator.color = [UIColor whiteColor];
+    activityIndicator.tag = 999;
+    activityIndicator.frame = CGRectMake(self.containerView.confirmButtonView.frame.size.width/2 - 12, self.containerView.confirmButtonView.frame.size.height/2 - 12, 24, 24);
+    [activityIndicator startAnimating];
+}
+
+- (void)stopSpinner {
+    UIView *removeView;
+    while((removeView = [self.containerView.confirmButtonView viewWithTag:999]) != nil) {
+        [removeView removeFromSuperview];
+        self.containerView.confirmButtonView.userInteractionEnabled = YES;
+        [self.containerView.confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    }
+}
+
 
 @end

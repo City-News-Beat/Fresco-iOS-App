@@ -27,13 +27,13 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="830"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOCATION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3pu-Vl-QNl">
-                                    <rect key="frame" x="24" y="24" width="327" height="16.5"/>
+                                    <rect key="frame" x="24" y="24" width="327" height="14"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="14"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cWV-dj-pa1">
-                                    <rect key="frame" x="16" y="48.5" width="343" height="128"/>
+                                    <rect key="frame" x="16" y="46" width="343" height="128"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="128" id="pZW-HT-2VV"/>
                                     </constraints>
@@ -44,13 +44,13 @@
                                     </userDefinedRuntimeAttributes>
                                 </mapView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ETR-Up-8NN">
-                                    <rect key="frame" x="24" y="200.5" width="327" height="16.5"/>
+                                    <rect key="frame" x="24" y="198" width="327" height="14"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="14"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8PM-kx-X76">
-                                    <rect key="frame" x="0.0" y="225" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="220" width="375" height="44"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DXz-uW-D94">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
@@ -92,13 +92,13 @@
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CAPTION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nUk-fz-PSB">
-                                    <rect key="frame" x="24" y="293" width="327" height="16.5"/>
+                                    <rect key="frame" x="24" y="288" width="327" height="14"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="14"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wvd-pX-Thp">
-                                    <rect key="frame" x="0.0" y="317.5" width="375" height="192"/>
+                                    <rect key="frame" x="0.0" y="310" width="375" height="192"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bdG-kI-Hf8">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
@@ -120,7 +120,7 @@
                                             <color key="tintColor" red="0.16078431369999999" green="0.31372549020000001" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <attributedString key="attributedText">
                                                 <fragment>
-                                                    <mutableString key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                                    <string key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                     <attributes>
                                                         <font key="NSFont" metaFont="system" size="15"/>
                                                         <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.2" tighteningFactorForTruncation="0.0"/>
@@ -147,13 +147,13 @@
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EXPIRATION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4b2-2I-cj1">
-                                    <rect key="frame" x="24" y="533.5" width="327" height="16.5"/>
+                                    <rect key="frame" x="24" y="526" width="327" height="14"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="14"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TfQ-9Y-qRF">
-                                    <rect key="frame" x="0.0" y="558" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="548" width="375" height="44"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U18-h2-bwb">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
@@ -194,7 +194,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ov5-9f-sAc">
-                                    <rect key="frame" x="24" y="642" width="327" height="64"/>
+                                    <rect key="frame" x="24" y="632" width="327" height="64"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jC-Ar-kiK">
                                             <rect key="frame" x="0.0" y="0.0" width="327" height="64"/>
@@ -271,6 +271,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="captionTextView" destination="Sfo-R8-Ywk" id="Pc5-zg-EOD"/>
+                <outlet property="confirmButton" destination="8jC-Ar-kiK" id="cxS-hy-MoV"/>
                 <outlet property="confirmButtonView" destination="Ov5-9f-sAc" id="BJF-k3-1eX"/>
                 <outlet property="expirationTextField" destination="OD4-Pb-M0p" id="fAc-zW-Gqz"/>
                 <outlet property="mapView" destination="cWV-dj-pa1" id="mCh-Ye-pOg"/>
