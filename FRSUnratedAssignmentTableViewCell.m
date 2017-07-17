@@ -19,7 +19,21 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    UIColor *color = self.indicatorCircle.backgroundColor;
     [super setSelected:selected animated:animated];
+    
+    if (selected){
+        self.indicatorCircle.backgroundColor = color;
+    }
+}
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    UIColor *color = self.indicatorCircle.backgroundColor;
+    [super setHighlighted:highlighted animated:animated];
+    
+    if (highlighted){
+        self.indicatorCircle.backgroundColor = color;
+    }
 }
 
 @end

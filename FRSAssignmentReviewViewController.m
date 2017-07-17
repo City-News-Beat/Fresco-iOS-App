@@ -106,17 +106,19 @@
         [self stopSpinner];
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            
             return;
         }
         
-        
         if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISPATCH UPDATED" message:@"Great job!" actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
-            [alert show];
-            
-            [self segueHome];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Dispatch updated" message:@"Great job!" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"🎉" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self segueHome];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }];
 }
@@ -131,16 +133,20 @@
         [self stopSpinner];
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            
             return;
         }
         
         if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISPATCH APPROVED" message:@"Nice work!" actionTitle:nil cancelTitle:@"OK" cancelTitleColor:nil delegate:nil];
-            [alert show];
             
-            [self segueHome];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Dispatch approved" message:@"Woo!" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"🎉" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self segueHome];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }];
 }
@@ -192,13 +198,11 @@
 
 
 - (void)segueHome {
-    
-    
-    FRSDispatchViewController *dispatchVC = [[FRSDispatchViewController alloc] init];
-    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:dispatchVC];
-    
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSDispatchViewController *dispatchVC = [[FRSDispatchViewController alloc] init];
+        FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:dispatchVC];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
+    });
 }
 
 
@@ -345,6 +349,8 @@
         [self.containerView.confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
 }
+
+
 
 
 @end

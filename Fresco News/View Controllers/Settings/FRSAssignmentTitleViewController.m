@@ -10,7 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAssignmentTypeViewController.h"
 
-@interface FRSAssignmentTitleViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
+@interface FRSAssignmentTitleViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
