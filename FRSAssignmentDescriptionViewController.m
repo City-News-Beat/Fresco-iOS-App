@@ -148,7 +148,7 @@
         CLPlacemark *placemark = [placemarks objectAtIndex:0];
         
         NSString *addressString = [outletString stringByReplacingOccurrencesOfString:@"{ADDRESS}" withString:placemark.name];
-        NSString *cityStateString = [addressString stringByReplacingOccurrencesOfString:@"{CITY, STATE}" withString:[NSString stringWithFormat:@"%@, %@", placemark.subLocality ? placemark.subLocality : placemark.locality, placemark.administrativeArea]];        
+        NSString *cityStateString = [addressString stringByReplacingOccurrencesOfString:@"{CITY, STATE}" withString:[NSString stringWithFormat:@"%@, %@", placemark.subLocality ? placemark.subLocality : placemark.locality, placemark.administrativeArea]];
         
         [self updateTextFieldWithString:cityStateString];
     }];
@@ -176,7 +176,6 @@
     NSRange range8 = [text rangeOfString:@"{LOCATION}"];
     NSRange range9 = [text rangeOfString:@"{SHOOTING or STABBING}"];
     NSRange range10 = [text rangeOfString:@"{END TIME} {a.m./p.m.}"];
-    
     
     
     NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;

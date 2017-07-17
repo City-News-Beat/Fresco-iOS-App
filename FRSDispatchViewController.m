@@ -14,6 +14,7 @@
 #import "NSString+Fresco.h"
 #import "FRSAssignmentTitleViewController.h"
 //#import "FRSUsernameViewController.h"
+#import "FRSAssignmentTypeViewController.h"
 
 @interface FRSDispatchViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -165,13 +166,10 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    FRSAssignmentTypeViewController *typeVC = [[FRSAssignmentTypeViewController alloc] init];
-//    typeVC.assignment = [self.assignments objectAtIndex:indexPath.row];
-//    [self.navigationController pushViewController:typeVC animated:YES];
     
-    FRSAssignmentTitleViewController *titleVC = [[FRSAssignmentTitleViewController alloc] init];
-    titleVC.assignment = [self.assignments objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:titleVC animated:YES];
+    FRSAssignmentTypeViewController *typevc = [[FRSAssignmentTypeViewController alloc] init];
+    typevc.assignment = [self.assignments objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:typevc animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
