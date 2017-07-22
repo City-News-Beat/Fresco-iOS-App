@@ -127,20 +127,40 @@
 
 - (void)configureActionButton {
     if ([self.assignment[@"rating"] isEqual:@1]) {
-        [self.containerView.confirmButton setTitle:@"UPDATE DISPATCH" forState:UIControlStateNormal];
-        self.containerView.confirmButtonView.backgroundColor = [UIColor frescoBlueColor];
-        [self.containerView.confirmButton addTarget:self action:@selector(updateDispatch) forControlEvents:UIControlEventTouchUpInside];
+        [self setButtonToUpdate];
+        
     } else if ([self.assignment[@"rating"] isEqual:@0]) {
-        [self.containerView.confirmButton setTitle:@"APPROVE DISPATCH" forState:UIControlStateNormal];
-        self.containerView.confirmButtonView.backgroundColor = [UIColor frescoGreenColor];
-        [self.containerView.confirmButton addTarget:self action:@selector(approveDispatch) forControlEvents:UIControlEventTouchUpInside];
+        [self setButtonToApprove];
+        
     } else {
-        [self.containerView.confirmButton setTitle:@"APPROVE DISPATCH" forState:UIControlStateNormal];
-        self.containerView.confirmButtonView.backgroundColor = [UIColor frescoGreenColor];
-        [self.containerView.confirmButton addTarget:self action:@selector(approveDispatch) forControlEvents:UIControlEventTouchUpInside];
+        [self setButtonToApprove];
+        
     }
 }
 
+- (void)setButtonToUpdate {
+    [self.containerView.confirmButton setTitle:@"UPDATE DISPATCH" forState:UIControlStateNormal];
+    self.containerView.confirmButtonView.backgroundColor = [UIColor frescoBlueColor];
+    [self.containerView.confirmButton addTarget:self action:@selector(updateDispatch) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setButtonToApprove {
+    [self.containerView.confirmButton setTitle:@"APPROVE DISPATCH" forState:UIControlStateNormal];
+    self.containerView.confirmButtonView.backgroundColor = [UIColor frescoGreenColor];
+    [self.containerView.confirmButton addTarget:self action:@selector(approveDispatch) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setButtonToExpire {
+    [self.containerView.confirmButton setTitle:@"EXPIRE DISPATCH" forState:UIControlStateNormal];
+    self.containerView.confirmButtonView.backgroundColor = [UIColor frescoRedColor];
+    [self.containerView.confirmButton addTarget:self action:@selector(expireDispatch) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setButtonToDeny {
+    [self.containerView.confirmButton setTitle:@"DENY DISPATCH" forState:UIControlStateNormal];
+    self.containerView.confirmButtonView.backgroundColor = [UIColor frescoRedColor];
+    [self.containerView.confirmButton addTarget:self action:@selector(denyDispatch) forControlEvents:UIControlEventTouchUpInside];
+}
 
 #pragma mark - API Calls
 
@@ -211,6 +231,13 @@
     }];
 }
 
+- (void)expireDispatch {
+    
+}
+
+- (void)denyDispatch {
+    
+}
 
 
 #pragma mark - Text Handling
@@ -289,12 +316,24 @@
     [timeLeft appendString:[NSString stringWithFormat: @"%ld", (long)totalHours*-1]];
     
     if ([timeLeft integerValue] < 0) {
+        
+        if ([self.assignment[@"rating"] isEqual:@1]) {
+            [self setButtonToExpire];
+        } else if ([self.assignment[@"rating"] isEqual:@0]) {
+            [self setButtonToDeny];
+        }
         return [NSMutableString stringWithFormat:@"0"];
+        
+    } else {
+        if ([self.assignment[@"rating"] isEqual:@1]) {
+            [self setButtonToUpdate];
+        } else if ([self.assignment[@"rating"] isEqual:@0]) {
+            [self setButtonToApprove];
+        }
     }
     
     return timeLeft;
 }
-
 
 
 
