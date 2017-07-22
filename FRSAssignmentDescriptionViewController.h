@@ -15,4 +15,5 @@
 @property (strong, nonatomic) NSMutableDictionary *assignment;
 @property AssignmentTypes assignmentType;
 
++ (NSAttributedString *)formattedAttributedStringFromString:(NSString *)text;
 @end

@@ -55,7 +55,6 @@
         textField.secureTextEntry = YES;
     }];
     
-    
     [self configureSpinner];
     
     UIAlertAction *okAction = [UIAlertAction
@@ -101,11 +100,6 @@
     [self presentViewController:alertController animated:YES completion:^{
         
     }];
-    
-    
-    
-    
-    
     
 }
 

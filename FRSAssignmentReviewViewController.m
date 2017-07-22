@@ -12,6 +12,7 @@
 #import "FRSAssignmentAnnotation.h"
 #import "ReviewContainerView.h"
 #import "FRSDispatchViewController.h"
+#import "FRSAssignmentDescriptionViewController.h"
 
 
 
@@ -67,8 +68,8 @@
     [self.containerView.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     [self addAssignmentAnnotation:self.assignment index:0];
     
-    self.containerView.titleTextField.text = self.assignment[@"title"];
-    self.containerView.captionTextView.text = self.assignment[@"caption"];
+    self.containerView.titleTextField.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"title"]];
+    self.containerView.captionTextView.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"caption"]];
     
     
     // need to get expiration date from `ends_at`
@@ -93,7 +94,26 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.containerView.expirationTextField.delegate = self;
+    self.containerView.captionTextView.delegate = self;
+    self.containerView.titleTextField.delegate = self;
+    
+    [self.containerView.titleTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
+    [self.containerView.expirationTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
+    
+}
+
 - (void)updateDispatch {
+    
+    if ([self containsUnformattedText]) {
+        
+        [self presentUnformattedTextError];
+        
+        return;
+    }
     
     
     NSString *endpoint = [NSString stringWithFormat:@"assignment/%@/update", self.assignment[@"id"]];
@@ -106,15 +126,12 @@
         [self stopSpinner];
         
         if (error) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-            
+            [self presentAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", error.localizedDescription] action:@"Ok"];
             return;
         }
         
         if (responseObject) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Dispatch updated" message:@"Great job!" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Dispatch updated" message:@"You did it!" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"🎉" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self segueHome];
             }]];
@@ -125,17 +142,23 @@
 
 - (void)approveDispatch {
     
+    if ([self containsUnformattedText]) {
+        
+        [self presentUnformattedTextError];
+        
+        return;
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:@"assignment/%@/approve", self.assignment[@"id"]];
     
     [self startSpinner];
+    
     
     [[FRSAPIClient sharedClient] post:endpoint withParameters:@{@"title" : self.assignment[@"title"], @"caption" : self.assignment[@"caption"], @"radius" : self.assignment[@"radius"]} completion:^(id responseObject, NSError *error) {
         [self stopSpinner];
         
         if (error) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"ERROR" message:[NSString stringWithFormat:@"%@", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
+            [self presentAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", error.localizedDescription] action:@"Ok"];
             
             return;
         }
@@ -151,17 +174,25 @@
     }];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+
+- (BOOL)containsUnformattedText {
+    if ([self.assignment[@"title"] containsString:@"{"] || [self.assignment[@"title"] containsString:@"}"]) {
+        return YES;
+    }
     
-    self.containerView.expirationTextField.delegate = self;
-    self.containerView.captionTextView.delegate = self;
-    self.containerView.titleTextField.delegate = self;
+    if ([self.assignment[@"caption"] containsString:@"{"] || [self.assignment[@"caption"] containsString:@"}"]) {
+        return YES;
+    }
     
-    [self.containerView.titleTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
-    [self.containerView.expirationTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
-    
+    return NO;
 }
+
+
+- (void)presentUnformattedTextError {
+    [self presentAlertWithTitle:@"Error" message:@"Unformatted title or caption detected.\nReview your text fields and make sure there's no leftover formatting." action:@"Ok"];
+}
+
+
 
 
 - (void)updateTextFields:(UITextField *)textField {
@@ -348,6 +379,12 @@
         self.containerView.confirmButtonView.userInteractionEnabled = YES;
         [self.containerView.confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
+}
+
+- (void)presentAlertWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:action style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
