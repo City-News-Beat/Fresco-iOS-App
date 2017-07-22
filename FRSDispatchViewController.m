@@ -19,6 +19,8 @@
 @interface FRSDispatchViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) NSMutableArray *assignments;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
@@ -107,6 +109,10 @@
     [self fetchAssignemnts];
     [self configureNavigationBar];
     [self configureSpinner];
+    
+    
+    
+    
 }
 
 - (void)configureSpinner {
@@ -145,12 +151,15 @@
     
     
     // Create empty array to hold unrated assignments
-    self.assignments = [[NSMutableArray alloc] init];
     
     
     [[FRSAPIClient sharedClient] get:@"search"
                       withParameters:params
                           completion:^(id responseObject, NSError *error) {
+                              
+                              self.assignments = [[NSMutableArray alloc] init];
+                              
+                              [self.refreshControl endRefreshing];
                               
                               NSLog(@"ERROR: %@", error);
                               
@@ -175,7 +184,11 @@
                                   if (counter == totalCount) {
                                       // Configure and load tableView with assignments from self.assignments
                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                          [self configureTableView];
+                                          if (!self.tableView) {
+                                              [self configureTableView];
+                                          } else {
+                                              [self.tableView reloadData];
+                                          }
                                       });
                                   }
                               }
@@ -183,14 +196,26 @@
 }
 
 - (void)configureTableView {
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
-    tableView.backgroundColor = [UIColor clearColor];
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    [self.view addSubview:tableView];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
     
-    [tableView registerNib:[UINib nibWithNibName:@"FRSUnratedAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"unrated-cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSUnratedAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"unrated-cell"];
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor clearColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(reloadMainTableView)
+                  forControlEvents:UIControlEventValueChanged];
+    
+    self.tableView.refreshControl = self.refreshControl;
+    
+}
+
+- (void)reloadMainTableView {
+    [self fetchAssignemnts];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
