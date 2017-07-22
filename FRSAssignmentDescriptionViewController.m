@@ -72,23 +72,33 @@
 //        self.textView.text = self.assignment[@"caption"];
 //    }
     
+    UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [nextButton addTarget:self action:@selector(next) forControlEvents:UIControlEventTouchUpInside];
+    nextButton.tintColor = [UIColor frescoBlueColor];
+    [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+    [nextButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    nextButton.frame = CGRectMake(self.view.frame.size.width -100, self.textView.frame.size.height +36, 100, 56);
+    [self.view addSubview:nextButton];
     
+}
+
+- (void) next {
+    NSMutableDictionary *mutableDict = [self.assignment mutableCopy];
+    [mutableDict setObject:self.textView.text forKey:@"caption"];
+    [mutableDict setObject:self.formattedTitle forKey:@"title"];
     
+    self.assignment = [mutableDict mutableCopy];
+    
+    FRSRadiusViewController *locvc = [[FRSRadiusViewController alloc] init];
+    locvc.assignment = self.assignment;
+    [self.navigationController pushViewController:locvc animated:YES];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
     if([text isEqualToString:@"\n"]) {
         
-        NSMutableDictionary *mutableDict = [self.assignment mutableCopy];
-        [mutableDict setObject:textView.text forKey:@"caption"];
-        [mutableDict setObject:self.formattedTitle forKey:@"title"];
-        
-        self.assignment = [mutableDict mutableCopy];
-        
-        FRSRadiusViewController *locvc = [[FRSRadiusViewController alloc] init];
-        locvc.assignment = self.assignment;
-        [self.navigationController pushViewController:locvc animated:YES];
+        [self next];
         
         return NO;
     }
