@@ -14,8 +14,6 @@
 #import "FRSDispatchViewController.h"
 #import "FRSAssignmentDescriptionViewController.h"
 
-
-
 @interface FRSAssignmentReviewViewController () <MKMapViewDelegate, UITextFieldDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) ReviewContainerView *containerView;
@@ -23,19 +21,71 @@
 @property (nonatomic) CGSize kbSize;
 @end
 
-
-
 @implementation FRSAssignmentReviewViewController
 
 
+
+#pragma mark - Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self configureUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    [self configureNavigationBar];
+    self.containerView.expirationTextField.delegate = self;
+    self.containerView.captionTextView.delegate = self;
+    self.containerView.titleTextField.delegate = self;
+    
+    [self.containerView.titleTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
+    [self.containerView.expirationTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
+    
+}
+
+- (void)segueHome {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSDispatchViewController *dispatchVC = [[FRSDispatchViewController alloc] init];
+        FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:dispatchVC];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
+    });
+}
+
+
+#pragma mark - UI Configuration
+
+- (void)configureUI {
+    
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
+    [self configureNavigationBar];
+    [self configureScrollView];
+    [self configureMapView];
+    [self configureActionButton];
     
+    self.containerView.titleTextField.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"title"]];
+    self.containerView.captionTextView.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"caption"]];
+    self.containerView.expirationTextField.text = self.assignment[@""];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)configureNavigationBar {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    label.text = @"REVIEW";
+    label.font = [UIFont notaBoldWithSize:17];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor whiteColor];
+    
+    [self configureBackButtonAnimated:YES];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    [self.navigationItem setTitleView:label];
+}
+
+- (void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [self.scrollView setContentSize:CGSizeMake(self.view.frame.size.width, 790)];
     [self.view addSubview:self.scrollView];
@@ -46,7 +96,6 @@
     
     self.scrollView.delaysContentTouches = NO;
     
-    
     self.containerView.mapView.layer.borderColor = [UIColor frescoShadowColor].CGColor;
     self.containerView.mapView.layer.borderWidth = 0.5;
     self.containerView.mapView.layer.cornerRadius = 5;
@@ -55,9 +104,9 @@
     self.containerView.confirmButtonView.layer.borderColor = [UIColor frescoShadowColor].CGColor;
     self.containerView.confirmButtonView.layer.borderWidth = 0.5;
     self.containerView.confirmButtonView.layer.cornerRadius = 5;
-    
-    
-    
+}
+
+- (void)configureMapView {
     MKCoordinateRegion region;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[self.assignment[@"location"][@"coordinates"][0] doubleValue] longitude:[self.assignment[@"location"][@"coordinates"][1] doubleValue]];
     region.center.latitude = location.coordinate.longitude;
@@ -67,18 +116,9 @@
     [self zoomToCoordinates:region.center.latitude lon:region.center.longitude withRadius:@([self.assignment[@"radius"] doubleValue]) withAnimation:YES];
     [self.containerView.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     [self addAssignmentAnnotation:self.assignment index:0];
-    
-    self.containerView.titleTextField.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"title"]];
-    self.containerView.captionTextView.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"caption"]];
-    
-    
-    // need to get expiration date from `ends_at`
-    self.containerView.expirationTextField.text = self.assignment[@""];
-    
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
-    [self.view addGestureRecognizer:tap];
-    
+}
+
+- (void)configureActionButton {
     if ([self.assignment[@"rating"] isEqual:@1]) {
         [self.containerView.confirmButton setTitle:@"UPDATE DISPATCH" forState:UIControlStateNormal];
         self.containerView.confirmButtonView.backgroundColor = [UIColor frescoBlueColor];
@@ -94,27 +134,15 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    self.containerView.expirationTextField.delegate = self;
-    self.containerView.captionTextView.delegate = self;
-    self.containerView.titleTextField.delegate = self;
-    
-    [self.containerView.titleTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
-    [self.containerView.expirationTextField addTarget:self action:@selector(updateTextFields:) forControlEvents:UIControlEventEditingChanged];
-    
-}
+
+#pragma mark - API Calls
 
 - (void)updateDispatch {
     
     if ([self containsUnformattedText]) {
-        
         [self presentUnformattedTextError];
-        
         return;
     }
-    
     
     NSString *endpoint = [NSString stringWithFormat:@"assignment/%@/update", self.assignment[@"id"]];
     
@@ -139,6 +167,7 @@
         }
     }];
 }
+
 
 - (void)approveDispatch {
     
@@ -175,26 +204,8 @@
 }
 
 
-- (BOOL)containsUnformattedText {
-    if ([self.assignment[@"title"] containsString:@"{"] || [self.assignment[@"title"] containsString:@"}"]) {
-        return YES;
-    }
-    
-    if ([self.assignment[@"caption"] containsString:@"{"] || [self.assignment[@"caption"] containsString:@"}"]) {
-        return YES;
-    }
-    
-    return NO;
-}
 
-
-- (void)presentUnformattedTextError {
-    [self presentAlertWithTitle:@"Error" message:@"Unformatted title or caption detected.\nReview your text fields and make sure there's no leftover formatting." action:@"Ok"];
-}
-
-
-
-
+#pragma mark - Text Handling
 - (void)updateTextFields:(UITextField *)textField {
     NSMutableDictionary *mutableDict = [self.assignment mutableCopy];
     if ([textField isEqual:self.containerView.titleTextField]) {
@@ -213,31 +224,25 @@
     self.assignment = [mutableDict mutableCopy];
 }
 
+- (BOOL)containsUnformattedText {
+    if ([self.assignment[@"title"] containsString:@"{"] || [self.assignment[@"title"] containsString:@"}"]) {
+        return YES;
+    }
+    
+    if ([self.assignment[@"caption"] containsString:@"{"] || [self.assignment[@"caption"] containsString:@"}"]) {
+        return YES;
+    }
+    
+    return NO;
+}
 
-- (void)configureNavigationBar {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
-    label.text = @"REVIEW";
-    label.font = [UIFont notaBoldWithSize:17];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor whiteColor];
-    
-    [self configureBackButtonAnimated:YES];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    
-    [self.navigationItem setTitleView:label];
+- (void)presentUnformattedTextError {
+    [self presentAlertWithTitle:@"Error" message:@"Unformatted title or caption detected.\nReview your text fields and make sure there's no leftover formatting." action:@"Ok"];
 }
 
 
-- (void)segueHome {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        FRSDispatchViewController *dispatchVC = [[FRSDispatchViewController alloc] init];
-        FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:dispatchVC];
-        [self.navigationController presentViewController:nav animated:YES completion:nil];
-    });
-}
 
-
-#pragma mark - Map
+#pragma mark - MKMapView Delegate
 - (void)zoomToCoordinates:(double)lat lon:(double)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
     // Span uses degrees, 1 degree = 69 miles
     MKCoordinateSpan span = MKCoordinateSpanMake(
@@ -360,6 +365,10 @@
     [self.containerView.titleTextField resignFirstResponder];
     [self.containerView.captionTextView resignFirstResponder];
 }
+
+
+
+#pragma mark - Helpers
 
 - (void)startSpinner {
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];

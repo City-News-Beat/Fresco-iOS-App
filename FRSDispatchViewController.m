@@ -238,9 +238,6 @@
         [self.navigationController pushViewController:typevc animated:YES];
     }
     
-    
-    
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
