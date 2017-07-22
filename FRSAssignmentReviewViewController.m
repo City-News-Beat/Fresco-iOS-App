@@ -13,12 +13,17 @@
 #import "ReviewContainerView.h"
 #import "FRSDispatchViewController.h"
 #import "FRSAssignmentDescriptionViewController.h"
+#import "NSString+Fresco.h"
+#import "FRSDateFormatter.h"
 
 @interface FRSAssignmentReviewViewController () <MKMapViewDelegate, UITextFieldDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) ReviewContainerView *containerView;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (nonatomic) CGSize kbSize;
+
+@property (strong, nonatomic) NSString *dateString;
+
 @end
 
 @implementation FRSAssignmentReviewViewController
@@ -30,6 +35,8 @@
     [super viewDidLoad];
     
     [self configureUI];
+    
+    self.dateString = self.assignment[@"ends_at"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -66,7 +73,7 @@
     
     self.containerView.titleTextField.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"title"]];
     self.containerView.captionTextView.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:self.assignment[@"caption"]];
-    self.containerView.expirationTextField.text = self.assignment[@""];
+    self.containerView.expirationTextField.text = [self hoursFromExpirationTime:[NSString dateFromString:self.assignment[@"ends_at"]]];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     [self.view addGestureRecognizer:tap];
@@ -148,8 +155,9 @@
     
     [self startSpinner];
     
-    // ***** NEED TO UPDATE `ends_at` FOR EXPIRATION TIME *****
-    [[FRSAPIClient sharedClient] post:endpoint withParameters:@{@"title" : self.assignment[@"title"], @"caption" : self.assignment[@"caption"], @"radius" : self.assignment[@"radius"]} completion:^(id responseObject, NSError *error) {
+    
+    
+    [[FRSAPIClient sharedClient] post:endpoint withParameters:@{@"title" : self.assignment[@"title"], @"caption" : self.assignment[@"caption"], @"radius" : self.assignment[@"radius"], @"ends_at" : self.dateString} completion:^(id responseObject, NSError *error) {
         
         [self stopSpinner];
         
@@ -211,7 +219,8 @@
     if ([textField isEqual:self.containerView.titleTextField]) {
         [mutableDict setObject:textField.text forKey:@"title"];
     } else if([textField isEqual:self.containerView.expirationTextField]) {
-//        [mutableDict setObject:textField.text forKey:@"ends_at"];
+        // We don't need to do this here because we convert at the time of approval/update
+//        [mutableDict setObject:[self hoursFromExpirationTime] forKey:@"ends_at"];
     }
     
     self.assignment = [mutableDict mutableCopy];
@@ -239,6 +248,53 @@
 - (void)presentUnformattedTextError {
     [self presentAlertWithTitle:@"Error" message:@"Unformatted title or caption detected.\nReview your text fields and make sure there's no leftover formatting." action:@"Ok"];
 }
+
+- (NSString *)hoursFromExpirationTime:(NSDate *)expirationDate {
+    
+    self.dateString = expirationDate;
+    return [self timeLeftSinceDate:expirationDate];
+}
+
+
+-(NSMutableString*) timeLeftSinceDate: (NSDate *) dateT {
+    
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    
+    NSMutableString *timeLeft = [[NSMutableString alloc]init];
+    
+    NSDate *today =[NSDate date];
+    
+    NSInteger seconds = [today timeIntervalSinceDate:dateT];
+    
+    NSInteger days = (int) (floor(seconds / (3600 * 24)));
+    if(days) seconds -= days * 3600 * 24;
+    
+    NSInteger hours = (int) (floor(seconds / 3600));
+    if(hours) seconds -= hours * 3600;
+    
+//    NSInteger minutes = (int) (floor(seconds / 60));
+//    if(minutes) seconds -= minutes * 60;
+    
+    int totalHours = 0;
+    if (days) {
+        totalHours += days * 24;
+    }
+    
+    if (hours) {
+        totalHours += hours;
+    }
+    
+    [timeLeft appendString:[NSString stringWithFormat: @"%ld", (long)totalHours*-1]];
+    
+    if ([timeLeft integerValue] < 0) {
+        return [NSMutableString stringWithFormat:@"0"];
+    }
+    
+    return timeLeft;
+}
+
 
 
 
@@ -324,7 +380,24 @@
     [self showKeyboardAnimation];
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if ([textField isEqual:self.containerView.expirationTextField]) {
+        
+        UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+        datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+        [datePicker addTarget:self
+                       action:@selector(dateUpdated:)
+             forControlEvents:UIControlEventValueChanged];
+        datePicker.date = [NSString dateFromString:self.assignment[@"ends_at"]];
+        self.containerView.expirationTextField.inputView = datePicker;
+        
+    }
+    
     [self showKeyboardAnimation];
+}
+
+
+- (void) dateUpdated:(UIDatePicker *)datePicker {
+    self.containerView.expirationTextField.text = [self hoursFromExpirationTime:datePicker.date];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
