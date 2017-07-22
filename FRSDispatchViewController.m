@@ -110,9 +110,6 @@
     [self configureNavigationBar];
     [self configureSpinner];
     
-    
-    
-    
 }
 
 - (void)configureSpinner {

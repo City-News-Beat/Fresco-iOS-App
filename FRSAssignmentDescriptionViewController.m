@@ -24,6 +24,7 @@
     
     [self configureNavigationBar];
     [self configureTextField];
+    [self configureSpinner];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
@@ -204,13 +205,13 @@
         self.formattedTitle = [title stringByReplacingOccurrencesOfString:@"{CITY, ST}" withString:[NSString stringWithFormat:@"%@, %@", placemark.locality ? placemark.locality : placemark.subLocality, placemark.administrativeArea]];
         
         [self updateTextFieldWithString:cityStateString];
+        [self removeSpinner];
     }];
     
     return outletString;
 }
 
 - (void)updateTextFieldWithString:(NSString *)string {
-    
     
     if ([self.assignment[@"rating"] isEqual:@0]) {
         self.textView.attributedText = [FRSAssignmentDescriptionViewController formattedAttributedStringFromString:string];
@@ -263,6 +264,23 @@
     [attributedText setAttributes:dictBoldText range:range10];
     
     return attributedText;
+}
+
+- (void)configureSpinner {
+    self.textView.userInteractionEnabled = NO;
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.textView addSubview:activityIndicator];
+    activityIndicator.tag = 999;
+    activityIndicator.frame = CGRectMake(self.textView.frame.size.width/2 - 12, self.textView.frame.size.height/2 - 12, 24, 24);
+    [activityIndicator startAnimating];
+}
+
+- (void)removeSpinner {
+    self.textView.userInteractionEnabled = YES;
+    UIView *removeView;
+    while((removeView = [self.view viewWithTag:999]) != nil) {
+        [removeView removeFromSuperview];
+    }
 }
 
 @end
