@@ -153,13 +153,13 @@
 - (void)setButtonToExpire {
     [self.containerView.confirmButton setTitle:@"EXPIRE DISPATCH" forState:UIControlStateNormal];
     self.containerView.confirmButtonView.backgroundColor = [UIColor frescoRedColor];
-    [self.containerView.confirmButton addTarget:self action:@selector(expireDispatch) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerView.confirmButton addTarget:self action:@selector(updateDispatch) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)setButtonToDeny {
-    [self.containerView.confirmButton setTitle:@"DENY DISPATCH" forState:UIControlStateNormal];
+- (void)setButtonToReject {
+    [self.containerView.confirmButton setTitle:@"REJECT DISPATCH" forState:UIControlStateNormal];
     self.containerView.confirmButtonView.backgroundColor = [UIColor frescoRedColor];
-    [self.containerView.confirmButton addTarget:self action:@selector(denyDispatch) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerView.confirmButton addTarget:self action:@selector(rejectDispatch) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark - API Calls
@@ -231,12 +231,33 @@
     }];
 }
 
-- (void)expireDispatch {
-    
-}
 
-- (void)denyDispatch {
+- (void)rejectDispatch {
     
+    
+    NSString *endpoint = [NSString stringWithFormat:@"assignment/%@/reject", self.assignment[@"id"]];
+    
+    [self startSpinner];
+    
+    
+    [[FRSAPIClient sharedClient] post:endpoint withParameters:@{} completion:^(id responseObject, NSError *error) {
+        [self stopSpinner];
+        
+        if (error) {
+            [self presentAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", error.localizedDescription] action:@"Ok"];
+            
+            return;
+        }
+        
+        if (responseObject) {
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Dispatch rejected" message:@"Womp" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"💀" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self segueHome];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }];
 }
 
 
@@ -320,7 +341,7 @@
         if ([self.assignment[@"rating"] isEqual:@1]) {
             [self setButtonToExpire];
         } else if ([self.assignment[@"rating"] isEqual:@0]) {
-            [self setButtonToDeny];
+            [self setButtonToReject];
         }
         return [NSMutableString stringWithFormat:@"0"];
         
