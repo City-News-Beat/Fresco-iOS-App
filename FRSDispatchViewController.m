@@ -27,25 +27,86 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // [self logoutWithPop:NO];
-    
     self.view.backgroundColor = [UIColor whiteColor];
     
+    // [self logoutWithPop:NO];
+    
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
-        
         [self configureUI];
     } else {
         [self login];
-        
     }
 }
 
 - (void)login {
-    [[FRSAuthManager sharedInstance] signIn:@"omar@fresconews.com"
-                                   password:@"password"
-                                 completion:^(id responseObject, NSError *error) {
-                                     
-                                 }];
+    
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Log in"
+                                          message:@"Use your name@fresconews.com"
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Email";
+        textField.keyboardType = UIKeyboardTypeEmailAddress;
+    }];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Password";
+        textField.secureTextEntry = YES;
+    }];
+    
+    
+    [self configureSpinner];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:@"Ok"
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action) {
+                                   
+                                   UITextField *login = alertController.textFields.firstObject;
+                                   UITextField *password = alertController.textFields.lastObject;
+                                   
+                                   [self removeSpinner];
+                                   
+                                   [[FRSAuthManager sharedInstance] signIn:login.text
+                                                                  password:password.text
+                                                                completion:^(id responseObject, NSError *error) {
+                                                                    if (responseObject) {
+                                                                        [self configureUI];
+                                                                    }
+                                                                    
+                                                                    if (error) {
+                                                                        UIAlertController *alertController = [UIAlertController
+                                                                                                              alertControllerWithTitle:@"Error"
+                                                                                                              message:@"Unable to login."
+                                                                                                              preferredStyle:UIAlertControllerStyleAlert];
+                                                                        
+                                                                        UIAlertAction *okAction = [UIAlertAction
+                                                                                                   actionWithTitle:@"Try again"
+                                                                                                   style:UIAlertActionStyleDefault
+                                                                                                   handler:^(UIAlertAction *action) {
+                                                                                                       
+                                                                                                       [self login];
+                                                                                                       
+                                                                                                   }];
+                                                                        
+                                                                        [alertController addAction:okAction];
+                                                                        [self presentViewController:alertController animated:YES completion:nil];
+                                                                    }
+                                                                }];
+                               }];
+    
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+        
+    }];
+    
+    
+    
+    
+    
+    
 }
 
 - (void)configureUI {
@@ -58,7 +119,7 @@
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.view addSubview:activityIndicator];
     activityIndicator.tag = 999;
-    activityIndicator.frame = CGRectMake(self.view.frame.size.width/2 - 12, self.view.frame.size.height/2 - 12, 24, 24);
+    activityIndicator.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 12, [UIScreen mainScreen].bounds.size.height/2 - 12, 24, 24);
     [activityIndicator startAnimating];
 }
 
