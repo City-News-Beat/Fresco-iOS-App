@@ -110,6 +110,11 @@
     [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
     [nextButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     nextButton.frame = CGRectMake(self.view.frame.size.width -100, self.mapView.frame.size.height + sliderContainer.frame.size.height, 100, 56);
+    
+    if (self.view.frame.size.width == 320) {
+        nextButton.frame = CGRectMake(self.view.frame.size.width -100, self.mapView.frame.size.height-6, 100, 56);
+    }
+    
     [self.view addSubview:nextButton];
 }
 
@@ -203,8 +208,10 @@ float RoundTo(float number, float to)
     
     MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
     if ([overlay isKindOfClass:[FRSMapCircle class]]) {
-        circleR.fillColor = [UIColor frescoOrangeColor];
-        circleR.alpha = 0.3;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            circleR.fillColor = [UIColor frescoOrangeColor];
+            circleR.alpha = 0.3;
+        });
     }
     
     return circleR;
@@ -218,9 +225,9 @@ float RoundTo(float number, float to)
     MKCoordinateRegion region = { CLLocationCoordinate2DMake(lat, lon), span };
     MKCoordinateRegion regionThatFits = [self.mapView regionThatFits:region];
     
-    [UIView animateWithDuration:0.33 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//    [UIView animateWithDuration:0.33 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self.mapView setRegion:regionThatFits animated:animate];
-    } completion:nil];
+//    } completion:nil];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {

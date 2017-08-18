@@ -31,7 +31,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // [self logoutWithPop:NO];
+//     [self logoutWithPop:NO];
     
     if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
         [self configureUI];
@@ -220,7 +220,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
+    return 128;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
